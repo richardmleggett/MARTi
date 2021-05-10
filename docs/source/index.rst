@@ -1,42 +1,35 @@
-MARTi
-======
+MARTi - Metagenomic Analysis in Real Time
+=========================================
 
 .. toctree::
    :hidden:
    
    installation
-   docker
-   virtualbox
    running
-   report
-   howitworks
-   parserapi
-   datafiles
-   commonerrors
-   tutorial
    history
-   nanookrt
-   reporter
 
+MARTi is a software package designed for performing real-time analysis of metagenomic samples using nanopore sequencing. If you're not working in real-time, MARTi may still be a quick and easy analysis soultion for you. And if you're not using nanopore sequencing, you may still benefit from using MARTi to analyse your data.
 
-MARTi - Metagenomic Analysis in Real Time
-=========================================
-MARTi is a tool.
+Getting MARTi
+=============
 
-Further information
-===================
-* To find out how to install MARTi, see the :ref:`Download and installation page <installation>`.
-* To find out how to use MARTi, see the :ref:`Running MARTi page <running>` or the :ref:`NanoOK tutorial page <tutorial>`.
+MARTi is undergoing some final testing before we release the code to the world.
+
+However, if you would like to get access to a test version before we release it, please email richard.leggett@earlham.ac.uk.
 
 Papers
 ======
+
 Coming soon.
 
 Talks and posters
 =================
 
+Coming soon.
+
 Follow us
 =========
+
 You can follow MARTi updates on twitter `@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
 
 Or if you would like to be on a MARTi mailing list to receive information about updates, please email richard.leggett@earlham.ac.uk.
