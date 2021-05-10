@@ -4,7 +4,6 @@ MARTi - Metagenomic Analysis in Real Time
 .. toctree::
    :hidden:
    
-   Home <index>
    installation
    running
    history
