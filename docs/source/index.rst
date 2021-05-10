@@ -34,8 +34,6 @@ Coming soon.
 
 Talks and posters
 =================
-* Richard Leggett presented a poster at AGBT 2021 - `here it is <http://f1000research.com/posters/5-176>`_.
-* Richard Leggett spoke at the London Calling Nanopore conference - `here are his slides <http://documentation.tgac.ac.uk/download/attachments/7209095/RichardLeggett_LondonCalling2015.pdf?version=1&modificationDate=1431700116000&api=v2>`_.
 
 Follow us
 =========
