@@ -1,0 +1,14 @@
+Keyword	Example	Meaning
+**SampleName**	BAMBI_1D_18042017	Sample name
+**RawDataDir**	/path/to/dir	Run directory - specifically the path to the directory containing the fastq_pass, fastq_fail etc. directories
+**SampleDir**	/path/to/dir	Path to directory to use for MARTi analysis files (will be created if doesn't exist)
+ProcessBarcodes	01,02,03	If a barcoded sample, indicates which barcodes to process
+BarcodeId<n>	BarcodeSampleId1	Sample ID to use for barcode n
+**Scheduler**	local	Job scheduler to use - currently only "local" works. Soon will be able to specify "slurm" to run SLURM.
+LocalSchedulerMaxJobs	4	Specifies the maximum number of concurrent jobs that can be run by the local scheduler.
+InactivityTimeout	10	How long (seconds) before giving up waiting for new reads to appear. After this timeout, all remaining analysis will be completed and analysis will stop. Default timeout is 10 seconds.
+StopProcessingAfter	50000	Stop analysis after this number of reads. Default behaviour is no limit.
+**TaxonomyDir**	/path/to/dir	Specifies location of NCBI taxonomy files.
+AccessionMap	/path/to/file	Specifies an accession map for mapping accession IDs to taxa. This is generated using the NCBI accession2taxid data by a separte tool. Option should not be required for normal MARTi operation.
+ConvertFastQ	n/a	Deprecated.
+ReadsPerBlast	4000	BLAST chunk size - reads are batched into bundles of this number before BLASTing.

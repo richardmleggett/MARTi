@@ -6,6 +6,7 @@ MARTi - Metagenomic Analysis in Real Time
    
    installation
    running
+   configfiles
    issues
    history
 
