@@ -4,6 +4,7 @@ MARTi - Metagenomic Analysis in Real Time
 .. toctree::
    :hidden:
    
+   intro
    installation
    running
    configfiles
