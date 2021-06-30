@@ -46,7 +46,7 @@ You can run multiple BLAST processes. Each begins with the Keyword BlastProcess.
    :delim: tab
 
 Example
-=======
+-------
 
 Example file::
 
