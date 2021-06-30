@@ -28,7 +28,7 @@ Coming soon.
 Talks and posters
 =================
 
-Coming soon.
+* `Richard Leggett's talk at London Calling 2021 <https://www.youtube.com/watch?v=Ccw1872jzOE>`_.
 
 Follow us
 =========
