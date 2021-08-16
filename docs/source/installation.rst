@@ -11,7 +11,28 @@ However, if you would like to get access to a test version before we release it,
 
 * a back-end which performs the analysis and can be a single desktop/laptop or a high performance cluster.
 * a lightweight web-based front-end which allows users to view analysis results.
-MARTi Engine (back-end) installation------------------------------------Coming soon.MARTi GUI (front-end) installation----------------------------------The only pre-requistite is to have node.js installed. `You can download it from nodejs.org <https://nodejs.org/en/download/>`_.Then to install the MARTi GUI:``git clone <URL>``
+MARTi Engine (back-end) installation------------------------------------MARTi Engine requires the following pre-requisites:
+
+* BLAST - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
+* Java Run Time Environment - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
+
+Then to install MARTi Engine:
+``git clone <URL>``
+
+The marti script inside the bin directory is used to launch MARTi. Open this in a text editor and change line 5 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
+
+``MARTI_DIR=/Users/leggettr/Documents/github/MARTiEngine/bin``
+
+Finally, move this marti script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
+
+``mv bin/marti /usr/local/bin``
+
+You can then check the MARTi Engine is installed by typing:
+
+``marti -h``
+
+If you see the help text, all is ok.
+MARTi GUI (front-end) installation----------------------------------The only pre-requistite is to have node.js installed. `You can download it from nodejs.org <https://nodejs.org/en/download/>`_.Then to install the MARTi GUI:``git clone <URL>``
 
 The server requires an options file which is placed in your home directory. An example is provided. To copy it to your home directory, type:
 
