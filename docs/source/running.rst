@@ -33,6 +33,13 @@ Initiating analyses in the HPC configuration
 
 In an HPC configuration, analyses can not be initiated through the MARTi GUI, but have to be initiated from the command line when logged into the HPC. This is because many HPC implementations do not permit users to easily install software which has the necessary access to perform this.
 
+rsync'ing or mapping?
+---------------------
+
+The simplest approach to access a remote sequencer is to map its drive across the network. However, if you have an unreliable network connection, this will result in stalled analysis. Therefore, the safest option may be to rsync the raw data from the sequencer to the analysis machine. Then if the network fails and the drive dissapears, the analysis will not fail. When the network reappears, the rsync can be resumed.
+
+Note: the timeout value set may mean that MARTi Engine stops processing a run if a long time passes before the network link and rsync is reestablished.
+
 Connecting a Mk1C in a local configuration
 ------------------------------------------
 
