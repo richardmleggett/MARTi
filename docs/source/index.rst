@@ -6,8 +6,8 @@ MARTi - Metagenomic Analysis in Real Time
    
    intro
    installation
-   cmdline
    running
+   cmdline
    configfiles
    issues
    history
