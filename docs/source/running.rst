@@ -33,6 +33,8 @@ Initiating analyses in the HPC configuration
 
 In an HPC configuration, analyses can not be initiated through the MARTi GUI, but have to be initiated from the command line when logged into the HPC. This is because many HPC implementations do not permit users to easily install software which has the necessary access to perform this.
 
+See :ref:`cmdline`.
+
 rsync'ing or mapping?
 ---------------------
 

@@ -73,3 +73,16 @@ After this, you may get an additional error:
   :align: center
 
 Click on "Open" and hopefully that will be macOS's last warning!
+
+BLAST database installation
+---------------------------
+
+For the CARD database, you will need to:
+
+1. Download Data `from  the CARD website <https://card.mcmaster.ca/download>`_
+2. Create BLAST databases from the FASTA sequences:
+
+``makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -dbtype nucl``
+
+3. Download the ontology separately `from  the CARD website <https://card.mcmaster.ca/download>`_
+4. Place aro.tsv from the ontology in the same directory as the database.
