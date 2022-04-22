@@ -14,5 +14,7 @@ The Dashboard
 The Compare page
 ----------------
 
+.. _startinganalysis:
 Starting analysis
 -----------------
+

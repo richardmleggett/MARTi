@@ -1,10 +1,14 @@
 .. _cmdline:
 
-Starting analysis from the command line
-=======================================
+Starting analysis
+=================
 
-Running MARTi
--------------
+If you're running in a local configuration, you can start new analyses from :ref:`within the MARTI GUI<startinganalysis>`, or from the command line.
+
+If you're running in an HPC configuration, you must start analyses from the command line on your HPC system.
+
+Starting MARTi from the command line
+------------------------------------
 
 MARTi requires a configuration (or 'config') file in order to begin an analysis. This defines the input dataset, the analysis to be run and the options for the analysis.
 
