@@ -9,9 +9,7 @@ MARTi - Metagenomic Analysis in Real Time
    running
    cmdline
    configfiles
-   samples
-   dashboard
-   compare
+   gui
    faqs
    history
 
