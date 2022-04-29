@@ -1,0 +1,8 @@
+# Lines beginning with # are comments
+# Format is Tag then tab then Value
+# Tags should be case insensitive
+
+MinKNOWRunDirectory	/Users/user/Documents/minknow
+MARTiSampleDirectory	/Users/user/Documents/marti/marti_gui
+BlastDatabaseDirectory	/Users/user/Documents/Databases
+TaxonomyDirectory	/Users/user/Documents/Databases/taxonomy_6Jul20

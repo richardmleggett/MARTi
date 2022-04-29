@@ -1,0 +1,618 @@
+
+
+
+
+
+<!-- <div class="card shadow mb-4">
+
+  <div class="card-body text-center text-primary">
+    <div class="marti-logo-full mb-4"></div>
+    <p class="card-text mb-3">To get MARTi, see <a class="visibleUrl" href="https://marti.readthedocs.io/" target="_blank">Documentation</a></p>
+    <p class="card-text mb-0"><b>Dashboard</b> - Ideal for monitoring a single run/sample in real-time.</p>
+    <p class="card-text mb-0">Click the <i class="fas fa-tachometer-alt"></i> icon next to the sample you wish to load into Dashboard mode.</p>
+    <p class="card-text mt-3 mb-0"><b>Compare</b> - Comparison plots for real-time and previously analysed samples.</p>
+    <p class="card-text mb-0">To access Compare mode, select at least one sample using the <i class="far fa-check-square"></i> below. </p>
+
+
+
+  </div>
+</div> -->
+
+            <div class="card shadow mb-4">
+              <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Start new analysis</h6>
+              </div>
+              <div class="card-body">
+
+                <form id="newForm" class="needs-validation" novalidate action="/new" method="post">
+
+
+                  <h3 class="text-dark mb-4">Sample settings</h3>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="sampleName" class="">MinKNOW run ID</label>
+                      <i class="fas fa-info-circle" data-tooltip="Select a MinKNOW run for MARTi to analyse."></i>
+                    </div>
+
+                    <div class="col-auto">
+                      <select class="form-control" name="sampleName" id="sampleName" required>
+                      </select>
+                    </div>
+                  </div>
+
+
+
+                  <!-- <div class="form-group row">
+                    <label for="rawDataDir" class="col-sm-3 col-form-label">Raw data directory</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" name="rawDataDir" value="/path/to/dir" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Enter path to the run directory - contains the fastq_pass, fastq_fail etc. directories
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <div class="form-group row">
+                    <label for="martiName" class="col-sm-3 col-form-label">MARTi analysis ID</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" name="martiName" id="martiName" value="" placeholder="" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="outputDir" class="col-sm-3 col-form-label">MARTi output directory</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" name="outputDir" id="outputDir">
+                      </select>
+                      <!-- <input disabled type="text" class="form-control" name="outputDir" value="" placeholder=""> -->
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="outputPath" class="col-sm-3 col-form-label">MARTi output path</label>
+                    <div class="col-sm-9">
+                      <input disabled type="text" class="form-control" name="outputPath" value="" placeholder="">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="processBarcodeCheck" class="">Process barcodes</label>
+                      <i class="fas fa-info-circle" data-tooltip="If a barcoded run has been selected you can choose which barcodes to analyse."></i>
+                    </div>
+
+                    <div class="col-auto my-auto">
+                      <input class="" type="checkbox" name="processBarcodeCheck" id="processBarcodeCheck">
+                    </div>
+                  </div>
+
+                  <div id="selectBarcodesRow" class="d-none form-group row">
+                    <label for="barcodeOptions" class="col-sm-3 col-form-label">Select barcodes</label>
+                    <div class="col-sm-9">
+                      <div id="barcodeOptions" class="border rounded p-3">
+
+                    </div>
+                    </div>
+                  </div>
+
+
+
+
+
+                  <!-- <div class="form-group row">
+                    <label for="taxonomyDir" class="col-sm-3 col-form-label">Taxonomy directory</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" name="taxonomyDir" value="/path/to/dir" required>
+                      <div class="invalid-feedback">
+                        Path to directory of NCBI taxonomy files
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- <div class="form-group row">
+                    <label for="accessionMap" class="col-sm-3 col-form-label">Accession map</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" name="accessionMap" value="/path/to/file">
+                    </div>
+                  </div> -->
+
+                  <h3 class="text-dark mb-4">Pipeline default settings</h3>
+
+                  <div id="" class="form-group row">
+                    <label for="addAnalysis" class="col-sm-3 col-form-label">Load default settings</label>
+                    <div class="col-auto">
+                      <input class="btn btn-new-form mb-1" id="loadDefaultBlastLca" type="button" value="BlastLCA">
+                      <input class="btn btn-new-form mb-1" id="loadDefaultBlastLcaCard" type="button" value="BlastLCA-CARD">
+                      <input class="btn btn-new-form mb-1" id="resetForm" type="button" value="Reset">
+                    </div>
+                  </div>
+
+                  <h3 class="text-dark my-4">Pre-filtering settings</h3>
+
+                  <!-- <div class="form-group row">
+                    <label for="readFilterMinQ" class="col-sm-3 col-form-label">Minimum Q score</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="readFilterMinQ">
+
+                      </select>
+                    </div>
+                  </div> -->
+
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="readFilterMinQ">Minimum Q score</label>
+                      <i class="fas fa-info-circle" data-tooltip="Minimum mean quality value. Reads with mean Q below this are not processed."></i>
+                    </div>
+
+                    <div class="col-auto">
+                      <input class="form-control" type="number" name="readFilterMinQ" min="0" max="30" step="1" value="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                    <label for="minimumReadLength">Minimum read length</label>
+                      <i class="fas fa-info-circle" data-tooltip="Reads shorter than this (bp) are not processed."></i>
+                    </div>
+                    <div class="col-auto">
+                      <input class="form-control" type="number" name="minimumReadLength" min="0" max="1000000" step="1" value="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="readsPerChunkSelect">Reads per chunk</label>
+                      <i class="fas fa-info-circle" data-tooltip="Reads are batched into bundles of this number before being analysed."></i>
+                    </div>
+
+                    <div class="col-auto">
+                      <select class="form-control" id="readsPerChunkSelect">
+                        <option>1000</option>
+                        <option>2000</option>
+                        <option>3000</option>
+                        <option>4000</option>
+                        <option>8000</option>
+                        <option>16000</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                    <div class="col-auto">
+                      <input type="number" class="form-control d-none" name="readsPerChunk" id="readsPerChunk" min="0" step="1" max="1000000000" value="1000">
+                    </div>
+                  </div>
+
+                  <h3 class="text-dark my-4">LCA classification</h3>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="maxHits">Max hits</label>
+                      <i class="fas fa-info-circle" data-tooltip="Maximum number of BLAST hits to consider in LCA assignment."></i>
+                    </div>
+                    <div class="col-sm-9 my-auto d-flex">
+                      <a class="lca-range">20</a>
+                      <input type="range" class="form-control-range" name="maxHits" min="1" max="100" value="20">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="scorePercent">Score percent</label>
+                      <i class="fas fa-info-circle" data-tooltip="Only consider hits within this percentage of the top hit for a given read."></i>
+                    </div>
+
+                    <div class="col-sm-9 my-auto d-flex">
+                      <a class="lca-range">90 %</a>
+                      <input type="range" class="form-control-range" name="scorePercent" min="1" max="100" value="90">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="minimumIdentity">Minimum identity</label>
+                      <i class="fas fa-info-circle" data-tooltip="Only consider hits with this minimum identity."></i>
+                    </div>
+
+                    <div class="col-sm-9 my-auto d-flex">
+                      <a class="lca-range">0 %</a>
+                      <input type="range" class="form-control-range" name="minimumIdentity" min="0" max="100" value="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="minQueryCoverage">Minimum query coverage</label>
+                      <i class="fas fa-info-circle" data-tooltip="Only consider hits with this minmum percent coverage of query."></i>
+                    </div>
+
+                    <div class="col-sm-9 my-auto d-flex">
+                      <a class="lca-range">0 %</a>
+                      <input type="range" class="form-control-range" name="minQueryCoverage" min="0" max="100" value="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="minCombinedScore">Minimum combined score</label>
+                      <i class="fas fa-info-circle" data-tooltip="Only consider hits where identity % added to query coverage % is greater than this value."></i>
+                    </div>
+
+                    <div class="col-sm-9 my-auto d-flex">
+                      <a class="lca-range">0</a>
+                      <input type="range" class="form-control-range" name="minCombinedScore" min="0" max="200" value="0">
+                    </div>
+                  </div>
+
+                  <h3 class="text-dark my-4">Analysis processes</h3>
+
+                  <!-- <div id="addChart" class="card my-5">
+
+                    <div id="addChartPlusSign" class="card-body text-center pointer">
+                      <div class="mb-2">
+                        <i class="fas fa-plus fa-5x"></i>
+                      </div>
+                      <h4 class="font-weight-bold ">Click to add BLAST process</h4>
+                    </div>
+
+                  </div> -->
+
+                  <div id="addAnalysis" class="form-group row">
+                    <label for="addAnalysis" class="col-sm-3 col-form-label">Add analysis</label>
+                    <div class="col-auto">
+                      <input class="btn btn-new-form mb-1" id="addBlastNt" type="button" value="BLAST vs nt">
+                      <input class="btn btn-new-form mb-1" id="addBlastCard" type="button" value="BLAST vs CARD">
+                      <input class="btn btn-new-form mb-1" id="addBlastOther" type="button" value="BLAST vs other">
+                    </div>
+                  </div>
+
+                  <h3 class="text-dark mb-4">Scheduling</h3>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="inactivityTimeout" class="">Inactivity timeout</label>
+                      <i class="fas fa-info-circle" data-tooltip="How long (seconds) before giving up waiting for new reads to appear. After this time, all remaining analysis will be completed and analysis will stop."></i>
+                    </div>
+                    <div class="col-auto">
+                      <input class="form-control" type="number" name="inactivityTimeout" min="1" max="10000" step="1" value="10" style="max-width:100px;">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="stopProcessingAfter" class="">Stop processing after</label>
+                      <i class="fas fa-info-circle" data-tooltip="Stop analysis after this number of reads. Default behaviour is no limit."></i>
+                    </div>
+                    <div class="col-auto">
+                      <input type="number" class="form-control" name="stopProcessingAfter" min="0" step="1" max="1000000000" value="0" style="max-width:150px;">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="maxJobs">Max jobs</label>
+                      <i class="fas fa-info-circle" data-tooltip="Specifies the maximum number of concurrent jobs that can be run by the local scheduler."></i>
+                    </div>
+
+                    <div class="col-auto">
+                      <select class="form-control" name="maxJobs">
+
+                      </select>
+                    </div>
+                  </div>
+
+                  <button id="startNewAnalysisButton" class="btn btn-primary mt-4" type="submit">Start analysis</button>
+
+                </form>
+
+                <div id="blastProcessTemplate" class="d-none">
+                  <div class="form-group row" >
+
+
+                    <div class="col-12 mt-4">
+
+                      <div class="card shadow" id="">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                          <h6 id="" class="m-0 font-weight-bold text-primary">BLAST process</h6>
+
+                          <i id="" class="fas fa-fw fa-times text-gray-600 pointer removeRow"></i>
+
+                        </div>
+
+                        <div class="card-body-custom p-4">
+
+                          <div class="form-group row">
+                            <label for="processName" class="col-sm-3 col-form-label">Process name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="processName" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="blastProgram" class="col-sm-3 col-form-label">BLAST Algorithm</label>
+                            <div class="col-auto">
+                              <select class="form-control" name="blastProgram">
+                                <option>blastn</option>
+                                <option>megablast</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="blastDatabase" class="col-sm-3 col-form-label">BLAST database name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="blastDatabase" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="taxaFilter" class="col-sm-3 col-form-label">Taxa filter file name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="taxaFilter" placeholder="">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxE">Maximum E value</label>
+                              <i class="fas fa-info-circle" data-tooltip="Max E value for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxE" min="1e-50" step="0.001" value="0.001">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxTargetSeqs">Maximum target sequences</label>
+                              <i class="fas fa-info-circle" data-tooltip="Maximum number of target sequences for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxTargetSeqs" min="1" step="1" value="25">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="blastThreads">Number of BLAST threads</label>
+                              <i class="fas fa-info-circle" data-tooltip="Number of threads to use when running BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="blastThreads" min="1" step="1" value="4" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                              <label for="useToClassify" class="">Use this BLAST to clasify</label>
+                              <i class="fas fa-info-circle" data-tooltip="Indicates whether this BLAST process is to be used as the input to LCA classification. It can thus only be specified for one BLAST process."></i>
+                            </div>
+
+                            <div class="col-auto my-auto">
+                              <input class="useToClassifyHid" type="hidden" name="useToClassify" value="off">
+                              <input class="useToClassifyVis" type="checkbox" name="useToClassify" value="on">
+                            </div>
+                          </div>
+
+
+                      </div>
+
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <div id="blastProcessNt" class="d-none">
+                  <div class="form-group row" >
+
+
+                    <div class="col-12 mt-4">
+
+                      <div class="card shadow" id="">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                          <h6 id="" class="m-0 font-weight-bold text-primary">BLAST process</h6>
+
+                          <i id="" class="fas fa-fw fa-times text-gray-600 pointer removeRow"></i>
+
+                        </div>
+
+                        <div class="card-body-custom p-4">
+
+                          <div class="form-group row">
+                            <label for="processName" class="col-sm-3 col-form-label">Process name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="processName" value="nt" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="blastProgram" class="col-sm-3 col-form-label">BLAST Algorithm</label>
+                            <div class="col-auto">
+                              <select class="form-control" name="blastProgram">
+                                <option>blastn</option>
+                                <option selected >megablast</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="databaseDir" class="col-sm-3 col-form-label">Database directory</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="databaseDir" placeholder="">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="blastDatabase">Database prefix</label>
+                            <i class="fas fa-info-circle" data-tooltip="Enter the prefix for the database that can be found in the directory specified above."></i>
+                            </div>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="blastDatabase" value="nt" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="taxaFilter" class="col-sm-3 col-form-label">Taxa filter file name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="taxaFilter" placeholder="">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxE">Maximum E value</label>
+                              <i class="fas fa-info-circle" data-tooltip="Max E value for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxE" min="1e-50" step="0.001" value="0.001">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxTargetSeqs">Maximum target sequences</label>
+                              <i class="fas fa-info-circle" data-tooltip="Maximum number of target sequences for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxTargetSeqs" min="1" step="1" value="25">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="blastThreads">Number of BLAST threads</label>
+                              <i class="fas fa-info-circle" data-tooltip="Number of threads to use when running BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="blastThreads" min="1" step="1" value="4" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                              <label for="useToClassify" class="">Use this BLAST to clasify</label>
+                              <i class="fas fa-info-circle" data-tooltip="Indicates whether this BLAST process is to be used as the input to LCA classification. It can thus only be specified for one BLAST process."></i>
+                            </div>
+
+                            <div class="col-auto my-auto">
+                              <input class="useToClassifyHid" type="hidden" name="useToClassify" value="off">
+                              <input class="useToClassifyVis" type="checkbox" name="useToClassify" value="on">
+                            </div>
+                          </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <div id="blastProcessCard" class="d-none">
+                  <div class="form-group row" >
+
+
+                    <div class="col-12 mt-4">
+
+                      <div class="card shadow" id="">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                          <h6 id="" class="m-0 font-weight-bold text-primary">BLAST process</h6>
+
+                          <i id="" class="fas fa-fw fa-times text-gray-600 pointer removeRow"></i>
+
+                        </div>
+
+                        <div class="card-body-custom p-4">
+
+                          <div class="form-group row">
+                            <label for="processName" class="col-sm-3 col-form-label">Process name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="processName" value="card" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="blastProgram" class="col-sm-3 col-form-label">BLAST Algorithm</label>
+                            <div class="col-auto">
+                              <select class="form-control" name="blastProgram">
+                                <option selected>blastn</option>
+                                <option>megablast</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="databaseDir" class="col-sm-3 col-form-label">Database directory</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="databaseDir" placeholder="">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="blastDatabase">Database prefix</label>
+                            <i class="fas fa-info-circle" data-tooltip="Enter the prefix for the database that can be found in the directory specified above."></i>
+                            </div>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="blastDatabase" value="nucleotide_fasta_protein_homolog_model.fasta" placeholder="" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="taxaFilter" class="col-sm-3 col-form-label">Taxa filter file name</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="taxaFilter" placeholder="">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxE">Maximum E value</label>
+                              <i class="fas fa-info-circle" data-tooltip="Max E value for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxE" min="1e-50" step="0.001" value="0.001">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="maxTargetSeqs">Maximum target sequences</label>
+                              <i class="fas fa-info-circle" data-tooltip="Maximum number of target sequences for BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="maxTargetSeqs" min="1" step="1" value="100">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                            <label for="blastThreads">Number of BLAST threads</label>
+                              <i class="fas fa-info-circle" data-tooltip="Number of threads to use when running BLAST."></i>
+                            </div>
+                            <div class="col-auto">
+                              <input class="form-control" type="number" name="blastThreads" min="1" step="1" value="1" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                              <label for="useToClassify" class="">Use this BLAST to clasify</label>
+                              <i class="fas fa-info-circle" data-tooltip="Indicates whether this BLAST process is to be used as the input to LCA classification. It can thus only be specified for one BLAST process."></i>
+                            </div>
+
+                            <div class="col-auto my-auto">
+                              <input class="useToClassifyHid" type="hidden" name="useToClassify" value="off">
+                              <input class="useToClassifyVis" type="checkbox" name="useToClassify" value="on">
+                            </div>
+                          </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>

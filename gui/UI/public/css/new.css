@@ -1,0 +1,43 @@
+.lca-range {
+  width: 60px;
+}
+.barcode-options label {
+  margin-left: 0.25rem;
+  margin-bottom:0;
+}
+
+#barcodeOptions {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+#barcodeOptions::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+#barcodeOptions::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.btn-new-form {
+    color: #fff;
+    background-color: #858796;
+    border-color: #858796;
+}
+.btn-new-form:not(:disabled):not(.disabled):active, .btn-new-form:not(:disabled):not(.disabled).active, .show > .btn-new-form.dropdown-toggle {
+    color: #fff;
+    background-color: #6b6d7d;
+    border-color: #656776;
+}
+.btn-new-form:hover {
+    color: #fff;
+    background-color: #717384;
+    border-color: #6b6d7d;
+}
+.btn-new-form:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}

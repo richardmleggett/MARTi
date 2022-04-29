@@ -1,0 +1,75 @@
+
+#samplePageDataTable>tbody>tr[role="row"]>td:nth-child(2) {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#samplePageDataTable>tbody>tr[role="row"]>td:nth-child(2):hover {
+  text-decoration: underline;
+}
+
+#samplePageDataTable>tbody>tr[role="row"]>td:nth-child(2):hover:before {
+  background-color:#f6c23e;
+  color:white;
+}
+
+#samplePageDataTable>tbody>tr[role="row"]>td:nth-child(2):before {
+  height:24px;
+  width:24px;
+  color:#858796;
+  border:2px solid white;
+  border-radius:24px;
+  box-shadow:0 0 3px #444;
+  box-sizing:content-box;
+  text-align:center;
+  font-family: "Font Awesome 5 Free";
+  content: "\f3fd";
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 900;
+  /* background-color:#31b131; */
+  background-color:#ffffff;
+  margin-right: 5px;
+}
+#samplePageDataTable>tbody>tr[role="row"].dashboardSelected>td:nth-child(2):before {
+  background-color:#1cc88a;
+  color:white;
+}
+
+#samplePageDataTable td:first-child, #samplePageDataTable th:first-child  {
+  text-align:center;
+}
+
+table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before, thead th.select-checkbox:before {
+    content: ' ';
+    margin-top: -6px;
+    margin-left: -6px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+table.dataTable tbody td.select-checkbox:before, table.dataTable tbody td.select-checkbox:after, table.dataTable tbody th.select-checkbox:before, table.dataTable tbody th.select-checkbox:after, thead th.select-checkbox:before, thead th.select-checkbox:after {
+    display: block;
+    position: absolute;
+    top: 1.2em;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    box-sizing: border-box;
+}
+
+table.dataTable tr.checkSelected td.select-checkbox:after, table.dataTable tr.checkSelected th.select-checkbox:after, table.dataTable tr th.select-checkbox.checkSelected:after {
+    content: '\2714';
+    margin-top: -11px;
+    margin-left: -4px;
+    text-align: center;
+    text-shadow: 1px 1px #B0BED9, -1px -1px #B0BED9, 1px -1px #B0BED9, -1px 1px #B0BED9;
+}
+
+table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkbox, thead th.select-checkbox {
+    position: relative;
+}
+table.dataTable tbody>tr.checkSelected, table.dataTable tbody>tr>.checkSelected, table.dataTable thead>tr>.checkSelected {
+    background-color: #B0BED9;
+    color: #333;
+}

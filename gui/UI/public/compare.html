@@ -1,0 +1,436 @@
+<div class="fixed-options-bar shadow align-items-center d-flex">
+
+  <!-- <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-5 mr-auto "><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+  <a class="ml-4 mr-auto" ></a>
+  <a class="d-lg-none">Minimum abundance:</a>
+  <a class="d-none d-lg-block">LCA minimum abundance cutoff:</a>
+  <a class="mr-2"></a>
+
+
+    <div id="minimumAbundanceButtonCompare" class="btn-group btn-group-sm abundance-button mr-3" role="group" aria-label="LCA minimum abundance cutoff">
+      <button type="button" class="btn btn-primary">0%</button>
+      <button type="button" class="btn btn-primary active">0.1%</button>
+      <button type="button" class="btn btn-primary">1%</button>
+      <button type="button" class="btn btn-primary">2%</button>
+    </div>
+
+    <div class="my-auto d-none d-md-block">
+      <!-- <h1 class="h5 my-auto mb-0 mr-2 text-center">Rank:</h1> -->
+    </div>
+
+    <a class="d-lg-none">Rank:</a>
+    <a class="d-none d-lg-block">Taxonomic rank:</a>
+    <a class="mr-2"></a>
+
+    <div class="dropdown mr-4">
+      <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="taxonomicLevelSelectorCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        All Levels
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="taxonomicLevelSelectorCompare" style="min-width: 8.5rem;" id="taxonomicLevelSelectorCompareMenu">
+        <a class="dropdown-item dropdown-nonhref rank">All Levels</a>
+        <a class="dropdown-item dropdown-nonhref rank">Domain</a>
+        <a class="dropdown-item dropdown-nonhref rank">Phylum</a>
+        <a class="dropdown-item dropdown-nonhref rank">Class</a>
+        <a class="dropdown-item dropdown-nonhref rank">Order</a>
+        <a class="dropdown-item dropdown-nonhref rank">Family</a>
+        <a class="dropdown-item dropdown-nonhref rank">Genus</a>
+        <a class="dropdown-item dropdown-nonhref rank">Species</a>
+        <!-- <div class="dropdown-divider"></div>
+        <div class="dropdown-header">Options:</div>
+        <a class="dropdown-item radio-dropdown" style="padding:0.25rem 0.8rem;" href="#">
+        <table>
+        <tr>
+          <td colspan="2">Include ancestors:</td>
+        </tr>
+        <tr>
+          <td><label><input type="radio" name="includeAncestorNodes" value="off" checked> No</label></td>
+          <td><label><input type="radio" name="includeAncestorNodes" value="on"> Yes</label></td>
+        </tr>
+      </table>
+      </a> -->
+      </div>
+    </div>
+
+
+
+  </div>
+
+
+<!-- Compare info panel -->
+<div class="row mt-5">
+
+  <div class="col-12 mb-4">
+
+    <div class="card shadow">
+
+      <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Samples</h6>
+      </div>
+
+          <div class="card-body">
+
+
+
+      <div class="row">
+
+
+
+            <div class="col-md-4 mb-md-0 mb-3">
+
+              <div class="d-flex justify-content-center align-items-center">
+
+                <a class="text-primary">Order:</a>
+                <a class="mr-2"></a>
+
+                <div class="dropdown">
+                  <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns" href="#" role="button" id="sampleOrderCompareButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ID asc
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="sampleOrderCompareButton" id="sampleOrderCompareMenu">
+                    <a class="dropdown-item dropdown-nonhref rank">ID asc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Sequencing date asc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Sequencing date desc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Yield desc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Reads analysed asc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Reads analysed desc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Manual</a>
+                  </div>
+                </div>
+            </div>
+
+              <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+                <p class="card-text text-primary">Drag samples <i class="fas fa-grip-vertical"></i> to order manually.</p>
+                <p class="card-text text-primary">Click on sample name to visit its Dashboard.</p>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <!-- <h5 class="text-center">Samples</h5> -->
+
+              <div class="d-flex h-100 flex-column justify-content-center ml-3">
+                <ol id="compareSampleNameList" class="h5 text-primary">
+                </ol>
+              </div>
+
+           </div>
+
+          <!-- <h3 class="text-primary" id="compareSampleNames">test</h3> -->
+
+
+        <!-- <div class="col-md-4 text-center mb-3">
+          <h5 class="">Reads Sequenced</h5>
+          <h2 class="text-primary" id="dashboardInfoCardReadsSequenced"></h2>
+        </div>
+
+        <div class="col-md-4 text-center mb-3">
+          <h5 class="">Reads Classified</h5>
+          <h2 class="text-primary" id="dashboardInfoCardReadsClassified"></h2>
+        </div> -->
+
+
+      </div>
+
+      <!-- <hr> -->
+
+      <!-- <div class="py-3">
+      </div> -->
+
+
+
+        <!-- <div class="d-flex justify-content-center align-items-center">
+
+              <div class="dropdown">
+                <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="taxonomicLevelSelectorCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="taxonomicLevelSelectorCompare" style="min-width: 5rem;" id="taxonomicLevelSelectorCompareMenu">
+                  <a class="dropdown-item rank" href="#">All Levels</a>
+                  <a class="dropdown-item rank" href="#">Domain</a>
+                  <a class="dropdown-item rank" href="#">Phylum</a>
+                  <a class="dropdown-item rank" href="#">Class</a>
+                  <a class="dropdown-item rank" href="#">Order</a>
+                  <a class="dropdown-item rank" href="#">Family</a>
+                  <a class="dropdown-item rank" href="#">Genus</a>
+                  <a class="dropdown-item rank" href="#">Species</a>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-header">Options:</div>
+                  <a class="dropdown-item radio-dropdown" style="padding:0.25rem 0.8rem;" href="#">
+                  <table>
+                  <tr>
+                    <td colspan="2">Include ancestors:</td>
+                  </tr>
+                  <tr>
+                    <td><label><input type="radio" name="includeAncestorNodes" value="off" checked> No</label></td>
+                    <td><label><input type="radio" name="includeAncestorNodes" value="on"> Yes</label></td>
+                  </tr>
+                </table>
+                </a>
+                </div>
+              </div>
+
+
+              <div class="px-2"></div>
+
+            <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        </div> -->
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+          <!-- Stacked bar Row -->
+          <div class="row">
+
+
+            <div class="col-12 mb-4">
+
+              <!-- stackedBar card -->
+              <div class="card shadow" id="stackedBarCard">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Stacked bar</h6>
+
+                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(stackedBarFullScreen);">
+                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
+                  </div>
+
+                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
+                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
+                  </div> -->
+
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                      <div class="dropdown-header">Options:</div>
+                      <form class="dropdown-form">
+
+                      <div class="form-group">
+                        <label for="compareStackedBarTopN">Show top <a id="compareStackedBarTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
+                        <input type="range" class="form-control-range" id="compareStackedBarTopN" min="1" max="30" value="10">
+                      </div>
+
+                      <div>
+                        <label>Y-axis:</label>
+                        <label><input type="radio" name="stackedBar" value="read"> Read count</label>
+                        <label><input type="radio" name="stackedBar" value="percent" checked> Percent</label>
+                      </div>
+                      <div>
+                        <label> Unclassified node:</label>
+                        <label><input type="radio" name="compareStackedBarUnclassified" value="show" checked>  Show</label>
+                        <label><input type="radio" name="compareStackedBarUnclassified" value="hide" >  Hide</label>
+                      </div>
+
+                    </form>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="exportTaxaStackedBarSVG" href="#">Export as SVG</a>
+                    <a class="dropdown-item" id="exportTaxaStackedBarPNG" href="#">Export as PNG</a>
+                    <a class="dropdown-item" id="exportTaxaStackedBarJPG" href="#">Export as JPG</a>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="card-body-custom text-center">
+
+                <div class="stackedBarCard">
+                  <div id='stackedBarLegend'>
+
+                </div>
+                  <div id='stackedBarPlot'>
+                  <!-- <div id='chart'>
+
+                  </div> -->
+                </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          </div>
+
+          <!-- Donut Row -->
+          <div class="row">
+
+
+            <div class="col-12 mb-4">
+
+              <!-- stackedBar card -->
+              <div class="card shadow" id="compareDonutCard">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Donut</h6>
+
+                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareDonutFullScreen);">
+                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
+                  </div>
+
+                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
+                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
+                  </div> -->
+
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuDonutCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuDonutCompare">
+                      <div class="dropdown-header">Options:</div>
+                      <!-- <a class="dropdown-item"> -->
+                      <form class="dropdown-form">
+                      <div class="form-group">
+                        <label for="compareDonutTopN">Show top <a id="compareDonutTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
+                        <input type="range" class="form-control-range" id="compareDonutTopN" min="1" max="30" value="10">
+                      </div>
+
+                      <div class="form-group">
+                        <label>Donut radius:</label>
+                        <input type="range" class="form-control-range" name="donutRadius" min="50" max="200" value="125">
+                      </div>
+
+                      <div class="form-group">
+                        <label>Donut area:</label>
+                        <label><input type="radio" name="donutArea" value="read" > Read count</label>
+                        <label><input type="radio" name="donutArea" value="equal" checked> Equal</label>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Read count:</label>
+                        <label><input type="radio" name="showDonutReadCount" value="on" > On</label>
+                        <label><input type="radio" name="showDonutReadCount" value="off" checked> Off</label>
+                      </div>
+
+                      <div>
+                        <label> Sample name:</label>
+                        <label><input type="radio" name="compareDonutSampleName" value="show" checked>  Show</label>
+                        <label><input type="radio" name="compareDonutSampleName" value="hide" >  Hide</label>
+                      </div>
+
+                      <div>
+                        <label> Unclassified node:</label>
+                        <label><input type="radio" name="compareDonutUnclassified" value="show" checked>  Show</label>
+                        <label><input type="radio" name="compareDonutUnclassified" value="hide" >  Hide</label>
+                      </div>
+
+                    </form>
+                      <!-- </a> -->
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" id="exportCompareDonutSVG" href="#">Export as SVG</a>
+                      <a class="dropdown-item" id="exportCompareDonutPNG" href="#">Export as PNG</a>
+                      <a class="dropdown-item" id="exportCompareDonutJPG" href="#">Export as JPG</a>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="card-body-custom text-center">
+
+                <div class="compareDonutCard">
+                  <div id='compareDonutPlotLegend'>
+
+                </div>
+                  <div id='compareDonutPlot'>
+                  <!-- <div id='chart'>
+
+                  </div> -->
+                </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          </div>
+
+
+          <!-- Rarefaction Row -->
+          <div class="row" id="accumulationChartRow">
+
+
+            <div class="col-12 mb-4">
+
+              <!-- stackedBar card -->
+              <div class="card shadow" id="compareRarefactionCard">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa accumulation</h6>
+
+                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareRarefactionFullScreen);">
+                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
+                  </div>
+
+                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
+                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
+                  </div> -->
+
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRarefactionCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuRarefactionCompare">
+                      <div class="dropdown-header">Options:</div>
+                      <form class="dropdown-form">
+
+                        <div>
+                          <label>X-axis:</label>
+                          <label><input type="radio" name="rareXAxis" value="reads" checked> Reads</label>
+                          <label><input type="radio" name="rareXAxis" value="time"> Time</label>
+                        </div>
+
+                      <div>
+                        <label>Curve:</label>
+                        <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
+                        <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
+                      </div>
+                    </form>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
+                    <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
+                    <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="card-body-custom text-center">
+
+                  <div id="accumulationPlotWarning" class="row">
+                    <div class="col-auto pl-5 pt-4">
+                        <a class=""><i class="fas fa-exclamation-triangle"></i> When LCA minimum abundance cutoff is not 0%, curve may go down as well as up</a>
+                    </div>
+                  </div>
+
+                <div id="no-data-accumulation" class="text-center text-gray-500 m-5">
+                    <div class="mb-2">
+                      <i class="fas fa-exclamation-circle fa-5x"></i>
+                    </div>
+                    <h3 class="font-weight-bold ">Data Not Available</h3>
+                    <h4 class="font-weight-bold ">Please run accumulation analysis to see this plot</h4>
+                </div>
+
+
+                <div class="compareRarefactionCard">
+                  <div id='compareRarefactionPlotLegend' class="text-center">
+
+                </div>
+                  <div id='compareRarefactionPlot'>
+
+                </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          </div>

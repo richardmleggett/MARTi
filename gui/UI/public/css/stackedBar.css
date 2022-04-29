@@ -1,0 +1,87 @@
+
+#stackedBarPlot svg,
+#clonedStackedBarPlot svg {
+  background-color: rgb(255, 255, 255);
+  /* font: 12px sans-serif; */
+}
+
+#stackedBarPlot svg rect:hover,
+#clonedStackedBarPlot svg rect:hover {
+  opacity: .7;
+}
+
+#stackedBarPlot svg {
+  background-color: #fff;
+}
+
+#stackedBarPlot .axis path,
+#stackedBarPlot .axis line,
+#clonedStackedBarPlot .axis path,
+#clonedStackedBarPlot .axis line {
+  fill: none;
+  stroke: #000;
+  /* shape-rendering: crispEdges; */
+}
+
+#stackedBarPlot .line,
+#clonedStackedBarPlot .line
+ {
+  stroke: #FF9900;
+  fill: none;
+  stroke-opacity: 25%;
+  stroke-width: 1px;
+  /* shape-rendering: crispEdges; */
+}
+
+#stackedBarPlot .unfocused {
+  stroke-opacity: 25%;
+}
+
+#stackedBarPlot .focused {
+  stroke-width: 2px;
+  stroke-opacity: 100%;
+}
+
+
+#stackedBarPlot {
+    margin: 10px 20px 10px 20px;
+  }
+
+#stackedBarPlot svg {
+  overflow: visible;
+}
+
+#stackedBarPlot .bar {
+  fill: steelblue;
+}
+
+#stackedBarPlot .x.axis path {
+  /*display: none;*/
+}
+
+#stackedBarLegend svg.stackedBarLegend {
+  margin: 10px 0px 5px 10px;
+
+}
+
+#stackedBarLegend svg.stackedBarLegend {
+  overflow: visible;
+
+}
+
+#stackedBarLegend {
+  margin: 10px 15px 10px 15px;
+}
+
+
+#mergedStackedBarPlotExport
+ {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#clonedStackedBarLegend {
+  font-size: 16px;
+}
+#clonedStackedBarPlot {
+  font-size: 16px;
+}

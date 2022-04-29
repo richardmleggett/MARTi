@@ -1,0 +1,35 @@
+#compareDonutPlot svg.pie {
+  margin: 10px 10px 10px 10px;
+}
+
+#compareDonutPlot {
+  margin: 10px 15px 10px 15px;
+}
+
+/* #compareDonutPlot svg {
+  color: #858796;
+} */
+
+#mergedCompareDonutPlotExport
+ {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 16px;
+}
+
+#compareDonutPlot .arc {
+  stroke: #fff;
+}
+
+#compareDonutPlotLegend svg.donutCompareLegend {
+  margin: 10px 0px 5px 10px;
+
+}
+
+#compareDonutPlotLegend svg.donutCompareLegend {
+  overflow: visible;
+
+}
+
+#compareDonutPlotLegend {
+  margin: 10px 15px 10px 15px;
+}

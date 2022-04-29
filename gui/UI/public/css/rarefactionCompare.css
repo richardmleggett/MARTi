@@ -1,0 +1,49 @@
+#compareRarefactionPlot .axis path,
+#compareRarefactionPlot .axis line,
+#clonedAccumulationPlot .axis path,
+#clonedAccumulationPlot .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#compareRarefactionPlot .x.axis path {
+  /* display: none; */
+}
+
+#mergedAccumulationPlotExport
+ {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#compareRarefactionPlot .line,
+#clonedAccumulationPlot .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2.5px;
+}
+
+#compareRarefactionPlot {
+  margin: 10px 20px 10px 20px;
+}
+
+#compareRarefactionPlot svg {
+  overflow: visible;
+}
+
+#compareRarefactionPlotLegend svg.rarefactionCompareLegend {
+  margin: 10px 0px 5px 10px;
+  overflow: visible;
+}
+
+
+#compareRarefactionPlotLegend {
+  margin: 10px 15px 10px 15px;
+}
+
+#clonedAccumulationLegend {
+  font-size: 16px;
+}
+#clonedAccumulationPlot {
+  font-size: 16px;
+}
