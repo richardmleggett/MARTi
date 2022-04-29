@@ -1,9 +1,9 @@
 # MARTi
 Metagenomic Analysis in Real Time
 
-Code will appear here shortly...
-
 Documentation: https://marti.readthedocs.io/en/latest/
+
+Try MARTi out at http://marti.cyverseuk.org
 
 Current version is for beta testing purposes and the following are not yet fully implemented:
 
