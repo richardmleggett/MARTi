@@ -3,27 +3,41 @@
 Download and installation=========================
 Overview
 --------
-
-MARTi is undergoing some final testing before we release the code to the world.
-
-However, if you would like to get access to a test version before we release it, please email richard.leggett@earlham.ac.uk.
 MARTi consists of two main components:
 
 * a back-end which performs the analysis and can be a single desktop/laptop or a high performance cluster.
 * a lightweight web-based front-end which allows users to view analysis results.
-MARTi Engine (back-end) installation------------------------------------MARTi Engine requires the following pre-requisites:
+
+Make sure you've read the :ref:`intro` and know whether you are installing MARTi in a local configuration (analysis performed on a laptop/desktop) or an HPC configuration (analysis performed on an HPC Cluster).
+
+You need to copy the MARTi software onto any computer that will be running the MARTi Engine (back-end) or the MARTi GUI (web server). If running in local mode, this will be the same computer. If running in an HPC mode, you will copy the software on to the cluster and also onto the computer where you will be running the web server for the GUI.
+
+Prerequisites
+-------------
+In order to run the MARTi Engine (back-end), you also need to install the following on the machine where it will be running:
 
 * BLAST - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
 * Java Run Time Environment - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
 
-Then to install MARTi Engine:
-``git clone <URL>``
+In order to run the MARTi web server, you also need to install the following on the computer where it will be running:
 
-The marti script inside the bin directory is used to launch MARTi. Open this in a text editor and change line 5 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
+* node.js - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
+
+Downloading
+-----------
+
+The easiest way to keep up to date with MARTi is to clone the GitHub repository. To do this, go to the command line, change into a convenient directory and then type:
+
+``git clone https://github.com/richardmleggett/MARTi.git``
+
+Alternatively, you can `visit GitHub <https://github.com/richardmleggett/MARTi>`_ and download a zip file with everything in it.
+MARTi Engine (back-end) installation------------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
+
+The marti script inside the bin directory is used to launch MARTi Engine. Open this in a text editor and change line 6 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
 
 ``MARTI_DIR=/Users/leggettr/Documents/github/MARTiEngine/bin``
 
-Finally, move this marti script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
+Then move this marti script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
 
 ``mv bin/marti /usr/local/bin``
 
@@ -32,9 +46,7 @@ You can then check the MARTi Engine is installed by typing:
 ``marti -h``
 
 If you see the help text, all is ok.
-MARTi GUI (front-end) installation----------------------------------The only pre-requistite is to have node.js installed. `You can download it from nodejs.org <https://nodejs.org/en/download/>`_.Then to install the MARTi GUI:``git clone <URL>``
-
-The server requires an options file which is placed in your home directory. An example is provided. To copy it to your home directory, type:
+MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer being used to run the front-end web server, you need to create an options file in your home directory that is required by the GUI. An example is provided with the code. To copy it to your home directory, type:
 
 ``cp marti_server_options.txt ~/``
 

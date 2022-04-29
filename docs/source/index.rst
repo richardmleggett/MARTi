@@ -15,6 +15,8 @@ MARTi - Metagenomic Analysis in Real Time
 
 MARTi is a software package designed for performing real-time analysis of metagenomic samples using nanopore sequencing. If you're not working in real-time, MARTi may still be a quick and easy analysis solution for you. And if you're not using nanopore sequencing, you may still benefit from using MARTi to analyse your data.
 
+MARTi runs on Linux and on macOS. At the moment, Windows is not supported.
+
 .. Note::
    | The current version of MARTi is for beta testing purposes and the following are not yet fully implemented:
    | 
@@ -25,9 +27,7 @@ MARTi is a software package designed for performing real-time analysis of metage
 Getting MARTi
 =============
 
-MARTi is undergoing some final testing before we release the code to the world.
-
-However, if you would like to get access to a test version before we release it, please email richard.leggett@earlham.ac.uk.
+MARTi is available from GitHub - see :ref:`installation` for details.
 
 Papers
 ======
