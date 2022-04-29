@@ -1,0 +1,19 @@
+{
+  "name": "rtv",
+  "version": "1.0.0",
+  "description": "Real-time visualisation for nanopore sequencing data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ned Peel",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^3.4.2",
+    "express": "^4.16.4",
+    "fs-extra": "^9.0.1",
+    "open-term": "^2.0.4",
+    "socket.io": "^2.1.1",
+    "uuid": "^8.3.2"
+  }
+}
