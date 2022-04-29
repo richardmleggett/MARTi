@@ -19,7 +19,7 @@ In order to run the MARTi Engine (back-end), you also need to install the follow
 * BLAST - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
 * Java Run Time Environment - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
 
-In order to run the MARTi web server, you also need to install the following on the computer where it will be running:
+In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
 * node.js - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
 
