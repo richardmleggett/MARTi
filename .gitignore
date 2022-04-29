@@ -1,3 +1,5 @@
 docs/build
 .DS_Store
 docs/source/.DS_Store
+/engine/target/
+docs/.DS_Store

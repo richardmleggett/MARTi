@@ -1,0 +1,38 @@
+# Default taxonomy directory can be defined here
+TaxonomyDir:/Users/leggettr/Documents/Databases/taxonomy_6Jul20
+
+# Blast processes can be defined in here and then settings can be simply copied to new config files
+BlastProcess
+    Name:nt
+    Program:megablast
+    Database:/Users/leggettr/Documents/Databases/nt_30Jan2020_v5/nt
+    MaxE:0.001
+    MaxTargetSeqs:25
+    BlastThreads:2
+    UseToClassify
+
+BlastProcess
+    Name:ref_prok_rep
+    Program:megablast
+    Database:/Users/leggettr/Documents/Databases/ref_prok_rep_genomes_29Jul21/ref_prok_rep_genomes
+    MaxE:0.001
+    MaxTargetSeqs:25
+    BlastThreads:2
+    UseToClassify
+
+BlastProcess
+    Name:zymo_mock
+    Program:megablast
+    Database:/Users/leggettr/Documents/Databases/zymo_mock/zymo_refs_sam.fasta
+    MaxE:0.001
+    MaxTargetSeqs:25
+    BlastThreads:2
+    UseToClassify
+
+BlastProcess
+    Name:card
+    Program:blastn
+    Database:/Users/leggettr/Documents/Databases/CARD_3.1.1_Download_10Mar21/nucleotide_fasta_protein_homolog_model.fasta
+    MaxE:0.001
+    MaxTargetSeqs:100
+    BlastThreads:2
