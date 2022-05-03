@@ -1,0 +1,541 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.2"
+    },
+    "amr": {
+        "currentChunk": 12,
+        "chunkTime": {
+            "1": "18 Jun 2021 23:23:35",
+            "2": "18 Jun 2021 23:24:58",
+            "3": "18 Jun 2021 23:25:18",
+            "4": "18 Jun 2021 23:26:01",
+            "5": "18 Jun 2021 23:36:30",
+            "6": "18 Jun 2021 23:36:46",
+            "7": "18 Jun 2021 23:38:02",
+            "8": "18 Jun 2021 23:38:17",
+            "9": "18 Jun 2021 23:50:40",
+            "10": "18 Jun 2021 23:50:45",
+            "11": "18 Jun 2021 23:51:02",
+            "12": "18 Jun 2021 23:51:29"
+        },
+        "readsWithAMRHits": 225,
+        "geneList": [
+            {
+                "cardId": "ARO:3003318",
+                "name": "Streptomyces",
+                "description": "point mutation on the Streptomyces rishiriensis parY resulting in aminocoumarin resistance",
+                "count": {
+                    "2": 1,
+                    "6": 2
+                },
+                "averageAccuracy": {
+                    "2": 80.56,
+                    "6": 80.71
+                },
+                "species": {
+                    "Bifidobacterium breve": {
+                        "2": 1,
+                        "6": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000621",
+                "name": "PC1",
+                "description": "The blaZ beta-lactamase is found in Bacillus subtilis and Staphylococcus aureus.",
+                "count": {
+                    "1": 1,
+                    "5": 2,
+                    "9": 3
+                },
+                "averageAccuracy": {
+                    "1": 87.57,
+                    "5": 87.93,
+                    "9": 86.32
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "5": 1,
+                        "9": 2
+                    },
+                    "Staphylococcus aureus": {
+                        "1": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002597",
+                "name": "AAC(6')-Ie-APH(2'')-Ia",
+                "description": "AAC(6')-Ie-APH(2'')-Ia is an aminoglycoside acetyltransferase encoded by plasmids and transposons in S. aureus, E. faecalis, E. faecium and Staphylococcus warneri",
+                "count": {
+                    "2": 1,
+                    "6": 2,
+                    "9": 3,
+                    "10": 5,
+                    "11": 6
+                },
+                "averageAccuracy": {
+                    "2": 88.91,
+                    "6": 90.57,
+                    "9": 91.04,
+                    "10": 90.28,
+                    "11": 90.65
+                },
+                "species": {
+                    "root": {
+                        "6": 1
+                    },
+                    "Bacilli": {
+                        "10": 1
+                    },
+                    "Bacteria": {
+                        "2": 1,
+                        "11": 2
+                    },
+                    "Bacillales": {
+                        "9": 1,
+                        "10": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003359",
+                "name": "Streptomyces",
+                "description": "Sequence variants of Streptomyces cinnamoneus elongation factor Tu that confer resistance to elfamycin antibiotics.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 85.29
+                },
+                "species": {
+                    "Bifidobacterium breve": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000190",
+                "name": "tetO",
+                "description": "TetO is a ribosomal protection protein. It is associated with conjugative plasmids.",
+                "count": {
+                    "1": 11,
+                    "2": 17,
+                    "3": 26,
+                    "4": 32,
+                    "5": 40,
+                    "6": 47,
+                    "7": 54,
+                    "8": 58,
+                    "9": 65,
+                    "10": 68,
+                    "11": 77,
+                    "12": 85
+                },
+                "averageAccuracy": {
+                    "1": 89.31,
+                    "2": 89.04,
+                    "3": 88.98,
+                    "4": 89.1,
+                    "5": 89.2,
+                    "6": 89.2,
+                    "7": 89.01,
+                    "8": 89.0,
+                    "9": 88.73,
+                    "10": 88.75,
+                    "11": 88.79,
+                    "12": 88.64
+                },
+                "species": {
+                    "Bifidobacterium breve": {
+                        "1": 1,
+                        "2": 3,
+                        "3": 5,
+                        "4": 7,
+                        "5": 10,
+                        "7": 11,
+                        "8": 13,
+                        "9": 16,
+                        "10": 17,
+                        "11": 20
+                    },
+                    "Bacteria": {
+                        "1": 6,
+                        "2": 9,
+                        "3": 11,
+                        "4": 12,
+                        "5": 13,
+                        "6": 16,
+                        "7": 18,
+                        "8": 19,
+                        "9": 21,
+                        "10": 23,
+                        "11": 26
+                    },
+                    "Terrabacteria group": {
+                        "1": 4,
+                        "2": 5,
+                        "3": 10,
+                        "4": 13,
+                        "5": 17,
+                        "6": 21,
+                        "7": 25,
+                        "8": 26,
+                        "9": 28,
+                        "11": 31
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003730",
+                "name": "Bifidobacteria",
+                "description": "Bifidobacteria have an intrinsically resistant form of ileS (isoleucyl-tRNA synthetase) that confers resistance to mupirocin.",
+                "count": {
+                    "1": 5,
+                    "2": 7,
+                    "3": 13,
+                    "4": 15,
+                    "5": 19,
+                    "6": 25,
+                    "7": 29,
+                    "8": 32,
+                    "9": 37,
+                    "10": 45,
+                    "11": 51,
+                    "12": 56
+                },
+                "averageAccuracy": {
+                    "1": 82.85,
+                    "2": 84.14,
+                    "3": 85.98,
+                    "4": 85.45,
+                    "5": 85.21,
+                    "6": 84.57,
+                    "7": 84.88,
+                    "8": 84.95,
+                    "9": 84.55,
+                    "10": 84.34,
+                    "11": 84.34,
+                    "12": 84.3
+                },
+                "species": {
+                    "Bifidobacterium breve": {
+                        "1": 3,
+                        "2": 4,
+                        "3": 5,
+                        "4": 7,
+                        "5": 9,
+                        "6": 14,
+                        "7": 15,
+                        "8": 17,
+                        "9": 21,
+                        "10": 27,
+                        "11": 31
+                    },
+                    "Bifidobacterium bifidum": {
+                        "1": 2,
+                        "2": 3,
+                        "3": 8,
+                        "5": 10,
+                        "6": 11,
+                        "7": 14,
+                        "8": 15,
+                        "9": 16,
+                        "10": 18,
+                        "11": 20
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000391",
+                "name": "norA",
+                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA, and is a structural homolog of Bmr of Bacillus subtilis. It is regulated by arlRS and mgrA, the latter also known as NorR.",
+                "count": {
+                    "3": 1,
+                    "7": 2,
+                    "10": 3
+                },
+                "averageAccuracy": {
+                    "3": 88.33,
+                    "7": 86.66,
+                    "10": 88.19
+                },
+                "species": {
+                    "Staphylococcus epidermidis": {
+                        "3": 1,
+                        "7": 2,
+                        "10": 3
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003046",
+                "name": "qacA",
+                "description": "qacA is a subunit of the qac multidrug efflux pump",
+                "count": {
+                    "3": 1,
+                    "6": 2
+                },
+                "averageAccuracy": {
+                    "3": 84.38,
+                    "6": 87.2
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "6": 1
+                    },
+                    "Staphylococcus haemolyticus": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000300",
+                "name": "lsaA",
+                "description": "LsaA is an ABC efflux pump expressed in Enterococcus faecalis. It confers resistance to clindamycin, quinupristin-dalfopristin, and dalfopristin.",
+                "count": {
+                    "2": 3,
+                    "3": 5,
+                    "5": 7,
+                    "6": 13,
+                    "7": 14,
+                    "8": 15,
+                    "9": 17,
+                    "10": 20,
+                    "11": 23,
+                    "12": 24
+                },
+                "averageAccuracy": {
+                    "2": 87.89,
+                    "3": 87.57,
+                    "5": 88.55,
+                    "6": 89.19,
+                    "7": 89.4,
+                    "8": 89.03,
+                    "9": 89.01,
+                    "10": 88.72,
+                    "11": 88.47,
+                    "12": 88.53
+                },
+                "species": {
+                    "Enterococcus faecalis": {
+                        "2": 3,
+                        "3": 5,
+                        "5": 7,
+                        "6": 13,
+                        "7": 14,
+                        "8": 15,
+                        "9": 17,
+                        "10": 20,
+                        "11": 23
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002865",
+                "name": "dfrC",
+                "description": "dfrC is a chromosome-encoded dihydrofolate reductase found in Staphylococcus aureus",
+                "count": {
+                    "12": 1
+                },
+                "averageAccuracy": {
+                    "12": 84.1
+                },
+                "species": {
+                    "Staphylococcus epidermidis": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003551",
+                "name": "emeA",
+                "description": "A multidrug efflux pump from Enterococcus faecalis. There exist efflux activity of several antimicrobial agents such as DAPI, Hoechst 33342 and acriflavine. Efflux of DAPI via EmeA was strongly inhibited by reserpine.",
+                "count": {
+                    "1": 4,
+                    "2": 6,
+                    "4": 7,
+                    "5": 8,
+                    "6": 11,
+                    "7": 13,
+                    "8": 15,
+                    "9": 16,
+                    "11": 18,
+                    "12": 20
+                },
+                "averageAccuracy": {
+                    "1": 87.07,
+                    "2": 87.26,
+                    "4": 88.29,
+                    "5": 87.68,
+                    "6": 87.86,
+                    "7": 87.71,
+                    "8": 87.19,
+                    "9": 87.47,
+                    "11": 87.82,
+                    "12": 87.2
+                },
+                "species": {
+                    "Enterococcus faecalis": {
+                        "1": 4,
+                        "2": 6,
+                        "4": 7,
+                        "5": 8,
+                        "6": 11,
+                        "7": 13,
+                        "8": 15,
+                        "9": 16,
+                        "11": 18
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000186",
+                "name": "tetM",
+                "description": "TetM is a ribosomal protection protein that confers tetracycline resistance. It is found on transposable DNA elements and its horizontal transfer between bacterial species has been documented.",
+                "count": {
+                    "2": 1,
+                    "3": 4,
+                    "4": 5,
+                    "6": 6,
+                    "8": 7,
+                    "11": 8
+                },
+                "averageAccuracy": {
+                    "2": 83.68,
+                    "3": 83.06,
+                    "4": 82.56,
+                    "6": 82.28,
+                    "8": 82.76,
+                    "11": 82.43
+                },
+                "species": {
+                    "Streptococcus mitis B6": {
+                        "6": 1
+                    },
+                    "Bacilli": {
+                        "2": 1,
+                        "3": 4,
+                        "4": 5,
+                        "8": 6
+                    },
+                    "Enterococcus": {
+                        "11": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002875",
+                "name": "dfrE",
+                "description": "dfrE is a chromosome-encoded dihydrofolate reductase found in Enterococcus faecalis",
+                "count": {
+                    "1": 2,
+                    "3": 3,
+                    "4": 5,
+                    "7": 7,
+                    "8": 8,
+                    "10": 9,
+                    "11": 10
+                },
+                "averageAccuracy": {
+                    "1": 83.6,
+                    "3": 83.35,
+                    "4": 84.7,
+                    "7": 87.0,
+                    "8": 87.29,
+                    "10": 86.99,
+                    "11": 87.62
+                },
+                "species": {
+                    "Enterococcus faecalis": {
+                        "7": 1
+                    },
+                    "Bacteria": {
+                        "1": 2,
+                        "3": 3,
+                        "4": 5,
+                        "7": 6,
+                        "8": 7,
+                        "10": 8,
+                        "11": 9
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001209",
+                "name": "mecC",
+                "description": "A foreign PBP2a acquired by lateral gene transfer that able to perform peptidoglycan synthesis in the presence of beta-lactams.",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 90.69
+                },
+                "species": {
+                    "Staphylococcus aureus": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000196",
+                "name": "tet32",
+                "description": "Tet32 is a tetracycline resistance gene similar to Tet(O), and binds to the ribosome to confer tetracycline resistance as a ribosomal protection protein.",
+                "count": {
+                    "1": 1,
+                    "8": 2
+                },
+                "averageAccuracy": {
+                    "1": 81.65,
+                    "8": 81.86
+                },
+                "species": {
+                    "Terrabacteria group": {
+                        "1": 1,
+                        "8": 2
+                    }
+                }
+            },
+            {
+                "cardId": "Unknown",
+                "name": "Unknown",
+                "description": "No description for Unknown",
+                "count": {
+                    "10": 1
+                },
+                "averageAccuracy": {
+                    "10": 80.81
+                },
+                "species": {
+                    "no_hit": {
+                        "10": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000250",
+                "name": "ErmC",
+                "description": "ErmC is a methyltransferase that catalyzes the methylation of A2058 of the 23S ribosomal RNA in two steps. Expression of ErmC is inducible by erythromycin. The leader peptide causes attenuation of the mRNA and stabilizes the structure preventing further translation. When erythromycin is present, it binds the leader peptide causing a change in conformation allowing for the expression of ErmC.",
+                "count": {
+                    "2": 1,
+                    "10": 2,
+                    "11": 3
+                },
+                "averageAccuracy": {
+                    "2": 95.46,
+                    "10": 93.32,
+                    "11": 93.5
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "10": 1
+                    },
+                    "Staphylococcus aureus": {
+                        "2": 1,
+                        "11": 2
+                    }
+                }
+            }
+        ]
+    }
+}

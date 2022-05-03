@@ -1,0 +1,440 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.2",
+        "blastFiles": {
+            "0": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_0.txt",
+            "1": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_1.txt",
+            "2": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_3.txt",
+            "3": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_2.txt",
+            "4": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_4.txt",
+            "5": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_5.txt",
+            "6": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_7.txt",
+            "7": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_6.txt",
+            "8": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_11.txt",
+            "9": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_8.txt",
+            "10": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_9.txt",
+            "11": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_10.txt"
+        }
+    },
+    "tree": {
+        "name": "root",
+        "rank": 0,
+        "ncbiRank": "no rank",
+        "ncbiID": 1,
+        "value": 316,
+        "summedValue": 90376,
+        "children": [
+            {
+                "name": "cellular organisms",
+                "rank": 0,
+                "ncbiRank": "no rank",
+                "ncbiID": 131567,
+                "value": 0,
+                "summedValue": 90060,
+                "children": [
+                    {
+                        "name": "Bacteria",
+                        "rank": 1,
+                        "ncbiRank": "superkingdom",
+                        "ncbiID": 2,
+                        "value": 1408,
+                        "summedValue": 90060,
+                        "children": [
+                            {
+                                "name": "Proteobacteria",
+                                "rank": 3,
+                                "ncbiRank": "phylum",
+                                "ncbiID": 1224,
+                                "value": 0,
+                                "summedValue": 66398,
+                                "children": [
+                                    {
+                                        "name": "Gammaproteobacteria",
+                                        "rank": 4,
+                                        "ncbiRank": "class",
+                                        "ncbiID": 1236,
+                                        "value": 121,
+                                        "summedValue": 66373,
+                                        "children": [
+                                            {
+                                                "name": "Enterobacterales",
+                                                "rank": 5,
+                                                "ncbiRank": "order",
+                                                "ncbiID": 91347,
+                                                "value": 215,
+                                                "summedValue": 66252,
+                                                "children": [
+                                                    {
+                                                        "name": "Enterobacteriaceae",
+                                                        "rank": 6,
+                                                        "ncbiRank": "family",
+                                                        "ncbiID": 543,
+                                                        "value": 3604,
+                                                        "summedValue": 65925,
+                                                        "children": [
+                                                            {
+                                                                "name": "Citrobacter",
+                                                                "rank": 7,
+                                                                "ncbiRank": "genus",
+                                                                "ncbiID": 544,
+                                                                "value": 0,
+                                                                "summedValue": 156,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Citrobacter freundii complex",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "species group",
+                                                                        "ncbiID": 1344959,
+                                                                        "value": 98,
+                                                                        "summedValue": 98,
+                                                                        "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "Enterobacter",
+                                                                "rank": 7,
+                                                                "ncbiRank": "genus",
+                                                                "ncbiID": 547,
+                                                                "value": 39396,
+                                                                "summedValue": 62104,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Enterobacter cloacae complex",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "species group",
+                                                                        "ncbiID": 354276,
+                                                                        "value": 12144,
+                                                                        "summedValue": 22708,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Enterobacter hormaechei",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 158836,
+                                                                                "value": 10564,
+                                                                                "summedValue": 10564,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "Escherichia",
+                                                                "rank": 7,
+                                                                "ncbiRank": "genus",
+                                                                "ncbiID": 561,
+                                                                "value": 0,
+                                                                "summedValue": 119,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Escherichia coli",
+                                                                        "rank": 8,
+                                                                        "ncbiRank": "species",
+                                                                        "ncbiID": 562,
+                                                                        "value": 119,
+                                                                        "summedValue": 119,
+                                                                        "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "Erwiniaceae",
+                                                        "rank": 6,
+                                                        "ncbiRank": "family",
+                                                        "ncbiID": 1903409,
+                                                        "value": 0,
+                                                        "summedValue": 115,
+                                                        "children": [
+                                                            {
+                                                                "name": "Pantoea",
+                                                                "rank": 7,
+                                                                "ncbiRank": "genus",
+                                                                "ncbiID": 53335,
+                                                                "value": 0,
+                                                                "summedValue": 114,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Pantoea ananatis",
+                                                                        "rank": 8,
+                                                                        "ncbiRank": "species",
+                                                                        "ncbiID": 553,
+                                                                        "value": 112,
+                                                                        "summedValue": 112,
+                                                                        "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "environmental samples",
+                                "rank": 0,
+                                "ncbiRank": "no rank",
+                                "ncbiID": 48479,
+                                "value": 0,
+                                "summedValue": 111,
+                                "children": [
+                                    {
+                                        "name": "uncultured bacterium",
+                                        "rank": 8,
+                                        "ncbiRank": "species",
+                                        "ncbiID": 77133,
+                                        "value": 111,
+                                        "summedValue": 111,
+                                        "children": [
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Terrabacteria group",
+                                "rank": 0,
+                                "ncbiRank": "clade",
+                                "ncbiID": 1783272,
+                                "value": 0,
+                                "summedValue": 22256,
+                                "children": [
+                                    {
+                                        "name": "Firmicutes",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1239,
+                                        "value": 0,
+                                        "summedValue": 2580,
+                                        "children": [
+                                            {
+                                                "name": "Bacilli",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 91061,
+                                                "value": 0,
+                                                "summedValue": 2564,
+                                                "children": [
+                                                    {
+                                                        "name": "Bacillales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 1385,
+                                                        "value": 0,
+                                                        "summedValue": 2096,
+                                                        "children": [
+                                                            {
+                                                                "name": "Staphylococcaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 90964,
+                                                                "value": 0,
+                                                                "summedValue": 2088,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Staphylococcus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1279,
+                                                                        "value": 141,
+                                                                        "summedValue": 2087,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Staphylococcus aureus",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1280,
+                                                                                "value": 360,
+                                                                                "summedValue": 360,
+                                                                                "children": [
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "name": "Staphylococcus epidermidis",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1282,
+                                                                                "value": 1586,
+                                                                                "summedValue": 1586,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "Lactobacillales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 186826,
+                                                        "value": 0,
+                                                        "summedValue": 418,
+                                                        "children": [
+                                                            {
+                                                                "name": "Streptococcaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 1300,
+                                                                "value": 0,
+                                                                "summedValue": 122,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Streptococcus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1301,
+                                                                        "value": 122,
+                                                                        "summedValue": 122,
+                                                                        "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "Enterococcaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 81852,
+                                                                "value": 0,
+                                                                "summedValue": 293,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Enterococcus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1350,
+                                                                        "value": 0,
+                                                                        "summedValue": 293,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Enterococcus faecalis",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1351,
+                                                                                "value": 286,
+                                                                                "summedValue": 286,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Actinobacteria",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 201174,
+                                        "value": 0,
+                                        "summedValue": 19673,
+                                        "children": [
+                                            {
+                                                "name": "Actinobacteria",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1760,
+                                                "value": 108,
+                                                "summedValue": 19673,
+                                                "children": [
+                                                    {
+                                                        "name": "Bifidobacteriales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 85004,
+                                                        "value": 0,
+                                                        "summedValue": 19598,
+                                                        "children": [
+                                                            {
+                                                                "name": "Bifidobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 31953,
+                                                                "value": 0,
+                                                                "summedValue": 19598,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Bifidobacterium",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1678,
+                                                                        "value": 2857,
+                                                                        "summedValue": 19565,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Bifidobacterium breve",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1685,
+                                                                                "value": 400,
+                                                                                "summedValue": 400,
+                                                                                "children": [
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "name": "Bifidobacterium animalis",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 28025,
+                                                                                "value": 507,
+                                                                                "summedValue": 507,
+                                                                                "children": [
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "name": "Bifidobacterium longum",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 216816,
+                                                                                "value": 15801,
+                                                                                "summedValue": 15801,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "unclassified",
+                "rank": 0,
+                "ncbiRank": "no rank",
+                "ncbiID": 0,
+                "value": 1543,
+                "summedValue": 1543,
+                "children": [
+                ]
+            }
+        ]
+    }
+}

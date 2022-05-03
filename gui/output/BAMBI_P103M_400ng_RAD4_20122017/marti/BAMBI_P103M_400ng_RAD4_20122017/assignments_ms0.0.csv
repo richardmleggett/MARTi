@@ -1,0 +1,97 @@
+root,1,59,95350
+Viruses,10239,0,3
+unclassified viruses,12429,0,1
+unclassified bacterial viruses,12333,0,1
+Streptococcus satellite phage Javan368,2558664,1,1
+Duplodnaviria,2731341,0,2
+Heunggongvirae,2731360,0,2
+Uroviricota,2731618,0,2
+Caudoviricetes,2731619,0,2
+Caudovirales,28883,0,2
+Siphoviridae,10699,0,2
+Phietavirus,1623298,1,1
+Phifelvirus,1623299,1,1
+cellular organisms,131567,0,95288
+Bacteria,2,1949,95288
+Proteobacteria,1224,0,8
+Gammaproteobacteria,1236,0,6
+Enterobacterales,91347,0,6
+Enterobacteriaceae,543,3,6
+Escherichia,561,0,1
+Escherichia coli,562,1,1
+Salmonella,590,0,2
+Salmonella enterica,28901,2,2
+Betaproteobacteria,28216,0,2
+Burkholderiales,80840,0,2
+Burkholderiaceae,119060,0,1
+Ralstonia,48736,0,1
+Ralstonia pickettii,329,1,1
+Burkholderiales genera incertae sedis,224471,0,1
+Mitsuaria,65047,0,1
+unclassified Mitsuaria,2648776,0,1
+Mitsuaria sp. 7,1658665,1,1
+environmental samples,48479,13,15
+uncultured bacterium,77133,2,2
+Terrabacteria group,1783272,27,93316
+Firmicutes,1239,13,25774
+Bacilli,91061,160,25761
+Bacillales,1385,15,3600
+Staphylococcaceae,90964,0,3499
+Staphylococcus,1279,162,3499
+Staphylococcus aureus,1280,74,74
+Staphylococcus epidermidis,1282,1955,1955
+Staphylococcus haemolyticus,1283,1028,1028
+Staphylococcus hominis,1290,14,14
+Staphylococcus lugdunensis,28035,261,261
+Staphylococcus caprae,29380,1,1
+Staphylococcus cohnii,29382,1,1
+Staphylococcus saprophyticus,29385,1,1
+Staphylococcus capitis,29388,1,1
+Staphylococcus pseudintermedius,283734,1,1
+Bacillaceae,186817,17,20
+Bacillus,1386,1,3
+[Brevibacterium] frigoritolerans,450367,2,2
+Planococcaceae,186818,0,1
+Paenisporosarcina,651660,0,1
+Paenisporosarcina antarctica,417367,1,1
+Listeriaceae,186820,0,64
+Listeria,1637,33,64
+Listeria monocytogenes,1639,28,28
+Listeria welshimeri,1643,3,3
+Bacillales incertae sedis,539002,0,1
+Bacillales Family XII. Incertae Sedis,539742,0,1
+Exiguobacterium,33986,0,1
+unclassified Exiguobacterium,2644629,0,1
+Exiguobacterium sp. S3-2,1389960,1,1
+Lactobacillales,186826,4,22001
+Streptococcaceae,1300,0,3
+Streptococcus,1301,0,3
+Streptococcus agalactiae,1311,1,1
+Streptococcus mitis,28037,2,2
+Enterococcaceae,81852,310,21993
+Enterococcus,1350,245,21683
+Enterococcus faecalis,1351,21433,21433
+Enterococcus faecium,1352,1,1
+unclassified Enterococcus,2608891,3,4
+Enterococcus sp. DA9,2603296,1,1
+Carnobacteriaceae,186828,0,1
+Carnobacterium,2747,0,1
+unclassified Carnobacterium,257487,1,1
+Actinobacteria,201174,0,67515
+Actinobacteria,1760,0,67515
+Bifidobacteriales,85004,0,67227
+Bifidobacteriaceae,31953,0,67227
+Bifidobacterium,1678,4085,67227
+Bifidobacterium bifidum,1681,11053,11053
+Bifidobacterium breve,1685,52078,52078
+Bifidobacterium choerinum,35760,1,1
+Bifidobacterium scardovii,158787,1,1
+Bifidobacterium longum,216816,9,9
+Corynebacteriales,85007,0,287
+Corynebacteriaceae,1653,0,287
+Corynebacterium,1716,0,287
+Corynebacterium kroppenstedtii,161879,287,287
+Propionibacteriales,85009,0,1
+Propionibacteriaceae,31957,0,1
+Cutibacterium,1912216,0,1
+Cutibacterium acnes,1747,1,1

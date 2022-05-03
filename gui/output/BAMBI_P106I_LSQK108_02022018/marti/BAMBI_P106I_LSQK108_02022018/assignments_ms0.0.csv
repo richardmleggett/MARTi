@@ -1,0 +1,108 @@
+root,1,31,63706
+Viruses,10239,0,7
+Duplodnaviria,2731341,0,7
+Heunggongvirae,2731360,0,7
+Uroviricota,2731618,0,7
+Caudoviricetes,2731619,0,7
+Caudovirales,28883,0,7
+Siphoviridae,10699,0,4
+unclassified Siphoviridae,196894,1,2
+Lactococcus phage proPhi7,2656514,1,1
+Phietavirus,1623298,1,2
+unclassified Phietavirus,1636203,0,1
+Staphylococcus phage IME1348_01,1965489,1,1
+environmental samples,2100420,0,3
+uncultured Caudovirales phage,2100421,3,3
+cellular organisms,131567,0,63668
+Bacteria,2,2524,63668
+Proteobacteria,1224,0,1
+Betaproteobacteria,28216,0,1
+Burkholderiales,80840,0,1
+Burkholderiaceae,119060,0,1
+Ralstonia,48736,1,1
+Fusobacteria,32066,0,1
+Fusobacteriia,203490,0,1
+Fusobacteriales,203491,0,1
+Fusobacteriaceae,203492,0,1
+Fusobacterium,848,0,1
+Fusobacterium necrophorum,859,1,1
+environmental samples,48479,0,1
+uncultured bacterium,77133,1,1
+FCB group,1783270,0,1
+Bacteroidetes/Chlorobi group,68336,0,1
+Bacteroidetes,976,0,1
+Bacteroidia,200643,0,1
+Bacteroidales,171549,0,1
+Bacteroidaceae,815,0,1
+Bacteroides,816,0,1
+Bacteroides dorei,357276,1,1
+Terrabacteria group,1783272,66,61140
+Firmicutes,1239,27,8191
+Bacilli,91061,17,8159
+Bacillales,1385,1,497
+Staphylococcaceae,90964,0,495
+Staphylococcus,1279,25,495
+Staphylococcus aureus,1280,3,3
+Staphylococcus epidermidis,1282,386,386
+Staphylococcus haemolyticus,1283,80,80
+Staphylococcus caprae,29380,1,1
+Listeriaceae,186820,0,1
+Listeria,1637,0,1
+Listeria monocytogenes,1639,1,1
+Lactobacillales,186826,47,7645
+Streptococcaceae,1300,5,1122
+Streptococcus,1301,1,4
+Streptococcus thermophilus,1308,1,1
+Streptococcus parauberis,1348,1,1
+Streptococcus dysgalactiae group,119603,0,1
+Streptococcus dysgalactiae,1334,1,1
+Lactococcus,1357,151,1113
+Lactococcus lactis,1358,294,294
+Lactococcus garvieae,1363,606,606
+Lactococcus piscium,1364,1,1
+Lactococcus raffinolactis,1366,1,1
+Lactococcus petauri,1940789,60,60
+Enterococcaceae,81852,2,6476
+Enterococcus,1350,257,6474
+Enterococcus faecalis,1351,6115,6115
+Enterococcus faecium,1352,102,102
+Clostridia,186801,0,5
+Clostridiales,186802,0,5
+Lachnospiraceae,186803,0,2
+Butyrivibrio,830,0,1
+Butyrivibrio proteoclasticus,43305,1,1
+unclassified Lachnospiraceae,186928,0,1
+[Eubacterium] rectale,39491,1,1
+Peptostreptococcaceae,186804,2,3
+Clostridioides,1870884,0,1
+Clostridioides difficile,1496,1,1
+Actinobacteria,201174,3,52883
+Actinobacteria,1760,0,52880
+Bifidobacteriales,85004,0,52875
+Bifidobacteriaceae,31953,0,52875
+Bifidobacterium,1678,3965,52875
+Bifidobacterium adolescentis,1680,2,2
+Bifidobacterium bifidum,1681,8257,8257
+Bifidobacterium angulatum,1683,2,2
+Bifidobacterium breve,1685,40637,40637
+Bifidobacterium pseudolongum,1694,1,1
+Bifidobacterium scardovii,158787,1,1
+Bifidobacterium longum,216816,10,10
+Micrococcales,85006,0,2
+Cellulomonadaceae,85016,0,1
+Oerskovia,162491,0,1
+unclassified Oerskovia,2619021,0,1
+Oerskovia sp. KBS0722,1179673,1,1
+Microbacteriaceae,85023,0,1
+Leucobacter,55968,0,1
+Leucobacter triazinivorans,1784719,1,1
+Corynebacteriales,85007,0,2
+Corynebacteriaceae,1653,0,1
+Corynebacterium,1716,0,1
+Corynebacterium aurimucosum,169292,1,1
+Mycobacteriaceae,1762,0,1
+Mycolicibacterium,1866885,0,1
+Mycolicibacterium mucogenicum,56689,1,1
+Streptomycetales,85011,0,1
+Streptomycetaceae,2062,0,1
+Streptomyces,1883,1,1
