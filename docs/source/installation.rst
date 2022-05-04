@@ -46,7 +46,16 @@ You can then check the MARTi Engine is installed by typing:
 ``marti -h``
 
 If you see the help text, all is ok.
-MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer being used to run the front-end web server, you need to create an options file in your home directory that is required by the GUI. An example is provided with the code. To copy it to your home directory, type:
+MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
+The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the guy directory e.g.:
+
+``MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui``
+
+Then move this marti_gui script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
+
+``mv bin/marti_gui /usr/local/bin``
+
+Next, you need to create an options file in your home directory that is required by the GUI. An example is provided with the code. To copy it to your home directory, type:
 
 ``cp marti_server_options.txt ~/``
 
@@ -59,7 +68,9 @@ This file contains the locations of some important directories and you will need
 
 To start the GUI server, type
 
-``node UI/index.js``
+``marti_gui [port]``
+
+Where port is an optional parameter to specify the port number to be used. Ignore this if unsure.
 
 **macOS**
 
