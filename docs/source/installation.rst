@@ -47,7 +47,7 @@ You can then check the MARTi Engine is installed by typing:
 
 If you see the help text, all is ok.
 MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
-The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the guy directory e.g.:
+The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
 ``MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui``
 
