@@ -72,7 +72,7 @@ To start the GUI server, type
 
 Where port is an optional parameter to specify the port number to be used. Ignore this if unsure.
 
-**macOS**
+**macOS differences**
 
 On some versions of macOS, you may get an error about fsevents.node the first time you run it:
 
