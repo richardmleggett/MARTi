@@ -10,7 +10,7 @@ Download and installation=========================
 
 Make sure you've read the :ref:`intro` and know whether you are installing MARTi in a local configuration (analysis performed on a laptop/desktop) or an HPC configuration (analysis performed on an HPC Cluster).
 
-You need to copy the MARTi software onto any computer that will be running the MARTi Engine (back-end) or the MARTi GUI (web server). If running in local mode, this will be the same computer. If running in an HPC mode, you will copy the software on to the cluster and also onto the computer where you will be running the web server for the GUI.
+Both components are contained within a single GitHub repository. You need to copy the MARTi software onto any computer that will be running the MARTi Engine (back-end) or the MARTi GUI (web server). If running in local mode, this will be the same computer. If running in an HPC mode, you will copy the software on to the cluster and also onto the computer where you will be running the web server for the GUI. For simplicity, it is not necessary to separate the Engine from the GUI for installation purposes.
 
 Prerequisites
 -------------
@@ -22,6 +22,8 @@ In order to run the MARTi Engine (back-end), you also need to install the follow
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
 * node.js - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
+
+If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the front-end dependencies.
 
 Downloading
 -----------
