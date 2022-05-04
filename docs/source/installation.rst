@@ -23,7 +23,7 @@ In order to run the MARTi GUI, you also need to install the following on the com
 
 * node.js - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
 
-If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the front-end dependencies.
+If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the GUI dependencies. If you are running both the Engine and the GUI on a single computer, then you need to install both sets of dependencies on that computer.
 
 Downloading
 -----------

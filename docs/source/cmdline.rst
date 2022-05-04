@@ -33,7 +33,12 @@ Where:
 
 MARTi will generate a config file will default options and these can then be edited in a text editor.
 
-Blast processes
----------------
+Blast process configuration
+---------------------------
 
-The default options for blast processes are defined in the file marti_engine_options.txt which, by default, is found in the bin directory. Each blast process defined in this file has a name associated with it and this is the identifier to pass to the -blast option above.
+The default options for blast processes are defined in the file marti_engine_options.txt which, by default, is found in the MARTi bin directory. Each blast process defined in this file has a name associated with it and this is the identifier to pass to the -blast option above. The options defined in this file will be the default ones written to the new config file.
+
+MARTi looks for marti_engine_options.txt in three locations:
+1. In the current directory.
+2. If not in the current directory, in the user's home directory (i.e. ~/marti_engine_options.txt).
+3. If not in the user's home directory, in the directory containing the MARTiEngine.jar, which unless you have changed things will be the bin directory.
