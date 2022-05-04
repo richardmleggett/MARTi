@@ -3,6 +3,6 @@
 # Tags should be case insensitive
 
 MinKNOWRunDirectory	/Users/user/Documents/minknow
-MARTiSampleDirectory	/Users/user/Documents/marti/marti_gui
+MARTiSampleDirectory	/Users/user/Documents/marti/marti_gui/output
 BlastDatabaseDirectory	/Users/user/Documents/Databases
 TaxonomyDirectory	/Users/user/Documents/Databases/taxonomy_6Jul20

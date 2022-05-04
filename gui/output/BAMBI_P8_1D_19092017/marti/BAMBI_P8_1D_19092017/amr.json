@@ -1,0 +1,467 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.2"
+    },
+    "amr": {
+        "currentChunk": 4,
+        "chunkTime": {
+            "1": "18 Jun 2021 23:17:49",
+            "2": "18 Jun 2021 23:36:04",
+            "3": "18 Jun 2021 23:37:20",
+            "4": "18 Jun 2021 23:38:21"
+        },
+        "readsWithAMRHits": 55,
+        "geneList": [
+            {
+                "cardId": "ARO:3003922",
+                "name": "oqxA",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "count": {
+                    "2": 2,
+                    "3": 10,
+                    "4": 11
+                },
+                "averageAccuracy": {
+                    "2": 83.28,
+                    "3": 83.75,
+                    "4": 83.52
+                },
+                "species": {
+                    "Enterobacteriaceae": {
+                        "2": 1
+                    },
+                    "Klebsiella": {
+                        "3": 3
+                    },
+                    "Klebsiella pneumoniae": {
+                        "2": 1,
+                        "3": 6
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002985",
+                "name": "arnA",
+                "description": "arnA modifies lipid A with 4-amino-4-deoxy-L-arabinose (Ara4N) which allows gram-negative bacteria to resist the antimicrobial activity of cationic antimicrobial peptides and antibiotics such as polymyxin. arnA is found in E. coli and P. aeruginosa.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 81.73
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002670",
+                "name": "cat",
+                "description": "No description for ARO:3002670",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 84.66
+                },
+                "species": {
+                    "Proteus mirabilis": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003154",
+                "name": "SHV-187",
+                "description": "From the Lahey list of beta-lactamases.",
+                "count": {
+                    "1": 1,
+                    "2": 2,
+                    "3": 3,
+                    "4": 4
+                },
+                "averageAccuracy": {
+                    "1": 83.35,
+                    "2": 82.62,
+                    "3": 85.09,
+                    "4": 84.31
+                },
+                "species": {
+                    "Enterobacteriaceae": {
+                        "2": 1
+                    },
+                    "Klebsiella": {
+                        "1": 1
+                    },
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003923",
+                "name": "oqxB",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "count": {
+                    "1": 1,
+                    "2": 4,
+                    "3": 8,
+                    "4": 12
+                },
+                "averageAccuracy": {
+                    "1": 83.36,
+                    "2": 84.02,
+                    "3": 84.07,
+                    "4": 84.4
+                },
+                "species": {
+                    "Enterobacteriaceae": {
+                        "2": 1
+                    },
+                    "Klebsiella": {
+                        "1": 1,
+                        "3": 2
+                    },
+                    "Klebsiella pneumoniae": {
+                        "2": 2,
+                        "3": 5
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003152",
+                "name": "SHV-185",
+                "description": "From the Lahey list of beta-lactamases.",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 83.55
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000074",
+                "name": "emrB",
+                "description": "emrB is a translocase in the emrB -TolC efflux protein in E. coli. It recognizes substrates including carbonyl cyanide m-chlorophenylhydrazone (CCCP), nalidixic acid, and thioloactomycin.",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 81.82
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000216",
+                "name": "acrB",
+                "description": "Protein subunit of AcrA-AcrB-TolC multidrug efflux complex. AcrB functions as a herterotrimer which forms the inner membrane component and is primarily responsible for substrate recognition and energy transduction by acting as a drug/proton antiporter.",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 80.1
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002895",
+                "name": "sat-1",
+                "description": "sat-1 is a plasmid-mediated streptothricin acetyltransferase in Escherichia coli",
+                "count": {
+                    "3": 1,
+                    "4": 2
+                },
+                "averageAccuracy": {
+                    "3": 84.52,
+                    "4": 84.47
+                },
+                "species": {
+                    "Gammaproteobacteria": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000518",
+                "name": "CRP",
+                "description": "CRP is a global regulator that represses MdtEF multidrug efflux pump expression.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 81.78
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001125",
+                "name": "SHV-71",
+                "description": "SHV-71 is a broad-spectrum beta-lactamase found in Klebsiella pneumoniae and Shigella.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 85.59
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002601",
+                "name": "aadA",
+                "description": "ANT(3'')-Ia is an aminoglycoside nucleotidyltransferase gene encoded by plasmids, transposons, integrons in Enterobacteriaceae, A. baumannii, P. aeruginosa and Vibrio cholerae",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 83.21
+                },
+                "species": {
+                    "Gammaproteobacteria": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003049",
+                "name": "rosB",
+                "description": "rosB is a potassium antiporter in Yersinia that confers resistance to cationic antimicrobial peptides such as polymyxin B",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 80.2
+                },
+                "species": {
+                    "Proteus mirabilis": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000830",
+                "name": "cpxA",
+                "description": "CpxA is a membrane-localized sensor kinase that is activated by envelope stress. It starts a kinase cascade that activates CpxR, which promotes efflux complex expression.",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 80.1
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003209",
+                "name": "FosA5",
+                "description": "fosA5 is a fosfomycin resistance gene isolated from clinical strain of Escherichia coli E265. It is susceptible to amikacin, tetracycline and imipenem, and resistant to sulphonamide, cephalosporins, gentamicin, ciprofloxacin, chloramphenicol and streptomycin",
+                "count": {
+                    "2": 3,
+                    "3": 6,
+                    "4": 8
+                },
+                "averageAccuracy": {
+                    "2": 82.8,
+                    "3": 83.26,
+                    "4": 83.08
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "2": 3,
+                        "3": 6
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002854",
+                "name": "dfrA1",
+                "description": "dfrA1 is an integron-encoded dihydrofolate reductase found in Escherichia coli",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 91.03
+                },
+                "species": {
+                    "Gammaproteobacteria": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000676",
+                "name": "H-NS",
+                "description": "H-NS is a histone-like protein involved in global gene regulation in Gram-negative bacteria. It is a repressor of the membrane fusion protein genes acrE, mdtE, and emrK as well as nearby genes of many RND-type multidrug exporters.",
+                "count": {
+                    "3": 1,
+                    "4": 2
+                },
+                "averageAccuracy": {
+                    "3": 82.61,
+                    "4": 82.27
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001096",
+                "name": "SHV-38",
+                "description": "SHV-38 is an extended-spectrum beta-lactamase found in Klebsiella pneumoniae.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 92.05
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001123",
+                "name": "SHV-69",
+                "description": "SHV-69 is a beta-lactamase found in Klebsiella pneumoniae.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 89.77
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001330",
+                "name": "mdtD",
+                "description": "Efflux pump mdtD",
+                "count": {
+                    "1": 1
+                },
+                "averageAccuracy": {
+                    "1": 80.95
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "1": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000804",
+                "name": "mexF",
+                "description": "MexF is the multidrug inner membrane transporter of the MexEF-OprN complex.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 80.82
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003830",
+                "name": "aminocoumarin",
+                "description": "alanyl-tRNA synthetase conferring resistance to novobiocin in Escherichia coli",
+                "count": {
+                    "4": 2
+                },
+                "averageAccuracy": {
+                    "4": 80.9
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000177",
+                "name": "tetJ",
+                "description": "TetJ is a tetracycline efflux protein expressed in Gram-negative bacteria (Escherichia, Morganella, and Proteus).",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 88.46
+                },
+                "species": {
+                    "Proteus mirabilis": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002831",
+                "name": "vgaC",
+                "description": "vgaC is an efflux protein expressed in staphylococci that confers resistance to streptogramin A antibiotics and related compounds. It is associated with plasmid DNA.",
+                "count": {
+                    "2": 3,
+                    "3": 4,
+                    "4": 5
+                },
+                "averageAccuracy": {
+                    "2": 88.56,
+                    "3": 87.51,
+                    "4": 86.65
+                },
+                "species": {
+                    "Enterobacteriaceae": {
+                        "2": 2
+                    },
+                    "Enterobacterales": {
+                        "2": 1,
+                        "3": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000794",
+                "name": "mdtC",
+                "description": "MdtC is a transporter that forms a heteromultimer complex with MdtB to form a multidrug transporter. MdtBC is part of the MdtABC-TolC efflux complex. In the absence of MdtB, MdtC can form a homomultimer complex that results in a functioning efflux complex with a narrower drug specificity.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 81.46
+                },
+                "species": {
+                    "Klebsiella pneumoniae": {
+                        "2": 1
+                    }
+                }
+            }
+        ]
+    }
+}

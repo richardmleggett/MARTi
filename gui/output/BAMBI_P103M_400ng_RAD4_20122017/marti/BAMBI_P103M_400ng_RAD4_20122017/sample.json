@@ -1,0 +1,38 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.2"
+    },
+    "sample": {
+        "id": "BAMBI_P103M_400ng_RAD4_20122017",
+        "sequencingDate": "2021-06-18T23:09:56",
+        "analysisDate": "2021-06-18T23:09:56",
+        "yieldBases": 163454946,
+        "yieldGb": 0.163454946,
+        "readsPassBasecall": 120000,
+        "readsFailedFilter": 24009,
+        "readsPassedFilter": 95991,
+        "readsWithClassification": 95350,
+        "readsUnclassified": 641,
+        "readsWithPoorAlignments": 64,
+        "readsAnalysed": 95991,
+        "sequencingStatus": "Complete",
+        "martiStatus": "Complete",
+        "analysis": {
+            "pipeline": "BlastLCA-CARD",
+            "classification": {
+                "algorithm": "BlastLCA",
+                "blastVersion": "0.0.0",
+                "database": "nt",
+                "databaseVersion": "01-01-1900"
+            },
+            "accumulation": "true",
+            "amr": {
+                "algorithm": "Blast",
+                "blastVersion": "0.0.0",
+                "database": "CARD",
+                "databaseVersion": "0.0.0"
+            }
+        }
+    }
+}

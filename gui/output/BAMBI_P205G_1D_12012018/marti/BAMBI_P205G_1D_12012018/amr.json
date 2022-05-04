@@ -1,0 +1,1053 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.2"
+    },
+    "amr": {
+        "currentChunk": 12,
+        "chunkTime": {
+            "1": "18 Jun 2021 23:38:48",
+            "2": "18 Jun 2021 23:39:30",
+            "3": "18 Jun 2021 23:39:46",
+            "4": "18 Jun 2021 23:40:19",
+            "5": "18 Jun 2021 23:49:18",
+            "6": "18 Jun 2021 23:50:53",
+            "7": "18 Jun 2021 23:51:40",
+            "8": "18 Jun 2021 23:52:11",
+            "9": "18 Jun 2021 23:58:38",
+            "10": "18 Jun 2021 23:59:54",
+            "11": "19 Jun 2021 00:02:12",
+            "12": "19 Jun 2021 00:02:21"
+        },
+        "readsWithAMRHits": 194,
+        "geneList": [
+            {
+                "cardId": "ARO:3000781",
+                "name": "adeJ",
+                "description": "AdeJ is a RND efflux protein that acts as the inner membrane transporter of the AdeIJK efflux complex. It has 57% identity with E. coli AcrB.",
+                "count": {
+                    "1": 1
+                },
+                "averageAccuracy": {
+                    "1": 80.87
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "1": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000237",
+                "name": "tolC",
+                "description": "TolC is a protein subunit of many multidrug efflux complexes in Gram negative bacteria. It is an outer membrane efflux protein and is constitutively open. Regulation of efflux activity is often at its periplasmic entrance by other components of the efflux complex.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 81.91
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "4": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001827",
+                "name": "ACT-16",
+                "description": "ACT-16 is a beta-lactamase found in Enterobacteriaceae",
+                "count": {
+                    "5": 1,
+                    "6": 2
+                },
+                "averageAccuracy": {
+                    "5": 91.67,
+                    "6": 89.9
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "5": 1
+                    },
+                    "Bacteria": {
+                        "6": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000676",
+                "name": "H-NS",
+                "description": "H-NS is a histone-like protein involved in global gene regulation in Gram-negative bacteria. It is a repressor of the membrane fusion protein genes acrE, mdtE, and emrK as well as nearby genes of many RND-type multidrug exporters.",
+                "count": {
+                    "2": 1,
+                    "6": 2
+                },
+                "averageAccuracy": {
+                    "2": 88.07,
+                    "6": 85.07
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "2": 1
+                    },
+                    "Enterobacter hormaechei": {
+                        "6": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001830",
+                "name": "ACT-7",
+                "description": "ACT-7 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 85.12
+                },
+                "species": {
+                    "Bacteria": {
+                        "4": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003922",
+                "name": "oqxA",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "count": {
+                    "1": 1,
+                    "2": 3
+                },
+                "averageAccuracy": {
+                    "1": 82.14,
+                    "2": 81.76
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "1": 1,
+                        "2": 3
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002986",
+                "name": "bacA",
+                "description": "bacA is a gene that recycles undecaprenyl pyrophosphate during cell wall biosynthesis which confers resistance to bacitracin",
+                "count": {
+                    "2": 1,
+                    "6": 2,
+                    "10": 3,
+                    "12": 4
+                },
+                "averageAccuracy": {
+                    "2": 82.11,
+                    "6": 81.84,
+                    "10": 81.37,
+                    "12": 81.23
+                },
+                "species": {
+                    "Enterobacter": {
+                        "2": 1,
+                        "6": 2
+                    },
+                    "Enterobacter hormaechei": {
+                        "10": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003840",
+                "name": "aminocoumarin",
+                "description": "Positive regulator of gene expression in the cysteine regulon. cysB mutants confer resistance to novobiocin, an aminocoumarin antibiotic, in Escherichia coli.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 81.3
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000216",
+                "name": "acrB",
+                "description": "Protein subunit of AcrA-AcrB-TolC multidrug efflux complex. AcrB functions as a herterotrimer which forms the inner membrane component and is primarily responsible for substrate recognition and energy transduction by acting as a drug/proton antiporter.",
+                "count": {
+                    "1": 4,
+                    "2": 6,
+                    "3": 10,
+                    "4": 18,
+                    "5": 22,
+                    "6": 25,
+                    "7": 29,
+                    "8": 34,
+                    "9": 37,
+                    "11": 41,
+                    "12": 46
+                },
+                "averageAccuracy": {
+                    "1": 84.2,
+                    "2": 83.39,
+                    "3": 83.51,
+                    "4": 83.68,
+                    "5": 83.48,
+                    "6": 83.46,
+                    "7": 83.7,
+                    "8": 83.69,
+                    "9": 83.74,
+                    "11": 83.74,
+                    "12": 83.76
+                },
+                "species": {
+                    "Enterobacter": {
+                        "2": 1,
+                        "3": 2,
+                        "5": 3,
+                        "7": 4,
+                        "9": 6
+                    },
+                    "Enterobacter cloacae complex": {
+                        "1": 4,
+                        "2": 5,
+                        "3": 7,
+                        "4": 11,
+                        "5": 12,
+                        "6": 14,
+                        "7": 16,
+                        "8": 20,
+                        "9": 21,
+                        "11": 22
+                    },
+                    "Enterobacter hormaechei subsp. oharae": {
+                        "4": 2,
+                        "11": 4
+                    },
+                    "Enterobacter hormaechei": {
+                        "3": 1,
+                        "4": 3,
+                        "5": 5,
+                        "6": 6,
+                        "7": 7,
+                        "8": 8,
+                        "11": 9
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003830",
+                "name": "aminocoumarin",
+                "description": "alanyl-tRNA synthetase conferring resistance to novobiocin in Escherichia coli",
+                "count": {
+                    "1": 1,
+                    "2": 3,
+                    "4": 5,
+                    "7": 6,
+                    "8": 7,
+                    "11": 8,
+                    "12": 10
+                },
+                "averageAccuracy": {
+                    "1": 81.1,
+                    "2": 81.09,
+                    "4": 81.73,
+                    "7": 81.51,
+                    "8": 81.43,
+                    "11": 81.38,
+                    "12": 81.34
+                },
+                "species": {
+                    "Enterobacter": {
+                        "2": 1,
+                        "4": 2,
+                        "8": 3
+                    },
+                    "Enterobacter cloacae complex": {
+                        "1": 1,
+                        "2": 2,
+                        "4": 3,
+                        "7": 4,
+                        "11": 5
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001850",
+                "name": "ACT-30",
+                "description": "ACT-30 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 86.45
+                },
+                "species": {
+                    "Bacteria": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000831",
+                "name": "cpxR",
+                "description": "CpxR is a regulator that promotes acrD expression when phosphorylated by a cascade involving CpxA, a sensor kinase.",
+                "count": {
+                    "8": 1
+                },
+                "averageAccuracy": {
+                    "8": 82.28
+                },
+                "species": {
+                    "Enterobacter hormaechei": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001851",
+                "name": "ACT-31",
+                "description": "ACT-31 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "6": 1
+                },
+                "averageAccuracy": {
+                    "6": 81.92
+                },
+                "species": {
+                    "Bacteria": {
+                        "6": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000518",
+                "name": "CRP",
+                "description": "CRP is a global regulator that represses MdtEF multidrug efflux pump expression.",
+                "count": {
+                    "2": 2,
+                    "3": 3,
+                    "4": 4,
+                    "7": 7,
+                    "8": 8,
+                    "9": 9,
+                    "10": 12,
+                    "11": 13
+                },
+                "averageAccuracy": {
+                    "2": 86.24,
+                    "3": 85.23,
+                    "4": 84.81,
+                    "7": 84.82,
+                    "8": 84.39,
+                    "9": 83.98,
+                    "10": 83.53,
+                    "11": 83.72
+                },
+                "species": {
+                    "Enterobacter": {
+                        "7": 1,
+                        "10": 3
+                    },
+                    "Enterobacteriaceae": {
+                        "3": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                        "2": 2,
+                        "4": 3,
+                        "7": 4,
+                        "9": 5,
+                        "10": 6,
+                        "11": 7
+                    },
+                    "Enterobacter hormaechei": {
+                        "7": 1,
+                        "8": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000804",
+                "name": "mexF",
+                "description": "MexF is the multidrug inner membrane transporter of the MexEF-OprN complex.",
+                "count": {
+                    "8": 1
+                },
+                "averageAccuracy": {
+                    "8": 80.7
+                },
+                "species": {
+                    "Enterobacter": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000502",
+                "name": "acrF",
+                "description": "AcrF is a inner membrane transporter, similar to AcrB.",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 81.0
+                },
+                "species": {
+                    "Enterobacter": {
+                        "4": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001329",
+                "name": "mdtG",
+                "description": "Efflux protien mdtG.",
+                "count": {
+                    "10": 1
+                },
+                "averageAccuracy": {
+                    "10": 83.17
+                },
+                "species": {
+                    "Enterobacter": {
+                        "10": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001852",
+                "name": "ACT-32",
+                "description": "ACT-32 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "3": 2,
+                    "6": 3,
+                    "10": 5
+                },
+                "averageAccuracy": {
+                    "3": 83.15,
+                    "6": 83.61,
+                    "10": 85.48
+                },
+                "species": {
+                    "Enterobacteriaceae": {
+                        "3": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                        "10": 1
+                    },
+                    "Bacteria": {
+                        "3": 1,
+                        "6": 2,
+                        "10": 3
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000026",
+                "name": "mepA",
+                "description": "MepA is an efflux protein regulated by MepR and part of the MepRAB cluster. Its presence in Staphylococcus aureus led to multidrug resistance, while it has also been shown to decrease tigecycline susceptibility.",
+                "count": {
+                    "1": 1
+                },
+                "averageAccuracy": {
+                    "1": 86.95
+                },
+                "species": {
+                    "Staphylococcus aureus": {
+                        "1": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000621",
+                "name": "PC1",
+                "description": "The blaZ beta-lactamase is found in Bacillus subtilis and Staphylococcus aureus.",
+                "count": {
+                    "2": 1,
+                    "10": 2
+                },
+                "averageAccuracy": {
+                    "2": 86.43,
+                    "10": 84.79
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "2": 1,
+                        "10": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001328",
+                "name": "mdfA",
+                "description": "Multidrug translocase MdfA",
+                "count": {
+                    "11": 1
+                },
+                "averageAccuracy": {
+                    "11": 80.0
+                },
+                "species": {
+                    "Enterobacter hormaechei": {
+                        "11": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000319",
+                "name": "mphC",
+                "description": "The mphC gene was identified from Staphylococcus aureus.  This gene shows similarity to mphB gene from Escherchia coli.",
+                "count": {
+                    "3": 1,
+                    "12": 2
+                },
+                "averageAccuracy": {
+                    "3": 85.71,
+                    "12": 85.41
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "3": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000074",
+                "name": "emrB",
+                "description": "emrB is a translocase in the emrB -TolC efflux protein in E. coli. It recognizes substrates including carbonyl cyanide m-chlorophenylhydrazone (CCCP), nalidixic acid, and thioloactomycin.",
+                "count": {
+                    "8": 1,
+                    "11": 2
+                },
+                "averageAccuracy": {
+                    "8": 86.96,
+                    "11": 85.38
+                },
+                "species": {
+                    "Enterobacter": {
+                        "8": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                        "11": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001837",
+                "name": "ACT-15",
+                "description": "ACT-15 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 86.12
+                },
+                "species": {
+                    "Bacteria": {
+                        "7": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000377",
+                "name": "mexA",
+                "description": "MexA is the membrane fusion protein of the MexAB-OprM multidrug efflux complex.",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 80.2
+                },
+                "species": {
+                    "Enterobacter": {
+                        "7": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001838",
+                "name": "ACT-17",
+                "description": "ACT-17 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "8": 1
+                },
+                "averageAccuracy": {
+                    "8": 90.13
+                },
+                "species": {
+                    "Bacteria": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001847",
+                "name": "ACT-27",
+                "description": "ACT-27 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "count": {
+                    "1": 3,
+                    "2": 4,
+                    "3": 5,
+                    "4": 6,
+                    "5": 7,
+                    "8": 8,
+                    "12": 10
+                },
+                "averageAccuracy": {
+                    "1": 87.72,
+                    "2": 88.83,
+                    "3": 87.73,
+                    "4": 87.64,
+                    "5": 87.36,
+                    "8": 87.06,
+                    "12": 86.54
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "1": 2
+                    },
+                    "Enterobacter hormaechei subsp. oharae": {
+                    },
+                    "Bacteria": {
+                        "1": 1,
+                        "2": 2,
+                        "3": 3,
+                        "4": 4,
+                        "5": 5,
+                        "8": 6
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000815",
+                "name": "mgrA",
+                "description": "MgrA, also known as NorR, is a regulator for norA, norB, and tet38. It is a positive regulator for norA expression, but is a direct repressor for norB and an indirect repressor of tet38.",
+                "count": {
+                    "6": 1
+                },
+                "averageAccuracy": {
+                    "6": 90.06
+                },
+                "species": {
+                    "Staphylococcus epidermidis": {
+                        "6": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003923",
+                "name": "oqxB",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "count": {
+                    "2": 2,
+                    "4": 7,
+                    "5": 8,
+                    "6": 9,
+                    "7": 10,
+                    "8": 13,
+                    "9": 14,
+                    "10": 18,
+                    "11": 20,
+                    "12": 21
+                },
+                "averageAccuracy": {
+                    "2": 85.02,
+                    "4": 82.35,
+                    "5": 82.18,
+                    "6": 82.09,
+                    "7": 81.93,
+                    "8": 81.56,
+                    "9": 81.52,
+                    "10": 81.43,
+                    "11": 81.42,
+                    "12": 81.51
+                },
+                "species": {
+                    "Enterobacter": {
+                        "4": 4,
+                        "7": 5,
+                        "8": 6,
+                        "10": 8
+                    },
+                    "Enterobacter cloacae complex": {
+                        "2": 2,
+                        "4": 3,
+                        "5": 4,
+                        "6": 5,
+                        "8": 7,
+                        "9": 8,
+                        "10": 10,
+                        "11": 12
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000391",
+                "name": "norA",
+                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA, and is a structural homolog of Bmr of Bacillus subtilis. It is regulated by arlRS and mgrA, the latter also known as NorR.",
+                "count": {
+                    "12": 1
+                },
+                "averageAccuracy": {
+                    "12": 91.76
+                },
+                "species": {
+                    "Staphylococcus epidermidis": {
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000207",
+                "name": "acrA",
+                "description": "Protein subunit of AcrA-AcrB-TolC multidrug efflux complex. AcrA represents the periplasmic portion of the transport protein.",
+                "count": {
+                    "3": 1,
+                    "4": 2,
+                    "5": 4,
+                    "7": 5,
+                    "8": 6,
+                    "9": 8,
+                    "10": 9,
+                    "12": 10
+                },
+                "averageAccuracy": {
+                    "3": 81.7,
+                    "4": 81.41,
+                    "5": 84.31,
+                    "7": 83.87,
+                    "8": 83.26,
+                    "9": 84.38,
+                    "10": 83.96,
+                    "12": 84.65
+                },
+                "species": {
+                    "Enterobacter": {
+                        "3": 1,
+                        "4": 2,
+                        "7": 3,
+                        "9": 4
+                    },
+                    "Enterobacter cloacae complex": {
+                        "5": 1,
+                        "8": 2,
+                        "9": 3,
+                        "10": 4
+                    },
+                    "Enterobacter hormaechei": {
+                        "5": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000796",
+                "name": "mdtF",
+                "description": "MdtF is the multidrug inner membrane transporter for the MdtEF-TolC efflux complex.",
+                "count": {
+                    "8": 1
+                },
+                "averageAccuracy": {
+                    "8": 81.31
+                },
+                "species": {
+                    "Enterobacter hormaechei": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000794",
+                "name": "mdtC",
+                "description": "MdtC is a transporter that forms a heteromultimer complex with MdtB to form a multidrug transporter. MdtBC is part of the MdtABC-TolC efflux complex. In the absence of MdtB, MdtC can form a homomultimer complex that results in a functioning efflux complex with a narrower drug specificity.",
+                "count": {
+                    "3": 1,
+                    "6": 2
+                },
+                "averageAccuracy": {
+                    "3": 80.72,
+                    "6": 80.69
+                },
+                "species": {
+                    "Enterobacter": {
+                        "3": 1,
+                        "6": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000516",
+                "name": "emrR",
+                "description": "EmrR is a negative regulator for the EmrAB-TolC multidrug efflux pump in E. coli. Mutations lead to EmrAB-TolC overexpression.",
+                "count": {
+                    "2": 2
+                },
+                "averageAccuracy": {
+                    "2": 81.22
+                },
+                "species": {
+                    "Enterobacter": {
+                        "2": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001330",
+                "name": "mdtD",
+                "description": "Efflux pump mdtD",
+                "count": {
+                    "6": 1
+                },
+                "averageAccuracy": {
+                    "6": 80.5
+                },
+                "species": {
+                    "Enterobacter": {
+                        "6": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000024",
+                "name": "patA",
+                "description": "PatA is an ABC transporter of Streptococcus pneumoniae that interacts with PatB to confer fluoroquinolone resistance.",
+                "count": {
+                    "3": 1,
+                    "7": 2,
+                    "10": 3,
+                    "12": 4
+                },
+                "averageAccuracy": {
+                    "3": 80.05,
+                    "7": 80.51,
+                    "10": 81.92,
+                    "12": 81.6
+                },
+                "species": {
+                    "Enterobacter": {
+                        "7": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                        "3": 1,
+                        "10": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000491",
+                "name": "acrD",
+                "description": "AcrD is an aminoglycoside efflux pump expressed in E. coli. Its expression can be induced by indole, and is regulated by baeRS and cpxAR.",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 82.3
+                },
+                "species": {
+                    "Enterobacter": {
+                        "7": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000263",
+                "name": "marA",
+                "description": "In the presence of antibiotic stress, E. coli overexpresses the global activator protein MarA, which besides inducing MDR efflux pump AcrAB, also down- regulates synthesis of the porin OmpF.",
+                "count": {
+                    "2": 1,
+                    "7": 2,
+                    "11": 4
+                },
+                "averageAccuracy": {
+                    "2": 82.6,
+                    "7": 82.8,
+                    "11": 83.04
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "2": 1
+                    },
+                    "Bacteria": {
+                        "7": 1,
+                        "11": 3
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003730",
+                "name": "Bifidobacteria",
+                "description": "Bifidobacteria have an intrinsically resistant form of ileS (isoleucyl-tRNA synthetase) that confers resistance to mupirocin.",
+                "count": {
+                    "1": 1,
+                    "3": 2,
+                    "6": 3,
+                    "7": 5,
+                    "10": 6,
+                    "11": 7,
+                    "12": 8
+                },
+                "averageAccuracy": {
+                    "1": 80.8,
+                    "3": 80.61,
+                    "6": 82.07,
+                    "7": 81.99,
+                    "10": 81.8,
+                    "11": 82.06,
+                    "12": 82.24
+                },
+                "species": {
+                    "Bifidobacterium longum subsp. longum BBMN68": {
+                    },
+                    "Bifidobacterium longum": {
+                        "1": 1,
+                        "3": 2,
+                        "6": 3,
+                        "7": 5,
+                        "10": 6,
+                        "11": 7
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000830",
+                "name": "cpxA",
+                "description": "CpxA is a membrane-localized sensor kinase that is activated by envelope stress. It starts a kinase cascade that activates CpxR, which promotes efflux complex expression.",
+                "count": {
+                    "8": 1,
+                    "9": 2
+                },
+                "averageAccuracy": {
+                    "8": 83.55,
+                    "9": 82.54
+                },
+                "species": {
+                    "Enterobacter": {
+                        "9": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000186",
+                "name": "tetM",
+                "description": "TetM is a ribosomal protection protein that confers tetracycline resistance. It is found on transposable DNA elements and its horizontal transfer between bacterial species has been documented.",
+                "count": {
+                    "5": 1
+                },
+                "averageAccuracy": {
+                    "5": 83.55
+                },
+                "species": {
+                    "Bacteria": {
+                        "5": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000823",
+                "name": "ramA",
+                "description": "RamA (\"\"resistance antibiotic multiple\"\") is a positive regulator of AcrAB-TolC and leads to high level multidrug resistance in Klebsiella pneumoniae, Salmonella enterica, and Enterobacter aerugenes, increasing the expression of both the mar operon as well as AcrAB. RamA also decreases OmpF expression.",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 82.09
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "7": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000825",
+                "name": "robA",
+                "description": "robA is a positive regulator for the acrAB efflux genes, and is structurally similar to SoxS and MarA.",
+                "count": {
+                    "2": 3,
+                    "3": 4,
+                    "4": 5,
+                    "5": 8,
+                    "6": 10,
+                    "7": 12,
+                    "9": 14,
+                    "10": 15,
+                    "11": 17,
+                    "12": 20
+                },
+                "averageAccuracy": {
+                    "2": 87.88,
+                    "3": 88.03,
+                    "4": 87.28,
+                    "5": 86.9,
+                    "6": 87.93,
+                    "7": 87.97,
+                    "9": 87.73,
+                    "10": 87.44,
+                    "11": 87.25,
+                    "12": 87.79
+                },
+                "species": {
+                    "Enterobacter": {
+                        "6": 1
+                    },
+                    "Enterobacter cloacae complex": {
+                    },
+                    "Bacteria": {
+                        "2": 3,
+                        "3": 4,
+                        "4": 5,
+                        "5": 8,
+                        "6": 9,
+                        "7": 11,
+                        "9": 13,
+                        "10": 14,
+                        "11": 16
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000178",
+                "name": "tetK",
+                "description": "TetK is a tetracycline efflux protein found in both Gram-negative (Haemophilus and Gallibacterium) and Gram-positive (many species, including mycobacteria) bacteria.",
+                "count": {
+                    "5": 1,
+                    "6": 2,
+                    "8": 3
+                },
+                "averageAccuracy": {
+                    "5": 86.74,
+                    "6": 89.95,
+                    "8": 89.3
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "5": 1,
+                        "6": 2
+                    },
+                    "Staphylococcus aureus subsp. aureus": {
+                        "8": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003318",
+                "name": "Streptomyces",
+                "description": "point mutation on the Streptomyces rishiriensis parY resulting in aminocoumarin resistance",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 81.91
+                },
+                "species": {
+                    "Bifidobacterium longum": {
+                        "2": 1
+                    }
+                }
+            }
+        ]
+    }
+}
