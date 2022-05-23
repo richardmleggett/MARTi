@@ -479,7 +479,7 @@ keepNodes.forEach((keepNode) => {
   recursiveParentKeep(keepNode);
 });
 
-
+console.log(removeLeaves);
 
 removeLeaves.forEach((removeLeaf) => {
   hiddenLeafSummedValue += removeLeaf.summedValue;
@@ -591,8 +591,12 @@ function prepareTreeMapData(data,finalData){
 // console.log(newLeafNodes);
 // console.log(hideBranchList);
 // console.log(leavesBeforeLevel);
+if (dashboardTreeMapUnclassified == "hide") {
+  dashboardTreeMapLeafCount = newLeafNodes.length + 1 ;
+} else {
+  dashboardTreeMapLeafCount = newLeafNodes.length;
+}
 
-dashboardTreeMapLeafCount = newLeafNodes.length;
 
 function recursiveSetValue(d) {
     d.count = d.value;

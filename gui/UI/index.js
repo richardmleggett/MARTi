@@ -208,31 +208,91 @@ app.use(express.urlencoded({ extended: true }));
 
 var obserser = new Obserser();
 
+function addSampleToDatabase(runId,sampleId){
+
+
+database.push({
+  pathRunId: runId,
+  pathSampleId: sampleId,
+  sample: {},
+  tree: {},
+  amr: {},
+  accumulation: {}
+});
+
+  // if (database.hasOwnProperty(runId)) {
+  //   database[runId][sampleId] = {
+  //     sample: {},
+  //     tree: {},
+  //     amr: {},
+  //     accumulation: {}
+  //   };
+  // } else {
+  //   database[runId] = {};
+  //   database[runId][sampleId] = {
+  //     sample: {},
+  //     tree: {},
+  //     amr: {},
+  //     accumulation: {}
+  //   };
+  // };
+
+  // console.log(runId + " - " + sampleId + " added to database.")
+};
+
 
 
 function metaDataUpdate(meta) {
 
 var data = meta.content;
-var id = meta.id;
+var sampleId = meta.id;
 var runId = meta.runId;
 
 if (!data.sample.hasOwnProperty("runId")) {
   data.sample.runId = runId;
 }
 
+// var findSample = database.findIndex(sample => sample.pathRunId == runId && sample.pathSampleId == sampleId);
+//
+// if (findSample != -1) {
+//   database[findSample]["sample"] = data;
+// } else {
+//   database.push({
+//     pathRunId: runId,
+//     pathSampleId: sampleId,
+//     sample: data,
+//     tree: {},
+//     amr: {},
+//     accumulation: {}
+//   });
+// }
 
 
   if (sampleMetaDict[runId]) {
-    sampleMetaDict[runId][id] = data;
+    sampleMetaDict[runId][sampleId] = data;
   } else {
     sampleMetaDict[runId] = {};
-    sampleMetaDict[runId][id] = data;
+    sampleMetaDict[runId][sampleId] = data;
   }
+
+// if (database.hasOwnProperty(runId)) {
+//   if (database[runId].hasOwnProperty(id)) {
+//     database[runId][id]["sample"] = data;
+//   } else {
+//     addSampleToDatabase(runId,id);
+//     database[runId][id]["sample"] = data;
+//   };
+// } else {
+//   addSampleToDatabase(runId,id);
+//   database[runId][id]["sample"] = data;
+// };
+
+
 
 
   io.sockets.emit('meta-update-available', {
     runId: runId,
-    sampleId: id
+    sampleId: sampleId
   });
 }
 
@@ -273,6 +333,55 @@ obserser.on('meta-file-updated', meta => {
   metaDataUpdate(meta);
 });
 
+obserser.on('meta-file-removed', meta => {
+  // sampleMetaDict[meta.sample.id]=meta;
+  //
+  // io.sockets.emit('meta-update-available', {
+  //   runId: meta.sample.runId,
+  //   sampleId: meta.sample.id
+  // });
+
+  var sampleId = meta.id;
+  var runId = meta.runName;
+
+  if (sampleMetaDict.hasOwnProperty(runId) && sampleMetaDict[runId].hasOwnProperty(sampleId)) {
+    delete sampleMetaDict[runId][sampleId];
+  }
+
+  if (sampleTreeDict.hasOwnProperty(runId) && sampleTreeDict[runId].hasOwnProperty(sampleId)) {
+    delete sampleTreeDict[runId][sampleId];
+  }
+
+  if (sampleAccumulationDict.hasOwnProperty(runId) && sampleAccumulationDict[runId].hasOwnProperty(sampleId)) {
+    delete sampleAccumulationDict[runId][sampleId];
+  }
+
+  if (sampleAmrDict.hasOwnProperty(runId) && sampleAmrDict[runId].hasOwnProperty(sampleId)) {
+    delete sampleAmrDict[runId][sampleId];
+  }
+
+  for (const [uuid, entryData] of Object.entries(clientData)) {
+    if (sampleId == entryData.selectedDashboardSample.name && runId == entryData.selectedDashboardSample.runId) {
+      entryData.selectedDashboardSample.name = "";
+      entryData.selectedDashboardSample.runId = "";
+    };
+
+    var findSampleInCompare = entryData.selectedCompareSamples.findIndex(e => e.name == sampleId && e.runId == runId);
+
+    if (findSampleInCompare != -1) {
+      entryData.selectedCompareSamples.splice(findSampleInCompare,1);
+    };
+
+  };
+
+  io.sockets.emit('sample-removed', {
+    runId: runId,
+    sampleId: sampleId
+  });
+
+
+});
+
 obserser.on('tree-file-added', tree => {
 
 
@@ -289,13 +398,31 @@ obserser.on('tree-file-added', tree => {
     sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
   }
 
+  // var findSample = database.findIndex(sample => sample.pathRunId == tree.runName && sample.pathSampleId == tree.id);
+
+//   if (findSample != -1) {
+//     database[findSample]["tree"][tree.lca] = tree.content;
+//   } else {
+// console.log("Tree json registered prior to sample json");
+//     database.push({
+//       pathRunId: tree.runName,
+//       pathSampleId: tree.id,
+//       sample: {},
+//       tree: {[tree.lca]:tree.content},
+//       amr: {},
+//       accumulation: {}
+//     });
+//
+//   }
+
+
 });
 
 obserser.on('tree-file-updated', tree => {
   sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
 
   for (const [id, data] of Object.entries(clientData)) {
-    if ((tree.id == data.selectedDashboardSample.name && tree.runName == data.selectedDashboardSample.runId) || (data.selectedCompareSamples.includes(tree.id) )) {
+    if ((tree.id == data.selectedDashboardSample.name && tree.runName == data.selectedDashboardSample.runId) || (data.selectedCompareSamples.findIndex(e => e.name == tree.id && e.runId == tree.runName) )) {
       io.to(id).emit('tree-update-available');
       console.log(`[${new Date().toLocaleString()}][${id}] Tree update notification sent`);
     };
@@ -418,6 +545,9 @@ var sampleMetaDict = {};
 var sampleTreeDict = {};
 var sampleAccumulationDict = {};
 var sampleAmrDict = {};
+
+var database = [];
+
 
 var clientData = {};
 
@@ -563,10 +693,10 @@ io.on('connect', function(socket){
 
   socket.on('selected-compare-samples', samples => {
       var id = samples.clientId;
-      console.log(samples);
+      // console.log(samples);
       var samples = samples.data;
       clientData[id].selectedCompareSamples = samples;
-      console.log(samples);
+      // console.log(samples);
       io.to(id).emit('current-compare-samples-response', clientData[id].selectedCompareSamples);
       var sampleNames = [];
       for (const sample of samples) {
@@ -618,7 +748,6 @@ socket.on('compare-tree-request', request => {
   var lca = request.lca;
   var selectedCompareSamples = clientData[id].selectedCompareSamples;
   compareTreeData = [];
-  console.log(sampleTreeDict);
   for (var sample of selectedCompareSamples){
     if (sampleTreeDict.hasOwnProperty(sample.runId)) {
       if (sampleTreeDict[sample.runId].hasOwnProperty(sample.name)) {

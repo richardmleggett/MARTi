@@ -137,15 +137,33 @@ function plotRarefactionCompare(data) {
 
     // for (const [key, value] of Object.entries(data)) {
     for (const sample of data) {
-      idList.push(sample.id);
-      var line = {
-          name: sample.id,
-          values: sample.data[rareXAxis].map(function(c) {
-            return {readCount: c[0], taxaCount: c[1]};
-          })
+      var sampleIdPlot;
+      for (const sampleMetaData of sampleMetaDataArray) {
+        if (sampleMetaData.pathName == sample.id && sampleMetaData.pathRun == sample.runId) {
+          sampleIdPlot = sampleMetaData.id;
+          idList.push(sampleIdPlot);
+          var line = {
+              name: sampleIdPlot,
+              values: sample.data[rareXAxis].map(function(c) {
+                return {readCount: c[0], taxaCount: c[1]};
+              })
+          };
+          line.values.unshift({readCount: 0, taxaCount: 0});
+          multilineData.push(line);
+
+          break;
+        }
       };
-      line.values.unshift({readCount: 0, taxaCount: 0});
-      multilineData.push(line);
+
+      // idList.push(sample.id);
+      // var line = {
+      //     name: sample.id,
+      //     values: sample.data[rareXAxis].map(function(c) {
+      //       return {readCount: c[0], taxaCount: c[1]};
+      //     })
+      // };
+      // line.values.unshift({readCount: 0, taxaCount: 0});
+      // multilineData.push(line);
     };
 
 
@@ -368,6 +386,30 @@ mouseG.select('rect')
 
   });
 
+  rarefactionCompareLegend.on("mouseover", function(d, i) {
+
+      sampleLine.filter(function(x) {
+          if (x.name == d) {
+              d3.select(this).classed("hoverRect", true);
+          };
+      });
+
+        d3.select(this).select("g rect").classed("hoverRect", true);
+        d3.select(this).select("g text").style("font-weight", "bold");
+  });
+
+  rarefactionCompareLegend.on("mouseout", function(d, i) {
+
+    sampleLine.filter(function(x) {
+        if (x.name == d) {
+            d3.select(this).classed("hoverRect", false);
+        };
+    });
+
+      d3.select(this).select("g rect").classed("hoverRect", false);
+      d3.select(this).select("g text").style("font-weight", "normal");
+
+  });
 
 
     };

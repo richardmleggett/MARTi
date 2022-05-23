@@ -329,7 +329,9 @@ socket.on('current-compare-samples-response', function(samples) {
     };
   };
 
-  compareSampleObjectArray = samples.sort(d3.ascending);
+  // console.log(samples);
+  // console.log(selectedCompareMetaDataArray);
+  // compareSampleObjectArray = samples.sort(d3.ascending);
 
   // if(currentPage=="Samples") {
   //

@@ -988,7 +988,11 @@ $('#minimumAbundanceButtonDashboard').on( 'click', 'button', function () {
 });
 
 $('#minimumAbundanceButtonDashboard>button').removeClass('active');
-$('#minimumAbundanceButtonDashboard>button:contains(' + lcaAbundanceDashboardUnformatted + ')').addClass("active");
+// $('#minimumAbundanceButtonDashboard>button:contains(' + lcaAbundanceDashboardUnformatted + ')').addClass("active");
+
+$("#minimumAbundanceButtonDashboard>button").filter(function() {
+    return $(this).text() == lcaAbundanceDashboardUnformatted;
+}).addClass("active");
 
 // Empty chart visibility object when switching samples
 dashboardChartVisibility = {};

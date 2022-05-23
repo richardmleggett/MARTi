@@ -39,7 +39,11 @@ function initialiseComparePage() {
   });
 
   $('#minimumAbundanceButtonCompare>button').removeClass('active');
-  $('#minimumAbundanceButtonCompare>button:contains(' + lcaAbundanceCompareUnformatted + ')').addClass("active");
+  // $('#minimumAbundanceButtonCompare>button:contains(' + lcaAbundanceCompareUnformatted + ')').addClass("active");
+
+  $("#minimumAbundanceButtonCompare>button").filter(function() {
+      return $(this).text() == lcaAbundanceCompareUnformatted;
+  }).addClass("active");
 
 
   $('#taxonomicLevelSelectorCompareMenu').on( 'click', 'a.rank', function () {
@@ -236,7 +240,8 @@ updateComparePlots(compareTreeDataGlobal);
 
   compareStackedBarUnclassified = "show",
   compareDonutUnclassified = "show";
-  updateCompareSampleNameList(compareSampleObjectArray);
+  // updateCompareSampleNameList(compareSampleObjectArray);
+  updateCompareSampleNameList(selectedCompareMetaDataArray);
 
 };
 
@@ -366,7 +371,8 @@ var donutCompareData = [];
 
 function updateComparePlots(compareSampleData) {
 
-
+console.log(compareSampleData);
+console.log(selectedCompareMetaDataArray);
 
     if(isEmpty(compareSampleData)) {
 
@@ -380,12 +386,21 @@ function updateComparePlots(compareSampleData) {
 // Object.keys(compareSampleData).forEach(function(sample) {
 for (var sample of compareSampleData) {
 
+  var id;
+  var runId;
 
-  var id = sample.id;
-  var runId = sample.runId;
+for (var sampleData of selectedCompareMetaDataArray) {
+  if (sample.id == sampleData.pathName && sample.runId == sampleData.pathRun) {
+    id = sampleData.id;
+    runId = sampleData.runId;
+  }
+};
+
+  // var id = sample.id;
+  // var runId = sample.runId;
   var data = sample.tree;
 
-
+console.log(id);
     var thisSampleTree = d3.layout.tree().nodes(data);
 
 
@@ -439,15 +454,33 @@ var sortCompareNameArray = [];
 if (sampleOrdertype == "Manual" && manualSortCompareNames.length !== 0) {
   sortCompareNameArray = manualSortCompareNames;
 } else if (sampleOrdertype == "ID asc"){
-  // sortCompareNameArray = compareSampleObjectArray.sort(d3.ascending);
-  sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
-   return d3.ascending(x.name, y.name);
-});
+//   sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
+//    return d3.ascending(x.name, y.name);
+// });
+selectedCompareMetaDataArray.sort(function(x, y){
+ return d3.ascending(x.id, y.id);
+})
+  for (const sample of selectedCompareMetaDataArray) {
+    sortCompareNameArray.push({
+      name: sample.id,
+      runId: sample.runId
+    });
+  };
 } else if (sampleOrdertype == "ID desc"){
-  // sortCompareNameArray = compareSampleObjectArray.sort(d3.descending);
-  sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
-   return d3.descending(x.name, y.name);
-});
+//   sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
+//    return d3.descending(x.name, y.name);
+// });
+
+selectedCompareMetaDataArray.sort(function(x, y){
+ return d3.descending(x.id, y.id);
+})
+  for (const sample of selectedCompareMetaDataArray) {
+    sortCompareNameArray.push({
+      name: sample.id,
+      runId: sample.runId
+    });
+  };
+
 } else if (sampleOrdertype == "Sequencing date asc"){
   selectedCompareMetaDataArray.sort(function(x, y){
    return d3.ascending(x.sequencingDate, y.sequencingDate);
@@ -510,11 +543,24 @@ if (sampleOrdertype == "Manual" && manualSortCompareNames.length !== 0) {
       });
     };
 } else {
-  sortCompareNameArray = compareSampleObjectArray;
+  // sortCompareNameArray = compareSampleObjectArray;
+  selectedCompareMetaDataArray.sort(function(x, y){
+   return d3.ascending(x.id, y.id);
+  })
+    for (const sample of selectedCompareMetaDataArray) {
+      sortCompareNameArray.push({
+        name: sample.id,
+        runId: sample.runId
+      });
+    };
 }
 
+// d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
+//   return sortCompareNameArray.indexOf(a) - sortCompareNameArray.indexOf(b);
+// })
+
 d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
-  return sortCompareNameArray.indexOf(a) - sortCompareNameArray.indexOf(b);
+  return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
 })
 
 
@@ -542,6 +588,9 @@ for (const sample of sortCompareNameArray){
 donutCompareTaxa = [...new Set(tempCompareTaxa["donut"])];
 stackedBarCompareTaxa = [...new Set(tempCompareTaxa["stackedBar"])];
 
+console.log(stackedBarCompareData);
+
+
 plotStackedBar(stackedBarCompareData,stackedBarCompareTaxa);
 
 plotCompareDonut(donutCompareData,donutCompareTaxa);
@@ -563,10 +612,10 @@ function updateCompareSampleNameList(names) {
       compareSampleList.enter()
           .append("li")
           .attr("data-id", function(d) {
-            return d.name;})
+            return d.id;})
           .attr("data-run", function(d) {
               return d.runId;})
-          .text(function(d) {return d.name;});
+          .text(function(d) {return d.id;});
           // .append("span").attr("class","fa-li")
           // .append("i").attr("class","fas fa-arrows-alt-v");
 

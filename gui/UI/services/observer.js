@@ -274,11 +274,20 @@ class Observer extends EventEmitter {
 
       watcher.on('unlink', async filePath => {
         if (filePath.includes('sample.json')) {
+
+          var split = filePath.split(sep);
+
+          var sampleName = split[split.length - 2]
+
+          var runName = split[split.length - 4];
+
           console.log(
             `[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`
           );
 
           this.emit('meta-file-removed', {
+            id: sampleName,
+            runName: runName,
             content: filePath
           });
 

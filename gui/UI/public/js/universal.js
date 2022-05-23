@@ -278,3 +278,48 @@ socket.on('current-client-count', function(data){
   console.log("current number of user: " + data);
   $("#currentClientCount").text(data);
     });
+
+socket.on('sample-removed', function(data){
+  console.log("Sample removed: " + data.runId + " " + data.sampleId);
+
+  if(currentPage=="Samples") {
+    socket.emit('meta-request',{
+      clientId: uuid
+    });
+  } else if (currentPage == "Dashboard" && currentDashboardSampleName == data.sampleId) {
+    currentDashboardSampleName = "";
+
+    activeSidebarIcon($("#samples-item"));
+    currentPage = "Samples";
+    $("h1#pageTitle").text("Samples");
+    $("#response").load("samples.html", function() {
+    $("html, body").animate({ scrollTop: "0px" });
+    initialiseSamplePage();
+    });
+
+
+  } else if (currentPage == "Compare" ) {
+    var findSampleInCompare = compareSampleObjectArray.findIndex(e => e.name == data.sampleId && e.runId == data.runId);
+
+    if (findSampleInCompare != -1) {
+      compareSampleObjectArray.splice(findSampleInCompare,1);
+      activeSidebarIcon($("#samples-item"));
+      currentPage = "Samples";
+      $("h1#pageTitle").text("Samples");
+      $("#response").load("samples.html", function() {
+      $("html, body").animate({ scrollTop: "0px" });
+      initialiseSamplePage();
+      });
+    };
+
+  };
+if (currentDashboardSampleName == data.sampleId) {
+  currentDashboardSampleName = "";
+};
+var findSampleInCompare = compareSampleObjectArray.findIndex(e => e.name == data.sampleId && e.runId == data.runId);
+
+  if (findSampleInCompare != -1) {
+    compareSampleObjectArray.splice(findSampleInCompare,1);
+  };
+
+    });
