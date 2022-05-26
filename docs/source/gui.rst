@@ -10,6 +10,7 @@ The MARTi GUI is a browser-based interface for viewing and interacting with anal
 #. **Compare** - for comparing the results from multiple samples.
 #. **New analysis** - for configuring and initiating local **MARTi Engine** analyses.
 
+
 The Samples page
 ----------------
 
@@ -19,6 +20,7 @@ The Samples page
   :align: center
 
 The Samples page allows users to select and load available samples into the Dashboard and Compare analysis modes. A sample can be loaded into the Dashboard mode by clicking on its sample ID or the dashboard icon next to it. To compare samples, select them with the checkboxes in the first column of the table and then navigate to the Compare page.
+
 
 The Dashboard page
 ------------------
@@ -41,6 +43,7 @@ The Dashboard content is flexible and dependent on the available analyses for th
 #. AMR Table card – A table of antimicrobial-resistance (AMR) genes found in the sample.
 #. Walkout Analysis card – Donut plot showing results from AMR gene walkout analysis.
 
+
 The Compare page
 ----------------
 
@@ -58,6 +61,7 @@ This page features four cards:
 #. Multi-donut card – A multi-donut plot for comparing the composition of assigned reads between samples.
 #. Taxa accumulation card – A multi-line chart representing taxa discovery rates of each sample over the course of analysis, with the x-axis showing either reads sampled or time analysed.
 
+
 .. _startinganalysis:
 New analysis page
 -----------------
@@ -68,3 +72,46 @@ New analysis page
   :align: center
 
 The new analysis page allows users to generate a configuration file and start a local **MARTi Engine** analysis from the **MARTi GUI**.
+
+The MARTi Engine requires a configuration (or ‘config’) file to start a new analysis of a whole run or selected barcoded samples. The config file provides the details for the analysis to be performed by the MARTi Engine (see :ref:`here for config file format information<configfiles>`). When running MARTi in an HPC configuration, a config file with default options can be :ref:`generated via the command line<cmdline>` and then edited with a text editor if required. In local configuration, you can use the command line method or the new analysis page of the MARTi GUI to generate a config file and start analysis.
+
+The new analysis page is comprised of a single card that houses all the input fields and buttons required to generate a config file and start a new analysis. Two of the fields rely on information provided by the user in the marti_server_options.txt file:
+
+* MinKNOW run ID – this dropdown is automatically populated with samples available for MARTi analysis found within the MinKNOW run directory specified by the user.
+* MARTi output directory – a dropdown of paths being monitored by the GUI’s server for MARTi output. Users specify this path, or a colon-separated list of paths, as MARTiSampleDirectory in the server options file. The path selected in the dropdown will be used as the output location for the new analysis.
+
+To start a new analysis from this page:
+
+#. Select a sample to analyse from the *MinKNOW run ID* dropdown.
+#. Choose an output directory using the *MARTi output directory* dropdown.
+#. If you’re analysing a barcoded run, tick the *Process barcodes* checkbox and then select the barcodes you wish to analyse in the newly revealed *Select barcodes* box.
+#. Under the *Pipeline default settings* subheading, there are buttons to load default settings for the two most common MARTi pipelines, BlastLCA and BlastLCA-CARD. To classify reads using BLAST and MARTi’s LCA algorithm, click BlastLCA. If you also want to identify AMR genes, click BlastLCA-CARD. The BlastLCA-CARD button assigns the same default settings as the BlastLCA button but adds an additional BLAST process to align reads to the CARD database.
+#. For the *BLAST process* card to be used for taxonomic classification, complete the path in the *Database directory* input so that it points to the directory that contains your blast database. Then, set the *Database prefix* to the name of the database used as the prefix for the database files. Finally, tick the *Use this BLAST to classify* checkbox.
+#. If you also have a BLAST process for CARD then you’ll need to update the *Database directory* input of that process so that it points to the location of the CARD database.
+#. Select the maximum number of concurrent jobs that can be run by the local scheduler using the *Max jobs* dropdown.
+#. Click the *Start analysis* button.
+
+
+Options
+-------
+
+
+.. image:: images/GuiOptionsGeneral.png
+  :width: 800
+  :alt: MARTi GUI general options
+  :align: center
+
+The general options menu for the GUI can be accessed by clicking the cog icon in the top right-hand corner of the page. Alternative colour palettes for the GUI can be found in this menu.
+
+The Dashboard and Compare pages have additional page-specific options bars fixed to the bottom of the header bar. On the Dashboard page, this houses three buttons:
+
+1.	the *Assignments* button - for downloading MARTi’s taxonomic assignments in CSV format for downstream analysis.
+2.	*LCA minimum abundance cut-off* selector – for displaying the sample’s taxonomic assignment data at one of four LCA minimum abundance cut-off values (0, 0.1, 1, or 2%).
+3.	*Taxonomic rank* dropdown - allows users to view the plots at different taxonomic levels.
+
+.. image:: images/GuiOptionsPlot.png
+  :width: 800
+  :alt: MARTi GUI plot options
+  :align: center
+
+Many of the plots also have plot-specific options that can be accessed via the three vertical dots menu icon in the top right-hand corner of the plot’s card.
