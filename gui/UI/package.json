@@ -1,19 +1,18 @@
 {
-  "name": "rtv",
+  "name": "marti",
   "version": "1.0.0",
-  "description": "Real-time visualisation for nanopore sequencing data",
+  "description": "Metagenomic Analysis in Real-Time",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ned Peel",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "^3.4.2",
-    "express": "^4.16.4",
-    "fs-extra": "^9.0.1",
-    "open-term": "^2.0.4",
-    "socket.io": "^2.1.1",
+    "chokidar": "^3.5.3",
+    "express": "^4.18.1",
+    "fs-extra": "^10.1.0",
+    "socket.io": "^4.5.1",
     "uuid": "^8.3.2"
   }
 }
