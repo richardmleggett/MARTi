@@ -68,6 +68,10 @@ This file contains the locations of some important directories and you will need
 * BlastDatabaseDirectory - the location of blast databases.
 * TaxonomyDirectory - the location of NCBI taxonomy data.
 
+Then install the GUI server dependencies by running the following command from gui/UI/:
+
+``npm install``
+
 To start the GUI server, type
 
 ``marti_gui [port]``
