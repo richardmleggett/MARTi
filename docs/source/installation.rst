@@ -68,7 +68,7 @@ This file contains the locations of some important directories and you will need
 * BlastDatabaseDirectory - the location of blast databases.
 * TaxonomyDirectory - the location of NCBI taxonomy data.
 
-Then install the GUI server dependencies by running the following command from gui/UI/:
+Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
 
 ``npm install``
 
