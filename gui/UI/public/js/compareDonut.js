@@ -323,40 +323,89 @@ if (compareDonutSampleName == "show") {
 
 donutCompareLegend.on("mouseover", function(d, i) {
 
+    // donutSlices.filter(function(x) {
+    //     if (x.data.name == d) {
+    //         d3.select(this).classed("hoverRect", true);
+    //     };
+    // });
+    //
+    //   d3.select(this).select("g rect").classed("hoverRect", true);
+    //   d3.select(this).select("g text").style("font-weight", "bold");
+
     donutSlices.filter(function(x) {
         if (x.data.name == d) {
-            d3.select(this).classed("hoverRect", true);
+        } else {
+          d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
         };
     });
 
-      d3.select(this).select("g rect").classed("hoverRect", true);
-      d3.select(this).select("g text").style("font-weight", "bold");
+    donutCompareLegend.filter(function(x) {
+        if (x == d) {
+            d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
+        } else {
+          d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
+        };
+    });
+
 });
 
 donutCompareLegend.on("mouseout", function(d, i) {
 
+  // donutSlices.filter(function(x) {
+  //     if (x.data.name == d) {
+  //         d3.select(this).classed("hoverRect", false);
+  //     };
+  // });
+  //
+  //   d3.select(this).select("g rect").classed("hoverRect", false);
+  //   d3.select(this).select("g text").style("font-weight", "normal");
+
   donutSlices.filter(function(x) {
       if (x.data.name == d) {
-          d3.select(this).classed("hoverRect", false);
+      } else {
+        d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
       };
   });
 
-    d3.select(this).select("g rect").classed("hoverRect", false);
-    d3.select(this).select("g text").style("font-weight", "normal");
+  donutCompareLegend.filter(function(x) {
+      if (x == d) {
+          d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
+      } else {
+        d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
+      };
+  });
+
 
 });
 
 
 donutSlices.on("mouseover", function(d, i) {
 
+  // donutCompareLegend.filter(function(x) {
+  //     if (d.data.name == x) {
+  //         d3.select(this).select("rect").classed("hoverRect", true);
+  //         d3.select(this).select("text").style("font-weight", "bold");
+  //     };
+  // });
+  //
+  //   d3.select(this).classed("hoverRect", true);
+
   donutCompareLegend.filter(function(x) {
       if (d.data.name == x) {
-          d3.select(this).select("rect").classed("hoverRect", true);
-          d3.select(this).select("text").style("font-weight", "bold");
+          d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
+      } else {
+        d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
       };
   });
 
-    d3.select(this).classed("hoverRect", true);
+
+  donutSlices.filter(function(x) {
+      if (d.data.name == x.data.name) {
+      } else {
+        d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
+      };
+  });
+
 
 });
 
@@ -380,14 +429,30 @@ donutSlices.on("mousemove", function(d, i) {
 
 donutSlices.on("mouseout", function(d, i) {
 
-  donutCompareLegend.filter(function(x) {
-      if (d.data.name == x) {
-          d3.select(this).select("rect").classed("hoverRect", false);
-          d3.select(this).select("text").style("font-weight", "normal");
-      };
-  });
+//   donutCompareLegend.filter(function(x) {
+//       if (d.data.name == x) {
+//           d3.select(this).select("rect").classed("hoverRect", false);
+//           d3.select(this).select("text").style("font-weight", "normal");
+//       };
+//   });
+//
+// d3.select(this).classed("hoverRect", false);
 
-d3.select(this).classed("hoverRect", false);
+donutCompareLegend.filter(function(x) {
+    if (d.data.name == x) {
+        d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
+    } else {
+      d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
+    };
+});
+
+
+donutSlices.filter(function(x) {
+    if (d.data.name == x.data.name) {
+    } else {
+      d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
+    };
+});
 
   toolTipDiv.transition()
       .duration(50)

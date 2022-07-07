@@ -1,8 +1,6 @@
 function initialiseCompareAccumulation() {
 
   rarefactionCompareSVG = d3.select("#compareRarefactionPlot").append("svg")
-      // .attr("rareWidth", rareWidth + margin.left + margin.right)
-      // .attr("rareHeight", rareHeight + margin.top + margin.bottom)
       .attr("viewBox", function() {
         var width = rareWidth + 180;
         var height = rareHeight + 80;
@@ -11,7 +9,7 @@ function initialiseCompareAccumulation() {
           return x + " " + y + " " + width + " " + height;
       })
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + rareMargin.left + "," + rareMargin.top + ")");
 
 
       rarefactionCompareSVG.append("g")
@@ -39,16 +37,16 @@ function initialiseCompareAccumulation() {
         plotRarefactionCompare(rareData);
       });
 
-      d3.selectAll("input[name='rareXAxis']").on("change", function(){
-        plotRarefactionCompare(rareData);
-      });
+      // d3.selectAll("input[name='rareXAxis']").on("change", function(){
+      //   plotRarefactionCompare(rareData);
+      // });
 
 
 };
 
-var margin = {top: 20, right: 80, bottom: 50, left: 60},
-    rareWidth = 960 - margin.left - margin.right,
-    rareHeight = 500 - margin.top - margin.bottom;
+var rareMargin = {top: 20, right: 80, bottom: 50, left: 60},
+    rareWidth = 960 - rareMargin.left - rareMargin.right,
+    rareHeight = 500 - rareMargin.top - rareMargin.bottom;
 
 var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -67,6 +65,7 @@ var rc_y = d3.scale.linear()
 
 var rc_xAxis = d3.svg.axis()
     .scale(rc_x)
+    .ticks(8)
     .orient("bottom");
 
 var yAxisTicks;
@@ -83,6 +82,12 @@ var rc_yAxis = d3.svg.axis()
 
 
 function plotRarefactionCompare(data) {
+
+
+
+data.sort(function(a, b){
+  return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
+})
 
   var compareAccumulationLine;
   var rareXAxis;
@@ -118,13 +123,16 @@ function plotRarefactionCompare(data) {
           .x(function(d) { return rc_x(d.readCount); });
     };
 
-    if ($("input[name='rareXAxis'][value='reads']").is(':checked')) {
-      rareXAxis = "reads";
-      xAxisLabel = "Reads analysed";
-    } else {
-      rareXAxis = "time";
-      xAxisLabel = "Time (min)";
-    }
+    // if ($("input[name='rareXAxis'][value='reads']").is(':checked')) {
+    //   rareXAxis = "reads";
+    //   xAxisLabel = "Reads analysed";
+    // } else {
+    //   rareXAxis = "time";
+    //   xAxisLabel = "Time (min)";
+    // }
+
+    rareXAxis = "reads";
+    xAxisLabel = "Reads analysed";
 
     var yAxisLabel = taxonomicRankSelectedText;
     $("#yAxisLabelAccumulation").text(yAxisLabel+" count");
@@ -388,26 +396,57 @@ mouseG.select('rect')
 
   rarefactionCompareLegend.on("mouseover", function(d, i) {
 
+      // sampleLine.filter(function(x) {
+      //     if (x.name == d) {
+      //         d3.select(this).classed("hoverRect", true);
+      //     };
+      // });
+      //
+      //   d3.select(this).select("g rect").classed("hoverRect", true);
+      //   d3.select(this).select("g text").style("font-weight", "bold");
+
       sampleLine.filter(function(x) {
           if (x.name == d) {
-              d3.select(this).classed("hoverRect", true);
+          } else {
+            d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
           };
       });
 
-        d3.select(this).select("g rect").classed("hoverRect", true);
-        d3.select(this).select("g text").style("font-weight", "bold");
+      rarefactionCompareLegend.filter(function(x) {
+          if (x == d) {
+              d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
+          } else {
+            d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
+          };
+      });
+
   });
 
   rarefactionCompareLegend.on("mouseout", function(d, i) {
 
+    // sampleLine.filter(function(x) {
+    //     if (x.name == d) {
+    //         d3.select(this).classed("hoverRect", false);
+    //     };
+    // });
+    //
+    //   d3.select(this).select("g rect").classed("hoverRect", false);
+    //   d3.select(this).select("g text").style("font-weight", "normal");
+
     sampleLine.filter(function(x) {
         if (x.name == d) {
-            d3.select(this).classed("hoverRect", false);
+        } else {
+          d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
         };
     });
 
-      d3.select(this).select("g rect").classed("hoverRect", false);
-      d3.select(this).select("g text").style("font-weight", "normal");
+    rarefactionCompareLegend.filter(function(x) {
+        if (x == d) {
+            d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
+        } else {
+          d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
+        };
+    });
 
   });
 

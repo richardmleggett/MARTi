@@ -124,6 +124,10 @@ hr.toolTipLine {
   width:150px;
 }
 
+.dashboard-amr-chunk-time {
+  min-width:162px;
+}
+
 /* #dashboardAmrTable>tbody>tr[role="row"]>td:last-child {
   max-width: 30px;
   white-space: nowrap;

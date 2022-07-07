@@ -28,6 +28,11 @@
   opacity: .5;
 }
 
+.lowOpacity {
+  opacity: .2;
+}
+
+
 /* @media (max-width: 576px) {
   .stackedBarCard {
     height: 200px;

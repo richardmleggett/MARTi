@@ -13,12 +13,6 @@ var colourPalettes = {
     '#deb887', '#00ff00', '#00fa9a', '#dc143c', '#00ffff', '#00bfff', '#0000ff', '#d8bfd8', '#ff00ff', '#1e90ff', '#db7093','#ff1493', '#ee82ee']
 };
 
-// var globalColourPalette1 = d3.scale.ordinal()
-//     .range(['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffed75']);
-// var globalColourPalette2 = d3.scale.ordinal()
-//     .range(['#556b2f', '#a0522d', '#483d8b', '#5f9ea0', '#008000', '#9acd32', '#00008b', '#8b008b', '#ff4500', '#ffa500', '#ffff00',
-//   '#deb887', '#00ff00', '#00fa9a', '#dc143c', '#00ffff', '#00bfff', '#0000ff', '#d8bfd8', '#ff00ff', '#1e90ff', '#db7093','#ff1493', '#ee82ee']);
-
 var selectedPalette = "default11";
 var comparePlotColorPalette = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
@@ -224,12 +218,45 @@ function findWithAttr(array, attr, value) {
     return -1;
 }
 
+function assignToObject(obj, keyPath, value) {
+   lastKeyIndex = keyPath.length-1;
+   for (var i = 0; i < lastKeyIndex; ++ i) {
+     key = keyPath[i];
+     if (!(key in obj)){
+       obj[key] = {}
+     }
+     obj = obj[key];
+   }
+   obj[keyPath[lastKeyIndex]] = value;
+}
+
+function checkNested(obj) {
+  var args = Array.prototype.slice.call(arguments, 1);
+
+  for (var i = 0; i < args.length; i++) {
+    if (!obj || !obj.hasOwnProperty(args[i])) {
+      return false;
+    }
+    obj = obj[args[i]];
+  }
+  return true;
+}
+
 function rank(r) {
   var firstData = r[0];
   if (r.length > 1 ){
     return "n/a"
   } else {
     return firstData.ncbiRank
+  }
+};
+
+function ncbiID(r) {
+  var firstData = r[0];
+  if (r.length > 1 ){
+    return "n/a"
+  } else {
+    return firstData.ncbiID
   }
 };
 

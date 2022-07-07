@@ -234,7 +234,7 @@ treeMapSvg.attr("transform", "translate(" + translateRectX + "," + treeMapMargin
   });
 // }
 
-console.log(nodes);
+// console.log(nodes);
 
 
     // var leafCount = nodes.length;
@@ -479,7 +479,7 @@ keepNodes.forEach((keepNode) => {
   recursiveParentKeep(keepNode);
 });
 
-console.log(removeLeaves);
+// console.log(removeLeaves);
 
 removeLeaves.forEach((removeLeaf) => {
   hiddenLeafSummedValue += removeLeaf.summedValue;

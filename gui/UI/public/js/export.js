@@ -1,3 +1,10 @@
+function export_as_csv(csv,filename) {
+  const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+  saveAs(csvData, filename+'.csv');
+}
+
+
 function save_as_svg_with_style(id,css,filename,resetWidth,remove){
 fetch(css)
 .then(response => response.text())

@@ -100,11 +100,15 @@ function initialiseComparePage() {
               //   }
 
               updateComparePlots(compareTreeDataGlobal);
+              plotRarefactionCompare(rareData);
           }
   });
 
   initialiseCompareStackedBar();
   initialiseCompareMultiDonut();
+
+  initialiseHeatmapTaxa();
+
   compareAccumulationDataAvailable = false;
 
   socket.emit('compare-tree-request',{
@@ -145,6 +149,7 @@ function initialiseComparePage() {
         $('#sampleOrderCompareMenu a.rank:contains(' + sampleOrdertype + ')').addClass("active");
         $('#sampleOrderCompareButton').text(sampleOrdertype);
         updateComparePlots(compareTreeDataGlobal);
+        plotRarefactionCompare(rareData);
       }
 
   });
@@ -228,30 +233,92 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   });
 
 
+  d3.select('#exportCompareHmTaxaSVG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var exportSVG = $("#compareHmTaxa");
+    var exportSVGWidth = exportSVG.width();
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_svg_with_style('compareHmTaxa','/css/heatmapTaxa.css',outputFilename,true);
+
+  });
+
+  d3.select('#exportCompareHmTaxaPNG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var exportSVG = $("#compareHmTaxa");
+    var exportSVGWidth = exportSVG.width();
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_raster_with_style('compareHmTaxa','/css/heatmapTaxa.css',outputFilename,2,'png',true);
+  });
+
+  d3.select('#exportCompareHmTaxaJPG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var exportSVG = $("#compareHmTaxa");
+    var exportSVGWidth = exportSVG.width();
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_raster_with_style('compareHmTaxa','/css/heatmapTaxa.css',outputFilename,2,'jpg',true);
+  });
+
+
   d3.selectAll("input[name='compareStackedBarUnclassified']").on("change", function() {
-  compareStackedBarUnclassified = d3.select(this).property("value");
+  compareStackedBarUnclassified = this.value;
   updateComparePlots(compareTreeDataGlobal);
 });
 
 d3.selectAll("input[name='compareDonutUnclassified']").on("change", function() {
-compareDonutUnclassified = d3.select(this).property("value");
+compareDonutUnclassified = this.value;
+updateComparePlots(compareTreeDataGlobal);
+});
+
+d3.selectAll("input[name='compareHmTaxaUnclassified']").on("change", function() {
+compareHmTaxaUnclassified = this.value;
 updateComparePlots(compareTreeDataGlobal);
 });
 
   compareStackedBarUnclassified = "show",
-  compareDonutUnclassified = "show";
+  compareDonutUnclassified = "show",
+  compareHmTaxaUnclassified = "show";
   // updateCompareSampleNameList(compareSampleObjectArray);
   updateCompareSampleNameList(selectedCompareMetaDataArray);
+
+
+
+d3.select('#downloadCompareAssignments').on('click', function(){
+var csvToExport = convertDataToCSV(compareTaxaData);
+var date = getDate() + "_" + getTime();
+var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+export_as_csv(csvToExport,outputFilename);
+});
 
 };
 
 var compareStackedBarUnclassified,
-compareDonutUnclassified;
+compareDonutUnclassified,
+compareHmTaxaUnclassified;
 
 var sortableCompareNames;
 var manualSortCompareNames = [];
 
 var sampleOrdertype;
+
+var stackedBarCompareData,
+sortCompareNameArray;
+
+var hmTaxaData;
+
+var compareTaxaData;
 
 var lcaAbundanceCompareUnformatted = "0.1%";
 var lcaAbundanceCompare = "0.1";
@@ -259,6 +326,9 @@ var taxonomicRankSelectedCompare = 7;
 var taxonomicRankSelectedCompareText = "Genus";
 
 var compareAccumulationDataAvailable = false;
+
+var opacityTransitionTime = 450;
+
 
 // function topTaxa(node,dataSum) {
 //     return (node.chartValue / dataSum * 100 >= 1) ? node.name : "Other";
@@ -300,6 +370,19 @@ var compareAccumulationDataAvailable = false;
           thresholdVal = "Other";
         };
 
+        if (!compareTaxaData.hasOwnProperty(taxa.ncbiID)){
+          compareTaxaData[taxa.ncbiID] = {
+            name: taxa.name,
+            values: {},
+            ncbiRank: taxa.ncbiRank
+          };
+        };
+
+        assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'count'], taxa.value);
+        assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'summedCount'], taxa.summedValue);
+        assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'chartValue'], taxa.chartValue);
+
+
         topTaxaArray.push({
             name: taxa.name,
             value: taxa.chartValue,
@@ -311,6 +394,7 @@ var compareAccumulationDataAvailable = false;
       };
 
 
+
         var topTaxaCompareArray = d3.nest()
             .key(function(d) {
                 return d.threshold;
@@ -319,6 +403,7 @@ var compareAccumulationDataAvailable = false;
               return {
                 thresholdName: thresholdName(v),
                 ncbiRank: rank(v),
+                ncbiID: ncbiID(v),
                 value: d3.sum(v, function(d) {
                   return d.value;
               })
@@ -336,7 +421,8 @@ var compareAccumulationDataAvailable = false;
                 return {
                     label: g.values.thresholdName,
                     value: g.values.value,
-                    ncbiRank: g.values.ncbiRank
+                    ncbiRank: g.values.ncbiRank,
+                    ncbiID: g.values.ncbiID
                 }
             })
             .sort(function(a, b) {
@@ -348,14 +434,25 @@ var compareAccumulationDataAvailable = false;
             return d.value;
         });
 
-
         var sampleDataArray = {sample:sample,totalReadCount:sampleReadCount,runId:run};
 
 
         topTaxaCompareArray.forEach(function(d) {
-            sampleDataArray[d.label] = {value:d.value,ncbiRank:d.ncbiRank};
-            // sampleDataArray[d.label] = d.value;
-            tempCompareTaxa[chart].push(d.label);
+          var proportion = d.value/sampleReadCount;
+            sampleDataArray[d.label] = {value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
+            sampleDataArray[d.ncbiID] = {name:d.label,value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
+
+
+            var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.name == d.label);
+
+            if (findTaxa != -1) {
+              taxaTotalCounts[chart][findTaxa].totalValue += d.value;
+              taxaTotalCounts[chart][findTaxa].proportionSum += proportion;
+            } else {
+              taxaTotalCounts[chart].push({name: d.label,ncbiID:d.ncbiID,totalValue: d.value,proportionSum: proportion});
+            };
+
+
         });
 
         formattedData[chart].push(sampleDataArray);
@@ -363,25 +460,28 @@ var compareAccumulationDataAvailable = false;
 
 // var taxaNameNCBIRankDictCompare;
 var compareDonutTopN = 10;
-var compareStackedBarTopN = 10
+var compareStackedBarTopN = 10;
+var compareHmTaxaTopN = 10;
 var formattedData = {};
-var tempCompareTaxa = {};
+// var tempCompareTaxa = {};
+
+
+var taxaTotalCounts = {"donut":[],"stackedBar":[]};
 
 var donutCompareData = [];
 
 function updateComparePlots(compareSampleData) {
 
-console.log(compareSampleData);
-console.log(selectedCompareMetaDataArray);
+compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
 
     if(isEmpty(compareSampleData)) {
 
     } else {
 
-      formattedData = {"donut":[],"stackedBar":[]};
-      tempCompareTaxa = {"donut":[],"stackedBar":[]};
+      formattedData = {"donut":[],"stackedBar":[],"hmTaxa":[]};
+      // tempCompareTaxa = {"donut":[],"stackedBar":[]};
       // taxaNameNCBIRankDictCompare = {};
-
+      taxaTotalCounts = {"donut":[],"stackedBar":[],"hmTaxa":[]};
 
 // Object.keys(compareSampleData).forEach(function(sample) {
 for (var sample of compareSampleData) {
@@ -400,7 +500,6 @@ for (var sampleData of selectedCompareMetaDataArray) {
   // var runId = sample.runId;
   var data = sample.tree;
 
-console.log(id);
     var thisSampleTree = d3.layout.tree().nodes(data);
 
 
@@ -429,16 +528,16 @@ console.log(id);
       };
     });
 
-    var taxaLevelSummedValue = d3.sum(thisSampleTree, function(d) {
-        return d.chartValue;
-    });
+    // var taxaLevelSummedValue = d3.sum(thisSampleTree, function(d) {
+    //     return d.chartValue;
+    // });
 
 
   topTaxaCompare(id,runId,thisSampleTree,"donut",compareDonutTopN,compareDonutUnclassified);
 
   topTaxaCompare(id,runId,thisSampleTree,"stackedBar",compareStackedBarTopN,compareStackedBarUnclassified);
 
-
+  topTaxaCompare(id,runId,thisSampleTree,"hmTaxa",compareHmTaxaTopN,compareHmTaxaUnclassified);
 
 
   };
@@ -447,9 +546,10 @@ console.log(id);
 // var stackedBarCompareData = formattedData["stackedBar"];
 
 donutCompareData = [];
-var stackedBarCompareData = [];
+stackedBarCompareData = [];
+hmTaxaData = [];
 
-var sortCompareNameArray = [];
+sortCompareNameArray = [];
 
 if (sampleOrdertype == "Manual" && manualSortCompareNames.length !== 0) {
   sortCompareNameArray = manualSortCompareNames;
@@ -578,6 +678,11 @@ for (const sample of sortCompareNameArray){
     }
   }
 
+for (const sampleData of formattedData.hmTaxa) {
+  if (sampleData.sample == sample.name && sampleData.runId == sample.runId) {
+    hmTaxaData.push(sampleData);
+  }
+}
   // var indexOfSample = findWithAttr(formattedData["donut"], "sample", sample.name);
   // if (indexOfSample != -1) {
   //   donutCompareData.push(formattedData["donut"][indexOfSample]);
@@ -585,17 +690,49 @@ for (const sample of sortCompareNameArray){
   // }
 }
 
-donutCompareTaxa = [...new Set(tempCompareTaxa["donut"])];
-stackedBarCompareTaxa = [...new Set(tempCompareTaxa["stackedBar"])];
-
-console.log(stackedBarCompareData);
+// donutCompareTaxa = [...new Set(tempCompareTaxa["donut"])];
+// stackedBarCompareTaxa = [...new Set(tempCompareTaxa["stackedBar"])];
 
 
-plotStackedBar(stackedBarCompareData,stackedBarCompareTaxa);
+
+taxaTotalCounts["donut"].sort(function(a, b) {
+    return b.proportionSum - a.proportionSum;
+});
+
+taxaTotalCounts["stackedBar"].sort(function(a, b) {
+    return b.proportionSum - a.proportionSum;
+});
+
+taxaTotalCounts["hmTaxa"].sort(function(a, b) {
+    return b.proportionSum - a.proportionSum;
+});
+
+
+
+donutCompareTaxa = [];
+stackedBarCompareTaxa = [];
+hmTaxaTaxa = [];
+
+for (var taxa of taxaTotalCounts["stackedBar"]) {
+  stackedBarCompareTaxa.push(taxa.name);
+}
+
+for (var taxa of taxaTotalCounts["donut"]) {
+  donutCompareTaxa.push(taxa.name);
+}
+
+for (var taxa of taxaTotalCounts["hmTaxa"]) {
+  hmTaxaTaxa.push(taxa.ncbiID);
+}
+
+
+plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 
 plotCompareDonut(donutCompareData,donutCompareTaxa);
 
+plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
 
+// plotHeatmapTaxa(stackedBarCompareData,hmTaxaTaxa);
 
       };
 

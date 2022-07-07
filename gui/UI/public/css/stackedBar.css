@@ -5,10 +5,10 @@
   /* font: 12px sans-serif; */
 }
 
-#stackedBarPlot svg rect:hover,
+/* #stackedBarPlot svg rect:hover,
 #clonedStackedBarPlot svg rect:hover {
   opacity: .7;
-}
+} */
 
 #stackedBarPlot svg {
   background-color: #fff;

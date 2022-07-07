@@ -47,7 +47,7 @@ function initialiseCompareStackedBar() {
 
 
   d3.select("#compareStackedBarTopN").on("input", function(){
-    compareStackedBarTopN = d3.select(this).property("value");
+    compareStackedBarTopN = this.value;
     d3.select("#compareStackedBarTopNNum").text(compareStackedBarTopN);
   });
 
@@ -127,7 +127,7 @@ function transitionPercent() {
 
   yAxis.tickFormat(d3.format("%"));
   stack.offset("expand");  // use this to get it to be relative/normalized!
-  // var stacked = stack(makeData(segmentsStacked, data));
+  // var stacked = stack(makeData(stackedTaxa, data));
     var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
   // call function to do the bars, which is same across both formats.
   transitionRects(stacked);
@@ -137,7 +137,7 @@ function transitionCount() {
 
   yAxis.tickFormat(d3.format(".2s")); // for the stacked totals version
   stack.offset("zero");
-  // var stacked = stack(makeData(segmentsStacked, data));
+  // var stacked = stack(makeData(stackedTaxa, data));
       var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
   transitionRects(stacked);
 
@@ -170,10 +170,9 @@ function transitionRects(stacked) {
   stackedSvg.selectAll(".y.axis").transition().call(yAxis);
 }
 
-function makeData(segmentsStacked, data) {
-  return segmentsStacked.map(function(component) {
+function makeData(stackedTaxa, data) {
+  return stackedTaxa.map(function(component) {
       return data.map(function(d) {
-        // var xVal = d.sample + " " + d.runId;
         if (d[component]) {
           var yVal = +d[component]["value"];
           var rank = d[component]["ncbiRank"];
@@ -181,7 +180,6 @@ function makeData(segmentsStacked, data) {
           var yVal = 0;
           var rank = "n/a";
         };
-        // return {x: d["sample"], y: +d[component], component: component};
         return {x: d.index, y: yVal, sample: d.sample, runId: d.runId, component: component, readCount: yVal, totalReadCount: d["totalReadCount"], ncbiRank: rank};
       })
     });
@@ -191,10 +189,26 @@ var stackedBarInputData;
 var stackedTaxa;
 // var stacked;
 
-function plotStackedBar(data,segmentsStacked) {
+
+function plotStackedBar(data,taxaTotalCounts) {
+
+stackedTaxa = [];
+
+  if(percentClicked) {
+    taxaTotalCounts.sort(function(a, b) {
+        return b.proportionSum - a.proportionSum;
+    });
+  } else {
+    taxaTotalCounts.sort(function(a, b) {
+        return b.totalValue - a.totalValue;
+    });
+  };
+
+  for (var taxa of taxaTotalCounts) {
+    stackedTaxa.push(taxa.name);
+  }
 
 stackedBarInputData = data;
-stackedTaxa = segmentsStacked;
 
 for (var [i, sample] of data.entries()){
   sample.index = i;
@@ -209,10 +223,10 @@ for (var [i, sample] of data.entries()){
   // data.sort(function(a,b) { return +a.total - +b.total;});
 
 
-  // var segmentsStacked = ["Escherichia","Oscillatoria","Streptomyces","Pseudomonas","Microcoleus","Arthrobacter","Polaromonas", "Bradyrhizobium"];
+  // var stackedTaxa = ["Escherichia","Oscillatoria","Streptomyces","Pseudomonas","Microcoleus","Arthrobacter","Polaromonas", "Bradyrhizobium"];
 
 
-  var stacked = stack(makeData(segmentsStacked, data));
+  var stacked = stack(makeData(stackedTaxa, data));
 
 
 
@@ -254,7 +268,6 @@ if (data.length <= 2) {
 
 
 
-
   var sample = layer1.selectAll(".taxa")
       .data(stacked);
 
@@ -267,7 +280,6 @@ if (data.length <= 2) {
 
   var rectangles = sample.selectAll("rect")
       .data(function(d) {
-        // console.log("array for a rectangle");
         return d; })  // this just gets the array for bar segment.
     .enter().append("rect")
         .attr("width", xScale.rangeBand());
@@ -288,7 +300,7 @@ if (data.length <= 2) {
 // function drawLegend() {
 
   var stackedBarLegend = d3.select("#stackedBarLegend").selectAll(".stackedBarLegend")
-      .data(segmentsStacked);
+      .data(stackedTaxa);
 
   var stackedBarLegendEnter = stackedBarLegend.enter().append("svg")
       .attr("class", "stackedBarLegend")
@@ -318,33 +330,7 @@ if (data.length <= 2) {
 
   stackedBarLegend.exit().remove();
 
-    stackedBarLegend.on("mouseover", function(d, i) {
 
-        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-
-
-            if (x.component == d) {
-                d3.select(this).classed("hoverRect", true);
-            };
-        });
-
-          d3.select(this).select("rect").classed("hoverRect", true);
-          d3.select(this).select("text").style("font-weight", "bold");
-    });
-
-    stackedBarLegend.on("mouseout", function(d, i) {
-
-      stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-
-          if (x.component == d) {
-              d3.select(this).classed("hoverRect", false);
-          };
-      });
-
-        d3.select(this).select("rect").classed("hoverRect", false);
-        d3.select(this).select("text").style("font-weight", "normal");
-
-    });
 
 
   // }
@@ -353,23 +339,118 @@ if (data.length <= 2) {
 
 
 
-// ================================================================
 // Mouse Events
-// ================================================================
+$(document).ready( function() {
 
-    rectangles
-        .on("mouseover", mouseoverFunc)
-        .on("mousemove", mousemoveFunc)
-        .on("mouseout", mouseoutFunc);
+  stackedBarLegend.on("mouseover", function(d, i) {
+
+      // stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+      //
+      //
+      //     if (x.component == d) {
+      //         d3.select(this).classed("hoverRect", true);
+      //     };
+      // });
+      //
+      //   d3.select(this).select("rect").classed("hoverRect", true);
+      //   d3.select(this).select("text").style("font-weight", "bold");
+
+
+
+        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+
+
+            if (x.component == d) {
+                // d3.select(this).classed("hoverRect", true);
+            } else {
+              // d3.select(this).classed("lowOpacity", true);
+              d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
+            };
+        });
+
+        d3.selectAll(".stackedBarLegend").filter(function(x) {
+            if (x == d) {
+                d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
+            } else {
+              // d3.select(this).select("g").classed("lowOpacity", true);
+              d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
+            };
+        });
+
+
+  });
+
+  stackedBarLegend.on("mouseout", function(d, i) {
+
+    // stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+    //
+    //     if (x.component == d) {
+    //         d3.select(this).classed("hoverRect", false);
+    //     };
+    // });
+    //
+    //   d3.select(this).select("rect").classed("hoverRect", false);
+    //   d3.select(this).select("text").style("font-weight", "normal");
+
+    stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+
+        if (x.component == d) {
+
+        } else {
+          // d3.select(this).classed("lowOpacity", false);
+          d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
+        };
+    });
+
+    d3.selectAll(".stackedBarLegend").filter(function(x) {
+        if (x == d) {
+            d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
+        } else {
+          // d3.select(this).select("g").classed("lowOpacity", false);
+          d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
+        };
+    });
+
+  });
+
+  rectangles
+      .on("mouseover", mouseoverFunc)
+      .on("mousemove", mousemoveFunc)
+      .on("mouseout", mouseoutFunc);
+
+
+}
+);
 
 
     function mouseoverFunc(d) {
 
-          d3.selectAll(".stackedBarLegend").filter(function(x) {
+          // d3.selectAll(".stackedBarLegend").filter(function(x) {
+          //
+          //     if (d.component == x) {
+          //         d3.select(this).select("g rect").classed("hoverRect", true);
+          //         d3.select(this).select("g text").style("font-weight", "bold");
+          //     };
+          // });
 
+
+          d3.selectAll(".stackedBarLegend").filter(function(x) {
               if (d.component == x) {
-                  d3.select(this).select("g rect").classed("hoverRect", true);
-                  d3.select(this).select("g text").style("font-weight", "bold");
+                  // d3.select(this).select("g text").style("font-weight", "bold");
+                  d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
+              } else {
+                // d3.select(this).select("g").classed("lowOpacity", true);
+                d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
+              };
+          });
+
+
+          stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+              if (d.component == x.component) {
+                  // d3.select(this).classed("hoverRect", true);
+              } else {
+                // d3.select(this).classed("lowOpacity", true);
+                d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
               };
           });
 
@@ -395,11 +476,30 @@ if (data.length <= 2) {
     }
 
     function mouseoutFunc(d) {
+      // d3.selectAll(".stackedBarLegend").filter(function(x) {
+      //   if (d.component == x) {
+      //       d3.select(this).select("g rect").classed("hoverRect", false);
+      //       d3.select(this).select("g text").style("font-weight", "normal");
+      //   };
+      // });
+
       d3.selectAll(".stackedBarLegend").filter(function(x) {
-        if (d.component == x) {
-            d3.select(this).select("g rect").classed("hoverRect", false);
-            d3.select(this).select("g text").style("font-weight", "normal");
-        };
+          if (d.component == x) {
+              // d3.select(this).select("g text").style("font-weight", "normal");
+              d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
+          } else {
+            d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
+          };
+      });
+
+
+      stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+          if (d.component == x.component) {
+              // d3.select(this).classed("hoverRect", true);
+          } else {
+            // d3.select(this).classed("lowOpacity", false);
+            d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
+          };
       });
 
 
@@ -425,10 +525,10 @@ if (data.length <= 2) {
           .style("max-height", 500 + addedAxisHeight)
 
 
-// #stackedBarPlot>svg
-$(".stackedBarLegend:eq(0) text").mouseenter(function(){
-  $(this).css("font-weight", "bold");
-});
+
+// $(".stackedBarLegend:eq(0) text").mouseenter(function(){
+//   $(this).css("font-weight", "bold");
+// });
 
 
 
@@ -436,6 +536,7 @@ $(".stackedBarLegend:eq(0) text").mouseenter(function(){
 
 
 function stackedBarTextShrink(d,data) {
+
 
     // var tbbox = this.getBBox();
     var maxChars = 28,

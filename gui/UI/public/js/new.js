@@ -159,8 +159,8 @@ $("input[name='minimumIdentity']").trigger("input");
 
 // LCAMinLength:100
 
-// readsPerChunk:8000
-$("#readsPerChunkSelect option").filter(function() { return $(this).text() == "8000" }).prop({selected: true});
+// readsPerChunk:4000
+$("#readsPerChunkSelect option").filter(function() { return $(this).text() == "4000" }).prop({selected: true});
 $("#readsPerChunkSelect").trigger("change");
 
 // ReadFilterMinQ:9
@@ -186,8 +186,8 @@ $("input[name='minimumIdentity']").trigger("input");
 
 // LCAMinLength:100
 
-// readsPerChunk:8000
-$("#readsPerChunkSelect option").filter(function() { return $(this).text() == "8000" }).prop({selected: true});
+// readsPerChunk:4000
+$("#readsPerChunkSelect option").filter(function() { return $(this).text() == "4000" }).prop({selected: true});
 $("#readsPerChunkSelect").trigger("change");
 
 // ReadFilterMinQ:9

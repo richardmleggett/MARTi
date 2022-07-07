@@ -422,7 +422,7 @@ obserser.on('tree-file-updated', tree => {
   sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
 
   for (const [id, data] of Object.entries(clientData)) {
-    if ((tree.id == data.selectedDashboardSample.name && tree.runName == data.selectedDashboardSample.runId) || (data.selectedCompareSamples.findIndex(e => e.name == tree.id && e.runId == tree.runName) )) {
+    if ((tree.id == data.selectedDashboardSample.name && tree.runName == data.selectedDashboardSample.runId) || (data.selectedCompareSamples.filter(e => e.name == tree.id && e.runId == tree.runName).length > 0)) {
       io.to(id).emit('tree-update-available');
       console.log(`[${new Date().toLocaleString()}][${id}] Tree update notification sent`);
     };

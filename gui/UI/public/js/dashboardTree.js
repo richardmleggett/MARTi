@@ -1,4 +1,9 @@
 
+var dashboardTreeLinkType,
+dashboardTreeType,
+dashboardTreeCircleSizeType,
+dashboardTreeCircleColourType;
+
 function initialiseDashboardTree() {
 
   treeSVG = d3.select("#dendrogram").append("svg")
@@ -28,30 +33,25 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
   });
 
   d3.selectAll("input[name='dashboardTreeLinkType']").on("change", function() {
+    dashboardTreeLinkType = this.value;
     duration = 0;
-    if (this.value == "straight") {
-      diagonal = function (d, i) {
-        return "M" + d.source.y + "," + d.source.x
-            + "h" + 20
-            + "V" + d.target.x + "H" + d.target.y;
-      }
-    } else {
-      diagonal = d3.svg.diagonal()
-        .projection(function(d) { return [d.y, d.x]; });
-    }
+
     treeUpdate(root);
     duration = 750;
   });
 
   d3.selectAll("input[name='dashboardTreeType']").on("change", function() {
+    dashboardTreeType = this.value;
     treeUpdate(root);
   });
 
   d3.selectAll("input[name='dashboardTreeCircleSizeType']").on("change", function() {
+    dashboardTreeCircleSizeType = this.value;
     treeUpdate(root);
   });
 
   d3.selectAll("input[name='dashboardTreeCircleColourType']").on("change", function() {
+    dashboardTreeCircleColourType = this.value;
     treeUpdate(root);
   });
 
@@ -71,6 +71,12 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
   });
 
     d3.selectAll(".dashboard-taxa-tree-top-n-text").text(dashboardTaxaTreeTopN);
+
+
+    dashboardTreeLinkType = "curve";
+    dashboardTreeType = "tree";
+    dashboardTreeCircleSizeType = "linear";
+    dashboardTreeCircleColourType = "linear";
 
 
   //
@@ -445,6 +451,16 @@ var preReadCountSum;
 
 function treeUpdate(source) {
 
+  if (dashboardTreeLinkType == "straight") {
+    diagonal = function (d, i) {
+      return "M" + d.source.y + "," + d.source.x
+          + "h" + 20
+          + "V" + d.target.x + "H" + d.target.y;
+    }
+  } else {
+    diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
+  }
 
 if(newTreeData == true) {
   preNodes = d3.layout.tree().nodes(root).reverse();
@@ -519,9 +535,7 @@ var treeDivWidth = $("#dendrogram").width() - dashboardTreeMargin.right - dashbo
 
 
 
-if ($("input[name='dashboardTreeType'][value='tree']").is(':checked')) {
-
-
+if (dashboardTreeType == "tree") {
 
   var tree = d3.layout.tree()
       .size([tempHeight, treeDivWidth]);
@@ -610,25 +624,23 @@ if (readCountSum > preReadCountSum) {
     // d3.selectAll(".dashboard-taxa-tree-read-sum").text(thousandsSeparators(preReadCountSum));
     d3.selectAll(".dashboard-taxa-tree-read-perc").text(Number.parseFloat((readCountSum/preReadCountSum)*100).toPrecision(3));
 
-    var circleSizeType = $("input[name='dashboardTreeCircleSizeType']:checked").val();
-    var circleColourType = $("input[name='dashboardTreeCircleColourType']:checked").val();
 
-    if (circleColourType == "linear") {
+    if (dashboardTreeCircleColourType == "linear") {
       var circleColour = d3.scale.linear()
       	.domain([1, readCountMax])
       	.range(['white', '#375a7f']);
     }
-    else if (circleColourType === "sqrt"){
+    else if (dashboardTreeCircleColourType === "sqrt"){
       var circleColour = d3.scale.sqrt()
       	.domain([1, readCountMax])
       	.range(['white', '#375a7f']);
     }
-    else if (circleColourType === "log10"){
+    else if (dashboardTreeCircleColourType === "log10"){
       var circleColour = d3.scale.log().base(10)
         .domain([1, readCountMax])
         .range(['white', '#375a7f']);
     }
-    else if (circleColourType === "ln"){
+    else if (dashboardTreeCircleColourType === "ln"){
       var circleColour = d3.scale.log().base(Math.exp(1))
         .domain([1, readCountMax])
         .range(['white', '#375a7f']);
@@ -662,7 +674,7 @@ if (readCountSum > preReadCountSum) {
   nodeUpdate.select("circle")
 	  // .attr("r", 8)
     .attr("r", function(d) {
-          return circleSize(d,circleSizeType);
+          return circleSize(d,dashboardTreeCircleSizeType);
         })
     .style("fill", function(d) {
       var nodeVal;
@@ -704,7 +716,7 @@ if (readCountSum > preReadCountSum) {
     // .transition()
 	  // .duration(0)
 	  // .attr("x", function(d) { return d.children ? -13 : 13; })
-    .attr("dx", function (d) {return d.children ? (-14 - circleSize(d,circleSizeType)) : (6 + circleSize(d,circleSizeType)); })
+    .attr("dx", function (d) {return d.children ? (-14 - circleSize(d,dashboardTreeCircleSizeType)) : (6 + circleSize(d,dashboardTreeCircleSizeType)); })
     .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
 	  // .style("fill-opacity", function(d) { return d.children ?  1e-6 : 1; });
     .style("visibility", function(d) { return d.children ?  "hidden" : "visible"; });
