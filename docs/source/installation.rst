@@ -76,7 +76,11 @@ To start the GUI server, type
 
 ``marti_gui [port]``
 
-Where port is an optional parameter to specify the port number to be used. Ignore this if unsure.
+Where port is an optional parameter to specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+
+To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
+
+``localhost:3000``
 
 **macOS differences**
 
