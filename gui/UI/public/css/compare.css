@@ -103,3 +103,24 @@
  #sampleOrderCompareMenu {
    min-width: 8.5rem;
  }
+
+#compareTreePlot {
+  overflow-x: scroll;
+}
+
+#ttTable {
+  max-width:min-content;
+  white-space: normal;
+  line-height: 1;
+}
+
+#ttTable th, #ttTable td {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+#ttTable td {
+  text-align: right;
+}

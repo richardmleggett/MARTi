@@ -1168,7 +1168,7 @@ amrTableInitiated = true;
 d3.selectAll(".dashboard-amr-chunk-value").text(dashboardAmrTableChunkSelected+"/"+dashboardAmrTableChunkTotal);
 d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashboardAmrTableChunkSelected]);
 
-
+var csvString = "";
 
   for (const gene of amrData.geneList){
 
@@ -1226,6 +1226,13 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
       if (speciesCountAtChunk !== undefined) {
 
         gene.speciesCounts.push(species+" ("+speciesCountAtChunk+")");
+
+        if (species.indexOf(' ') >= 0) {
+          line = species + ":" + speciesCountAtChunk + "\n";
+          // console.log(line);
+          csvString += line;
+        }
+
       }
 
     }
@@ -1266,6 +1273,7 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
   // removeAmrRowList.forEach(function(d) {
   //     dashboardAmrTable.row(d).remove()
   //   });
+
 
 
   dashboardAmrTable.clear();

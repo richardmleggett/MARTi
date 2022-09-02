@@ -40,6 +40,11 @@
   text-align:center;
 }
 
+#samplePageDataTable .dataTables_empty {
+  font-weight: bold;
+  color:#000000;
+}
+
 table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before, thead th.select-checkbox:before {
     content: ' ';
     margin-top: -6px;

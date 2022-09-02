@@ -11,17 +11,36 @@ class Observer extends EventEmitter {
 
   watchFolder(folder) {
     try {
-      console.log(
-        `[${new Date().toLocaleString()}] Monitoring MARTi files in: ${folder}`
-      );
+
 
       var filesToWatch;
 
-      if (folder.endsWith("/")) {
-        filesToWatch = folder + "*/marti/**/*.json";
-      } else {
-        filesToWatch = folder + "/*/marti/**/*.json";
-      }
+      if (!folder.endsWith("/")) {
+        folder = folder + "/";
+      };
+
+      console.log(
+        `[${new Date().toLocaleString()}] Attempting to monitor MARTi run directories in the following location: ${folder}`
+      );
+
+      var dirToMonitor;
+        if (fsExtra.existsSync(folder + "marti")) {
+          console.log(
+            `[${new Date().toLocaleString()}] WARNING: An individual run directory has been specified.`
+          );
+            filesToWatch = folder + "marti/**/*.json";
+            dirToMonitor = folder + "marti/";
+            console.log(
+              `[${new Date().toLocaleString()}] Monitoring MARTi Engine output files in the following directory: ${dirToMonitor}`
+            );
+        } else {
+            filesToWatch = folder + "*/marti/**/*.json";
+            console.log(
+              `[${new Date().toLocaleString()}] Monitoring MARTi run directories in the following location: ${folder}`
+            );
+        }
+
+
 
       var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true });
 

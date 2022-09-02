@@ -18,6 +18,10 @@ var comparePlotColorPalette = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
 var dashboardPlotColorPalette = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
+
+var ctColor = d3.scale.ordinal()
+    .range(colourPalettes[selectedPalette]);
+
 var dashboardColorIndex = colourPalettes[selectedPalette].length;
 
 function thousandsSeparators(num) {

@@ -451,6 +451,9 @@ var preReadCountSum;
 
 function treeUpdate(source) {
 
+console.log(source);
+console.log(root);
+
   if (dashboardTreeLinkType == "straight") {
     diagonal = function (d, i) {
       return "M" + d.source.y + "," + d.source.x
@@ -573,42 +576,15 @@ else {
     // readCountSum = d3.sum(nodes, function(d) { return d.value; });
     readCountSum = d3.sum(nodes, function(d) { return d.children ? d.value : d.summedValue; });
 
-// var string;
+
+// var nodesWithoutChildren = nodes.filter(function(d) {
+//     return !d.children;
+//   });
 //
-// for (var spec of nodes) {
-//   var usedVal;
-//   if (spec.children) {
-//     usedVal = spec.value;
-//   } else {
-//     usedVal = spec.summedValue;
-//   }
-//   string += spec.name + "," + spec.value + "," + spec.summedValue + "," + usedVal + "\n";
-// }
-//
-// console.log(string);
-//
-var nodesWithoutChildren = nodes.filter(function(d) {
-    return !d.children;
-  });
+//   var nodesWithChildren = nodes.filter(function(d) {
+//       return d.children;
+//     });
 
-  var nodesWithChildren = nodes.filter(function(d) {
-      return d.children;
-    });
-
-
-// console.log(nodesWithoutChildren);
-// console.log(nodesWithChildren);
-//
-// console.log(readCountSum);
-// console.log(preReadCountSum);
-
-// console.log("With no children sum:");
-// console.log(d3.sum(nodesWithoutChildren, function(d) {return d.summedValue}));
-
-// console.log("With children sum:");
-// console.log(d3.sum(nodesWithChildren, function(d) {return d.value}));
-
-// console.log(d3.sum(nodesWithoutChildren, function(d) {return d.summedValue}) + d3.sum(nodesWithChildren, function(d) {return d.value}));
 
 if (readCountSum > preReadCountSum) {
   // console.log("True");

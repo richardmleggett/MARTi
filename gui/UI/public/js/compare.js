@@ -108,6 +108,7 @@ function initialiseComparePage() {
   initialiseCompareMultiDonut();
 
   initialiseHeatmapTaxa();
+  initialisecompareTree();
 
   compareAccumulationDataAvailable = false;
 
@@ -271,6 +272,44 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   });
 
 
+
+  d3.select('#exportCompareTreeSVG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
+    var outputFilename = "compare_taxa_tree_lca_" + levelSelected + "_tree_lca_" + lcaAbundanceCompare + "_" + date;
+    var exportSVG = $("#compareTreeSvg")[0];
+    var exportSVGWidth = exportSVG.getBBox().width + 200;
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_svg_with_style('compareTreeSvg','/css/compareTree.css',outputFilename,true);
+  });
+
+  d3.select('#exportCompareTreePNG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
+    var outputFilename = "compare_taxa_tree_lca_" + levelSelected + "_tree_lca_" + lcaAbundanceCompare + "_" + date;
+    var exportSVG = $("#compareTreeSvg")[0];
+    var exportSVGWidth = exportSVG.getBBox().width + 200;
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_raster_with_style('compareTreeSvg','/css/compareTree.css',outputFilename,2,'png',true);
+  });
+
+  d3.select('#exportCompareTreeJPG').on('click', function(){
+
+    var date = getDate() + "_" + getTime();
+    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
+    var outputFilename = "compare_taxa_tree_lca_" + levelSelected + "_tree_lca_" + lcaAbundanceCompare + "_" + date;
+    var exportSVG = $("#compareTreeSvg")[0];
+    var exportSVGWidth = exportSVG.getBBox().width + 200;
+    $(exportSVG).attr('width',exportSVGWidth);
+
+    save_as_raster_with_style('compareTreeSvg','/css/compareTree.css',outputFilename,2,'jpg',true);
+  });
+
+
   d3.selectAll("input[name='compareStackedBarUnclassified']").on("change", function() {
   compareStackedBarUnclassified = this.value;
   updateComparePlots(compareTreeDataGlobal);
@@ -298,7 +337,7 @@ d3.select('#downloadCompareAssignments').on('click', function(){
 var csvToExport = convertDataToCSV(compareTaxaData);
 var date = getDate() + "_" + getTime();
 var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
-var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+var outputFilename = "compare_taxa_assignments_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
 export_as_csv(csvToExport,outputFilename);
 });
 
@@ -730,7 +769,13 @@ plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 
 plotCompareDonut(donutCompareData,donutCompareTaxa);
 
+
 plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
+
+
+buildCompareTree(compareSampleData)
+
+plotCompareTree(newCompareTree);
 
 // plotHeatmapTaxa(stackedBarCompareData,hmTaxaTaxa);
 
@@ -846,3 +891,135 @@ socket.on('accumulation-update-available', request => {
 //
 //   };
 // });
+
+  var newCompareTree = {};
+
+function buildCompareTree(data){
+
+
+  newCompareTree = {};
+  var newCompareTreeTaxa = [];
+
+
+    for (var sample of data) {
+      var tree = sample.tree;
+      var sampleRun = sample.id + "_" + sample.runId;
+      var nodes = d3.layout.tree().nodes(tree);
+
+      var sampleAssignedReadTotal = d3.sum(nodes, function(d) { return d.value; });
+
+      function recursiveTreeCheck(d) {
+        var taxa = d.ncbiID;
+        var proportion = d.value/sampleAssignedReadTotal;
+        var summedProportion = d.summedValue/sampleAssignedReadTotal;
+        if(!newCompareTreeTaxa.includes(taxa)){
+          newCompareTreeTaxa.push(taxa);
+
+          if(taxa == 1){
+            newCompareTree = {
+              depth:d.depth,
+              name:d.name,
+              ncbiID:1,
+              rank:d.rank,
+              ncbiRank:d.ncbiRank,
+              values: []
+            };
+            // newCompareTree["values"][sampleRun] = {readCount:d.value,summedCount:d.summedValue};
+            newCompareTree.values.push({sampleId: sample.id, runId: sample.runId, readCount:d.value, summedCount:d.summedValue, proportion:proportion, summedProportion:summedProportion});
+          } else {
+            function addTaxaToTree(treeNode,newTaxa){
+              if (newTaxa.parent.ncbiID == treeNode.ncbiID){
+                if (!treeNode.hasOwnProperty("children")){
+                  treeNode.children = [];
+                };
+                var newCompareTreeNode = {
+                  depth:newTaxa.depth,
+                  name:newTaxa.name,
+                  ncbiID:newTaxa.ncbiID,
+                  rank:newTaxa.rank,
+                  ncbiRank:newTaxa.ncbiRank,
+                  values: []
+                };
+                // newCompareTreeNode["values"][sampleRun] = {readCount:newTaxa.value,summedCount:newTaxa.summedValue};
+                newCompareTreeNode.values.push({sampleId: sample.id, runId: sample.runId, readCount:d.value, summedCount:d.summedValue, proportion:proportion, summedProportion:summedProportion});
+                treeNode.children.push(newCompareTreeNode);
+
+
+              } else if (treeNode.children){
+                treeNode.children.forEach(function(c){
+                    addTaxaToTree(c,newTaxa);
+                  });
+              }
+
+            }
+            addTaxaToTree(newCompareTree,d);
+          };
+
+        } else {
+          function updateTaxaInTree(treeNode,newTaxa){
+            if (newTaxa.ncbiID == treeNode.ncbiID){
+              // treeNode["values"][sampleRun] = {readCount:newTaxa.value,summedCount:newTaxa.summedValue};
+
+              treeNode.values.push({sampleId: sample.id, runId: sample.runId, readCount:d.value, summedCount:d.summedValue, proportion:proportion, summedProportion:summedProportion});
+
+              // for (var sampleData of treeNode.values) {
+              //   if (sampleData.sampleId == sample.id && sampleData.runId == sample.runId) {
+              //     console.log("Update");
+              //     sampleData.readCount = newTaxa.value;
+              //     sampleData.summedCount = newTaxa.summedValue;
+              //   } else {
+              //
+              //   }
+              // }
+            } else if (treeNode.children){
+              treeNode.children.forEach(function(c){
+                  updateTaxaInTree(c,newTaxa);
+                });
+            }
+
+          }
+          updateTaxaInTree(newCompareTree,d);
+        };
+
+        if (d.children) {
+          d.children.forEach(function(c){
+              recursiveTreeCheck(c);
+            });
+        }
+      };
+      recursiveTreeCheck(tree);
+
+
+
+
+    }
+    newCompareTree.x0 = 0;
+    newCompareTree.y0 = 0;
+
+
+          function recursiveMissingValueSet(d) {
+
+            for (var sample of sortCompareNameArray) {
+              // var sampleRun = sample.name + "_" + sample.runId;
+
+              if (d.values.findIndex(e => e.sampleId == sample.name && e.runId == sample.runId) == -1) {
+                d.values.push({sampleId: sample.name, runId: sample.runId, readCount:0, summedCount:0, proportion:0, summedProportion:0});
+              }
+
+              // if (!d.values.hasOwnProperty(sampleRun)){
+              //   d["values"][sampleRun] = {};
+              //   d["values"][sampleRun]["readCount"] = 0;
+              //   d["values"][sampleRun]["summedCount"] = 0;
+              // }
+            }
+
+            if (d.children) {
+              d.children.forEach(function(c){
+                  recursiveMissingValueSet(c);
+                });
+            }
+          };
+
+          recursiveMissingValueSet(newCompareTree);
+
+}

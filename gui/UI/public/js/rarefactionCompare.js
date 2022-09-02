@@ -42,7 +42,33 @@ function initialiseCompareAccumulation() {
       // });
 
 
+
+      d3.selectAll("input[name='rareXAxisMax']").on("change", function(){
+        // dashboardTaxaTreeTopNChanged = true;
+        plotRarefactionCompare(rareData);
+        // dashboardTaxaTreeTopNChanged = false;
+      });
+
+      d3.selectAll("input[name='rareXAxisMax']").on("input", function(){
+        rareXAxisMaxNum = parseInt(d3.select(this).property("value"));
+        // d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
+        d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
+      });
+
+        d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
+
+        d3.select('#downloadAccumulationData').on('click', function(){
+        var csvToExport = convertAccumulationDataToCSV(accumulationData);
+        var date = getDate() + "_" + getTime();
+        var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
+        var outputFilename = "compare_accumulation_data_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+        export_as_csv(csvToExport,outputFilename);
+        });
+
 };
+
+var rareXAxisMaxDefault = 100000;
+var rareXAxisMaxNum = rareXAxisMaxDefault;
 
 var rareMargin = {top: 20, right: 80, bottom: 50, left: 60},
     rareWidth = 960 - rareMargin.left - rareMargin.right,
@@ -78,6 +104,46 @@ var rc_yAxis = d3.svg.axis()
 
 
 
+    var accumulationData;
+
+    function convertAccumulationDataToCSV(data) {
+      var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
+      var dataArray = [];
+      var header = [];
+      // header.push('Read count','Taxa count');
+      console.log(data);
+      var maxRow = 0;
+      for (var sample of data) {
+        header.push(sample.name + " read count");
+        header.push(sample.name + " " + levelSelected + " count");
+        var valLength = sample.values.length;
+        if (valLength > maxRow){
+          maxRow = valLength;
+        }
+      }
+      dataArray.push(header);
+
+      for (var i = 0; i < maxRow; i++) {
+        var rowData = [];
+        for (var sample of data) {
+          if (sample.values[i] !== undefined) {
+          rowData.push(sample.values[i].readCount);
+          rowData.push(sample.values[i].taxaCount);
+        } else {
+          rowData.push("");
+          rowData.push("");
+        }
+      }
+        dataArray.push(rowData);
+    }
+
+      var csvString = '';
+      dataArray.forEach(function(infoArray, index) {
+        dataString = infoArray.join(',');
+        csvString += index < dataArray.length-1 ? dataString + '\n' : dataString;
+      });
+      return csvString;
+    };
 
 
 
@@ -177,7 +243,38 @@ data.sort(function(a, b){
 
       rarefactionLineColour.domain(idList);
 
+var readCountMax = d3.max(multilineData, function(c) { return d3.max(c.values, function(v) { return v.readCount; }); });
+d3.selectAll("input[name='rareXAxisMax']").property("max", parseInt(readCountMax));
 
+if (readCountMax < rareXAxisMaxDefault) {
+  rareXAxisMaxNum = readCountMax;
+}
+// else {
+//   rareXAxisMax = rareXAxisMaxDefault;
+// }
+
+// d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
+// d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
+// d3.selectAll("#rareXAxisMaxNumTotal").text(dashboardTreeLeafCount);
+
+
+for (var line of multilineData) {
+  var indexOfMax = findWithAttr(line.values,"readCount",rareXAxisMaxNum);
+  if (indexOfMax != -1) {
+    line.values.length = indexOfMax + 1;
+  } else {
+    for (var [i,chunk] of line.values.entries()) {
+      if (chunk.readCount < rareXAxisMaxNum){
+        indexOfMax = i;
+      } else {
+        break;
+      }
+    }
+    line.values.length = indexOfMax + 1;
+  }
+}
+
+accumulationData = multilineData;
 
 var rarefactionCompareLegend = d3.select("#compareRarefactionPlotLegend").selectAll(".rarefactionCompareLegend")
     .data(idList);
@@ -215,7 +312,7 @@ rarefactionCompareLegend.exit().remove();
 
 rc_x.domain([
   d3.min(multilineData, function(c) { return d3.min(c.values, function(v) { return v.readCount; }); }),
-  d3.max(multilineData, function(c) { return d3.max(c.values, function(v) { return v.readCount; }); })
+  rareXAxisMaxNum
 ]);
 
 rc_y.domain([

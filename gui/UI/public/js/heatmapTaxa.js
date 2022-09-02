@@ -60,6 +60,7 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
           if (Math.abs(currentWidthHmTaxa - tempWidthHmTaxa) >= 30) {
               currentWidthHmTaxa = tempWidthHmTaxa;
               plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
+              plotCompareTree(newCompareTree);
             }
         }
 

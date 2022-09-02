@@ -392,7 +392,15 @@
                         <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
                         <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
                       </div>
+
+                      <div class="form-group">
+                        <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
+                        <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
+                      </div>
+
                     </form>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
 
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
@@ -530,3 +538,140 @@
             </div>
           </div>
           </div>
+
+
+          <!-- Content Row -->
+<div class="row" id="compareTaxaTreeRow">
+
+
+  <div class="col-12 mb-4">
+
+    <!-- Taxonomic tree -->
+    <div class="card shadow" id="compareTaxaTreeCard">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Tree</h6>
+
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuCompareTaxaTree" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuCompareTaxaTree">
+
+            <div class="dropdown-header">Options:</div>
+            <form class="dropdown-form">
+
+            <!-- <div>
+              <label>Tree links:</label>
+              <label><input type="radio" name="compareTreeLinkType" value="curve" checked>  Curve</label>
+              <label><input type="radio" name="compareTreeLinkType" value="straight" >  Straight</label>
+            </div>
+            <div>
+              <label>Tree type:</label>
+              <label><input type="radio" name="compareTreeType" value="tree" checked>  Tree</label>
+              <label><input type="radio" name="compareTreeType" value="cluster" >  Cluster</label>
+            </div>
+
+
+            <div>
+              <label>Circle size:</label>
+              <label><input type="radio" name="compareTreeCircleSizeType" value="linear" checked>  Linear</label>
+              <label><input type="radio" name="compareTreeCircleSizeType" value="sqrt" > Sqrt</label>
+              <label><input type="radio" name="compareTreeCircleSizeType" value="log10" > Log10</label>
+              <label><input type="radio" name="compareTreeCircleSizeType" value="ln">  Ln</label>
+            </div>
+
+            <div>
+              <label>Colour scale:</label>
+              <label><input type="radio" name="compareTreeCircleColourType" value="linear" checked>  Linear</label>
+              <label><input type="radio" name="compareTreeCircleColourType" value="sqrt"> Sqrt</label>
+              <label><input type="radio" name="compareTreeCircleColourType" value="log10"> Log10</label>
+              <label><input type="radio" name="compareTreeCircleColourType" value="ln"> Ln</label>
+            </div> -->
+
+            <div>
+              <label> Value:</label>
+              <label><input type="radio" name="compareTreeRead" value="percent" checked>  Percent</label>
+              <label><input type="radio" name="compareTreeRead" value="count" >  Read count</label>
+            </div>
+
+            <div>
+              <label>Value scale:</label>
+              <label><input type="radio" name="compareTreeValueScale" value="linear" checked>  Linear</label>
+              <label><input type="radio" name="compareTreeValueScale" value="sqrt" > Sqrt</label>
+              <label><input type="radio" name="compareTreeValueScale" value="log10" > Log10</label>
+              <label><input type="radio" name="compareTreeValueScale" value="ln">  Ln</label>
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Horizontal separation: <a id="compareTreeHorizontalSeparationNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareTreeHorizontalSeparation" min="10" max="200" step="1" value="80">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Vertical separation: <a id="compareTreeVerticalSeparationNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareTreeVerticalSeparation" min="10" max="200" step="1" value="60">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Node width: <a id="compareTreeNodeWidthNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareTreeNodeWidth" min="24" max="160" value="46">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Node height: <a id="compareTreeNodeHeightNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareTreeNodeHeight" min="20" max="160" value="34">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Horizontal node position: <a id="compareTreeHorizontalPathNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareTreeHorizontalPath" min="0" max="160" value="60">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Sibling node separation: <a id="compareTreeSiblingSeparationNum" class="font-weight-bold">N</a></label>
+              <input type="range" class="form-control-range" name="compareTreeSiblingSeparation" min="0" max="4" step="0.1" value="1">
+            </div>
+
+            <div class="form-group">
+              <label for="compareTreeNodeWidth">Cousin node separation: <a id="compareTreeCousinSeparationNum" class="font-weight-bold">N</a></label>
+              <input type="range" class="form-control-range" name="compareTreeCousinSeparation" min="0" max="4" step="0.1" value="2">
+            </div>
+
+          </form>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" id="exportCompareTreeSVG" href="#">Export as SVG</a>
+            <a class="dropdown-item" id="exportCompareTreePNG" href="#">Export as PNG</a>
+            <a class="dropdown-item" id="exportCompareTreeJPG" href="#">Export as JPG</a>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body-custom">
+
+
+    <!-- <form>
+      <div class="form-group row ml-4 mt-3">
+        <div class="col-form-label col-auto">
+        <label for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves.</label>
+        </div>
+        <div class="col-sm-3 my-auto d-flex">
+        <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
+        </div>
+        <div class="col-sm-5 my-auto d-flex">
+        </div>
+      </div>
+    </form> -->
+
+
+<div class="compareTreeCard pt-5">
+  <div id='compareTreePlot'>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

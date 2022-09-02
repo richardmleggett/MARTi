@@ -1,0 +1,38 @@
+.ctBgStroke {
+  stroke-width: 2px;
+}
+
+.treeLink {
+  fill: none;
+  stroke: #b5b5b5;
+  stroke-width: 3px;
+}
+
+.node text {
+  font: 0.85rem sans-serif;
+}
+
+/*
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: #858796;
+  stroke-width: 3px;
+}
+
+.node text {
+  font: 0.85rem sans-serif;
+}
+
+.treeLink {
+  fill: none;
+  stroke: #b5b5b5;
+  stroke-width: 3px;
+}
+
+#dendrogram{
+  overflow-x: scroll;
+} */
