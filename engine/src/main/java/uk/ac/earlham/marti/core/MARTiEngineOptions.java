@@ -4,11 +4,10 @@
  */
 package uk.ac.earlham.marti.core;
 
-import uk.ac.earlham.marti.classify.ReadClassifier;
-import uk.ac.earlham.marti.watcher.WatcherLog;
-import uk.ac.earlham.marti.blast.BlastHandler;
-import uk.ac.earlham.marti.blast.BlastProcess;
-import uk.ac.earlham.marti.schedule.SimpleJobScheduler;
+import uk.ac.earlham.marti.classify.*;
+import uk.ac.earlham.marti.watcher.*;
+import uk.ac.earlham.marti.blast.*;
+import uk.ac.earlham.marti.schedule.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,6 +72,7 @@ public class MARTiEngineOptions implements Serializable {
     private boolean classifyingReads = true;
     private boolean mergeFastaFiles = false;
     private boolean force = false;
+    private boolean testMode = false;
     private double minQForPass = -1;
     private int maxSchedulerJobs = 4;
     private int runMode = 0;
@@ -87,7 +87,7 @@ public class MARTiEngineOptions implements Serializable {
     private int returnValue = 0;
     private int readsPerBlast = 4000;
     private boolean clearLogsOnStart = true;
-    private SimpleJobScheduler jobScheduler = null;
+    private JobScheduler jobScheduler = null;
     private transient WatcherLog watcherReadLog = new WatcherLog(this);
     private transient WatcherLog watcherCardFileLog = new WatcherLog(this);
     private transient WatcherLog watcherntFileLog = new WatcherLog(this);
@@ -217,6 +217,9 @@ public class MARTiEngineOptions implements Serializable {
                 configFile = args[i+1];
                 writeConfigMode = true;
                 i+=2;
+            } else if (args[i].equalsIgnoreCase("-test")) {
+                testMode = true;
+                i++;
             } else if (args[i].equalsIgnoreCase("-force")) {
                 force = true;
                 i++;
@@ -309,7 +312,7 @@ public class MARTiEngineOptions implements Serializable {
                 }
             }            
         }
-                        
+                 
         if (configFile == null) {
             System.out.println("Error: you must specify a config file");
             System.exit(1);
@@ -357,6 +360,8 @@ public class MARTiEngineOptions implements Serializable {
                 if (schedulerName.equals("debug")) {
                     jobScheduler.setDontRunCommand();
                 }
+            } else if (schedulerName.equalsIgnoreCase("slurm")) {
+                jobScheduler = new SlurmScheduler(this);
             }
             
             if(resultsFile != null) {
@@ -1053,7 +1058,7 @@ public class MARTiEngineOptions implements Serializable {
         return false;
     }
     
-    public SimpleJobScheduler getJobScheduler() {
+    public JobScheduler getJobScheduler() {
         return jobScheduler;
     }
                 
@@ -1354,5 +1359,9 @@ public class MARTiEngineOptions implements Serializable {
     
     public String getClassifyingBlastName() {
         return classifyingBlastName;
+    }
+    
+    public boolean inTestMode() {
+        return testMode;
     }
 }

@@ -13,7 +13,7 @@ fi
 JARFILE=${MARTI_DIR}/MARTiEngine.jar
 
 if [ ! -f ${JARFILE} ] ; then
-    echo "Error: Can't find MARTiEngine.jar - it needs to be inside the dist subdirectory of the directory pointed to by MARTI_DIR which is currently ${MARTI_DIR}"
+    echo "Error: Can't find MARTiEngine.jar - it needs to be inside the directory pointed to by MARTI_DIR which is currently ${MARTI_DIR}"
     exit 1
 fi
 

@@ -4,15 +4,11 @@
  */
 package uk.ac.earlham.marti.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.zip.*;
+import uk.ac.earlham.marti.schedule.*;
 
 /**
  * Entry class for tool.
@@ -20,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.7";
+    public final static String VERSION_STRING = "v0.9.9";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
@@ -39,6 +35,32 @@ public class MARTiEngine {
         System.out.println("totalMem: " + totalMem + "Mb");
         System.out.println("  maxMem: " + maxMem + "Mb");
         System.out.println(" freeMem: " + freeMem + "Mb");
+    }
+    
+    private static void testUnzip() {
+        System.out.println("Testing unzip...");
+        String filename="/Users/leggettr/Desktop/testdata/RL_KewAirCollections_25082022/20220825_1141_X2_FAT13928_6d06bfee/fastq_pass/barcode32/FAT13928_pass_barcode32_cae06ba5_0.fastq.gz";
+        
+        try {
+            InputStream fileStream = new FileInputStream(filename);
+            InputStream gzipStream = new GZIPInputStream(fileStream);
+            Reader decoder = new InputStreamReader(gzipStream, "US-ASCII");
+            BufferedReader br = new BufferedReader(decoder);  
+            String line = null;
+            int linesRead = 0;
+            do {
+                line = br.readLine();
+                if (line != null) {
+                    System.out.println("Line: "+line);
+                    linesRead++;                    
+                }
+            } while ((line != null) && (linesRead < 8));            
+            br.close();
+        } catch (Exception e) {
+            System.out.println("Exception:");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
     
     /**
@@ -77,7 +99,23 @@ public class MARTiEngine {
         // Parse command line
         options.parseArgs(args);
         
-        if (options.isInitMode()) {
+        if (options.inTestMode()) {
+            testUnzip();
+            // SLURM development
+            /* System.out.println("Test mode");
+            String commands[] = {"sleep", "10"};
+            SlurmSchedulerJob ssj = new SlurmSchedulerJob("testjob", commands, "testlog.txt", false);
+            ssj.run();
+            for (int i=0; i<20; i++) {
+                ssj.queryJobState();
+                if (ssj.getJobState() == SlurmSchedulerJob.STATE_COMPLETED) {
+                    break;
+                }
+                Thread.sleep(1000);
+            } */
+                    
+            System.out.println("Done");
+        } else if (options.isInitMode()) {
             System.out.println("Init mode");
             MARTiJSONFile jf = new MARTiJSONFile();
             String initFilename = options.getInitDir() + File.separator + "init.json";

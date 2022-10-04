@@ -16,7 +16,7 @@ import uk.ac.earlham.marti.core.MARTiLog;
  * 
  * @author Richard M. Leggett
  */
-public class SimpleJobScheduler {
+public class SimpleJobScheduler implements JobScheduler {
     private static final int MAX_QUICK_JOB_ID = 100000;
     private LinkedList<SimpleJobSchedulerJob> pendingJobs = new LinkedList<SimpleJobSchedulerJob>();
     private LinkedList<SimpleJobSchedulerJob> runningJobs = new LinkedList<SimpleJobSchedulerJob>();

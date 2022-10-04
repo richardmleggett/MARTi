@@ -29,7 +29,7 @@ public class MARTiProgress {
         options = o;
     }
     
-    public void incrementRawFileCount(String filename) {
+    public synchronized void incrementRawFileCount(String filename) {
         rawFileCount++;
         
         if (rawSequenceFiles.containsKey(filename)) {
@@ -39,7 +39,7 @@ public class MARTiProgress {
         }
     }
     
-    public void markRawFileProcessed(String filename) {
+    public synchronized void markRawFileProcessed(String filename) {
         if (!rawSequenceFiles.containsKey(filename)) {
             options.getLog().printlnLogAndScreen("Warning: not seen file  being marked as completed - "+filename);            
         }
@@ -47,31 +47,31 @@ public class MARTiProgress {
         writeProgressFile();
     }
     
-    public void incrementChunkCount() {
+    public synchronized void incrementChunkCount() {
         chunkCount++;
     }
 
-    public void decrementChunkCount() {
+    public synchronized void decrementChunkCount() {
         chunkCount--;
     }
     
-    public void incrementChunksBlastedCount() {
+    public synchronized void incrementChunksBlastedCount() {
         chunksBlasted++;
     }
     
-    public void incrementChunksParsedCount() {
+    public synchronized void incrementChunksParsedCount() {
         chunksParsed++;
     }
     
-    public void incrementAnalysisSubmitted() {
+    public synchronized void incrementAnalysisSubmitted() {
         analysisSubmitted++;
     }
 
-    public void incrementAnalysisCompleted() {
+    public synchronized void incrementAnalysisCompleted() {
         analysisCompleted++;
     }
     
-    public String getProgressString() {
+    public synchronized String getProgressString() {
         String s = "Progress report RF=" + rawFileCount + 
                    " CC=" + chunkCount +
                    " CB=" + chunksBlasted + 
@@ -82,11 +82,11 @@ public class MARTiProgress {
         return s;
     }
     
-    public int getChunksBlasted() {
+    public synchronized int getChunksBlasted() {
         return chunksBlasted;
     }
     
-    public boolean chunksComplete() {
+    public synchronized boolean chunksComplete() {
         int blastProcessCount = options.getBlastProcesses().size();
         
         boolean complete = false;        

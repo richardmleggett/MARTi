@@ -5,22 +5,12 @@
 package uk.ac.earlham.marti.filter;
 
 import uk.ac.earlham.marti.watcher.FileWatcher;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import uk.ac.earlham.marti.core.FASTAQPairPendingList;
-import uk.ac.earlham.marti.core.MARTiEngineOptions;
-import uk.ac.earlham.marti.core.SampleMetaData;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.logging.*;
+import java.util.zip.*;
+import uk.ac.earlham.marti.core.*;
 
 /**
  * Read filter for a sample (e.g. barcode).
@@ -277,7 +267,25 @@ public class ReadFilterSample {
 
             try {
                 String header;
-                BufferedReader br = new BufferedReader(new FileReader(fastqPathname));
+                BufferedReader br = null;
+                InputStream fileStream = null;
+                InputStream gzipStream = null;
+                Reader decoder = null;
+                
+                if (fastqPathname.toLowerCase().endsWith(".fastq")) {                
+                    br = new BufferedReader(new FileReader(fastqPathname));
+                } else if (fastqPathname.toLowerCase().endsWith(".fastq.gz")) {
+                    fileStream = new FileInputStream(fastqPathname);
+                    gzipStream = new GZIPInputStream(fileStream);
+                    decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                    br = new BufferedReader(decoder);                      
+                }
+                
+                if (br == null) {
+                    System.out.println("Ooops shouldn't have got to here without a .fastq or a .fastq.gz");
+                    System.exit(1);
+                }
+                
                 while (((header = br.readLine()) != null) && (stopProcessingChunks == false)) {
                     if (header.startsWith("@")) {
                         String seq = br.readLine();
@@ -333,6 +341,12 @@ public class ReadFilterSample {
                     }
                 }
                 br.close();
+                
+                if (fastqPathname.toLowerCase().endsWith(".fastq.gz")) {
+                    decoder.close();
+                    gzipStream.close();
+                    fileStream.close();
+                }
                 options.getProgressReport().markRawFileProcessed(fastqPathname);
             } catch (IOException e) {
                 System.out.println("runConvertFastQ exception");

@@ -4,13 +4,11 @@
  */
 package uk.ac.earlham.marti.classify;
 
-import uk.ac.earlham.lcaparse.LCAFileParser;
-import uk.ac.earlham.lcaparse.BlastHit;
-import uk.ac.earlham.lcaparse.LCAParseOptions;
-import uk.ac.earlham.lcaparse.Taxonomy;
-import uk.ac.earlham.marti.blast.BlastDependencies;
-import uk.ac.earlham.marti.schedule.SimpleJobScheduler;
-import uk.ac.earlham.marti.amr.AMRAnalysisTask;
+import uk.ac.earlham.lcaparse.*;
+import uk.ac.earlham.marti.core.*;
+import uk.ac.earlham.marti.blast.*;
+import uk.ac.earlham.marti.schedule.*;
+import uk.ac.earlham.marti.amr.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,12 +17,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
-import uk.ac.earlham.marti.core.MARTiEngineOptions;
-import uk.ac.earlham.marti.core.MARTiJSONFile;
-import uk.ac.earlham.marti.core.MARTiPendingTaskList;
-import uk.ac.earlham.marti.core.NanoporeSequence;
-import uk.ac.earlham.marti.core.SampleMetaData;
-import uk.ac.earlham.marti.core.MARTiLog;
 
 /**
  * Classify reads based on alignment results, using Lowest Common Ancestor algorithm.
@@ -134,7 +126,7 @@ public class ReadClassifier {
     }
     
     public synchronized void checkForFilesToClassify() {
-        SimpleJobScheduler js = options.getJobScheduler();
+        JobScheduler js = options.getJobScheduler();
         Set<Integer> asSet = files.keySet();
         Integer[] ids = asSet.toArray(new Integer[asSet.size()]);        
 
@@ -178,15 +170,21 @@ public class ReadClassifier {
                                 int barcode = options.getBarcodeFromPath(f.getBlastFile());
                                 SampleMetaData md = options.getSampleMetaData(barcode);
 
+                                options.getLog().println("Got sample metadata");
                                 LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null);
                                 
                                 String summaryFilename = f.getClassifierPrefix() + "_summary.txt";
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";
+                                options.getLog().println("Got LCAFileParse instance, now parsing");
                                 int readsWithHits = pfp.parseFile(f.getBlastFile());
+                                options.getLog().println("Parsed... now removing poor alignments");
                                 int readsRemoved = pfp.removePoorAlignments();
 
+                                options.getLog().println("Adding to reads classified");
                                 md.addToReadsClassified(readsWithHits);
+                                options.getLog().println("Marking poor alignments");
                                 md.markPoorAlignments(readsRemoved);
+                                options.getLog().println("Registering chunks");
                                 md.registerChunkAnalysed(f.getQueryFile());
 
                                 timeDiff = (System.nanoTime() - startTime) / 1000000;

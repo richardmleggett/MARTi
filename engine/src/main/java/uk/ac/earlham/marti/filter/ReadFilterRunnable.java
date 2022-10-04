@@ -274,6 +274,24 @@ public class ReadFilterRunnable implements Runnable {
 //        }
     }                
     
+    private boolean checkValidExtension(String filename) {
+        boolean valid = false;
+        if (filename.toLowerCase().endsWith(".fastq")) {
+            valid = true;
+        } else if (filename.toLowerCase().endsWith(".fastq.gz")) {
+            // We process .fastq.gz only if there isn't a .fastq file with the same prefix
+            String withoutGz = filename.substring(0, filename.length()-3);
+            File f = new File(withoutGz);
+            if (!f.exists()) {
+                valid = true;
+                System.out.println("Processing "+filename+" because "+withoutGz+" doesn't exist");
+            } else {
+                System.out.println("Not processing "+filename+" because "+withoutGz+" exists");
+            }
+        }
+        return valid;
+    }
+    
     private void processPendingFiles() {
         FileWatcherItem fwi = null;
         
@@ -285,7 +303,7 @@ public class ReadFilterRunnable implements Runnable {
             if (fwi != null) {
                 String nextPathname = fwi.getPathname();
 
-                if (nextPathname.toLowerCase().endsWith(".fastq")) {
+                if (checkValidExtension(nextPathname)) {
                     processFile(nextPathname);
                 }
             }
@@ -311,7 +329,7 @@ public class ReadFilterRunnable implements Runnable {
             if (fwi != null) {
                 String nextPathname = fwi.getPathname();
                 
-                if (nextPathname.toLowerCase().endsWith(".fastq")) {
+                if (checkValidExtension(nextPathname)) {
                     processFile(nextPathname);
                 }
             }

@@ -4,10 +4,10 @@
  */
 package uk.ac.earlham.marti.blast;
 
-import uk.ac.earlham.marti.schedule.SimpleJobScheduler;
+import uk.ac.earlham.marti.schedule.*;
 import java.util.Hashtable;
 import java.util.Set;
-import uk.ac.earlham.marti.core.MARTiEngineOptions;
+import uk.ac.earlham.marti.core.*;
 
 /**
  * Store BLAST database dependencies. For example, need VFDB or CARD to parse nt results.
@@ -88,7 +88,7 @@ public class BlastDependencies {
     * @return        true or false if dependencies met or not
     */
     public boolean dependenciesMet() {
-        SimpleJobScheduler js = options.getJobScheduler();
+        JobScheduler js = options.getJobScheduler();
         Set<String> ids = dependencies.keySet();
         boolean completed = true;
 

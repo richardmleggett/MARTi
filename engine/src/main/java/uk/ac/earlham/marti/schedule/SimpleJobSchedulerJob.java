@@ -42,6 +42,7 @@ public class SimpleJobSchedulerJob {
         commands = c;
         logFilename = l;
         errorFilename = e;
+        dontRunCommand = d;
     }
     
     public void setJobId(int i) {

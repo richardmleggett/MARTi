@@ -4,7 +4,8 @@
  */
 package uk.ac.earlham.marti.blast;
 
-import uk.ac.earlham.marti.schedule.SimpleJobScheduler;
+import uk.ac.earlham.marti.schedule.*;
+import uk.ac.earlham.marti.core.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,8 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import uk.ac.earlham.marti.core.MARTiEngineOptions;
-import uk.ac.earlham.marti.core.ProcessLogger;
 
 /**
  * Handle creation of BLAST commands, processing filenames etc.
@@ -106,7 +105,7 @@ public class BlastHandler {
                 PrintWriter pw = new PrintWriter(new FileWriter(commandFile));
                 // TODO: -task option shouldn't be hardcoded
                 String command = "";
-                SimpleJobScheduler jobScheduler = options.getJobScheduler();
+                JobScheduler jobScheduler = options.getJobScheduler();
 
                 command = "blastn" + 
                           " -db " + blastDb +
