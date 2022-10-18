@@ -205,7 +205,11 @@ public class LCAFileParser {
 
                         pwPerRead.println(queryName + "\t" + ancestor + "\t" + taxonomy.getNameFromTaxonId(ancestor)+ "\t" +ancestorRank);
                         hs.setAssignedTaxon(ancestor);
-                    }
+                    } else {
+                        pwPerRead.println(queryName + "\t0\tUnassigned\tBadAlignment");
+                    }                
+                } else {
+                    pwPerRead.println(queryName + "\t0\tUnassigned\tNoAlignments");
                 }
             }
             
