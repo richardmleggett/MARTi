@@ -16,12 +16,14 @@ Prerequisites
 -------------
 In order to run the MARTi Engine (back-end), you also need to install the following on the machine where it will be running:
 
-* BLAST - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
-* Java Run Time Environment - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
+* BLAST (2.10 or greater) - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
+* BLAST databases - what you'll need will depend on what you're trying to do. But you might want to start with the nt database, `available from the NCBI Blast FTP site <https://ftp.ncbi.nlm.nih.gov/blast/db/>`_.
+* NCBI taxonomy - you can `download this from the NCBI taxonomy FTP site <https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/>`_. You need the taxdump files, specifically the nodes.dmp and names.dmp files.
+* Java Run Time Environment (OpenJDK 16.0.2 or greater) - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
 
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
-* node.js - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
+* node.js (14.17.5 or greater) - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
 
 If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the GUI dependencies. If you are running both the Engine and the GUI on a single computer, then you need to install both sets of dependencies on that computer.
 
@@ -43,6 +45,12 @@ Then move this marti script into somewhere in your search path. For Macs, this m
 
 ``mv bin/marti /usr/local/bin``
 
+Finally, you need to create an options file in your home directory that is required by the Engine. An example is provided in the bin directory. To copy it to your home directory, type:
+
+``cp bin/marti_engine_options.txt ~/``
+
+More details on what this file contains is provided in :ref:`cmdline`.
+
 You can then check the MARTi Engine is installed by typing:
 
 ``marti -h``
@@ -57,16 +65,16 @@ Then move this marti_gui script into somewhere in your search path. For Macs, th
 
 ``mv bin/marti_gui /usr/local/bin``
 
-Next, you need to create an options file in your home directory that is required by the GUI. An example is provided with the code. To copy it to your home directory, type:
+Next, you need to create an options file in your home directory that is required by the GUI. An example is provided in the bin directory. To copy it to your home directory, type:
 
-``cp marti_server_options.txt ~/``
+``cp bin/marti_server_options.txt ~/``
 
 This file contains the locations of some important directories and you will need to update these for your system installation:
 
 * MinKNOWRunDirectory - the location of MinKNOW run data.
 * MARTiSampleDirectory - the location to put MARTi's analysis directories.
 * BlastDatabaseDirectory - the location of blast databases.
-* TaxonomyDirectory - the location of NCBI taxonomy data.
+* TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
 
 Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
 

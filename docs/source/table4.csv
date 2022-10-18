@@ -1,10 +1,10 @@
-**BlastProcess**	n/a	Defines the start of a BLAST process
-**Name**	nt	Name of process
-**Program**	megablast	Blast algorithm to use - megablast or blast
-**Database**	/path/to/db	Path to BLAST database
+BlastProcess	n/a	Defines the start of a BLAST process
+Name	nt	Name of process
+Program	megablast	Blast algorithm to use - megablast or blast
+Database	/path/to/db	Path to BLAST database
 UseToClassify	n/a	Use BLAST results for classification (can only be set for 1 BLAST process)	
 TaxaFilter	/path/to/file.txt	Taxa filter file to use with BLAST (e.g. to filter to bacteria/viruses)
 MaxE	0.001	Max E value for BLAST
 MaxTargetSeqs	25	Maximum number of target sequences for BLAST
 RunMeganEvery	n/a	Deprecated.
-**BlastThreads** 	4	Number of threads to use when running BLAST
+BlastThreads 	4	Number of threads to use when running BLAST
