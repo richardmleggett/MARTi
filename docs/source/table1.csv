@@ -1,5 +1,5 @@
 SampleName	BAMBI_1D_18042017	Sample name
-RawDataDir	/path/to/dir	Run directory - specifically the path to the directory containing the fastq_pass, fastq_fail etc. directories
+RawDataDir	/path/to/dir	Run directory - specifically the path to the directory containing the fastq_pass, fastq_fail etc. directories. Or for guppy run separately, the directory containing the fastq directory.
 SampleDir	/path/to/dir	Path to directory to use for MARTi analysis files (will be created if doesn't exist)
 ProcessBarcodes	01,02,03	If a barcoded sample, indicates which barcodes to process
 BarcodeId<n>	BarcodeSampleId1	Sample ID to use for barcode n

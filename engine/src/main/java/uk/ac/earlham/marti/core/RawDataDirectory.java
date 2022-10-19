@@ -13,9 +13,11 @@ import java.io.File;
  */
 public class RawDataDirectory {
     private String pathname = null;    
+    private MARTiEngineOptions options = null;
     
-    public RawDataDirectory(String p) {
+    public RawDataDirectory(MARTiEngineOptions o, String p) {
         pathname = p;
+        options = o;
     }
     
     public String getPathname() {
@@ -23,7 +25,23 @@ public class RawDataDirectory {
     }
     
     public String getFastqPassPath() {
-        return pathname + File.separator + "fastq_pass";
+        String fastqPassDir = pathname + File.separator + "fastq_pass";        
+        File dir = new File (fastqPassDir);
+        
+        if (dir.exists()) {
+            System.out.println("Got fastq_pass directory: "+ fastqPassDir);
+        } else {
+            fastqPassDir = pathname + File.separator + "fastq";
+            dir = new File (fastqPassDir);
+            if (dir.exists()) {
+                System.out.println("Not got fastq_pass, but found fastq directory: "+fastqPassDir);
+            } else {
+                System.out.println("ERROR: Can't find fastq_pass or fastq directory in "+pathname);
+                System.exit(1);
+            }
+        }
+        
+        return fastqPassDir;
     }
     
     public String getFastaPassPath() {

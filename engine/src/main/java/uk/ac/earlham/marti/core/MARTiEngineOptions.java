@@ -83,7 +83,6 @@ public class MARTiEngineOptions implements Serializable {
     private String jobQueue = "";
     private MARTiLog logFile = new MARTiLog();
     private String readsDir = "fast5";
-    private String fastQConvertDir = "fastq_pass";
     private int returnValue = 0;
     private int readsPerBlast = 4000;
     private boolean clearLogsOnStart = true;
@@ -287,7 +286,7 @@ public class MARTiEngineOptions implements Serializable {
                 initMode = true;
                 i++;
             } else if (args[i].equalsIgnoreCase("-rawdir")) {
-                rawDataDir = new RawDataDirectory(args[i+1]);
+                rawDataDir = new RawDataDirectory(this, args[i+1]);
                 i+=2;                
             } else if (args[i].equalsIgnoreCase("-sampledir")) {
                 sampleDirectory = args[i+1];
@@ -491,11 +490,7 @@ public class MARTiEngineOptions implements Serializable {
             return sampleDirectory + File.separator + readsDir;
         }
     }
-    
-    public String getFastQConvertDir() {
-        return fastQConvertDir;
-    }
-    
+        
     /**
      * Get FASTA directory.
      * @return directory name as String
@@ -866,7 +861,7 @@ public class MARTiEngineOptions implements Serializable {
                                 }
                             } else if (tokens[0].compareToIgnoreCase("RawDataDir") == 0) {
                                 if (tokens[1].startsWith("/")) {
-                                    rawDataDir = new RawDataDirectory(tokens[1]);
+                                    rawDataDir = new RawDataDirectory(this, tokens[1]);
                                 } else {
                                     System.out.println("Error: Raw data directory must be an absolute path");
                                     System.exit(1);
@@ -991,12 +986,7 @@ public class MARTiEngineOptions implements Serializable {
             e.printStackTrace();
             System.exit(1);
         }
-                
-        if (convertingFastQ) {
-            // Work out directory from raw read dir
-            fastQConvertDir = rawDataDir.getPathname() + "/fastq_pass";
-        }        
-                
+                                
         checkForClassifyingBlast();
 
         System.out.println("");

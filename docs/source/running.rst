@@ -12,14 +12,12 @@ In both situations, the GUI looks the same, but the method of initiating the MAR
 
 In either situation, the machine running the MARTi Engine needs to have access to the drive where the sequencer is outputting reads. Typically this is done by mapping the drive over a network. But in certain situations, it may be achieved by rsync'ing data from the sequencer to the analysis machine.
 
-**Please note: currently MARTi does not support fastq.gz file input, so please make sure you tell MinKNOW not to compress fastq files as it generates them. Support for .gz will be added in a future release.**
-
 Key concept
 -----------
 
 In summary, MARTi works as follows:
 
-#. The MARTi Engine accesses read data in nanopore run directories, speciically the fastq_pass directory.
+#. The MARTi Engine accesses read data in nanopore run directories, speciically the fastq_pass directory from MinKNOW or the fastq directory from guppy.
 #. The MARTi Engine writes analysis results to a MARTi run directory, named for the run.
 #. The MARTi GUI anticipates that MARTi run directories are contained within a single parent directory. The GUI scans this parent directory to look for run analyses which are displayed within the GUI.
 

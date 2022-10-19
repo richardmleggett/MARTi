@@ -209,6 +209,13 @@ public class WalkOutChunk {
                     options.getLog().println("Warning: Got CARD hits, but not bacterial hits for "+queryId + " ("+walkoutRead.getNumberOfGenes()+")");
                     for (int i=0; i<walkoutRead.getNumberOfGenes(); i++) {
                         String cardHit = walkoutRead.getCardHit(i).getTargetName();
+
+                        if (cardHit.contains("ARO")) {
+                            cardHit = walkoutRead.getCardHit(i).getTargetName().substring(cardHit.lastIndexOf("ARO"));
+                        } else {
+                            options.getLog().println("Warning: couldn't get ARO from "+cardHit);
+                        }
+
                         double identity = walkoutRead.getCardHit(i).getIdentity();
                         results.addWalkoutHit(cardHit, "no_hit", originalChunkNumber, processedChunkNumber, false, 0, identity);
                     }

@@ -25,7 +25,7 @@ To generate a new config file:
 
 Where:
 
-* ``-rawdir`` specifies a path to a MinKNOW raw data directory (the directory containing fastq_pass).
+* ``-rawdir`` specifies a path to a MinKNOW raw data directory (the directory containing fastq_pass directory or fastq directory for guppy run separately).
 * ``-sampledir`` specifies a path to a directory where MARTi will write intermediate and final files. If this doesn't exist, it will be created.
 * ``-runname`` specifies the name of this run.
 * ``-barcodes`` specifies the barcodes being used, or can be left out if the run is not barcoded.
