@@ -39,11 +39,11 @@ public class Taxonomy {
     private Hashtable<String, Long> idByName = new Hashtable<String, Long>();
     private Hashtable<String, Long> accessionToTaxon = new Hashtable<String, Long>();
     private TaxonomyNode unclassifiedNode = new TaxonomyNode(0L);
-    private long humanId;
-    private long bacteriaId;
-    private long lambdaId;
-    private long vectorsId;
-    private long ecoliId;
+    private long humanId = 0;
+    private long bacteriaId = 0;
+    private long lambdaId = 0;
+    private long vectorsId = 0;
+    private long ecoliId = 0;
     private int maxRow = 0;
     private int maxColumn = 0;
     private int plotWidth = 2000;
@@ -150,11 +150,31 @@ public class Taxonomy {
             timeDiff = (System.nanoTime() - startTime) / 1000000;
             System.out.println("Completed in "+timeDiff+" ms");
             
-            if ((lambdaId == 0) || (humanId == 0) || (vectorsId == 0) || (bacteriaId == 0) || (ecoliId == 0)) {
-                System.out.println("Didn't get one of the Ids");
-                System.exit(0);
+            if (humanId == 0) {
+                System.out.println("WARNING: Didn't find human ID. Setting to default.");
+                humanId = 9606L;
             }
-                     
+            
+            if (bacteriaId == 0) {
+                System.out.println("WARNING: Didn't find bacteria ID. Setting to default.");
+                bacteriaId = 2L;
+            }
+            
+            if (lambdaId == 0) {
+                System.out.println("WARNING: Didn't find lambda ID. Setting to default.");
+                lambdaId = 10710L;
+            }
+            
+            if (vectorsId == 0) {
+                System.out.println("WARNING: Didn't find vectors ID. Setting to default.");
+                vectorsId = 29278L;
+            }
+            
+            if (ecoliId == 0) {
+                System.out.println("WARNING: Didn't find E. coli ID. Setting to default.");
+                ecoliId = 562L;
+            }
+                                 
         } catch (Exception e) {
             System.out.println("Taxonomy exception");
             e.printStackTrace();
