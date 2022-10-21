@@ -16,14 +16,14 @@ Prerequisites
 -------------
 In order to run the MARTi Engine (back-end), you also need to install the following on the machine where it will be running:
 
-* BLAST (2.10 or greater) - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_.
+* BLAST (2.10 or greater) - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_. On Ubuntu, using apt-get may install an older version. In which case, it may be easiest to download executables from the NCBI link above.
 * BLAST databases - what you'll need will depend on what you're trying to do. But you might want to start with the nt database, `available from the NCBI Blast FTP site <https://ftp.ncbi.nlm.nih.gov/blast/db/>`_.
 * NCBI taxonomy - you can `download this from the NCBI taxonomy FTP site <https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/>`_. You need the taxdump files, specifically the nodes.dmp and names.dmp files.
 * Java Run Time Environment (OpenJDK 16.0.2 or greater) - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_).
 
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
-* node.js (14.17.5 or greater) - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_.
+* node.js (14.17.5 or greater) - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_. On Ubuntu, using apt-get may install an older version. In which case, see `the Installation instructions here <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
 
 If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the GUI dependencies. If you are running both the Engine and the GUI on a single computer, then you need to install both sets of dependencies on that computer.
 
