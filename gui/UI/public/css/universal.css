@@ -182,3 +182,14 @@ table.dataTable tfoot th,table.dataTable tfoot td {
 th.dt-center, td.dt-center {
   text-align: center;
 }
+
+.row.columns-2 {
+	min-width: 700px;
+}
+
+@media (max-width: 768px) {
+	.row.columns-2 {
+		min-width: 240px !important;
+		overflow-x: hidden;
+	}
+}

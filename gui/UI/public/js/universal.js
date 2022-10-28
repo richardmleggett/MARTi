@@ -1,4 +1,5 @@
 var taxonomicLevelDict = {"no rank":0, "Domain":1, "Kingdom":2, "Phylum":3, "Class":4, "Order":5, "Family":6, "Genus":7, "Species":8, "Subspecies":9, "All Levels":10};
+var taxonomicLevelDictRev = {"0":"no rank", "1":"domain", "2":"kingdom", "3":"phylum", "4":"class", "5":"order", "6":"family", "7":"genus", "8":"species", "9":"subspecies", "10":"all Levels"};
 
 var taxonomicRankSelectedText;
 var taxonomicRankSelectedTextLowerCase;
@@ -77,27 +78,29 @@ function lcaFormat(lca){
 //               return dLeaves;
 // };
 
-function labelNewLeaves(d,rank) {
-  var dLeaves = [];
-  if (rank != 10) {
-    if (d.children != null || d.children != undefined){
-      dChildIsLeaf = false;
-      d.children.forEach(function(c){
-        if (c.rank <= rank && c.rank != d.rank && c.rank != 0) {
-          dChildIsLeaf = true;
-        };
-      });
-      if (dChildIsLeaf == false) {
-        dLeaves.push(d.ncbiID)
-      }
-    } else {
-      dLeaves.push(d.ncbiID)
-    }
-var dLeaves = [...new Set(dLeaves)];
-
-  };
-              return dLeaves;
-};
+// function labelNewLeaves(d,rank) {
+//   var dLeaves = [];
+//   if (rank != 10) {
+//     if (d.children != null || d.children != undefined){
+//       var dChildIsLeaf = false;
+//       console.log(d.name);
+//       d.children.forEach(function(c){
+//         if (c.rank <= rank && c.rank != d.rank && c.rank != 0) {
+//           console.log(c.name);
+//           dChildIsLeaf = true;
+//         };
+//       });
+//       if (dChildIsLeaf == false) {
+//         dLeaves.push(d.ncbiID)
+//       }
+//     } else {
+//       dLeaves.push(d.ncbiID)
+//     }
+// var dLeaves = [...new Set(dLeaves)];
+//
+//   };
+//               return dLeaves;
+// };
 
 function openFullscreen(fullScreen) {
   $(".toolTip").appendTo(fullScreen)
@@ -245,6 +248,15 @@ function checkNested(obj) {
   }
   return true;
 }
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+};
 
 function rank(r) {
   var firstData = r[0];

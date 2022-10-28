@@ -100,6 +100,10 @@ hr.toolTipLine {
   overflow-y: scroll;
 }
 
+#taxaTable table{
+  width: 100% !important;
+}
+
 .dashboardDataTable::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
@@ -347,6 +351,14 @@ color:#1cc88a;
 /* #downloadClassifications {
   width: 117px;
 } */
+
+#dashboardTreeMapTopNText {
+  min-width: 230px;
+}
+
+#dashboardTaxaTreeTopNText {
+  min-width: 235px;
+}
 
 .lds-grid {
   display: inline-block;

@@ -45,6 +45,8 @@ function initialiseCompareAccumulation() {
 
       d3.selectAll("input[name='rareXAxisMax']").on("change", function(){
         // dashboardTaxaTreeTopNChanged = true;
+        rareXAxisMaxChanged = true;
+        rareXAxisMaxUserVal = rareXAxisMaxNum;
         plotRarefactionCompare(rareData);
         // dashboardTaxaTreeTopNChanged = false;
       });
@@ -57,6 +59,8 @@ function initialiseCompareAccumulation() {
 
         d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
 
+        rareXAxisMaxChanged = false;
+
         d3.select('#downloadAccumulationData').on('click', function(){
         var csvToExport = convertAccumulationDataToCSV(accumulationData);
         var date = getDate() + "_" + getTime();
@@ -67,8 +71,11 @@ function initialiseCompareAccumulation() {
 
 };
 
-var rareXAxisMaxDefault = 100000;
-var rareXAxisMaxNum = rareXAxisMaxDefault;
+// var rareXAxisMaxDefault = 100000;
+var rareXAxisMaxNum = 100000;
+var rareXAxisMaxUserVal = 0;
+
+var rareXAxisMaxChanged = false;
 
 var rareMargin = {top: 20, right: 80, bottom: 50, left: 60},
     rareWidth = 960 - rareMargin.left - rareMargin.right,
@@ -111,7 +118,6 @@ var rc_yAxis = d3.svg.axis()
       var dataArray = [];
       var header = [];
       // header.push('Read count','Taxa count');
-      console.log(data);
       var maxRow = 0;
       for (var sample of data) {
         header.push(sample.name + " read count");
@@ -243,12 +249,26 @@ data.sort(function(a, b){
 
       rarefactionLineColour.domain(idList);
 
+
 var readCountMax = d3.max(multilineData, function(c) { return d3.max(c.values, function(v) { return v.readCount; }); });
+
 d3.selectAll("input[name='rareXAxisMax']").property("max", parseInt(readCountMax));
 
-if (readCountMax < rareXAxisMaxDefault) {
+
+if(!rareXAxisMaxChanged){
   rareXAxisMaxNum = readCountMax;
-}
+  d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
+  d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
+};
+
+
+// d3.selectAll("input[name='rareXAxisMax']").property("value",100000);
+
+// if (readCountMax < rareXAxisMaxDefault) {
+//   rareXAxisMaxNum = readCountMax;
+// }
+
+
 // else {
 //   rareXAxisMax = rareXAxisMaxDefault;
 // }

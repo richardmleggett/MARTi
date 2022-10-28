@@ -65,7 +65,7 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
   });
 
   d3.selectAll("input[name='dashboardTaxaTreeTopN']").on("input", function(){
-    dashboardTaxaTreeTopN = parseInt(d3.select(this).property("value"));
+    dashboardTaxaTreeTopN = parseInt(this.value);
     d3.selectAll("input[name='dashboardTaxaTreeTopN']").property("value",dashboardTaxaTreeTopN);
     d3.selectAll(".dashboard-taxa-tree-top-n-text").text(dashboardTaxaTreeTopN);
   });
@@ -217,12 +217,12 @@ function tempRecursiveSumFunction(d) {
 
 
 
-function copyCollapseState(tree) {
+function copyCollapseState(tree,ids) {
             function recursiveCopy(d) {
 
-              if (oldNodes.hasOwnProperty(d.name)) {
+              if (ids.hasOwnProperty(d.ncbiID)) {
 
-                if (oldNodes[d.name]["hiddenClickChildren"] == true) {
+                if (ids[d.ncbiID]["hiddenClickChildren"] == true) {
                   click(d);
                   d._children.forEach(function(c){
                       recursiveCopy(c);
@@ -239,14 +239,18 @@ function copyCollapseState(tree) {
             recursiveCopy(tree);
 };
 
+var treeLeafCounts = {"compare":0,"dashboard":0};
+
+function taxonomicRankFilt(tree,plot,rank) {
 
 
-function taxonomicRankFilt(tree) {
-   dashboardTreeLeafCount = 0;
+   var leafCount = 0
+   // dashboardTreeLeafCount = 0;
    var hideBranchList = [];
             function recursiveRankFilt(d) {
 
-              if (d.rank < taxonomicRankSelected) {
+
+              if (d.rank < rank) {
 
                 if (d.children) {
                   d.children.forEach(function(c){
@@ -262,30 +266,75 @@ function taxonomicRankFilt(tree) {
                       recursiveRankFilt(c);
                     });
                 } else {
-                  dashboardTreeLeafCount += 1;
+                  leafCount += 1;
                 }
-              } else if (d.rank == taxonomicRankSelected) {
-                  dashboardTreeLeafCount += 1;
+              } else if (d.rank == rank) {
+                  leafCount += 1;
                   changeTaxa(d,"false");
-              } else if (d.rank > taxonomicRankSelected) {
+              // }
+              } else if (d.rank > rank) {
                   hideBranchList.push(d);
               };
 
-              if (d.name == "other sequences" && taxonomicRankSelected < 8) {
-                dashboardTreeLeafCount += 1;
+              if (d.name == "other sequences" && rank < 8) {
+                leafCount += 1;
                 changeTaxa(d,"false");
               }
 
             };
             recursiveRankFilt(tree);
 
+
             hideBranchList.forEach(function(d){
-              hideSpecificBranch(d.parent,d.name);
+              hideSpecificBranch(d.parent,d.ncbiID);
               });
 
-
+              treeLeafCounts[plot] = leafCount;
 };
 
+
+// function taxonomicRankFilt(tree) {
+//    dashboardTreeLeafCount = 0;
+//    var hideBranchList = [];
+//             function recursiveRankFilt(d) {
+//
+//               if (d.rank < taxonomicRankSelected) {
+//
+//                 if (d.children) {
+//                   d.children.forEach(function(c){
+//                       recursiveRankFilt(c);
+//                     });
+//                 } else if (d._children) {
+//                   d._children.forEach(function(c){
+//                       recursiveRankFilt(c);
+//                     });
+//                 } else if (d.Tchildren){
+//                   changeTaxa(d,"true");
+//                   d.children.forEach(function(c){
+//                       recursiveRankFilt(c);
+//                     });
+//                 } else {
+//                   dashboardTreeLeafCount += 1;
+//                 }
+//               } else if (d.rank == taxonomicRankSelected) {
+//                   dashboardTreeLeafCount += 1;
+//                   changeTaxa(d,"false");
+//               } else if (d.rank > taxonomicRankSelected) {
+//                   hideBranchList.push(d);
+//               };
+//
+//               if (d.name == "other sequences" && taxonomicRankSelected < 8) {
+//                 dashboardTreeLeafCount += 1;
+//                 changeTaxa(d,"false");
+//               }
+//
+//             };
+//             recursiveRankFilt(tree);
+//
+//             hideBranchList.forEach(function(d){
+//               hideSpecificBranch(d.parent,d.name);
+//               });
+// };
 
 // function recursivUnclick(tree) {
 //
@@ -306,7 +355,7 @@ function taxonomicRankFilt(tree) {
 //             recursiveFunc(tree);
 // };
 
-var dashboardTreeLeafCount;
+var dashboardTreeLeafCount = 0;
 var dashboardTaxaTreeTopNChanged = false;
 var dashboardTaxaTreeTopNDefault = 30;
 var dashboardTaxaTreeTopN = dashboardTaxaTreeTopNDefault;
@@ -362,7 +411,7 @@ function resetTreeBranches(tree) {
 
   // recursivUnclick(tree);
 
-  var allNodes = d3.layout.tree().nodes(tree);
+  // var allNodes = d3.layout.tree().nodes(tree);
 
 
   // allNodes.forEach(function(d) {
@@ -377,7 +426,7 @@ function resetTreeBranches(tree) {
 
 };
 
-function topNLeaves(tree) {
+function topNLeaves(tree,topN) {
 
   var allNodes = d3.layout.tree().nodes(tree);
 
@@ -394,10 +443,9 @@ function topNLeaves(tree) {
       return b.summedValue - a.summedValue
   });
 
-  var thresholdSelected = dashboardTaxaTreeTopN;
 
   for (const [i,taxa] of leafNodes.entries()) {
-    if(i < thresholdSelected) {
+    if(i < topN) {
       taxa.keep = "true";
     }
 
@@ -420,11 +468,9 @@ var removeLeaves = leafNodes.filter(function(d){
 
 keepNodes.forEach((keepNode) => {
   function recursiveParentKeep(d) {
+    d.keep = "true";
     if (d.parent) {
-        d.keep = "true";
         recursiveParentKeep(d.parent);
-    }else {
-      d.keep = "true";
     };
   };
   recursiveParentKeep(keepNode);
@@ -434,7 +480,7 @@ removeLeaves.forEach((removeLeaf) => {
   function recursiveParentRemove(d) {
     if (d.parent) {
         if (d.parent.keep == "true") {
-          hideSpecificBranch(d.parent,d.name);
+          hideSpecificBranch(d.parent,d.ncbiID);
         } else{
           recursiveParentRemove(d.parent);
         };
@@ -450,9 +496,6 @@ var preNodes;
 var preReadCountSum;
 
 function treeUpdate(source) {
-
-console.log(source);
-console.log(root);
 
   if (dashboardTreeLinkType == "straight") {
     diagonal = function (d, i) {
@@ -485,18 +528,21 @@ if(newTreeData == true) {
 
 if (newTreeData == true || taxonomicRankChanged == true) {
   resetTreeBranches(root);
-  taxonomicRankFilt(root);
+  taxonomicRankFilt(root,"dashboard",taxonomicRankSelected);
+  dashboardTreeLeafCount = treeLeafCounts.dashboard;
   updateDashboardTaxaTreeTopNMax();
-  topNLeaves(root);
+  topNLeaves(root,dashboardTaxaTreeTopN);
 } else if (dashboardTaxaTreeTopNChanged == true) {
   resetTreeBranches(root);
-  topNLeaves(root);
+  taxonomicRankFilt(root,"dashboard",taxonomicRankSelected);
+  topNLeaves(root,dashboardTaxaTreeTopN);
 }
 
 if (newTreeData == true && Object.keys(oldNodes).length !== 0) {
-copyCollapseState(root);
+copyCollapseState(root,oldNodes);
 duration = 0;
 };
+
 
 
   // Compute the new tree layout.
@@ -674,7 +720,7 @@ if (readCountSum > preReadCountSum) {
               .duration(0)
               .style("opacity", .95);
 
-              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at this node: " +
+              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at node: " +
               thousandsSeparators(d.value) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
               .style("color", "black")
               .style("left", (d3.event.pageX) + "px")
@@ -714,7 +760,7 @@ if (readCountSum > preReadCountSum) {
 
   // Update the links…
   var link = treeSVG.selectAll("path.treeLink")
-	  .data(links, function(d) { return d.target.id; });
+	  .data(links, function(d) {return d.target.id; });
 
   // Enter any new links at the parent's previous position.
   link.enter().insert("path", "g")
@@ -749,7 +795,7 @@ if (readCountSum > preReadCountSum) {
     hiddenClickChildren = true;
   };
 
-  oldNodes[d.name] = {
+  oldNodes[d.ncbiID] = {
     x0:d.x,
     y0:d.y,
     hiddenClickChildren:hiddenClickChildren
@@ -790,13 +836,14 @@ function changeTaxa(d,show) {
 }
 
 // hide specific branch of tree
-function hideSpecificBranch(d,name) {
+function hideSpecificBranch(d,id) {
 
+  // if (d.hasOwnProperty("children")) {
   if (d.children) {
     var splice;
 
     d.children.forEach((c, i) => {
-      if (c.name == name) {
+      if (c.ncbiID == id) {
         if (d.branchChildren) {
           d.branchChildren.push(c);
           splice = i;
