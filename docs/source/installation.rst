@@ -23,7 +23,7 @@ In order to run the MARTi Engine (back-end), you also need to install the follow
 
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
-* **node.js (14.17.5 or greater)** - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_. On Ubuntu, using apt-get may install an older version. In which case, see `the Installation instructions here <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
+* **Node.js (14.17.5 or greater)** - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_. NPM, a package manager for Node.js packages, is included with the Node.js installation and therefore doesn't need to be installed separately. On Ubuntu, using apt-get may install an older version. In which case, see `the Installation instructions here <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
 
 If you are only running the GUI on a particular computer, you do not need to install the Engine dependencies. If you are only running the engine on a particular computer, you do not need to install the GUI dependencies. If you are running both the Engine and the GUI on a single computer, then you need to install both sets of dependencies on that computer.
 
@@ -71,9 +71,9 @@ Next, you need to create an options file in your home directory that is required
 
 This file contains the locations of some important directories and you will need to update these for your system installation:
 
-* MinKNOWRunDirectory - the location of MinKNOW run data.
-* MARTiSampleDirectory - the location to put MARTi's analysis directories.
-* BlastDatabaseDirectory - the location of blast databases.
+* MinKNOWRunDirectory - the location of the directory containing read data for runs to be analysed by MARTi. The data for each run within the MinKNOWRunDirectory should be in the MinKNOW output directory format. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/minknow`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample should look something like this: ``/Users/peeln/Documents/minknow/Flongle_run_11102022/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass``
+* MARTiSampleDirectory - the location of a directory that contains MARTi output data. The MARTi GUI will monitor this directory for results to display.
+* BlastDatabaseDirectory - the location of a directory containing blast databases.
 * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
 
 Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
@@ -120,10 +120,8 @@ BLAST database installation
 
 For the CARD database, you will need to:
 
-1. Download Data `from  the CARD website <https://card.mcmaster.ca/download>`_
-2. Create BLAST databases from the FASTA sequences:
+1. Download both the CARD Data and CARD Ontology files `from  the CARD website <https://card.mcmaster.ca/download>`_
+2. Extract the contents of each file into a single directory.
+3. Create a BLAST database from the FASTA sequences:
 
 ``makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -dbtype nucl``
-
-3. Download the ontology separately `from  the CARD website <https://card.mcmaster.ca/download>`_
-4. Place aro.tsv from the ontology in the same directory as the database.
