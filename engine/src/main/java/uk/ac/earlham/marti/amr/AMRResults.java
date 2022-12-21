@@ -122,7 +122,11 @@ public class AMRResults {
  
             //String meanIdString = String.format("%.2f", gene.getMeanIdentity());            
             //geneBuilder.add("averageAccuracy", Double.parseDouble(meanIdString));            
-            geneBuilder.add("description", cardOntology.getDescription(gene.getCARDId()));            
+            geneBuilder.add("description", cardOntology.getDescription(gene.getCARDId()));   
+            geneBuilder.add("shortName", cardOntology.getShortName(gene.getCARDId()));               
+            geneBuilder.add("drugClass", cardOntology.getDrugClass(gene.getCARDId()));
+            geneBuilder.add("geneFamily", cardOntology.getGeneFamily(gene.getCARDId()));
+            geneBuilder.add("resistanceMechanism", cardOntology.getResistanceMechanism(gene.getCARDId()));
             geneBuilder.add("count", countBuilder);
             geneBuilder.add("averageAccuracy", accuracyBuilder);
                          
