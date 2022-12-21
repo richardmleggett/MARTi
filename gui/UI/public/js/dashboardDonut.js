@@ -171,13 +171,13 @@ function findOtherIndex(item) {
   }
 };
 
-function topTwenty(item) {
-    return (item.donutValue >= topTwentyThreshold) ? item.name : "Other";
-};
-
-function topTen(item) {
-    return (item.donutValue >= topTenThreshold) ? item.name : "Other";
-};
+// function topTwenty(item) {
+//     return (item.donutValue >= topTwentyThreshold) ? item.name : "Other";
+// };
+//
+// function topTen(item) {
+//     return (item.donutValue >= topTenThreshold) ? item.name : "Other";
+// };
 
 
 // function indexOfDonutOtherCategory(){
@@ -232,6 +232,7 @@ function returnTopTaxa(data) {
             return {
               thresholdName: thresholdName(v),
               ncbiRank: rank(v),
+              ncbiID: ncbiID(v),
               donutValue: d3.sum(v, function(d) {
                 return d.donutValue;
             })
@@ -242,7 +243,8 @@ function returnTopTaxa(data) {
             return {
                 label: g.values.thresholdName,
                 value: g.values.donutValue,
-                ncbiRank: g.values.ncbiRank
+                ncbiRank: g.values.ncbiRank,
+                ncbiID: g.values.ncbiID
             }
         })
         .sort(function(a, b) {
@@ -264,6 +266,7 @@ var color = dashboardPlotColorPalette;
 
 function donutUpdate(data) {
 
+
   color = dashboardPlotColorPalette;
 
     // var dataMax = d3.max(data, function(d) {
@@ -276,13 +279,18 @@ function donutUpdate(data) {
 
     var legendItems = [];
 
+    // for (taxa of data) {
+    //   if (taxa.value != 0) {
+    //     legendItems.push(taxa.label);
+    //   };
+    // };
+
+
     for (taxa of data) {
       if (taxa.value != 0) {
-        legendItems.push(taxa.label);
+        legendItems.push(taxa);
       };
     };
-
-
 
     /* ------- PIE SLICES -------*/
     var slice = donutSVG.select(".slices").selectAll("path.slice")
@@ -345,7 +353,7 @@ function donutUpdate(data) {
 
         dashboardTaxaDonutLegend.select("g text")
           .style("text-anchor", "start")
-          .text(function(d) { return d; });
+          .text(function(d) { return d.label; });
 
         dashboardTaxaDonutLegend
           .attr("width",function(d) { var getWidth = this.firstChild.getBBox().width + 10; if (getWidth != 10) { return getWidth;} else {return "200"} });
@@ -373,7 +381,13 @@ function donutUpdate(data) {
 
 
             dashboardTaxaDonutLegend.filter(function(x) {
-                if (d.data.label == x) {
+                var tempID = x.ncbiID;
+                var match = "ncbiID";
+                if (tempID == "n/a"){
+                  tempID = x.label;
+                  match = "label";
+                };
+                if (d["data"][match] == tempID) {
                   d3.select(this).select("rect").classed("goldFill", true);
                   d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
                   d3.select(this).attr("width",function(d) { var getWidth = this.firstChild.getBBox().width + 10; if (getWidth != 10) { return getWidth;} else {return "200"} });
@@ -381,16 +395,17 @@ function donutUpdate(data) {
             });
 
             d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-                if (this.firstChild.textContent == d.data.label) {
+              var tempID = taxonomyDataTable.row(this).data()[4];
+              var match = "ncbiID";
+              if (tempID == "n/a"){
+                tempID = x.label;
+                match = "label";
+              };
+                if (tempID == d["data"][match]) {
                     d3.select(this).select("rect").classed("goldFill", true);
                     d3.select(this).classed("donut-table-hover", true);
                 };
             });
-
-            //Tree
-            var rowTaxa = d.data.label
-
-            // pathHighlight(rowTaxa,true,false)
 
 
         });
@@ -400,7 +415,13 @@ function donutUpdate(data) {
 
 
             dashboardTaxaDonutLegend.filter(function(x) {
-                if (d.data.label == x) {
+              var tempID = x.ncbiID;
+              var match = "ncbiID";
+              if (tempID == "n/a"){
+                tempID = x.label;
+                match = "label";
+              };
+                if (d["data"][match] == tempID) {
                   d3.select(this).select("rect").classed("goldFill", false);
                   d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
                   // d3.select(this).attr("width",function(d) { return this.firstChild.getBBox().width; });
@@ -409,8 +430,13 @@ function donutUpdate(data) {
 
 
             d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-
-                if (this.firstChild.textContent == d.data.label) {
+              var tempID = taxonomyDataTable.row(this).data()[4];
+              var match = "ncbiID";
+              if (tempID == "n/a"){
+                tempID = x.label;
+                match = "label";
+              };
+                if (tempID == d["data"][match]) {
                     d3.select(this).select("rect").classed("goldFill", false);
                     d3.select(this).classed("donut-table-hover", false);
                 };
@@ -421,23 +447,19 @@ function donutUpdate(data) {
             toolTipDiv.style("opacity", 0);
 
 
-            //Tree
-            var rowTaxa = d.data.label
-
-            if ( $(this).hasClass('selected') ) {
-
-            }
-            else {
-              // pathHighlight(rowTaxa,false,false)
-            }
-
 
         });
 
         dashboardTaxaDonutLegend.on("mouseover", function(d, i) {
 
         slice.filter(function(x) {
-            if (x.data.label == d) {
+          var tempID = x.data.ncbiID;
+          var match = "ncbiID";
+          if (tempID == "n/a"){
+            tempID = x.data.label;
+            match = "label";
+          };
+            if (tempID == d[match]) {
                 d3.select(this).classed("goldFill", true);
             };
         });
@@ -451,7 +473,13 @@ function donutUpdate(data) {
         dashboardTaxaDonutLegend.on("mouseout", function(d, i) {
 
         slice.filter(function(x) {
-            if (x.data.label == d) {
+          var tempID = x.data.ncbiID;
+          var match = "ncbiID";
+          if (tempID == "n/a"){
+            tempID = x.data.label;
+            match = "label";
+          };
+            if (tempID == d[match]) {
                 d3.select(this).classed("goldFill", false);
             };
         });

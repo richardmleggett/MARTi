@@ -206,12 +206,9 @@
         <div class="chart-area dashboardDataTable" id="taxaTable">
           <!-- <canvas id="myPieChart"></canvas> -->
 
-          <table id="selectedColumn" class="table table-hover " >
+          <table id="selectedColumn" class="table table-hover" >
             <thead>
-              <tr>
-                <!-- <th>Name</th>
-                <th>Read Proportion</th> -->
-              </tr>
+
             </thead>
             <tbody>
             </tbody>
@@ -415,7 +412,7 @@
     <form>
       <div class="form-group row ml-4 mt-3">
         <div class="col-form-label col-auto">
-        <label for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves.</label>
+        <label id="dashboardTaxaTreeTopNText" for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves</label>
         </div>
         <div class="col-sm-3 my-auto d-flex">
         <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
@@ -470,30 +467,49 @@
               <label><input type="radio" name="dashboardTreeMapBg" value="black" checked>  Black</label>
               <label><input type="radio" name="dashboardTreeMapBg" value="white" >  White</label>
             </div>
-            <div>
+            <!-- <div>
               <label> Hierarchical padding:</label>
               <label><input type="radio" name="dashboardTreeMapPadding" value="off" checked>  Off</label>
               <label><input type="radio" name="dashboardTreeMapPadding" value="on" >  On</label>
-            </div>
+            </div> -->
             <div>
               <label> Unclassified node:</label>
               <label><input type="radio" name="dashboardTreeMapUnclassified" value="show" checked>  Show</label>
               <label><input type="radio" name="dashboardTreeMapUnclassified" value="hide" >  Hide</label>
             </div>
             <div>
-              <label> Higher taxa node:</label>
-              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="hide" >  Hide</label>
+              <label> Root node:</label>
+              <label><input type="radio" name="dashboardTreeMapRoot" value="show" checked>  Show</label>
+              <label><input type="radio" name="dashboardTreeMapRoot" value="hide" >  Hide</label>
             </div>
             <div>
+              <label> Higher taxa node:</label>
+              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="show" checked>  Show</label>
+              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="hide">  Hide</label>
+            </div>
+            <!-- <div>
               <label> Reveal higher taxa:</label>
               <label><input type="radio" name="dashboardTreeMapRevealHigherTaxa" value="show" >  Show</label>
               <label><input type="radio" name="dashboardTreeMapRevealHigherTaxa" value="hide" checked>  Hide</label>
-            </div>
+            </div> -->
 
             <div class="form-group">
               <label for="dashboardTreeMapMinTextSize">Min font size: <a class="dashboard-tree-map-min-text-size font-weight-bold">N</a> px</label>
-              <input type="range" class="form-control-range" name="dashboardTreeMapMinTextSize" min="1" max="12" value="6">
+              <input type="range" class="form-control-range" name="dashboardTreeMapMinTextSize" min="0" max="12" value="5">
+            </div>
+
+            <div class="form-group">
+              <label for="dashboardTreeMapColourBy">Colour by:</label>
+              <select class="form-control form-control-sm" id="dashboardTreeMapColourBy">
+                <option>Phylum</option>
+                <option>Domain</option>
+              </select>
+            </div>
+
+            <div>
+              <label> Group label:</label>
+              <label><input type="radio" name="dashboardTreeMapGroupTitle" value="show" checked>  Show</label>
+              <label><input type="radio" name="dashboardTreeMapGroupTitle" value="hide" >  Hide</label>
             </div>
 
           </form>
@@ -512,8 +528,8 @@
     <!-- <div class="col-4 pl-5 pt-4 position-absolute z-index-1"> -->
       <form>
         <div class="form-group row ml-4 mt-3">
-          <div class="col-form-label col-auto">
-            <label for="dashboardTreeMapTopN">Showing top <a class="dashboard-treemap-top-n-text font-weight-bold">N</a> of <a class="dashboard-treemap-total-n-text">N</a> leaves.
+          <div class="col-form-label col-auto" >
+            <label id="dashboardTreeMapTopNText" for="dashboardTreeMapTopN">Showing top <a class="dashboard-treemap-top-n-text font-weight-bold">N</a> of <a class="dashboard-treemap-total-n-text">N</a> nodes
               <!-- <br>
             <a class="dashboard-treemap-read-perc">N</a>% of analysed reads represented. -->
           </label>
@@ -577,8 +593,15 @@
               <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
             </div>
 
+            <div class="form-group">
+              <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
+              <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
+            </div>
 
           </form>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
           <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
@@ -679,8 +702,6 @@
 
           <table id="dashboardAmrTable" class="table table-bordered table-hover" width="100%">
             <thead>
-              <tr>
-              </tr>
             </thead>
             <tbody>
                 <!-- populate with JS -->

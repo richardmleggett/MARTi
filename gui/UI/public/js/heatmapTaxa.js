@@ -21,7 +21,6 @@ function initialiseHeatmapTaxa() {
     .attr("transform",
           "translate(" + marginHeatmapTaxa.left + "," + marginHeatmapTaxa.top + ")");
 
-
   defs = heatmapTaxaSvg.append("defs");
 
   defs.append("linearGradient")
@@ -112,7 +111,6 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
     });
 
     compareHmTaxaRead = "percent";
-
 
 
 

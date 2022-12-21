@@ -200,45 +200,45 @@ function makeConfigFileString(form_object) {
 // var EventEmitter = require('events').EventEmitter;
 // var chokidar = require('chokidar');
 // var path = require('path');
-var Obserser = require('./services/observer');
+var Observer = require('./services/observer');
 
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.urlencoded({ extended: true }));
 
-var obserser = new Obserser();
+var observer = new Observer();
 
-function addSampleToDatabase(runId,sampleId){
-
-
-database.push({
-  pathRunId: runId,
-  pathSampleId: sampleId,
-  sample: {},
-  tree: {},
-  amr: {},
-  accumulation: {}
-});
-
-  // if (database.hasOwnProperty(runId)) {
-  //   database[runId][sampleId] = {
-  //     sample: {},
-  //     tree: {},
-  //     amr: {},
-  //     accumulation: {}
-  //   };
-  // } else {
-  //   database[runId] = {};
-  //   database[runId][sampleId] = {
-  //     sample: {},
-  //     tree: {},
-  //     amr: {},
-  //     accumulation: {}
-  //   };
-  // };
-
-  // console.log(runId + " - " + sampleId + " added to database.")
-};
+// function addSampleToDatabase(runId,sampleId){
+//
+//
+// database.push({
+//   pathRunId: runId,
+//   pathSampleId: sampleId,
+//   sample: {},
+//   tree: {},
+//   amr: {},
+//   accumulation: {}
+// });
+//
+//   // if (database.hasOwnProperty(runId)) {
+//   //   database[runId][sampleId] = {
+//   //     sample: {},
+//   //     tree: {},
+//   //     amr: {},
+//   //     accumulation: {}
+//   //   };
+//   // } else {
+//   //   database[runId] = {};
+//   //   database[runId][sampleId] = {
+//   //     sample: {},
+//   //     tree: {},
+//   //     amr: {},
+//   //     accumulation: {}
+//   //   };
+//   // };
+//
+//   // console.log(runId + " - " + sampleId + " added to database.")
+// };
 
 
 
@@ -296,7 +296,7 @@ if (!data.sample.hasOwnProperty("runId")) {
   });
 }
 
-obserser.on('meta-file-added', meta => {
+observer.on('meta-file-added', meta => {
   // sampleMetaDict[meta.sample.id]=meta;
   // io.sockets.emit('meta-update-available', {
   //   sampleId: meta.sample.id
@@ -323,7 +323,7 @@ obserser.on('meta-file-added', meta => {
 
 });
 
-obserser.on('meta-file-updated', meta => {
+observer.on('meta-file-updated', meta => {
   // sampleMetaDict[meta.sample.id]=meta;
   //
   // io.sockets.emit('meta-update-available', {
@@ -333,7 +333,7 @@ obserser.on('meta-file-updated', meta => {
   metaDataUpdate(meta);
 });
 
-obserser.on('meta-file-removed', meta => {
+observer.on('meta-file-removed', meta => {
   // sampleMetaDict[meta.sample.id]=meta;
   //
   // io.sockets.emit('meta-update-available', {
@@ -382,7 +382,7 @@ obserser.on('meta-file-removed', meta => {
 
 });
 
-obserser.on('tree-file-added', tree => {
+observer.on('tree-file-added', tree => {
 
 
   if (sampleTreeDict[tree.runName]) {
@@ -418,7 +418,7 @@ obserser.on('tree-file-added', tree => {
 
 });
 
-obserser.on('tree-file-updated', tree => {
+observer.on('tree-file-updated', tree => {
   sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
 
   for (const [id, data] of Object.entries(clientData)) {
@@ -432,7 +432,7 @@ obserser.on('tree-file-updated', tree => {
 
 
 
-obserser.on('accumulation-file-added', data => {
+observer.on('accumulation-file-added', data => {
 
   var accumulationData = data.content;
   var id = data.id;
@@ -461,7 +461,7 @@ obserser.on('accumulation-file-added', data => {
 
 });
 
-obserser.on('accumulation-file-updated', data => {
+observer.on('accumulation-file-updated', data => {
 
   var accumulationData = data.content;
   var id = data.id;
@@ -483,7 +483,7 @@ sampleAccumulationDict[runId][id][lca]=accumulationData;
 });
 
 
-obserser.on('amr-file-added', data => {
+observer.on('amr-file-added', data => {
 
   var amrData = data.content;
   var id = data.id;
@@ -507,7 +507,7 @@ obserser.on('amr-file-added', data => {
 
 });
 
-obserser.on('amr-file-updated', data => {
+observer.on('amr-file-updated', data => {
 
   var amrData = data.content;
   var id = data.id;
@@ -528,7 +528,7 @@ var martiDirs = [];
 
 if(serverOptions["MARTiSampleDirectory"].length > 0){
   for (var dir of serverOptions["MARTiSampleDirectory"]) {
-    obserser.watchFolder(dir);
+    observer.watchFolder(dir);
   }
 
 } else {
@@ -538,7 +538,7 @@ if(serverOptions["MARTiSampleDirectory"].length > 0){
 
 
 // const folder = serverOptions["MARTiSampleDirectory"];
-// obserser.watchFolder(folder);
+// observer.watchFolder(folder);
 
 
 var sampleMetaDict = {};

@@ -6,11 +6,20 @@ function initialiseDashboardPage() {
         { "title": "Name" },
         { "title": "Rank" },
         { "title": "Read Count" },
-        { "title": "Read Proportion"}
+        { "title": "Read Proportion"},
+        null
       ],
-        columnDefs: [
-      { targets: "_all", "className": "dt-center"}
+      "columnDefs": [
+        { "targets": [0,1,2,3], "className": "dt-center"},
+          {
+              "targets": [ 4 ],
+              "visible": false,
+              "searchable": false
+          }
       ],
+      //   columnDefs: [
+      // { targets: "_all", "className": "dt-center"}
+      // ],
       "dom": 'Bt',
       "paging" : false,
       "order": [[ 3, "desc" ]],
@@ -407,103 +416,77 @@ var newLeafNodes;
 
 function globUpdate(data) {
 
-  // globNodes = tree.nodes(data);
-  donutNodes = d3.layout.tree().nodes(data);
+  // donutNodes = d3.layout.tree().nodes(data);
 
-  //Read Count Card
-  // totalClassifiedReads = d3.sum(globNodes, function(d) {
-  //   return d.value;
-  // });
+var donutLeaves = [];
+var donutTaxaAtRank = [];
 
-  // document.getElementById("totalReadCountCard").innerHTML = thousandsSeparators(totalClassifiedReads);
+function taxaAtRank(d) {
 
-  //Taxonomy Count Card
-
-    // totalTaxonomyCount = d3.selectAll(globNodes).size()
-    // document.getElementById("totalTaxonomyCountCard").innerHTML = thousandsSeparators(totalTaxonomyCount);
-
-
-   // globNodes = globNodes.filter(function(d){
-   //   if (d.rank <= taxonomicRankSelected){
-   //      // globNodeLevelNames.push(d.name);
-   //       return d;
-   //    }
-   //      });
-
-
-
-// excludedLeavesList = [];
-//
-// globNodes.forEach(function(d) {
-//   let leafArr = excludedLeavesListFunction(d,taxonomicRankSelected);
-//   excludedLeavesList = [...excludedLeavesList,...leafArr];
-// });
-//
-//
-// globNodes = globNodes.filter(function(d){
-//   if (!excludedLeavesList.includes(d.ncbiID) && d.rank != 0){
-//       return d;
-//    }
-//      });
+  if (d.rank < taxonomicRankSelected) {
+    if(taxonomicRankSelected == 10){
+      donutTaxaAtRank.push(d);
+    };
+    if (d.children) {
+      d.children.forEach(function(c){
+          taxaAtRank(c);
+        });
+    } else {
+      donutLeaves.push(d.ncbiID);
+    };
+  } else if (d.rank == taxonomicRankSelected) {
+    donutLeaves.push(d.ncbiID);
+    donutTaxaAtRank.push(d);
+  };
 
 
-if (taxonomicRankSelected < 10){
 
-  donutNodes = donutNodes.filter(function(d){
-  if (d.rank == taxonomicRankSelected){
-         return d;
-       }
-     });
 };
-
-
-newLeafNodes = [];
-
-donutNodes.forEach(function(d) {
-  let leafArr = labelNewLeaves(d,taxonomicRankSelected);
-  newLeafNodes = [...newLeafNodes,...leafArr];
-});
-
-newLeafNodes = [...new Set(newLeafNodes)];
-
+taxaAtRank(data);
 
 // if (taxonomicRankSelected < 10){
 //
-//   if ($("input[name='includeAncestorNodes'][value='off']").is(':checked')) {
-//     donutAncestorsOff();
-//         }
-//       else {
-//     donutAncestorsOn();
-//              }
-// }
-// else{
-//   donutNodes = globNodes;
+//   donutNodes = donutNodes.filter(function(d){
+//   if (d.rank == taxonomicRankSelected){
+//          return d;
+//        }
+//      });
 // };
+//
+//
+// newLeafNodes = [];
+//
+// donutNodes.forEach(function(d) {
+//   let leafArr = labelNewLeaves(d,taxonomicRankSelected);
+//   newLeafNodes = [...newLeafNodes,...leafArr];
+// });
+//
+// newLeafNodes = [...new Set(newLeafNodes)];
 
 
+//
+// console.log(newLeafNodes);
+//
+// donutNodes.forEach(function(d) {
+//   if (newLeafNodes.includes(d.ncbiID)){
+//     d.donutValue = d.summedValue;
+//   } else {
+//     d.donutValue = d.value;
+//   };
+// });
 
+donutNodes = donutTaxaAtRank;
 
 donutNodes.forEach(function(d) {
-  if (newLeafNodes.includes(d.ncbiID)){
+  if (donutLeaves.includes(d.ncbiID)){
     d.donutValue = d.summedValue;
   } else {
     d.donutValue = d.value;
   };
 });
 
-
-
 donutUpdate(returnTopTaxa(donutNodes));
 
-
-
-      // if (taxonomicRankSelected == 10) {
-      //   levelTaxonomyCount = totalTaxonomyCount;
-      //   // document.getElementById("levelTaxonomyCountCard").innerHTML = thousandsSeparators(levelTaxonomyCount);
-      // } else {
-      //   levelTaxonomyCount = d3.selectAll(donutNodes).size()
-      //   // document.getElementById("levelTaxonomyCountCard").innerHTML = thousandsSeparators(levelTaxonomyCount);
-      // }
 
 
   readCountAtLevelMax = d3.max(donutNodes, function(d) {return d.donutValue; });
@@ -541,7 +524,7 @@ donutUpdate(returnTopTaxa(donutNodes));
 
 
      // existingTaxa.push(d.name)
-     taxonomyDataTable.row.add([ncbiUrl,d.ncbiRank,thousandsSeparators(d.donutValue),d.proportionClassifiedReads]).node().id = rowID;
+     taxonomyDataTable.row.add([ncbiUrl,d.ncbiRank,thousandsSeparators(d.donutValue),d.proportionClassifiedReads,d.ncbiID]).node().id = rowID;
 
  };
 
@@ -555,19 +538,19 @@ updateTaxTable()
 };
 
 
-function excludedLeavesListFunction(d,rank) {
-          var dLeaves = [];
-
-  if (d.rank == rank) {
-    if (d.parent != null || d.parent != undefined){
-      if (d.parent.rank == d.rank) {
-        dLeaves.push(d.ncbiID)
-      };
-    };
-  };
-        var dLeaves = [...new Set(dLeaves)];
-        return dLeaves;
-};
+// function excludedLeavesListFunction(d,rank) {
+//           var dLeaves = [];
+//
+//   if (d.rank == rank) {
+//     if (d.parent != null || d.parent != undefined){
+//       if (d.parent.rank == d.rank) {
+//         dLeaves.push(d.ncbiID)
+//       };
+//     };
+//   };
+//         var dLeaves = [...new Set(dLeaves)];
+//         return dLeaves;
+// };
 
 
 
@@ -633,21 +616,32 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
 
                             //Table
                             d3.select(this).select("rect").classed("goldFill", true);
-                            var rowTaxa = this.firstChild.textContent
+                            var rowTaxa = this.firstChild.textContent;
+                            var tempID = taxonomyDataTable.row(this).data()[4];
+                            var match = "ncbiID";
+                            if (tempID == "n/a"){
+                              tempID = x.label;
+                              match = "label";
+                            };
 
                             //Donut
                             d3.select("#dashboardTaxaDonutPlot").select(".slices").selectAll(".slice").filter(function(x) {
 
-                                if (x.data.label == rowTaxa) {
+                                if (x["data"][match] == tempID) {
                                     d3.select(this).classed("goldFill", true);
                                 };
                             });
 
-                            //Tree
-
-                            // pathHighlight(rowTaxa,true,false)
 
                           }).on("mouseout", function(d) {
+                            d3.select(this).select("rect").classed("goldFill", true);
+                            var rowTaxa = this.firstChild.textContent;
+                            var tempID = taxonomyDataTable.row(this).data()[4];
+                            var match = "ncbiID";
+                            if (tempID == "n/a"){
+                              tempID = x.label;
+                              match = "label";
+                            };
 
                             //Table
                             d3.select(this).select("rect").classed("goldFill", false);
@@ -656,14 +650,11 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
                             //Donut
                             d3.select("#dashboardTaxaDonutPlot").select(".slices").selectAll(".slice").filter(function(x) {
 
-                                if (x.data.label == rowTaxa) {
+                                if (x["data"][match] == tempID) {
                                     d3.select(this).classed("goldFill", false);
                                 };
                             });
 
-                            //Tree
-
-                              // pathHighlight(rowTaxa,false,false)
 
 
                           })
