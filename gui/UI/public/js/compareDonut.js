@@ -1,4 +1,4 @@
-var readCountOpacity,radiusSelected,compareDonutSampleName,compareDonutArea;
+var readCountOpacity,radiusSelected,compareDonutSampleName,compareDonutArea,compareDonutColor;
 
 function initialiseCompareMultiDonut() {
 
@@ -46,15 +46,10 @@ d3.select("#compareDonutTopNNum").text(compareDonutTopN);
 };
 
 
-
-// var comparePlotColorPalette = d3.scale.ordinal()
-//     .range(['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffed75']);
-
 var pieCompare = d3.layout.pie()
     .sort(function(a, b) {
         return b.taxaReadCount - a.taxaReadCount
     })
-    // .sort(null)
     .value(function(d) { return d.taxaReadCount; });
 
 
@@ -68,10 +63,10 @@ var maxLinesWrapped;
                 word,
                 line = [],
                 lineNumber = 0,
-                lineHeight = 1.1, // ems
+                lineHeight = 1.1,
                 x = text.attr("x"),
                 y = text.attr("y"),
-                dy = 0, //parseFloat(text.attr("dy")),
+                dy = 0,
                 tspan = text.text(null)
                             .append("tspan")
                             .attr("x", x)
@@ -104,11 +99,8 @@ var maxLinesWrapped;
 
 function plotCompareDonut(data,segmentsStacked) {
 
-
-  // var comparePlotColorPalette = d3.scale.ordinal()
-  //     // .range(['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffed75']);
-  //     .range(['#556b2f', '#a0522d', '#483d8b', '#5f9ea0', '#008000', '#9acd32', '#00008b', '#8b008b', '#ff4500', '#ffa500', '#ffff00',
-  //   '#deb887', '#00ff00', '#00fa9a', '#dc143c', '#00ffff', '#00bfff', '#0000ff', '#d8bfd8', '#ff00ff', '#1e90ff', '#db7093','#ff1493', '#ee82ee']);
+  compareDonutColor = d3.scale.ordinal()
+        .range(colourPalettes[selectedPalette]);
 
   data.forEach(function(d) {
     d.taxa = segmentsStacked.map(function(name) {
@@ -156,10 +148,6 @@ var segmentsStackedLength = segmentsStacked.length;
 
 radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]);
 
-
-      // donutCompareLegendSVG.attr("width", function(d) {var rows = Math.ceil(segmentsStackedLength / 7 ); return radius * 2 * rows; });
-  // donutCompareLegendSVG.attr("width", $("#compareDonutPlot").parent().parent().width());
-
   var donutCompareLegend = d3.select("#compareDonutPlotLegend").selectAll(".donutCompareLegend")
       .data(segmentsStacked);
 
@@ -169,30 +157,20 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
       .append("g");
 
 
-  // var donutCompareLegend = donutCompareLegendSVG.selectAll("g")
-  //     .data(segmentsStacked);
-
-
-      // .data(comparePlotColorPalette.domain().slice().reverse());
-
-  // var donutCompareLegendEnter = donutCompareLegend.enter().append("g");
-
   donutCompareLegendEnter.append("rect")
       .attr("width", 20)
       .attr("height", 20)
       .style("fill", "black");
-      // .style("fill", comparePlotColorPalette);
 
   donutCompareLegendEnter.append("text")
       .attr("x", 24)
       .attr("y", 9)
       .style("font-size", "1.1em")
       .attr("dy", ".356em");
-      // .text(function(d) { return d; });
 
 
   donutCompareLegend.select("g rect")
-    .style("fill", function(d) {return comparePlotColorPalette(d); });
+    .style("fill", function(d) {return compareDonutColor(d); });
 
   donutCompareLegend.select("g text")
     .style("text-anchor", "start")
@@ -201,8 +179,6 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
   donutCompareLegend
     .attr("width",function(d) { return this.firstChild.getBBox().width; });
 
-  // donutCompareLegend.attr("transform", function(d, i) { var row = Math.floor(i / 7 );return "translate(" + radius * 2 * row + "," + (i-7*row) * 20 + ")"; });
-  // donutCompareLegend.attr("transform", function(d, i) { var row = Math.floor(i / 7 );return "translate(" + 74 * 2 * row + "," + (i-7*row) * 20 + ")"; });
 
 
   donutCompareLegend.exit().remove();
@@ -210,7 +186,6 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
 
 var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
     .data(data);
-    // .data(data.sort(function(a, b) { return b.totalReadCount - a.totalReadCount; }));
 
     var donutCompareSVGEnter = donutCompareSVG.enter().append("svg")
         .attr("class", "pie")
@@ -234,7 +209,6 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
         donutSlices.enter().append("path")
             .attr("class", "arc")
             .attr("d", arcCompare)
-            // .each(function(d) {this._current = d; })
             .style("fill", "white");
 
             maxLinesWrapped = 0;
@@ -245,7 +219,6 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
 
               var thisSVG = d3.select("#pie"+x);
 
-                // thisSVG.transition().duration(500).attr("width", r * 2)
                 thisSVG.attr("width", r * 2)
                   .attr("height", r * 2 + 20)
                   .select("g")
@@ -262,11 +235,8 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
                 thisSVG.select("text.donutReadCount")
                   .text(function(d) { return thousandsSeparators(d.totalReadCount); })
                   .style("font-size", function(d) { d3.select(this).style("font-size", 12); return Math.floor((r * 0.6) / this.getComputedTextLength() * 22) + "px"; })
-                // .style("font-size", function(d) { return Math.floor((r * 0.6) / this.getComputedTextLength() * 22) + "px"; })
                 .transition().duration(500)
                     .style("opacity", function(d) {return (readCountOpacity == "on") ? 1 : 0;})
-                    // .style("font-size", 12)
-                    // .style("font-size", function(d) { return Math.floor((r * 0.6) / this.getComputedTextLength() * 22) + "px"; })
                     .attr("dy", ".35em")
                     .style("text-anchor", "middle");
 
@@ -274,10 +244,8 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
 
           		var thisSVGSlices = thisSVG.selectAll(".arc").data(pieCompare(data[x].taxa));
 
-              // thisSVGSlices.each(function(d) {this._current = d; });
 
-
-          		thisSVGSlices.transition().duration(500).attrTween("d", function(a) {
+          		thisSVGSlices.transition("compareDonutSliceTrans").duration(500).attrTween("d", function(a) {
                           var i = d3.interpolate(this._current, a);
                           this._current = i(0);
                           return function(t) {
@@ -285,7 +253,7 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
                           };
                         })
                         .attr("d", arcCompare.outerRadius(r).innerRadius(r * 0.6))
-                        .style("fill", function(d) {return comparePlotColorPalette(d.data.name); });
+                        .style("fill", function(d) {return compareDonutColor(d.data.name); });
 
                 thisSVGSlices.exit().remove();
 
@@ -308,8 +276,6 @@ if (compareDonutSampleName == "show") {
   textLineHeight = 0;
 }
 
-
-        // thisSVG.transition().duration(500).attr("width", r * 2)
         thisSVG.attr("width", r * 2)
           .attr("height", r * 2 + textLineHeight + 10)
           .select("g")
@@ -322,15 +288,6 @@ if (compareDonutSampleName == "show") {
 
 
 donutCompareLegend.on("mouseover", function(d, i) {
-
-    // donutSlices.filter(function(x) {
-    //     if (x.data.name == d) {
-    //         d3.select(this).classed("hoverRect", true);
-    //     };
-    // });
-    //
-    //   d3.select(this).select("g rect").classed("hoverRect", true);
-    //   d3.select(this).select("g text").style("font-weight", "bold");
 
     donutSlices.filter(function(x) {
         if (x.data.name == d) {
@@ -351,14 +308,6 @@ donutCompareLegend.on("mouseover", function(d, i) {
 
 donutCompareLegend.on("mouseout", function(d, i) {
 
-  // donutSlices.filter(function(x) {
-  //     if (x.data.name == d) {
-  //         d3.select(this).classed("hoverRect", false);
-  //     };
-  // });
-  //
-  //   d3.select(this).select("g rect").classed("hoverRect", false);
-  //   d3.select(this).select("g text").style("font-weight", "normal");
 
   donutSlices.filter(function(x) {
       if (x.data.name == d) {
@@ -381,14 +330,6 @@ donutCompareLegend.on("mouseout", function(d, i) {
 
 donutSlices.on("mouseover", function(d, i) {
 
-  // donutCompareLegend.filter(function(x) {
-  //     if (d.data.name == x) {
-  //         d3.select(this).select("rect").classed("hoverRect", true);
-  //         d3.select(this).select("text").style("font-weight", "bold");
-  //     };
-  // });
-  //
-  //   d3.select(this).classed("hoverRect", true);
 
   donutCompareLegend.filter(function(x) {
       if (d.data.name == x) {
@@ -422,21 +363,12 @@ donutSlices.on("mousemove", function(d, i) {
   "<small class='text-gray-800'>" + d.data.ncbiRank + "</small>" +
   "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.data.taxaReadCount) +
   "<br/>Read %: " + Math.round(((d.data.taxaReadCount/d.data.totalReadCount)*10000))/100)
-     .style("left", (d3.event.pageX) + "px")
+     .style("left", (tooltipPos(d3.event.pageX)) + "px")
      .style("top", (d3.event.pageY - 35) + "px");
 
 });
 
 donutSlices.on("mouseout", function(d, i) {
-
-//   donutCompareLegend.filter(function(x) {
-//       if (d.data.name == x) {
-//           d3.select(this).select("rect").classed("hoverRect", false);
-//           d3.select(this).select("text").style("font-weight", "normal");
-//       };
-//   });
-//
-// d3.select(this).classed("hoverRect", false);
 
 donutCompareLegend.filter(function(x) {
     if (d.data.name == x) {

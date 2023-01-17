@@ -8,11 +8,6 @@ function initialiseAmrDonut() {
   amrDonutSVG = d3.select("#dashboardAmrDonutPlot")
     .append("svg")
     .attr("id","dashboardAmrDonutPlotExport")
-    // .attr("viewBox", function() {
-    //   var x = 0-width/2;
-    //   var y = 0-height/2;
-    //     return x + " " + y + " " + width + " " + height;
-    // })
     .attr("height", height)
     .attr("width", width)
     .append("g")
@@ -35,7 +30,6 @@ function initialiseAmrDonut() {
     });
 
     d3.select("#dashboardAmrDonutTopN").on("change", function(){
-      // dashboardAmrDonutTopN = d3.select(this).property("value");
       plotAmrDonut(dashboardAmrReponseData);
     });
 
@@ -60,11 +54,9 @@ var key = function(d) {
     return d.data.label;
     };
 
-// var amrDonutColor = d3.scale.ordinal()
-//     .range(['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffed75']);
 
-  var amrDonutColor = dashboardPlotColorPalette;
-
+  // var amrDonutColor = dashboardPlotColorPalette;
+  var amrDonutColor;
 
     function topTaxaAmr(data) {
 
@@ -162,7 +154,10 @@ var dashboardAmrDonutTopN = 10;
 
 function plotAmrDonut(data) {
 
-amrDonutColor = dashboardPlotColorPalette;
+// amrDonutColor = dashboardPlotColorPalette;
+
+amrDonutColor = d3.scale.ordinal()
+    .range(colourPalettes[selectedPalette]);
 
 dropdownGeneList = [];
 
@@ -173,17 +168,22 @@ dropdownGeneList = [];
 
 var plotData = [];
 
+  var geneListShortName = "cardId";
+
 
   for (const [i,gene] of data.geneList.entries()) {
+    if(gene.hasOwnProperty("shortName")){
+      geneListShortName = "shortName";
+    }
     var geneInChunkList = false;
     if (gene.averageAccuracy.hasOwnProperty(dashboardAmrTableChunkSelected) && gene.speciesCounts.length > 0) {
-      dropdownGeneList.push(gene.cardId);
+      dropdownGeneList.push(gene[geneListShortName]);
       geneInChunkList = true;
     } else {
       for (var chunk of Object.keys(gene.averageAccuracy)) {
         chunk = parseInt(chunk);
         if (chunk < dashboardAmrTableChunkSelected && gene.speciesCounts.length > 0) {
-          dropdownGeneList.push(gene.cardId);
+          dropdownGeneList.push(gene[geneListShortName]);
           geneInChunkList = true;
           break
         } else {
@@ -192,7 +192,7 @@ var plotData = [];
       }
     }
 
-    if (gene.cardId == dropdownGeneListSelected && geneInChunkList) {
+    if (gene[geneListShortName] == dropdownGeneListSelected && geneInChunkList) {
       newData.geneList = [data.geneList[i]];
       plotData = topTaxaAmr(newData);
     };
@@ -200,11 +200,6 @@ var plotData = [];
 
   };
 
-
-  // if (gene.name == dropdownGeneListSelected) {
-  //   newData.geneList = [data.geneList[i]];
-  //   plotData = topTaxaAmr(newData);
-  // };
 
   if (plotData.length == 0) {
     plotData = topTaxaAmr(data);
@@ -255,8 +250,8 @@ $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')
           .style("stroke-width", "0.5")
           .attr("class", "slice");
 
-      slice.transition()
-          .duration(1000)
+      slice.transition("dashboardAmrDonutTrans")
+          .duration(500)
           .attrTween("d", function(d) {
               this._current = this._current || d;
               var interpolate = d3.interpolate(this._current, d);
@@ -265,9 +260,6 @@ $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')
                   return amrArc(interpolate(t));
               };
           })
-          // .style("fill", function(d) {
-          //     return amrDonutColor(d.data.label);
-          // });
           .style("fill", function(d, i) {
               return amrDonutColor(i % dashboardColorIndex);
           });
@@ -297,7 +289,6 @@ $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')
               .attr("dy", ".356em");
 
           dashboardAmrDonutLegend.select("g rect")
-            // .style("fill", function(d) {return amrDonutColor(d); });
             .style("fill", function(d, i) {
                 return amrDonutColor(i % dashboardColorIndex);
             });
@@ -317,37 +308,48 @@ $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')
             toolTipDiv.style("opacity", .95)
                 .html("<h5 class='mb-0'>" + d.data.label + "</h5>" +
                 "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.value) +
-                // "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
                 "<br/>Read %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
-                .style("left", (d3.event.pageX) + "px")
+                .style("left", (tooltipPos(d3.event.pageX)) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
 
           });
 
           slice.on("mouseover", function(d, i) {
-              d3.select(this).classed("goldFill", true);
+
+              slice.filter(function(x) {
+                  if (d.data.label != x.data.label) {
+                      d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
+                  };
+              });
 
 
               dashboardAmrDonutLegend.filter(function(x) {
                   if (d.data.label == x) {
-                    d3.select(this).select("rect").classed("goldFill", true);
                     d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
+                  } else {
+                    d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
                   };
               });
-
 
           });
 
           slice.on("mouseout", function(d, i) {
-              d3.select(this).classed("goldFill", false);
+
+              slice.filter(function(x) {
+                  if (d.data.label != x.data.label) {
+                      d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
+                  };
+              });
 
 
               dashboardAmrDonutLegend.filter(function(x) {
                   if (d.data.label == x) {
-                    d3.select(this).select("rect").classed("goldFill", false);
                     d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
+                  } else {
+                    d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
                   };
               });
+
 
               toolTipDiv.style("opacity", 0);
 
@@ -356,26 +358,39 @@ $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')
           dashboardAmrDonutLegend.on("mouseover", function(d, i) {
 
           slice.filter(function(x) {
-              if (x.data.label == d) {
-                  d3.select(this).classed("goldFill", true);
+            if (x.data.label != d) {
+                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
+            };
+          });
+
+          dashboardAmrDonutLegend.filter(function(x) {
+              if (d == x) {
+                d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
+              } else {
+                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
               };
           });
 
-            d3.select(this).select("g rect").classed("goldFill", true);
-            d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
 
           });
 
           dashboardAmrDonutLegend.on("mouseout", function(d, i) {
 
           slice.filter(function(x) {
-              if (x.data.label == d) {
-                  d3.select(this).classed("goldFill", false);
+            if (x.data.label != d) {
+                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
+            };
+          });
+
+
+          dashboardAmrDonutLegend.filter(function(x) {
+              if (d == x) {
+                d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
+              } else {
+                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
               };
           });
 
-            d3.select(this).select("g rect").classed("goldFill", false);
-            d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
 
           });
 

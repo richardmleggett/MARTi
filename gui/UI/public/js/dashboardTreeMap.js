@@ -105,8 +105,8 @@ function initialiseDashboardTreeMap() {
       dashboardTreeMapShape = "rectangle";
       dashboardTreeMapBg = "black";
       // dashboardTreeMapPadding = "off";
-      dashboardTreeMapUnclassified = "show";
-      dashboardTreeMapRoot = "show";
+      dashboardTreeMapUnclassified = "hide";
+      dashboardTreeMapRoot = "hide";
       dashboardTreeMapHigherTaxaNode = "show";
       // dashboardTreeMapRevealHigherTaxa = "hide";
       dashboardTreeMapMinTextSize = 5;
@@ -119,7 +119,7 @@ function initialiseDashboardTreeMap() {
 
 var dashboardTreeMapLeafCount;
 // var dashboardTreeMapTopNChanged = false;
-var dashboardTreeMapTopNDefault = 30;
+var dashboardTreeMapTopNDefault = 250;
 var dashboardTreeMapTopN = dashboardTreeMapTopNDefault;
 var dashboardTreeMapTopNMaxSelected = true;
 var dashboardTreeMapColourBy;
@@ -154,7 +154,8 @@ var treeMapMargin = {top: 20, right: 120, bottom: 20, left: 120},
 
 var x = d3.scale.linear().range([0, treeMapWidth]),
     y = d3.scale.linear().range([0, treeMapHeight]),
-    treeMapColor = dashboardPlotColorPalette,
+    treeMapColor = d3.scale.ordinal()
+    .range(colourPalettes[selectedPalette]),
     treeMapRoot,
     treeMapNode;
 
@@ -222,7 +223,8 @@ treeMapSvg.attr("transform", "translate(" + translateRectX + "," + treeMapMargin
 
       // }
 
-  treeMapColor = dashboardPlotColorPalette;
+  treeMapColor = d3.scale.ordinal()
+    .range(colourPalettes[selectedPalette]);
 
     treeMapNode = treeMapRoot = data;
 
@@ -354,7 +356,6 @@ treeMapSvg.attr("transform", "translate(" + translateRectX + "," + treeMapMargin
 cell.select("tspan")
    .attr("x", function(d) { return parseInt(d3.select(this).attr("x"))+0.01; });
 
-
   cell.on("mousemove", function(d) {
   // node.select("circle").on("mousemove", function(d) {
            toolTipDiv.transition()
@@ -364,7 +365,7 @@ cell.select("tspan")
               toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at this node: " +
               thousandsSeparators(d.count) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
               .style("color", "black")
-              .style("left", (d3.event.pageX) + "px")
+              .style("left", (tooltipPos(d3.event.pageX)) + "px")
               .style("top", (d3.event.pageY - 35) + "px");
           })
               .on("mouseout", function(d) {
@@ -428,6 +429,10 @@ cell.select("tspan")
             };
             return "rgb("+whiterRgb.r+","+whiterRgb.g+","+whiterRgb.b+")"})
             .style("visibility", function(d) { return dashboardTreeMapGroupTitle == "show" ? "visible" : "hidden"; });
+
+//Fix Safari bug..
+    title.select("text")
+      .attr("y", function(d) { return parseInt(d3.select(this).attr("y"))+0.01; });
 
     title.exit().remove();
 
@@ -587,8 +592,6 @@ nodes = treemap.nodes(newTreeMap);
 
 
 
-  // var leaves = [];
-
   leafNodes.sort(function(a, b) {
       return b.treeMapValue - a.treeMapValue
   });
@@ -653,9 +656,6 @@ removeLeaves.forEach((removeLeaf) => {
 });
 
 
-
-// var rootValMinusLeafVal = tree.summedValue - leafSummedValue - hiddenNodeSummedValue;
-
 var hiddenLeavesNode = {
   name: "Hidden leaves",
   count: 0,
@@ -665,286 +665,11 @@ var hiddenLeavesNode = {
   treeMapValue: hiddenNodeSummedValue
 }
 
-// var higherTaxaNode = {
-//   name: "Higher taxa",
-//   count: 0,
-//   ncbiRank: "no rank",
-//   rank: 0,
-//   summedValue: rootValMinusLeafVal,
-//   treeMapValue: rootValMinusLeafVal
-// }
-
-// tree.children.push(hiddenLeavesNode);
 
 newTreeMap.children.push(hiddenLeavesNode);
 
 
-// if (dashboardTreeMapRevealHigherTaxa == "show") {
-//   higherTaxaNode.treeMapValue = 0;
-//   higherTaxaNode.children = [];
-//
-//   for (node of higherTaxaNodes) {
-//     higherTaxaNode.children.push(node);
-//   }
-//
-//
-// }
-
-// if (dashboardTreeMapHigherTaxaNode == "show") {
-//   tree.children.push(higherTaxaNode);
-// }
-
-
 };
-
-// function topNLeavesTreeMap(tree) {
-//
-//   var nodes = treemap.nodes(tree);
-//
-//   for (var node of nodes) {
-//
-//     var lineage = {
-//         domain: "n/a",
-//         phylum: "n/a",
-//         class: "n/a",
-//         order: "n/a",
-//         family: "n/a",
-//         genus: "n/a",
-//         species: "n/a"
-//     };
-//
-//     function recursiveLineage(d) {
-//
-//       var capNcbiRank = d.ncbiRank.charAt(0).toUpperCase() + d.ncbiRank.slice(1);
-//       if (taxonomicLevelDict.hasOwnProperty(capNcbiRank)){
-//         lineage[d.ncbiRank] = d.name;
-//       } else if (d.ncbiRank == "superkingdom") {
-//         lineage.domain = d.name;
-//       };
-//
-//       if (d.parent) {
-//         recursiveLineage(d.parent);
-//       };
-//     };
-//
-//     // if(!node.hasOwnProperty("higherNode") && node.name !== "root"){
-//     //   recursiveLineage(node);
-//     //   node.lineage = lineage;
-//     //   // node.group = node.lineage.phylum;
-//     // };
-//
-//     if(node.name !== "root"){
-//       recursiveLineage(node);
-//       node.lineage = lineage;
-//     } else{
-//       node.lineage = lineage;
-//     };
-//
-//   }
-//
-// var treeMapGroups = [];
-//
-//   nodes.forEach((node) => {
-//     node.keep = "false";
-//
-//     // if (node.name != "root"){
-//       if (node.children){
-//         changeTaxa(node,"false");
-//       }
-//
-//       if (node.name == "unclassified"){
-//         node.lineage = {
-//             domain: "unclassified",
-//             phylum: "unclassified",
-//             class: "unclassified",
-//             order: "unclassified",
-//             family: "unclassified",
-//             genus: "unclassified",
-//             species: "unclassified"
-//         };
-//       };
-//
-//       if (node.name == "root"){
-//         node.lineage = {
-//             domain: "root",
-//             phylum: "root",
-//             class: "root",
-//             order: "root",
-//             family: "root",
-//             genus: "root",
-//             species: "root"
-//         };
-//       }
-//
-//
-//       var group = node.lineage.phylum;
-//       var groupIndex = findWithAttr(treeMapGroups,"name",group);
-//       if(groupIndex != -1){
-//         treeMapGroups[groupIndex].children.push(node);
-//         treeMapGroups[groupIndex].groupSum += node.treeMapValue;
-//       } else {
-//         treeMapGroups.push({
-//             name: group,
-//             count: 0,
-//             ncbiRank: "no rank",
-//             ncbiID: "n/a",
-//             rank: 0,
-//             treeMapValue: 0,
-//             groupSum: node.treeMapValue,
-//             children: [node]
-//         });
-//
-//       }
-//
-//       if(node.name == group){
-//         var newGroupIndex = findWithAttr(treeMapGroups,"name",group);
-//         treeMapGroups[newGroupIndex].ncbiRank = node.ncbiRank;
-//         treeMapGroups[newGroupIndex].ncbiID = node.ncbiID;
-//         treeMapGroups[newGroupIndex].rank = node.rank;
-//       }
-//     // }
-//
-//   });
-//
-// treeMapGroups.sort(function(a, b) {
-//     return a.groupSum - b.groupSum
-// });
-//
-//   console.log(treeMapGroups);
-//
-// newTreeMap = {
-//   name: "treeRoot",
-//   count: 0,
-//   ncbiRank: "no rank",
-//   rank: 0,
-//   treeMapValue: 0,
-//   children: []
-// };
-//
-//
-// treeMapGroups.forEach((node) =>{
-//   newTreeMap.children.push(node);
-// });
-//
-// nodes = treemap.nodes(newTreeMap);
-//   // nodes.forEach((node) => {
-//   //   node.keep = "false";
-//   // });
-//
-//
-//   var leafNodes = nodes.filter(function(d) {
-//       return !d.children;
-//     });
-//
-// // console.log(leafNodes);
-//
-//   var leaves = [];
-//
-//   leafNodes.sort(function(a, b) {
-//       return b.summedValue - a.summedValue
-//   });
-//
-//   var thresholdSelected = dashboardTreeMapTopN;
-//
-//   for (const [i,taxa] of leafNodes.entries()) {
-//     if(i < thresholdSelected) {
-//       taxa.keep = "true";
-//       taxa.threshold = taxa.ncbiID.toString();
-//     } else {
-//       taxa.threshold = "Other";
-//     };
-//
-//   };
-//
-// var keepNodes = leafNodes.filter(function(d){
-//       if (d.keep == "true"){
-//           return d;
-//        }
-//      });
-//
-// var removeLeaves = leafNodes.filter(function(d){
-//      if (d.keep == "false"){
-//          return d;
-//       }
-//     });
-//
-//
-// var leafSummedValue = 0;
-// var hiddenNodeSummedValue = 0;
-//
-// keepNodes.forEach((keepNode) => {
-//   leafSummedValue += keepNode.summedValue;
-//   function recursiveParentKeep(d) {
-//     if (d.parent) {
-//         d.keep = "true";
-//         recursiveParentKeep(d.parent);
-//     }else {
-//       d.keep = "true";
-//     };
-//   };
-//   recursiveParentKeep(keepNode);
-// });
-//
-//
-//
-// removeLeaves.forEach((removeLeaf) => {
-//   hiddenNodeSummedValue += removeLeaf.summedValue;
-//   function recursiveParentRemove(d) {
-//     if (d.parent) {
-//         if (d.parent.keep == "true") {
-//           hideSpecificBranch(d.parent,d.name);
-//         } else{
-//           recursiveParentRemove(d.parent);
-//         };
-//     };
-//   };
-//   recursiveParentRemove(removeLeaf);
-// });
-//
-//
-// // var rootValMinusLeafVal = tree.summedValue - leafSummedValue - hiddenNodeSummedValue;
-//
-// var hiddenLeavesNode = {
-//   name: "Hidden leaves",
-//   count: 0,
-//   ncbiRank: "no rank",
-//   rank: 0,
-//   summedValue: hiddenNodeSummedValue,
-//   treeMapValue: hiddenNodeSummedValue
-// }
-//
-// // var higherTaxaNode = {
-// //   name: "Higher taxa",
-// //   count: 0,
-// //   ncbiRank: "no rank",
-// //   rank: 0,
-// //   summedValue: rootValMinusLeafVal,
-// //   treeMapValue: rootValMinusLeafVal
-// // }
-//
-// // tree.children.push(hiddenLeavesNode);
-//
-// newTreeMap.children.push(hiddenLeavesNode);
-//
-//
-// // if (dashboardTreeMapRevealHigherTaxa == "show") {
-// //   higherTaxaNode.treeMapValue = 0;
-// //   higherTaxaNode.children = [];
-// //
-// //   for (node of higherTaxaNodes) {
-// //     higherTaxaNode.children.push(node);
-// //   }
-// //
-// //
-// // }
-//
-// // if (dashboardTreeMapHigherTaxaNode == "show") {
-// //   tree.children.push(higherTaxaNode);
-// // }
-//
-//
-// };
-
 
 
 function prepareTreeMapData(data,finalData){
@@ -952,73 +677,10 @@ function prepareTreeMapData(data,finalData){
   var hideBranchList = [];
   var newLeafNodeIds = [];
   var higherTaxaIdArray = [];
-  // higherTaxaNodes = [];
 
    var parentNodeId;
 
 
-    //  function recursiveRankFilt(d) {
-    //
-    //    if (d.rank < taxonomicRankSelected) {
-    //      if (d.children && d.children.length > 0) {
-    //        parentNodeId = d.ncbiID;
-    //        higherTaxaIdArray.push(d.ncbiID);
-    //        d.children.forEach(function(c){
-    //            recursiveRankFilt(c);
-    //          });
-    //      } else if (d.name == "unclassified" && dashboardTreeMapUnclassified == "hide"){
-    //
-    //      } else {
-    //         newLeafNodeIds.push(d.ncbiID);
-    //      };
-    //    } else if (d.rank == taxonomicRankSelected) {
-    //        newLeafNodeIds.push(d.ncbiID);
-    //    } else if (d.rank > taxonomicRankSelected) {
-    //        newLeafNodeIds.push(parentNodeId);
-    //    };
-    //
-    //    if (d.name == "other sequences" && taxonomicRankSelected < 8) {
-    //       newLeafNodeIds.push(d.ncbiID);
-    //    }
-    //    parentNodeId = d.ncbiID;
-    //  };
-    //  recursiveRankFilt(data);
-    //
-    //
-    //
-    // if (dashboardTreeMapUnclassified == "hide") {
-    //   dashboardTreeMapLeafCount = newLeafNodeIds.length + 1 ;
-    // } else {
-    //   dashboardTreeMapLeafCount = newLeafNodeIds.length;
-    // }
-
-
-// function recursiveSetValue(d) {
-//     d.count = d.value;
-//     if (newLeafNodeIds.includes(d.ncbiID)) {
-//       d.treeMapValue = d.summedValue;
-//       changeTaxa(d,"false");
-//     } else if (higherTaxaIdArray.includes(d.ncbiID) && dashboardTreeMapRevealHigherTaxa == "show") {
-//       d.treeMapValue = d.count;
-//       higherTaxaNodes.push({
-//         higherNode: true,
-//         name: d.name,
-//         ncbiID: d.ncbiID,
-//         count: d.count,
-//         ncbiRank: d.ncbiRank,
-//         rank: d.rank,
-//         summedValue: d.summedValue,
-//         treeMapValue: d.count
-//       });
-//     } else {
-//       d.treeMapValue = 0;
-//     };
-//     if (d.children) {
-//       d.children.forEach(function(c){
-//           recursiveSetValue(c);
-//         });
-//     };
-//   };
 
 
 function recursiveRankFilt(d) {
@@ -1054,12 +716,6 @@ recursiveRankFilt(data);
 
 
 
-// if (dashboardTreeMapUnclassified == "hide") {
-//  dashboardTreeMapLeafCount = newLeafNodeIds.length + 1 + higherTaxaIdArray.length;
-// } else {
-//  dashboardTreeMapLeafCount = newLeafNodeIds.length + higherTaxaIdArray.length;
-// }
-
 dashboardTreeMapLeafCount = 0;
 
   function recursiveSetValue(d) {
@@ -1075,16 +731,6 @@ dashboardTreeMapLeafCount = 0;
         if(d.treeMapValue > 0){
           dashboardTreeMapLeafCount += 1;
         }
-        // higherTaxaNodes.push({
-        //   higherNode: true,
-        //   name: d.name,
-        //   ncbiID: d.ncbiID,
-        //   count: d.count,
-        //   ncbiRank: d.ncbiRank,
-        //   rank: d.rank,
-        //   summedValue: d.summedValue,
-        //   treeMapValue: d.count
-        // });
       } else {
         d.treeMapValue = 0;
       };
@@ -1096,10 +742,6 @@ dashboardTreeMapLeafCount = 0;
     };
 
 recursiveSetValue(finalData);
-
-// if (dashboardTreeMapUnclassified == "hide") {
-//  dashboardTreeMapLeafCount += 1;
-// }
 
 };
 
@@ -1124,11 +766,11 @@ function treeMapWrap(d,ele,tbbox,cbbox,maxSize,cbboxWidth,cbboxHeight) {
           width = tbbox.width/2,
           line = [],
           lineNumber = 0,
-          lineHeight = 1.1, // ems
+          lineHeight = 1.1,
           x = text.attr("x"),
           y = text.attr("y"),
           dy = -.3;
-           //parseFloat(text.attr("dy")),
+
 
           var tspan = text.text(null)
                       .append("tspan")
@@ -1166,7 +808,6 @@ function treeMapWrap(d,ele,tbbox,cbbox,maxSize,cbboxWidth,cbboxHeight) {
                             .text(word);
             }
           } else {
-            // if (tspan.node().getComputedTextLength() > width) {
             if (line.length > 1) {
                 line.pop();
                 tspan.text(line.join(" "));
@@ -1217,45 +858,11 @@ function treeMapRectColour(d) {
 
   var colourName;
 
-  // if(dashboardTreeMapColourBy == "Parent") {
-  //   if (d.name !== "treeRoot") {
-  //     colourName = d.parent.name;
-  //   } else {
-  //     colourName = "root";
-  //   }
-  // } else if (dashboardTreeMapColourBy == "Phylum"){
-  //     if(d.hasOwnProperty("lineage")){
-  //       colourName = d.lineage.phylum;
-  //     } else {
-  //       if (d.name !== "treeRoot") {
-  //         colourName = d.parent.name;
-  //       } else {
-  //         colourName = "Higher taxa";
-  //       }
-  //     }
-  // } else if (dashboardTreeMapColourBy == "Domain"){
-  //     // colourName = d.lineage.domain;
-  //
-  //     if(d.hasOwnProperty("lineage")){
-  //       colourName = d.lineage.domain;
-  //     } else {
-  //       if (d.name !== "treeRoot") {
-  //         colourName = d.parent.name;
-  //       } else {
-  //         colourName = "Higher taxa";
-  //       }
-  //     }
-  // }
-
-  // if (d.name !== "treeRoot") {
     colourName = d.parent.name;
-  // } else {
-  //   colourName = "treeRoot";
-  // }
+
 
   var ignoreNodes = ["n/a","root","treeRoot","unclassified"];
 
-  // if(colourName != "n/a" && colourName != "root" && colourName != "treeRoot") {
   if(!ignoreNodes.includes(colourName)) {
 
     var width = d.dx;

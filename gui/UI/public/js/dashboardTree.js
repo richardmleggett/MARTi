@@ -7,11 +7,9 @@ dashboardTreeCircleColourType;
 function initialiseDashboardTree() {
 
   treeSVG = d3.select("#dendrogram").append("svg")
-  	// .attr("width", width + margin.right + margin.left)
   	.attr("id", "dashboardTreeSVG")
   	.attr("height", "440")
     .attr("width", "100%")
-    // .attr("height", "100%")
     .append("g")
   	.attr("transform", "translate(" + dashboardTreeMargin.left + "," + dashboardTreeMargin.top + ")");
 
@@ -79,38 +77,6 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
     dashboardTreeCircleColourType = "linear";
 
 
-  //
-  // d3.selectAll("input[name='horizontalNodeDistRange']").on("change", function() {
-  //   console.log("horizontal distance: "+this.value);
-  //   horizontalSeparationBetweenNodes = this.value;
-  //   treeUpdate(data,1000);
-  // });
-  //
-  //
-  //
-  // d3.selectAll("input[name='verticalNodeDistRange']").on("change", function() {
-  //   console.log("vertical distance: "+this.value);
-  //   verticalSeparationBetweenNodes = this.value;
-  //   treeUpdate(data,1000);
-  // });
-  //
-  // d3.selectAll("input[name='fontSizeRange']").on("change", function() {
-  //   console.log("font size: "+this.value);
-  //   node.selectAll('.node text')
-  //     // .transition()
-  //     // .duration(minorTransition)
-  //     .style("font-size", this.value+"rem");
-  //     treeUpdate(data,1000);
-  //
-  // });
-  //
-  // d3.selectAll("input[name='nodeSizeRange']").on("change", function() {
-  //   console.log("Tree scale: "+this.value);
-  //
-  //     maxCircleSize = 13*this.value;
-  //     treeUpdate(data,1000);
-  //
-  // });
 
 };
 
@@ -118,27 +84,11 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
 
 
 
-var dashboardTreeMargin = {top: 20, right: 120, bottom: 20, left: 120}
-	// width = 960 - dashboardTreeMargin.right - dashboardTreeMargin.left
-	// height = 500 - dashboardTreeMargin.top - dashboardTreeMargin.bottom;
+var dashboardTreeMargin = {top: 20, right: 120, bottom: 20, left: 120};
 
 var i = 0,
 	duration = 750;
 
-  // var verticalSeparationBetweenNodes = 60;
-  // var horizontalSeparationBetweenNodes = 125;
-
-// var tree = d3.layout.tree()
-// 	.size([height, width]);
-
-// var tree = d3.layout.tree()
-//     .size([height, width]);
-    // .nodeSize([verticalSeparationBetweenNodes, horizontalSeparationBetweenNodes])
-    // .separation(function(a, b) {
-    //     return a.parent == b.parent ? 1 : 2;
-    // }).sort(function(a,b){
-    //   return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-    // });
 
 var diagonal = d3.svg.diagonal()
 	.projection(function(d) { return [d.y, d.x]; });
@@ -172,13 +122,6 @@ var diagonal = d3.svg.diagonal()
         return ((Math.sqrt(nodeVal)/Math.sqrt(readCountMax))*maxCircleSize)+minCircleSize;
 
 
-    // if (d.value == 0)
-    //     return minCircleSize;
-    // else if (type === "log")
-    //     return ((Math.log(d.value)/Math.log(readCountMax))*maxCircleSize)+minCircleSize;
-    // else if (type === "linear")
-    //     return ((d.value/readCountMax)*maxCircleSize)+minCircleSize;
-
   }
 
 
@@ -211,7 +154,6 @@ function tempRecursiveSumFunction(d) {
             recursiveSum(d);
             var summedReadCount = childrenSum + d.value;
             d.summedReadCount = summedReadCount;
-            // return summedReadCount;
 };
 
 
@@ -245,7 +187,6 @@ function taxonomicRankFilt(tree,plot,rank) {
 
 
    var leafCount = 0
-   // dashboardTreeLeafCount = 0;
    var hideBranchList = [];
             function recursiveRankFilt(d) {
 
@@ -271,7 +212,6 @@ function taxonomicRankFilt(tree,plot,rank) {
               } else if (d.rank == rank) {
                   leafCount += 1;
                   changeTaxa(d,"false");
-              // }
               } else if (d.rank > rank) {
                   hideBranchList.push(d);
               };
@@ -292,68 +232,6 @@ function taxonomicRankFilt(tree,plot,rank) {
               treeLeafCounts[plot] = leafCount;
 };
 
-
-// function taxonomicRankFilt(tree) {
-//    dashboardTreeLeafCount = 0;
-//    var hideBranchList = [];
-//             function recursiveRankFilt(d) {
-//
-//               if (d.rank < taxonomicRankSelected) {
-//
-//                 if (d.children) {
-//                   d.children.forEach(function(c){
-//                       recursiveRankFilt(c);
-//                     });
-//                 } else if (d._children) {
-//                   d._children.forEach(function(c){
-//                       recursiveRankFilt(c);
-//                     });
-//                 } else if (d.Tchildren){
-//                   changeTaxa(d,"true");
-//                   d.children.forEach(function(c){
-//                       recursiveRankFilt(c);
-//                     });
-//                 } else {
-//                   dashboardTreeLeafCount += 1;
-//                 }
-//               } else if (d.rank == taxonomicRankSelected) {
-//                   dashboardTreeLeafCount += 1;
-//                   changeTaxa(d,"false");
-//               } else if (d.rank > taxonomicRankSelected) {
-//                   hideBranchList.push(d);
-//               };
-//
-//               if (d.name == "other sequences" && taxonomicRankSelected < 8) {
-//                 dashboardTreeLeafCount += 1;
-//                 changeTaxa(d,"false");
-//               }
-//
-//             };
-//             recursiveRankFilt(tree);
-//
-//             hideBranchList.forEach(function(d){
-//               hideSpecificBranch(d.parent,d.name);
-//               });
-// };
-
-// function recursivUnclick(tree) {
-//
-//             function recursiveFunc(d) {
-//
-//                 if (d.children) {
-//                   d.children.forEach(function(c){
-//                       recursiveFunc(c);
-//                     });
-//                 } else if (d._children) {
-//                   click(d);
-//                   d.children.forEach(function(c){
-//                       recursiveFunc(c);
-//                     });
-//                 }
-//
-//             };
-//             recursiveFunc(tree);
-// };
 
 var dashboardTreeLeafCount = 0;
 var dashboardTaxaTreeTopNChanged = false;
@@ -407,22 +285,6 @@ function resetTreeBranches(tree) {
 
   };
   recursiveFunc(tree);
-
-
-  // recursivUnclick(tree);
-
-  // var allNodes = d3.layout.tree().nodes(tree);
-
-
-  // allNodes.forEach(function(d) {
-  //   d.keep = "false";
-  //   if (d.branchChildren) {
-  //     if (typeof d.children !== 'undefined') {
-  //         d.children = d.children.concat(d.branchChildren);
-  //     }
-  //     delete d.branchChildren;
-  //   }
-  // });
 
 };
 
@@ -510,7 +372,6 @@ function treeUpdate(source) {
 
 if(newTreeData == true) {
   preNodes = d3.layout.tree().nodes(root).reverse();
-  // preReadCountSum = d3.sum(preNodes, function(d) { return d.value; });
   preReadCountSum = d3.sum(preNodes, function(d) { return d.children ? d.value : d.summedValue; });
 
   function recursiveSetSum(d) {
@@ -545,14 +406,9 @@ duration = 0;
 
 
 
-  // Compute the new tree layout.
   var tempNodes = d3.layout.tree().nodes(root).reverse(),
 	   tempLinks = d3.layout.tree().links(tempNodes);
 
-
-
-
-  // Calculate tree size.
     var depthDict = {};
 
   tempNodes.forEach(function(d) {
@@ -589,20 +445,10 @@ if (dashboardTreeType == "tree") {
   var tree = d3.layout.tree()
       .size([tempHeight, treeDivWidth]);
 
-      // Compute the new tree layout.
   var nodes = tree.nodes(root).reverse();
 	var links = tree.links(nodes);
 }
 else {
-
-  // var tempHeight = dashboardTreeLeafCount * 17;
-  //   if (tempHeight < 400) {
-  //     var tempHeight = 400;
-  //   };
-  //
-  // d3.select("#dendrogram>svg").transition().duration(duration).attr("height", tempHeight + dashboardTreeMargin.top + dashboardTreeMargin.bottom);
-  //
-  // var treeDivWidth = $("#dendrogram").width() - dashboardTreeMargin.right - dashboardTreeMargin.left - 180;
 
   var cluster = d3.layout.cluster()
       .size([tempHeight, treeDivWidth]);
@@ -612,39 +458,23 @@ else {
   var links = cluster.links(nodes);
 }
 
-
-  // Update the nodes…
   var node = treeSVG.selectAll("g.node")
 	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
 
     readCountMax = d3.max(nodes, function(d) { return d.children ? d.value : d.summedValue; });
-    // readCountSum = d3.sum(nodes, function(d) { return d.value; });
     readCountSum = d3.sum(nodes, function(d) { return d.children ? d.value : d.summedValue; });
 
 
-// var nodesWithoutChildren = nodes.filter(function(d) {
-//     return !d.children;
-//   });
-//
-//   var nodesWithChildren = nodes.filter(function(d) {
-//       return d.children;
-//     });
-
-
 if (readCountSum > preReadCountSum) {
-  // console.log("True");
-  // console.log("Difference: " + (readCountSum-preReadCountSum));
-      // console.log(readCountSum-preReadCountSum);
+
 } else {
-    // console.log("False");
 
 }
 
 
-    // d3.selectAll(".dashboard-taxa-tree-read-showing").text(thousandsSeparators(readCountSum));
-    // d3.selectAll(".dashboard-taxa-tree-read-sum").text(thousandsSeparators(preReadCountSum));
-    d3.selectAll(".dashboard-taxa-tree-read-perc").text(Number.parseFloat((readCountSum/preReadCountSum)*100).toPrecision(3));
+
+    // d3.selectAll(".dashboard-taxa-tree-read-perc").text(Number.parseFloat((readCountSum/preReadCountSum)*100).toPrecision(3));
 
 
     if (dashboardTreeCircleColourType == "linear") {
@@ -669,8 +499,6 @@ if (readCountSum > preReadCountSum) {
     }
 
 
-
-  // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("g")
 	  .attr("class", "node")
 	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
@@ -678,23 +506,18 @@ if (readCountSum > preReadCountSum) {
 
   nodeEnter.append("circle")
 	  .attr("r", 1e-6);
-	  // .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   nodeEnter.append("text")
-	  // .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
 	  .attr("dy", ".35em")
 	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
 	  .text(function(d) { return d.name; })
-	  // .style("fill-opacity", 1e-6);
 	  .style("visibility", "hidden");
 
-  // Transition nodes to their new position.
   var nodeUpdate = node.transition()
 	  .duration(duration)
 	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
-	  // .attr("r", 8)
     .attr("r", function(d) {
           return circleSize(d,dashboardTreeCircleSizeType);
         })
@@ -711,11 +534,9 @@ if (readCountSum > preReadCountSum) {
       else
           return circleColour(nodeVal);
         })
-	  // .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
     .style("stroke", function(d) { return d._children ? "#000" : "#858796"; });
 
   node.on("mousemove", function(d) {
-  // node.select("circle").on("mousemove", function(d) {
            toolTipDiv.transition()
               .duration(0)
               .style("opacity", .95);
@@ -723,7 +544,7 @@ if (readCountSum > preReadCountSum) {
               toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at node: " +
               thousandsSeparators(d.value) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
               .style("color", "black")
-              .style("left", (d3.event.pageX) + "px")
+              .style("left", (tooltipPos(d3.event.pageX)) + "px")
               .style("top", (d3.event.pageY - 35) + "px");
           })
               .on("mouseout", function(d) {
@@ -735,16 +556,11 @@ if (readCountSum > preReadCountSum) {
 
 
   nodeUpdate.select("text")
-    // .transition()
-	  // .duration(0)
-	  // .attr("x", function(d) { return d.children ? -13 : 13; })
     .attr("dx", function (d) {return d.children ? (-14 - circleSize(d,dashboardTreeCircleSizeType)) : (6 + circleSize(d,dashboardTreeCircleSizeType)); })
     .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-	  // .style("fill-opacity", function(d) { return d.children ?  1e-6 : 1; });
     .style("visibility", function(d) { return d.children ?  "hidden" : "visible"; });
 
 
-  // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
 	  .duration(duration)
 	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
@@ -754,15 +570,12 @@ if (readCountSum > preReadCountSum) {
 	  .attr("r", 1e-6);
 
   nodeExit.select("text")
-	  // .style("fill-opacity", 1e-6);
     .style("visibility", "hidden");
 
 
-  // Update the links…
   var link = treeSVG.selectAll("path.treeLink")
 	  .data(links, function(d) {return d.target.id; });
 
-  // Enter any new links at the parent's previous position.
   link.enter().insert("path", "g")
 	  .attr("class", "treeLink")
 	  .attr("d", function(d) {
@@ -770,12 +583,10 @@ if (readCountSum > preReadCountSum) {
 		return diagonal({source: o, target: o});
 	  });
 
-  // Transition links to their new position.
   link.transition()
 	  .duration(duration)
 	  .attr("d", diagonal);
 
-  // Transition exiting nodes to the parent's new position.
   link.exit().transition()
 	  .duration(duration)
 	  .attr("d", function(d) {
@@ -784,7 +595,6 @@ if (readCountSum > preReadCountSum) {
 	  })
 	  .remove();
 
-  // Stash the old positions for transition.
   nodes.forEach(function(d) {
 	d.x0 = d.x;
 	d.y0 = d.y;
@@ -805,11 +615,8 @@ if (readCountSum > preReadCountSum) {
   });
 
 duration = 750;
-
-// console.log("Tree updated");
 }
 
-// Toggle children on click.
 function click(d) {
   if (d.children) {
 	d._children = d.children;
@@ -818,10 +625,10 @@ function click(d) {
 	d.children = d._children;
 	d._children = null;
   }
-  // treeUpdate(d);
+
 }
 
-// hide all children of selected taxa
+
 function changeTaxa(d,show) {
   if (d.children) {
 	d.Tchildren = d.children;
@@ -835,10 +642,9 @@ function changeTaxa(d,show) {
 }
 }
 
-// hide specific branch of tree
+
 function hideSpecificBranch(d,id) {
 
-  // if (d.hasOwnProperty("children")) {
   if (d.children) {
     var splice;
 

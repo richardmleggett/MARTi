@@ -40,7 +40,7 @@ fetch(css)
     var canvas = document.createElement('canvas');
       canvas.width = svgElement.getAttribute("width")*scale;
       canvas.height = svgElement.getAttribute("height")*scale;
-    var ctx = canvas.getContext('2d'); // For Canvas returns 2D graphic.
+    var ctx = canvas.getContext('2d');
 
     v = canvg.Canvg.fromString(ctx, full_svg);
     v.start();
@@ -86,13 +86,9 @@ saveAs(blob, svg + "_" + date + ".svg");
 function svg_data(svg,style,g){
 var svg_data = document.getElementById(svg).innerHTML
 var head = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2200" height="2000">'
-// var g = '<g transform="translate(100,20) scale(1)">'
 var g_close = '</g>'
 var style = style
 var full_svg = head + style + g + svg_data + g_close + "</svg>"
-// var blob = new Blob([full_svg], {type: "image/svg+xml"})
-
-// return $(full_svg);
 return full_svg;
 };
 
@@ -103,7 +99,6 @@ function dashboardAmrDonutExport(){
   var svgNS = "http://www.w3.org/2000/svg";
   var outer = document.getElementById('response');
 
-  // get chart content
   var chartSvg = $('#dashboardAmrDonutPlot svg')[0];
   var chartContent = chartSvg.childNodes[0];
 
@@ -113,7 +108,6 @@ function dashboardAmrDonutExport(){
   $(merged).attr('id', 'merged-div');
   outer.appendChild(merged);
 
-  // createElementNS for svg
   var mergedSvg = document.createElementNS(svgNS, 'svg');
   $(mergedSvg).attr('id', 'mergedAmrDonut');
   $(mergedSvg).attr('height', '300');
@@ -165,7 +159,6 @@ function dashboardTaxaDonutExport(){
   var svgNS = "http://www.w3.org/2000/svg";
   var outer = document.getElementById('response');
 
-  // get chart content
   var chart = document.getElementById('dashboardTaxaDonutPlot');
   var chartSvg = chart.getElementsByTagName('svg')[0];
   var chartContent = Array.from(chartSvg.childNodes);
@@ -176,7 +169,6 @@ function dashboardTaxaDonutExport(){
   $(merged).attr('id', 'merged-div');
   outer.appendChild(merged);
 
-  // createElementNS for svg
   var mergedSvg = document.createElementNS(svgNS, 'svg');
   $(mergedSvg).attr('id', 'mergedTaxaDonut');
   $(mergedSvg).attr('height', '300');
@@ -230,10 +222,6 @@ function compareTaxaDonutExport(){
       var svgNS = "http://www.w3.org/2000/svg";
       var outer = document.getElementById('response');
 
-      // var chartSvg = $('#compareDonutPlot svg')[0];
-      // var chartContent = chartSvg.childNodes[0];
-
-      // var chartSvgViewBox = $(chartSvg).attr('viewBox');
 
       var legendArray = $(".donutCompareLegend");
       var compareDonuts = $("#compareDonutPlot .pie");
@@ -244,35 +232,23 @@ function compareTaxaDonutExport(){
 
       var mergedSvg = document.createElementNS(svgNS, 'svg');
       $(mergedSvg).attr('id', 'mergedCompareDonutPlot');
-      // $(mergedSvg).attr('viewBox', chartSvgViewBox);
       $(mergedSvg).attr('height', '500');
       $(mergedSvg).attr('width', '900');
 
       merged.appendChild(mergedSvg);
 
-        // var clonedChart = chartContent.cloneNode(true);
-        //   $(clonedChart).attr('id','clonedDonutComparePlot');
-
-        // mergedSvg.appendChild(clonedChart);
 
         var clonedDonutComparePlot = d3.select("#mergedCompareDonutPlot").append("g")
           .attr('id', 'clonedDonutComparePlot');
 
         var clonedDonutCompareLegend = d3.select("#mergedCompareDonutPlot").append("g")
           .attr('id', 'clonedDonutCompareLegend');
-          // .attr("transform","translate(30,0)");
-
-
 
                 var numberDonutLines = 1;
 
                 var donutSpacing = 20;
                 var currentDonutLinePosition = 0;
                 var currentDonutCount = 0;
-                // var firstDonutWidth = parseInt($("#compareDonutPlot .pie").attr("width"));
-                // var maxDonutLineLength = 750 + 2*donutSpacing;
-                // var donutHeight = parseInt($("#compareDonutPlot .pie").attr("height"));
-                // var donutLineHeight = 300;
 
                 clonedDonutComparePlot.append("g")
                   .attr('id', 'clonedDonutComparePlot_line_'+numberDonutLines);
@@ -296,7 +272,6 @@ function compareTaxaDonutExport(){
                   var donutChildElement = donut.firstChild;
                   var clonedChildElement = donutChildElement.cloneNode(true);
                   line.push(clonedChildElement);
-                  // var lineLength = 0;
 
                   donutWidth = Math.ceil(donutChildElement.getBBox().width);
                   var elementHeight = Math.ceil(donutChildElement.getBBox().height);
@@ -354,31 +329,6 @@ function compareTaxaDonutExport(){
               }
 
 
-                // compareDonuts.each(function(item) {
-                // var donutContent = $(this)[0].firstChild;
-                // console.log(donutContent);
-                // var clonedNode = donutContent.cloneNode(true);
-                // // var clonedNodeWidth = donutContent.getBBox().width;
-                // var previousDonutLinePosition = currentDonutLinePosition;
-                //
-                // if (currentDonutCount == 3) {
-                //   previousDonutLinePosition = 0;
-                //   currentDonutLinePosition = donutWidth + donutSpacing;
-                //   currentDonutCount = 1;
-                //   numberDonutLines += 1;
-                //   clonedDonutComparePlot.append("g")
-                //     .attr('id', 'clonedDonutComparePlot_line_'+numberDonutLines);
-                // } else {
-                //   currentDonutCount += 1;
-                //   currentDonutLinePosition = previousDonutLinePosition + donutWidth + donutSpacing;
-                // }
-                //
-                // var x = previousDonutLinePosition;
-                // // var y = donutLineHeight * (numberDonutLines-1);
-                // $(clonedNode).attr("transform","translate("+x+",0)");
-                // $("#clonedDonutComparePlot_line_"+numberDonutLines)[0].appendChild(clonedNode);
-                // });
-
                 var donutLines = d3.selectAll('#clonedDonutComparePlot>g');
 
                 var linePosition = 0;
@@ -413,7 +363,6 @@ function compareTaxaDonutExport(){
       var legendContent = Array.from($(this)[0].childNodes);
 
       for (const [i, child] of legendContent.entries()){
-        // console.log(legendContent[i]);
         var clonedNode = legendContent[i].cloneNode(true);
         var clonedNodeWidth = legendContent[i].getBBox().width;
         var previousLineLength = currentLineLength;
@@ -440,26 +389,21 @@ function compareTaxaDonutExport(){
         var thisLength = this.getBBox().width;
         var xPos = (maxLineLength - thisLength) / 2;
         var yPos = lineHeight * i;
-        // return "translate(0,"+yPos+")"
         return "translate("+xPos+","+yPos+")"
       });
 
 
       var legendHeight = $("#clonedDonutCompareLegend")[0].getBBox().height;
       var donutPlotHeight = $("#clonedDonutComparePlot")[0].getBBox().height;
-      // var xAxisHeight = $("#clonedDonutComparePlot g.x.axis")[0].getBBox().height;
       $('#clonedDonutCompareLegend').attr("transform","translate(20,20)");
       var newHeight = legendHeight + donutPlotHeight + 60;
       var newWidth = maxLineLength + 40;
       $(mergedSvg).attr('height', newHeight);
       $(mergedSvg).attr('width', newWidth);
-      // var plotX = 20 + firstDonutWidth/2;
       var plotX = 20;
       var plotY = legendHeight + 40 + firstLineHeight - lineData["r1"]["tallestElementDonutRad"];
-      // var plotY = legendHeight + firstDonutWidth/2 + (firstLineHeight-firstDonutWidth) + 40;
 
       $('#clonedDonutComparePlot').attr("transform","translate("+plotX+","+plotY+")");
-      // $('#clonedDonutComparePlot').attr("transform","translate(0,0)");
 
 };
 
@@ -483,7 +427,6 @@ function compareTaxaStackedBarExport(){
 
       var mergedSvg = document.createElementNS(svgNS, 'svg');
       $(mergedSvg).attr('id', 'mergedStackedBarPlot');
-      // $(mergedSvg).attr('viewBox', chartSvgViewBox);
       $(mergedSvg).attr('height', '500');
       $(mergedSvg).attr('width', '920');
 
@@ -497,7 +440,6 @@ function compareTaxaStackedBarExport(){
 
         var clonedStackedBarLegend = d3.select("#mergedStackedBarPlot").append("g")
           .attr('id', 'clonedStackedBarLegend');
-          // .attr("transform","translate(30,0)");
 
         var numberLines = 1;
         var lineHeight = 30;
@@ -538,7 +480,6 @@ function compareTaxaStackedBarExport(){
         var thisLength = this.getBBox().width;
         var xPos = (maxLineLength - thisLength) / 2;
         var yPos = lineHeight * i;
-        // return "translate(0,"+yPos+")"
         return "translate("+xPos+","+yPos+")"
       });
 

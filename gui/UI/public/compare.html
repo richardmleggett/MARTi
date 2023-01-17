@@ -91,8 +91,8 @@
                   <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="sampleOrderCompareButton" id="sampleOrderCompareMenu">
                     <a class="dropdown-item dropdown-nonhref rank">ID asc</a>
                     <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Sequencing date asc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Sequencing date desc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Run asc</a>
+                    <a class="dropdown-item dropdown-nonhref rank">Run desc</a>
                     <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
                     <a class="dropdown-item dropdown-nonhref rank">Yield desc</a>
                     <a class="dropdown-item dropdown-nonhref rank">Reads analysed asc</a>
@@ -548,16 +548,16 @@
 
     <!-- Taxonomic tree -->
     <div class="card shadow" id="compareTaxaTreeCard">
-      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseTree" aria-expanded="false" data-toggle="collapse" role="button"">
         <h6 class="m-0 font-weight-bold text-primary">Tree</h6>
 
         <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuCompareTaxaTree" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle disabled" href="#" role="button" id="dropdownMenuCompareTaxaTree" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuCompareTaxaTree">
-
-            <div class="dropdown-header">Options:</div>
+            <form class="dropdown-form">
+            <div class="dropdown-header px-0">Options:</div>
 
             <div class="row columns-2">
               <div class="col-md-6">
@@ -634,13 +634,12 @@
 
 
 
-
-
+            </form>
           </div>
         </div>
       </div>
 
-      <div class="card-body-custom">
+      <div class="card-body-custom collapse" id="collapseTree"">
 
 
     <!-- <form>

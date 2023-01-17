@@ -1,24 +1,19 @@
 #!/usr/bin/env node
-
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 const { v4: uuidv4 } = require('uuid');
-// var fs = require('fs');
 const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 
 const myArgs = process.argv.slice(2);
 
-/* Check if number is a valid port number */
 function checkIfValidPortnumber(num) {
-  // Regular expression to check if number is a valid port number
   const regexExp = /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/gi;
   return regexExp.test(num);
 }
 
-// Use the function
 var slectedPort = 3000;
 
 if (myArgs.length == 1) {
@@ -47,7 +42,7 @@ if(fsExtra.existsSync("./marti_server_options.txt")) {
   serverOptionsPath = homedir + "/.marti_server_options.txt";
 } else {
   console.log("Warning: Could not find marti_server_options.txt.");
-  console.log("You must have the file marti_server_options.txt in either the working directory or your home directory to start new analyses.");
+  console.log("You must have the file marti_server_options.txt in your home directory to start new analyses.");
 }
 
 try {
@@ -69,7 +64,6 @@ try {
             };
             serverOptions["MARTiSampleDirectory"].push(finalDir);
           }
-          // serverOptions["MARTiSampleDirectory"] = fields[1];
 
         } else if (fields[0] == "BlastDatabaseDirectory") {
           serverOptions["BlastDatabaseDirectory"] = fields[1];
@@ -88,8 +82,72 @@ try {
     console.log("Please check this file and restart to start new analyses.");
   }
 } catch (err) {
-  //console.log(err);
+
 }
+
+
+var engineOptionsPath = "";
+if(fsExtra.existsSync("./marti_engine_options.txt")) {
+  engineOptionsPath = "./marti_engine_options.txt";
+} else if(fsExtra.existsSync(homedir + "/marti_engine_options.txt")) {
+  engineOptionsPath = homedir + "/marti_engine_options.txt";
+} else if (fsExtra.existsSync(homedir + "/.marti_engine_options.txt")) {
+  engineOptionsPath = homedir + "/.marti_engine_options.txt";
+} else {
+  console.log("Warning: Could not find marti_engine_options.txt");
+  // console.log("You must have the file marti_engine_options.txt in your home directory to start new analyses.");
+}
+
+engineOptionsObject = {processes:[]};
+
+try {
+  const martiEngineOptions = fsExtra.readFileSync(engineOptionsPath, 'UTF-8');
+  const lines = martiEngineOptions.split(/\r?\n/);
+  var newProcess = false;
+  var processFound = false;
+  var currentProcess = {text:""};
+  lines.forEach((line) => {
+      if(line.charAt(0) != '#') {
+
+        if (newProcess == true) {
+          if (line == "") {
+            newProcess = false;
+            engineOptionsObject.processes.push(currentProcess);
+            currentProcess = {text:""};
+          } else {
+            var key = line.split(":")[0].trim();
+            var value;
+            if (key == "UseToClassify") {
+              currentProcess.text += "    " + key + "\n";
+              value = "true";
+            } else {
+              value = line.split(":")[1].trim();
+              currentProcess.text += "    " + key + ":" + value + "\n";
+            }
+            currentProcess[key] = value;
+          }
+        } else if (line.search("BlastProcess") != -1) {
+          newProcess = true;
+          processFound = true;
+        };
+      }
+  });
+
+  if (newProcess == true) {
+    newProcess = false;
+    engineOptionsObject.processes.push(currentProcess);
+    currentProcess = {text:""};
+  }
+
+
+if(processFound == false) {
+    console.log("Warning: Could not find any processes in " + engineOptionsPath);
+}
+} catch (err) {
+
+}
+
+
 
 function getSubDirectories(path) {
   return fsExtra.readdirSync(path).filter(function (file) {
@@ -160,46 +218,56 @@ function makeConfigFileString(form_object) {
   configFileString += "ReadsPerBlast:" + form_object["readsPerChunk"] + "\n";
   configFileString += "ReadFilterMinQ:" + form_object["readFilterMinQ"] + "\n";
   configFileString += "ReadFilterMinLength:" + form_object["minimumReadLength"] + "\n";
-  if(form_object.hasOwnProperty("processName")) {
-    if(Array.isArray(form_object["processName"])) {
-    for(var i = 0; i < form_object["processName"].length; i++) {
-        configFileString += "BlastProcess\n";
-        configFileString += "\tName:" + form_object["processName"][i] + "\n";
-        configFileString += "\tProgram:" + form_object["blastProgram"][i] + "\n";
-        configFileString += "\tDatabase:" + form_object["databaseDir"][i] + "/" + form_object["blastDatabase"][i] + "\n";
-        if(form_object["taxaFilter"][i].length > 0) {
-          configFileString += "\tTaxaFilter:" + form_object["taxaFilter"][i] + "\n";
+
+  if(form_object.hasOwnProperty("analysisName")) {
+        if(Array.isArray(form_object["analysisName"])) {
+          for (var [i, process] of array.entries()) {
+              configFileString += form_object["analysisName"][i];
+              configFileString += "\n";
+            }
+        } else {
+              configFileString += form_object["analysisName"];
+              configFileString += "\n";
         }
-        configFileString += "\tMaxE:" + form_object["maxE"][i] + "\n";
-        configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"][i] + "\n";
-        configFileString += "\tBlastThreads:" + form_object["blastThreads"][i] + "\n";
-        if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"][i] == "on") {
-          configFileString += "\tUseToClassify\n";
-        }
-      }
-    } else {
-      configFileString += "BlastProcess\n";
-      configFileString += "\tName:" + form_object["processName"] + "\n";
-      configFileString += "\tProgram:" + form_object["blastProgram"] + "\n";
-      configFileString += "\tDatabase:" + form_object["databaseDir"] + "/" + form_object["blastDatabase"] + "\n";
-      if(form_object["taxaFilter"].length > 0 ) {
-        configFileString += "\tTaxaFilter:" + form_object["taxaFilter"] + "\n";
-      }
-      configFileString += "\tMaxE:" + form_object["maxE"] + "\n";
-      configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"] + "\n";
-      configFileString += "\tBlastThreads:" + form_object["blastThreads"] + "\n";
-      if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"] == "on") {
-        configFileString += "\tUseToClassify\n";
-      }
-    }
   }
+
+  // if(form_object.hasOwnProperty("processName")) {
+  //   if(Array.isArray(form_object["processName"])) {
+  //   for(var i = 0; i < form_object["processName"].length; i++) {
+  //       configFileString += "BlastProcess\n";
+  //       configFileString += "\tName:" + form_object["processName"][i] + "\n";
+  //       configFileString += "\tProgram:" + form_object["blastProgram"][i] + "\n";
+  //       configFileString += "\tDatabase:" + form_object["databaseDir"][i] + "/" + form_object["blastDatabase"][i] + "\n";
+  //       if(form_object["taxaFilter"][i].length > 0) {
+  //         configFileString += "\tTaxaFilter:" + form_object["taxaFilter"][i] + "\n";
+  //       }
+  //       configFileString += "\tMaxE:" + form_object["maxE"][i] + "\n";
+  //       configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"][i] + "\n";
+  //       configFileString += "\tBlastThreads:" + form_object["blastThreads"][i] + "\n";
+  //       if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"][i] == "on") {
+  //         configFileString += "\tUseToClassify\n";
+  //       }
+  //     }
+  //   } else {
+  //     configFileString += "BlastProcess\n";
+  //     configFileString += "\tName:" + form_object["processName"] + "\n";
+  //     configFileString += "\tProgram:" + form_object["blastProgram"] + "\n";
+  //     configFileString += "\tDatabase:" + form_object["databaseDir"] + "/" + form_object["blastDatabase"] + "\n";
+  //     if(form_object["taxaFilter"].length > 0 ) {
+  //       configFileString += "\tTaxaFilter:" + form_object["taxaFilter"] + "\n";
+  //     }
+  //     configFileString += "\tMaxE:" + form_object["maxE"] + "\n";
+  //     configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"] + "\n";
+  //     configFileString += "\tBlastThreads:" + form_object["blastThreads"] + "\n";
+  //     if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"] == "on") {
+  //       configFileString += "\tUseToClassify\n";
+  //     }
+  //   }
+  // }
   return configFileString;
 }
 
-// var fsExtra = require('fs-extra');
-// var EventEmitter = require('events').EventEmitter;
-// var chokidar = require('chokidar');
-// var path = require('path');
+
 var Observer = require('./services/observer');
 
 app.use(express.static(__dirname + '/public'));
@@ -207,39 +275,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 
 var observer = new Observer();
-
-// function addSampleToDatabase(runId,sampleId){
-//
-//
-// database.push({
-//   pathRunId: runId,
-//   pathSampleId: sampleId,
-//   sample: {},
-//   tree: {},
-//   amr: {},
-//   accumulation: {}
-// });
-//
-//   // if (database.hasOwnProperty(runId)) {
-//   //   database[runId][sampleId] = {
-//   //     sample: {},
-//   //     tree: {},
-//   //     amr: {},
-//   //     accumulation: {}
-//   //   };
-//   // } else {
-//   //   database[runId] = {};
-//   //   database[runId][sampleId] = {
-//   //     sample: {},
-//   //     tree: {},
-//   //     amr: {},
-//   //     accumulation: {}
-//   //   };
-//   // };
-//
-//   // console.log(runId + " - " + sampleId + " added to database.")
-// };
-
 
 
 function metaDataUpdate(meta) {
@@ -252,21 +287,6 @@ if (!data.sample.hasOwnProperty("runId")) {
   data.sample.runId = runId;
 }
 
-// var findSample = database.findIndex(sample => sample.pathRunId == runId && sample.pathSampleId == sampleId);
-//
-// if (findSample != -1) {
-//   database[findSample]["sample"] = data;
-// } else {
-//   database.push({
-//     pathRunId: runId,
-//     pathSampleId: sampleId,
-//     sample: data,
-//     tree: {},
-//     amr: {},
-//     accumulation: {}
-//   });
-// }
-
 
   if (sampleMetaDict[runId]) {
     sampleMetaDict[runId][sampleId] = data;
@@ -275,21 +295,6 @@ if (!data.sample.hasOwnProperty("runId")) {
     sampleMetaDict[runId][sampleId] = data;
   }
 
-// if (database.hasOwnProperty(runId)) {
-//   if (database[runId].hasOwnProperty(id)) {
-//     database[runId][id]["sample"] = data;
-//   } else {
-//     addSampleToDatabase(runId,id);
-//     database[runId][id]["sample"] = data;
-//   };
-// } else {
-//   addSampleToDatabase(runId,id);
-//   database[runId][id]["sample"] = data;
-// };
-
-
-
-
   io.sockets.emit('meta-update-available', {
     runId: runId,
     sampleId: sampleId
@@ -297,49 +302,14 @@ if (!data.sample.hasOwnProperty("runId")) {
 }
 
 observer.on('meta-file-added', meta => {
-  // sampleMetaDict[meta.sample.id]=meta;
-  // io.sockets.emit('meta-update-available', {
-  //   sampleId: meta.sample.id
-  // });
-
-  // if (!meta.sample.hasOwnProperty("runId")) {
-  //   meta.sample.runId = meta.sample.id;
-  // }
-  //
-  // if (sampleMetaDict[meta.sample.runId]) {
-  //   sampleMetaDict[meta.sample.runId][meta.sample.id] = meta;
-  // } else {
-  //   sampleMetaDict[meta.sample.runId] = {};
-  //   sampleMetaDict[meta.sample.runId][meta.sample.id] = meta;
-  // }
-  //
-  //
-  // io.sockets.emit('meta-update-available', {
-  //   runId: meta.sample.runId,
-  //   sampleId: meta.sample.id
-  // });
-
   metaDataUpdate(meta);
-
 });
 
 observer.on('meta-file-updated', meta => {
-  // sampleMetaDict[meta.sample.id]=meta;
-  //
-  // io.sockets.emit('meta-update-available', {
-  //   runId: meta.sample.runId,
-  //   sampleId: meta.sample.id
-  // });
   metaDataUpdate(meta);
 });
 
 observer.on('meta-file-removed', meta => {
-  // sampleMetaDict[meta.sample.id]=meta;
-  //
-  // io.sockets.emit('meta-update-available', {
-  //   runId: meta.sample.runId,
-  //   sampleId: meta.sample.id
-  // });
 
   var sampleId = meta.id;
   var runId = meta.runName;
@@ -398,23 +368,6 @@ observer.on('tree-file-added', tree => {
     sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
   }
 
-  // var findSample = database.findIndex(sample => sample.pathRunId == tree.runName && sample.pathSampleId == tree.id);
-
-//   if (findSample != -1) {
-//     database[findSample]["tree"][tree.lca] = tree.content;
-//   } else {
-// console.log("Tree json registered prior to sample json");
-//     database.push({
-//       pathRunId: tree.runName,
-//       pathSampleId: tree.id,
-//       sample: {},
-//       tree: {[tree.lca]:tree.content},
-//       amr: {},
-//       accumulation: {}
-//     });
-//
-//   }
-
 
 });
 
@@ -471,9 +424,6 @@ observer.on('accumulation-file-updated', data => {
 sampleAccumulationDict[runId][id][lca]=accumulationData;
 
   for (const [uuid, entryData] of Object.entries(clientData)) {
-    // console.log(entryData.selectedCompareSamples);
-    // console.log("filter");
-    // console.log(entryData.selectedCompareSamples.filter(e => e.name == id && e.runId == runId));
     if ((id == entryData.selectedDashboardSample.name && runId == entryData.selectedDashboardSample.runId) || entryData.selectedCompareSamples.filter(e => e.name == id && e.runId == runId).length > 0) {
       io.to(uuid).emit('accumulation-update-available');
       console.log(`[${new Date().toLocaleString()}][${uuid}] Accumulation update notification sent`);
@@ -525,20 +475,30 @@ observer.on('amr-file-updated', data => {
 });
 
 var martiDirs = [];
+var projectsEnabled = false;
+var projectsDatabase = {};
 
 if(serverOptions["MARTiSampleDirectory"].length > 0){
   for (var dir of serverOptions["MARTiSampleDirectory"]) {
+    if (!dir.endsWith("/")) {
+      dir = dir + "/";
+    };
+
+    try {
+      const projectsObj = fsExtra.readJsonSync(dir + "projects.json");
+      for (const [project,runs] of Object.entries(projectsObj)){
+        projectsDatabase[project] = runs;
+      }
+      projectsEnabled = true;
+    } catch (err) {
+    }
+
     observer.watchFolder(dir);
   }
 
 } else {
   console.log("MARTiSampleDirectory not specified.");
 }
-
-
-
-// const folder = serverOptions["MARTiSampleDirectory"];
-// observer.watchFolder(folder);
 
 
 var sampleMetaDict = {};
@@ -571,11 +531,16 @@ app.get('/:runId/:sampleId/:lca/csv', function (req, res) {
   res.download(file);
 })
 
+app.get('/project/:project', function (req, res) {
+  res.sendFile(__dirname + '/indexNode.html');
+})
+
+
+
+
 app.post('/new',(req, res) => {
-  console.log(req.body);
   if(numAnalyses < serverOptions["MaxSimultaneousAnalyses"] ) {
     // check output dir exists, create if not
-    //TODO: What if it already exists? Return to client with failure and request new marti name?
     const outputDir = req.body["outputDir"] + "/" + req.body["martiName"];
     if (!fsExtra.existsSync(outputDir)) {
       fsExtra.mkdirSync(outputDir);
@@ -589,7 +554,7 @@ app.post('/new',(req, res) => {
       }
     })
 
-    //start MARTi
+    // start MARTi
     var logStream = fsExtra.createWriteStream(outputDir + "/output.txt", {flags: 'a'});
     var spawn = require('child_process').spawn,
       marti_process = spawn('marti', ['-config', outputDir + '/config.txt']);
@@ -623,8 +588,6 @@ io.on('connect', function(socket){
   io.sockets.emit('current-client-count', clientCount);
 
   socket.on('hb_pong', function(data){
-    // console.log(data);
-    //   console.log("Pong received from client");
   });
 
   socket.on('register-request', function(data){ // a client requests registration
@@ -642,17 +605,15 @@ io.on('connect', function(socket){
           name: data.currentDashboardSampleName,
           runId: data.currentDashboardSampleRun
         },
-        selectedCompareSamples: data.compareSampleObjectArray
+        selectedCompareSamples: data.compareSampleObjectArray,
+        project: data.clientProject
       };
       console.log(`[${new Date().toLocaleString()}][${id}] New client ID`);
     } else {
       console.log(`[${new Date().toLocaleString()}][${id}] Already exists in object`);
     }
 
-      // var id = clientId == null? uuidv4() : clientId; // create an id if client doesn't already have one
-
-      socket.join(id); //subscribe this socket to room id
-
+      socket.join(id);
       io.to(id).emit('register-response', id);
 
       console.log(`[${new Date().toLocaleString()}][${id}] Client registered`);
@@ -662,19 +623,36 @@ io.on('connect', function(socket){
   });
 
 
-
-//   console.log(`[${new Date().toLocaleString()}] Client connected`);
-//
   socket.on('meta-request', request => {
     var id = request.clientId;
+    if (!projectsEnabled){
     io.to(id).emit('meta-response', sampleMetaDict);
     console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
+  } else {
+    if (clientData[id]["project"]){
+      var project = clientData[id]["project"];
+      if(projectsDatabase.hasOwnProperty(project)){
+        var customMetaDict = {};
+        for (const [run,samples] of Object.entries(sampleMetaDict)){
+          if(projectsDatabase[project].includes(run)){
+            customMetaDict[run] = samples;
+          }
+        }
+        io.to(id).emit('meta-response', customMetaDict);
+        console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
+      }
+
+    }
+
+
+  }
   });
 
 
   socket.on('default-server-options-request', request => {
     var id = request.clientId;
     scanMinKNOWRunDirectory();
+    serverOptions.processes = engineOptionsObject.processes;
     io.to(id).emit('default-server-options-response', serverOptions);
     console.log(`[${new Date().toLocaleString()}][${id}] Default server options sent`);
   });
@@ -693,10 +671,8 @@ io.on('connect', function(socket){
 
   socket.on('selected-compare-samples', samples => {
       var id = samples.clientId;
-      // console.log(samples);
       var samples = samples.data;
       clientData[id].selectedCompareSamples = samples;
-      // console.log(samples);
       io.to(id).emit('current-compare-samples-response', clientData[id].selectedCompareSamples);
       var sampleNames = [];
       for (const sample of samples) {
@@ -729,7 +705,7 @@ io.on('connect', function(socket){
               treeData: sampleTreeDict[selectedDashboardRun][selectedDashboardSample][lca],
               treeData2: sampleTreeDict[selectedDashboardRun][selectedDashboardSample][lca]
               });
-            console.log(`[${new Date().toLocaleString()}][${id}] Dasboard tree data sent at lca: ${lca}`);
+            console.log(`[${new Date().toLocaleString()}][${id}] Dashboard tree data sent at lca: ${lca}`);
           }
         };
 
@@ -740,7 +716,7 @@ io.on('connect', function(socket){
     var selectedDashboardSampleName = clientData[id].selectedDashboardSample.name;
     var selectedDashboardSampleRunId = clientData[id].selectedDashboardSample.runId;
     io.to(id).emit('dashboard-meta-response', sampleMetaDict[selectedDashboardSampleRunId][selectedDashboardSampleName]);
-    console.log(`[${new Date().toLocaleString()}][${id}] Dasboard meta data sent`);
+    console.log(`[${new Date().toLocaleString()}][${id}] Dashboard meta data sent`);
     });
 
 socket.on('compare-tree-request', request => {
@@ -791,11 +767,29 @@ socket.on('compare-tree-request', request => {
 
     });
 
+    socket.on('compare-amr-request', request => {
+      var id = request.clientId;
+      var selectedCompareSamples = clientData[id].selectedCompareSamples;
+      var compareAmrData = [];
+      for (var sample of selectedCompareSamples){
+        if (sampleAmrDict.hasOwnProperty(sample.runId)) {
+          if (sampleAmrDict[sample.runId].hasOwnProperty(sample.name)) {
+            compareAmrData.push({
+              id: sample.name,
+              runId: sample.runId,
+              data: sampleAmrDict[sample.runId][sample.name]
+            });
+            };
+          };
+        };
+      io.to(id).emit('compare-amr-response', compareAmrData);
+      console.log(`[${new Date().toLocaleString()}][${id}] Compare amr data sent`);
+      });
+
     socket.on('dashboard-accumulationChart-request', request => {
       var id = request.clientId;
       var rank = request.rank;
       var lca = request.lca;
-      // var dashboardAccumulationData = [];
 
 
       var selectedDashboardSample = clientData[id].selectedDashboardSample.name;
@@ -822,10 +816,6 @@ socket.on('compare-tree-request', request => {
         var selectedDashboardSample = clientData[uuid].selectedDashboardSample.name;
         var selectedDashboardRun = clientData[uuid].selectedDashboardSample.runId;
 
-        // console.log(selectedDashboardSample);
-        // console.log(selectedDashboardRun);
-        // console.log(sampleAmrDict[selectedDashboardRun][selectedDashboardSample]);
-
         if (sampleAmrDict.hasOwnProperty(selectedDashboardRun)) {
               if (sampleAmrDict[selectedDashboardRun].hasOwnProperty(selectedDashboardSample)) {
                 io.to(uuid).emit('dashboard-dashboardAmrTable-response', sampleAmrDict[selectedDashboardRun][selectedDashboardSample]);
@@ -847,7 +837,7 @@ socket.on('compare-tree-request', request => {
           const rooms = Object.keys(socket.rooms);
           var property = rooms[1];
           console.log(`[${new Date().toLocaleString()}] Client disconnecting: ${property}`);
-          // delete clientData[property];
+
         });
 
 

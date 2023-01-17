@@ -1,7 +1,6 @@
 function initialiseDashboardPage() {
 
     taxonomyDataTable = $('#selectedColumn').DataTable({
-      // "data": existingTaxa,
       "columns": [
         { "title": "Name" },
         { "title": "Rank" },
@@ -17,9 +16,6 @@ function initialiseDashboardPage() {
               "searchable": false
           }
       ],
-      //   columnDefs: [
-      // { targets: "_all", "className": "dt-center"}
-      // ],
       "dom": 'Bt',
       "paging" : false,
       "order": [[ 3, "desc" ]],
@@ -54,31 +50,18 @@ function initialiseDashboardPage() {
     updateTaxTable();
     });
 
-    // $('#selectedColumn tbody').on( 'click', 'tr', function () {
-    //         if ( $(this).hasClass('selected') ) {
-    //             $(this).removeClass('selected');
-    //
-    //         }
-    //         else {
-    //
-    //             taxonomyDataTable.$('tr.selected').removeClass('selected');
-    //             $(this).addClass('selected');
-    //
-    //         }
-    //
-    //         //Tree
-    //         var rowTaxa = this.firstChild.textContent
-    //         // pathHighlight(rowTaxa,true,true)
-    //     } );
 
         dashboardAmrTable = $('#dashboardAmrTable').DataTable({
         "columns": [
-          { "title": "Name" , "width": "10%"},
-          { "title": "Antibiotic Resistance Ontology", "width": "2%"},
-          { "title": "Count", "width": "2%"},
-          { "title": "Average Accuracy", "width": "2%"},
+          { "title": "Name"},
+          { "title": "Antibiotic Resistance Ontology"},
+          { "title": "Count"},
+          { "title": "Average Accuracy"},
           { "title": "Walkout Species" },
-          { "title": "Description"}
+          { "title": "Description"},
+          { "title": "Resistance Mechanism"},
+          { "title": "Gene Family"},
+          { "title": "Drug Class"}
         ],
           columnDefs: [
             { targets: "_all", "className": "dt-center"}
@@ -133,7 +116,6 @@ function initialiseDashboardPage() {
 
 amrTableInitiated = false;
 amrListCurrent = [];
-// existingTaxa = [];
 
 resizeOptionsFullscreen();
 initialiseDashboardDonut();
@@ -322,12 +304,10 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
 
   $("#reportGenerator").click(function() {
     var element = $('#response')[0];
-    // setInlineStyles(element);
     var opt = {
       filename:     'MARTi_dashboard.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale:2,
-        // width: 950,
         windowWidth: 800
       },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -340,6 +320,8 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
 $("#taxaTableAndDonutRow").hide();
 $("#taxaTreeRow").hide();
 $("#treeMapRow").hide();
+
+
 
 
 
@@ -356,7 +338,6 @@ var dashboardSampleName;
 var dashboardSampleRunId;
 var newTreeData;
 var dashboardSampleData;
-// var existingTaxa;
 var dashboardAccumulationDataAvailable = false;
 
 var lcaAbundanceDashboard = "0.1";
@@ -364,12 +345,10 @@ var lcaAbundanceDashboardUnformatted = "0.1%";
 
 socket.on('dashboard-meta-response', function(data) {
   dashboardSampleData = data.sample;
-  // $("#dashboardInfoCardYield").text(thousandsSeparators(sampleData.yieldGb.toFixed(3)));
   $("#dashboardSampleName").text(dashboardSampleData.id);
   $("#dashboardInfoCardMartiStatus").text(dashboardSampleData.martiStatus);
   $("#dashboardInfoCardReadsSequenced").text(thousandsSeparators(dashboardSampleData.readsPassBasecall));
   $("#dashboardInfoCardPipeline").text(thousandsSeparators(dashboardSampleData.analysis.pipeline));
-  // $("#dashboardInfoCardPassedFilter").text(thousandsSeparators(sampleData.readsPassedFilter));
   plotReadsDonut(dashboardSampleData);
 
 });
@@ -390,16 +369,13 @@ socket.on('dashboard-tree-response', function(treeData) {
   var target = {};
   dashboardSampleName = treeData.id;
   dashboardSampleRunId = treeData.run;
-  // $("#dashboardSampleName").text(dashboardSampleName);
   root = treeData.treeData;
   treeMapData = JSON.parse(JSON.stringify(root));
   root.x0 = 0;
   root.y0 = 0;
   newTreeData = true;
-  // setTreeRoot(root);
   treeUpdate(root);
   treeMapUpdate(treeMapData);
-  // data = root;
   globDonutData = treeData.treeData2;
 
   globUpdate(globDonutData);
@@ -415,8 +391,6 @@ var readCountAtLevelSum;
 var newLeafNodes;
 
 function globUpdate(data) {
-
-  // donutNodes = d3.layout.tree().nodes(data);
 
 var donutLeaves = [];
 var donutTaxaAtRank = [];
@@ -444,36 +418,7 @@ function taxaAtRank(d) {
 };
 taxaAtRank(data);
 
-// if (taxonomicRankSelected < 10){
-//
-//   donutNodes = donutNodes.filter(function(d){
-//   if (d.rank == taxonomicRankSelected){
-//          return d;
-//        }
-//      });
-// };
-//
-//
-// newLeafNodes = [];
-//
-// donutNodes.forEach(function(d) {
-//   let leafArr = labelNewLeaves(d,taxonomicRankSelected);
-//   newLeafNodes = [...newLeafNodes,...leafArr];
-// });
-//
-// newLeafNodes = [...new Set(newLeafNodes)];
 
-
-//
-// console.log(newLeafNodes);
-//
-// donutNodes.forEach(function(d) {
-//   if (newLeafNodes.includes(d.ncbiID)){
-//     d.donutValue = d.summedValue;
-//   } else {
-//     d.donutValue = d.value;
-//   };
-// });
 
 donutNodes = donutTaxaAtRank;
 
@@ -493,21 +438,9 @@ donutUpdate(returnTopTaxa(donutNodes));
   readCountAtLevelSum = d3.sum(donutNodes, function(d) { return d.donutValue; });
   levelMaxProportion = readCountAtLevelMax/readCountAtLevelSum * 100;
 
-// var nodeNames = []
-// var removeRowList = []
-
-// donutNodes.forEach(function(d) {
-//   nodeNames.push(d.name);
-// });
-
-
-  // existingTaxa = [];
   taxonomyDataTable.clear();
 
 
-
-
-// Add new rows to taxa table
   donutNodes.forEach(function(d) {
 
     if (d.donutValue > 0) {
@@ -522,8 +455,6 @@ donutUpdate(returnTopTaxa(donutNodes));
 
     var rowID = d.name.replace(/ /g, "_").replace(/\./g, "_");
 
-
-     // existingTaxa.push(d.name)
      taxonomyDataTable.row.add([ncbiUrl,d.ncbiRank,thousandsSeparators(d.donutValue),d.proportionClassifiedReads,d.ncbiID]).node().id = rowID;
 
  };
@@ -538,35 +469,13 @@ updateTaxTable()
 };
 
 
-// function excludedLeavesListFunction(d,rank) {
-//           var dLeaves = [];
-//
-//   if (d.rank == rank) {
-//     if (d.parent != null || d.parent != undefined){
-//       if (d.parent.rank == d.rank) {
-//         dLeaves.push(d.ncbiID)
-//       };
-//     };
-//   };
-//         var dLeaves = [...new Set(dLeaves)];
-//         return dLeaves;
-// };
-
-
+var tableOpacityTransitionTime = 100;
 
 function updateTaxTable(){
 
 
 
 tr = d3.select("#selectedColumn tbody").selectAll("tr")
-
-  // tr.select("td.sorting_1")
-  //     // .text(function(d) {return d.value/readCountAtLevelMax * 100; })
-  //     .attr("class", "hidden-text")
-  //     .style("vertical-align", "middle")
-  //     .append("svg")
-  //       .attr("height", 12)
-  //       .style("width", "100%")
 
  tr.select(":nth-child(4)").each(function() {
    if (this.childNodes.length > 1) {
@@ -591,10 +500,8 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
               .select("rect")
                 .attr("height", 12)
                 .style("width", function(d) { return (this.parentNode.parentNode.textContent/levelMaxProportion) * 100 + "%"; })
-                // .style("fill", function(d,i) {return (i < indexOfDonutOtherCategory()) ? color(i % 11) : color((i+1) % 11); })
-                // .style("stroke","black");
                 .on("mousemove", function(d) {
-             toolTipDiv.transition()
+             toolTipDiv.transition("donutSlice")
                 .duration(0)
                 .style("opacity", .95);
 
@@ -603,7 +510,7 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
             "</h5><small class='text-gray-800'>" + this.parentNode.parentNode.parentNode.childNodes[1].textContent +
              "</em></small><hr class='toolTipLine'/>Read count: " + thousandsSeparators(this.parentNode.parentNode.parentNode.childNodes[2].textContent) +
              "<br/>Read %: " + Math.round((this.parentNode.parentNode.textContent*100))/100)
-                .style("left", (d3.event.pageX) + "px")
+                .style("left", (tooltipPos(d3.event.pageX)) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
             })
                 .on("mouseout", function(d) {
@@ -614,8 +521,6 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
 
                 tr.on("mouseover", function(d) {
 
-                            //Table
-                            d3.select(this).select("rect").classed("goldFill", true);
                             var rowTaxa = this.firstChild.textContent;
                             var tempID = taxonomyDataTable.row(this).data()[4];
                             var match = "ncbiID";
@@ -624,17 +529,21 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
                               match = "label";
                             };
 
-                            //Donut
                             d3.select("#dashboardTaxaDonutPlot").select(".slices").selectAll(".slice").filter(function(x) {
+                              var sliceID = x.data.ncbiID;
+                              var sliceMatch = "ncbiID";
+                              if (sliceID == "n/a"){
+                                sliceID = x.data.label;
+                                sliceMatch = "label";
+                              };
 
-                                if (x["data"][match] == tempID) {
-                                    d3.select(this).classed("goldFill", true);
+                                if (tempID != sliceID) {
+                                    d3.select(this).transition("donutSlice").duration(tableOpacityTransitionTime).style("opacity", "0.2");
                                 };
                             });
 
 
                           }).on("mouseout", function(d) {
-                            d3.select(this).select("rect").classed("goldFill", true);
                             var rowTaxa = this.firstChild.textContent;
                             var tempID = taxonomyDataTable.row(this).data()[4];
                             var match = "ncbiID";
@@ -643,18 +552,19 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
                               match = "label";
                             };
 
-                            //Table
-                            d3.select(this).select("rect").classed("goldFill", false);
-                            var rowTaxa = this.firstChild.textContent
 
-                            //Donut
                             d3.select("#dashboardTaxaDonutPlot").select(".slices").selectAll(".slice").filter(function(x) {
+                              var sliceID = x.data.ncbiID;
+                              var sliceMatch = "ncbiID";
+                              if (sliceID == "n/a"){
+                                sliceID = x.data.label;
+                                sliceMatch = "label";
+                              };
 
-                                if (x["data"][match] == tempID) {
-                                    d3.select(this).classed("goldFill", false);
+                                if (tempID != sliceID) {
+                                    d3.select(this).transition("donutSlice").duration(tableOpacityTransitionTime).style("opacity", "1");
                                 };
                             });
-
 
 
                           })
@@ -670,8 +580,7 @@ function updateTaxTableColors() {
 d3.selectAll("#selectedColumn tbody tr td rect").style("fill", function(d) {
   var ind = findWithAttr(sorted,"name",this.parentNode.parentNode.parentNode.firstChild.textContent);
 
-  // return ((ind < indexOfDonutOtherCategory()) || (indexOfDonutOtherCategory() == -1)) ? color(ind % 11) : color((ind+1) % 11);
-  return ((ind < indexOfDonutOtherCategory()) || (indexOfDonutOtherCategory() == -1)) ? color(ind % dashboardColorIndex) : color((ind+1) % dashboardColorIndex);
+  return ((ind < indexOfDonutOtherCategory()) || (indexOfDonutOtherCategory() == -1)) ? dashboardDonutColor(ind % dashboardColorIndex) : dashboardDonutColor((ind+1) % dashboardColorIndex);
 });
 
 };
@@ -693,27 +602,23 @@ function pathHighlight(taxa,selected,toggle){
 
 if(toggle == true){
 
-  //color the links
   treeLine.filter(function(d) {
     if(nodePath.indexOf(d.target) > -1) {
       if (d3.select(this).classed("treeLineToggled")){
         d3.select(this).classed("treeLineToggled", false);
         d3.select(this).classed("treeLineSelected", false);
 
-        //font
         d3.select(thisNode).select("text").style("font-weight", "normal");
 
       }
       else{
         d3.select(this).classed("treeLineToggled", true);
         d3.select(this).classed("treeLineSelected", true);
-        //font
         d3.select(thisNode).select("text").style("font-weight", "bold");
       }
     }
   })
 
-  //color the nodes
   node.filter(function(d) {
   if(nodePath.indexOf(d) > -1) {
     if (d3.select(this).select("circle").classed("treeLineToggled")){
@@ -730,19 +635,19 @@ if(toggle == true){
 }
 else {
 
-  //color the links
+
   treeLine.filter(function(d) {
     if(nodePath.indexOf(d.target) > -1) {
       if (d3.select(this).classed("treeLineToggled")){
         d3.select(this).classed("treeLineSelected", true);
 
-        //font
+
         d3.select(thisNode).select("text").style("font-weight", "bold");
       }
       else{
         d3.select(this).classed("treeLineSelected", selected);
 
-        //font
+
         if(selected == true){
           d3.select(thisNode).select("text").style("font-weight", "bold");
         }
@@ -754,7 +659,6 @@ else {
     }
   })
 
-  //color the nodes
   node.filter(function(d) {
   if(nodePath.indexOf(d) > -1) {
     if (d3.select(this).select("circle").classed("treeLineToggled")){
@@ -829,43 +733,6 @@ function initialisePlotVisibility(chart,visible) {
 
 };
 
-// function initialisePlotVisibility() {
-//
-//   if (Object.keys(dashboardChartVisibility).length != 0) {
-//
-//     for (const [chart,visible] of Object.entries(dashboardChartVisibility)) {
-//         if (visible) {
-//           $("#"+chart+"Row").show();
-//           $("#"+chart+"Add").hide();
-//         } else {
-//           $("#"+chart+"Row").hide();
-//         };
-//
-//         hideAddChartsRow();
-//
-//         $("#"+chart+"Close").click(function() {
-//            dashboardChartVisibility[chart] = false;
-//            $("#"+chart+"Row").hide();
-//            $("#"+chart+"Add").show();
-//            hideAddChartsRow();
-//         });
-//
-//         $("#"+chart+"Add").click(function() {
-//            dashboardChartVisibility[chart] = true;
-//            socket.emit('dashboard-' + chart + '-request');
-//            $("#"+chart+"Row").show();
-//            $("#"+chart+"Add").hide();
-//            $("#addChartOptions, #addChartPlusSign").toggle();
-//            hideAddChartsRow();
-//        });
-//
-//       };
-//
-//   } else {
-//     $(".row > div > #addChart").hide();
-//   };
-// };
-
 
 
 function hideAddChartsRow() {
@@ -885,34 +752,13 @@ function hideAddChartsRow() {
 
 function resizeOptionsFullscreen() {
 
-// new ResizeSensor($('.donut-card'), function(){
-//   if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-// // Display result inside a div element
-// smallScreenDonutViewBox();
-//
-//   }
-//   else {
-// fullScreenDonutViewBox();
-//   }
-//
-// });
+
 
 new ResizeSensor($('#taxaTable'), function(){
 updateTaxTable()
 
 });
 
-
-// new ResizeSensor($('#dendrogram'), function(){
-//   d3.select("#dendrogram svg")
-//       .attr("viewBox", function() {
-//         width = $("#dendrogram").parent().parent().width();
-//         height = $("#dendrogram").parent().parent().height();
-//         x = 0-width/4;
-//         y = 0-height/2;
-//           return x + " " + y + " " + width + " " + height;
-//       })
-// });
 
   $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedDashboardText);
   taxonomicRankSelectedText = taxonomicRankSelectedDashboardText;
@@ -979,13 +825,11 @@ $('#minimumAbundanceButtonDashboard').on( 'click', 'button', function () {
 });
 
 $('#minimumAbundanceButtonDashboard>button').removeClass('active');
-// $('#minimumAbundanceButtonDashboard>button:contains(' + lcaAbundanceDashboardUnformatted + ')').addClass("active");
 
 $("#minimumAbundanceButtonDashboard>button").filter(function() {
     return $(this).text() == lcaAbundanceDashboardUnformatted;
 }).addClass("active");
 
-// Empty chart visibility object when switching samples
 dashboardChartVisibility = {};
 
 $(".row > div > #addChart").hide();
@@ -1012,13 +856,7 @@ $(document).mouseup(function (e) {
      }
  });
 
- // initialisePlotVisibility();
 
-
-
-// treeFullScreen = document.getElementById("taxonomicTreeCard");
-// donutFullScreen = document.getElementById("donutCard");
-// compareRarefactionFullScreen = document.getElementById("compareRarefactionCard");
 fullScreenIconStart();
 
 };
@@ -1078,7 +916,7 @@ socket.on('dashboard-dashboardAmrTable-response', function(data) {
     dashboardChartVisibility["dashboardAmrDonut"] = true;
     initialisePlotVisibility("dashboardAmrDonut",true);
   }
-  // dashboardAmrReponseData = data[Object.keys(data)[0]];
+
     dashboardAmrReponseData = data;
 
   updateAmrTable(dashboardAmrReponseData);
@@ -1139,6 +977,8 @@ function firstAmrTableRun() {
 
 function updateAmrTable(amrData){
 
+  console.log(amrData);
+
   dashboardAmrTableChunkTotal = amrData.currentChunk;
   dashboardAmrTableChunkTime = amrData.chunkTime;
 
@@ -1151,19 +991,14 @@ if(amrTableInitiated == false){
 
 amrTableInitiated = true;
 
-  // var dataAmrList = [];
-  // var removeAmrRowList = [];
-
-
 
 d3.selectAll(".dashboard-amr-chunk-value").text(dashboardAmrTableChunkSelected+"/"+dashboardAmrTableChunkTotal);
 d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashboardAmrTableChunkSelected]);
 
-var csvString = "";
+// var csvString = "";
 
   for (const gene of amrData.geneList){
 
-    // dataAmrList.push(gene.name);
 
       if (gene.count.hasOwnProperty(dashboardAmrTableChunkSelected)) {
         var totalCountAtChunk = gene.count[dashboardAmrTableChunkSelected];
@@ -1218,11 +1053,10 @@ var csvString = "";
 
         gene.speciesCounts.push(species+" ("+speciesCountAtChunk+")");
 
-        if (species.indexOf(' ') >= 0) {
-          line = species + ":" + speciesCountAtChunk + "\n";
-          // console.log(line);
-          csvString += line;
-        }
+        // if (species.indexOf(' ') >= 0) {
+        //   line = species + ":" + speciesCountAtChunk + "\n";
+        //   csvString += line;
+        // }
 
       }
 
@@ -1245,55 +1079,76 @@ var csvString = "";
 
 
 
-  // // Remove amr data if no longer exists
-  // amrListCurrent.forEach(function(d) {
-  //   if (!dataAmrList.includes(d)){
-  //     amrListCurrent = amrListCurrent.filter(function(ele){
-  //        return ele != d;
-  //    })
-  //     dashboardAmrTable.rows().every( function () {
-  //         var row = this.data();
-  //         if (row[0].split(">")[1].split("<")[0] == d) {
-  //           removeAmrRowList.push(this.node());
-  //         }
-  //     } );
-  //   }
-  // });
-  //
-  // // Remove rows from amr table
-  // removeAmrRowList.forEach(function(d) {
-  //     dashboardAmrTable.row(d).remove()
-  //   });
-
 
 
   dashboardAmrTable.clear();
 
-  // Add new rows to amr list table
     for (const gene of amrData.geneList) {
       if (gene.totalGeneCount > 0) {
         var aroNum = gene.cardId.split(":")[1];
         var cardUrl = '<a href="https://card.mcmaster.ca/aro/' + aroNum + '" target="_blank">'+ aroNum +'</a>';
-      // var cardUrl = '<a href="https://card.mcmaster.ca/aro/' + aroNum + '" target="_blank">'+ gene.name +'</a>';
-     //  if (amrListCurrent.includes(gene.name)){
-     //    dashboardAmrTable.rows().every( function () {
-     //        var row = this.data();
-     //        if (row[0] == cardUrl) {
-     //          row[1] = gene.totalGeneCount;
-     //          row[2] = gene.averageAccuracy[dashboardAmrTableChunkSelected];
-     //          row[3] = gene.speciesCounts.join(", ");
-     //          row[4] = gene.description;
-     //          this.invalidate(); // invalidate the data DataTables has cached for this row
-     //        }
-     //    });
-     //  }
-     // else {
+
        amrListCurrent.push(gene.name);
-       dashboardAmrTable.row.add([gene.name,cardUrl,gene.totalGeneCount,gene.averageAccuracyAtChunk,gene.speciesCounts.join(", "),gene.description]);
-     // }
+
+       var resMech = "n/a";
+       var geneFam = "n/a";
+       var drugClass = "n/a";
+       if(gene.hasOwnProperty("shortName")){
+         resMech = gene.resistanceMechanism;
+         geneFam = gene.geneFamily;
+         drugClass = gene.drugClass.replaceAll(";","; ");
+       }
+
+       dashboardAmrTable.row.add([gene.name,cardUrl,gene.totalGeneCount,gene.averageAccuracyAtChunk,gene.speciesCounts.join(", "),gene.description,resMech,geneFam,drugClass]);
     };
    };
 
   dashboardAmrTable.draw(false);
 
+  // $('#dashboardAmrTable tbody>tr').children(':last-child').on('click', function() {
+  //     var rowData = dashboardAmrTable.row( $(this).closest('tr') ).data();
+  //
+  //     var tableAro = rowData[1].split(">")[1].split("<")[0];
+  //
+  //     var thisGeneData;
+  //
+  //   for (const gene of amrData.geneList) {
+  //     var aroNum = gene.cardId.split(":")[1];
+  //     if (tableAro == aroNum){
+  //       thisGeneData = gene;
+  //     }
+  //   };
+  //
+  //     prepareAmrInfoModal(thisGeneData);
+  //
+  //   $('#amrInfoModal').modal('show');
+  //
+  //
+  // });
+
   };
+
+  // function prepareAmrInfoModal(data){
+  //
+  //   var aroNum = data.cardId.split(":")[1];
+  //
+  //   $("#amrInfoGeneName").text(data.name);
+  //   $("#amrInfoAccession").text(aroNum);
+  //
+  //   if(data.hasOwnProperty("shortName")) {
+  //     $("#amrInfoShortName").text(data.shortName);
+  //     $("#amrInfoGeneFamily").text(data.geneFamily);
+  //     $("#amrInfoDrugClass").text(data.drugClass.replaceAll(";","; "));
+  //     $("#amrInfoResMech").text(data.resistanceMechanism);
+  //   } else {
+  //     $("#amrInfoShortName").text("n/a");
+  //     $("#amrInfoGeneFamily").text("n/a");
+  //     $("#amrInfoDrugClass").text("n/a");
+  //     $("#amrInfoResMech").text("n/a");
+  //   }
+  //
+  //   $("#amrInfoDescription").text(data.description);
+  //   var cardUrl = "https://card.mcmaster.ca/aro/" + aroNum;
+  //   $("#amrInfoUrl").html('<a href="' + cardUrl + '" target="_blank">'+ cardUrl +'</a>');
+  //
+  // }

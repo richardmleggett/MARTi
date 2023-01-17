@@ -103,8 +103,8 @@ function plotReadsDonut(data) {
           .style("stroke-width", "0.5")
           .attr("class", "slice");
 
-      slice.transition()
-          .duration(1000)
+      slice.transition("dashboardReadsDonutSliceTrans")
+          .duration(500)
           .attrTween("d", function(d) {
               this._current = this._current || d;
               var interpolate = d3.interpolate(this._current, d);
@@ -174,28 +174,50 @@ function plotReadsDonut(data) {
 
           dashboardReadsDonutLegend.on("mouseover", function(d, i) {
 
+          // slice.filter(function(x) {
+          //     if (x.data.label == d.label) {
+          //         d3.select(this).classed("hoverRect", true);
+          //     };
+          // });
+
           slice.filter(function(x) {
-              if (x.data.label == d.label) {
-                  d3.select(this).classed("hoverRect", true);
+              if (x.data.label != d.label) {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
               };
           });
 
-            d3.select(this).select("g rect").classed("hoverRect", true);
-            // d3.select(this).select("g text").style("font-weight", "bold");
+          dashboardReadsDonutLegend.filter(function(x) {
+              if (x.label != d.label) {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
+              };
+          });
+
+            // d3.select(this).select("g rect").classed("hoverRect", true);
             d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
 
           });
 
           dashboardReadsDonutLegend.on("mouseout", function(d, i) {
 
+          // slice.filter(function(x) {
+          //     if (x.data.label == d.label) {
+          //         d3.select(this).classed("hoverRect", false);
+          //     };
+          // });
+
           slice.filter(function(x) {
-              if (x.data.label == d.label) {
-                  d3.select(this).classed("hoverRect", false);
+              if (x.data.label != d.label) {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
               };
           });
 
-            d3.select(this).select("g rect").classed("hoverRect", false);
-            // d3.select(this).select("g text").style("font-weight", "normal");
+
+          dashboardReadsDonutLegend.filter(function(x) {
+              if (x.label != d.label) {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
+              };
+          });
+            // d3.select(this).select("g rect").classed("hoverRect", false);
             d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
 
           });
@@ -204,13 +226,20 @@ function plotReadsDonut(data) {
 
             dashboardReadsDonutLegend.filter(function(x) {
                 if (d.data.label == x.label) {
-                    d3.select(this).select("rect").classed("hoverRect", true);
+                    // d3.select(this).select("rect").classed("hoverRect", true);
                     // d3.select(this).select("text").style("font-weight", "bold");
                     d3.select(this).select("text").classed("hoverDonutPlotTextHighlight", true);
+                } else {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
                 };
             });
 
-              d3.select(this).classed("hoverRect", true);
+            slice.filter(function(x) {
+                if (x.data.label != d.data.label) {
+                    d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
+                };
+            });
+              // d3.select(this).classed("hoverRect", true);
 
           });
 
@@ -220,13 +249,21 @@ function plotReadsDonut(data) {
 
             dashboardReadsDonutLegend.filter(function(x) {
                 if (d.data.label == x.label) {
-                    d3.select(this).select("rect").classed("hoverRect", false);
+                    // d3.select(this).select("rect").classed("hoverRect", false);
                     // d3.select(this).select("text").style("font-weight", "normal");
                     d3.select(this).select("text").classed("hoverDonutPlotTextHighlight", false);
+                } else {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
                 };
             });
 
-          d3.select(this).classed("hoverRect", false);
+          // d3.select(this).classed("hoverRect", false);
+
+          slice.filter(function(x) {
+              if (x.data.label != d.data.label) {
+                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
+              };
+          });
 
           });
 

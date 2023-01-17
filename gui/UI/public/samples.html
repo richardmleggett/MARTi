@@ -4,9 +4,7 @@
 
 
 <div class="card shadow mb-4">
-  <!-- <div class="card-header">
-    <h6 class="m-0 font-weight-bold text-primary">Sample selector</h6>
-  </div> -->
+
   <div class="card-body text-center text-primary">
     <div class="marti-logo-full mb-4"></div>
     <p class="card-text mb-3">To get MARTi, see <a class="visibleUrl" href="https://marti.readthedocs.io/" target="_blank">Documentation</a></p>
@@ -31,10 +29,8 @@
               <div class="card-body">
 
                 <div id="" class="row justify-content-between px-3 pb-3">
-                  <!-- <div class="col-auto pb-3"> -->
                       <a class=""><i class="fas fa-info-circle"></i> Shift click on column headers for multi-column ordering.</a>
                       <button id="" type="button" class="btn btn-primary compareSamplesInput">Compare samples</button>
-                  <!-- </div> -->
                 </div>
                 <div class="table-responsive">
                   <table class="table table-bordered table-hover" id="samplePageDataTable" width="100%" cellspacing="0">
@@ -50,6 +46,7 @@
                         <th>Status</th>
                         <th>Sequencing date</th>
                         <th>Analysis date</th>
+                        <th>More info</th>
                       </tr>
                     </thead>
                     <tfoot>
@@ -64,11 +61,115 @@
 
                 <div class="modal-footer">
                   <button id="" type="button" class="btn btn-primary compareSamplesInput">Compare samples</button>
-                  <!-- <input id="hiddenDashboardSampleInput" type="file" name="dashboardSample" style="display: none;" /> -->
                 </div>
 
               </div>
             </div>
 
-            <!-- <script src="/js/samples.js" type="text/javascript"></script> -->
-            <!-- <link href="/css/samples.css" rel="stylesheet"> -->
+            <!-- Sample Info Modal -->
+            <div class="modal" id="sampleInfoModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Sample information</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <dl class="row">
+
+                    <div class="col-12 sampleDataHeader"><h5 class="text-dark">Sample</h5></div>
+
+                    <dt class="col-sm-6">Name:</dt>
+                    <dd class="col-sm-6" id="sampleDataSampleName">the_sample_name</dd>
+
+                    <dt class="col-sm-6">Run:</dt>
+                    <dd class="col-sm-6" id="sampleDataRunName">the_run_id</dd>
+
+                    <dt class="col-sm-6">Sequencing date:</dt>
+                    <dd class="col-sm-6" id="sampleDataSequencingDate">10/06/2022</dd>
+
+                    <dt class="col-sm-6">Analysis date:</dt>
+                    <dd class="col-sm-6" id="sampleDataAnalysisDate">11/06/2022</dd>
+
+                    <div class="col-12 sampleDataHeader"><h5 class="text-dark">Summary</h5></div>
+
+                    <dt class="col-sm-6">Yield (Gb):</dt>
+                    <dd class="col-sm-6" id="sampleDataYieldGb">17.5</dd>
+
+                    <dt class="col-sm-6">Basecalled reads:</dt>
+                    <dd class="col-sm-6" id="sampleDataBasecalledReads">127,893</dd>
+
+                    <dt class="col-sm-6">Reads passed filter:</dt>
+                    <dd class="col-sm-6" id="sampleDataReadsPassedFilter">127,893</dd>
+
+                    <dt class="col-sm-6">Reads analysed:</dt>
+                    <dd class="col-sm-6" id="sampleDataReadsAnalysed">127,893</dd>
+
+                    <dt class="col-sm-6">Reads classified:</dt>
+                    <dd class="col-sm-6" id="sampleDataReadsClassified">127,893</dd>
+
+                    <dt class="col-sm-6">Reads unclassified:</dt>
+                    <dd class="col-sm-6" id="sampleDataReadsUnclassified">127,893</dd>
+
+                    <dt class="col-sm-6">Reads with poor alignments:</dt>
+                    <dd class="col-sm-6" id="sampleDataReadsPoorAlignments">127,893</dd>
+
+
+                    <div class="col-12 sampleDataHeader"><h5 class="text-dark">Analysis</h5></div>
+
+                    <dt class="col-sm-6">MARTi Engine version:</dt>
+                    <dd class="col-sm-6" id="sampleDataMartiVersion">v0.9.10</dd>
+
+                    <dt class="col-sm-6">Status:</dt>
+                    <dd class="col-sm-6" id="sampleDataAnalysisStatus">Complete</dd>
+
+                    <dt class="col-sm-6">Pipeline:</dt>
+                    <dd class="col-sm-6" id="sampleDataAnalysisPipeline">BlastLCA</dd>
+
+                    <!-- <div class="col-12 sampleDataHeader"><h5 class="text-dark">Classification</h5></div>
+
+                    <dt class="col-sm-6">Algorithm:</dt>
+                    <dd class="col-sm-6" id="sampleDataClassificationAlgorithm">Blast</dd>
+
+                    <dt class="col-sm-6">Blast version:</dt>
+                    <dd class="col-sm-6" id="sampleDataClassificationAlgorithmVersion">0.0.0</dd>
+
+                    <dt class="col-sm-6">Database:</dt>
+                    <dd class="col-sm-6" id="sampleDataClassificationDatabase">database_name</dd>
+
+                    <dt class="col-sm-6">Database version:</dt>
+                    <dd class="col-sm-6" id="sampleDataClassificationDatabaseVersion">0.0.0</dd>
+
+                    <div class="col-12 sampleDataHeader"><h5 class="text-dark">AMR</h5></div>
+
+                    <dt class="col-sm-6">Algorithm:</dt>
+                    <dd class="col-sm-6" id="sampleDataAmrAlgorithm">Blast</dd>
+
+                    <dt class="col-sm-6">Blast version:</dt>
+                    <dd class="col-sm-6" id="sampleDataAmrAlgorithmVersion">0.0.0</dd>
+
+                    <dt class="col-sm-6">Database:</dt>
+                    <dd class="col-sm-6" id="sampleDataAmrDatabase">database_name</dd>
+
+                    <dt class="col-sm-6">Database version:</dt>
+                    <dd class="col-sm-6" id="sampleDataAmrDatabaseVersion">0.0.0</dd> -->
+
+                    <!-- <dt class="col-sm-3">Nesting</dt>
+                    <dd class="col-sm-9">
+                      <dl class="row">
+                        <dt class="col-sm-4">Nested definition list</dt>
+                        <dd class="col-sm-8">Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc.</dd>
+                      </dl>
+                    </dd> -->
+                  </dl>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+            </div>

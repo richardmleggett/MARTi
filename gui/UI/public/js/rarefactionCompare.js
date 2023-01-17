@@ -37,23 +37,15 @@ function initialiseCompareAccumulation() {
         plotRarefactionCompare(rareData);
       });
 
-      // d3.selectAll("input[name='rareXAxis']").on("change", function(){
-      //   plotRarefactionCompare(rareData);
-      // });
-
-
 
       d3.selectAll("input[name='rareXAxisMax']").on("change", function(){
-        // dashboardTaxaTreeTopNChanged = true;
         rareXAxisMaxChanged = true;
         rareXAxisMaxUserVal = rareXAxisMaxNum;
         plotRarefactionCompare(rareData);
-        // dashboardTaxaTreeTopNChanged = false;
       });
 
       d3.selectAll("input[name='rareXAxisMax']").on("input", function(){
         rareXAxisMaxNum = parseInt(d3.select(this).property("value"));
-        // d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
         d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
       });
 
@@ -71,7 +63,7 @@ function initialiseCompareAccumulation() {
 
 };
 
-// var rareXAxisMaxDefault = 100000;
+
 var rareXAxisMaxNum = 100000;
 var rareXAxisMaxUserVal = 0;
 
@@ -89,10 +81,6 @@ var rc_x = d3.scale.linear()
 var rc_y = d3.scale.linear()
     .range([rareHeight, 0]);
 
-// var rarefactionLineColour = d3.scale.category10();
-// var rarefactionLineColour = d3.scale.ordinal()
-//     .range(['#556b2f', '#a0522d', '#483d8b', '#5f9ea0', '#008000', '#9acd32', '#00008b', '#8b008b', '#ff4500', '#ffa500', '#ffff00',
-//   '#deb887', '#00ff00', '#00fa9a', '#dc143c', '#00ffff', '#00bfff', '#0000ff', '#d8bfd8', '#ff00ff', '#1e90ff', '#db7093','#ff1493', '#ee82ee']);
 
   var rarefactionLineColour = dashboardPlotColorPalette;
 
@@ -106,7 +94,6 @@ var yAxisTicks;
 var rc_yAxis = d3.svg.axis()
     .scale(rc_y)
     .orient("left")
-    // .tickValues(yAxisTicks)
     .tickFormat(d3.format("d"));
 
 
@@ -117,7 +104,6 @@ var rc_yAxis = d3.svg.axis()
       var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
       var dataArray = [];
       var header = [];
-      // header.push('Read count','Taxa count');
       var maxRow = 0;
       for (var sample of data) {
         header.push(sample.name + " read count");
@@ -184,7 +170,6 @@ data.sort(function(a, b){
 
   if ($("input[name='rareLine'][value='monotone']").is(':checked')) {
     compareAccumulationLine = d3.svg.line()
-        // .interpolate("basis")
         .interpolate("monotone")
         .y(function(d) { return rc_y(d.taxaCount); })
         .x(function(d) { return rc_x(d.readCount); });
@@ -194,14 +179,6 @@ data.sort(function(a, b){
           .y(function(d) { return rc_y(d.taxaCount); })
           .x(function(d) { return rc_x(d.readCount); });
     };
-
-    // if ($("input[name='rareXAxis'][value='reads']").is(':checked')) {
-    //   rareXAxis = "reads";
-    //   xAxisLabel = "Reads analysed";
-    // } else {
-    //   rareXAxis = "time";
-    //   xAxisLabel = "Time (min)";
-    // }
 
     rareXAxis = "reads";
     xAxisLabel = "Reads analysed";
@@ -215,7 +192,6 @@ data.sort(function(a, b){
     var multilineData = [];
 
 
-    // for (const [key, value] of Object.entries(data)) {
     for (const sample of data) {
       var sampleIdPlot;
       for (const sampleMetaData of sampleMetaDataArray) {
@@ -235,15 +211,6 @@ data.sort(function(a, b){
         }
       };
 
-      // idList.push(sample.id);
-      // var line = {
-      //     name: sample.id,
-      //     values: sample.data[rareXAxis].map(function(c) {
-      //       return {readCount: c[0], taxaCount: c[1]};
-      //     })
-      // };
-      // line.values.unshift({readCount: 0, taxaCount: 0});
-      // multilineData.push(line);
     };
 
 
@@ -260,22 +227,6 @@ if(!rareXAxisMaxChanged){
   d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
   d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
 };
-
-
-// d3.selectAll("input[name='rareXAxisMax']").property("value",100000);
-
-// if (readCountMax < rareXAxisMaxDefault) {
-//   rareXAxisMaxNum = readCountMax;
-// }
-
-
-// else {
-//   rareXAxisMax = rareXAxisMaxDefault;
-// }
-
-// d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
-// d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
-// d3.selectAll("#rareXAxisMaxNumTotal").text(dashboardTreeLeafCount);
 
 
 for (var line of multilineData) {
@@ -345,9 +296,6 @@ rarefactionCompareSVG.select("g.axis.x")
     .call(rc_xAxis);
 
 
-    // yAxisTicks = rc_y.ticks()
-    // .filter(tick => Number.isInteger(tick));
-
 rarefactionCompareSVG.select("g.axis.y")
     .call(rc_yAxis);
 
@@ -373,38 +321,28 @@ var sampleLineEnter = sampleLine.enter().append("g")
     sampleLine.exit().remove();
 
 
-// sampleLine.append("text")
-//     .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-//     .attr("transform", function(d) { return "translate(" + rc_x(d.value.readCount) + "," + rc_y(d.value.taxaCount) + ")"; })
-//     .attr("x", 3)
-//     .attr("dy", ".35em")
-//     .text(function(d) { return d.name; });
-
 d3.select(".mouse-over-effects").remove();
 
 var mouseG = rarefactionCompareSVG.append("g")
   .attr("class", "mouse-over-effects");
 
-// this is the vertical line
 mouseG.append("path")
   .attr("class", "mouse-line")
   .style("stroke", "black")
   .style("stroke-width", "1px")
-  .style("opacity", "0");
+  .style("visibility", "hidden");
 
-  mouseG.append('svg:rect')
-    .attr('width', rareWidth)
-    .attr('height', rareHeight)
-    .attr('fill', 'none')
-    .attr('pointer-events', 'all');
+  // mouseG.append('svg:rect')
+  //   .attr('width', rareWidth)
+  //   .attr('height', rareHeight)
+  //   .attr('fill', 'none')
+  //   .attr('pointer-events', 'all');
 
 
-// keep a reference to all our lines
 var lines = document.getElementsByClassName('line');
 
   mouseG.selectAll('.mouse-per-line').remove();
 
-// here's a g for each circle and text on the line
 var mousePerLine = mouseG.selectAll('.mouse-per-line')
   .data(multilineData);
 
@@ -415,66 +353,66 @@ var mousePerLineEnter =
   .attr("class", "mouse-per-line");
 
 
-// the circle
 mousePerLineEnter.append("circle")
   .attr("r", 7)
   .style("stroke", function(d) { return rarefactionLineColour(d.name); })
-  // .style("stroke", function(d) {
-  //   return color(d.name);
-  // })
   .style("fill", "none")
   .style("stroke-width", "1px")
-  .style("opacity", "0");
+  // .style("opacity", "0");
+  .style("visibility", "hidden");
 
-// the text
+
+
 mousePerLineEnter.append("text")
-  // .attr("transform", "translate(10,3)")
   .attr("transform", "translate(10,14)")
   .style("font-size", "1.3em");
 
   mousePerLine.exit().remove();
 
-// rect to capture mouse movements
+  mouseG.append('svg:rect')
+    .attr('width', rareWidth)
+    .attr('height', rareHeight)
+    .attr('fill', 'none')
+    .attr('pointer-events', 'all');
+
 mouseG.select('rect')
-  .on('mouseout', function() { // on mouse out hide line, circles and text
+  .on('mouseout', function() {
     d3.select(".mouse-line")
-      .style("opacity", "0");
+      .style("visibility", "hidden");
+    // d3.selectAll(".mouse-per-line")
+    //   .style("visibility", "hidden");
     d3.selectAll(".mouse-per-line circle")
-      .style("opacity", "0");
+      // .style("opacity", "0");
+      .style("visibility", "hidden");
     d3.selectAll(".mouse-per-line text")
-      .style("opacity", "0");
+      .style("visibility", "hidden");
   })
-  .on('mouseover', function() { // on mouse in show line, circles and text
+  .on('mouseover', function() {
     d3.select(".mouse-line")
-      .style("opacity", "1");
+      .style("visibility", "visible");
+    // d3.selectAll(".mouse-per-line")
+    //   .style("visibility", "visible");
     d3.selectAll(".mouse-per-line circle")
-      .style("opacity", "1");
+      // .style("opacity", "1");
+      .style("visibility", "visible");
     d3.selectAll(".mouse-per-line text")
-      .style("opacity", "1");
+      .style("visibility", "visible");
   })
-  .on('mousemove', function() { // mouse moving over canvas
+  .on('mousemove', function() {
     var mouse = d3.mouse(this);
 
-    // move the vertical line
-    // d3.select(".mouse-line")
-    //   .attr("d", function() {
-    //     var d = "M" + mouse[0] + "," + rareHeight;
-    //     d += " " + mouse[0] + "," + 0;
-    //     return d;
-    //   });
 
  var largestX = {readCount: 0, taxaCount: 0};
 
-    // position the circle and text
+
     d3.selectAll(".mouse-per-line")
       .attr("transform", function(d, i) {
 
 
         var xMouse = rc_x.invert(mouse[0]);
-            // bisect = d3.bisector(function(d) { return d.date; }).right;
+
             var bisect = d3.bisector(function(d) { return d.readCount; }).right;
 
-            // idx = bisect(d.values, xDate);
             var iBisect = bisect(d.values, xMouse);
 
             var d0 = d.values[iBisect - 1];
@@ -489,15 +427,12 @@ mouseG.select('rect')
             if (dx.readCount > largestX.readCount) {
               largestX = dx;
             }
+          
 
-
-          // update the text with y value
           d3.select(this).select('text')
-            .text(dx.taxaCount);
+            .text(dx.taxaCount + " (" + thousandsSeparators(dx.readCount) + " reads)");
 
 
-        // return position
-        // return "translate(" + mouse[0] + "," + pos.y +")";
         return "translate(" + rc_x(dx.readCount) + "," + rc_y(dx.taxaCount) +")";
       });
 
@@ -512,15 +447,6 @@ mouseG.select('rect')
   });
 
   rarefactionCompareLegend.on("mouseover", function(d, i) {
-
-      // sampleLine.filter(function(x) {
-      //     if (x.name == d) {
-      //         d3.select(this).classed("hoverRect", true);
-      //     };
-      // });
-      //
-      //   d3.select(this).select("g rect").classed("hoverRect", true);
-      //   d3.select(this).select("g text").style("font-weight", "bold");
 
       sampleLine.filter(function(x) {
           if (x.name == d) {
@@ -541,14 +467,6 @@ mouseG.select('rect')
 
   rarefactionCompareLegend.on("mouseout", function(d, i) {
 
-    // sampleLine.filter(function(x) {
-    //     if (x.name == d) {
-    //         d3.select(this).classed("hoverRect", false);
-    //     };
-    // });
-    //
-    //   d3.select(this).select("g rect").classed("hoverRect", false);
-    //   d3.select(this).select("g text").style("font-weight", "normal");
 
     sampleLine.filter(function(x) {
         if (x.name == d) {

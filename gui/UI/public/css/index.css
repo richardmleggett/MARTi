@@ -6,32 +6,6 @@
   min-height: 100vh;
 }
 
-/* footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-} */
-
-/* .node circle {
-  stroke: #858796;
-  stroke-width: 3.5px;
-  cursor: pointer;
-}
-.node {
-    font: 1.25rem sans-serif;
-}
-.node text {
-  cursor: pointer;
-
-}
-.treeLine {
-    fill: none;
-    stroke-width: 3.5px;
-}
-.treeLineSelected {
-    stroke: #5a5c69 !important;
-    stroke-width: 5px !important;
-} */
 
 
 .toolTip {
@@ -39,15 +13,10 @@
     text-align: center;
     padding: 10px;
     margin: 2px;
-    /* font: 12px sans-serif; */
-    /* background: #ceeaea; */
-    /* background: #36b9cc; */
     background: #f8f9fc;
     border: 0px;
-    /* border-radius: 8px; */
     border-radius: calc(0.35rem - 1px);
     box-shadow: 0.15rem 0.15rem 0.75rem 0 rgba(58, 59, 69, 0.85) !important;
-    /* box-shadow: 5px 10px red; */
     pointer-events: none;
     white-space: nowrap;
 }
@@ -66,30 +35,10 @@ hr.toolTipLine {
   -webkit-box-flex: 1;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
-  /* padding: 1.25rem; */
-
 }
 
 .tree-card {
-  /* max-width: 100%;
-  height: 800px;
-  overflow: hidden; */
 }
-
-/* .cardRangeInputs {
-  overflow: hidden;
-  background-color: #f8f9fc;
-  position: absolute;
-  padding: 10px 30px 10px 30px !important;
-  top: 0;
-  left: 0;
-  color: black;
-  margin: 70px 20px;
-  border-radius: calc(0.35rem - 1px);
-  opacity: 0.9;
-  z-index: 1020;
-} */
-
 
 .radio-dropdown:active {
   color: #3a3b45;
@@ -116,8 +65,6 @@ hr.toolTipLine {
 }
 
 #compareSampleNameList {
-  /* max-height: 200px;
-  overflow-y: scroll; */
 }
 
 #dashboardAmrTableDiv {
@@ -132,44 +79,9 @@ hr.toolTipLine {
   min-width:162px;
 }
 
-/* #dashboardAmrTable>tbody>tr[role="row"]>td:last-child {
-  max-width: 30px;
-  white-space: nowrap;
-  overflow-x: scroll;
-} */
 
-/* input[name="dashboardAmrTableChunk"] {
-  min-width: 200px;
-  display: inline-block;
-} */
-
-/* .range-slider-value {
-display: inline-block;
-position: relative;
-width: 60px;
-color: white;
-line-height: 20px;
-text-align: center;
-border-radius: 3px;
-background: #303030;
-padding: 5px 10px;
-margin-left: 11px;
-}
-
-.range-slider-value:after {
-    position: absolute;
-    top: 8px;
-    left: -7px;
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-right: 7px solid #303030;
-    border-bottom: 7px solid transparent;
-    content: '';
-  } */
 
 .donut-table-hover td {
-  /* color: #858796; */
   background-color: rgba(0, 0, 0, 0.075);
 }
 
@@ -178,14 +90,10 @@ table.dataTable thead th, table.dataTable thead td {
     border-bottom: 1px solid #e3e6f0;
 }
 
-/* #dataTableSearchBox {
-  height: auto;
-} */
 
 .searchContainer {
   height: 1.5em;
   display: inline-flex;
-  /* flex: 1 1 300px; */
   position: relative;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -201,8 +109,6 @@ table.dataTable thead th, table.dataTable thead td {
 .searchBox {
   border: 0;
   height: auto;
-  /* padding: 0.4rem; */
-  /* flex: 1; */
 }
 
 .form-control:focus {
@@ -215,10 +121,6 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 
-
-
-
-/* Donut CSS */
 
 polyline{
 	opacity: .3;
@@ -248,7 +150,7 @@ polyline{
   padding: 0rem 1.25rem;
 }
 
-table.dataTable tbody tr td:nth-child(2) {
+#taxaTable table.dataTable tbody tr td:nth-child(2) {
   text-transform: capitalize;
 }
 
@@ -264,9 +166,6 @@ color:#36B9C9;
 
 }
 
-/* #addChartPlusSign {
-  cursor: pointer;
-} */
 
 .icon-red {
 color:#e74a3b;
@@ -348,16 +247,13 @@ color:#1cc88a;
   fill: black !important;
 }
 
-/* #downloadClassifications {
-  width: 117px;
-} */
 
 #dashboardTreeMapTopNText {
-  min-width: 230px;
+  min-width: 250px;
 }
 
 #dashboardTaxaTreeTopNText {
-  min-width: 235px;
+  min-width: 250px;
 }
 
 .lds-grid {
