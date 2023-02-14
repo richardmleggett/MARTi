@@ -47,7 +47,6 @@ class Observer extends EventEmitter {
       watcher.on('add', async filePath => {
         if (filePath.includes('sample.json')) {
 
-          // Read content of new file
           var fileContent = await fsExtra.readFile(filePath);
 
           fileContent = JSON.parse(fileContent);
@@ -63,8 +62,6 @@ class Observer extends EventEmitter {
           fileContent.sample.pathName = sampleName;
           fileContent.sample.pathRun = runId;
 
-          // emit an event when new file has been added
-          // this.emit('meta-file-added', JSON.parse(fileContent));
           this.emit('meta-file-added', {
             id: sampleName,
             runId: runId,
@@ -77,10 +74,8 @@ class Observer extends EventEmitter {
 
         } else if (filePath.includes('tree_ms')) {
 
-          // Read content of new file
           var fileContent = await fsExtra.readFile(filePath);
 
-          // Temporary code to handle old file format
           fileContent = JSON.parse(fileContent);
 
           var treeData = fileContent.tree;
@@ -93,7 +88,6 @@ class Observer extends EventEmitter {
 
           var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
 
-          // emit an event when new file has been added
           this.emit('tree-file-added', {
             id: sampleName,
             runName: runName,
@@ -107,7 +101,7 @@ class Observer extends EventEmitter {
 
         } else if (filePath.includes('accumulation_')) {
 
-          // Read content of new file
+
           var fileContent = await fsExtra.readFile(filePath);
 
           var split = filePath.split(sep);
@@ -118,7 +112,6 @@ class Observer extends EventEmitter {
 
           var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
 
-          // emit an event when new file has been added
           this.emit('accumulation-file-added', {
             id: sampleName,
             runName: runName,
@@ -132,7 +125,6 @@ class Observer extends EventEmitter {
 
         }else if (filePath.includes('amr.json')) {
 
-          // Read content of new file
           var fileContent = await fsExtra.readFile(filePath);
 
           // Temporary code to handle old file format
@@ -152,7 +144,6 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          // emit an event when new file has been added
           this.emit('amr-file-added', {
             id: sampleName,
             runName: runName,
@@ -169,7 +160,6 @@ class Observer extends EventEmitter {
       watcher.on('change', async filePath => {
         if (filePath.includes('sample.json')) {
 
-          // Read content of new file
           var fileContent = await fsExtra.readFile(filePath);
 
           fileContent = JSON.parse(fileContent);
@@ -186,8 +176,6 @@ class Observer extends EventEmitter {
           fileContent.sample.pathName = sampleName;
           fileContent.sample.pathRun = runId;
 
-          // emit an event when new file has been added
-          // this.emit('meta-file-added', JSON.parse(fileContent));
           this.emit('meta-file-updated', {
             id: sampleName,
             runId: runId,
@@ -202,7 +190,6 @@ class Observer extends EventEmitter {
         } else if (filePath.includes('tree_ms')) {
 
 
-            // Read content of new file
             var fileContent = await fsExtra.readFile(filePath);
 
             // Temporary code to handle old file format
@@ -218,7 +205,6 @@ class Observer extends EventEmitter {
 
             var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
 
-            // emit an event when new file has been added
             this.emit('tree-file-updated', {
               id: sampleName,
               runName: runName,
@@ -233,7 +219,6 @@ class Observer extends EventEmitter {
 
         } else if (filePath.includes('accumulation_')) {
 
-          // Read content of new file
           var fileContent = await fsExtra.readFile(filePath);
 
           var split = filePath.split(sep);
@@ -244,7 +229,6 @@ class Observer extends EventEmitter {
 
           var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
 
-          // emit an event when new file has been added
           this.emit('accumulation-file-updated', {
             id: sampleName,
             runName: runName,
@@ -258,7 +242,7 @@ class Observer extends EventEmitter {
 
 
         } else if (filePath.includes('amr.json')) {
-          // Read content of new file
+
           var fileContent = await fsExtra.readFile(filePath);
 
           // Temporary code to handle old file format
@@ -278,7 +262,6 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          // emit an event when new file has been added
           this.emit('amr-file-updated', {
             id: sampleName,
             runName: runName,

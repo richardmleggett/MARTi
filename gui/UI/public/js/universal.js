@@ -20,8 +20,8 @@ var comparePlotColorPalette = d3.scale.ordinal()
 var dashboardPlotColorPalette = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
 
-var ctColor = d3.scale.ordinal()
-    .range(colourPalettes[selectedPalette]);
+// var ctColor = d3.scale.ordinal()
+//     .range(colourPalettes[selectedPalette]);
 
 var dashboardColorIndex = colourPalettes[selectedPalette].length;
 
@@ -41,66 +41,6 @@ function lcaFormat(lca){
     return output;
 }
 
-// function recursiveSumFunction(d) {
-//             childrenSum = 0;
-//             function recursiveSum(n) {
-//                     if (n.children != null || n.children != undefined){
-//                       n.children.forEach(function(c){
-//                           childrenSum += c.value;
-//                           recursiveSum(c);
-//                         });
-//                     }
-//             };
-//             recursiveSum(d);
-//             summedReadCount = childrenSum + d.value;
-//             return summedReadCount;
-// };
-
-// function newLeafFunction(d,rank) {
-//   var dLeaves = [];
-//   if (rank != 10) {
-//     if (d.children != null || d.children != undefined){
-//       dChildIsLeaf = false;
-//       d.children.forEach(function(c){
-//         if (c.rank <= rank && c.rank != d.rank && c.rank != 0) {
-//           dChildIsLeaf = true;
-//         };
-//       });
-//       if (dChildIsLeaf == false) {
-//         dLeaves.push(d.name)
-//       }
-//     } else {
-//       dLeaves.push(d.name)
-//     }
-// var dLeaves = [...new Set(dLeaves)];
-//
-//   };
-//               return dLeaves;
-// };
-
-// function labelNewLeaves(d,rank) {
-//   var dLeaves = [];
-//   if (rank != 10) {
-//     if (d.children != null || d.children != undefined){
-//       var dChildIsLeaf = false;
-//       console.log(d.name);
-//       d.children.forEach(function(c){
-//         if (c.rank <= rank && c.rank != d.rank && c.rank != 0) {
-//           console.log(c.name);
-//           dChildIsLeaf = true;
-//         };
-//       });
-//       if (dChildIsLeaf == false) {
-//         dLeaves.push(d.ncbiID)
-//       }
-//     } else {
-//       dLeaves.push(d.ncbiID)
-//     }
-// var dLeaves = [...new Set(dLeaves)];
-//
-//   };
-//               return dLeaves;
-// };
 
 function openFullscreen(fullScreen) {
   $(".toolTip").appendTo(fullScreen)
@@ -194,19 +134,23 @@ return time;
 
 
 $(document).ready(function() {
-// $(".topbar #sidebarToggleTop").click(function() {
-//   $(".topbar").toggleClass("topToggled");
-//   $(".fixed-options-bar").toggleClass("topToggled");
-// });
 
-
-// Define the div for the tooltip
 toolTipDiv = d3.select("body").append("div")
     .attr("class", "toolTip")
     .style("opacity", 0)
     .style("color", "black");
 
 });
+
+function tooltipPos(x){
+  var width = toolTipDiv[0][0].clientWidth;
+  var position = x;
+  if (width + x > window.innerWidth){
+    position = x - width;
+  }
+
+  return position;
+};
 
 function isEmpty(obj) {
     for(var key in obj) {
@@ -292,18 +236,25 @@ currentPage = "";
 currentDashboardSampleName = "";
 currentDashboardSampleRun = "";
 compareSampleObjectArray = [];
+var clientProject = null;
 
 socket.on('connect', () => {
   console.log("Connected to server");
+
+  var windowPath = window.location.pathname.split("/");
+
+  if (windowPath[1] == "project"){
+    clientProject = windowPath[2];
+  }
+
   socket.emit("register-request", {
     uuid: uuid,
-    // currentPage: currentPage,
     currentDashboardSampleName: currentDashboardSampleName,
     currentDashboardSampleRun: currentDashboardSampleRun,
-    compareSampleObjectArray: compareSampleObjectArray
+    compareSampleObjectArray: compareSampleObjectArray,
+    clientProject: clientProject
   });
 });
-// initiate the register from the client
 
 
 socket.on('register-response', response => {
@@ -335,7 +286,7 @@ socket.on('sample-removed', function(data){
     activeSidebarIcon($("#samples-item"));
     currentPage = "Samples";
     $("h1#pageTitle").text("Samples");
-    $("#response").load("samples.html", function() {
+    $("#response").load("/samples.html", function() {
     $("html, body").animate({ scrollTop: "0px" });
     initialiseSamplePage();
     });
@@ -349,7 +300,7 @@ socket.on('sample-removed', function(data){
       activeSidebarIcon($("#samples-item"));
       currentPage = "Samples";
       $("h1#pageTitle").text("Samples");
-      $("#response").load("samples.html", function() {
+      $("#response").load("/samples.html", function() {
       $("html, body").animate({ scrollTop: "0px" });
       initialiseSamplePage();
       });

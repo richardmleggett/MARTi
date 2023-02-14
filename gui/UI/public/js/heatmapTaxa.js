@@ -14,7 +14,6 @@ function initialiseHeatmapTaxa() {
   heatmapTaxaSvg = d3.select("#compareHeatmapTaxaPlot")
   .append("svg")
   .attr("id","compareHmTaxa")
-    // .attr("width", widthHeatmapTaxa + marginHeatmapTaxa.left + marginHeatmapTaxa.right)
     .attr("height", heightHeatmapTaxa + marginHeatmapTaxa.top + marginHeatmapTaxa.bottom)
     .attr("width", "100%")
   .append("g")
@@ -59,7 +58,10 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
           if (Math.abs(currentWidthHmTaxa - tempWidthHmTaxa) >= 30) {
               currentWidthHmTaxa = tempWidthHmTaxa;
               plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
-              plotCompareTree(newCompareTree);
+              // if (ctCard) {
+              //   plotCompareTree(newCompareTree);
+              // };
+              // plotCompareTree(newCompareTree);
             }
         }
 
@@ -173,11 +175,6 @@ var marginHeatmapTaxa = {top: 30, right: 80, bottom: 30, left: 60},
 
 function plotHeatmapTaxa(data,taxa) {
 
-// console.log(data);
-// console.log(taxa);
-//
-// console.log(compareTaxaData);
-
 
 for (var [i, sample] of data.entries()){
   sample.index = i;
@@ -284,9 +281,6 @@ var hmTaxaDomain = [];
 var colourPaletteLength = hmTaxaColourPalettes[hmTaxaColourPalette].length;
 
 for (var [i,col] of hmTaxaColourPalettes[hmTaxaColourPalette].entries()) {
-  // if (i == 0){
-  //   continue;
-  // }
   var domainVal = (plotMaxValue/(colourPaletteLength-1))*i;
   hmTaxaDomain.push(domainVal);
 }
@@ -317,19 +311,26 @@ for (var [i,col] of hmTaxaColourPalettes[hmTaxaColourPalette].entries()) {
 
   xScaleHmTaxa.domain(data.map(function(d) {return d.index; }));
 
-
+if (data.length <= 10){
   heatmapTaxaSvg.select("g.x.axis")
     .attr("transform", "translate(0," + heightHeatmapTaxa + ")")
     .call(xAxisHmTaxa)
-    // .selectAll("text")
-    // .text(function(d) { return data[d].sample; })
     .selectAll("text")
       .text(function(d) { var finalText = stackedBarTextShrink(d,data); return finalText })
-      // .attr("dy", "0.5em")
       .attr("dx", "0.5em")
       .attr("transform", "rotate(45)")
       .style("text-anchor", "start");
-
+} else {
+  heatmapTaxaSvg.select("g.x.axis")
+    .attr("transform", "translate(0," + heightHeatmapTaxa + ")")
+    .call(xAxisHmTaxa)
+    .selectAll("text")
+      .text(function(d) { var finalText = stackedBarTextShrink(d,data); return finalText })
+      .attr("dy", "-0.25em")
+      .attr("dx", "0.5em")
+      .attr("transform", "rotate(90)")
+      .style("text-anchor", "start");
+}
 
       var xAxisHeight = heatmapTaxaSvg.select("g.x.axis")[0][0].getBBox().height;
 
@@ -360,7 +361,6 @@ for (var [i,col] of hmTaxaColourPalettes[hmTaxaColourPalette].entries()) {
 
       rectanglesHmTaxa.exit().remove();
 
-      // var minLegendWidth = 150;
       var maxLegendWidth = 250;
 
       var legendWidth = maxLegendWidth;
@@ -395,7 +395,6 @@ if(compareHmTaxaRead == "percent"){
 
 
       hmTaxaLegend.select("rect")
-      // .attr("x", -legendWidth/2)
       .attr("y", 10)
       .attr("width", legendWidth)
       .attr("height", legendHeight)
@@ -410,7 +409,6 @@ if(compareHmTaxaRead == "percent"){
       .attr("transform", "translate(" + (legendWidth - legendTextWidth)/2  + "," + 0 + ")");
 
       hmTaxaLegend.select("g.x.axis")
-      	// .attr("transform", "translate(" + (-legendWidth/2) + "," + (10 + legendHeight) + ")")
         .attr("transform", "translate(" + 0 + "," + (10 + legendHeight) + ")")
       	.call(legendXAxis)
         .selectAll("text")
@@ -429,20 +427,12 @@ if(compareHmTaxaRead == "percent"){
       }
 
       d3.select("#compareHeatmapTaxaPlot>svg")
-      //   .attr("width", widthHeatmapTaxa + marginHeatmapTaxa.left + marginHeatmapTaxa.right)
         .attr("height", heightHeatmapTaxa + xAxisHeight + hmTaxaLegendHeight + marginHeatmapTaxa.top + marginHeatmapTaxa.bottom);
 
 
-        // Mouse Events
-        $(document).ready( function() {
-
-          // rectanglesHmTaxa.on("mouseover", function(d) {
-          //
-          // });
-
           rectanglesHmTaxa.on("mousemove", function(d) {
 
-            toolTipDiv.transition()
+            toolTipDiv.transition("HmTaxaToolTip")
                .duration(0)
                .style("opacity", .95);
 
@@ -451,7 +441,7 @@ if(compareHmTaxaRead == "percent"){
             "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
             "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.taxaReadCount) +
             "<br/>Read %: " + Math.round((d.proportion*10000))/100)
-               .style("left", (d3.event.pageX) + "px")
+               .style("left", (tooltipPos(d3.event.pageX)) + "px")
                .style("top", (d3.event.pageY - 35) + "px");
 
           });
@@ -459,15 +449,12 @@ if(compareHmTaxaRead == "percent"){
           rectanglesHmTaxa.on("mouseout", function(d) {
 
 
-            toolTipDiv.transition()
+            toolTipDiv.transition("HmTaxaToolTip")
                 .duration(50)
                 .style("opacity", 0);
 
           });
 
-
-
-        });
 
 
 };

@@ -1,10 +1,5 @@
 function initialiseComparePage() {
 
-  // stackedBarFullScreen = document.getElementById("stackedBarCard");
-  // compareDonutFullScreen = document.getElementById("compareDonutCard");
-  // compareRarefactionFullScreen = document.getElementById("compareRarefactionCard");
-  //
-  // fullScreenIconStart();
 
   $('#taxonomicLevelSelectorCompare').text(taxonomicRankSelectedCompareText);
   taxonomicRankSelectedText = taxonomicRankSelectedCompareText;
@@ -39,7 +34,6 @@ function initialiseComparePage() {
   });
 
   $('#minimumAbundanceButtonCompare>button').removeClass('active');
-  // $('#minimumAbundanceButtonCompare>button:contains(' + lcaAbundanceCompareUnformatted + ')').addClass("active");
 
   $("#minimumAbundanceButtonCompare>button").filter(function() {
       return $(this).text() == lcaAbundanceCompareUnformatted;
@@ -86,20 +80,6 @@ function initialiseComparePage() {
               $(this).addClass('active');
               sampleOrdertype = this.textContent;
               $('#sampleOrderCompareButton').text(sampleOrdertype);
-              // switch (sampleOrdertype) {
-              //   case "ID asc":
-              //       d3.select("#compareSampleNameList").selectAll("li").sort(d3.ascending)
-              //       break;
-              //   case "ID desc":
-              //       d3.select("#compareSampleNameList").selectAll("li").sort(d3.descending)
-              //       break;
-              //   case "Manual":
-              //       d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
-              //         return manualSortCompareNames.indexOf(a) - manualSortCompareNames.indexOf(b);
-              //       })
-              //       break;
-              //
-              //   }
 
               updateComparePlots(compareTreeDataGlobal);
               plotRarefactionCompare(rareData);
@@ -133,7 +113,6 @@ function initialiseComparePage() {
 
   sortableCompareNames = new Sortable(compareSampleNameList, {
       animation: 150,
-      // handle: ".compareSampleHandle",
       ghostClass: 'compareSampleGhostClass',
       onUpdate: function () {
           manualSortCompareNames = [];
@@ -145,7 +124,6 @@ function initialiseComparePage() {
             runId: runId
           });
         });
-        // manualSortCompareNames = sortableCompareNames.toArray();
 
         $('#sampleOrderCompareMenu a.rank').removeClass('active');
         sampleOrdertype = "Manual";
@@ -330,9 +308,10 @@ updateComparePlots(compareTreeDataGlobal);
   compareStackedBarUnclassified = "show",
   compareDonutUnclassified = "show",
   compareHmTaxaUnclassified = "show";
-  // updateCompareSampleNameList(compareSampleObjectArray);
-  updateCompareSampleNameList(selectedCompareMetaDataArray);
 
+  $(document).ready(function () {
+      updateCompareSampleNameList(selectedCompareMetaDataArray);
+  });
 
 
 d3.select('#downloadCompareAssignments').on('click', function(){
@@ -342,6 +321,37 @@ var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
 var outputFilename = "compare_taxa_assignments_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
 export_as_csv(csvToExport,outputFilename);
 });
+
+
+$('#compareTaxaTreeCard div.card-header:not(dropdown)').on('click', function() {
+
+  var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
+  if (ctIsExpanded == "false") {
+  ctCard = true;
+  // $('#dropdownMenuCompareTaxaTree').removeClass('disabled');
+  buildCompareTree(compareTreeDataGlobal);
+  plotCompareTree(newCompareTree);
+
+  } else {
+  ctCard = false;
+  // $('#dropdownMenuCompareTaxaTree').addClass('disabled');
+  }
+
+
+
+  });
+
+
+  $('#dropdownMenuCompareTaxaTree').on('click',function() {
+    var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
+    if (ctIsExpanded == "false") {
+      $('#dropdownMenuCompareTaxaTree').addClass('disabled');
+    } else {
+    $('#dropdownMenuCompareTaxaTree').removeClass('disabled');
+    }
+});
+
+ctCard = false;
 
 };
 
@@ -368,17 +378,11 @@ var lcaAbundanceCompare = "0.1";
 var taxonomicRankSelectedCompare = 7;
 var taxonomicRankSelectedCompareText = "Genus";
 
-// var taxonomicRankSelectedCompare = 10;
-// var taxonomicRankSelectedCompareText = "All levels";
 
 var compareAccumulationDataAvailable = false;
 
 var opacityTransitionTime = 450;
 
-
-// function topTaxa(node,dataSum) {
-//     return (node.chartValue / dataSum * 100 >= 1) ? node.name : "Other";
-// };
 
 
 
@@ -403,12 +407,6 @@ var opacityTransitionTime = 450;
       for (const [i,taxa] of sorted.entries()) {
 
         var thresholdVal;
-
-        // if(i < thresholdSelected) {
-        //   taxa.threshold = taxa.name;
-        // } else {
-        //   taxa.threshold = "Other";
-        // };
 
         if(i < thresholdSelected) {
           thresholdVal = taxa.ncbiID;
@@ -454,16 +452,9 @@ var opacityTransitionTime = 450;
                   return d.value;
               })
             }
-            //     return d3.sum(v, function(d) {
-            //         return d.value;
-            //     });
             })
             .entries(topTaxaArray)
             .map(function(g) {
-                // return {
-                //     label: g.key,
-                //     value: g.values
-                // }
                 return {
                     label: g.values.thresholdName,
                     value: g.values.value,
@@ -504,12 +495,11 @@ var opacityTransitionTime = 450;
         formattedData[chart].push(sampleDataArray);
 };
 
-// var taxaNameNCBIRankDictCompare;
+
 var compareDonutTopN = 10;
 var compareStackedBarTopN = 10;
 var compareHmTaxaTopN = 10;
 var formattedData = {};
-// var tempCompareTaxa = {};
 
 
 var taxaTotalCounts = {"donut":[],"stackedBar":[]};
@@ -525,11 +515,7 @@ compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
     } else {
 
       formattedData = {"donut":[],"stackedBar":[],"hmTaxa":[]};
-      // tempCompareTaxa = {"donut":[],"stackedBar":[]};
-      // taxaNameNCBIRankDictCompare = {};
       taxaTotalCounts = {"donut":[],"stackedBar":[],"hmTaxa":[]};
-
-// Object.keys(compareSampleData).forEach(function(sample) {
 
 
 for (var sample of compareSampleData) {
@@ -579,37 +565,6 @@ for (var sampleData of selectedCompareMetaDataArray) {
   taxaAtRank(data);
 
 
-
-
-
-    // var thisSampleTree = d3.layout.tree().nodes(data);
-
-
-    // if(taxonomicRankSelectedCompare < 10) {
-    //   var thisSampleTree = thisSampleTree.filter(function(d){
-    //     if (d.rank == taxonomicRankSelectedCompare){
-    //         return d;
-    //      }
-    //   });
-    // };
-
-    // var newLeafNodesArray = [];
-    //
-    // thisSampleTree.forEach(function(d) {
-    //   let leafArr = labelNewLeaves(d,taxonomicRankSelectedCompare);
-    //   newLeafNodesArray = [...newLeafNodesArray,...leafArr];
-    // });
-    //
-    // newLeafNodesArray = [...new Set(newLeafNodesArray)];
-    //
-    // thisSampleTree.forEach(function(d) {
-    //   if (newLeafNodesArray.includes(d.ncbiID)){
-    //     d.chartValue = d.summedValue;
-    //   } else {
-    //     d.chartValue = d.value;
-    //   };
-    // });
-
     thisSampleTree = sampleTaxaAtRank;
 
     thisSampleTree.forEach(function(d) {
@@ -630,8 +585,6 @@ for (var sampleData of selectedCompareMetaDataArray) {
 
   };
 
-// var donutCompareData = formattedData["donut"];
-// var stackedBarCompareData = formattedData["stackedBar"];
 
 donutCompareData = [];
 stackedBarCompareData = [];
@@ -642,9 +595,6 @@ sortCompareNameArray = [];
 if (sampleOrdertype == "Manual" && manualSortCompareNames.length !== 0) {
   sortCompareNameArray = manualSortCompareNames;
 } else if (sampleOrdertype == "ID asc"){
-//   sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
-//    return d3.ascending(x.name, y.name);
-// });
 selectedCompareMetaDataArray.sort(function(x, y){
  return d3.ascending(x.id, y.id);
 })
@@ -655,9 +605,7 @@ selectedCompareMetaDataArray.sort(function(x, y){
     });
   };
 } else if (sampleOrdertype == "ID desc"){
-//   sortCompareNameArray = compareSampleObjectArray.sort(function(x, y){
-//    return d3.descending(x.name, y.name);
-// });
+
 
 selectedCompareMetaDataArray.sort(function(x, y){
  return d3.descending(x.id, y.id);
@@ -669,28 +617,60 @@ selectedCompareMetaDataArray.sort(function(x, y){
     });
   };
 
-} else if (sampleOrdertype == "Sequencing date asc"){
-  selectedCompareMetaDataArray.sort(function(x, y){
-   return d3.ascending(x.sequencingDate, y.sequencingDate);
+} else if (sampleOrdertype == "Run asc"){
+selectedCompareMetaDataArray.sort(function(x, y){
+  var result = d3.ascending(x.runId, y.runId);
+  if (result === 0) {
+    result = d3.ascending(x.id, x.id);
+  }
+return result;
+ // return d3.ascending(x.runId, y.runId);
 })
-    for (const sample of selectedCompareMetaDataArray) {
-      // sortCompareNameArray.push(sample.id);
-      sortCompareNameArray.push({
-        name: sample.id,
-        runId: sample.runId
-      });
-    };
-} else if (sampleOrdertype == "Sequencing date desc"){
-  selectedCompareMetaDataArray.sort(function(x, y){
-   return d3.descending(x.sequencingDate, y.sequencingDate);
+  for (const sample of selectedCompareMetaDataArray) {
+    sortCompareNameArray.push({
+      name: sample.id,
+      runId: sample.runId
+    });
+  };
+} else if (sampleOrdertype == "Run desc"){
+selectedCompareMetaDataArray.sort(function(x, y){
+  var result = d3.descending(x.runId, y.runId);
+  if (result === 0) {
+    result = d3.descending(x.id, x.id);
+  }
+return result;
+ // return d3.descending(x.runId, y.runId);
 })
-    for (const sample of selectedCompareMetaDataArray) {
-      sortCompareNameArray.push({
-        name: sample.id,
-        runId: sample.runId
-      });
-    };
-} else if (sampleOrdertype == "Yield asc"){
+  for (const sample of selectedCompareMetaDataArray) {
+    sortCompareNameArray.push({
+      name: sample.id,
+      runId: sample.runId
+    });
+  };
+
+}
+// else if (sampleOrdertype == "Sequencing date asc"){
+//   selectedCompareMetaDataArray.sort(function(x, y){
+//    return d3.ascending(x.sequencingDate, y.sequencingDate);
+// })
+//     for (const sample of selectedCompareMetaDataArray) {
+//       sortCompareNameArray.push({
+//         name: sample.id,
+//         runId: sample.runId
+//       });
+//     };
+// } else if (sampleOrdertype == "Sequencing date desc"){
+//   selectedCompareMetaDataArray.sort(function(x, y){
+//    return d3.descending(x.sequencingDate, y.sequencingDate);
+// })
+//     for (const sample of selectedCompareMetaDataArray) {
+//       sortCompareNameArray.push({
+//         name: sample.id,
+//         runId: sample.runId
+//       });
+//     };
+// }
+else if (sampleOrdertype == "Yield asc"){
   selectedCompareMetaDataArray.sort(function(x, y){
    return d3.ascending(x.yieldBases, y.yieldBases);
 })
@@ -731,7 +711,6 @@ selectedCompareMetaDataArray.sort(function(x, y){
       });
     };
 } else {
-  // sortCompareNameArray = compareSampleObjectArray;
   selectedCompareMetaDataArray.sort(function(x, y){
    return d3.ascending(x.id, y.id);
   })
@@ -743,9 +722,6 @@ selectedCompareMetaDataArray.sort(function(x, y){
     };
 }
 
-// d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
-//   return sortCompareNameArray.indexOf(a) - sortCompareNameArray.indexOf(b);
-// })
 
 d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
   return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
@@ -771,15 +747,8 @@ for (const sampleData of formattedData.hmTaxa) {
     hmTaxaData.push(sampleData);
   }
 }
-  // var indexOfSample = findWithAttr(formattedData["donut"], "sample", sample.name);
-  // if (indexOfSample != -1) {
-  //   donutCompareData.push(formattedData["donut"][indexOfSample]);
-  //   stackedBarCompareData.push(formattedData["stackedBar"][indexOfSample]);
-  // }
 }
 
-// donutCompareTaxa = [...new Set(tempCompareTaxa["donut"])];
-// stackedBarCompareTaxa = [...new Set(tempCompareTaxa["stackedBar"])];
 
 
 
@@ -821,14 +790,24 @@ plotCompareDonut(donutCompareData,donutCompareTaxa);
 
 plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
 
-// if (newCompareTreeData == true) {
-  buildCompareTree(compareSampleData)
-// };
 
 
-plotCompareTree(newCompareTree);
 
-// plotHeatmapTaxa(stackedBarCompareData,hmTaxaTaxa);
+  if (sortCompareNameArray.length <= 6){
+    ctCard = true;
+
+    var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
+    if (ctIsExpanded == "false") {
+      $('#compareTaxaTreeCard div.card-header:not(dropdown)').trigger('click');
+    }
+
+  }
+  if (ctCard) {
+    buildCompareTree(compareSampleData)
+    plotCompareTree(newCompareTree);
+  };
+
+
 
       };
 
@@ -836,8 +815,6 @@ plotCompareTree(newCompareTree);
 
 
 function updateCompareSampleNameList(names) {
-  // names.sort();
-
 
   var compareSampleList = d3.select("#compareSampleNameList").selectAll("li")
       .data(names);
@@ -848,9 +825,8 @@ function updateCompareSampleNameList(names) {
             return d.id;})
           .attr("data-run", function(d) {
               return d.runId;})
-          .text(function(d) {return d.id;});
-          // .append("span").attr("class","fa-li")
-          // .append("i").attr("class","fas fa-arrows-alt-v");
+          // .text(function(d) {return d.id + " - " + d.runId;});
+          .html(function(d) {return "<a>" + d.id + "</a><br>" + "<a class='compareSampleNameListRun'>" + d.runId + "</a>";});
 
       compareSampleList.exit()
           .remove();
@@ -869,7 +845,7 @@ function updateCompareSampleNameList(names) {
               activeSidebarIcon($("#dashboard-item"));
               currentPage = "Dashboard";
               $("h1#pageTitle").text("Dashboard");
-              $("#response").load("dashboard.html", function(){
+              $("#response").load("/dashboard.html", function(){
                 initialiseDashboardPage();
               });
 
@@ -886,10 +862,6 @@ socket.on('compare-tree-response', function(treeData) {
   newCompareTreeData = true;
   updateComparePlots(compareTreeDataGlobal);
   newCompareTreeData = false;
-  // socket.emit('current-compare-samples-request',{
-  //   clientId: uuid
-  // });
-  // updateCompareSampleNameList(compareSampleObjectArray);
 
 });
 
@@ -902,17 +874,6 @@ socket.on('tree-update-available', request => {
   };
 });
 
-
-
-
-
-// socket.on('compareSampleDataServer', function(compareSampleData) {
-//
-//   if ($('#stackedBarCard').length) {
-//   compareTreeDataGlobal = compareSampleData.compareSampleData;
-//   updateComparePlots(compareTreeDataGlobal);
-//   };
-// });
 
 socket.on('compare-accumulation-response', function(data) {
 
@@ -937,27 +898,21 @@ socket.on('accumulation-update-available', request => {
   };
 });
 
-// socket.on('rarefactionData', function(data) {
-//
-//   if ($('#stackedBarCard').length) {
-//   rareData = data;
-//   plotRarefactionCompare(rareData);
-//
-//   };
-// });
 
   var newCompareTree = {};
 
+socket.on('compare-amr-response', function(amrData) {
+  updateAmrPlots(amrData);
+});
+
 function buildCompareTree(data){
 
-console.log("Build new compare tree")
   newCompareTree = {};
   var newCompareTreeTaxa = [];
   compareTreeSampleNodes = {};
 
     for (var sample of data) {
       var tree = sample.tree;
-      // var sampleRun = sample.id + "_" + sample.runId;
 
       var sampleRun = sample.jsonId + "_" + sample.jsonRunId;
       var nodes = d3.layout.tree().nodes(tree);
@@ -1049,8 +1004,6 @@ console.log("Build new compare tree")
           function recursiveMissingValueSet(d) {
 
             for (var sample of sortCompareNameArray) {
-              // var sampleRun = sample.name + "_" + sample.runId;
-
 
               if (d.values.findIndex(e => e.sampleId == sample.name && e.runId == sample.runId) == -1) {
                 d.values.push({sampleId: sample.name, runId: sample.runId, readCount:0, summedCount:0, proportion:0, summedProportion:0});
@@ -1067,3 +1020,143 @@ console.log("Build new compare tree")
           recursiveMissingValueSet(newCompareTree);
 
 }
+
+function requestCompareAmrData(){
+
+  socket.emit('compare-amr-request',{
+    clientId: uuid
+  });
+
+}
+
+var compareAmrData;
+
+function updateAmrPlots(amrData){
+  compareAmrData = {};
+
+  for (var sample of amrData) {
+
+    var id;
+    var runId;
+
+  for (var sampleData of selectedCompareMetaDataArray) {
+    if (sample.id == sampleData.pathName && sample.runId == sampleData.pathRun) {
+      id = sampleData.id;
+      runId = sampleData.runId;
+    }
+  };
+
+
+    for (const gene of sample.data.geneList) {
+      var aroNum = gene.cardId.split(":")[1];
+
+      if (!compareAmrData.hasOwnProperty(aroNum)){
+        compareAmrData[aroNum] = {
+          name: gene.name,
+          resMech: gene.resistanceMechanism,
+          geneFam: gene.geneFamily,
+          drugClass: gene.drugClass,
+          values: {}
+        };
+      };
+
+
+        var highestChunk = 0;
+        for (const [chunk, count] of Object.entries(gene.count)) {
+          if (chunk > highestChunk) {
+            var highestChunk = chunk;
+          }
+        }
+        var totalCountAtChunk = gene.count[highestChunk];
+
+        var speciesCounts = [];
+
+        for (const [species, counts] of Object.entries(gene.species)) {
+          var speciesCountAtChunk;
+          if (counts.hasOwnProperty(highestChunk)) {
+            speciesCountAtChunk = counts[highestChunk];
+          } else {
+            var highestSpeciesChunk = 0;
+            for (const [chunk, count] of Object.entries(counts)) {
+              if (chunk > highestSpeciesChunk) {
+                var highestSpeciesChunk = chunk;
+              }
+            }
+            speciesCountAtChunk = counts[highestSpeciesChunk];
+          }
+
+            speciesCounts.push(species+" ("+speciesCountAtChunk+")");
+        }
+
+        speciesCounts.sort(function(a, b) {
+          var regExp = /\(([^)]*)\)[^(]*$/;
+          var countA = parseInt(regExp.exec(a)[1]);
+          var countB = parseInt(regExp.exec(b)[1]);
+          if (countA > countB) {
+            return -1;
+          } else if (countA < countB) {
+            return 1;
+          }
+          return 0;
+        });
+
+
+      assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'count'], totalCountAtChunk);
+      assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'species'], speciesCounts);
+    };
+  }
+
+
+
+var csvToExport = generateCompareAmrCsv(compareAmrData);
+var date = getDate() + "_" + getTime();
+var outputFilename = "compare_amr_" + date;
+export_as_csv(csvToExport,outputFilename);
+
+}
+
+function generateCompareAmrCsv(data) {
+  var dataArray = [];
+  var header = [];
+  header.push('Name','ARO','Resistance mechanism','Gene family','Drug class');
+  for (var sample of sortCompareNameArray) {
+    var sampleNameRunCount = sample.name + " (" + sample.runId + ") Read count";
+    header.push(sampleNameRunCount);
+  };
+  for (var sample of sortCompareNameArray) {
+    var sampleNameRunSpecies = sample.name + " (" + sample.runId + ") Walkout species";
+    header.push(sampleNameRunSpecies);
+  };
+  dataArray.push(header);
+  for (const [key, value] of Object.entries(data)) {
+    if (key !== "n/a") {
+      var keyRow = [];
+      keyRow.push(value.name);
+      keyRow.push(key);
+      keyRow.push(value.resMech);
+      keyRow.push(value.geneFam);
+      keyRow.push(value.drugClass);
+      for (var sample of sortCompareNameArray) {
+        if (checkNested(value.values, sample.runId, sample.name)) {
+          keyRow.push((value["values"][sample.runId][sample.name]['count']).toString());
+        } else {
+          keyRow.push('0');
+        };
+      };
+      for (var sample of sortCompareNameArray) {
+        if (checkNested(value.values, sample.runId, sample.name)) {
+          keyRow.push((value["values"][sample.runId][sample.name]['species'].join('; ')));
+        } else {
+          keyRow.push('n/a');
+        };
+      };
+      dataArray.push(keyRow);
+    };
+  };
+  var csvString = '';
+  dataArray.forEach(function(infoArray, index) {
+    var dataString = infoArray.join(',');
+    csvString += index < dataArray.length-1 ? dataString + '\n' : dataString;
+  });
+  return csvString;
+};

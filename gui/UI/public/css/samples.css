@@ -45,6 +45,45 @@
   color:#000000;
 }
 
+#samplePageDataTable td.moreInfo {
+  cursor: pointer;
+  text-align:center;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size:1.5rem;
+}
+
+#samplePageDataTable td.moreInfo::before {
+
+  content: "\f05a";
+
+}
+
+#samplePageDataTable td.moreInfo:hover {
+
+  background-color: #f6c23e;
+  color: black;
+
+}
+
+#sampleInfoModal dt {
+  font-weight: 400;
+  text-align: right;
+}
+
+#sampleInfoModal dd {
+  margin-bottom: 0rem;
+}
+
+.sampleDataHeader {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.sampleDataHeader h5 {
+  margin-bottom: 0rem !important;
+}
+
 table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before, thead th.select-checkbox:before {
     content: ' ';
     margin-top: -6px;

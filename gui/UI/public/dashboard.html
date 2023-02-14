@@ -83,12 +83,12 @@
             <div class="row">
               <div class="col-md-6 text-center">
                 <h5 class="">Sample ID</h5>
-                <h3 class="text-primary" id="dashboardSampleName"></h3>
+                <h4 class="text-primary" id="dashboardSampleName"></h4>
               </div>
 
               <div class="col-md-6 text-center">
                 <h5 class="">Analysis status</h5>
-                <h3 class="text-primary" id="dashboardInfoCardMartiStatus"></h3>
+                <h4 class="text-primary" id="dashboardInfoCardMartiStatus"></h4>
               </div>
 
             </div>
@@ -100,12 +100,12 @@
 
               <div class="col-md-6 text-center">
                 <h5 class="">Pipeline</h5>
-                <h3 class="text-primary" id="dashboardInfoCardPipeline"></h3>
+                <h4 class="text-primary" id="dashboardInfoCardPipeline"></h4>
               </div>
 
               <div class="col-md-6 text-center">
                 <h5 class="">Basecalled reads</h5>
-                <h3 class="text-primary" id="dashboardInfoCardReadsSequenced"></h3>
+                <h4 class="text-primary" id="dashboardInfoCardReadsSequenced"></h4>
               </div>
 
             </div>
@@ -417,9 +417,9 @@
         <div class="col-sm-3 my-auto d-flex">
         <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
         </div>
-        <div class="col-sm-5 my-auto d-flex">
-        <!-- <a class="dashboard-taxa-tree-read-perc">N</a>% of analysed reads represented. -->
-        </div>
+        <!-- <div class="col-sm-5 my-auto d-flex">
+        <a class="dashboard-taxa-tree-read-perc">N</a>% of analysed reads represented.
+        </div> -->
       </div>
     </form>
   <!-- </div> -->
@@ -474,13 +474,13 @@
             </div> -->
             <div>
               <label> Unclassified node:</label>
-              <label><input type="radio" name="dashboardTreeMapUnclassified" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTreeMapUnclassified" value="hide" >  Hide</label>
+              <label><input type="radio" name="dashboardTreeMapUnclassified" value="show" >  Show</label>
+              <label><input type="radio" name="dashboardTreeMapUnclassified" value="hide" checked>  Hide</label>
             </div>
             <div>
               <label> Root node:</label>
-              <label><input type="radio" name="dashboardTreeMapRoot" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTreeMapRoot" value="hide" >  Hide</label>
+              <label><input type="radio" name="dashboardTreeMapRoot" value="show" >  Show</label>
+              <label><input type="radio" name="dashboardTreeMapRoot" value="hide" checked>  Hide</label>
             </div>
             <div>
               <label> Higher taxa node:</label>
@@ -842,4 +842,54 @@
 
 </div>
 
+</div>
+
+<!-- Sample Info Modal -->
+<div class="modal" id="amrInfoModal" tabindex="-1" role="dialog">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">AMR gene information</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <dl class="row">
+
+        <!-- <div class="col-12 sampleDataHeader mb-3"><h5 id="amrInfoGeneName" class="text-dark">Gene name</h5></div> -->
+
+        <dt class="col-sm-4">Name:</dt>
+        <dd class="col-sm-8" id="amrInfoGeneName">name</dd>
+
+        <dt class="col-sm-4">Accession:</dt>
+        <dd class="col-sm-8" id="amrInfoAccession">accession</dd>
+
+        <dt class="col-sm-4">Short name:</dt>
+        <dd class="col-sm-8" id="amrInfoShortName">short name</dd>
+        <hr class="col-sm-10">
+        <dt class="col-sm-4">Description:</dt>
+        <dd class="col-sm-8" id="amrInfoDescription">description</dd>
+        <hr class="col-sm-10">
+        <dt class="col-sm-4">Gene family:</dt>
+        <dd class="col-sm-8" id="amrInfoGeneFamily">n/a</dd>
+
+        <dt class="col-sm-4">Drug class:</dt>
+        <dd class="col-sm-8" id="amrInfoDrugClass">n/a</dd>
+
+        <dt class="col-sm-4">Resistance mechanism:</dt>
+        <dd class="col-sm-8" id="amrInfoResMech">n/a</dd>
+
+        <dt class="col-sm-4">URL:</dt>
+        <dd class="col-sm-8" id="amrInfoUrl">url</dd>
+
+      </dl>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
 </div>

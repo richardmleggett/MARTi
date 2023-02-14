@@ -130,8 +130,6 @@ d3.select("#compareTreeCousinSeparationNum").text(ctCousinSeparation);
 
 
 var compareTreeTopN;
-// var ctHeight;
-// var ctWidth;
 var ctVerticalSeparation;
 var ctHorizontalSeparation;
 var ctHorizontalPath,
@@ -139,15 +137,14 @@ ctSiblingSeparation,
 ctCousinSeparation,
 compareTreeValueScale;
 
+var ctCard = false;
+
+var ctColor;
+
 var compareTreeMargin = {top: 20, right: 120, bottom: 20, left: 120}
 
 
 var durationCompareTree = 750;
-
-
-// var diagonal = d3.svg.diagonal()
-// 	.projection(function(d) { return [d.y, d.x]; });
-
 
   var maxCircleSize = 9;
   var minCircleSize = 3;
@@ -167,25 +164,20 @@ var ctPie = d3.layout.pie()
   })
   .sort(null);
 
-// var ctColor = d3.scale.ordinal()
-//   .range(['#40bc96', '#fabd57', '#f5696d']);
 
-// var ctColor = d3.scale.ordinal()
-//     .range(colourPalettes[selectedPalette]);
-
-function drawPie(d) {
-
-
-  d3.select(this)
-    .selectAll('path')
-    .data(ctPie(d.values))
-    .enter()
-    .append('path')
-    .attr('d', ctArc)
-    .attr('fill', function(d, i) {
-      return ctColor(d.data.sampleId + "_" + d.data.runId);
-    });
-}
+// function drawPie(d) {
+//
+//
+//   d3.select(this)
+//     .selectAll('path')
+//     .data(ctPie(d.values))
+//     .enter()
+//     .append('path')
+//     .attr('d', ctArc)
+//     .attr('fill', function(d, i) {
+//       return ctColor(d.data.sampleId + "_" + d.data.runId);
+//     });
+// }
 
 var ctRectHeight = 34;
 var ctRectWidth = 46;
@@ -197,46 +189,26 @@ var ctY = d3.scale.linear()
   .range([ctRectHeight, 0]);
 
 function drawBars(d) {
-  // var maxCount = 0;
-  // var valToPlot;
-  // if (d.hasOwnProperty("children")) {
-  //   valToPlot = "readCount";
-  // } else {
-  //   valToPlot = "summedCount";
-  // }
-  // for (var sample of d.values) {
-  //   var value = sample[valToPlot];
-  //   if (value > maxCount) {
-  //     maxCount = value;
-  //   }
-  // }
-  //
-  // ctY.domain([0, maxCount]);
 
-
-
-  d3.select(this)
-    .selectAll('.ctBarStroke')
-    .data(d.values)
-    .enter()
-    .append('rect')
-    .attr("class", "ctBarStroke")
-    .attr('fill', 'white')
-    .attr('stroke', '#b5b5b5');
 
   d3.select(this)
     .selectAll('.ctbar')
     .data(d.values)
     .enter()
     .append('rect')
-    .attr("class", "ctbar")
-    // .attr("x", function(d) {return ctX(d.sampleId + "_" + d.runId); })
-    // .attr("width", ctX.rangeBand())
-    // .attr("y", function(d) { return ctY(d[valToPlot])-ctRectHeight/2; })
-    // .attr("height", function(d) { return ctRectHeight - ctY(d[valToPlot]); })
-    // .attr('fill', function(d, i) {
-    //   return ctColor(d.sampleId + "_" + d.runId);
-    // });
+    .attr("class", "ctbar");
+
+    d3.select(this)
+      .selectAll('.ctBarStroke')
+      .data(d.values)
+      .enter()
+      .append('rect')
+      .attr("class", "ctBarStroke")
+      .attr('fill', 'white')
+      .attr('fill-opacity', '0')
+      .attr('stroke', '#b5b5b5');
+
+
 }
 
 if(compareHmTaxaRead == "percent") {
@@ -307,10 +279,8 @@ function updateBars(d) {
     .selectAll('.ctbar')
     .attr("x", function(d) {return Math.round(ctX(d.sampleId + "_" + d.runId)); })
     .attr("width", Math.round(ctX.rangeBand()))
-    // .attr("y", function(d) { return ctY(valueScale(d[valToPlot]))-ctRectHeight/2; })
     .attr("y", function(d,i) { return ctY(valueScale(thisData[i][valToPlot]))-ctRectHeight/2; })
     .attr("height", function(d,i) {
-      // return ctRectHeight - ctY(valueScale(d[valToPlot])); })
       return ctRectHeight - ctY(valueScale(thisData[i][valToPlot])); })
     .attr('fill', function(d, i) {
       return ctColor(d.sampleId + "_" + d.runId);
@@ -323,34 +293,10 @@ function updateBars(d) {
 function plotCompareTree(source) {
 
 
+  ctColor = d3.scale.ordinal()
+        .range(colourPalettes[selectedPalette]);
 
-  // if(newCompareTreeData == true) {
-  //   console.log("New data");
     preNodesCompare = d3.layout.tree().nodes(newCompareTree).reverse();
-
-  // }
-
-  // console.log("newCompareTreeData: " + newCompareTreeData.toString());
-  // console.log("taxonomicRankChangedCompare: " + taxonomicRankChangedCompare.toString());
-
-
-  // if (newCompareTreeData == true || taxonomicRankChangedCompare == true) {
-  //   resetTreeBranches(newCompareTree);
-  //   taxonomicRankFilt(newCompareTree,"compare",taxonomicRankSelectedCompare);
-  // };
-
-  // if (newCompareTreeData == true || taxonomicRankChangedCompare == true) {
-  //
-  //   resetTreeBranches(newCompareTree);
-  //   taxonomicRankFilt(newCompareTree,"compare",taxonomicRankSelectedCompare);
-  //
-  //   compareTreeLeafCount = treeLeafCounts.compare;
-  //   updateCompareTreeTopNMax();
-  //   topNLeavesPerSample(newCompareTree,compareTreeTopN);
-  // } else if (compareTreeTopNChanged == true){
-  //   resetTreeBranches(newCompareTree);
-  //   topNLeavesPerSample(newCompareTree,compareTreeTopN);
-  // };
 
 
   if (newCompareTreeData == true || taxonomicRankChangedCompare == true) {
@@ -365,8 +311,6 @@ function plotCompareTree(source) {
     resetTreeBranches(newCompareTree);
     taxonomicRankFilt(newCompareTree,"compare",taxonomicRankSelectedCompare);
 
-    // compareTreeLeafCount = treeLeafCounts.compare;
-    // updateCompareTreeTopNMax();
     topNLeavesPerSample(newCompareTree,compareTreeTopN);
   };
 
@@ -375,7 +319,6 @@ function plotCompareTree(source) {
   duration = 0;
   };
 
-// console.log(newCompareTree);
 
   ctX = d3.scale.ordinal()
     .rangeBands([0, ctRectWidth]);
@@ -384,16 +327,12 @@ function plotCompareTree(source) {
   ctY = d3.scale.linear()
     .range([ctRectHeight, 0]);
 
-    // ctY = d3.scale.linear()
-    //   .range([0, ctRectHeight]);
-
     ctX.domain(sortCompareNameArray.map(function(d) { return d.name + "_" + d.runId; }));
 
   var tempNodes = d3.layout.tree().nodes(newCompareTree).reverse(),
 	   tempLinks = d3.layout.tree().links(tempNodes);
 
 
-  // Calculate tree size.
   var depthDict = {};
 
   tempNodes.forEach(function(d) {
@@ -408,7 +347,6 @@ var highestDepthValue = 0;
 
 
 for (var [key,value] of Object.entries(depthDict)) {
-  // var key = parseInt(key);
   if (value > highestDepthValue) { highestDepthValue = value;};
 }
 
@@ -419,22 +357,13 @@ var tempHeight = highestDepthValue * 110;
 
 
 
-
-// d3.select("#compareTreePlot>svg").transition().duration(durationCompareTree).attr("height", ctHeightPlotValue + compareTreeMargin.top + compareTreeMargin.bottom);
-// d3.select("#compareTreePlot>svg").transition().duration(durationCompareTree).attr("height", tempHeight + compareTreeMargin.top + compareTreeMargin.bottom);
-
-  // var treeDivWidth = $("#compareTreePlot").width() - compareTreeMargin.right - compareTreeMargin.left - 100;
-
-
     var tree = d3.layout.tree()
-        // .size([ctHeightPlotValue, treeDivWidth]);
-        // .size([tempHeight, treeDivWidth]);
         .nodeSize([ctVerticalSeparation, ctHorizontalSeparation])
         .separation(function separation(a, b) {
         return a.parent == b.parent ? ctSiblingSeparation : ctCousinSeparation;
       });
 
-        // Compute the new tree layout.
+
     var nodes = tree.nodes(newCompareTree).reverse();
   	var links = tree.links(nodes);
 
@@ -486,17 +415,13 @@ d3.select("#compareTreePlot>svg").transition().duration(durationCompareTree)
 d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).attr("transform", function(d) {return "translate(" + compareTreeMargin.left + "," + ctGroupShim + ")"; });
 
   var node = compareTreeSvg.selectAll("g.node")
-	  // .data(nodes, function(d) { return d.id || (d.id = ++i); });
 	  .data(nodes, function(d) { return d.ncbiID; });
-	  // .data(nodes);
 
 
   var nodeEnter = node.enter().append("g")
 	  .attr("class", "node")
 	  .attr("transform", function(d) {return "translate(" + source.y0 + "," + source.x0 + ")"; })
 	  .on("click", function(d) { click(d); plotCompareTree(d); });
-
-    // nodeEnter.each(drawPie);
 
 
     nodeEnter.append("rect")
@@ -509,26 +434,17 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
       .attr("class", "ctBgStroke")
       .attr("fill-opacity", 0);
 
-      // nodeEnter.append("circle")
-    	//   .attr("r", 1e-6);
-      //
       nodeEnter.append("text")
     	  .attr("dy", ".35em")
     	  .text(function(d) { return d.name; })
     	  .style("visibility", "hidden");
 
-      // Transition nodes to their new position.
       var nodeUpdate = node.transition()
     	  .duration(durationCompareTree)
     	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-      // nodeUpdate.select("circle")
-    	//   .attr("r", 8)
-    	//   .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-      //   .style("stroke", function(d) { return d._children ? "#000" : "#858796"; });
 
       nodeUpdate.select("text")
-        // .attr("dx", function (d) {return d.children ? (-14 - circleSize(d,dashboardTreeCircleSizeType)) : (6 + circleSize(d,dashboardTreeCircleSizeType)); })
         .attr("dx", ctRectWidth + 8)
         .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
         .style("visibility", function(d) { return d.children ?  "hidden" : "visible"; });
@@ -566,16 +482,6 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
 
 
 
-
-        // for (var sample of sortCompareNameArray) {
-        //   var sampleValueRow;
-        //   var sampleRun = sample.name + "_" + sample.runId;
-        //   var indexOfSampleValue = d.values.findIndex(e => e.sampleId == sample.name && e.runId == sample.runId);
-        //
-        //     sampleValueRow = "<hr class='toolTipLine'/><small class='text-gray-800'>" + sampleRun + "</em></small><hr class='toolTipLine'/>" +  "Reads at this node: " + thousandsSeparators(d["values"][indexOfSampleValue]["readCount"]) + "<br/>Summed read count: " + thousandsSeparators(d["values"][indexOfSampleValue]["summedCount"]);
-        //   toolTipHtml += sampleValueRow;
-        // }
-
         for (var sample of sortCompareNameArray) {
           var sampleValueRow;
           var sampleName = sample.name;
@@ -610,15 +516,10 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
                   .duration(0)
                   .style("opacity", .95);
 
-                  // toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at this node: " +
-                  // thousandsSeparators(d.value) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
-                  // toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5>")
                   toolTipDiv.html(toolTipHtml)
                   .style("color", "black")
-                  .style("left", (d3.event.pageX) + "px")
+                  .style("left", (tooltipPos(d3.event.pageX)) + "px")
                   .style("top", (d3.event.pageY - 35) + "px");
-
-                  // var ttTableRows = d3.selectAll("#ttTable>tbody>tr>th").selectAll(".testsvg").data(sortCompareNameArray);
 
                   var ttTableRows = d3.selectAll("#ttTable>tbody>tr>th");
 
@@ -654,8 +555,6 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
     	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
     	  .remove();
 
-      // nodeExit.select("circle")
-    	//   .attr("r", 1e-6);
 
       nodeExit.select("text")
         .style("visibility", "hidden");
@@ -667,7 +566,6 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
         }
 
         var link = compareTreeSvg.selectAll("path.treeLink")
-      	  // .data(links, function(d) { return d.target.id; });
       	  .data(links, function(d) { return d.target.ncbiID; });
 
           link.enter().insert("path", "g")
@@ -708,26 +606,7 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
           });
 
 
-
-
-//End of plotCompareTree
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// var oldNodes = {};
-
-
-
 
 
 
@@ -749,7 +628,6 @@ function updateCompareTreeTopNMax() {
 
   d3.selectAll("input[name='compareTreeTopN']").property("value",compareTreeTopN);
   d3.selectAll("#compareTreeTopNNum").text(compareTreeTopN);
-  // d3.selectAll(".compare-taxa-tree-total-n-text").text(compareTreeLeafCount);
 
 
 
@@ -830,7 +708,6 @@ var removeLeaves = leafNodes.filter(function(d){
       }
     });
 
-// console.log(removeLeaves);
 
 
 keepNodes.forEach((keepNode) => {

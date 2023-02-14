@@ -19,12 +19,18 @@ null,
 null,
 null,
 null,
+{
+"data": null,
+"orderable": false,
+className: "moreInfo",
+"defaultContent": ""
+},
 null,
 null
 ],
 "columnDefs": [
     {
-        "targets": [ 10,11 ],
+        "targets": [ 11,12 ],
         "visible": false,
         "searchable": false
     }
@@ -39,15 +45,18 @@ socket.emit('meta-request',{
   clientId: uuid
 });
 
-// Function compare samples button
+
 $('.compareSamplesInput').on('click', function() {
+
+  emitSelectedCompareSamples();
+
     if (comparePageUnlocked == false) {
       $('#compareModal').modal('show')
     } else {
     activeSidebarIcon($("#compare-item"));
     currentPage = "Compare";
     $("h1#pageTitle").text("Compare");
-    $("#response").load("compare.html", function(){
+    $("#response").load("/compare.html", function(){
       $("html, body").animate({ scrollTop: "0px" });
       initialiseComparePage();
     });
@@ -58,7 +67,18 @@ sampleListCurrent = [];
 
 $("#sampleTableSearchBox").keyup(function() {
 samplePageDataTable.search(this.value).draw();
+
+var selectAllToggle = $('thead>tr').children(':first-child');
+
+  if(selectAllToggle.hasClass('checkSelected')){
+    selectAllToggle.removeClass('checkSelected');
+  };
+
 });
+
+
+
+
 
 };
 
@@ -69,84 +89,37 @@ var sampleMetaDataArray = [];
 function updateSampleTable(data){
 
 dataSampleList = [];
-// removeSampleRowList = [];
 
 sampleMetaDataArray = [];
 
-// for (const [key, value] of Object.entries(data)) {
-//   var sampleData = value.sample;
-//   dataSampleList.push(key);
-//   sampleData.readsPassBasecall = thousandsSeparators(sampleData.readsPassBasecall);
-//   sampleData.readsAnalysed = thousandsSeparators(sampleData.readsAnalysed);
-// };
-
-// // Remove sample data if no longer exists
-// sampleListCurrent.forEach(function(d) {
-//   if (!dataSampleList.includes(d)){
-//     sampleListCurrent = sampleListCurrent.filter(function(ele){
-//        return ele != d;
-//    })
-//     samplePageDataTable.rows().every( function () {
-//         var row = this.data();
-//         if (row[1] == d) {
-//           removeSampleRowList.push(this.node());
-//         }
-//     } );
-//   }
-// });
-//
-// // Remove rows from sample table
-// removeSampleRowList.forEach(function(d) {
-//     samplePageDataTable.row(d).remove()
-//   });
 
 samplePageDataTable.clear();
 
-// Add new rows to sample list table
   for (const [runId, samples] of Object.entries(data)) {
     var dirRunId = runId;
     for (const [sample, value] of Object.entries(samples)) {
     var sampleData = value.sample;
+    sampleData.martiVersion = value.meta.martiVersion;
     var dirSampleId = sample;
     sampleMetaDataArray.push(sampleData);
     dataSampleList.push(sample);
-    sampleData.readsPassBasecall = thousandsSeparators(sampleData.readsPassBasecall);
-    sampleData.readsAnalysed = thousandsSeparators(sampleData.readsAnalysed);
+    // sampleData.readsPassBasecall = thousandsSeparators(sampleData.readsPassBasecall);
+    // sampleData.readsAnalysed = thousandsSeparators(sampleData.readsAnalysed);
 
-   //  if (sampleListCurrent.includes(value.id)){
-   //    samplePageDataTable.rows().every( function () {
-   //        var row = this.data();
-   //        if (row[1] == value.id) {
-   //          row[2] = value.yield;
-   //          row[3] = value.reads_sequenced;
-   //          row[4] = value.reads_classified;
-   //          row[5] = value.MARTi_status;
-   //          this.invalidate(); // invalidate the data DataTables has cached for this row
-   //        }
-   //    });
-   //  }
-   // else {
      sampleListCurrent.push(sampleData.id);
 
-       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),sampleData.readsPassBasecall,sampleData.readsAnalysed,sampleData.analysis.pipeline,sampleData.martiStatus,sampleData.sequencingDate.replace('T',' '),sampleData.analysisDate.replace('T',' '),dirRunId,dirSampleId]);
+       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,sampleData.sequencingDate.replace('T',' '),sampleData.analysisDate.replace('T',' '),null,dirRunId,dirSampleId]);
 
      };
-   // }
  };
 
 samplePageDataTable.draw(false);
 
 
-
-
-// if (runJqueryFuncs == true) {
-
-  // Function to select dashboard sample and emit the location to server
   $('table>tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
     var rowData = samplePageDataTable.row( $(this).closest('tr') ).data();
-      // var sampleName = $(this).text();
-      var sampleName = rowData[11];
-      var runId = rowData[10];
+      var sampleName = rowData[12];
+      var runId = rowData[11];
 
       socket.emit('selected-dashboard-sample',{
         clientId: uuid,
@@ -157,39 +130,17 @@ samplePageDataTable.draw(false);
       activeSidebarIcon($("#dashboard-item"));
       currentPage = "Dashboard";
       $("h1#pageTitle").text("Dashboard");
-      $("#response").load("dashboard.html", function(){
+      $("#response").load("/dashboard.html", function(){
         $("html, body").animate({ scrollTop: "0px" });
         initialiseDashboardPage();
       });
   });
 
 
-    $('tbody>tr').children(':not(:nth-child(2))').on('click', function() {
+    $('tbody>tr').children(':not(:nth-child(2)):not(:last-child)').on('click', function() {
       $(this).closest('tr').toggleClass('checkSelected');
-      emitSelectedCompareSamples()
-      // var selectedSamplesData = [];
+      // emitSelectedCompareSamples()
 
-      // $('#samplePageDataTable tbody tr.checkSelected').each(function() {
-      //   var rowData = samplePageDataTable.row( $(this) ).data();
-      //   var selectedRowData = {
-      //     name: rowData[1],
-      //     runId: rowData[2]
-      //   };
-      //   selectedSamplesData.push(selectedRowData);
-      // });
-      //
-      // socket.emit('selected-compare-samples', {
-      //   clientId: uuid,
-      //   data: selectedSamplesData
-      // });
-      // var sampleNames = [];
-      // $('#samplePageDataTable tbody tr.checkSelected td:nth-child(2)').each(function() {
-      //     sampleNames.push($(this).text());
-      // });
-      // socket.emit('selected-compare-samples', {
-      //   clientId: uuid,
-      //   data: sampleNames
-      // });
     });
 
     $('thead>tr').children(':first-child').on('click', function() {
@@ -201,33 +152,69 @@ samplePageDataTable.draw(false);
         $('tbody>tr').addClass('checkSelected');
       }
 
-      emitSelectedCompareSamples();
-      // var sampleNames = [];
-      // $('#samplePageDataTable tbody tr.checkSelected td:nth-child(2)').each(function() {
-      //     sampleNames.push($(this).text());
-      // });
-      // socket.emit('selected-compare-samples', {
-      //   clientId: uuid,
-      //   data: sampleNames
-      // });
+      // emitSelectedCompareSamples();
+
     });
 
-  // runJqueryFuncs = false;
 
-  // };
+$('tbody>tr').children(':last-child').on('click', function() {
+    var rowData = samplePageDataTable.row( $(this).closest('tr') ).data();
+    var sampleName = rowData[1];
+    var runId = rowData[2];
+
+    var thisMetaData;
+
+    for (var sample of sampleMetaDataArray){
+      if (sampleName == sample.id && runId == sample.runId){
+        thisMetaData = sample;
+      }
+    };
+
+    prepareSampleInfoModal(thisMetaData);
+
+  $('#sampleInfoModal').modal('show');
+
+
+});
+
 
 };
 
+// function emitSelectedCompareSamples() {
+//   var selectedSamplesData = [];
+//   $('#samplePageDataTable tbody tr.checkSelected').each(function() {
+//     var rowData = samplePageDataTable.row( $(this) ).data();
+//     var selectedRowData = {
+//       name: rowData[12],
+//       runId: rowData[11]
+//     };
+//     selectedSamplesData.push(selectedRowData);
+//   });
+//
+//   socket.emit('selected-compare-samples', {
+//     clientId: uuid,
+//     data: selectedSamplesData
+//   });
+// }
+
 function emitSelectedCompareSamples() {
+  $("#sampleTableSearchBox").val("");
+  samplePageDataTable.search("").draw();
   var selectedSamplesData = [];
   $('#samplePageDataTable tbody tr.checkSelected').each(function() {
     var rowData = samplePageDataTable.row( $(this) ).data();
     var selectedRowData = {
-      name: rowData[11],
-      runId: rowData[10]
+      name: rowData[12],
+      runId: rowData[11]
     };
     selectedSamplesData.push(selectedRowData);
   });
+
+  if(isEmpty(selectedSamplesData)) {
+    comparePageUnlocked = false;
+  } else {
+    comparePageUnlocked = true;
+  };
 
   socket.emit('selected-compare-samples', {
     clientId: uuid,
@@ -276,8 +263,8 @@ socket.on('current-dashboard-sample-response', function(sample) {
     if (typeof rowData !== 'undefined'){
 
       var selectedRowData = {
-        name: rowData[11],
-        runId: rowData[10]
+        name: rowData[12],
+        runId: rowData[11]
       };
       if (selectedRowData.name == currentDashboardSampleName && selectedRowData.runId == currentDashboardSampleRun){
         $("tr").removeClass("dashboardSelected");
@@ -290,9 +277,7 @@ socket.on('current-dashboard-sample-response', function(sample) {
 
 });
 
-// var compareSampleObjectArray;
 
-// Function to select rows of sample table based on information from server
 socket.on('current-compare-samples-response', function(samples) {
   if(isEmpty(samples)) {
     comparePageUnlocked = false;
@@ -302,11 +287,6 @@ socket.on('current-compare-samples-response', function(samples) {
 
   selectedCompareMetaDataArray = [];
 
-  // for (const sample of sampleMetaDataArray) {
-  //   if (samples.includes(sample.id)) {
-  //       selectedCompareMetaDataArray.push(sample);
-  //   }
-  // };
 
   for (const sampleMetaData of sampleMetaDataArray) {
     for (const sample of samples) {
@@ -318,8 +298,8 @@ socket.on('current-compare-samples-response', function(samples) {
           $('#samplePageDataTable tbody tr').each(function() {
             var rowData = samplePageDataTable.row( $(this) ).data();
             var selectedRowData = {
-              name: rowData[11],
-              runId: rowData[10]
+              name: rowData[12],
+              runId: rowData[11]
             };
             if (selectedRowData.name == sample.name && selectedRowData.runId == sample.runId) {
               $(this).addClass("checkSelected");
@@ -332,21 +312,27 @@ socket.on('current-compare-samples-response', function(samples) {
     };
   };
 
-  // console.log(samples);
-  // console.log(selectedCompareMetaDataArray);
-  // compareSampleObjectArray = samples.sort(d3.ascending);
-
-  // if(currentPage=="Samples") {
-  //
-  //
-  //   samples.forEach(function(sample) {
-  //   compareSampleRow = $("#samplePageDataTable td:nth-child(2)").filter(function() {
-  //     return $(this).text() == sample;
-  //   }).closest("tr");
-  //   compareSampleRow.addClass("checkSelected");
-  //   });
-  //
-  // };
 
 
 });
+
+function prepareSampleInfoModal(data){
+  $("#sampleDataSampleName").text(data.id);
+  $("#sampleDataRunName").text(data.runId);
+  $("#sampleDataSequencingDate").text(data.sequencingDate.replace('T',' '));
+  $("#sampleDataAnalysisDate").text(data.analysisDate.replace('T',' '));
+
+  $("#sampleDataYieldGb").text(data.yieldGb);
+  $("#sampleDataBasecalledReads").text(thousandsSeparators(data.readsPassBasecall));
+  $("#sampleDataReadsPassedFilter").text(thousandsSeparators(data.readsPassedFilter));
+  $("#sampleDataReadsAnalysed").text(thousandsSeparators(data.readsAnalysed));
+  $("#sampleDataReadsClassified").text(thousandsSeparators(data.readsWithClassification));
+  $("#sampleDataReadsUnclassified").text(thousandsSeparators(data.readsUnclassified));
+  $("#sampleDataReadsPoorAlignments").text(thousandsSeparators(data.readsWithPoorAlignments));
+
+  $("#sampleDataMartiVersion").text(data.martiVersion);
+  $("#sampleDataAnalysisStatus").text(data.martiStatus);
+  $("#sampleDataAnalysisPipeline").text(data.analysis.pipeline);
+
+
+}

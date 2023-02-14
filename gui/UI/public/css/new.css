@@ -41,3 +41,23 @@
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+
+#processList textarea{
+  height: 200px;
+  resize: none;
+  word-break: break-all;
+  font-size:0.9rem;
+}
+
+.process-options label {
+  margin-left: 0.25rem;
+  margin-bottom:0.25rem;
+}
+
+.card .card-header[data-toggle="collapse"].collapsed::after {
+  top:auto;
+}
+
+.card .card-header[data-toggle="collapse"]::after {
+  top:auto !important;
+}

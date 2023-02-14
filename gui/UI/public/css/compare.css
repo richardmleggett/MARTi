@@ -1,6 +1,4 @@
 .stackedBarCard {
-  /* max-height: 400px; */
-  /* overflow: hidden; */
 }
 
 #stackedBarPlot>svg {
@@ -12,17 +10,9 @@
 }
 
 .compareRarefactionCard {
-  /* min-height: 200px; */
 
 }
 
-
-
-/* .dropdown-item.active, .dropdown-item:active {
-    color: #3a3b45;
-    text-decoration: none;
-    background-color: transparent;
-} */
 
 .hoverRect {
   opacity: .5;
@@ -33,29 +23,6 @@
 }
 
 
-/* @media (max-width: 576px) {
-  .stackedBarCard {
-    height: 200px;
-  }
-
-} */
-
-
-/* #compareSampleNameList>li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
- }
-#compareSampleNameList>li { display: inline; }
-#compareSampleNameList>li:after {
-  content: ", ";
- }
-#compareSampleNameList>li:last-child:after { content: ""; }
-
-#compareSampleNameList>li>span:hover {
-  text-decoration: underline;
-} */
 
 #compareSampleNameList {
   padding: 0;
@@ -65,8 +32,6 @@
  }
 
 #compareSampleNameList>li {
-  /* list-style: none; */
-  /* list-style-type: lower-alpha; */
   padding: .50rem 1.25rem;
   cursor: pointer;
   border: 1px solid rgba(0,0,0,.125);
@@ -93,6 +58,14 @@
    font-size: 1rem;
  }
 
+.compareSampleNameListRun {
+  margin-left: 2.5rem;
+  font-size: 1rem;
+  /* color: 303030; */
+  color: #858796 !important;
+
+}
+
  .compareSampleGhostClass {
    background-color: lightsteelblue;
  }
@@ -103,6 +76,10 @@
  #sampleOrderCompareMenu {
    min-width: 8.5rem;
  }
+
+.dropdown-menu[aria-labelledby="dropdownMenuCompareTaxaTree"] {
+  cursor:default;
+}
 
 #compareTreePlot {
   overflow-x: scroll;
