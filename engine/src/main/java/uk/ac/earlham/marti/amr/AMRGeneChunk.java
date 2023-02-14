@@ -24,6 +24,7 @@ public class AMRGeneChunk {
         }
         count++;
         speciesToCount.put(lcaHit, count);
+        //System.out.println("Updated count for "+lcaHit+" to "+count);
         overallCount++;
         cumulativeIdentity += identity;
         numberOfHits++;

@@ -137,7 +137,7 @@ public class AMRResults {
             for (String s : species.keySet()) {
                 JsonObjectBuilder speciesCountBuilder = Json.createObjectBuilder();
                 cumulativeCount = 0;
-                for (int c=0; c<wor.getMaxChunkNumber(); c++) {
+                for (int c=0; c<=wor.getMaxChunkNumber(); c++) {
                     int count = gene.getSpeciesCountForChunk(s, c);
                     cumulativeCount += count;
                     if (count > 0) {

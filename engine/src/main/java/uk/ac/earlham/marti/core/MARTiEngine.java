@@ -16,7 +16,7 @@ import uk.ac.earlham.marti.schedule.*;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.11";
+    public final static String VERSION_STRING = "v0.9.12";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
@@ -100,9 +100,9 @@ public class MARTiEngine {
         options.parseArgs(args);
         
         if (options.inTestMode()) {
-            testUnzip();
+            //testUnzip();
             // SLURM development
-            /* System.out.println("Test mode");
+            System.out.println("Test mode");
             String commands[] = {"sleep", "10"};
             SlurmSchedulerJob ssj = new SlurmSchedulerJob("testjob", commands, "testlog.txt", false);
             ssj.run();
@@ -112,7 +112,7 @@ public class MARTiEngine {
                     break;
                 }
                 Thread.sleep(1000);
-            } */
+            }
                     
             System.out.println("Done");
         } else if (options.isInitMode()) {

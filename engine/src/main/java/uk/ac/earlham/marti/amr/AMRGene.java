@@ -40,6 +40,8 @@ public class AMRGene {
     public void addHit(int originalChunkNumber, int processedChunkNumber, String lcaHit, boolean isIndependent, double identity) {
         AMRGeneChunk chunk;
                 
+        //System.out.println("Chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
+        
         // Check if we have a chunk for this chunk number - if not create one
         if (chunks.containsKey(processedChunkNumber)) {
             chunk = chunks.get(processedChunkNumber);
@@ -59,8 +61,11 @@ public class AMRGene {
         // Now pass the species through to this chunk to increment the counter for that species
         // Note there may be no species...  
         if (lcaHit != null) {
+            //System.out.println("addHit to chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
             chunk.addHit(lcaHit, isIndependent, identity);
-        } 
+        } else {
+            chunk.addHit("null", isIndependent, identity);
+        }
         
         // Keep track of mean identity
         cumulativeIdentity += identity;
