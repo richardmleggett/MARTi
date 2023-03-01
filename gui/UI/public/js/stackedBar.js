@@ -107,7 +107,11 @@ function transitionCount() {
 
 function transitionRects(stacked) {
 
-  yScale.domain([0, d3.max(stacked[stacked.length-1], function(d) { return d.y0 + d.y; })]);
+
+
+  yScale.domain([0, d3.max(stacked[stacked.length-1], function(d) {return d.y0 + d.y; })]);
+
+
 
   var sample = stackedSvg.selectAll(".taxa")
     .data(stacked);

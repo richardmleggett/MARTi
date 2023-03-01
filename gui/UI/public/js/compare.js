@@ -329,11 +329,23 @@ $('#compareTaxaTreeCard div.card-header:not(dropdown)').on('click', function() {
   if (ctIsExpanded == "false") {
   ctCard = true;
   // $('#dropdownMenuCompareTaxaTree').removeClass('disabled');
-  buildCompareTree(compareTreeDataGlobal);
-  plotCompareTree(newCompareTree);
+  // buildCompareTree(compareTreeDataGlobal);
+  // plotCompareTree(newCompareTree);
+  taxonomicRankChangedCompare = true;
+
+    setTimeout(function () {
+      buildCompareTree(compareTreeDataGlobal);
+      plotCompareTree(newCompareTree);
+      taxonomicRankChangedCompare = false;
+      $("#generatingTreeNotice").hide();
+
+}, 50);
+
 
   } else {
   ctCard = false;
+
+
   // $('#dropdownMenuCompareTaxaTree').addClass('disabled');
   }
 
@@ -1145,7 +1157,7 @@ function generateCompareAmrCsv(data) {
       };
       for (var sample of sortCompareNameArray) {
         if (checkNested(value.values, sample.runId, sample.name)) {
-          keyRow.push((value["values"][sample.runId][sample.name]['species'].join('; ')));
+          keyRow.push((value["values"][sample.runId][sample.name]['species'].join(';')));
         } else {
           keyRow.push('n/a');
         };

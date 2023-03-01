@@ -221,8 +221,8 @@ function makeConfigFileString(form_object) {
 
   if(form_object.hasOwnProperty("analysisName")) {
         if(Array.isArray(form_object["analysisName"])) {
-          for (var [i, process] of array.entries()) {
-              configFileString += form_object["analysisName"][i];
+          for (var [i, process] of form_object["analysisName"].entries()) {
+              configFileString += process;
               configFileString += "\n";
             }
         } else {
