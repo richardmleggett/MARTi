@@ -12,6 +12,8 @@ Make sure you've read the :ref:`intro` and know whether you are installing MARTi
 
 Both components are contained within a single GitHub repository. You need to copy the MARTi software onto any computer that will be running the MARTi Engine (back-end) or the MARTi GUI (web server). If running in local mode, this will be the same computer. If running in an HPC mode, you will copy the software on to the cluster and also onto the computer where you will be running the web server for the GUI. For simplicity, it is not necessary to separate the Engine from the GUI for installation purposes.
 
+If you would rather use a pre-installed image, we also provide a :ref:`Docker image <docker>`.
+
 Prerequisites
 -------------
 In order to run the MARTi Engine (back-end), you also need to install the following on the machine where it will be running:
