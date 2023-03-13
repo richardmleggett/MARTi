@@ -19,15 +19,15 @@ When you have finished, type ``exit`` to end Docker.
 
 A small set of reads, custom database, and taxonomy files are available for testing the MARTi installation and can be downloaded from `here <https://nbicloud-my.sharepoint.com/:u:/g/personal/peeln_nbi_ac_uk/EUwY6lJhyAtHtuq5FB6vW1YBvlxZ-Vcl-9XUyEMPA0TMJA?e=g7jKty>`__.
 
-Unzip the downloaded file and run the MARTi docker image using the following command:
+Unzip the downloaded file and run the MARTi docker image using the following command::
 
   docker run -i -t -p 3000:3000 -v /path/to/marti_example/databases:/usr/databases -v /path/to/marti_example/reads:/usr/reads -v /path/to/marti_example/output:/usr/output -v /path/to/marti_example/config:/usr/config nedpeel/marti
 
-Test MARTi by running the following command:
+Test MARTi by running the following command::
 
   marti -config /usr/config/marti_test.txt
 
-The MARTi GUI can be launched by running: ``marti_gui``. To view the GUI, open a browser and navigate to GUI’s port: ``localhost:3000``   
+The MARTi GUI can be launched by running: ``marti_gui``. To view the GUI, open a browser and navigate to GUI’s port: ``localhost:3000``
 
 Notes:
 
