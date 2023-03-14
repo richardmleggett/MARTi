@@ -193,6 +193,7 @@ public class MARTiEngineOptions implements Serializable {
             System.out.println("");
             System.out.println("Options:");
             System.out.println("-init to enter initialisation mode and output version information.");
+            System.out.println("-options <filename> to specify the location of a marti_engine_options.txt file to use.");
             //System.out.println("-t|-numthreads <number> specifies the number of threads to use for external processes (default 5)");
             //System.out.println("-force to force ignore warnings");
             System.out.println("-loglevel <int> to set the level of logging to logs/engine.txt from 0 (none) to " + MARTiLog.LOGLEVEL_MAX +" (maximum) (default "+MARTiLog.LOGLEVEL_DEFAULT+")");           

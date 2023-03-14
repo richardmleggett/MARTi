@@ -43,3 +43,5 @@ MARTi looks for marti_engine_options.txt in three locations:
 1. In the current directory.
 2. If not in the current directory, in the user's home directory (i.e. ~/marti_engine_options.txt).
 3. If not in the user's home directory, in the directory containing the MARTiEngine.jar, which unless you have changed things will be the bin directory.
+
+Alternatively, you can specify the location of the file using the -options command line option. This is useful when running the docker image.
