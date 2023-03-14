@@ -42,7 +42,7 @@ class Observer extends EventEmitter {
 
 
 
-      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true });
+      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 2000, pollInterval: 100 }});
 
       watcher.on('add', async filePath => {
         if (filePath.includes('sample.json')) {
