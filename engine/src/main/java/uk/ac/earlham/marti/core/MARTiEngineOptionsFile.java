@@ -88,20 +88,28 @@ public class MARTiEngineOptionsFile {
     }
      
     public void readOptionsFile() {
-        File f = new File("marti_engine_options.txt");
-        if (!f.exists()) {
-            f = new File("~/marti_engine_options.txt");
-        }
-        if (!f.exists()) {
-            try {
-                String jarFilePath = MARTiEngineOptionsFile.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-                String decodedPath = URLDecoder.decode(jarFilePath, "UTF-8");
-                File jarFile = new File(decodedPath);
-                f = new File(jarFile.getParent() + "/marti_engine_options.txt");
-            } catch (Exception e) {
-                e.printStackTrace();
+        File f;
+        
+        if (options.getOptionsFilename() != null) {
+            f = new File(options.getOptionsFilename());
+        } else {        
+            f = new File("marti_engine_options.txt");
+            if (!f.exists()) {
+                f = new File("~/marti_engine_options.txt");
             }
+        
+            if (!f.exists()) {
+                try {
+                    String jarFilePath = MARTiEngineOptionsFile.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+                    String decodedPath = URLDecoder.decode(jarFilePath, "UTF-8");
+                    File jarFile = new File(decodedPath);
+                    f = new File(jarFile.getParent() + "/marti_engine_options.txt");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }            
         }
+        
         if (f.exists()) {
             readFile(f.getAbsolutePath());
         }

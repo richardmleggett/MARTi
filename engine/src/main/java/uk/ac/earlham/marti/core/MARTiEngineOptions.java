@@ -145,7 +145,8 @@ public class MARTiEngineOptions implements Serializable {
     private Hashtable<Integer, SampleMetaData> metaData = new Hashtable<Integer, SampleMetaData>();
     private BlastProcess vfdbBlastProcess = null;    
     private HashMap<Integer, String> sampleIdByBarcode = new HashMap<Integer,String>();
-    private MARTiEngineOptionsFile engineOptionsFile = new MARTiEngineOptionsFile(this);
+    private String optionsFilename = null;
+    private MARTiEngineOptionsFile engineOptionsFile = null;
     private String classifyingBlastName = null;
     
     public MARTiEngineOptions() {
@@ -155,9 +156,7 @@ public class MARTiEngineOptions implements Serializable {
             System.out.println("Mac OS X detected");
             meganCmdLine="/Applications/MEGAN5.11.3/MEGAN.app/Contents/MacOS/JavaApplicationStub";
             meganLicense="/Applications/MEGAN5/MEGAN5-academic-license.txt";
-        }        
-                        
-        engineOptionsFile.readOptionsFile();
+        }                                
     }
         
     public boolean isMac() {
@@ -302,6 +301,9 @@ public class MARTiEngineOptions implements Serializable {
             } else if (args[i].equalsIgnoreCase("-blast")) {                
                 blastProcessNames = args[i+1];
                 i+=2; 
+            } else if (args[i].equalsIgnoreCase("-options")) {
+                optionsFilename = args[i+1];
+                i+=2;
             } else {
                 int iCurrent = i;
                 
@@ -311,7 +313,10 @@ public class MARTiEngineOptions implements Serializable {
                 }
             }            
         }
-                 
+        
+        engineOptionsFile = new MARTiEngineOptionsFile(this);
+        engineOptionsFile.readOptionsFile();
+                
         if (configFile == null) {
             System.out.println("Error: you must specify a config file");
             System.exit(1);
@@ -1353,5 +1358,9 @@ public class MARTiEngineOptions implements Serializable {
     
     public boolean inTestMode() {
         return testMode;
+    }
+    
+    public String getOptionsFilename() {
+        return optionsFilename;
     }
 }
