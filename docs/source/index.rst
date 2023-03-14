@@ -6,6 +6,7 @@ MARTi - Metagenomic Analysis in Real Time
    
    intro
    installation
+   docker
    running
    cmdline
    gui
