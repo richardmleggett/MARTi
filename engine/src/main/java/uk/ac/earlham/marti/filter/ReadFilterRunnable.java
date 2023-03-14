@@ -276,9 +276,9 @@ public class ReadFilterRunnable implements Runnable {
     
     private boolean checkValidExtension(String filename) {
         boolean valid = false;
-        if (filename.toLowerCase().endsWith(".fastq")) {
+        if ((filename.toLowerCase().endsWith(".fastq")) || (filename.toLowerCase().endsWith(".fq"))) {
             valid = true;
-        } else if (filename.toLowerCase().endsWith(".fastq.gz")) {
+        } else if ((filename.toLowerCase().endsWith(".fastq.gz")) || (filename.toLowerCase().endsWith(".fq.gz"))) {
             // We process .fastq.gz only if there isn't a .fastq file with the same prefix
             String withoutGz = filename.substring(0, filename.length()-3);
             File f = new File(withoutGz);
