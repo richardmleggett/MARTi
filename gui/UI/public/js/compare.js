@@ -92,7 +92,10 @@ function initialiseComparePage() {
   initialiseHeatmapTaxa();
   initialiseCompareTree();
 
+
+
   compareAccumulationDataAvailable = false;
+  compareAmrDataAvailable = false;
 
   socket.emit('compare-tree-request',{
     clientId: uuid,
@@ -108,6 +111,12 @@ function initialiseComparePage() {
   });
 
   $("#accumulationChartRow").hide();
+
+  $("#compareAmrHmRow").hide();
+
+  socket.emit('compare-amr-request',{
+    clientId: uuid
+  });
 
   manualSortCompareNames = [];
 
@@ -365,6 +374,8 @@ $('#compareTaxaTreeCard div.card-header:not(dropdown)').on('click', function() {
 
 ctCard = false;
 
+
+
 };
 
 var compareStackedBarUnclassified,
@@ -392,6 +403,7 @@ var taxonomicRankSelectedCompareText = "Genus";
 
 
 var compareAccumulationDataAvailable = false;
+var compareAmrDataAvailable = false;
 
 var opacityTransitionTime = 450;
 
@@ -399,15 +411,16 @@ var opacityTransitionTime = 450;
 
 
 
-    function topTaxaCompare(sample,run,thisSampleTree,chart,thresholdSelected,unclassified) {
+    function topTaxaCompare(sample,run,thisSampleTree,chart,thresholdSelected,unclassified,unclassifiedNode) {
 
-
-    if (unclassified == "hide") {
-      var unclassifiedIndex = findWithAttr(thisSampleTree, "name", "unclassified");
-      if (unclassifiedIndex != -1) {
-
+    var unclassifiedIndex = findWithAttr(thisSampleTree, "name", "unclassified");
+    if (unclassified == "hide" && unclassifiedIndex != -1) {
         thisSampleTree.splice(unclassifiedIndex,1);
-      };
+    } else if (unclassified == "show" && unclassifiedIndex == -1){
+        if (unclassifiedNode !== undefined) {
+        thisSampleTree.push(unclassifiedNode);
+        }
+
     };
 
       var sorted = thisSampleTree.sort(function(a, b) {
@@ -510,7 +523,7 @@ var opacityTransitionTime = 450;
 
 var compareDonutTopN = 10;
 var compareStackedBarTopN = 10;
-var compareHmTaxaTopN = 10;
+var compareAmrHmTopN = 10;
 var formattedData = {};
 
 
@@ -542,7 +555,7 @@ for (var sampleData of selectedCompareMetaDataArray) {
   }
 };
 
-
+  var unclassifiedNode;
 
   sample.jsonId = id;
   sample.jsonRunId = runId;
@@ -558,6 +571,10 @@ for (var sampleData of selectedCompareMetaDataArray) {
     if (d.rank < taxonomicRankSelectedCompare) {
       if(taxonomicRankSelectedCompare == 10){
         sampleTaxaAtRank.push(d);
+      };
+      if (d.name == "unclassified") {
+        unclassifiedNode = d;
+        unclassifiedNode.chartValue = unclassifiedNode.value;
       };
       if (d.children) {
         d.children.forEach(function(c){
@@ -588,11 +605,11 @@ for (var sampleData of selectedCompareMetaDataArray) {
     });
 
 
-  topTaxaCompare(id,runId,thisSampleTree,"donut",compareDonutTopN,compareDonutUnclassified);
+  topTaxaCompare(id,runId,thisSampleTree,"donut",compareDonutTopN,compareDonutUnclassified,unclassifiedNode);
 
-  topTaxaCompare(id,runId,thisSampleTree,"stackedBar",compareStackedBarTopN,compareStackedBarUnclassified);
+  topTaxaCompare(id,runId,thisSampleTree,"stackedBar",compareStackedBarTopN,compareStackedBarUnclassified,unclassifiedNode);
 
-  topTaxaCompare(id,runId,thisSampleTree,"hmTaxa",compareHmTaxaTopN,compareHmTaxaUnclassified);
+  topTaxaCompare(id,runId,thisSampleTree,"hmTaxa",compareHmTaxaTopN,compareHmTaxaUnclassified,unclassifiedNode);
 
 
   };
@@ -913,8 +930,25 @@ socket.on('accumulation-update-available', request => {
 
   var newCompareTree = {};
 
+var rawAmrData;
+
+socket.on('amr-update-available', request => {
+  if(currentPage=="Compare") {
+    socket.emit('compare-amr-request',{
+      clientId: uuid
+    });
+  };
+});
+
 socket.on('compare-amr-response', function(amrData) {
-  updateAmrPlots(amrData);
+  rawAmrData = amrData;
+  if (!compareAmrDataAvailable) {
+    $("#compareAmrHmRow").show();
+    initialiseAmrHm();
+    compareAmrDataAvailable = true;
+  }
+
+  updateAmrPlots(rawAmrData);
 });
 
 function buildCompareTree(data){
@@ -1033,18 +1067,28 @@ function buildCompareTree(data){
 
 }
 
-function requestCompareAmrData(){
-
-  socket.emit('compare-amr-request',{
-    clientId: uuid
-  });
-
-}
+// function requestCompareAmrData(){
+//
+//   socket.emit('compare-amr-request',{
+//     clientId: uuid
+//   });
+//
+// }
 
 var compareAmrData;
+// var compareAmrGeneArrays;
+var compareAmrHmGenes;
+var compareAmrHmGenesSnAvailable = true;
 
 function updateAmrPlots(amrData){
   compareAmrData = {};
+  // compareAmrGeneArrays = [];
+  compareAmrHmGenes = [];
+  compareAmrHmGenesSnAvailable = true;
+
+
+  formattedAmrData = [];
+
 
   for (var sample of amrData) {
 
@@ -1059,73 +1103,196 @@ function updateAmrPlots(amrData){
   };
 
 
-    for (const gene of sample.data.geneList) {
-      var aroNum = gene.cardId.split(":")[1];
+  if (sample.data.geneList.length > 0) {
+    if (!sample.data.geneList[0].hasOwnProperty("shortName")){
+      compareAmrHmGenesSnAvailable = false;
+    }
 
-      if (!compareAmrData.hasOwnProperty(aroNum)){
-        compareAmrData[aroNum] = {
-          name: gene.name,
-          resMech: gene.resistanceMechanism,
-          geneFam: gene.geneFamily,
-          drugClass: gene.drugClass,
-          values: {}
+    var geneDataArray = [];
+
+      for (const gene of sample.data.geneList) {
+        var aroNum = gene.cardId.split(":")[1];
+
+        if (!compareAmrData.hasOwnProperty(aroNum)){
+          compareAmrData[aroNum] = {
+            name: gene.name,
+            resMech: gene.resistanceMechanism,
+            geneFam: gene.geneFamily,
+            drugClass: gene.drugClass,
+            shortName: gene.shortName,
+            values: {}
+          };
         };
+
+
+
+          var highestChunk = 0;
+          for (const [chunk, count] of Object.entries(gene.count)) {
+            if (chunk > highestChunk) {
+              var highestChunk = chunk;
+            }
+          }
+          var totalCountAtChunk = gene.count[highestChunk];
+
+          var speciesCounts = [];
+
+          for (const [species, counts] of Object.entries(gene.species)) {
+            var speciesCountAtChunk;
+            if (counts.hasOwnProperty(highestChunk)) {
+              speciesCountAtChunk = counts[highestChunk];
+            } else {
+              var highestSpeciesChunk = 0;
+              for (const [chunk, count] of Object.entries(counts)) {
+                if (chunk > highestSpeciesChunk) {
+                  var highestSpeciesChunk = chunk;
+                }
+              }
+              speciesCountAtChunk = counts[highestSpeciesChunk];
+            }
+
+              speciesCounts.push(species+" ("+speciesCountAtChunk+")");
+          }
+
+          speciesCounts.sort(function(a, b) {
+            var regExp = /\(([^)]*)\)[^(]*$/;
+            var countA = parseInt(regExp.exec(a)[1]);
+            var countB = parseInt(regExp.exec(b)[1]);
+            if (countA > countB) {
+              return -1;
+            } else if (countA < countB) {
+              return 1;
+            }
+            return 0;
+          });
+
+          var geneData = {
+            name: gene.name,
+            aro: aroNum,
+            resMech: gene.resistanceMechanism,
+            geneFam: gene.geneFamily,
+            drugClass: gene.drugClass,
+            shortName: gene.shortName,
+            count: totalCountAtChunk
+          }
+
+          geneDataArray.push(geneData);
+
+        assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'count'], totalCountAtChunk);
+        assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'species'], speciesCounts);
       };
 
-
-        var highestChunk = 0;
-        for (const [chunk, count] of Object.entries(gene.count)) {
-          if (chunk > highestChunk) {
-            var highestChunk = chunk;
-          }
-        }
-        var totalCountAtChunk = gene.count[highestChunk];
-
-        var speciesCounts = [];
-
-        for (const [species, counts] of Object.entries(gene.species)) {
-          var speciesCountAtChunk;
-          if (counts.hasOwnProperty(highestChunk)) {
-            speciesCountAtChunk = counts[highestChunk];
-          } else {
-            var highestSpeciesChunk = 0;
-            for (const [chunk, count] of Object.entries(counts)) {
-              if (chunk > highestSpeciesChunk) {
-                var highestSpeciesChunk = chunk;
-              }
-            }
-            speciesCountAtChunk = counts[highestSpeciesChunk];
-          }
-
-            speciesCounts.push(species+" ("+speciesCountAtChunk+")");
-        }
-
-        speciesCounts.sort(function(a, b) {
-          var regExp = /\(([^)]*)\)[^(]*$/;
-          var countA = parseInt(regExp.exec(a)[1]);
-          var countB = parseInt(regExp.exec(b)[1]);
-          if (countA > countB) {
-            return -1;
-          } else if (countA < countB) {
-            return 1;
-          }
-          return 0;
-        });
+      // compareAmrGeneArrays.push({
+      //   id: id,
+      //   runId: runId,
+      //   data: geneDataArray
+      // })
 
 
-      assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'count'], totalCountAtChunk);
-      assignToObject(compareAmrData, [aroNum, 'values', runId, id, 'species'], speciesCounts);
-    };
+      topNCompareAmrHm(id,runId,geneDataArray,compareAmrHmTopN);
+  }
+
+
+  }
+
+
+orderedAmrHmData = [];
+
+  for (const sample of sortCompareNameArray){
+    for (const sampleData of formattedAmrData) {
+      if (sampleData.sample == sample.name && sampleData.runId == sample.runId) {
+        orderedAmrHmData.push(sampleData);
+      }
+    }
   }
 
 
 
-var csvToExport = generateCompareAmrCsv(compareAmrData);
-var date = getDate() + "_" + getTime();
-var outputFilename = "compare_amr_" + date;
-export_as_csv(csvToExport,outputFilename);
+
+plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
+
 
 }
+
+var formattedAmrData;
+var orderedAmrHmData;
+
+function topNCompareAmrHm(sample,run,data,threshold){
+
+
+  data.sort(function(a, b) {
+      return b.count - a.count
+  })
+
+  var topAmrArray = [];
+
+  for (const [i,amr] of data.entries()) {
+
+    var thresholdGroup;
+
+    if(i < threshold) {
+      thresholdGroup = amr.aro;
+    } else {
+      thresholdGroup = "Other";
+    };
+
+    topAmrArray.push({
+      name: amr.name,
+      aro: amr.aro,
+      resMech: amr.resMech,
+      geneFam: amr.geneFam,
+      drugClass: amr.drugClass,
+      count: amr.count,
+      thresholdGroup: thresholdGroup
+    });
+
+  };
+
+  var topAmrArrayNested = d3.nest()
+      .key(function(d) {
+          return d.thresholdGroup;
+      })
+      .rollup(function(v) {
+        return {
+          thresholdGroup: v[0].thresholdGroup,
+          name: rollupValue(v,"name"),
+          value: d3.sum(v, function(d) {
+            return d.count;
+        })
+      }
+      })
+      .entries(topAmrArray)
+      .map(function(g) {
+          return {
+              label: g.values.thresholdGroup,
+              value: g.values.value,
+              name: g.values.name
+          }
+      })
+      .sort(function(a, b) {
+          return b.value - a.value
+      });
+
+
+      var sampleAmrReadCount = d3.sum(topAmrArrayNested, function(d) {
+          return d.value;
+      });
+
+      var sampleDataArray = {sample:sample,totalAmrReadCount:sampleAmrReadCount,runId:run};
+
+
+      topAmrArrayNested.forEach(function(d) {
+        var proportion = d.value/sampleAmrReadCount;
+          sampleDataArray[d.label] = {value:d.value,proportion:proportion};
+
+        if (!compareAmrHmGenes.includes(d.label)){
+          compareAmrHmGenes.push(d.label);
+        }
+      });
+
+  formattedAmrData.push(sampleDataArray);
+
+}
+
 
 function generateCompareAmrCsv(data) {
   var dataArray = [];

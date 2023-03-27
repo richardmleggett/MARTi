@@ -220,6 +220,15 @@ function ncbiID(r) {
   }
 };
 
+function rollupValue(r,field) {
+  var firstData = r[0];
+  if (r.length > 1 ){
+    return "n/a"
+  } else {
+    return firstData[field]
+  }
+};
+
 function thresholdName(r) {
   var firstData = r[0];
   if (firstData.threshold == "Other" ){

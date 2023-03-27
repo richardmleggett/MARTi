@@ -333,7 +333,7 @@ $(document).on('click touchstart', '.removeRow', function(event){
     });
 
 
-    $("input[name='databaseDir']").val(martiDatabaseDirPath);
+    // $("input[name='databaseDir']").val(martiDatabaseDirPath);
 
 
 infoIconInitialise();
@@ -343,7 +343,7 @@ infoIconInitialise();
 };
 
 var martiOutputBasePath = "/path/to/marti/dir/sample";
-var martiDatabaseDirPath = "/path/to/database/dir";
+// var martiDatabaseDirPath = "/path/to/database/dir";
 
 function updateSampleNameOptions(options) {
 
@@ -423,8 +423,8 @@ function updateProcessCheckboxes(data) {
 
 socket.on('default-server-options-response', response => {
 
-  martiDatabaseDirPath = response.BlastDatabaseDirectory + "/[DATABASE_DIRECTORY]";
-  $("input[name='databaseDir']").val(martiDatabaseDirPath);
+  // martiDatabaseDirPath = response.BlastDatabaseDirectory + "/[DATABASE_DIRECTORY]";
+  // $("input[name='databaseDir']").val(martiDatabaseDirPath);
   updateSampleNameOptions(response.minKNOWSampleNames);
   updateMartiOutputDirOptions(response.MARTiSampleDirectory);
   updateMartiNameField();

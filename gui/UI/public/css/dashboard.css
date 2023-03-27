@@ -25,6 +25,28 @@
   margin-bottom: 0rem;
 } */
 
+
+/* #selectedColumn td.moreInfo {
+  cursor: pointer;
+  text-align:center;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size:1.5rem;
+}
+
+#selectedColumn td.moreInfo::before {
+
+  content: "\f05a";
+
+}
+
+#selectedColumn td.moreInfo:hover {
+
+  background-color: #f6c23e;
+  color: black;
+
+} */
+
 #dashboardAmrTable > thead > tr > th:nth-child(1){
   min-width: 180px;
 }

@@ -58,6 +58,8 @@ You can then check the MARTi Engine is installed by typing:
 ``marti -h``
 
 If you see the help text, all is ok.
+
+.. _GUI installation:
 MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
@@ -67,7 +69,7 @@ Then move this marti_gui script into somewhere in your search path. For Macs, th
 
 ``mv bin/marti_gui /usr/local/bin``
 
-Next, you need to create an options file in your home directory that is required by the GUI. An example is provided in the bin directory. To copy it to your home directory, type:
+The GUI also requires the ``marti_engine_options.txt``. If you've already copied this to your home directory for the MARTi Engine then you can skip this step. Otherwise, copy it to your home directory, type:
 
 ``cp bin/marti_server_options.txt ~/``
 
@@ -75,7 +77,6 @@ This file contains the locations of some important directories and you will need
 
 * MinKNOWRunDirectory - the location of the directory containing read data for runs to be analysed by MARTi. The data for each run within the MinKNOWRunDirectory should be in the MinKNOW output directory format. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/minknow`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample should look something like this: ``/Users/peeln/Documents/minknow/Flongle_run_11102022/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass``
 * MARTiSampleDirectory - the location of a directory that contains MARTi output data. The MARTi GUI will monitor this directory for results to display.
-* BlastDatabaseDirectory - the location of a directory containing blast databases.
 * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
 
 Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :

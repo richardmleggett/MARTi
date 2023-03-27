@@ -175,7 +175,6 @@ var marginHeatmapTaxa = {top: 30, right: 80, bottom: 30, left: 60},
 
 function plotHeatmapTaxa(data,taxa) {
 
-
 for (var [i, sample] of data.entries()){
   sample.index = i;
 };

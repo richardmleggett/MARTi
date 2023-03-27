@@ -1,0 +1,16 @@
+#compareAmrHmPlot svg {
+  overflow: visible;
+}
+
+#compareAmrHmPlot .axis path,
+#compareAmrHmPlot .axis line,
+#compareAmrHmExport .axis path,
+#compareAmrHmExport .axis line {
+  fill: none;
+  stroke: #000;
+}
+
+#compareAmrHmExport text {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 16px;
+}

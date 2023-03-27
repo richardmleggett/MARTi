@@ -677,3 +677,95 @@
 
   </div>
 </div>
+
+
+
+<!-- Heatmap Amr row -->
+<div class="row" id="compareAmrHmRow">
+
+
+  <div class="col-12 mb-4">
+
+    <div class="card shadow" id="compareAmrHmCard">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">AMR heatmap</h6>
+
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuCompareAmrHm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuCompareAmrHm">
+            <div class="dropdown-header">Options:</div>
+
+            <form class="dropdown-form">
+
+              <div class="form-group">
+                <label for="compareAmrHmTopN">Show top <a id="compareAmrHmTopNNum" class="font-weight-bold">N</a> per sample</label>
+                <input type="range" class="form-control-range" id="compareAmrHmTopN" min="1" max="100" value="10">
+              </div>
+
+            <div class="form-group row">
+              <div class="col-sm-5">
+                <label class="">Colour palette:</label>
+              </div>
+              <div class="col-auto">
+                <div class="">
+                    <label><input type="radio" name="compareAmrHmColour" value="blue" checked> Blue</label>
+                </div>
+                <div class="">
+                    <label><input type="radio" name="compareAmrHmColour" value="viridis"> Viridis</label>
+                </div>
+                <div class="">
+                    <label><input type="radio" name="compareAmrHmColour" value="magma"> Magma</label>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label> Grey zero:</label>
+              <label><input type="radio" name="compareAmrHmGrey" value="off" checked>  Off</label>
+              <label><input type="radio" name="compareAmrHmGrey" value="on" >  On</label>
+            </div>
+
+            <div>
+              <label> Read:</label>
+              <label><input type="radio" name="compareAmrHmRead" value="percent" checked>  Percent</label>
+              <label><input type="radio" name="compareAmrHmRead" value="count" >  Count</label>
+            </div>
+
+            <div class="form-group">
+              <label for="compareAmrHmMaxRectWidth">Max cell width: <a id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
+              <input type="range" class="form-control-range" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80">
+            </div>
+
+          </form>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="exportCompareAmrHmCSV" href="#">Export as CSV</a>
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="exportCompareAmrHmSVG" href="#">Export as SVG</a>
+          <a class="dropdown-item" id="exportCompareAmrHmPNG" href="#">Export as PNG</a>
+          <a class="dropdown-item" id="exportCompareAmrHmJPG" href="#">Export as JPG</a>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-body-custom">
+
+
+      <div class="compareAmrHmCard">
+        <div id='compareAmrHmLegend' class="text-center">
+
+      </div>
+        <div id='compareAmrHmPlot'>
+
+      </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>

@@ -6,6 +6,14 @@ function initialiseDashboardPage() {
         { "title": "Rank" },
         { "title": "Read Count" },
         { "title": "Read Proportion"},
+        // {
+        // "title": "View alignments",
+        // "data": null,
+        // "orderable": false,
+        // "searchable": false,
+        // className: "moreInfo",
+        // "defaultContent": ""
+        // },
         null
       ],
       "columnDefs": [
@@ -977,7 +985,6 @@ function firstAmrTableRun() {
 
 function updateAmrTable(amrData){
 
-  console.log(amrData);
 
   dashboardAmrTableChunkTotal = amrData.currentChunk;
   dashboardAmrTableChunkTime = amrData.chunkTime;
