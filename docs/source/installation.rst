@@ -59,7 +59,6 @@ You can then check the MARTi Engine is installed by typing:
 
 If you see the help text, all is ok.
 
-.. _GUI installation:
 MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
@@ -71,7 +70,7 @@ Then move this marti_gui script into somewhere in your search path. For Macs, th
 
 The GUI also requires the ``marti_engine_options.txt``. If you've already copied this to your home directory for the MARTi Engine then you can skip this step. Otherwise, copy it to your home directory, type:
 
-``cp bin/marti_server_options.txt ~/``
+``cp bin/marti_engine_options.txt ~/``
 
 This file contains the locations of some important directories and you will need to update these for your system installation:
 

@@ -46,13 +46,13 @@ The MARTi GUI can be launched by running ``marti_gui``. To view the GUI, open a 
 Persistent options file
 -----------------------
 
-The ``marti_engine_options.txt`` file is used by both the Engine and the GUI. Users can set paths to their taxonomy directory and define blast processes, making MARTi config generation easier (see :ref:`cmdline` for more information about creating a config file and defining Blast processes). This file is also used to set the read data and MARTi output locations for the GUI to monitor (see ref:`GUI installation`). However, changes made to the options file within the Docker (``~/marti_engine_options.txt``) will be lost on exit. For a persistent options file, copy the file to your local machine, map the directory containing the file to the Docker image, and then run the Engine and GUI with the ``-options`` flag followed by the path to your options file.
+The ``marti_engine_options.txt`` file is used by both the Engine and the GUI. Users can set paths to their taxonomy directory and define blast processes, making MARTi config generation easier (see :ref:`cmdline` for more information about creating a config file and defining Blast processes). This file is also used to set the read data and MARTi output locations for the GUI to monitor (see ref:`_installation`). However, changes made to the options file within the Docker (``~/marti_engine_options.txt``) will be lost on exit. For a persistent options file, copy the file to your local machine, map the directory containing the file to the Docker image, and then run the Engine and GUI with the ``-options`` flag followed by the path to your options file.
 
 
 GUI only
 --------
 
-The MARTi Docker image can be used for running just the GUI component of the tool. When running the Docker for this purpose, only the MARTi output directory needs to be specified as a volume:
+The MARTi Docker image can be used for running just the GUI component of the tool. When running the Docker for this purpose, only the MARTi output directory needs to be specified as a volume::
 
   docker run -i -t -p 3000:3000 -v /path/to/marti_example/output:/usr/output nedpeel/marti
 
