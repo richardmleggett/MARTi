@@ -57,6 +57,9 @@ public class MARTiEngineOptionsFile {
                                 if (options.getTaxonomyDirectory() == null) {
                                     options.setTaxonomyDir(taxonomyDir);
                                 }
+                            } else if ((tokens[0].compareToIgnoreCase("MinKNOWRunDirectory")==0) ||
+                                       (tokens[0].compareToIgnoreCase("MARTiSampleDirectory")==0)) {
+                                System.out.println("Ignoring GUI option "+tokens[0]);
                             } else if (!tokens[0].startsWith("#")) {                                
                                 System.out.println("ERROR: Unknown token "+tokens[0]);
                                 System.exit(1);
