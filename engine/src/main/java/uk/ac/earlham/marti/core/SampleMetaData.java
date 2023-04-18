@@ -169,6 +169,7 @@ public class SampleMetaData {
         
         JsonObjectBuilder sampleObjectBuilder = Json.createObjectBuilder();
         sampleObjectBuilder.add("id", options.getSampleIdByBarcode(barcode));
+        sampleObjectBuilder.add("barcode", barcode);        
         sampleObjectBuilder.add("runId", options.getSampleName());
         sampleObjectBuilder.add("sequencingDate", sequencingTimeString);
         sampleObjectBuilder.add("analysisDate", analysingTimeString);
