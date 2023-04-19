@@ -16,10 +16,15 @@ To download one of these pre-built BLAST databases, run the script followed by a
 
 ``update_blastdb.pl --decompress ref_prok_rep_genomes``
 
+Custom database
+---------------
+
 If you want to make a custom BLAST database from FASTA files, you can use the makeblastdb tool distributed with the BLAST+ command line application. Before running the command you need to ensure that each sequence has a unique identifier and that you have created an additional file that maps these identifiers to NCBI taxids (`see here <https://www.ncbi.nlm.nih.gov/books/NBK569841/>`_ for more). Then you can build your database with a command similar to this::
 
   makeblastdb -in zymo_mock.fasta -parse_seqids -blastdb_version 5 -title "Zymo mock" -dbtype nucl -taxid_map taxid_map.txt
 
+CARD
+----
 
 If specified in the configuration file, the MARTi Engine will also BLAST reads to the Comprehensive Antibiotic Resistance Database (CARD) for AMR gene identification. To use the CARD database, you will need to:
 
