@@ -159,8 +159,17 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
   });
 
 
+  // d3.select('#downloadClassifications').on('click', function(){
+  //   window.open("/"+ dashboardSampleRunId + "/"+ dashboardSampleName + "/" + lcaAbundanceDashboard + "/csv");
+  // });
+
   d3.select('#downloadClassifications').on('click', function(){
-    window.open("/"+ dashboardSampleRunId + "/"+ dashboardSampleName + "/" + lcaAbundanceDashboard + "/csv");
+  // console.log(dashboardTaxaData);
+  var csvToExport = convertDashboardDataToCSV(dashboardTaxaData);
+  var date = getDate() + "_" + getTime();
+  var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+  var outputFilename = currentDashboardSampleName + "_taxa_assignments_lca_" + lcaAbundanceDashboard + "_" + levelSelected + "_" + date;
+  export_as_csv(csvToExport,outputFilename);
   });
 
 
@@ -364,6 +373,7 @@ socket.on('dashboard-meta-response', function(data) {
 var root;
 var globDonutData;
 var treeMapData;
+var dashboardTaxaData;
 
 socket.on('dashboard-tree-response', function(treeData) {
 
@@ -399,6 +409,8 @@ var readCountAtLevelSum;
 var newLeafNodes;
 
 function globUpdate(data) {
+
+  dashboardTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
 
 var donutLeaves = [];
 var donutTaxaAtRank = [];
@@ -1135,6 +1147,42 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
 
   };
 
+
+  function convertDashboardDataToCSV(data) {
+
+    var run = dashboardSampleData.runId;
+    var sample = dashboardSampleData.id;
+
+    var dataArray = [];
+    var header = [];
+    header.push('Taxon','NCBI ID','NCBI Rank','Read count','Summed read count');
+    // for (var sample of sortCompareNameArray) {
+      // var sampleNameRunCount = sample + " (" + run + ") Read count";
+      // header.push(sampleNameRunCount);
+    // };
+    // for (var sample of sortCompareNameArray) {
+      // var sampleNameRunSummed = sample + " (" + run + ") Summed read count";
+      // header.push(sampleNameRunSummed);
+    // };
+    dataArray.push(header);
+    for (const [key, value] of Object.entries(data)) {
+      if (key !== "n/a") {
+        var keyRow = [];
+        keyRow.push(value.name);
+        keyRow.push(key);
+        keyRow.push(value.ncbiRank);
+        keyRow.push(value.count);
+        keyRow.push(value.summedCount);
+        dataArray.push(keyRow);
+      };
+    };
+    var csvString = '';
+    dataArray.forEach(function(infoArray, index) {
+      dataString = infoArray.join(',');
+      csvString += index < dataArray.length-1 ? dataString + '\n' : dataString;
+    });
+    return csvString;
+  };
   // function prepareAmrInfoModal(data){
   //
   //   var aroNum = data.cardId.split(":")[1];

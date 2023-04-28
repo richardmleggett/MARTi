@@ -117,3 +117,7 @@ table.dataTable tbody>tr.checkSelected, table.dataTable tbody>tr>.checkSelected,
     background-color: #B0BED9;
     color: #333;
 }
+
+#sampleDataSampleName {
+  height: 32px;
+}

@@ -76,7 +76,26 @@ var selectAllToggle = $('thead>tr').children(':first-child');
 
 });
 
+$("#sampleDataSampleName").on('input', function(){
+  var inputName = $("#sampleDataSampleName").val();
+  var placeholder = $("#sampleDataSampleName").attr('placeholder');
+  var setId;
+  if (inputName != ""){
+      setId = inputName;
+  } else {
+      setId = placeholder;
+  }
 
+  socket.emit('update-sample-name-request',{
+    clientId: uuid,
+    newId: setId,
+    pathRun: currentSampleInfoModalData.pathRun,
+    pathName: currentSampleInfoModalData.pathName,
+    originalId: placeholder
+  });
+
+
+});
 
 
 
@@ -180,6 +199,8 @@ $('tbody>tr').children(':last-child').on('click', function() {
 
 };
 
+
+
 // function emitSelectedCompareSamples() {
 //   var selectedSamplesData = [];
 //   $('#samplePageDataTable tbody tr.checkSelected').each(function() {
@@ -245,7 +266,17 @@ socket.on('meta-update-available', request => {
   };
 });
 
-
+// socket.on('meta-id-file-update-available', request => {
+//   if(currentPage=="Samples") {
+//     socket.emit('meta-request',{
+//       clientId: uuid
+//     });
+//   } else if(currentPage == "Dashboard" && currentDashboardSampleRun == request.runId) {
+//     socket.emit('dashboard-meta-request',{
+//       clientId: uuid
+//     });
+//   };
+// });
 
 socket.on('current-dashboard-sample-response', function(sample) {
   if(sample.name == "") {
@@ -316,8 +347,18 @@ socket.on('current-compare-samples-response', function(samples) {
 
 });
 
+var currentSampleInfoModalData;
+
 function prepareSampleInfoModal(data){
-  $("#sampleDataSampleName").text(data.id);
+  currentSampleInfoModalData = data;
+  // $("#sampleDataSampleName").text(data.id);
+  $("#sampleDataSampleName").attr('value', data.id);
+  if(data.hasOwnProperty("originalId")){
+    $("#sampleDataSampleName").attr('placeholder', data.originalId);
+  } else {
+    $("#sampleDataSampleName").attr('placeholder', data.id);
+  }
+
   $("#sampleDataRunName").text(data.runId);
   $("#sampleDataSequencingDate").text(data.sequencingDate.replace('T',' '));
   $("#sampleDataAnalysisDate").text(data.analysisDate.replace('T',' '));

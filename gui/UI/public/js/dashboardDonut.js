@@ -94,6 +94,7 @@ function indexOfDonutOtherCategory(){
 function returnTopTaxa(data) {
 
 
+
   sorted = data.sort(function(a, b) {
       return b.donutValue - a.donutValue
   })
@@ -106,6 +107,18 @@ function returnTopTaxa(data) {
       } else {
         taxa.threshold = "Other";
       };
+
+
+          if (!dashboardTaxaData.hasOwnProperty(taxa.ncbiID)){
+            dashboardTaxaData[taxa.ncbiID] = {
+              name: taxa.name,
+              summedCount: taxa.summedValue,
+              count: taxa.value,
+              ncbiRank: taxa.ncbiRank
+            };
+          };
+
+
     };
 
 

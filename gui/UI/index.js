@@ -307,6 +307,10 @@ app.use(express.urlencoded({ extended: true }));
 var observer = new Observer();
 
 
+observer.on('id-file-added', meta => {
+  metaDataUpdateId(meta);
+});
+
 function metaDataUpdate(meta) {
 
 var data = meta.content;
@@ -330,6 +334,32 @@ if (!data.sample.hasOwnProperty("runId")) {
     sampleId: sampleId
   });
 }
+
+// function metaDataUpdateId(meta) {
+//
+//   console.log(meta);
+//
+//   var data = meta.content;
+//   var newIds = meta.content.ids;
+//   var runId = meta.runId;
+//
+//   if (!data.hasOwnProperty("runId")) {
+//     data.sample.runId = runId;
+//   }
+//
+//
+//   if (sampleMetaDict[runId]) {
+//     sampleMetaDict[runId]["newIds"] = newIds;
+//   } else {
+//     sampleMetaDict[runId] = {};
+//     sampleMetaDict[runId]["newIds"] = newIds;
+//   }
+//
+//   io.sockets.emit('meta-id-file-update-available', {
+//     runId: runId
+//   });
+//
+// }
 
 observer.on('meta-file-added', meta => {
   metaDataUpdate(meta);
@@ -678,6 +708,22 @@ io.on('connect', function(socket){
   }
   });
 
+  socket.on('update-sample-name-request', request => {
+    var newId = request.newId;
+    var originalId = request.originalId;
+    var sampleId = request.pathName;
+    var runId = request.pathRun;
+
+      if (sampleMetaDict[runId]) {
+        sampleMetaDict[runId][sampleId]["sample"]["originalId"] = originalId;
+        sampleMetaDict[runId][sampleId]["sample"]["id"] = newId;
+      }
+
+      io.sockets.emit('meta-update-available', {
+        runId: runId,
+        sampleId: sampleId
+      });
+  })
 
   socket.on('default-server-options-request', request => {
     var id = request.clientId;
