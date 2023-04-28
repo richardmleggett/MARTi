@@ -23,6 +23,7 @@ public class BlastProcess {
     private String blastMemory = null;
     private String jobQueue = null;
     private String taxaFilter = "";
+    private String negativeTaxaFilter = "";
     private String maxE = "0.001";
     private String maxTargetSeqs = "25";
     private int runMeganEvery = 0;
@@ -62,6 +63,8 @@ public class BlastProcess {
                                 jobQueue = tokens[1];
                             } else if (tokens[0].compareToIgnoreCase("TaxaFilter") == 0) {
                                 taxaFilter = tokens[1];
+                            } else if (tokens[0].compareToIgnoreCase("NegativeTaxaFilter") == 0) {
+                                negativeTaxaFilter = tokens[1];
                             } else if (tokens[0].compareToIgnoreCase("MaxE") == 0) {
                                 maxE = tokens[1];
                             } else if (tokens[0].compareToIgnoreCase("MaxTargetSeqs") == 0) {
@@ -156,6 +159,10 @@ public class BlastProcess {
     
     public String getTaxaFilter() {
         return taxaFilter;
+    }
+    
+    public String getNegativeTaxaFilter(){
+        return negativeTaxaFilter;
     }
     
     public String getMaxE() {

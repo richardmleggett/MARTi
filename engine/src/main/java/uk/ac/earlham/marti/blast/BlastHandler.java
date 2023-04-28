@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 /**
  * Handle creation of BLAST commands, processing filenames etc.
  * 
@@ -86,6 +86,7 @@ public class BlastHandler {
             String memory = bp.getBlastMemory();
             String queue = bp.getJobQueue();
             String taxfilter = bp.getTaxaFilter();
+            String negativeTaxaFilter = bp.getNegativeTaxaFilter();
                  
             String outputBlast = this.getBlastFilePathFromFastaFilePath(inputPathname, bp);
             String commandFile = this.getCommandFilePathFromFastaFilePath(inputPathname, bp);
@@ -121,6 +122,9 @@ public class BlastHandler {
                 if (taxfilter.length() > 1) {
                     command = command + " -taxidlist " + taxfilter;
                 }
+                if (negativeTaxaFilter.length() > 1) {
+                    command = command + " -negative_taxidlist " + negativeTaxaFilter;
+                }
 
                 pw.write(command);
                 pw.close();
@@ -140,31 +144,24 @@ public class BlastHandler {
                     // Need to get the correct LSF ID
                     blastJobsPending.add(blastJobCount);                    
                 } else {
-                    String[] commands;
+                    ArrayList<String> commands = new ArrayList<String>( Arrays.asList("blastn",
+                                             "-db", blastDb,
+                                             "-query", inputPathname,
+                                             "-evalue", bp.getMaxE(),
+                                             "-max_target_seqs", bp.getMaxTargetSeqs(),
+                                             "-show_gis",
+                                             "-num_threads", Integer.toString(bp.getNumThreads()),
+                                             "-task", bp.getBlastTask(),
+                                             "-out", outputBlast,
+                                             "-outfmt", defaultFormatString));
 
                     if (taxfilter.length() > 1) {
-                        commands = new String[]{"blastn",
-                                             "-db", blastDb,
-                                             "-query", inputPathname,
-                                             "-evalue", bp.getMaxE(),
-                                             "-max_target_seqs", bp.getMaxTargetSeqs(),
-                                             "-show_gis",
-                                             "-num_threads", Integer.toString(bp.getNumThreads()),
-                                             "-task", bp.getBlastTask(),
-                                             "-out", outputBlast,
-                                             "-outfmt", defaultFormatString,
-                                             "-taxidlist", taxfilter};
-                    } else {
-                        commands = new String[]{"blastn",
-                                             "-db", blastDb,
-                                             "-query", inputPathname,
-                                             "-evalue", bp.getMaxE(),
-                                             "-max_target_seqs", bp.getMaxTargetSeqs(),
-                                             "-show_gis",
-                                             "-num_threads", Integer.toString(bp.getNumThreads()),
-                                             "-task", bp.getBlastTask(),
-                                             "-out", outputBlast,
-                                             "-outfmt", defaultFormatString};
+                        commands.add("-taxidlist");
+                        commands.add(taxfilter);                                    
+                    }
+                    if (negativeTaxaFilter.length() > 1) {
+                        commands.add("-negative_taxidlist");
+                        commands.add(negativeTaxaFilter);
                     }
 
                     //System.out.println("Submitting with "+bp.getNumThreads() + " threads");
@@ -177,7 +174,8 @@ public class BlastHandler {
                         }
                     }
                     //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
-                    jobid = jobScheduler.submitJob(commands, logFile, runIt);
+                    String[] commandString = commands.toArray(new String[commands.size()]);
+                    jobid = jobScheduler.submitJob(commandString, logFile, runIt);
 
                     if (bp.useForClassifying()) {
                         classifyFilename = outputBlast;
