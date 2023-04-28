@@ -87,41 +87,41 @@ public class BlastProcessRunnable implements Runnable {
         return fastaPathname;
     }
     
-    public void runConvertFastQ(String fastqPathname) {
-        String fastaPathname = generateFastaPathFromFastq(fastqPathname);
-        //File f = new File(fastqPathname);
-        //String fastqLeafname = f.getName();
-        //String fastaPathname = options.getFastaDir() + "_chunks/"+fastqLeafname.substring(0,fastqLeafname.lastIndexOf('.'))+".fasta";
-        options.getLog().println("Converting "+fastqPathname);        
-        options.getLog().println("        to "+fastaPathname);
-        try {
-            String header;
-            PrintWriter pw = new PrintWriter(new FileWriter(fastaPathname));        
-            BufferedReader br = new BufferedReader(new FileReader(fastqPathname));
-            while ((header = br.readLine()) != null) {
-                if (header.startsWith("@")) {
-                    String seq = br.readLine();
-                    String plus = br.readLine();
-                    String qual = br.readLine();
-                    if (plus.equals("+")) {
-                        pw.println(">"+header.substring(1));
-                        pw.println(seq);
-                        numberOfReadsProcessed++;
-                    } else {
-                        System.out.println("ERROR: Badly formatted FASTQ entry in "+fastqPathname);
-                    }
-                } else {
-                    System.out.println("ERROR: Badly formatted FASTQ file: "+fastqPathname);
-                }
-            }
-            br.close();
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("runConvertFastQ exception");
-            e.printStackTrace();
-        }
-        runBlast(fastaPathname);        
-    }
+//    public void runConvertFastQ(String fastqPathname) {
+//        String fastaPathname = generateFastaPathFromFastq(fastqPathname);
+//        //File f = new File(fastqPathname);
+//        //String fastqLeafname = f.getName();
+//        //String fastaPathname = options.getFastaDir() + "_chunks/"+fastqLeafname.substring(0,fastqLeafname.lastIndexOf('.'))+".fasta";
+//        options.getLog().println("Converting "+fastqPathname);        
+//        options.getLog().println("        to "+fastaPathname);
+//        try {
+//            String header;
+//            PrintWriter pw = new PrintWriter(new FileWriter(fastaPathname));        
+//            BufferedReader br = new BufferedReader(new FileReader(fastqPathname));
+//            while ((header = br.readLine()) != null) {
+//                if (header.startsWith("@")) {
+//                    String seq = br.readLine();
+//                    String plus = br.readLine();
+//                    String qual = br.readLine();
+//                    if (plus.equals("+")) {
+//                        pw.println(">"+header.substring(1));
+//                        pw.println(seq);
+//                        numberOfReadsProcessed++;
+//                    } else {
+//                        System.out.println("ERROR: Badly formatted FASTQ entry in "+fastqPathname);
+//                    }
+//                } else {
+//                    System.out.println("ERROR: Badly formatted FASTQ file: "+fastqPathname);
+//                }
+//            }
+//            br.close();
+//            pw.close();
+//        } catch (IOException e) {
+//            System.out.println("runConvertFastQ exception");
+//            e.printStackTrace();
+//        }
+//        runBlast(fastaPathname);        
+//    }
             
     private void runBlast(String fastaPathname) {
         options.getLog().println("Adding read chunk "+fastaPathname);        

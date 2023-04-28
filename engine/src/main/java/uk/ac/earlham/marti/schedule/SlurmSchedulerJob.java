@@ -37,7 +37,7 @@ public class SlurmSchedulerJob {
     private Process process = null;
     private String logFilename;
     private String errorFilename = null;
-    private int jobId;
+    private int internalJobId;
     private ArrayList<Integer> dependencies = new ArrayList<Integer>();
     private boolean dontRunCommand = false;
     private int nCPUs=2;
@@ -53,7 +53,7 @@ public class SlurmSchedulerJob {
 
     public SlurmSchedulerJob(String name, String[] c, String l, boolean d) {
         jobName = name;
-        jobId = -1;
+        internalJobId = -1;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
@@ -62,7 +62,7 @@ public class SlurmSchedulerJob {
     
     public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d) {
         jobName = name;
-        jobId = i;
+        internalJobId = i;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
@@ -78,7 +78,7 @@ public class SlurmSchedulerJob {
     //}
     
     public void setJobId(int i) {
-        jobId = i;
+        internalJobId = i;
     }
 
     public void run() {
@@ -225,7 +225,7 @@ public class SlurmSchedulerJob {
     }
     
     public int getId() {
-        return jobId;
+        return internalJobId;
     }
     
     public String getLog() {
@@ -299,7 +299,8 @@ public class SlurmSchedulerJob {
     }
     
     public void queryJobState() {
-        if (submittedJobId > 0) {            try {
+        if (submittedJobId > 0) {
+            try {
                 Process process = Runtime.getRuntime().exec("sacct -j "+submittedJobId+" -b -X");
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));   
