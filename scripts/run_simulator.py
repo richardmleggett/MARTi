@@ -11,16 +11,18 @@ gzipFail = False
 
 inputDir = None
 outputDir = None
+gzipOutput = False
 
 def print_help():
-	print("run_simulator.py -i <input dir> -o <output dir> -c <chunk size> -t <time between chunks>")
-	print("\t <input dir> \t\t Nanopore run directory to simulate.")
-	print("\t <output dir> \t\t New directory for simulate runs (will create if doesn't exist).")
-	print("\t <chunk size> \t\t Number of reads per file in simulated run.")
-	print("\t <time between chunks> \t Time to wait between writing output files (in minutes).")
+	print("run_simulator.py -i <input dir> -o <output dir> -c <chunk size> -t <time between chunks> -g")
+	print("\t -i <input dir> \t\t Nanopore run directory to simulate.")
+	print("\t -o <output dir> \t\t New directory for simulate runs (will create if doesn't exist).")
+	print("\t -c <chunk size> \t\t Number of reads per file in simulated run.")
+	print("\t -t <time between chunks> \t Approx time to wait between writing output files (in minutes).")
+	print("\t -g \t\t\t\t gzip simulated fastq files.")
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:],"hi:o:c:t:")
+	opts, args = getopt.getopt(sys.argv[1:],"hi:o:c:t:g")
 except getopt.GetoptError:
 	print("Option not recognised.")
 	print_help()
@@ -30,13 +32,15 @@ for opt, arg in opts:
 		print_help()
 		sys.exit()
 	elif opt in ("-i"):
-		inputDir = arg
+		inputDir = arg.rstrip("/")
 	elif opt in ("-o"):
-		outputDir = arg
+		outputDir = arg.rstrip("/")
 	elif opt in ("-c"):
 		chunkSize = int(arg)
 	elif opt in ("-t"):
 		timeBetweenChunks = float(arg) * 60
+	elif opt in ("-g"):
+		gzipOutput = True
 
 if not inputDir:
 	print("Error: You must specify -i")
@@ -79,16 +83,18 @@ fastqFailList.sort(key=lambda p: int(p.name.split("_")[-1].split(".")[0]), rever
 
 # Make new directory structure
 Path(outputDir).mkdir(parents=True, exist_ok=True)
+outputDir += "/" + Path(inputDir).stem
+Path(outputDir).mkdir(parents=True, exist_ok=True)
 for path in Path(inputDir).rglob('*/'):
 	if path.is_dir() :
-		Path(outputDir + "/" + path.as_posix().replace(inputDir, '')).mkdir(parents=True, exist_ok=True)
+		Path(outputDir + path.as_posix().replace(inputDir, '')).mkdir(parents=True, exist_ok=True)
 		if path.name == "fastq_pass":
-			fastqPassOutputDir = outputDir + "/" + path.as_posix().replace(inputDir, '')
-			for fastq in Path(fastqPassOutputDir).glob("simulator_pass_chunk_*.fastq"):
+			fastqPassOutputDir = outputDir + path.as_posix().replace(inputDir, '')
+			for fastq in Path(fastqPassOutputDir).glob("simulator_pass_chunk_*.fastq*"):
 				fastq.unlink()
 		elif path.name == "fastq_fail":
-			fastqFailOutputDir = outputDir + "/" + path.as_posix().replace(inputDir, '')
-			for fastq in Path(fastqFailOutputDir).glob("simulator_fail_chunk_*.fastq"):
+			fastqFailOutputDir = outputDir + path.as_posix().replace(inputDir, '')
+			for fastq in Path(fastqFailOutputDir).glob("simulator_fail_chunk_*.fastq*"):
 				fastq.unlink()
 
 assert(fastqPassOutputDir != '')
@@ -104,17 +110,27 @@ with open(tempFilename, 'w') as outfile:
 chunkNumber = 0
 with open(tempFilename, 'r') as infile:
 	lineNumber = 0
-	f = open(fastqPassOutputDir + "/simulator_pass_chunk_0.fastq", "w")
+	outputPath = fastqPassOutputDir + "/simulator_pass_chunk_0.fastq"
+	if gzipOutput:
+		outputPath += ".gz"
+		f = gzip.open(outputPath, "wt")
+	else:
+		f = open(outputPath, "w")
 	for line in infile:
 		if lineNumber != 0 and (lineNumber / 4) % chunkSize == 0:
 			f.close()
-			print("[run_simulator.py] Writing pass chunk " + str(chunkNumber) + " to " + fastqPassOutputDir + "/simulator_pass_chunk_" + str(chunkNumber) + ".fastq")
+			print("[run_simulator.py] Writing pass chunk " + str(chunkNumber) + " to " + outputPath)
 			time.sleep(timeBetweenChunks)
 			chunkNumber += 1
-			f = open(fastqPassOutputDir + "/simulator_pass_chunk_" + str(chunkNumber) + ".fastq", "w")
+			outputPath = fastqPassOutputDir + "/simulator_pass_chunk_" + str(chunkNumber) + ".fastq"
+			if gzipOutput:
+				outputPath += ".gz"
+				f = gzip.open(outputPath, "wt")
+			else:
+				f = open(outputPath, "w")
 		f.write(line)
 		lineNumber += 1
-	print("[run_simulator.py] Writing pass chunk " + str(chunkNumber) + " to " + fastqPassOutputDir + "/simulator_pass_chunk_" + str(chunkNumber) + ".fastq")
+	print("[run_simulator.py] Writing pass chunk " + str(chunkNumber) + " to " + outputPath)
 	f.close()
 p = Path(tempFilename)
 p.unlink()
@@ -132,12 +148,22 @@ if len(fastqFailList) > 0:
 	chunkNumber = 0
 	with open(tempFilename, 'r') as infile:
 		lineNumber = 0
-		f = open(fastqFailOutputDir + "/simulator_fail_chunk_0.fastq", "w")
+		outputPath = fastqFailOutputDir + "/simulator_fail_chunk_0.fastq"
+		if gzipOutput:
+			outputPath += ".gz"
+			f = gzip.open(outputPath, "wt")
+		else:
+			f = open(outputPath, "w")
 		for line in infile:
 			if lineNumber != 0 and (lineNumber / 4) % chunkSize == 0:
 				f.close()
 				chunkNumber += 1
-				f = open(fastqFailOutputDir + "/simulator_fail_chunk_" + str(chunkNumber) + ".fastq", "w")
+				outputPath = fastqFailOutputDir + "/simulator_fail_chunk_" + str(chunkNumber) + ".fastq"
+				if gzipOutput:
+					outputPath += ".gz"
+					f = gzip.open(outputPath, "wt")
+				else:
+					f = open(outputPath, "w")
 			f.write(line)
 			lineNumber += 1
 		f.close()
