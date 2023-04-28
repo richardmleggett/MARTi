@@ -14,6 +14,7 @@ class Observer extends EventEmitter {
 
 
       var filesToWatch;
+      var idFilesToWatch;
 
       if (!folder.endsWith("/")) {
         folder = folder + "/";
@@ -30,16 +31,17 @@ class Observer extends EventEmitter {
           );
             filesToWatch = folder + "marti/**/*.json";
             dirToMonitor = folder + "marti/";
+            idFilesToWatch = folder + "ids.json"
             console.log(
               `[${new Date().toLocaleString()}] Monitoring MARTi Engine output files in the following directory: ${dirToMonitor}`
             );
         } else {
             filesToWatch = folder + "*/marti/**/*.json";
+            idFilesToWatch = folder + "*/ids.json";
             console.log(
               `[${new Date().toLocaleString()}] Monitoring MARTi run directories in the following location: ${folder}`
             );
         }
-
 
 
       var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 2000, pollInterval: 100 }});
@@ -61,6 +63,34 @@ class Observer extends EventEmitter {
           fileContent.sample.dir = dir;
           fileContent.sample.pathName = sampleName;
           fileContent.sample.pathRun = runId;
+
+
+          var idFilePath = split.slice(0,-3).join('/') + "/ids.json";
+
+          if (fsExtra.existsSync(idFilePath)) {
+
+            var idFileContent = await fsExtra.readFile(idFilePath);
+
+            idFileContent = JSON.parse(idFileContent);
+
+            // var split = filePath.split(sep);
+            // var dir = split.slice(0,-2).join('/');
+            //
+            // var runId = split[split.length - 2];
+
+
+            if (idFileContent.hasOwnProperty(sampleName)){
+              fileContent.sample.originalId = fileContent.sample.id;
+              fileContent.sample.id = idFileContent[sampleName];
+            }
+
+
+
+            console.log(
+              `[${new Date().toLocaleString()}] ${idFilePath} has been ADDED.`
+            );
+
+          }
 
           this.emit('meta-file-added', {
             id: sampleName,
@@ -297,10 +327,12 @@ class Observer extends EventEmitter {
       });
 
 
-
     } catch (error) {
       console.log(error);
     }
+
+
+
   }
 
 

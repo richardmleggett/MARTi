@@ -118,49 +118,7 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
 
 };
 
-function convertDataToCSV(data) {
-  var dataArray = [];
-  var header = [];
-  header.push('Taxon','NCBI ID','NCBI Rank');
-  for (var sample of sortCompareNameArray) {
-    var sampleNameRunCount = sample.name + " (" + sample.runId + ") Read count";
-    header.push(sampleNameRunCount);
-  };
-  for (var sample of sortCompareNameArray) {
-    var sampleNameRunSummed = sample.name + " (" + sample.runId + ") Summed read count";
-    header.push(sampleNameRunSummed);
-  };
-  dataArray.push(header);
-  for (const [key, value] of Object.entries(data)) {
-    if (key !== "n/a") {
-      var keyRow = [];
-      keyRow.push(value.name);
-      keyRow.push(key);
-      keyRow.push(value.ncbiRank);
-      for (var sample of sortCompareNameArray) {
-        if (checkNested(value.values, sample.runId, sample.name)) {
-          keyRow.push((value["values"][sample.runId][sample.name]['count']).toString());
-        } else {
-          keyRow.push('0');
-        };
-      };
-      for (var sample of sortCompareNameArray) {
-        if (checkNested(value.values, sample.runId, sample.name)) {
-          keyRow.push((value["values"][sample.runId][sample.name]['summedCount']).toString());
-        } else {
-          keyRow.push('0');
-        };
-      };
-      dataArray.push(keyRow);
-    };
-  };
-  var csvString = '';
-  dataArray.forEach(function(infoArray, index) {
-    dataString = infoArray.join(',');
-    csvString += index < dataArray.length-1 ? dataString + '\n' : dataString;
-  });
-  return csvString;
-};
+
 
 var hmTaxaColourPalettes = {
   blue: ['white', '#227AB5'],
