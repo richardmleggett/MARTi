@@ -48,7 +48,7 @@ socket.emit('meta-request',{
 
 $('.compareSamplesInput').on('click', function() {
 
-  emitSelectedCompareSamples();
+  // emitSelectedCompareSamples();
 
     if (comparePageUnlocked == false) {
       $('#compareModal').modal('show')
@@ -158,7 +158,7 @@ samplePageDataTable.draw(false);
 
     $('tbody>tr').children(':not(:nth-child(2)):not(:last-child)').on('click', function() {
       $(this).closest('tr').toggleClass('checkSelected');
-      // emitSelectedCompareSamples()
+      emitSelectedCompareSamples();
 
     });
 
@@ -171,7 +171,7 @@ samplePageDataTable.draw(false);
         $('tbody>tr').addClass('checkSelected');
       }
 
-      // emitSelectedCompareSamples();
+      emitSelectedCompareSamples();
 
     });
 
@@ -219,8 +219,10 @@ $('tbody>tr').children(':last-child').on('click', function() {
 // }
 
 function emitSelectedCompareSamples() {
+  var prevSearchValue = $("#sampleTableSearchBox").val();
   $("#sampleTableSearchBox").val("");
   samplePageDataTable.search("").draw();
+
   var selectedSamplesData = [];
   $('#samplePageDataTable tbody tr.checkSelected').each(function() {
     var rowData = samplePageDataTable.row( $(this) ).data();
@@ -236,6 +238,10 @@ function emitSelectedCompareSamples() {
   } else {
     comparePageUnlocked = true;
   };
+
+  $("#sampleTableSearchBox").val(prevSearchValue);
+  samplePageDataTable.search(prevSearchValue).draw();
+
 
   socket.emit('selected-compare-samples', {
     clientId: uuid,
@@ -310,6 +316,7 @@ socket.on('current-dashboard-sample-response', function(sample) {
 
 
 socket.on('current-compare-samples-response', function(samples) {
+
   if(isEmpty(samples)) {
     comparePageUnlocked = false;
   } else {
@@ -342,9 +349,6 @@ socket.on('current-compare-samples-response', function(samples) {
       };
     };
   };
-
-
-
 });
 
 var currentSampleInfoModalData;
@@ -352,7 +356,14 @@ var currentSampleInfoModalData;
 function prepareSampleInfoModal(data){
   currentSampleInfoModalData = data;
   // $("#sampleDataSampleName").text(data.id);
-  $("#sampleDataSampleName").attr('value', data.id);
+
+  if (restrictedMode == false){
+      $('#sampleDataSampleName').removeAttr('disabled');
+  } else {
+    console.log("restrictedMode: " + restrictedMode);
+  }
+
+  $("#sampleDataSampleName").val(data.id);
   if(data.hasOwnProperty("originalId")){
     $("#sampleDataSampleName").attr('placeholder', data.originalId);
   } else {
