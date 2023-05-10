@@ -29,6 +29,13 @@ function initialiseAmrDonut() {
       plotAmrDonut(dashboardAmrReponseData);
     });
 
+    dashboardAmrDonutPlotBy = "Gene";
+
+  d3.select("#dashboardAmrDonutPlotBy").on("change", function(){
+    dashboardAmrDonutPlotBy = d3.select(this).property("value");
+    plotAmrDonut(dashboardAmrReponseData);
+  });
+
     d3.select("#dashboardAmrDonutTopN").on("change", function(){
       plotAmrDonut(dashboardAmrReponseData);
     });
@@ -149,6 +156,8 @@ var key = function(d) {
 
 var dropdownGeneList = [];
 var dropdownGeneListSelected = "All genes";
+var dashboardAmrDonutPlotBy = "Gene";
+var dashboardAmrDonutPlotByList = [];
 var dashboardAmrDonutTopN = 10;
 
 
@@ -156,18 +165,51 @@ function plotAmrDonut(data) {
 
 // amrDonutColor = dashboardPlotColorPalette;
 
+dashboardAmrDonutPlotByListOptions = [{plotByProp:"drugClass",name:"Drug class"}]
+dashboardAmrDonutPlotByList = [];
+
+for (const option of dashboardAmrDonutPlotByListOptions) {
+  if (data.geneList[0].hasOwnProperty(option.plotByProp)) {
+    dashboardAmrDonutPlotByList.push(option.name);
+  }
+}
+
+dashboardAmrDonutPlotByList.unshift("Gene");
+
+d3.select("#dashboardAmrDonutPlotBy").selectAll("option").remove();
+
+  var plotByOptions = d3.select("#dashboardAmrDonutPlotBy").selectAll("option")
+      .data(dashboardAmrDonutPlotByList);
+
+      plotByOptions.enter()
+          .append("option")
+          .text(function(d) {return d;});
+
+      plotByOptions.exit()
+          .remove();
+
+$('#dashboardAmrDonutPlotBy option:contains(' + dashboardAmrDonutPlotBy + ')').prop({selected: true});
+
+console.log(dashboardAmrDonutPlotBy);
+
+
 amrDonutColor = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
 
-dropdownGeneList = [];
+
 
 
   var newData = JSON.parse(JSON.stringify(data));
 
-
+dropdownGeneList = [];
 
 var plotData = [];
 
+switch(dashboardAmrDonutPlotBy) {
+  case "Drug class":
+    // code block
+    break;
+  default:
   var geneListShortName = "cardId";
 
 
@@ -196,8 +238,6 @@ var plotData = [];
       newData.geneList = [data.geneList[i]];
       plotData = topTaxaAmr(newData);
     };
-
-
   };
 
 
@@ -230,6 +270,9 @@ d3.select("#dashboardAmrDonutAmrSelect").selectAll("option").remove();
           .remove();
 
 $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')').prop({selected: true});
+}
+
+
 
   var dataMax = d3.max(plotData, function(d) {
       return d.value;
