@@ -314,7 +314,7 @@ $(document).on('click touchstart', '.removeRow', function(event){
 
     });
 
-    $("#sampleName").change(function() {
+    $("#rawDataDir").change(function() {
       updateMartiNameField();
       $("input[name='martiName']").trigger('input');
     });
@@ -345,10 +345,11 @@ infoIconInitialise();
 var martiOutputBasePath = "/path/to/marti/dir/sample";
 // var martiDatabaseDirPath = "/path/to/database/dir";
 
-function updateSampleNameOptions(options) {
 
-  var sampleNameOptions = d3.select("select[name='sampleName']").selectAll("option")
-      .data(options);
+function updateRawDataDirOptions(options) {
+
+  var sampleNameOptions = d3.select("select[name='rawDataDir']").selectAll("option")
+     .data(options);
 
       sampleNameOptions.enter()
           .append("option")
@@ -359,6 +360,7 @@ function updateSampleNameOptions(options) {
 
 
 }
+
 
 function updateMartiOutputDirOptions(options) {
 
@@ -375,16 +377,17 @@ function updateMartiOutputDirOptions(options) {
 }
 
 function updateMartiNameField() {
-  var currentOption = $('#sampleName option:selected').text();
-  $("input[name='martiName']").val(currentOption);
+  var currentOption = $('#rawDataDir option:selected').text();
+  var name = currentOption.replace(options.MinKNOWRunDirectory, '').trim("/").split("/")[1];
+  $("input[name='martiName']").val(name);
 }
 
 function updateOutputPathField() {
-var martiName = $("input[name='martiName']").val();
-martiOutputBasePath = $('#outputDir option:selected').text();
-var path = martiOutputBasePath + "/" + martiName;
-$("input[name='outputPath']").val(path);
-
+  var martiName = $("input[name='martiName']").val();
+  //var martiName = 
+  martiOutputBasePath = $('#outputDir option:selected').text();
+  var path = martiOutputBasePath + "/" + martiName;
+  $("input[name='outputPath']").val(path);
 }
 
 
@@ -425,7 +428,9 @@ socket.on('default-server-options-response', response => {
 
   // martiDatabaseDirPath = response.BlastDatabaseDirectory + "/[DATABASE_DIRECTORY]";
   // $("input[name='databaseDir']").val(martiDatabaseDirPath);
-  updateSampleNameOptions(response.minKNOWSampleNames);
+  //console.log(response);
+  options = response;
+  updateRawDataDirOptions(response.minKNOWSampleNames);
   updateMartiOutputDirOptions(response.MARTiSampleDirectory);
   updateMartiNameField();
   updateOutputPathField();

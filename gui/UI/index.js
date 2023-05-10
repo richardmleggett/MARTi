@@ -194,14 +194,17 @@ function scanMinKNOWRunDirectory() {
       var list = getSubDirectories(MinKNOWRunDirectory);
       list.forEach(function(dir) {
         var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);
-        if(newList.length == 1) {
+        if(newList.includes("fastq_pass")) {
+          minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir);
+        }
+        else if(newList.length == 1) {
           const sampleDir = newList[0];
           newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir);
           if(newList.length == 1) {
             const uid_dir = newList[0];
             newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
             if(newList.includes("fastq_pass")) {
-              minKNOWSampleNames.push(dir);
+              minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
             }
           }
         }
@@ -215,10 +218,8 @@ function scanMinKNOWRunDirectory() {
 
 function makeConfigFileString(form_object) {
   var configFileString = "";
-  var dir1 = getSubDirectories(serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"])[0];
-  var dir2 = getSubDirectories(serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"] + "/" + dir1)[0];
+  configFileString += "RawDataDir:" + form_object["rawDataDir"] + "\n";
   configFileString += "SampleName:" + form_object["martiName"] + "\n";
-  configFileString += "RawDataDir:" + serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"] + "/" + dir1 + "/" + dir2 + "\n";
   configFileString += "SampleDir:" + form_object["outputDir"] + "/" + form_object["martiName"] + "\n";
   if(form_object.hasOwnProperty('processBarcodeCheck') && form_object["processBarcodeCheck"] == "on") {
     if(Array.isArray(form_object["barcodeCheck"])) {
