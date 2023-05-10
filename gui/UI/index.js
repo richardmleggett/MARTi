@@ -197,7 +197,7 @@ function scanMinKNOWRunDirectory() {
       var list = getSubDirectories(MinKNOWRunDirectory);
       list.forEach(function(dir) {
         var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);
-        if(newList.includes("fastq_pass")) {
+        if(newList.includes("fastq_pass") || newList.includes("pass")) {
           minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir);
         }
         else if(newList.length == 1) {
