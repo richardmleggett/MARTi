@@ -171,7 +171,7 @@ public class ReadClassifier {
                                 SampleMetaData md = options.getSampleMetaData(barcode);
 
                                 options.getLog().println("Got sample metadata");
-                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null);
+                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null, options.runningCARD());
                                 
                                 String summaryFilename = f.getClassifierPrefix() + "_summary.txt";
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";

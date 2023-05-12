@@ -25,7 +25,7 @@ public class BlastHandler {
     private int nSeqs = 0;
     private ArrayList<String> mergeList = new ArrayList<String>();
     //private String defaultFormatString = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle staxids";
-    private String defaultFormatString = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids";
+    private String defaultFormatString = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs staxids";
     private ArrayList<String> inputFilenames = new ArrayList<String>();
     private ArrayList<String> blastFilenames = new ArrayList<String>();
     private ArrayList<Integer> blastJobsPending = new ArrayList<Integer>();
@@ -54,6 +54,9 @@ public class BlastHandler {
     
     private synchronized void runBlasts(String inputPathname) {
         int barcode = options.getBarcodeFromPath(inputPathname);
+        if(options.runningCARD()) {
+            defaultFormatString = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids";
+        }            
         String formatString = "'" + defaultFormatString + "'";
         ArrayList<BlastProcess> blastProcesses = options.getBlastProcesses();
         File iff = new File(inputPathname);

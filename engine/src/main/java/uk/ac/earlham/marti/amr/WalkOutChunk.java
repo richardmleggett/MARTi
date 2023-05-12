@@ -57,7 +57,7 @@ public class WalkOutChunk {
             // Go through CARD file, storing reads with hits
             while ((line = cardReader.readLine()) != null) {
                 if (line.length() > 1) {
-                    BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false);
+                    BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false, true);
                     if (bh.isValidAlignment()) {
                         WalkOutRead wor = reads.get(bh.getQueryId());
                         if (wor == null) {
@@ -73,7 +73,7 @@ public class WalkOutChunk {
             // Now go through bacteria file
             while ((line = bacteriaReader.readLine()) != null) {
                 if (line.length() > 1) {
-                    BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false);
+                    BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false, true);
                     if (bh.isValidAlignment()) {
                         WalkOutRead wor = reads.get(bh.getQueryId());
                         if (wor != null) {

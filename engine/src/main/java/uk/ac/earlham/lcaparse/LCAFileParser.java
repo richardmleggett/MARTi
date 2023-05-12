@@ -33,11 +33,13 @@ public class LCAFileParser {
     private LCAParseOptions options;
     private String lastFilename = "";
     private boolean keepRejectedAlignments = false;
+    private boolean runningCARD;
 
-    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc) {
+    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard) {
         taxonomy = t;
         options = o;
         accTaxConvert = atc;
+        runningCARD = rCard;
     }
     
     private void logEqual(String queryName) {
@@ -60,7 +62,7 @@ public class LCAFileParser {
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAB) || 
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAXON))
         {
-            hit = new BlastHit(t, atc, line, options.getFileFormat(), true);
+            hit = new BlastHit(t, atc, line, options.getFileFormat(), true, runningCARD);
         } else {
             System.out.println("Error in crerateNewHit - unexpected format\n");
             System.exit(1);
