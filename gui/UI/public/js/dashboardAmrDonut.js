@@ -125,7 +125,7 @@ var key = function(d) {
             if (!drugClassSpeciesCounts.hasOwnProperty(drugClass)){
               drugClassSpeciesCounts[drugClass] = taxaSeparateCounts;
             } else {
-
+              drugClassSpeciesCounts[drugClass] = drugClassSpeciesCounts[drugClass].concat(taxaSeparateCounts);
             }
 
           };
