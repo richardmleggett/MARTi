@@ -1,21 +1,22 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.2"
+        "martiVersion": "v0.9.12"
     },
     "sample": {
         "id": "BAMBI_P116I_SQK108_02022018",
-        "sequencingDate": "2021-06-18T23:25:29",
-        "analysisDate": "2021-06-18T23:25:29",
+        "runId": "BAMBI_P116I_SQK108_02022018",
+        "sequencingDate": "2023-05-16T14:33:28",
+        "analysisDate": "2023-05-16T14:33:28",
         "yieldBases": 56018179,
         "yieldGb": 0.056018179,
         "readsPassBasecall": 120000,
-        "readsFailedFilter": 86825,
-        "readsPassedFilter": 33175,
-        "readsWithClassification": 32932,
-        "readsUnclassified": 243,
-        "readsWithPoorAlignments": 1,
-        "readsAnalysed": 33175,
+        "readsFailedFilter": 85080,
+        "readsPassedFilter": 34920,
+        "readsWithClassification": 33859,
+        "readsUnclassified": 1061,
+        "readsWithPoorAlignments": 41,
+        "readsAnalysed": 34920,
         "sequencingStatus": "Complete",
         "martiStatus": "Complete",
         "analysis": {

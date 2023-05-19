@@ -1,12 +1,18 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.2",
+        "martiVersion": "v0.9.12",
+        "fileWritten": "2023-05-16T15:17:52",
         "blastFiles": {
-            "0": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_3.txt",
-            "1": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_1.txt",
-            "2": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_0.txt",
-            "3": "/ei/projects/6/664c1d7d-0b6a-48b4-8c44-0afc719df462/data/results/marti/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_2.txt"
+            "0": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_8.txt",
+            "1": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_2.txt",
+            "2": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_0.txt",
+            "3": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_3.txt",
+            "4": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_5.txt",
+            "5": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_6.txt",
+            "6": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_4.txt",
+            "7": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_7.txt",
+            "8": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_1.txt"
         }
     },
     "tree": {
@@ -14,24 +20,114 @@
         "rank": 0,
         "ncbiRank": "no rank",
         "ncbiID": 1,
-        "value": 163,
-        "summedValue": 25131,
+        "value": 919,
+        "summedValue": 40744,
         "children": [
+            {
+                "name": "Viruses",
+                "rank": 1,
+                "ncbiRank": "superkingdom",
+                "ncbiID": 10239,
+                "value": 0,
+                "summedValue": 90,
+                "children": [
+                    {
+                        "name": "Duplodnaviria",
+                        "rank": 0,
+                        "ncbiRank": "clade",
+                        "ncbiID": 2731341,
+                        "value": 0,
+                        "summedValue": 88,
+                        "children": [
+                            {
+                                "name": "Heunggongvirae",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 2731360,
+                                "value": 0,
+                                "summedValue": 88,
+                                "children": [
+                                    {
+                                        "name": "Uroviricota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 2731618,
+                                        "value": 0,
+                                        "summedValue": 88,
+                                        "children": [
+                                            {
+                                                "name": "Caudoviricetes",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 2731619,
+                                                "value": 0,
+                                                "summedValue": 88,
+                                                "children": [
+                                                    {
+                                                        "name": "Caudovirales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 28883,
+                                                        "value": 0,
+                                                        "summedValue": 88,
+                                                        "children": [
+                                                            {
+                                                                "name": "Myoviridae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 10662,
+                                                                "value": 0,
+                                                                "summedValue": 83,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "unclassified Myoviridae",
+                                                                        "rank": 0,
+                                                                        "ncbiRank": "no rank",
+                                                                        "ncbiID": 196896,
+                                                                        "value": 0,
+                                                                        "summedValue": 83,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Myoviridae sp.",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 2202564,
+                                                                                "value": 74,
+                                                                                "summedValue": 74,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
             {
                 "name": "cellular organisms",
                 "rank": 0,
                 "ncbiRank": "no rank",
                 "ncbiID": 131567,
-                "value": 0,
-                "summedValue": 24968,
+                "value": 98,
+                "summedValue": 38940,
                 "children": [
                     {
                         "name": "Bacteria",
                         "rank": 1,
                         "ncbiRank": "superkingdom",
                         "ncbiID": 2,
-                        "value": 73,
-                        "summedValue": 24968,
+                        "value": 136,
+                        "summedValue": 38732,
                         "children": [
                             {
                                 "name": "Proteobacteria",
@@ -39,58 +135,78 @@
                                 "ncbiRank": "phylum",
                                 "ncbiID": 1224,
                                 "value": 0,
-                                "summedValue": 24838,
+                                "summedValue": 38511,
                                 "children": [
                                     {
                                         "name": "Gammaproteobacteria",
                                         "rank": 4,
                                         "ncbiRank": "class",
                                         "ncbiID": 1236,
-                                        "value": 125,
-                                        "summedValue": 24831,
+                                        "value": 90,
+                                        "summedValue": 38505,
                                         "children": [
                                             {
                                                 "name": "Enterobacterales",
                                                 "rank": 5,
                                                 "ncbiRank": "order",
                                                 "ncbiID": 91347,
-                                                "value": 731,
-                                                "summedValue": 24706,
+                                                "value": 1085,
+                                                "summedValue": 38415,
                                                 "children": [
                                                     {
                                                         "name": "Enterobacteriaceae",
                                                         "rank": 6,
                                                         "ncbiRank": "family",
                                                         "ncbiID": 543,
-                                                        "value": 2655,
-                                                        "summedValue": 20868,
+                                                        "value": 3003,
+                                                        "summedValue": 32970,
                                                         "children": [
+                                                            {
+                                                                "name": "Citrobacter",
+                                                                "rank": 7,
+                                                                "ncbiRank": "genus",
+                                                                "ncbiID": 544,
+                                                                "value": 0,
+                                                                "summedValue": 67,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Citrobacter freundii complex",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "species group",
+                                                                        "ncbiID": 1344959,
+                                                                        "value": 0,
+                                                                        "summedValue": 67,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Citrobacter freundii",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 546,
+                                                                                "value": 66,
+                                                                                "summedValue": 66,
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
                                                             {
                                                                 "name": "Enterobacter",
                                                                 "rank": 7,
                                                                 "ncbiRank": "genus",
                                                                 "ncbiID": 547,
                                                                 "value": 0,
-                                                                "summedValue": 38,
+                                                                "summedValue": 179,
                                                                 "children": [
                                                                     {
-                                                                        "name": "unclassified Enterobacter",
-                                                                        "rank": 0,
-                                                                        "ncbiRank": "no rank",
-                                                                        "ncbiID": 2608935,
-                                                                        "value": 0,
-                                                                        "summedValue": 25,
+                                                                        "name": "Enterobacter cloacae complex",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "species group",
+                                                                        "ncbiID": 354276,
+                                                                        "value": 165,
+                                                                        "summedValue": 165,
                                                                         "children": [
-                                                                            {
-                                                                                "name": "Enterobacter sp. Crenshaw",
-                                                                                "rank": 8,
-                                                                                "ncbiRank": "species",
-                                                                                "ncbiID": 1977566,
-                                                                                "value": 25,
-                                                                                "summedValue": 25,
-                                                                                "children": [
-                                                                                ]
-                                                                            }
                                                                         ]
                                                                     }
                                                                 ]
@@ -101,15 +217,15 @@
                                                                 "ncbiRank": "genus",
                                                                 "ncbiID": 561,
                                                                 "value": 0,
-                                                                "summedValue": 127,
+                                                                "summedValue": 67,
                                                                 "children": [
                                                                     {
                                                                         "name": "Escherichia coli",
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
                                                                         "ncbiID": 562,
-                                                                        "value": 123,
-                                                                        "summedValue": 123,
+                                                                        "value": 66,
+                                                                        "summedValue": 66,
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -120,36 +236,16 @@
                                                                 "rank": 7,
                                                                 "ncbiRank": "genus",
                                                                 "ncbiID": 570,
-                                                                "value": 4621,
-                                                                "summedValue": 18005,
+                                                                "value": 3072,
+                                                                "summedValue": 29581,
                                                                 "children": [
-                                                                    {
-                                                                        "name": "Klebsiella oxytoca",
-                                                                        "rank": 8,
-                                                                        "ncbiRank": "species",
-                                                                        "ncbiID": 571,
-                                                                        "value": 184,
-                                                                        "summedValue": 184,
-                                                                        "children": [
-                                                                        ]
-                                                                    },
                                                                     {
                                                                         "name": "Klebsiella pneumoniae",
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
                                                                         "ncbiID": 573,
-                                                                        "value": 13124,
-                                                                        "summedValue": 13124,
-                                                                        "children": [
-                                                                        ]
-                                                                    },
-                                                                    {
-                                                                        "name": "Klebsiella variicola",
-                                                                        "rank": 8,
-                                                                        "ncbiRank": "species",
-                                                                        "ncbiID": 244366,
-                                                                        "value": 26,
-                                                                        "summedValue": 26,
+                                                                        "value": 26394,
+                                                                        "summedValue": 26394,
                                                                         "children": [
                                                                         ]
                                                                     },
@@ -158,28 +254,28 @@
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
                                                                         "ncbiID": 1463165,
-                                                                        "value": 50,
-                                                                        "summedValue": 50,
+                                                                        "value": 115,
+                                                                        "summedValue": 115,
                                                                         "children": [
                                                                         ]
                                                                     }
                                                                 ]
                                                             },
                                                             {
-                                                                "name": "Raoultella",
+                                                                "name": "Salmonella",
                                                                 "rank": 7,
                                                                 "ncbiRank": "genus",
-                                                                "ncbiID": 160674,
-                                                                "value": 25,
-                                                                "summedValue": 60,
+                                                                "ncbiID": 590,
+                                                                "value": 0,
+                                                                "summedValue": 90,
                                                                 "children": [
                                                                     {
-                                                                        "name": "Raoultella ornithinolytica",
+                                                                        "name": "Salmonella enterica",
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
-                                                                        "ncbiID": 54291,
-                                                                        "value": 35,
-                                                                        "summedValue": 35,
+                                                                        "ncbiID": 28901,
+                                                                        "value": 89,
+                                                                        "summedValue": 89,
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -188,28 +284,28 @@
                                                         ]
                                                     },
                                                     {
-                                                        "name": "Pectobacteriaceae",
+                                                        "name": "Yersiniaceae",
                                                         "rank": 6,
                                                         "ncbiRank": "family",
-                                                        "ncbiID": 1903410,
+                                                        "ncbiID": 1903411,
                                                         "value": 0,
-                                                        "summedValue": 176,
+                                                        "summedValue": 81,
                                                         "children": [
                                                             {
-                                                                "name": "Dickeya",
+                                                                "name": "Serratia",
                                                                 "rank": 7,
                                                                 "ncbiRank": "genus",
-                                                                "ncbiID": 204037,
+                                                                "ncbiID": 613,
                                                                 "value": 0,
-                                                                "summedValue": 176,
+                                                                "summedValue": 81,
                                                                 "children": [
                                                                     {
-                                                                        "name": "Dickeya fangzhongdai",
+                                                                        "name": "Serratia marcescens",
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
-                                                                        "ncbiID": 1778540,
-                                                                        "value": 176,
-                                                                        "summedValue": 176,
+                                                                        "ncbiID": 615,
+                                                                        "value": 80,
+                                                                        "summedValue": 80,
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -223,7 +319,7 @@
                                                         "ncbiRank": "family",
                                                         "ncbiID": 1903414,
                                                         "value": 0,
-                                                        "summedValue": 2936,
+                                                        "summedValue": 4296,
                                                         "children": [
                                                             {
                                                                 "name": "Proteus",
@@ -231,15 +327,15 @@
                                                                 "ncbiRank": "genus",
                                                                 "ncbiID": 583,
                                                                 "value": 0,
-                                                                "summedValue": 2935,
+                                                                "summedValue": 4293,
                                                                 "children": [
                                                                     {
                                                                         "name": "Proteus mirabilis",
                                                                         "rank": 8,
                                                                         "ncbiRank": "species",
                                                                         "ncbiID": 584,
-                                                                        "value": 2931,
-                                                                        "summedValue": 2931,
+                                                                        "value": 4280,
+                                                                        "summedValue": 4280,
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -258,8 +354,8 @@
                                 "rank": 0,
                                 "ncbiRank": "clade",
                                 "ncbiID": 1783272,
-                                "value": 32,
-                                "summedValue": 64,
+                                "value": 46,
+                                "summedValue": 91,
                                 "children": [
                                     {
                                         "name": "Actinobacteria",
@@ -267,15 +363,15 @@
                                         "ncbiRank": "phylum",
                                         "ncbiID": 201174,
                                         "value": 0,
-                                        "summedValue": 43,
+                                        "summedValue": 67,
                                         "children": [
                                             {
-                                                "name": "Actinobacteria",
+                                                "name": "Actinomycetia",
                                                 "rank": 4,
                                                 "ncbiRank": "class",
                                                 "ncbiID": 1760,
                                                 "value": 0,
-                                                "summedValue": 43,
+                                                "summedValue": 67,
                                                 "children": [
                                                     {
                                                         "name": "Bifidobacteriales",
@@ -283,7 +379,7 @@
                                                         "ncbiRank": "order",
                                                         "ncbiID": 85004,
                                                         "value": 0,
-                                                        "summedValue": 36,
+                                                        "summedValue": 55,
                                                         "children": [
                                                             {
                                                                 "name": "Bifidobacteriaceae",
@@ -291,7 +387,7 @@
                                                                 "ncbiRank": "family",
                                                                 "ncbiID": 31953,
                                                                 "value": 0,
-                                                                "summedValue": 36,
+                                                                "summedValue": 55,
                                                                 "children": [
                                                                     {
                                                                         "name": "Bifidobacterium",
@@ -299,16 +395,316 @@
                                                                         "ncbiRank": "genus",
                                                                         "ncbiID": 1678,
                                                                         "value": 0,
-                                                                        "summedValue": 36,
+                                                                        "summedValue": 55,
                                                                         "children": [
                                                                             {
                                                                                 "name": "Bifidobacterium breve",
                                                                                 "rank": 8,
                                                                                 "ncbiRank": "species",
                                                                                 "ncbiID": 1685,
-                                                                                "value": 32,
-                                                                                "summedValue": 32,
+                                                                                "value": 45,
+                                                                                "summedValue": 45,
                                                                                 "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Eukaryota",
+                        "rank": 1,
+                        "ncbiRank": "superkingdom",
+                        "ncbiID": 2759,
+                        "value": 0,
+                        "summedValue": 121,
+                        "children": [
+                            {
+                                "name": "Opisthokonta",
+                                "rank": 0,
+                                "ncbiRank": "clade",
+                                "ncbiID": 33154,
+                                "value": 0,
+                                "summedValue": 120,
+                                "children": [
+                                    {
+                                        "name": "Metazoa",
+                                        "rank": 2,
+                                        "ncbiRank": "kingdom",
+                                        "ncbiID": 33208,
+                                        "value": 0,
+                                        "summedValue": 119,
+                                        "children": [
+                                            {
+                                                "name": "Eumetazoa",
+                                                "rank": 0,
+                                                "ncbiRank": "clade",
+                                                "ncbiID": 6072,
+                                                "value": 0,
+                                                "summedValue": 119,
+                                                "children": [
+                                                    {
+                                                        "name": "Bilateria",
+                                                        "rank": 0,
+                                                        "ncbiRank": "clade",
+                                                        "ncbiID": 33213,
+                                                        "value": 0,
+                                                        "summedValue": 119,
+                                                        "children": [
+                                                            {
+                                                                "name": "Deuterostomia",
+                                                                "rank": 0,
+                                                                "ncbiRank": "clade",
+                                                                "ncbiID": 33511,
+                                                                "value": 0,
+                                                                "summedValue": 119,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Chordata",
+                                                                        "rank": 3,
+                                                                        "ncbiRank": "phylum",
+                                                                        "ncbiID": 7711,
+                                                                        "value": 0,
+                                                                        "summedValue": 119,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Craniata",
+                                                                                "rank": 3,
+                                                                                "ncbiRank": "subphylum",
+                                                                                "ncbiID": 89593,
+                                                                                "value": 0,
+                                                                                "summedValue": 119,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Vertebrata",
+                                                                                        "rank": 0,
+                                                                                        "ncbiRank": "clade",
+                                                                                        "ncbiID": 7742,
+                                                                                        "value": 0,
+                                                                                        "summedValue": 119,
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "name": "Gnathostomata",
+                                                                                                "rank": 0,
+                                                                                                "ncbiRank": "clade",
+                                                                                                "ncbiID": 7776,
+                                                                                                "value": 0,
+                                                                                                "summedValue": 119,
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Teleostomi",
+                                                                                                        "rank": 0,
+                                                                                                        "ncbiRank": "clade",
+                                                                                                        "ncbiID": 117570,
+                                                                                                        "value": 0,
+                                                                                                        "summedValue": 119,
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "name": "Euteleostomi",
+                                                                                                                "rank": 0,
+                                                                                                                "ncbiRank": "clade",
+                                                                                                                "ncbiID": 117571,
+                                                                                                                "value": 0,
+                                                                                                                "summedValue": 119,
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "name": "Sarcopterygii",
+                                                                                                                        "rank": 3,
+                                                                                                                        "ncbiRank": "superclass",
+                                                                                                                        "ncbiID": 8287,
+                                                                                                                        "value": 0,
+                                                                                                                        "summedValue": 119,
+                                                                                                                        "children": [
+                                                                                                                            {
+                                                                                                                                "name": "Dipnotetrapodomorpha",
+                                                                                                                                "rank": 0,
+                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                "ncbiID": 1338369,
+                                                                                                                                "value": 0,
+                                                                                                                                "summedValue": 119,
+                                                                                                                                "children": [
+                                                                                                                                    {
+                                                                                                                                        "name": "Tetrapoda",
+                                                                                                                                        "rank": 0,
+                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                        "ncbiID": 32523,
+                                                                                                                                        "value": 0,
+                                                                                                                                        "summedValue": 119,
+                                                                                                                                        "children": [
+                                                                                                                                            {
+                                                                                                                                                "name": "Amniota",
+                                                                                                                                                "rank": 0,
+                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                "ncbiID": 32524,
+                                                                                                                                                "value": 0,
+                                                                                                                                                "summedValue": 119,
+                                                                                                                                                "children": [
+                                                                                                                                                    {
+                                                                                                                                                        "name": "Mammalia",
+                                                                                                                                                        "rank": 4,
+                                                                                                                                                        "ncbiRank": "class",
+                                                                                                                                                        "ncbiID": 40674,
+                                                                                                                                                        "value": 0,
+                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                        "children": [
+                                                                                                                                                            {
+                                                                                                                                                                "name": "Theria",
+                                                                                                                                                                "rank": 0,
+                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                "ncbiID": 32525,
+                                                                                                                                                                "value": 0,
+                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                "children": [
+                                                                                                                                                                    {
+                                                                                                                                                                        "name": "Eutheria",
+                                                                                                                                                                        "rank": 0,
+                                                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                                                        "ncbiID": 9347,
+                                                                                                                                                                        "value": 0,
+                                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                                        "children": [
+                                                                                                                                                                            {
+                                                                                                                                                                                "name": "Boreoeutheria",
+                                                                                                                                                                                "rank": 0,
+                                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                                "ncbiID": 1437010,
+                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                                "children": [
+                                                                                                                                                                                    {
+                                                                                                                                                                                        "name": "Euarchontoglires",
+                                                                                                                                                                                        "rank": 4,
+                                                                                                                                                                                        "ncbiRank": "superorder",
+                                                                                                                                                                                        "ncbiID": 314146,
+                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                                                        "children": [
+                                                                                                                                                                                            {
+                                                                                                                                                                                                "name": "Primates",
+                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                "ncbiRank": "order",
+                                                                                                                                                                                                "ncbiID": 9443,
+                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        "name": "Haplorrhini",
+                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                        "ncbiRank": "suborder",
+                                                                                                                                                                                                        "ncbiID": 376913,
+                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                "name": "Simiiformes",
+                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                "ncbiRank": "infraorder",
+                                                                                                                                                                                                                "ncbiID": 314293,
+                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        "name": "Catarrhini",
+                                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                                        "ncbiRank": "parvorder",
+                                                                                                                                                                                                                        "ncbiID": 9526,
+                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                "name": "Hominoidea",
+                                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                                "ncbiRank": "superfamily",
+                                                                                                                                                                                                                                "ncbiID": 314295,
+                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                        "name": "Hominidae",
+                                                                                                                                                                                                                                        "rank": 6,
+                                                                                                                                                                                                                                        "ncbiRank": "family",
+                                                                                                                                                                                                                                        "ncbiID": 9604,
+                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                        "summedValue": 119,
+                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                "name": "Homininae",
+                                                                                                                                                                                                                                                "rank": 6,
+                                                                                                                                                                                                                                                "ncbiRank": "subfamily",
+                                                                                                                                                                                                                                                "ncbiID": 207598,
+                                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                                "summedValue": 119,
+                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                        "name": "Homo",
+                                                                                                                                                                                                                                                        "rank": 7,
+                                                                                                                                                                                                                                                        "ncbiRank": "genus",
+                                                                                                                                                                                                                                                        "ncbiID": 9605,
+                                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                                        "summedValue": 110,
+                                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                "name": "Homo sapiens",
+                                                                                                                                                                                                                                                                "rank": 8,
+                                                                                                                                                                                                                                                                "ncbiRank": "species",
+                                                                                                                                                                                                                                                                "ncbiID": 9606,
+                                                                                                                                                                                                                                                                "value": 110,
+                                                                                                                                                                                                                                                                "summedValue": 110,
+                                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                ]
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        ]
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                ]
+                                                                                                                                                                                            }
+                                                                                                                                                                                        ]
+                                                                                                                                                                                    }
+                                                                                                                                                                                ]
+                                                                                                                                                                            }
+                                                                                                                                                                        ]
+                                                                                                                                                                    }
+                                                                                                                                                                ]
+                                                                                                                                                            }
+                                                                                                                                                        ]
+                                                                                                                                                    }
+                                                                                                                                                ]
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                                                    }
+                                                                                                                                ]
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
                                                                                 ]
                                                                             }
                                                                         ]
@@ -332,8 +728,8 @@
                 "rank": 0,
                 "ncbiRank": "no rank",
                 "ncbiID": 0,
-                "value": 574,
-                "summedValue": 574,
+                "value": 811,
+                "summedValue": 811,
                 "children": [
                 ]
             }
