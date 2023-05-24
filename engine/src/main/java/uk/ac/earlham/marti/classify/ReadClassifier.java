@@ -51,8 +51,11 @@ public class ReadClassifier {
         if (options.runBlastCommand() == false) {
             File f = new File(blastFilename);
             if (!f.exists()) {
-                options.getLog().println("dontrunblast - file "+blastFilename+" doesn't exist, so ignoring");
-                ignoreThis = true;
+                File fgz = new File(blastFilename + ".gz");
+                if(!fgz.exists()) {
+                    options.getLog().println("dontrunblast - files "+blastFilename+" and " + blastFilename + ".gz don't exist, so ignoring");
+                    ignoreThis = true;
+                }
             }
         }
 

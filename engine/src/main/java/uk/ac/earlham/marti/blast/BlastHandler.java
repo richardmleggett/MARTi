@@ -44,8 +44,11 @@ public class BlastHandler {
             String outputBlast = this.getBlastFilePathFromFastaFilePath(inputPathname, bp);
             File f = new File(outputBlast);
             if (!f.exists()) {
-                options.getLog().println("dontrunblast - can't find BLAST file "+outputBlast);
-                gotAll = false;
+                File fgz = new File(outputBlast + ".gz");
+                if(!fgz.exists()) {
+                    options.getLog().println("dontrunblast - can't find BLAST files "+outputBlast + " or " + outputBlast + ".gz");
+                    gotAll = false;
+                }
             }
         }
                 

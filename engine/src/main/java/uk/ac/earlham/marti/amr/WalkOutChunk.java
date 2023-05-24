@@ -6,13 +6,18 @@ package uk.ac.earlham.marti.amr;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.zip.GZIPInputStream;
 import uk.ac.earlham.lcaparse.AccessionTaxonConvertor;
 import uk.ac.earlham.lcaparse.BlastHit;
 import uk.ac.earlham.lcaparse.LCAParseOptions;
@@ -50,8 +55,21 @@ public class WalkOutChunk {
         int otherCount = 0;
         
         try {
-            BufferedReader cardReader = new BufferedReader(new FileReader(cardFilename));
-            BufferedReader bacteriaReader = new BufferedReader(new FileReader(bacteriaFilename));
+            InputStream cardFileStream = null;
+            InputStream cardGzipStream = null;
+            Reader cardDecoder = null;
+            BufferedReader cardReader = null;
+            File cardFile = new File(cardFilename);
+            if(cardFile.exists())
+            {
+                cardReader = new BufferedReader(new FileReader(cardFilename));  
+            } else {           
+                cardFilename = cardFilename + ".gz";
+                cardFileStream = new FileInputStream(cardFilename);
+                cardGzipStream = new GZIPInputStream(cardFileStream);
+                cardDecoder = new InputStreamReader(cardGzipStream, "US-ASCII");
+                cardReader = new BufferedReader(cardDecoder);  
+            }
             String line;
             
             // Go through CARD file, storing reads with hits
@@ -69,8 +87,29 @@ public class WalkOutChunk {
                 }
             }            
             cardReader.close();
+            if(cardFileStream != null) {
+                cardDecoder.close();
+                cardGzipStream.close();
+                cardFileStream.close();
+            }
 
             // Now go through bacteria file
+            InputStream bacteriaFileStream = null;
+            InputStream bacteriaGzipStream = null;
+            Reader bacteriaDecoder = null;
+            BufferedReader bacteriaReader = null;
+            File bacteriaFile = new File(bacteriaFilename);
+            if(bacteriaFile.exists())
+            {
+                bacteriaReader = new BufferedReader(new FileReader(bacteriaFilename));
+            } else {           
+                bacteriaFilename = bacteriaFilename + ".gz";
+                bacteriaFileStream = new FileInputStream(bacteriaFilename);
+                bacteriaGzipStream = new GZIPInputStream(bacteriaFileStream);
+                bacteriaDecoder = new InputStreamReader(bacteriaGzipStream, "US-ASCII");
+                bacteriaReader = new BufferedReader(bacteriaDecoder); 
+            }
+                
             while ((line = bacteriaReader.readLine()) != null) {
                 if (line.length() > 1) {
                     BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false, true);
@@ -90,6 +129,11 @@ public class WalkOutChunk {
                 }
             }
             bacteriaReader.close();
+            if(bacteriaFileStream != null) {
+                bacteriaDecoder.close();
+                bacteriaGzipStream.close();
+                bacteriaFileStream.close();
+            }
 
             System.out.println("Plasmid count "+plasmidCount + " chromosome count " + chromosomeCount + " other count "+otherCount);
             
