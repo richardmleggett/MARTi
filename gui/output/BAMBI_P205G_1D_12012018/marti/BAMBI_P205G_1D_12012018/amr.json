@@ -1,174 +1,215 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.2"
+        "martiVersion": "v0.9.12",
+        "fileWritten": "2023-05-16T18:22:51"
     },
     "amr": {
-        "currentChunk": 12,
+        "currentChunk": 20,
         "chunkTime": {
-            "1": "18 Jun 2021 23:38:48",
-            "2": "18 Jun 2021 23:39:30",
-            "3": "18 Jun 2021 23:39:46",
-            "4": "18 Jun 2021 23:40:19",
-            "5": "18 Jun 2021 23:49:18",
-            "6": "18 Jun 2021 23:50:53",
-            "7": "18 Jun 2021 23:51:40",
-            "8": "18 Jun 2021 23:52:11",
-            "9": "18 Jun 2021 23:58:38",
-            "10": "18 Jun 2021 23:59:54",
-            "11": "19 Jun 2021 00:02:12",
-            "12": "19 Jun 2021 00:02:21"
+            "1": "16 May 2023 16:14:45",
+            "2": "16 May 2023 16:25:04",
+            "3": "16 May 2023 16:27:21",
+            "4": "16 May 2023 16:28:05",
+            "5": "16 May 2023 16:29:06",
+            "6": "16 May 2023 16:29:37",
+            "7": "16 May 2023 16:29:49",
+            "8": "16 May 2023 16:32:14",
+            "9": "16 May 2023 16:32:33",
+            "10": "16 May 2023 16:36:14",
+            "11": "16 May 2023 18:05:27",
+            "12": "16 May 2023 18:08:39",
+            "13": "16 May 2023 18:11:41",
+            "14": "16 May 2023 18:16:06",
+            "15": "16 May 2023 18:18:02",
+            "16": "16 May 2023 18:19:09",
+            "17": "16 May 2023 18:21:40",
+            "18": "16 May 2023 18:21:45",
+            "19": "16 May 2023 18:22:22",
+            "20": "16 May 2023 18:22:51"
         },
-        "readsWithAMRHits": 194,
+        "readsWithAMRHits": 162,
         "geneList": [
             {
                 "cardId": "ARO:3000781",
                 "name": "adeJ",
                 "description": "AdeJ is a RND efflux protein that acts as the inner membrane transporter of the AdeIJK efflux complex. It has 57% identity with E. coli AcrB.",
+                "shortName": "adeJ",
+                "drugClass": "carbapenem;cephalosporin;diaminopyrimidine antibiotic;fluoroquinolone antibiotic;lincosamide antibiotic;macrolide antibiotic;penem;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "1": 1
+                    "7": 1
                 },
                 "averageAccuracy": {
-                    "1": 80.87
+                    "7": 80.87
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "1": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000237",
-                "name": "tolC",
-                "description": "TolC is a protein subunit of many multidrug efflux complexes in Gram negative bacteria. It is an outer membrane efflux protein and is constitutively open. Regulation of efflux activity is often at its periplasmic entrance by other components of the efflux complex.",
-                "count": {
-                    "4": 1
-                },
-                "averageAccuracy": {
-                    "4": 81.91
-                },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "4": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001827",
-                "name": "ACT-16",
-                "description": "ACT-16 is a beta-lactamase found in Enterobacteriaceae",
-                "count": {
-                    "5": 1,
-                    "6": 2
-                },
-                "averageAccuracy": {
-                    "5": 91.67,
-                    "6": 89.9
-                },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "5": 1
-                    },
-                    "Bacteria": {
-                        "6": 1
+                        "7": 1
                     }
                 }
             },
             {
                 "cardId": "ARO:3000676",
                 "name": "H-NS",
-                "description": "H-NS is a histone-like protein involved in global gene regulation in Gram-negative bacteria. It is a repressor of the membrane fusion protein genes acrE, mdtE, and emrK as well as nearby genes of many RND-type multidrug exporters.",
+                "description": "H-NS is a histone-like protein involved in global gene regulation in Gram-negative bacteria. It is a repressor of the membrane fusion protein genes acrE",
+                "shortName": "H-NS",
+                "drugClass": "cephalosporin;cephamycin;fluoroquinolone antibiotic;macrolide antibiotic;penam;tetracycline antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump;resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1,
-                    "6": 2
+                    "6": 1,
+                    "8": 2,
+                    "9": 3
                 },
                 "averageAccuracy": {
-                    "2": 88.07,
-                    "6": 85.07
+                    "6": 82.01,
+                    "8": 85.04,
+                    "9": 83.5
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "2": 1
+                        "6": 1,
+                        "9": 2
                     },
                     "Enterobacter hormaechei": {
-                        "6": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001830",
-                "name": "ACT-7",
-                "description": "ACT-7 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
-                "count": {
-                    "4": 1
-                },
-                "averageAccuracy": {
-                    "4": 85.12
-                },
-                "species": {
-                    "Bacteria": {
-                        "4": 1
+                        "8": 1
                     }
                 }
             },
             {
                 "cardId": "ARO:3003922",
                 "name": "oqxA",
-                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone.",
+                "shortName": "oqxA",
+                "drugClass": "diaminopyrimidine antibiotic;fluoroquinolone antibiotic;glycylcycline;nitrofuran antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "1": 1,
-                    "2": 3
+                    "7": 1,
+                    "8": 3
                 },
                 "averageAccuracy": {
-                    "1": 82.14,
-                    "2": 81.76
+                    "7": 82.14,
+                    "8": 81.76
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "1": 1,
-                        "2": 3
+                        "7": 1,
+                        "8": 3
                     }
                 }
             },
             {
                 "cardId": "ARO:3002986",
                 "name": "bacA",
-                "description": "bacA is a gene that recycles undecaprenyl pyrophosphate during cell wall biosynthesis which confers resistance to bacitracin",
+                "description": "The bacA gene product (BacA) recycles undecaprenyl pyrophosphate during cell wall biosynthesis which confers resistance to bacitracin.",
+                "shortName": "bacA",
+                "drugClass": "peptide antibiotic",
+                "geneFamily": "undecaprenyl pyrophosphate related proteins",
+                "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "2": 1,
-                    "6": 2,
-                    "10": 3,
-                    "12": 4
+                    "6": 1,
+                    "8": 2,
+                    "14": 3,
+                    "17": 4
                 },
                 "averageAccuracy": {
-                    "2": 82.11,
-                    "6": 81.84,
-                    "10": 81.37,
-                    "12": 81.23
+                    "6": 81.57,
+                    "8": 81.84,
+                    "14": 81.37,
+                    "17": 81.21
                 },
                 "species": {
-                    "Enterobacter": {
-                        "2": 1,
-                        "6": 2
-                    },
-                    "Enterobacter hormaechei": {
-                        "10": 1
+                    "Enterobacter cloacae complex": {
+                        "6": 1,
+                        "8": 2,
+                        "14": 3,
+                        "17": 4
                     }
                 }
             },
             {
-                "cardId": "ARO:3003840",
-                "name": "aminocoumarin",
-                "description": "Positive regulator of gene expression in the cysteine regulon. cysB mutants confer resistance to novobiocin, an aminocoumarin antibiotic, in Escherichia coli.",
+                "cardId": "ARO:3000804",
+                "name": "MexF",
+                "description": "MexF is the multidrug inner membrane transporter of the MexEF-OprN complex. mexF corresponds to 2 loci in Pseudomonas aeruginosa PAO1 (gene name: mexF/mexB) and 4 loci in Pseudomonas aeruginosa LESB58 (gene name: mexD/mexB).",
+                "shortName": "MexF",
+                "drugClass": "diaminopyrimidine antibiotic;fluoroquinolone antibiotic;phenicol antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1
+                    "12": 1
                 },
                 "averageAccuracy": {
-                    "2": 81.3
+                    "12": 80.7
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "2": 1
+                        "12": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000502",
+                "name": "AcrF",
+                "description": "AcrF is a inner membrane transporter",
+                "shortName": "AcrF",
+                "drugClass": "cephalosporin;cephamycin;fluoroquinolone antibiotic;penam",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "8": 1,
+                    "10": 2
+                },
+                "averageAccuracy": {
+                    "8": 83.05,
+                    "10": 82.03
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "8": 1,
+                        "10": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3001832",
+                "name": "ACT-10",
+                "description": "ACT-10 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "shortName": "ACT-10",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;penam",
+                "geneFamily": "ACT beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 83.12
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "7": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3004597",
+                "name": "Klebsiella pneumoniae KpnH",
+                "description": "KpnH consists of ~511 residues",
+                "shortName": "Kpne_KpnH",
+                "drugClass": "aminoglycoside antibiotic;carbapenem;cephalosporin;fluoroquinolone antibiotic;macrolide antibiotic;penam;penem;peptide antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "15": 1
+                },
+                "averageAccuracy": {
+                    "15": 86.96
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "15": 1
                     }
                 }
             },
@@ -176,149 +217,114 @@
                 "cardId": "ARO:3000216",
                 "name": "acrB",
                 "description": "Protein subunit of AcrA-AcrB-TolC multidrug efflux complex. AcrB functions as a herterotrimer which forms the inner membrane component and is primarily responsible for substrate recognition and energy transduction by acting as a drug/proton antiporter.",
-                "count": {
-                    "1": 4,
-                    "2": 6,
-                    "3": 10,
-                    "4": 18,
-                    "5": 22,
-                    "6": 25,
-                    "7": 29,
-                    "8": 34,
-                    "9": 37,
-                    "11": 41,
-                    "12": 46
-                },
-                "averageAccuracy": {
-                    "1": 84.2,
-                    "2": 83.39,
-                    "3": 83.51,
-                    "4": 83.68,
-                    "5": 83.48,
-                    "6": 83.46,
-                    "7": 83.7,
-                    "8": 83.69,
-                    "9": 83.74,
-                    "11": 83.74,
-                    "12": 83.76
-                },
-                "species": {
-                    "Enterobacter": {
-                        "2": 1,
-                        "3": 2,
-                        "5": 3,
-                        "7": 4,
-                        "9": 6
-                    },
-                    "Enterobacter cloacae complex": {
-                        "1": 4,
-                        "2": 5,
-                        "3": 7,
-                        "4": 11,
-                        "5": 12,
-                        "6": 14,
-                        "7": 16,
-                        "8": 20,
-                        "9": 21,
-                        "11": 22
-                    },
-                    "Enterobacter hormaechei subsp. oharae": {
-                        "4": 2,
-                        "11": 4
-                    },
-                    "Enterobacter hormaechei": {
-                        "3": 1,
-                        "4": 3,
-                        "5": 5,
-                        "6": 6,
-                        "7": 7,
-                        "8": 8,
-                        "11": 9
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3003830",
-                "name": "aminocoumarin",
-                "description": "alanyl-tRNA synthetase conferring resistance to novobiocin in Escherichia coli",
+                "shortName": "acrB",
+                "drugClass": "cephalosporin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;penam;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "1": 1,
-                    "2": 3,
-                    "4": 5,
-                    "7": 6,
-                    "8": 7,
-                    "11": 8,
-                    "12": 10
+                    "3": 2,
+                    "5": 3,
+                    "9": 4,
+                    "11": 5,
+                    "13": 7,
+                    "16": 8,
+                    "20": 11
                 },
                 "averageAccuracy": {
-                    "1": 81.1,
-                    "2": 81.09,
-                    "4": 81.73,
-                    "7": 81.51,
-                    "8": 81.43,
-                    "11": 81.38,
-                    "12": 81.34
+                    "1": 80.43,
+                    "3": 80.45,
+                    "5": 80.49,
+                    "9": 80.63,
+                    "11": 80.85,
+                    "13": 81.05,
+                    "16": 81.04,
+                    "20": 81.18
                 },
                 "species": {
-                    "Enterobacter": {
-                        "2": 1,
-                        "4": 2,
-                        "8": 3
-                    },
                     "Enterobacter cloacae complex": {
                         "1": 1,
-                        "2": 2,
-                        "4": 3,
-                        "7": 4,
-                        "11": 5
+                        "3": 2,
+                        "5": 3,
+                        "9": 4,
+                        "11": 5,
+                        "13": 7,
+                        "16": 8,
+                        "20": 11
                     }
                 }
             },
             {
-                "cardId": "ARO:3001850",
-                "name": "ACT-30",
-                "description": "ACT-30 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "cardId": "ARO:3000621",
+                "name": "PC1 beta-lactamase (blaZ)",
+                "description": "The blaZ beta-lactamase is found in Bacillus subtilis and Staphylococcus aureus.",
+                "shortName": "PC1_blaZ",
+                "drugClass": "penam",
+                "geneFamily": "BlaZ beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "2": 1
+                    "8": 1,
+                    "14": 2
                 },
                 "averageAccuracy": {
-                    "2": 86.45
+                    "8": 86.43,
+                    "14": 84.79
                 },
                 "species": {
-                    "Bacteria": {
-                        "2": 1
+                    "Staphylococcus": {
+                        "8": 1,
+                        "14": 2
                     }
                 }
             },
             {
-                "cardId": "ARO:3000831",
-                "name": "cpxR",
-                "description": "CpxR is a regulator that promotes acrD expression when phosphorylated by a cascade involving CpxA, a sensor kinase.",
+                "cardId": "ARO:3003950",
+                "name": "msbA",
+                "description": "MsbA is a multidrug resistance transporter homolog from E. coli and belongs to a superfamily of transporters that contain an adenosine triphosphate (ATP) binding cassette (ABC) which is also called a nucleotide-binding domain (NBD). MsbA is a member of the MDR-ABC transporter group by sequence homology. MsbA transports lipid A",
+                "shortName": "msbA",
+                "drugClass": "nitroimidazole antibiotic",
+                "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "8": 1
+                    "12": 2,
+                    "18": 3,
+                    "19": 4
                 },
                 "averageAccuracy": {
-                    "8": 82.28
+                    "12": 80.49,
+                    "18": 80.6,
+                    "19": 80.58
                 },
                 "species": {
+                    "Enterobacter cloacae complex": {
+                        "12": 2,
+                        "18": 3,
+                        "19": 4
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3005044",
+                "name": "OmpA",
+                "description": "OmpA is a porin that confers resistance to beta-lactam antibiotics.",
+                "shortName": "OmpA",
+                "drugClass": "peptide antibiotic",
+                "geneFamily": "General Bacterial Porin with reduced permeability to peptide antibiotics",
+                "resistanceMechanism": "reduced permeability to antibiotic",
+                "count": {
+                    "10": 1,
+                    "19": 2
+                },
+                "averageAccuracy": {
+                    "10": 86.23,
+                    "19": 87.76
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "19": 1
+                    },
                     "Enterobacter hormaechei": {
-                        "8": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001851",
-                "name": "ACT-31",
-                "description": "ACT-31 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
-                "count": {
-                    "6": 1
-                },
-                "averageAccuracy": {
-                    "6": 81.92
-                },
-                "species": {
-                    "Bacteria": {
-                        "6": 1
+                        "10": 1
                     }
                 }
             },
@@ -326,128 +332,116 @@
                 "cardId": "ARO:3000518",
                 "name": "CRP",
                 "description": "CRP is a global regulator that represses MdtEF multidrug efflux pump expression.",
+                "shortName": "CRP",
+                "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;penam",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 2,
-                    "3": 3,
-                    "4": 4,
-                    "7": 7,
-                    "8": 8,
-                    "9": 9,
-                    "10": 12,
-                    "11": 13
+                    "2": 1,
+                    "3": 2,
+                    "8": 4,
+                    "11": 5,
+                    "12": 6,
+                    "13": 8,
+                    "14": 10,
+                    "18": 12,
+                    "20": 13
                 },
                 "averageAccuracy": {
-                    "2": 86.24,
-                    "3": 85.23,
-                    "4": 84.81,
-                    "7": 84.82,
-                    "8": 84.39,
-                    "9": 83.98,
-                    "10": 83.53,
-                    "11": 83.72
+                    "2": 83.21,
+                    "3": 83.36,
+                    "8": 84.76,
+                    "11": 83.94,
+                    "12": 83.52,
+                    "13": 83.67,
+                    "14": 83.56,
+                    "18": 83.51,
+                    "20": 83.7
                 },
                 "species": {
                     "Enterobacter": {
-                        "7": 1,
-                        "10": 3
-                    },
-                    "Enterobacteriaceae": {
-                        "3": 1
+                        "2": 1
                     },
                     "Enterobacter cloacae complex": {
-                        "2": 2,
-                        "4": 3,
-                        "7": 4,
-                        "9": 5,
-                        "10": 6,
-                        "11": 7
-                    },
-                    "Enterobacter hormaechei": {
-                        "7": 1,
-                        "8": 2
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000804",
-                "name": "mexF",
-                "description": "MexF is the multidrug inner membrane transporter of the MexEF-OprN complex.",
-                "count": {
-                    "8": 1
-                },
-                "averageAccuracy": {
-                    "8": 80.7
-                },
-                "species": {
-                    "Enterobacter": {
-                        "8": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000502",
-                "name": "acrF",
-                "description": "AcrF is a inner membrane transporter, similar to AcrB.",
-                "count": {
-                    "4": 1
-                },
-                "averageAccuracy": {
-                    "4": 81.0
-                },
-                "species": {
-                    "Enterobacter": {
-                        "4": 1
+                        "3": 1,
+                        "8": 3,
+                        "11": 4,
+                        "12": 5,
+                        "13": 7,
+                        "14": 9,
+                        "18": 11,
+                        "20": 12
                     }
                 }
             },
             {
                 "cardId": "ARO:3001329",
                 "name": "mdtG",
-                "description": "Efflux protien mdtG.",
+                "description": "The MdtG protein",
+                "shortName": "mdtG",
+                "drugClass": "phosphonic acid antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "10": 1
+                    "16": 1
                 },
                 "averageAccuracy": {
-                    "10": 83.17
+                    "16": 83.17
                 },
                 "species": {
-                    "Enterobacter": {
-                        "10": 1
+                    "Enterobacter cloacae complex": {
+                        "16": 1
                     }
                 }
             },
             {
-                "cardId": "ARO:3001852",
-                "name": "ACT-32",
-                "description": "ACT-32 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "cardId": "ARO:3001328",
+                "name": "Escherichia coli mdfA",
+                "description": "Multidrug efflux pump in E. coli. This multidrug efflux system was originally identified as the Cmr/CmlA chloramphenicol exporter.",
+                "shortName": "Ecol_mdfA",
+                "drugClass": "disinfecting agents and antiseptics;tetracycline antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 2,
-                    "6": 3,
-                    "10": 5
+                    "16": 1
                 },
                 "averageAccuracy": {
-                    "3": 83.15,
-                    "6": 83.61,
-                    "10": 85.48
+                    "16": 80.0
                 },
                 "species": {
-                    "Enterobacteriaceae": {
-                        "3": 1
-                    },
                     "Enterobacter cloacae complex": {
-                        "10": 1
-                    },
-                    "Bacteria": {
-                        "3": 1,
-                        "6": 2,
-                        "10": 3
+                        "16": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000377",
+                "name": "MexA",
+                "description": "MexA is the membrane fusion protein of the MexAB-OprM multidrug efflux complex.",
+                "shortName": "MexA",
+                "drugClass": "aminocoumarin antibiotic;carbapenem;cephalosporin;cephamycin;diaminopyrimidine antibiotic;fluoroquinolone antibiotic;macrolide antibiotic;monobactam;penam;penem;peptide antibiotic;phenicol antibiotic;sulfonamide antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "18": 1
+                },
+                "averageAccuracy": {
+                    "18": 80.2
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "18": 1
                     }
                 }
             },
             {
                 "cardId": "ARO:3000026",
                 "name": "mepA",
-                "description": "MepA is an efflux protein regulated by MepR and part of the MepRAB cluster. Its presence in Staphylococcus aureus led to multidrug resistance, while it has also been shown to decrease tigecycline susceptibility.",
+                "description": "MepA is an efflux protein regulated by MepR and part of the MepRAB cluster. Its presence in Staphylococcus aureus led to multidrug resistance",
+                "shortName": "mepA",
+                "drugClass": "glycylcycline;tetracycline antibiotic",
+                "geneFamily": "multidrug and toxic compound extrusion (MATE) transporter",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "1": 1
                 },
@@ -461,37 +455,78 @@
                 }
             },
             {
-                "cardId": "ARO:3000621",
-                "name": "PC1",
-                "description": "The blaZ beta-lactamase is found in Bacillus subtilis and Staphylococcus aureus.",
+                "cardId": "ARO:3000186",
+                "name": "tet(M)",
+                "description": "Tet(M) is a ribosomal protection protein that confers tetracycline resistance. It is found on transposable DNA elements and its horizontal transfer between bacterial species has been documented.",
+                "shortName": "tet(M)",
+                "drugClass": "tetracycline antibiotic",
+                "geneFamily": "tetracycline-resistant ribosomal protection protein",
+                "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "2": 1,
-                    "10": 2
+                    "9": 1
                 },
                 "averageAccuracy": {
-                    "2": 86.43,
-                    "10": 84.79
+                    "9": 86.34
                 },
                 "species": {
-                    "Staphylococcus": {
-                        "2": 1,
-                        "10": 2
+                    "Bacteria": {
+                        "9": 1
                     }
                 }
             },
             {
-                "cardId": "ARO:3001328",
-                "name": "mdfA",
-                "description": "Multidrug translocase MdfA",
+                "cardId": "ARO:3006250",
+                "name": "ACT-55",
+                "description": "ACT-55 is a ACT beta-lactamase.",
+                "shortName": "ACT-55",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;penam",
+                "geneFamily": "ACT beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "11": 1
+                    "1": 2,
+                    "2": 3,
+                    "3": 5,
+                    "4": 6,
+                    "5": 7,
+                    "6": 8,
+                    "10": 10,
+                    "14": 11,
+                    "15": 12,
+                    "16": 13,
+                    "18": 14,
+                    "20": 16
                 },
                 "averageAccuracy": {
-                    "11": 80.0
+                    "1": 88.63,
+                    "2": 87.8,
+                    "3": 85.78,
+                    "4": 85.82,
+                    "5": 86.84,
+                    "6": 86.7,
+                    "10": 86.78,
+                    "14": 87.14,
+                    "15": 87.05,
+                    "16": 87.07,
+                    "18": 87.05,
+                    "20": 86.86
                 },
                 "species": {
-                    "Enterobacter hormaechei": {
-                        "11": 1
+                    "Enterobacter cloacae complex": {
+                        "1": 2,
+                        "2": 3,
+                        "3": 5,
+                        "4": 6,
+                        "5": 7,
+                        "6": 8,
+                        "10": 10,
+                        "14": 11,
+                        "15": 12,
+                        "16": 13,
+                        "18": 14,
+                        "20": 15
+                    },
+                    "Bacteria": {
+                        "20": 1
                     }
                 }
             },
@@ -499,244 +534,277 @@
                 "cardId": "ARO:3000319",
                 "name": "mphC",
                 "description": "The mphC gene was identified from Staphylococcus aureus.  This gene shows similarity to mphB gene from Escherchia coli.",
+                "shortName": "mphC",
+                "drugClass": "macrolide antibiotic",
+                "geneFamily": "macrolide phosphotransferase (MPH)",
+                "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "3": 1,
-                    "12": 2
+                    "2": 1,
+                    "20": 2
                 },
                 "averageAccuracy": {
-                    "3": 85.71,
-                    "12": 85.41
+                    "2": 90.82,
+                    "20": 90.15
                 },
                 "species": {
                     "Staphylococcus": {
-                        "3": 1
+                        "2": 1,
+                        "20": 2
                     }
                 }
             },
             {
                 "cardId": "ARO:3000074",
                 "name": "emrB",
-                "description": "emrB is a translocase in the emrB -TolC efflux protein in E. coli. It recognizes substrates including carbonyl cyanide m-chlorophenylhydrazone (CCCP), nalidixic acid, and thioloactomycin.",
+                "description": "emrB is a translocase in the emrB -TolC efflux protein in E. coli. It recognizes substrates including carbonyl cyanide m-chlorophenylhydrazone (CCCP)",
+                "shortName": "emrB",
+                "drugClass": "fluoroquinolone antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "8": 1,
-                    "11": 2
+                    "16": 1
                 },
                 "averageAccuracy": {
-                    "8": 86.96,
-                    "11": 85.38
+                    "16": 83.81
                 },
                 "species": {
-                    "Enterobacter": {
-                        "8": 1
-                    },
-                    "Enterobacter cloacae complex": {
-                        "11": 1
+                    "Enterobacteriaceae": {
+                        "16": 1
                     }
                 }
             },
             {
-                "cardId": "ARO:3001837",
-                "name": "ACT-15",
-                "description": "ACT-15 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
+                "cardId": "ARO:3006255",
+                "name": "ACT-60",
+                "description": "ACT-60 is a ACT beta-lactamase.",
+                "shortName": "ACT-60",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;penam",
+                "geneFamily": "ACT beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "7": 1
+                    "4": 1,
+                    "6": 2,
+                    "7": 3,
+                    "12": 5
                 },
                 "averageAccuracy": {
-                    "7": 86.12
-                },
-                "species": {
-                    "Bacteria": {
-                        "7": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000377",
-                "name": "mexA",
-                "description": "MexA is the membrane fusion protein of the MexAB-OprM multidrug efflux complex.",
-                "count": {
-                    "7": 1
-                },
-                "averageAccuracy": {
-                    "7": 80.2
-                },
-                "species": {
-                    "Enterobacter": {
-                        "7": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001838",
-                "name": "ACT-17",
-                "description": "ACT-17 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
-                "count": {
-                    "8": 1
-                },
-                "averageAccuracy": {
-                    "8": 90.13
-                },
-                "species": {
-                    "Bacteria": {
-                        "8": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001847",
-                "name": "ACT-27",
-                "description": "ACT-27 is a beta-lactamase. From the Lahey list of ACT beta-lactamases.",
-                "count": {
-                    "1": 3,
-                    "2": 4,
-                    "3": 5,
-                    "4": 6,
-                    "5": 7,
-                    "8": 8,
-                    "12": 10
-                },
-                "averageAccuracy": {
-                    "1": 87.72,
-                    "2": 88.83,
-                    "3": 87.73,
-                    "4": 87.64,
-                    "5": 87.36,
-                    "8": 87.06,
-                    "12": 86.54
+                    "4": 92.86,
+                    "6": 87.77,
+                    "7": 87.95,
+                    "12": 88.78
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "1": 2
-                    },
-                    "Enterobacter hormaechei subsp. oharae": {
-                    },
-                    "Bacteria": {
-                        "1": 1,
-                        "2": 2,
-                        "3": 3,
-                        "4": 4,
-                        "5": 5,
-                        "8": 6
+                        "4": 1,
+                        "6": 2,
+                        "7": 3,
+                        "12": 5
                     }
                 }
             },
             {
                 "cardId": "ARO:3000815",
                 "name": "mgrA",
-                "description": "MgrA, also known as NorR, is a regulator for norA, norB, and tet38. It is a positive regulator for norA expression, but is a direct repressor for norB and an indirect repressor of tet38.",
+                "description": "MgrA",
+                "shortName": "mgrA",
+                "drugClass": "cephalosporin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;penam;peptide antibiotic;tetracycline antibiotic",
+                "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump;major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "6": 1
+                    "9": 1
                 },
                 "averageAccuracy": {
-                    "6": 90.06
+                    "9": 90.0
                 },
                 "species": {
                     "Staphylococcus epidermidis": {
-                        "6": 1
+                        "9": 1
                     }
                 }
             },
             {
                 "cardId": "ARO:3003923",
                 "name": "oqxB",
-                "description": "RND efflux pump conferring resistance to fluoroquinolone",
+                "description": "RND efflux pump conferring resistance to fluoroquinolone.",
+                "shortName": "oqxB",
+                "drugClass": "diaminopyrimidine antibiotic;fluoroquinolone antibiotic;glycylcycline;nitrofuran antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 2,
-                    "4": 7,
-                    "5": 8,
-                    "6": 9,
-                    "7": 10,
-                    "8": 13,
-                    "9": 14,
-                    "10": 18,
-                    "11": 20,
-                    "12": 21
+                    "4": 1,
+                    "5": 3,
+                    "6": 4,
+                    "8": 6,
+                    "10": 9,
+                    "11": 10,
+                    "12": 11,
+                    "14": 13,
+                    "15": 15,
+                    "16": 16,
+                    "17": 17,
+                    "18": 20,
+                    "19": 21
                 },
                 "averageAccuracy": {
-                    "2": 85.02,
-                    "4": 82.35,
-                    "5": 82.18,
-                    "6": 82.09,
-                    "7": 81.93,
-                    "8": 81.56,
-                    "9": 81.52,
-                    "10": 81.43,
-                    "11": 81.42,
-                    "12": 81.51
+                    "4": 81.0,
+                    "5": 81.73,
+                    "6": 81.63,
+                    "8": 82.76,
+                    "10": 82.09,
+                    "11": 81.97,
+                    "12": 81.8,
+                    "14": 81.73,
+                    "15": 81.56,
+                    "16": 81.47,
+                    "17": 81.58,
+                    "18": 81.46,
+                    "19": 81.51
                 },
                 "species": {
-                    "Enterobacter": {
-                        "4": 4,
-                        "7": 5,
-                        "8": 6,
-                        "10": 8
-                    },
                     "Enterobacter cloacae complex": {
-                        "2": 2,
-                        "4": 3,
-                        "5": 4,
-                        "6": 5,
-                        "8": 7,
-                        "9": 8,
-                        "10": 10,
-                        "11": 12
+                        "4": 1,
+                        "5": 3,
+                        "6": 4,
+                        "8": 6,
+                        "10": 9,
+                        "11": 10,
+                        "12": 11,
+                        "14": 13,
+                        "15": 15,
+                        "16": 16,
+                        "17": 17,
+                        "18": 20,
+                        "19": 21
                     }
                 }
             },
             {
                 "cardId": "ARO:3000391",
                 "name": "norA",
-                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA, and is a structural homolog of Bmr of Bacillus subtilis. It is regulated by arlRS and mgrA, the latter also known as NorR.",
+                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA",
+                "shortName": "norA",
+                "drugClass": "disinfecting agents and antiseptics;fluoroquinolone antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "12": 1
+                    "17": 1
                 },
                 "averageAccuracy": {
-                    "12": 91.76
+                    "17": 91.76
                 },
                 "species": {
                     "Staphylococcus epidermidis": {
+                        "17": 1
                     }
                 }
             },
             {
-                "cardId": "ARO:3000207",
-                "name": "acrA",
-                "description": "Protein subunit of AcrA-AcrB-TolC multidrug efflux complex. AcrA represents the periplasmic portion of the transport protein.",
+                "cardId": "ARO:3004041",
+                "name": "Klebsiella pneumoniae acrA",
+                "description": "AcrA is a subunit of the AcrAB multidrug efflux system that in K. pneumoniae",
+                "shortName": "Kpne_acrA",
+                "drugClass": "cephalosporin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;penam;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 80.58
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "4": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000251",
+                "name": "msrA",
+                "description": "MsrA is an ABC-F subfamily ribosomal protection protein expressed in Staphylococcus species which confers resistance to erythromycin and streptogramin B antibiotics through antibiotic target protection mechanisms. It is associated with plasmid DNA.",
+                "shortName": "msrA",
+                "drugClass": "macrolide antibiotic;streptogramin B antibiotic;streptogramin antibiotic",
+                "geneFamily": "msr-type ABC-F protein",
+                "resistanceMechanism": "antibiotic target protection",
+                "count": {
+                    "2": 1,
+                    "15": 2
+                },
+                "averageAccuracy": {
+                    "2": 89.3,
+                    "15": 88.37
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "2": 1,
+                        "15": 2
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3004042",
+                "name": "Enterobacter cloacae acrA",
+                "description": "AcrA is a subunit of the AcrAB-TolC multidrug efflux system in E. cloacae.",
+                "shortName": "Eclo_acrA",
+                "drugClass": "cephalosporin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;penam;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "3": 1,
-                    "4": 2,
-                    "5": 4,
-                    "7": 5,
-                    "8": 6,
-                    "9": 8,
-                    "10": 9,
-                    "12": 10
+                    "4": 3,
+                    "10": 4,
+                    "11": 6,
+                    "13": 7,
+                    "14": 8,
+                    "15": 9,
+                    "20": 10
                 },
                 "averageAccuracy": {
                     "3": 81.7,
-                    "4": 81.41,
-                    "5": 84.31,
-                    "7": 83.87,
-                    "8": 83.26,
-                    "9": 84.38,
-                    "10": 83.96,
-                    "12": 84.65
+                    "4": 85.37,
+                    "10": 84.31,
+                    "11": 85.44,
+                    "13": 84.97,
+                    "14": 84.43,
+                    "15": 83.95,
+                    "20": 84.64
                 },
                 "species": {
-                    "Enterobacter": {
-                        "3": 1,
-                        "4": 2,
-                        "7": 3,
-                        "9": 4
-                    },
                     "Enterobacter cloacae complex": {
-                        "5": 1,
-                        "8": 2,
-                        "9": 3,
-                        "10": 4
-                    },
-                    "Enterobacter hormaechei": {
-                        "5": 1
+                        "3": 1,
+                        "4": 3,
+                        "10": 4,
+                        "11": 6,
+                        "13": 7,
+                        "14": 8,
+                        "15": 9,
+                        "20": 10
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000794",
+                "name": "mdtC",
+                "description": "MdtC is a transporter that forms a heteromultimer complex with MdtB to form a multidrug transporter. MdtBC is part of the MdtABC-TolC efflux complex. In the absence of MdtB",
+                "shortName": "mdtC",
+                "drugClass": "aminocoumarin antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "3": 1,
+                    "6": 2,
+                    "18": 3
+                },
+                "averageAccuracy": {
+                    "3": 80.72,
+                    "6": 80.69,
+                    "18": 80.76
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "3": 1,
+                        "6": 2,
+                        "18": 3
                     }
                 }
             },
@@ -744,34 +812,19 @@
                 "cardId": "ARO:3000796",
                 "name": "mdtF",
                 "description": "MdtF is the multidrug inner membrane transporter for the MdtEF-TolC efflux complex.",
+                "shortName": "mdtF",
+                "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;penam",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "8": 1
+                    "12": 1
                 },
                 "averageAccuracy": {
-                    "8": 81.31
+                    "12": 81.31
                 },
                 "species": {
-                    "Enterobacter hormaechei": {
-                        "8": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000794",
-                "name": "mdtC",
-                "description": "MdtC is a transporter that forms a heteromultimer complex with MdtB to form a multidrug transporter. MdtBC is part of the MdtABC-TolC efflux complex. In the absence of MdtB, MdtC can form a homomultimer complex that results in a functioning efflux complex with a narrower drug specificity.",
-                "count": {
-                    "3": 1,
-                    "6": 2
-                },
-                "averageAccuracy": {
-                    "3": 80.72,
-                    "6": 80.69
-                },
-                "species": {
-                    "Enterobacter": {
-                        "3": 1,
-                        "6": 2
+                    "Enterobacter cloacae complex": {
+                        "12": 1
                     }
                 }
             },
@@ -779,168 +832,324 @@
                 "cardId": "ARO:3000516",
                 "name": "emrR",
                 "description": "EmrR is a negative regulator for the EmrAB-TolC multidrug efflux pump in E. coli. Mutations lead to EmrAB-TolC overexpression.",
+                "shortName": "emrR",
+                "drugClass": "fluoroquinolone antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 2
+                    "7": 1,
+                    "8": 2
                 },
                 "averageAccuracy": {
-                    "2": 81.22
+                    "7": 82.28,
+                    "8": 81.22
                 },
                 "species": {
-                    "Enterobacter": {
-                        "2": 2
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3001330",
-                "name": "mdtD",
-                "description": "Efflux pump mdtD",
-                "count": {
-                    "6": 1
-                },
-                "averageAccuracy": {
-                    "6": 80.5
-                },
-                "species": {
-                    "Enterobacter": {
-                        "6": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000024",
-                "name": "patA",
-                "description": "PatA is an ABC transporter of Streptococcus pneumoniae that interacts with PatB to confer fluoroquinolone resistance.",
-                "count": {
-                    "3": 1,
-                    "7": 2,
-                    "10": 3,
-                    "12": 4
-                },
-                "averageAccuracy": {
-                    "3": 80.05,
-                    "7": 80.51,
-                    "10": 81.92,
-                    "12": 81.6
-                },
-                "species": {
-                    "Enterobacter": {
-                        "7": 1
-                    },
                     "Enterobacter cloacae complex": {
-                        "3": 1,
-                        "10": 2
+                        "7": 1,
+                        "8": 2
                     }
                 }
             },
             {
                 "cardId": "ARO:3000491",
                 "name": "acrD",
-                "description": "AcrD is an aminoglycoside efflux pump expressed in E. coli. Its expression can be induced by indole, and is regulated by baeRS and cpxAR.",
+                "description": "AcrD is an aminoglycoside efflux pump expressed in E. coli. Its expression can be induced by indole",
+                "shortName": "acrD",
+                "drugClass": "aminoglycoside antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "7": 1
+                    "13": 1
                 },
                 "averageAccuracy": {
-                    "7": 82.3
+                    "13": 82.3
                 },
                 "species": {
-                    "Enterobacter": {
-                        "7": 1
+                    "Enterobacter cloacae complex": {
+                        "13": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000178",
+                "name": "tet(K)",
+                "description": "TetK is a tetracycline efflux protein found in both Gram-negative (Haemophilus and Gallibacterium) and Gram-positive (many species",
+                "shortName": "tet(K)",
+                "drugClass": "tetracycline antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "4": 1,
+                    "6": 2,
+                    "12": 3
+                },
+                "averageAccuracy": {
+                    "4": 86.73,
+                    "6": 89.95,
+                    "12": 89.29
+                },
+                "species": {
+                    "Staphylococcus": {
+                        "4": 1,
+                        "6": 2,
+                        "12": 3
                     }
                 }
             },
             {
                 "cardId": "ARO:3000263",
                 "name": "marA",
-                "description": "In the presence of antibiotic stress, E. coli overexpresses the global activator protein MarA, which besides inducing MDR efflux pump AcrAB, also down- regulates synthesis of the porin OmpF.",
+                "description": "In the presence of antibiotic stress",
+                "shortName": "marA",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;monobactam;penam;penem;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "General Bacterial Porin with reduced permeability to beta-lactams;resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux;reduced permeability to antibiotic",
                 "count": {
-                    "2": 1,
-                    "7": 2,
-                    "11": 4
+                    "8": 1,
+                    "13": 2,
+                    "19": 4
                 },
                 "averageAccuracy": {
-                    "2": 82.6,
-                    "7": 82.8,
-                    "11": 83.04
+                    "8": 82.6,
+                    "13": 82.8,
+                    "19": 83.04
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "2": 1
-                    },
-                    "Bacteria": {
-                        "7": 1,
-                        "11": 3
+                        "8": 1,
+                        "13": 2,
+                        "19": 4
                     }
                 }
             },
             {
-                "cardId": "ARO:3003730",
-                "name": "Bifidobacteria",
-                "description": "Bifidobacteria have an intrinsically resistant form of ileS (isoleucyl-tRNA synthetase) that confers resistance to mupirocin.",
+                "cardId": "ARO:3007010",
+                "name": "norC",
+                "description": "NorC is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like tetracycline. It shares 61% similarity with NorB",
+                "shortName": "norC",
+                "drugClass": "disinfecting agents and antiseptics;fluoroquinolone antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "1": 1,
-                    "3": 2,
-                    "6": 3,
-                    "7": 5,
-                    "10": 6,
-                    "11": 7,
-                    "12": 8
+                    "5": 1
                 },
                 "averageAccuracy": {
-                    "1": 80.8,
-                    "3": 80.61,
-                    "6": 82.07,
-                    "7": 81.99,
-                    "10": 81.8,
-                    "11": 82.06,
-                    "12": 82.24
+                    "5": 96.24
                 },
                 "species": {
-                    "Bifidobacterium longum subsp. longum BBMN68": {
-                    },
-                    "Bifidobacterium longum": {
-                        "1": 1,
-                        "3": 2,
-                        "6": 3,
-                        "7": 5,
-                        "10": 6,
-                        "11": 7
+                    "Staphylococcus aureus": {
+                        "5": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3002875",
+                "name": "dfrE",
+                "description": "dfrE is a chromosome-encoded dihydrofolate reductase found in Enterococcus faecalis.",
+                "shortName": "dfrE",
+                "drugClass": "diaminopyrimidine antibiotic",
+                "geneFamily": "trimethoprim resistant dihydrofolate reductase dfr",
+                "resistanceMechanism": "antibiotic target replacement",
+                "count": {
+                    "11": 1
+                },
+                "averageAccuracy": {
+                    "11": 88.49
+                },
+                "species": {
+                    "Enterococcus faecalis": {
+                        "11": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3006269",
+                "name": "ACT-75",
+                "description": "ACT-75 is a ACT beta-lactamase.",
+                "shortName": "ACT-75",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;penam",
+                "geneFamily": "ACT beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
+                "count": {
+                    "5": 1
+                },
+                "averageAccuracy": {
+                    "5": 87.1
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "5": 1
                     }
                 }
             },
             {
                 "cardId": "ARO:3000830",
                 "name": "cpxA",
-                "description": "CpxA is a membrane-localized sensor kinase that is activated by envelope stress. It starts a kinase cascade that activates CpxR, which promotes efflux complex expression.",
+                "description": "CpxA is a membrane-localized sensor kinase that is activated by envelope stress. It starts a kinase cascade that activates CpxR",
+                "shortName": "cpxA",
+                "drugClass": "aminocoumarin antibiotic;aminoglycoside antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "8": 1,
-                    "9": 2
+                    "11": 1,
+                    "15": 2
                 },
                 "averageAccuracy": {
-                    "8": 83.55,
-                    "9": 82.54
+                    "11": 81.43,
+                    "15": 82.44
                 },
                 "species": {
-                    "Enterobacter": {
-                        "9": 1
-                    },
                     "Enterobacter cloacae complex": {
-                        "8": 1
+                        "11": 1,
+                        "15": 2
                     }
                 }
             },
             {
-                "cardId": "ARO:3000186",
-                "name": "tetM",
-                "description": "TetM is a ribosomal protection protein that confers tetracycline resistance. It is found on transposable DNA elements and its horizontal transfer between bacterial species has been documented.",
+                "cardId": "ARO:3004480",
+                "name": "Bifidobacterium adolescentis rpoB mutants conferring resistance to rifampicin",
+                "description": "Bifidobacterium are antibiotic resistant probiotics are prescribed to upkeep the population beneficial bacteria in the gut microbiome. However",
+                "shortName": "Bado_rpoB_RIF",
+                "drugClass": "peptide antibiotic;rifamycin antibiotic",
+                "geneFamily": "rifamycin-resistant beta-subunit of RNA polymerase (rpoB)",
+                "resistanceMechanism": "antibiotic target alteration;antibiotic target replacement",
+                "count": {
+                    "1": 2,
+                    "3": 3,
+                    "4": 5,
+                    "5": 6,
+                    "6": 9,
+                    "7": 10,
+                    "8": 12,
+                    "9": 13,
+                    "11": 14,
+                    "13": 15,
+                    "16": 17,
+                    "17": 18,
+                    "18": 20,
+                    "19": 21,
+                    "20": 23
+                },
+                "averageAccuracy": {
+                    "1": 82.69,
+                    "3": 83.12,
+                    "4": 82.56,
+                    "5": 82.47,
+                    "6": 82.2,
+                    "7": 82.31,
+                    "8": 82.1,
+                    "9": 82.16,
+                    "11": 82.05,
+                    "13": 82.01,
+                    "16": 81.84,
+                    "17": 81.79,
+                    "18": 81.9,
+                    "19": 82.02,
+                    "20": 81.87
+                },
+                "species": {
+                    "Bifidobacterium longum subsp. infantis": {
+                        "1": 1,
+                        "3": 2,
+                        "4": 3,
+                        "5": 4,
+                        "6": 7,
+                        "7": 8,
+                        "8": 10,
+                        "9": 11,
+                        "11": 12,
+                        "13": 13,
+                        "16": 15,
+                        "17": 16,
+                        "18": 18,
+                        "19": 19,
+                        "20": 20
+                    },
+                    "Bifidobacterium longum": {
+                        "1": 1,
+                        "4": 2,
+                        "20": 3
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3003730",
+                "name": "Bifidobacterium bifidum ileS conferring resistance to mupirocin",
+                "description": "Bifidobacteria have an intrinsically resistant form of ileS (isoleucyl-tRNA synthetase) that confers resistance to mupirocin.",
+                "shortName": "Bbif_ileS_MUP",
+                "drugClass": "mupirocin-like antibiotic",
+                "geneFamily": "antibiotic-resistant isoleucyl-tRNA synthetase (ileS)",
+                "resistanceMechanism": "antibiotic target alteration",
+                "count": {
+                    "3": 1,
+                    "7": 2,
+                    "9": 3,
+                    "13": 4,
+                    "14": 5,
+                    "17": 6,
+                    "18": 7,
+                    "19": 8
+                },
+                "averageAccuracy": {
+                    "3": 80.41,
+                    "7": 80.61,
+                    "9": 82.07,
+                    "13": 82.02,
+                    "14": 81.79,
+                    "17": 82.06,
+                    "18": 82.03,
+                    "19": 82.24
+                },
+                "species": {
+                    "Bifidobacterium longum subsp. infantis": {
+                        "3": 1,
+                        "7": 2,
+                        "9": 3,
+                        "13": 4,
+                        "14": 5,
+                        "17": 6,
+                        "18": 7,
+                        "19": 8
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3005059",
+                "name": "LptD",
+                "description": "LptD is involved in LPS transport in a ABC Transporter efflux system. It confers resistance to carbapenems",
+                "shortName": "LptD",
+                "drugClass": "aminocoumarin antibiotic;carbapenem;peptide antibiotic;rifamycin antibiotic",
+                "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 80.77
+                },
+                "species": {
+                    "Enterobacter cloacae complex": {
+                        "2": 1
+                    }
+                }
+            },
+            {
+                "cardId": "ARO:3000237",
+                "name": "TolC",
+                "description": "TolC is a protein subunit of many multidrug efflux complexes in Gram negative bacteria. It is an outer membrane efflux protein and is constitutively open. Regulation of efflux activity is often at its periplasmic entrance by other components of the efflux complex.",
+                "shortName": "TolC",
+                "drugClass": "aminocoumarin antibiotic;aminoglycoside antibiotic;carbapenem;cephalosporin;cephamycin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;macrolide antibiotic;penam;penem;peptide antibiotic;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump;major facilitator superfamily (MFS) antibiotic efflux pump;resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "5": 1
                 },
                 "averageAccuracy": {
-                    "5": 83.55
+                    "5": 81.91
                 },
                 "species": {
-                    "Bacteria": {
+                    "Enterobacter cloacae complex": {
                         "5": 1
                     }
                 }
@@ -948,103 +1157,20 @@
             {
                 "cardId": "ARO:3000823",
                 "name": "ramA",
-                "description": "RamA (\"\"resistance antibiotic multiple\"\") is a positive regulator of AcrAB-TolC and leads to high level multidrug resistance in Klebsiella pneumoniae, Salmonella enterica, and Enterobacter aerugenes, increasing the expression of both the mar operon as well as AcrAB. RamA also decreases OmpF expression.",
+                "description": "RamA (resistance antibiotic multiple) is a positive regulator of AcrAB-TolC and leads to high level multidrug resistance in Klebsiella pneumoniae",
+                "shortName": "ramA",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;disinfecting agents and antiseptics;fluoroquinolone antibiotic;glycylcycline;monobactam;penam;penem;phenicol antibiotic;rifamycin antibiotic;tetracycline antibiotic",
+                "geneFamily": "General Bacterial Porin with reduced permeability to beta-lactams;resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux;reduced permeability to antibiotic",
                 "count": {
-                    "7": 1
+                    "13": 1
                 },
                 "averageAccuracy": {
-                    "7": 82.09
+                    "13": 82.09
                 },
                 "species": {
                     "Enterobacter cloacae complex": {
-                        "7": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000825",
-                "name": "robA",
-                "description": "robA is a positive regulator for the acrAB efflux genes, and is structurally similar to SoxS and MarA.",
-                "count": {
-                    "2": 3,
-                    "3": 4,
-                    "4": 5,
-                    "5": 8,
-                    "6": 10,
-                    "7": 12,
-                    "9": 14,
-                    "10": 15,
-                    "11": 17,
-                    "12": 20
-                },
-                "averageAccuracy": {
-                    "2": 87.88,
-                    "3": 88.03,
-                    "4": 87.28,
-                    "5": 86.9,
-                    "6": 87.93,
-                    "7": 87.97,
-                    "9": 87.73,
-                    "10": 87.44,
-                    "11": 87.25,
-                    "12": 87.79
-                },
-                "species": {
-                    "Enterobacter": {
-                        "6": 1
-                    },
-                    "Enterobacter cloacae complex": {
-                    },
-                    "Bacteria": {
-                        "2": 3,
-                        "3": 4,
-                        "4": 5,
-                        "5": 8,
-                        "6": 9,
-                        "7": 11,
-                        "9": 13,
-                        "10": 14,
-                        "11": 16
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000178",
-                "name": "tetK",
-                "description": "TetK is a tetracycline efflux protein found in both Gram-negative (Haemophilus and Gallibacterium) and Gram-positive (many species, including mycobacteria) bacteria.",
-                "count": {
-                    "5": 1,
-                    "6": 2,
-                    "8": 3
-                },
-                "averageAccuracy": {
-                    "5": 86.74,
-                    "6": 89.95,
-                    "8": 89.3
-                },
-                "species": {
-                    "Staphylococcus": {
-                        "5": 1,
-                        "6": 2
-                    },
-                    "Staphylococcus aureus subsp. aureus": {
-                        "8": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3003318",
-                "name": "Streptomyces",
-                "description": "point mutation on the Streptomyces rishiriensis parY resulting in aminocoumarin resistance",
-                "count": {
-                    "2": 1
-                },
-                "averageAccuracy": {
-                    "2": 81.91
-                },
-                "species": {
-                    "Bifidobacterium longum": {
-                        "2": 1
+                        "13": 1
                     }
                 }
             }
