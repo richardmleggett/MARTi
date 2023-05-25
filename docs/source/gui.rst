@@ -80,7 +80,7 @@ The new analysis page is comprised of several cards that together house all the 
 * Input data directory – this dropdown is automatically populated with samples available for MARTi analysis found within the MinKNOW run directory specified by the user.
 * MARTi output directory – a dropdown of paths being monitored by the GUI’s server for MARTi output. Users specify this path, or a semicolon-separated list of paths, as MARTiSampleDirectory in the engine options file. The path selected in the dropdown will be used as the output location for the new analysis.
 
-An example of how to start a new analysis from the new analysis page can be found :ref:`here<docker>`.
+An example of how to start a new analysis from the new analysis page can be found :ref:`here<example>`.
 
 Options
 -------
