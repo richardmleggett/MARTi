@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Classify reads based on alignment results, using Lowest Common Ancestor algorithm.
@@ -33,6 +34,7 @@ public class ReadClassifier {
     //private Hashtable<Integer, Integer> ntVfdbPair = new Hashtable<Integer, Integer>();
     private Hashtable<Integer, BlastDependencies> blastDependencies = new Hashtable<Integer, BlastDependencies>();
     private MARTiPendingTaskList pendingAnalysisTasks = null;
+    private ConcurrentLinkedQueue<String> fileCompressionQueue = null;
     private int filesProcessed = 0;
     private int fileCount = 0;
     
@@ -246,6 +248,9 @@ public class ReadClassifier {
                                         System.out.println("Error: couldn't get CARD filename\n");
                                         System.exit(1);
                                     }
+                                } else {
+                                    // add blast file to list of files to be compressed.
+                                    fileCompressionQueue.add(f.getBlastFile());
                                 }
                                 
                                 md.writeSampleJSON(false);
@@ -418,6 +423,15 @@ public class ReadClassifier {
     public void setPendingTaskList(MARTiPendingTaskList ptl) {
         options.getLog().println("Got pending task list");
         pendingAnalysisTasks = ptl;
+    }
+    
+    public void setFileCompressionQueue(ConcurrentLinkedQueue<String> queue) {
+        if(fileCompressionQueue == null) {
+            fileCompressionQueue = queue;
+        } else {
+            System.out.println("[ReadClassifier] Warning: Setting file compression queue but this has already been set. "
+                                + "Something has gone wrong.");
+        }
     }
 
     public LCAParseOptions getLCAParseOptions() {
