@@ -44,7 +44,7 @@ class Observer extends EventEmitter {
         }
 
 
-      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 2000, pollInterval: 100 }});
+      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
 
       watcher.on('add', async filePath => {
         if (filePath.includes('sample.json')) {
@@ -307,20 +307,30 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          console.log(
-            `[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`
-          );
+          if(fsExtra.existsSync(filePath)) {
+            console.log(
+              `[${new Date().toLocaleString()}] ${filePath} still exists. Network delay.`
+            );
+          } else {
 
-          this.emit('meta-file-removed', {
-            id: sampleName,
-            runName: runName,
-            content: filePath
-          });
+            console.log(
+              `[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`
+            );
+
+            this.emit('meta-file-removed', {
+              id: sampleName,
+              runName: runName,
+              content: filePath
+            });
+
+          }
+
+
 
         }
       });
 
-      var idFileWatcher = chokidar.watch(idFilesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 2000, pollInterval: 100 }});
+      var idFileWatcher = chokidar.watch(idFilesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
 
       idFileWatcher.on('add', async filePath => {
 

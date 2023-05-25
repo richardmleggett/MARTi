@@ -292,7 +292,7 @@ $(document).on('click touchstart', '.removeRow', function(event){
                data: form.serialize(),
                success: function(data)
                {
-                   alert("Success! You'll now be redirected to the samples page where you will find your new analysis in a few minutes time.");
+                   alert("Form submitted.");
 
                    activeSidebarIcon($("#dashboard-item"));
                    currentPage = "Samples";
@@ -384,7 +384,7 @@ function updateMartiNameField() {
 
 function updateOutputPathField() {
   var martiName = $("input[name='martiName']").val();
-  //var martiName = 
+  //var martiName =
   martiOutputBasePath = $('#outputDir option:selected').text();
   var path = martiOutputBasePath + "/" + martiName;
   $("input[name='outputPath']").val(path);
