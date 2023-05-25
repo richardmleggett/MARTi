@@ -75,22 +75,12 @@ The new analysis page allows users to generate a configuration file and start a 
 
 The MARTi Engine requires a configuration (or ‘config’) file to start a new analysis of a whole run or selected barcoded samples. The config file provides the details for the analysis to be performed by the MARTi Engine (see :ref:`here for config file format information<configfiles>`). When running MARTi in an HPC configuration, a config file with default options can be :ref:`generated via the command line<cmdline>` and then edited with a text editor if required. In local configuration, you can use the command line method or the new analysis page of the MARTi GUI to generate a config file and start analysis.
 
-The new analysis page is comprised of a single card that houses all the input fields and buttons required to generate a config file and start a new analysis. Two of the fields rely on information provided by the user in the marti_server_options.txt file:
+The new analysis page is comprised of several cards that together house all the input fields and buttons required to generate a config file and start a new analysis. Two of the fields rely on information provided by the user in the marti_engine_options.txt file:
 
-* MinKNOW run ID – this dropdown is automatically populated with samples available for MARTi analysis found within the MinKNOW run directory specified by the user.
-* MARTi output directory – a dropdown of paths being monitored by the GUI’s server for MARTi output. Users specify this path, or a colon-separated list of paths, as MARTiSampleDirectory in the server options file. The path selected in the dropdown will be used as the output location for the new analysis.
+* Input data directory – this dropdown is automatically populated with samples available for MARTi analysis found within the MinKNOW run directory specified by the user.
+* MARTi output directory – a dropdown of paths being monitored by the GUI’s server for MARTi output. Users specify this path, or a semicolon-separated list of paths, as MARTiSampleDirectory in the engine options file. The path selected in the dropdown will be used as the output location for the new analysis.
 
-To start a new analysis from this page:
-
-#. Select a sample to analyse from the *MinKNOW run ID* dropdown.
-#. Choose an output directory using the *MARTi output directory* dropdown.
-#. If you’re analysing a barcoded run, tick the *Process barcodes* checkbox and then select the barcodes you wish to analyse in the newly revealed *Select barcodes* box.
-#. Under the *Pipeline default settings* subheading, there are buttons to load default settings for the two most common MARTi pipelines, BlastLCA and BlastLCA-CARD. To classify reads using BLAST and MARTi’s LCA algorithm, click BlastLCA. If you also want to identify AMR genes, click BlastLCA-CARD. The BlastLCA-CARD button assigns the same default settings as the BlastLCA button but adds an additional BLAST process to align reads to the CARD database.
-#. For the *BLAST process* card to be used for taxonomic classification, complete the path in the *Database directory* input so that it points to the directory that contains your blast database. Then, set the *Database prefix* to the name of the database used as the prefix for the database files. Finally, tick the *Use this BLAST to classify* checkbox.
-#. If you also have a BLAST process for CARD then you’ll need to update the *Database directory* input of that process so that it points to the location of the CARD database.
-#. Select the maximum number of concurrent jobs that can be run by the local scheduler using the *Max jobs* dropdown.
-#. Click the *Start analysis* button.
-
+An example of how to start a new analysis from the new analysis page can be found :ref:`here<docker>`.
 
 Options
 -------
