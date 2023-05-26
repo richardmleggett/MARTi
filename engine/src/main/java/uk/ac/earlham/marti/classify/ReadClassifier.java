@@ -250,7 +250,9 @@ public class ReadClassifier {
                                     }
                                 } else {
                                     // add blast file to list of files to be compressed.
-                                    fileCompressionQueue.add(f.getBlastFile());
+                                    if(options.getCompressBlastFiles()) {
+                                        fileCompressionQueue.add(f.getBlastFile());
+                                    }
                                 }
                                 
                                 md.writeSampleJSON(false);
