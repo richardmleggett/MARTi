@@ -135,6 +135,14 @@ public class WalkOutRead {
         return s;
     }
     
+    public long getLCAHitTaxonID() {
+        if (bacterialHitSet.getNumberOfAlignments() == 0) {
+            System.out.println("Er... no alignments in getLCAHit");
+            System.exit(0);
+        }
+        return taxonomy.findAncestor(bacterialHitSet, 10, false);
+    }
+    
     public int getBacterialHitSetSize() {
         return bacterialHitSet.getNumberOfAlignments();
     }

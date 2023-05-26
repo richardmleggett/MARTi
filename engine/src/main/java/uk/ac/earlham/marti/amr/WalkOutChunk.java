@@ -223,6 +223,7 @@ public class WalkOutChunk {
                     String hostHit = walkoutRead.getBacterialHit();
                     String lcaHit = walkoutRead.getLCAHit();
                     String lcaShort = lcaHit.substring(lcaHit.lastIndexOf(',')+1);
+                    long lcaTaxonID = walkoutRead.getLCAHitTaxonID();
 
                     for (int i=0; i<walkoutRead.getNumberOfGenes(); i++) {
                         int overlap = walkoutRead.getCardHit(i).getDistance();
@@ -236,7 +237,7 @@ public class WalkOutChunk {
                             options.getLog().println("Warning: couldn't get ARO from "+cardHit);
                         }
                         
-                        results.addWalkoutHit(cardHit, lcaShort, originalChunkNumber, processedChunkNumber, isIndependent, overlap, identity);
+                        results.addWalkoutHit(cardHit, lcaShort, lcaTaxonID, originalChunkNumber, processedChunkNumber, isIndependent, overlap, identity);
                         writeAMRFileHit(pwAmr, walkoutRead, i);
                         writeWalkoutFileHit(pwWalkout, walkoutRead, queryId, lcaShort, i, overlap, isIndependent);
                         
@@ -261,7 +262,7 @@ public class WalkOutChunk {
                         }
 
                         double identity = walkoutRead.getCardHit(i).getIdentity();
-                        results.addWalkoutHit(cardHit, "no_hit", originalChunkNumber, processedChunkNumber, false, 0, identity);
+                        results.addWalkoutHit(cardHit, "no_hit", -2l, originalChunkNumber, processedChunkNumber, false, 0, identity);
                     }
                 }
             }

@@ -40,7 +40,7 @@ public class WalkOutResults {
     }        
     
     // UPDATE TO WRITE HITS TO FILE
-    public void addWalkoutHit(String cardHit, String lcaHit, int originalChunkNumber, int processedChunkNumber, boolean isIndependent, int overlap, double identity) {       
+    public void addWalkoutHit(String cardHit, String lcaHit, long lcaHitTaxonID, int originalChunkNumber, int processedChunkNumber, boolean isIndependent, int overlap, double identity) {       
         // Update overall count
         int chunkCount = 0;
         if (countPerChunk.containsKey(processedChunkNumber)) {
@@ -64,7 +64,7 @@ public class WalkOutResults {
         }
         
         // Now add this hit
-        gene.addHit(originalChunkNumber, processedChunkNumber, lcaHit, isIndependent, identity);
+        gene.addHit(originalChunkNumber, processedChunkNumber, lcaHitTaxonID, isIndependent, identity);
         
         if (lcaHit != null) {
             if (isIndependent) {

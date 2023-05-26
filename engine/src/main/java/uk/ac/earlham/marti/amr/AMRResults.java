@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -86,6 +85,7 @@ public class AMRResults {
     */
     public void writeJSON(int cn) {
         Hashtable<String, AMRGene> genes = wor.getGenes();
+        Taxonomy taxonomy = options.getReadClassifier().getTaxonomy();
         // chunkTime object
         JsonObjectBuilder chunkTimes = Json.createObjectBuilder();
         
@@ -129,24 +129,33 @@ public class AMRResults {
             geneBuilder.add("resistanceMechanism", cardOntology.getResistanceMechanism(gene.getCARDId()));
             geneBuilder.add("count", countBuilder);
             geneBuilder.add("averageAccuracy", accuracyBuilder);
-                         
-            // Add species section
-            JsonObjectBuilder speciesBuilder = Json.createObjectBuilder();
+
+            JsonArrayBuilder speciesArrayBuilder = Json.createArrayBuilder();
+                    
             // Loop through species
-            Hashtable<String, Integer> species = gene.getSpecies();
-            for (String s : species.keySet()) {
+            Hashtable<Long, Integer> species = gene.getSpecies();
+            for (Long id : species.keySet()) {
+                // Add species section
+                JsonObjectBuilder speciesBuilder = Json.createObjectBuilder();
+                String speciesName = taxonomy.getNameFromTaxonId(id);
+                if(id == -2l){
+                    speciesName = "Unassigned";
+                }
+                speciesBuilder.add("name", speciesName);
+                speciesBuilder.add("ncbiID", id);
                 JsonObjectBuilder speciesCountBuilder = Json.createObjectBuilder();
                 cumulativeCount = 0;
                 for (int c=0; c<=wor.getMaxChunkNumber(); c++) {
-                    int count = gene.getSpeciesCountForChunk(s, c);
+                    int count = gene.getSpeciesCountForChunk(id, c);
                     cumulativeCount += count;
                     if (count > 0) {
                         speciesCountBuilder.add(Integer.toString(c), cumulativeCount);
                     }
                 }
-                speciesBuilder.add(s, speciesCountBuilder);
+                speciesBuilder.add("chunkCounts", speciesCountBuilder);
+                speciesArrayBuilder.add(speciesBuilder);
             }
-            geneBuilder.add("species", speciesBuilder);
+            geneBuilder.add("species", speciesArrayBuilder);
 
             // Add this gene to the array
             arrayBuilder.add(geneBuilder);

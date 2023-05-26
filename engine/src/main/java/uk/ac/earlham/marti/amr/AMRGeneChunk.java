@@ -13,17 +13,17 @@ import java.util.Hashtable;
  */
 public class AMRGeneChunk {
     private int overallCount = 0;
-    private Hashtable<String, Integer> speciesToCount = new Hashtable<String, Integer>();
+    private Hashtable<Long, Integer> speciesToCount = new Hashtable<Long, Integer>();
     double cumulativeIdentity = 0.0;
     int numberOfHits = 0;
     
-    public void addHit(String lcaHit, boolean isIndependent, double identity) {
+    public void addHit(Long lcaHitTaxonID, boolean isIndependent, double identity) {
         int count = 0;
-        if (speciesToCount.containsKey(lcaHit)) {
-            count = speciesToCount.get(lcaHit);
+        if (speciesToCount.containsKey(lcaHitTaxonID)) {
+            count = speciesToCount.get(lcaHitTaxonID);
         }
         count++;
-        speciesToCount.put(lcaHit, count);
+        speciesToCount.put(lcaHitTaxonID, count);
         //System.out.println("Updated count for "+lcaHit+" to "+count);
         overallCount++;
         cumulativeIdentity += identity;
@@ -34,11 +34,11 @@ public class AMRGeneChunk {
         return overallCount;
     }
     
-    public int getCountForSpecies(String species) {
+    public int getCountForSpecies(Long speciesID) {
         int count = 0;
         
-        if (speciesToCount.containsKey(species)) {
-            count = speciesToCount.get(species);
+        if (speciesToCount.containsKey(speciesID)) {
+            count = speciesToCount.get(speciesID);
         }
         
         return count;
