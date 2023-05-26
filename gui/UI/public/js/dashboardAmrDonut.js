@@ -84,40 +84,75 @@ var key = function(d) {
   // var amrDonutColor = dashboardPlotColorPalette;
   var amrDonutColor;
 
+function returnTaxaSeperateCounts(data){
+
+  var taxaSeparateCounts = [];
+
+if (Array.isArray(data)){
+
+  for (const taxa of data) {
+    var counts = taxa.chunkCounts;
+    var speciesCountAtChunk = 0;
+    if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+      speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+    } else {
+      var highestChunk = 0;
+      for (const [chunk, count] of Object.entries(counts)) {
+        if (chunk < dashboardAmrTableChunkSelected) {
+          var highestChunk = chunk;
+        } else {
+          break;
+        }
+      }
+      if (highestChunk !== 0){
+        speciesCountAtChunk = counts[highestChunk];
+      }
+
+    };
+
+    taxaSeparateCounts.push({
+      taxaName: taxa.name,
+      count: speciesCountAtChunk
+    });
+  };
+
+} else {
+
+  for (const [taxa,counts] of Object.entries(data)) {
+    var speciesCountAtChunk = 0;
+    if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+      speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+    } else {
+      var highestChunk = 0;
+      for (const [chunk, count] of Object.entries(counts)) {
+        if (chunk < dashboardAmrTableChunkSelected) {
+          var highestChunk = chunk;
+        } else {
+          break;
+        }
+      }
+      if (highestChunk !== 0){
+        speciesCountAtChunk = counts[highestChunk];
+      }
+
+    };
+
+    taxaSeparateCounts.push({
+      taxaName: taxa,
+      count: speciesCountAtChunk
+    });
+  };
+
+}
+  return taxaSeparateCounts;
+}
+
     function topTaxaAmrByOther(data,plotBy) {
 
       var drugClassSpeciesCounts = {};
 
       for (const gene of data.geneList) {
-
-        var taxaSeparateCounts = [];
-
-        for (const [taxa,counts] of Object.entries(gene.species)) {
-          var speciesCountAtChunk;
-          if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
-            speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
-          } else {
-            var highestChunk = 0;
-            for (const [chunk, count] of Object.entries(counts)) {
-              if (chunk < dashboardAmrTableChunkSelected) {
-                var highestChunk = chunk;
-              } else {
-                break;
-              }
-            }
-            if (counts.hasOwnProperty(highestChunk)) {
-              speciesCountAtChunk = counts[highestChunk];
-            } else {
-              speciesCountAtChunk = "0";
-            }
-
-          };
-
-          taxaSeparateCounts.push({
-            taxaName: taxa,
-            count: speciesCountAtChunk
-          });
-        };
+        var taxaSeparateCounts = returnTaxaSeperateCounts(gene.species);
 
         var drugClassArray = gene[plotBy].split(";");
 
@@ -225,33 +260,7 @@ var key = function(d) {
 
         var taxaSeparateCounts = [];
         for (const gene of data.geneList) {
-
-          for (const [taxa,counts] of Object.entries(gene.species)) {
-
-            if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
-              var speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
-            } else {
-              var highestChunk = 0;
-              for (const [chunk, count] of Object.entries(counts)) {
-                if (chunk < dashboardAmrTableChunkSelected) {
-                  var highestChunk = chunk;
-                } else {
-                  break;
-                }
-              }
-              if (counts.hasOwnProperty(highestChunk)) {
-                var speciesCountAtChunk = counts[highestChunk];
-              } else {
-                var speciesCountAtChunk = "0";
-              }
-
-            };
-
-            taxaSeparateCounts.push({
-              taxaName: taxa,
-              count: speciesCountAtChunk
-            });
-          };
+          taxaSeparateCounts = taxaSeparateCounts.concat(returnTaxaSeperateCounts(gene.species));
         };
 
 
