@@ -147,7 +147,7 @@ public class SlurmSchedulerJob {
         pbCommands.add(commandString);
         
         
-        System.out.println(pbCommands);
+        //System.out.println(pbCommands);
         
         String fullCommand="";
         for (int i=0; i<pbCommands.size(); i++) {
@@ -157,10 +157,10 @@ public class SlurmSchedulerJob {
             
             fullCommand+=pbCommands.get(i);
         }
-        System.out.println(fullCommand);
-        System.out.println("");
-        System.out.println("");
-        System.out.println("Trying..");
+        //System.out.println(fullCommand);
+        //System.out.println("");
+        //System.out.println("");
+        //System.out.println("Trying..");
         
         
         try {
@@ -172,21 +172,18 @@ public class SlurmSchedulerJob {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));   
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println("Line: "+line);
+                //System.out.println("Line: "+line);
                 if (line.startsWith("Submitted batch job")) {
                     String id = line.substring(20);
                     submittedJobId = Long.parseLong(id);
-                    System.out.println("   got id "+submittedJobId);
+                    //System.out.println("   got id "+submittedJobId);
                 }
             }
 
             reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));   
             while ((line = reader.readLine()) != null) {
                 System.out.println("Error line: "+line);
-            }
-
-            
-            System.out.println("Finished pb");
+            }            
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -310,7 +307,6 @@ public class SlurmSchedulerJob {
                     if (fields[0].compareTo(Long.toString(submittedJobId)) == 0) {
                         String state = fields[1];
                         parseJobState(state);
-                        System.out.println("State is "+getJobStateString());
                     }
                 }
 

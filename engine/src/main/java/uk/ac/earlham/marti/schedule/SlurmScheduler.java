@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Set;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 
@@ -20,15 +21,14 @@ import uk.ac.earlham.marti.core.MARTiLog;
  */
 public class SlurmScheduler implements JobScheduler {
     private static final int MAX_QUICK_JOB_ID = 100000;
-    private LinkedList<SlurmSchedulerJob> pendingJobs = new LinkedList<SlurmSchedulerJob>();
-    private LinkedList<SlurmSchedulerJob> runningJobs = new LinkedList<SlurmSchedulerJob>();
-    private LinkedList<SlurmSchedulerJob> failedJobs = new LinkedList<SlurmSchedulerJob>();    
-    //private LinkedList<SimpleJobSchedulerJob> finishedJobs = new LinkedList<SimpleJobSchedulerJob>();
     private Hashtable<Integer, SlurmSchedulerJob> allJobs = new Hashtable<Integer, SlurmSchedulerJob>();
+    private LinkedList<SlurmSchedulerJob> pendingJobs = new LinkedList<SlurmSchedulerJob>();
+    private Hashtable<Integer, SlurmSchedulerJob> runningJobs = new Hashtable<Integer, SlurmSchedulerJob>();
+    private Hashtable<Integer, SlurmSchedulerJob> failedJobs = new Hashtable<Integer, SlurmSchedulerJob>();    
     private Hashtable<Integer, Integer> jobStatus = new Hashtable<Integer, Integer>();
     private MARTiLog schedulerLog = new MARTiLog();
     private MARTiEngineOptions options;
-    private int jobId = 1;
+    private int internalJobId = 1; // Id used in this Java class, not by SLURM
     private int maxJobs = 1000;
     private boolean dontRunCommand = false;
     private long lastSlurmQuery = System.nanoTime();
@@ -56,25 +56,25 @@ public class SlurmScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+jobId, jobId, commands, logFilename, dontRunIt);
+        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt);
         pendingJobs.add(j);
-        allJobs.put(jobId, j);
-        jobStatus.put(jobId, SlurmSchedulerJob.STATE_PENDING);
-        schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
-        return jobId++;
+        allJobs.put(internalJobId, j);
+        jobStatus.put(internalJobId, SlurmSchedulerJob.STATE_PENDING);
+        schedulerLog.println("Submitted job\t"+internalJobId+"\t"+j.getCommand());
+        return internalJobId++;
     }
 
     // The next methods rely on our local list of jobs and don't query SLURM .
     // That's all done by manageQueue. This is because SLURM can sometimes be
     // slow, so we only query it periodically.
     public synchronized boolean checkJobCompleted(int i) {
-        if (jobStatus.contains(i)) {    
+        if (jobStatus.containsKey(i)) {    
             int s = jobStatus.get(i);
             if (s == SlurmSchedulerJob.STATE_COMPLETED) {
                 return true;
             }
         } else {
-            options.getLog().printlnLogAndScreen("Warning: Attempt to check on unknown job id " + i);
+            options.getLog().printlnLogAndScreen("Warning: Attempt to check completion on unknown job id " + i);
         }
         
         return false;
@@ -82,10 +82,10 @@ public class SlurmScheduler implements JobScheduler {
     
     // See comment above
     public synchronized int getExitValue(int i) {
-        if (jobStatus.contains(i)) {    
+        if (jobStatus.containsKey(i)) {    
             return jobStatus.get(i);
         } else {
-            options.getLog().printlnLogAndScreen("Warning: Attempt to check on unknown job id " + i);
+            options.getLog().printlnLogAndScreen("Warning: Attempt to check exit on unknown job id " + i);
         }
         return SlurmSchedulerJob.STATE_UNKNOWN;
     }
@@ -100,23 +100,25 @@ public class SlurmScheduler implements JobScheduler {
     
     public synchronized void manageQueue() {
         // Check state of jobs, but only every minute or two
-        long timeDiff = (System.nanoTime() - lastSlurmQuery) / 1000000; // ms
+        long timeNow = System.nanoTime();
+        long timeDiff = (timeNow - lastSlurmQuery) / 1000000; // ms
         if (timeDiff < 1000) {
             return;
         }
 
-        lastSlurmQuery = System.nanoTime();
+        lastSlurmQuery = timeNow;
 
         // Check for any finished jobs
-        for (int i=0; i<runningJobs.size(); i++) {
-            SlurmSchedulerJob ssj = runningJobs.get(i);
+        Set<Integer> runningJobInternalIds = runningJobs.keySet();
+        for (int id : runningJobInternalIds) {
+            SlurmSchedulerJob ssj = runningJobs.get(id);
             ssj.queryJobState();
             int jState = ssj.getJobState();
             if (jState == SlurmSchedulerJob.STATE_COMPLETED) {
                 schedulerLog.println("Finished job\t" +ssj.getId() + "\t" + ssj.getCommand());
                 schedulerLog.println("Exit value was "+ssj.getExitValue());
-                runningJobs.remove(i);
-                jobStatus.put(i, jState);                
+                runningJobs.remove(id);
+                jobStatus.put(id, jState);                
             } else if ((jState == SlurmSchedulerJob.STATE_FAILED) ||
                        (jState == SlurmSchedulerJob.STATE_BOOT_FAIL) ||
                        (jState == SlurmSchedulerJob.STATE_CANCELLED) ||
@@ -125,12 +127,12 @@ public class SlurmScheduler implements JobScheduler {
                        (jState == SlurmSchedulerJob.STATE_REVOKED) ||
                        (jState == SlurmSchedulerJob.STATE_TIMEOUT)) {
                 schedulerLog.println("Job "+ssj.getId()+" failed with code "+ssj.getExitValue()); 
-                runningJobs.remove(i);
-                failedJobs.add(i, ssj);
+                runningJobs.remove(id);
+                failedJobs.put(id, ssj);
                 options.getLog().printlnLogAndScreen("Failed SLURM job "+ssj.getId()+" - see scheduler log");
             } else if ((jState != SlurmSchedulerJob.STATE_RUNNING) &&
                        (jState != SlurmSchedulerJob.STATE_PENDING)) {
-                options.getLog().printlnLogAndScreen("Unknown state for job "+ssj.getId()+" "+jState);
+                schedulerLog.println("Unknown state for job "+ssj.getId()+" "+jState);
             }
         }
         
@@ -141,7 +143,7 @@ public class SlurmScheduler implements JobScheduler {
         {      
             SlurmSchedulerJob ssj = pendingJobs.removeFirst();
             ssj.run();
-            runningJobs.add(ssj);
+            runningJobs.put(ssj.getId(), ssj);
             schedulerLog.println("Running job\t" + ssj.getId() + "\t" +ssj.getCommand());            
         }
     }

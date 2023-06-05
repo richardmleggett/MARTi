@@ -102,17 +102,22 @@ public class MARTiEngine {
         if (options.inTestMode()) {
             //testUnzip();
             // SLURM development
+            SlurmScheduler ss = new SlurmScheduler(options);
             System.out.println("Test mode");
             String commands[] = {"sleep", "10"};
-            SlurmSchedulerJob ssj = new SlurmSchedulerJob("testjob", commands, "testlog.txt", false);
-            ssj.run();
-            for (int i=0; i<20; i++) {
-                ssj.queryJobState();
-                if (ssj.getJobState() == SlurmSchedulerJob.STATE_COMPLETED) {
+            //SlurmSchedulerJob ssj = new SlurmSchedulerJob("testjob", commands, "testlog.txt", false);
+            int jobid = ss.submitJob(commands, "testlog.txt", true);
+            //ssj.run();
+            while(true) {
+                ss.manageQueue();
+                if (ss.checkJobCompleted(jobid)) {
+                    System.out.println("Job "+jobid+" COMPLETED");
                     break;
+                } else {
+                    System.out.println("Job "+jobid+" not complete");
                 }
                 Thread.sleep(1000);
-            }
+            };
                     
             System.out.println("Done");
         } else if (options.isInitMode()) {
