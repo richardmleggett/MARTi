@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Classify reads based on alignment results, using Lowest Common Ancestor algorithm.
@@ -33,6 +34,7 @@ public class ReadClassifier {
     //private Hashtable<Integer, Integer> ntVfdbPair = new Hashtable<Integer, Integer>();
     private Hashtable<Integer, BlastDependencies> blastDependencies = new Hashtable<Integer, BlastDependencies>();
     private MARTiPendingTaskList pendingAnalysisTasks = null;
+    private ConcurrentLinkedQueue<String> fileCompressionQueue = null;
     private int filesProcessed = 0;
     private int fileCount = 0;
     
@@ -51,8 +53,11 @@ public class ReadClassifier {
         if (options.runBlastCommand() == false) {
             File f = new File(blastFilename);
             if (!f.exists()) {
-                options.getLog().println("dontrunblast - file "+blastFilename+" doesn't exist, so ignoring");
-                ignoreThis = true;
+                File fgz = new File(blastFilename + ".gz");
+                if(!fgz.exists()) {
+                    options.getLog().println("dontrunblast - files "+blastFilename+" and " + blastFilename + ".gz don't exist, so ignoring");
+                    ignoreThis = true;
+                }
             }
         }
 
@@ -171,7 +176,7 @@ public class ReadClassifier {
                                 SampleMetaData md = options.getSampleMetaData(barcode);
 
                                 options.getLog().println("Got sample metadata");
-                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null);
+                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null, options.runningCARD());
                                 
                                 String summaryFilename = f.getClassifierPrefix() + "_summary.txt";
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";
@@ -242,6 +247,11 @@ public class ReadClassifier {
                                     } else {
                                         System.out.println("Error: couldn't get CARD filename\n");
                                         System.exit(1);
+                                    }
+                                } else {
+                                    // add blast file to list of files to be compressed.
+                                    if(options.getCompressBlastFiles()) {
+                                        fileCompressionQueue.add(f.getBlastFile());
                                     }
                                 }
                                 
@@ -415,6 +425,15 @@ public class ReadClassifier {
     public void setPendingTaskList(MARTiPendingTaskList ptl) {
         options.getLog().println("Got pending task list");
         pendingAnalysisTasks = ptl;
+    }
+    
+    public void setFileCompressionQueue(ConcurrentLinkedQueue<String> queue) {
+        if(fileCompressionQueue == null) {
+            fileCompressionQueue = queue;
+        } else {
+            System.out.println("[ReadClassifier] Warning: Setting file compression queue but this has already been set. "
+                                + "Something has gone wrong.");
+        }
     }
 
     public LCAParseOptions getLCAParseOptions() {

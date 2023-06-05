@@ -22,12 +22,38 @@ function initialiseAmrDonut() {
       .outerRadius(amrRadius * 0.8)
       .innerRadius(amrRadius * 0.5);
 
-      dropdownGeneListSelected = "All genes";
+      dropdownListSelected = "All genes";
 
-    d3.select("#dashboardAmrDonutAmrSelect").on("change", function(){
-      dropdownGeneListSelected = d3.select(this).property("value");
+
+    d3.selectAll(".amr-donut-plot-by>select").on("change", function(){
+      dropdownListSelected = d3.select(this).property("value");
       plotAmrDonut(dashboardAmrReponseData);
     });
+
+
+    dashboardAmrDonutPlotBy = "Gene";
+
+  d3.select("#dashboardAmrDonutPlotBy").on("change", function(){
+    dashboardAmrDonutPlotBy = d3.select(this).property("value");
+
+    switch(dashboardAmrDonutPlotBy) {
+      case "Drug class":
+
+      dropdownListSelected = "All classes";
+
+        break;
+      case "Resistance mechanism":
+
+      dropdownListSelected = "All mechanisms";
+
+        break;
+      default:
+
+    dropdownListSelected = "All genes";
+    };
+
+    plotAmrDonut(dashboardAmrReponseData);
+  });
 
     d3.select("#dashboardAmrDonutTopN").on("change", function(){
       plotAmrDonut(dashboardAmrReponseData);
@@ -58,37 +84,183 @@ var key = function(d) {
   // var amrDonutColor = dashboardPlotColorPalette;
   var amrDonutColor;
 
+function returnTaxaSeperateCounts(data){
+
+  var taxaSeparateCounts = [];
+
+if (Array.isArray(data)){
+
+  for (const taxa of data) {
+    var counts = taxa.chunkCounts;
+    var speciesCountAtChunk = 0;
+    if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+      speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+    } else {
+      var highestChunk = 0;
+      for (const [chunk, count] of Object.entries(counts)) {
+        if (chunk < dashboardAmrTableChunkSelected) {
+          var highestChunk = chunk;
+        } else {
+          break;
+        }
+      }
+      if (highestChunk !== 0){
+        speciesCountAtChunk = counts[highestChunk];
+      }
+
+    };
+
+    taxaSeparateCounts.push({
+      taxaName: taxa.name,
+      count: speciesCountAtChunk
+    });
+  };
+
+} else {
+
+  for (const [taxa,counts] of Object.entries(data)) {
+    var speciesCountAtChunk = 0;
+    if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+      speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+    } else {
+      var highestChunk = 0;
+      for (const [chunk, count] of Object.entries(counts)) {
+        if (chunk < dashboardAmrTableChunkSelected) {
+          var highestChunk = chunk;
+        } else {
+          break;
+        }
+      }
+      if (highestChunk !== 0){
+        speciesCountAtChunk = counts[highestChunk];
+      }
+
+    };
+
+    taxaSeparateCounts.push({
+      taxaName: taxa,
+      count: speciesCountAtChunk
+    });
+  };
+
+}
+  return taxaSeparateCounts;
+}
+
+    function topTaxaAmrByOther(data,plotBy) {
+
+      var drugClassSpeciesCounts = {};
+
+      for (const gene of data.geneList) {
+        var taxaSeparateCounts = returnTaxaSeperateCounts(gene.species);
+
+        var drugClassArray = gene[plotBy].split(";");
+
+          for (const drugClass of drugClassArray) {
+            if (!drugClassSpeciesCounts.hasOwnProperty(drugClass)){
+              drugClassSpeciesCounts[drugClass] = taxaSeparateCounts;
+            } else {
+              drugClassSpeciesCounts[drugClass] = drugClassSpeciesCounts[drugClass].concat(taxaSeparateCounts);
+            }
+
+          };
+        };
+
+
+        var countsArray = [];
+
+
+        for (const [drugClass,counts] of Object.entries(drugClassSpeciesCounts)) {
+          var countSum = d3.sum(counts, function(d) {
+              return d.count;
+          });
+          if(countSum > 0){
+            dropdownList.push(drugClass);
+          };
+        };
+
+        var tempDropdownListSelected;
+
+        if (!dropdownList.includes(dropdownListSelected)){
+          tempDropdownListSelected = "All classes";
+        } else {
+          tempDropdownListSelected = dropdownListSelected;
+        }
+
+        if (tempDropdownListSelected == "All classes"){
+          for (const [drugClass,counts] of Object.entries(drugClassSpeciesCounts)) {
+            countsArray = countsArray.concat(counts);
+          }
+
+
+        } else {
+
+          countsArray = countsArray.concat(drugClassSpeciesCounts[dropdownListSelected]);
+
+        }
+
+
+        var taxaConsolidatedCounts = d3.nest()
+            .key(function(d) {
+                return d.taxaName;
+            })
+            .rollup(function(v) {
+                return d3.sum(v, function(d) {
+                    return d.count;
+                });
+            })
+            .entries(countsArray)
+            .map(function(g) {
+                return {
+                    taxaName: g.key,
+                    count: g.values
+                }
+            })
+            .sort(function(a, b) {
+                return b.count - a.count
+            });
+
+
+        var thresholdSelected = dashboardAmrDonutTopN;
+
+        for (const [i,taxa] of taxaConsolidatedCounts.entries()) {
+          if(i < thresholdSelected) {
+            taxa.threshold = taxa.taxaName;
+          } else {
+            taxa.threshold = "Other";
+          };
+        };
+
+
+        var topTaxaArray = d3.nest()
+            .key(function(d) {
+                return d.threshold;
+            })
+            .rollup(function(v) {
+                return d3.sum(v, function(d) {
+                    return d.count;
+                });
+            })
+            .entries(taxaConsolidatedCounts)
+            .map(function(g) {
+                return {
+                    label: g.key,
+                    value: g.values
+                }
+            })
+            .sort(function(a, b) {
+                return b.value - a.value
+            });
+
+        return topTaxaArray;
+      };
+
+
     function topTaxaAmr(data) {
 
         var taxaSeparateCounts = [];
         for (const gene of data.geneList) {
-
-          for (const [taxa,counts] of Object.entries(gene.species)) {
-
-            if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
-              var speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
-            } else {
-              var highestChunk = 0;
-              for (const [chunk, count] of Object.entries(counts)) {
-                if (chunk < dashboardAmrTableChunkSelected) {
-                  var highestChunk = chunk;
-                } else {
-                  break;
-                }
-              }
-              if (counts.hasOwnProperty(highestChunk)) {
-                var speciesCountAtChunk = counts[highestChunk];
-              } else {
-                var speciesCountAtChunk = "0";
-              }
-
-            };
-
-            taxaSeparateCounts.push({
-              taxaName: taxa,
-              count: speciesCountAtChunk
-            });
-          };
+          taxaSeparateCounts = taxaSeparateCounts.concat(returnTaxaSeperateCounts(gene.species));
         };
 
 
@@ -147,80 +319,76 @@ var key = function(d) {
         return topTaxaArray;
 };
 
-var dropdownGeneList = [];
-var dropdownGeneListSelected = "All genes";
+var dropdownListSelected = "All genes";
+var dashboardAmrDonutPlotBy = "Gene";
+var dashboardAmrDonutPlotByList = [];
 var dashboardAmrDonutTopN = 10;
+
+
+var dropdownList = [];
+
 
 
 function plotAmrDonut(data) {
 
 // amrDonutColor = dashboardPlotColorPalette;
 
+dashboardAmrDonutPlotByListOptions = [{plotByProp:"drugClass",name:"Drug class"},{plotByProp:"resistanceMechanism",name:"Resistance mechanism"}]
+dashboardAmrDonutPlotByList = [];
+
+for (const option of dashboardAmrDonutPlotByListOptions) {
+  if (data.geneList[0].hasOwnProperty(option.plotByProp)) {
+    dashboardAmrDonutPlotByList.push(option.name);
+  }
+}
+
+dashboardAmrDonutPlotByList.unshift("Gene");
+
+d3.select("#dashboardAmrDonutPlotBy").selectAll("option").remove();
+
+  var plotByOptions = d3.select("#dashboardAmrDonutPlotBy").selectAll("option")
+      .data(dashboardAmrDonutPlotByList);
+
+      plotByOptions.enter()
+          .append("option")
+          .text(function(d) {return d;});
+
+      plotByOptions.exit()
+          .remove();
+
+$('#dashboardAmrDonutPlotBy option:contains(' + dashboardAmrDonutPlotBy + ')').prop({selected: true});
+
+
+
 amrDonutColor = d3.scale.ordinal()
     .range(colourPalettes[selectedPalette]);
 
-dropdownGeneList = [];
+
 
 
   var newData = JSON.parse(JSON.stringify(data));
 
 
+dropdownList = [];
 
 var plotData = [];
 
-  var geneListShortName = "cardId";
+$(".amr-donut-plot-by").hide();
 
+switch(dashboardAmrDonutPlotBy) {
+  case "Drug class":
 
-  for (const [i,gene] of data.geneList.entries()) {
-    if(gene.hasOwnProperty("shortName")){
-      geneListShortName = "shortName";
-    }
-    var geneInChunkList = false;
-    if (gene.averageAccuracy.hasOwnProperty(dashboardAmrTableChunkSelected) && gene.speciesCounts.length > 0) {
-      dropdownGeneList.push(gene[geneListShortName]);
-      geneInChunkList = true;
-    } else {
-      for (var chunk of Object.keys(gene.averageAccuracy)) {
-        chunk = parseInt(chunk);
-        if (chunk < dashboardAmrTableChunkSelected && gene.speciesCounts.length > 0) {
-          dropdownGeneList.push(gene[geneListShortName]);
-          geneInChunkList = true;
-          break
-        } else {
-          break;
-        }
-      }
-    }
+  $("#dashboardAmrDonutDrugClassSelect").parent().show();
 
-    if (gene[geneListShortName] == dropdownGeneListSelected && geneInChunkList) {
-      newData.geneList = [data.geneList[i]];
-      plotData = topTaxaAmr(newData);
-    };
+  // dropdownListSelected = "All classes";
+  plotData = topTaxaAmrByOther(newData,"drugClass");
 
+  dropdownList.sort().unshift("All classes");
 
-  };
+  d3.select("#dashboardAmrDonutDrugClassSelect").selectAll("option").remove();
 
-
-  if (plotData.length == 0) {
-    plotData = topTaxaAmr(data);
-  };
-
-
-  dropdownGeneList.sort().unshift("All genes");
-
-  var legendItems = [];
-
-  for (taxa of plotData) {
-    if (taxa.value != 0) {
-      legendItems.push(taxa.label);
-    };
-  };
-
-
-d3.select("#dashboardAmrDonutAmrSelect").selectAll("option").remove();
-
-  var geneOptions = d3.select("#dashboardAmrDonutAmrSelect").selectAll("option")
-      .data(dropdownGeneList);
+  var geneOptions = d3.select("#dashboardAmrDonutDrugClassSelect").selectAll("option")
+      .data(dropdownList);
 
       geneOptions.enter()
           .append("option")
@@ -229,7 +397,101 @@ d3.select("#dashboardAmrDonutAmrSelect").selectAll("option").remove();
       geneOptions.exit()
           .remove();
 
-$('#dashboardAmrDonutAmrSelect option:contains(' + dropdownGeneListSelected + ')').prop({selected: true});
+  $('#dashboardAmrDonutDrugClassSelect option:contains(' + dropdownListSelected + ')').prop({selected: true});
+
+    break;
+  case "Resistance mechanism":
+
+    $("#dashboardAmrDonutResMechSelect").parent().show();
+
+    plotData = topTaxaAmrByOther(newData,"resistanceMechanism");
+
+    dropdownList.sort().unshift("All mechanisms");
+
+    d3.select("#dashboardAmrDonutResMechSelect").selectAll("option").remove();
+
+    var geneOptions = d3.select("#dashboardAmrDonutResMechSelect").selectAll("option")
+        .data(dropdownList);
+
+        geneOptions.enter()
+            .append("option")
+            .text(function(d) {return d;});
+
+        geneOptions.exit()
+            .remove();
+
+    $('#dashboardAmrDonutResMechSelect option:contains(' + dropdownListSelected + ')').prop({selected: true});
+
+    break;
+  default:
+
+  $("#dashboardAmrDonutAmrSelect").parent().show();
+
+  var geneListShortName = "cardId";
+
+  for (const [i,gene] of data.geneList.entries()){
+    if(gene.hasOwnProperty("shortName")){
+      geneListShortName = "shortName";
+    }
+    var geneInChunkList = false;
+    if (gene.averageAccuracy.hasOwnProperty(dashboardAmrTableChunkSelected) && gene.speciesCounts.length > 0) {
+      dropdownList.push(gene[geneListShortName]);
+      geneInChunkList = true;
+    } else {
+      for (var chunk of Object.keys(gene.averageAccuracy)) {
+        chunk = parseInt(chunk);
+        if (chunk < dashboardAmrTableChunkSelected && gene.speciesCounts.length > 0) {
+          dropdownList.push(gene[geneListShortName]);
+          geneInChunkList = true;
+          break
+        } else {
+          break;
+        }
+      }
+    }
+
+    if (gene[geneListShortName] == dropdownListSelected && geneInChunkList) {
+      newData.geneList = [data.geneList[i]];
+      plotData = topTaxaAmr(newData);
+    };
+  };
+
+
+  if (plotData.length == 0) {
+    plotData = topTaxaAmr(data);
+  };
+
+  dropdownList.sort().unshift("All genes");
+
+  d3.select("#dashboardAmrDonutAmrSelect").selectAll("option").remove();
+
+  var geneOptions = d3.select("#dashboardAmrDonutAmrSelect").selectAll("option")
+      .data(dropdownList);
+
+      geneOptions.enter()
+          .append("option")
+          .text(function(d) {return d;});
+
+      geneOptions.exit()
+          .remove();
+
+  $('#dashboardAmrDonutAmrSelect option:contains(' + dropdownListSelected + ')').prop({selected: true});
+
+}
+
+
+
+
+
+
+var legendItems = [];
+
+for (taxa of plotData) {
+  if (taxa.value != 0) {
+    legendItems.push(taxa.label);
+  };
+};
+
 
   var dataMax = d3.max(plotData, function(d) {
       return d.value;

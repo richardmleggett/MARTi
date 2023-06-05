@@ -44,7 +44,7 @@ class Observer extends EventEmitter {
         }
 
 
-      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 2000, pollInterval: 100 }});
+      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
 
       watcher.on('add', async filePath => {
         if (filePath.includes('sample.json')) {
@@ -65,32 +65,26 @@ class Observer extends EventEmitter {
           fileContent.sample.pathRun = runId;
 
 
-          var idFilePath = split.slice(0,-3).join('/') + "/ids.json";
-
-          if (fsExtra.existsSync(idFilePath)) {
-
-            var idFileContent = await fsExtra.readFile(idFilePath);
-
-            idFileContent = JSON.parse(idFileContent);
-
-            // var split = filePath.split(sep);
-            // var dir = split.slice(0,-2).join('/');
-            //
-            // var runId = split[split.length - 2];
-
-
-            if (idFileContent.hasOwnProperty(sampleName)){
-              fileContent.sample.originalId = fileContent.sample.id;
-              fileContent.sample.id = idFileContent[sampleName];
-            }
-
-
-
-            console.log(
-              `[${new Date().toLocaleString()}] ${idFilePath} has been ADDED.`
-            );
-
-          }
+          // var idFilePath = split.slice(0,-3).join('/') + "/ids.json";
+          //
+          // if (fsExtra.existsSync(idFilePath)) {
+          //
+          //   var idFileContent = await fsExtra.readFile(idFilePath);
+          //
+          //   idFileContent = JSON.parse(idFileContent);
+          //
+          //
+          //   if (idFileContent.hasOwnProperty(sampleName)){
+          //     fileContent.sample.originalId = fileContent.sample.id;
+          //     fileContent.sample.id = idFileContent[sampleName];
+          //   }
+          //
+          //
+          //
+          //   console.log(
+          //     `[${new Date().toLocaleString()}] ${idFilePath} has been ADDED.`
+          //   );
+          // }
 
           this.emit('meta-file-added', {
             id: sampleName,
@@ -313,17 +307,93 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
+          if(fsExtra.existsSync(filePath)) {
+            console.log(
+              `[${new Date().toLocaleString()}] ${filePath} still exists. Network delay.`
+            );
+          } else {
+
+            console.log(
+              `[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`
+            );
+
+            this.emit('meta-file-removed', {
+              id: sampleName,
+              runName: runName,
+              content: filePath
+            });
+
+          }
+
+
+
+        }
+      });
+
+      var idFileWatcher = chokidar.watch(idFilesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
+
+      idFileWatcher.on('add', async filePath => {
+
+          var idFileContent = await fsExtra.readFile(filePath);
+
+          idFileContent = JSON.parse(idFileContent);
+
+          var split = filePath.split(sep);
+          var dir = split.slice(0,-2).join('/');
+
+          var runId = split[split.length - 2];
+
+          console.log(
+            `[${new Date().toLocaleString()}] ${filePath} has been ADDED.`
+          );
+
+          this.emit('id-file-added', {
+            runId: runId,
+            content: idFileContent
+          });
+
+
+      })
+
+      idFileWatcher.on('change', async filePath => {
+
+          var idFileContent = await fsExtra.readFile(filePath);
+
+          idFileContent = JSON.parse(idFileContent);
+
+          var split = filePath.split(sep);
+          var dir = split.slice(0,-2).join('/');
+
+          var runId = split[split.length - 2];
+
+          console.log(
+            `[${new Date().toLocaleString()}] ${filePath} has been CHANGED.`
+          );
+
+          this.emit('id-file-added', {
+            runId: runId,
+            content: idFileContent
+          });
+
+
+      })
+
+      idFileWatcher.on('unlink', async filePath => {
+
+        var split = filePath.split(sep);
+        var dir = split.slice(0,-2).join('/');
+
+        var runId = split[split.length - 2];
+
           console.log(
             `[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`
           );
 
-          this.emit('meta-file-removed', {
-            id: sampleName,
-            runName: runName,
-            content: filePath
+          this.emit('id-file-removed', {
+            runId: runId
           });
 
-        }
+
       });
 
 

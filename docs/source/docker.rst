@@ -33,15 +33,15 @@ Test data
 
 If you want to test the MARTi installation, you can use a set of sample reads, custom database, and taxonomy files available for download from `here <https://nbicloud-my.sharepoint.com/:u:/g/personal/peeln_nbi_ac_uk/EUwY6lJhyAtHtuq5FB6vW1YBvlxZ-Vcl-9XUyEMPA0TMJA?e=g7jKty>`__.
 
-After downloading the files, unzip them and run the MARTi Docker image with the following command::
+After downloading the files, unzip them and run the MARTi Docker image with the following command (replacing ``/path/to/marti_example/`` with the actual path to the unzipped marti_example directory)::
 
   docker run -i -t -p 3000:3000 -v /path/to/marti_example/databases:/usr/databases -v /path/to/marti_example/reads:/usr/reads -v /path/to/marti_example/output:/usr/output -v /path/to/marti_example/config:/usr/config nedpeel/marti
 
-Once the container is running, test MARTi by running the following command::
+Once the container is running, start the analysis with MARTi Engine running in the background with the following command::
 
-  marti -config /usr/config/marti_test.txt
+  marti -config /usr/config/marti_test.txt > marti_out.txt &
 
-The MARTi GUI can be launched by running ``marti_gui``. To view the GUI, open a browser and navigate to GUI’s port ``localhost:3000``.
+Launch the MARTi GUI by running ``marti_gui``, open a browser and navigate to GUI’s port ``localhost:3000``.
 
 Persistent options file
 -----------------------
@@ -56,7 +56,7 @@ The ``marti_engine_options.txt`` file is used by both the Engine and the GUI. Us
 GUI only
 --------
 
-The MARTi Docker image can be used for running just the GUI component of the tool. When running the Docker for this purpose, only the MARTi output directory needs to be specified as a volume::
+To view previously analysed samples, the MARTi Docker image can be used to run only the GUI component of the tool. When running the Docker for this purpose, you only need to specify the MARTi output directory as a volume::
 
   docker run -i -t -p 3000:3000 -v /path/to/marti_example/output:/usr/output nedpeel/marti
 

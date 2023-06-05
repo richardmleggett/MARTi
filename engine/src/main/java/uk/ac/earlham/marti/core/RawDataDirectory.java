@@ -29,15 +29,21 @@ public class RawDataDirectory {
         File dir = new File (fastqPassDir);
         
         if (dir.exists()) {
-            System.out.println("Got fastq_pass directory: "+ fastqPassDir);
+            System.out.println("Got fastq_pass directory: " + fastqPassDir);
         } else {
-            fastqPassDir = pathname + File.separator + "fastq";
+            fastqPassDir = pathname + File.separator + "pass";
             dir = new File (fastqPassDir);
-            if (dir.exists()) {
-                System.out.println("Not got fastq_pass, but found fastq directory: "+fastqPassDir);
+            if(dir.exists()) {
+                System.out.println("Got fastq_pass directory: " + fastqPassDir);
             } else {
-                System.out.println("ERROR: Can't find fastq_pass or fastq directory in "+pathname);
-                System.exit(1);
+                fastqPassDir = pathname + File.separator + "fastq";
+                dir = new File (fastqPassDir);
+                if (dir.exists()) {
+                    System.out.println("Not got fastq_pass, but found fastq directory: " + fastqPassDir);
+                } else {
+                    System.out.println("ERROR: Can't find 'fastq_pass', 'pass', or 'fastq' directory in " + pathname);
+                    System.exit(1);
+                }
             }
         }
         

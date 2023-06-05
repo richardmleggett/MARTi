@@ -13,7 +13,7 @@ import java.util.Hashtable;
  */
 public class AMRGene {
     private Hashtable<Integer, AMRGeneChunk> chunks = new Hashtable<Integer,AMRGeneChunk>();
-    private Hashtable<String, Integer> species = new Hashtable<String, Integer>();
+    private Hashtable<Long, Integer> species = new Hashtable<Long, Integer>();
     int cardNumber = 0;
     String geneName = "Unknown";
     String cardId = "Unknown";
@@ -37,7 +37,7 @@ public class AMRGene {
         }
     }
 
-    public void addHit(int originalChunkNumber, int processedChunkNumber, String lcaHit, boolean isIndependent, double identity) {
+    public void addHit(int originalChunkNumber, int processedChunkNumber, Long lcaHitTaxonID, boolean isIndependent, double identity) {
         AMRGeneChunk chunk;
                 
         //System.out.println("Chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
@@ -52,19 +52,19 @@ public class AMRGene {
     
         // Check if we have this in he overall species list for this gene
         int speciesCount = 0;
-        if (species.containsKey(lcaHit)) {
-            speciesCount = species.get(lcaHit);
+        if (species.containsKey(lcaHitTaxonID)) {
+            speciesCount = species.get(lcaHitTaxonID);
         }
         speciesCount++;
-        species.put(lcaHit, speciesCount);
+        species.put(lcaHitTaxonID, speciesCount);
             
         // Now pass the species through to this chunk to increment the counter for that species
         // Note there may be no species...  
-        if (lcaHit != null) {
+        if (lcaHitTaxonID != -2l) {
             //System.out.println("addHit to chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
-            chunk.addHit(lcaHit, isIndependent, identity);
+            chunk.addHit(lcaHitTaxonID, isIndependent, identity);
         } else {
-            chunk.addHit("null", isIndependent, identity);
+            chunk.addHit(-2l, isIndependent, identity);
         }
         
         // Keep track of mean identity
@@ -72,16 +72,16 @@ public class AMRGene {
         numberOfHits++;
     }
     
-    public Hashtable<String,Integer> getSpecies() {
+    public Hashtable<Long,Integer> getSpecies() {
         return species;
     }
     
-    public int getSpeciesCountForChunk(String species, int chunk) {
+    public int getSpeciesCountForChunk(Long speciesID, int chunk) {
         int count = 0;
 
        if (chunks.containsKey(chunk)) {
             AMRGeneChunk agg = chunks.get(chunk);
-            count = agg.getCountForSpecies(species);
+            count = agg.getCountForSpecies(speciesID);
        }
        
        return count;         

@@ -39,7 +39,7 @@ public class BlastHit implements LCAHit,Comparable {
     private String stitle = "";
     private boolean validAlignment = false;
     
-    public BlastHit(Taxonomy t, AccessionTaxonConvertor atc, String line, int format, boolean parse) {
+    public BlastHit(Taxonomy t, AccessionTaxonConvertor atc, String line, int format, boolean parse, boolean formatHasStitle) {
         String[] fields = line.split("\t");
                 
         taxonomy = t;
@@ -47,7 +47,11 @@ public class BlastHit implements LCAHit,Comparable {
         parseTaxon = parse;
                 
         if (format == LCAParseOptions.FORMAT_NANOOK) {
-            parseNanoOK(fields);
+            if(formatHasStitle) {
+                parseNanoOKWithStitle(fields);
+            } else {
+                parseNanoOK(fields);
+            }
         } else if ((format == LCAParseOptions.FORMAT_BLASTTAB) ||
                    (format == LCAParseOptions.FORMAT_BLASTTAXON)) {
             parseBlastTab(fields);
@@ -60,7 +64,7 @@ public class BlastHit implements LCAHit,Comparable {
         }        
     }
     
-    private void parseNanoOK(String[] fields) {
+    private void parseNanoOKWithStitle(String[] fields ) {
         // NanoOK14: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle staxids"
         // NanoOK15: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids"
 
@@ -91,6 +95,47 @@ public class BlastHit implements LCAHit,Comparable {
             } else if (fields.length == 15) {
                 queryCoverage = Double.parseDouble(fields[13]);
                 String taxaString = fields[14];
+                String[] taxa = taxaString.split(";");
+                taxonId = Integer.parseInt(taxa[0]);
+            }
+            
+            validAlignment = true;
+        } else {
+            System.out.println("Error: input format doesn't seem to be NanoOK");
+            System.exit(1);
+        }
+    }
+    
+    private void parseNanoOK(String[] fields ) {
+        // NanoOK13: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids"
+        // NanoOK14: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs staxids"
+
+        if ((fields.length == 13) || (fields.length == 14)) {        
+            queryName = fields[0];
+            targetName = fields[1];
+            identity = Double.parseDouble(fields[2]);
+            length = Integer.parseInt(fields[3]);
+            mismatches = Integer.parseInt(fields[4]);
+            // gapopen            
+            queryStart = Integer.parseInt(fields[6]);
+            queryEnd = Integer.parseInt(fields[7]);
+            targetStart = Integer.parseInt(fields[8]);
+            targetEnd = Integer.parseInt(fields[9]);
+            eValueString = fields[10] ; eValue = Double.parseDouble(eValueString);
+            bitscoreString = fields[11] ; bitscore = Double.parseDouble(bitscoreString);
+            
+            if (fields.length == 13) {
+                String taxaString = fields[12];
+                String[] taxa = taxaString.split(";");
+                
+                try {
+                    taxonId = Integer.parseInt(taxa[0]);
+                } catch (NumberFormatException e) {                    
+                    taxonId = -2;
+                }
+            } else if (fields.length == 14) {
+                queryCoverage = Double.parseDouble(fields[12]);
+                String taxaString = fields[13];
                 String[] taxa = taxaString.split(";");
                 taxonId = Integer.parseInt(taxa[0]);
             }
@@ -276,6 +321,9 @@ public class BlastHit implements LCAHit,Comparable {
     }
     
     public String getSubjectTitle() {
+        if(stitle == "") {
+            System.out.println("Warning: Caller has requested stitle but there is no stitle field in Blast file.");
+        }
         return stitle;
     }
 

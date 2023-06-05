@@ -31,6 +31,7 @@ public class ReadProcessor {
     private FASTAQPairPendingList pfl = null;
     private MARTiPendingTaskList ptl = null;
     private MARTiProgress progressReport;
+    private ConcurrentLinkedQueue<String> fileCompressionQueue = null;
 
     /**
      * Constructor
@@ -42,6 +43,7 @@ public class ReadProcessor {
         fw = new FileWatcher(options, pr);
         pfl = new FASTAQPairPendingList(options);
         ptl = new MARTiPendingTaskList(options);
+        fileCompressionQueue = new ConcurrentLinkedQueue<String>();
 
         progressReport = pr;
 
@@ -240,7 +242,8 @@ public class ReadProcessor {
         boolean fileWatcherTimedOut = false;
         ReadFilterRunnable readFilter = new ReadFilterRunnable(options, fw, pfl);
         BlastProcessRunnable blastProcess = new BlastProcessRunnable(options, pfl);
-        MARTiAnalysisRunnable analysisProcess = new MARTiAnalysisRunnable(options, ptl);
+        MARTiAnalysisRunnable analysisProcess = new MARTiAnalysisRunnable(options, ptl, fileCompressionQueue);
+        FileCompressorRunnable fileCompressor = null;
 
         rc.setPendingTaskList(ptl);
         
@@ -257,6 +260,13 @@ public class ReadProcessor {
 
         // Execute thread which checks for new local MARTi analysis jobs to launch
         executor.execute(analysisProcess);
+        
+        if(options.getCompressBlastFiles()) {
+            fileCompressor = new FileCompressorRunnable(fileCompressionQueue);
+            rc.setFileCompressionQueue(fileCompressionQueue);
+            // Execute thread which checks for files to compress and compresses them
+            executor.execute(fileCompressor);
+        }
                         
         //for (int i=0; i<options.getNumberOfThreads(); i++) {
         //}        
@@ -302,6 +312,11 @@ public class ReadProcessor {
         
         // Write stop sequencing flag
         options.writeStopSequencingFlag();
+        
+        // Stop compression thread and compress any remaining files in the queue
+        if(options.getCompressBlastFiles()) {         
+            fileCompressor.exitThread();       
+        }
                                 
         // That's all - wait for all threads to finish
         executor.shutdown();

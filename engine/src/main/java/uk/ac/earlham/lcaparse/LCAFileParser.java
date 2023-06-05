@@ -6,9 +6,14 @@
 package uk.ac.earlham.lcaparse;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Carry out Lowest Common Ancestor based classification.
@@ -33,11 +39,13 @@ public class LCAFileParser {
     private LCAParseOptions options;
     private String lastFilename = "";
     private boolean keepRejectedAlignments = false;
+    private boolean runningCARD;
 
-    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc) {
+    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard) {
         taxonomy = t;
         options = o;
         accTaxConvert = atc;
+        runningCARD = rCard;
     }
     
     private void logEqual(String queryName) {
@@ -60,7 +68,7 @@ public class LCAFileParser {
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAB) || 
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAXON))
         {
-            hit = new BlastHit(t, atc, line, options.getFileFormat(), true);
+            hit = new BlastHit(t, atc, line, options.getFileFormat(), true, runningCARD);
         } else {
             System.out.println("Error in crerateNewHit - unexpected format\n");
             System.exit(1);
@@ -101,9 +109,22 @@ public class LCAFileParser {
     */
     public int parseFile(String filename) {
         BufferedReader br;
-
+        InputStream fileStream = null;
+        InputStream gzipStream = null;
+        Reader decoder = null;
+        
         try {
-            br = new BufferedReader(new FileReader(filename));
+            File f = new File(filename);
+            if(f.exists()){
+                br = new BufferedReader(new FileReader(filename));
+            } else {
+                filename = filename + ".gz";
+                fileStream = new FileInputStream(filename);
+                gzipStream = new GZIPInputStream(fileStream);
+                decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                br = new BufferedReader(decoder);    
+            }
+            
             String line;
             String lastQuery = "";
             int equal = 0;
@@ -129,7 +150,13 @@ public class LCAFileParser {
                 }
             } while (line != null);
             lastFilename = filename;
+            
             br.close();
+            if(fileStream != null) {
+                decoder.close();
+                gzipStream.close();
+                fileStream.close();
+            }
             
             //printEquals();
         } catch (Exception e) {

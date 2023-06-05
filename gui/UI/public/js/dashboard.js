@@ -1052,34 +1052,59 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
       gene.averageAccuracyAtChunk = averageAccuracyAtChunk;
 
     gene.speciesCounts = [];
-    for (const [species, counts] of Object.entries(gene.species)) {
 
-      if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
-        var speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
-      } else {
-        var highestChunk = 0;
-        for (const [chunk, count] of Object.entries(counts)) {
-          if (chunk < dashboardAmrTableChunkSelected) {
-            var highestChunk = chunk;
-          } else {
-            break;
+    if (Array.isArray(gene.species)){
+      for (const species of gene.species) {
+        var counts = species.chunkCounts;
+        var speciesCountAtChunk = 0;
+        if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+          speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+        } else {
+          var highestChunk = 0;
+          for (const [chunk, count] of Object.entries(counts)) {
+            if (chunk < dashboardAmrTableChunkSelected) {
+              var highestChunk = chunk;
+            } else {
+              break;
+            }
+          }
+          if (highestChunk !== 0){
+            speciesCountAtChunk = counts[highestChunk];
           }
         }
-        var speciesCountAtChunk = counts[highestChunk];
+
+        if (speciesCountAtChunk !== 0) {
+          gene.speciesCounts.push(species.name+" ("+speciesCountAtChunk+")");
+        }
       }
+    } else {
+      for (const [species, counts] of Object.entries(gene.species)) {
+        var speciesCountAtChunk = 0;
+        if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
+          speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
+        } else {
+          var highestChunk = 0;
+          for (const [chunk, count] of Object.entries(counts)) {
+            if (chunk < dashboardAmrTableChunkSelected) {
+              var highestChunk = chunk;
+            } else {
+              break;
+            }
+          }
+          if (highestChunk !== 0){
+            speciesCountAtChunk = counts[highestChunk];
+          }
+        }
 
-      if (speciesCountAtChunk !== undefined) {
-
-        gene.speciesCounts.push(species+" ("+speciesCountAtChunk+")");
-
-        // if (species.indexOf(' ') >= 0) {
-        //   line = species + ":" + speciesCountAtChunk + "\n";
-        //   csvString += line;
-        // }
+        if (speciesCountAtChunk !== 0) {
+          gene.speciesCounts.push(species+" ("+speciesCountAtChunk+")");
+        }
 
       }
-
     }
+
+
+
 
 
     gene.speciesCounts.sort(function(a, b) {

@@ -267,12 +267,7 @@ if (widthAmrHm > maxWidth - yAxisWidth) {
   amrHmSvg.attr("transform","translate(" + (amrHmWidth/2 - (widthAmrHm + yAxisWidth)/2 + yAxisWidth) + "," + marginAmrHm.top + ")");
 }
 
-
-
-
 var plotMaxValue = 0;
-
-
 
 data.forEach(function(d) {
   var readCountToSubtractFromOther = 0;

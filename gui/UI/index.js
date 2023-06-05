@@ -14,15 +14,18 @@ function checkIfValidPortnumber(num) {
   return regexExp.test(num);
 }
 
-var slectedPort = 3000;
+// const portCandidate = argv.p || 3000;
+var selectedPort = argv.p || 3000;
 
-if (argv._.length == 1) {
-  var portCandidate = parseInt(argv._);
-  if (checkIfValidPortnumber(portCandidate)){
-    slectedPort = portCandidate;
+if (selectedPort != 3000) {
+  if (checkIfValidPortnumber(selectedPort)){
+    // selectedPort = portCandidate;
+  } else {
+    selectedPort = 3000;
   }
 }
 
+const restrictedMode = argv.r || false;
 
 
 var serverOptions = {};
@@ -194,14 +197,17 @@ function scanMinKNOWRunDirectory() {
       var list = getSubDirectories(MinKNOWRunDirectory);
       list.forEach(function(dir) {
         var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);
-        if(newList.length == 1) {
+        if(newList.includes("fastq_pass") || newList.includes("pass")) {
+          minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir);
+        }
+        else if(newList.length == 1) {
           const sampleDir = newList[0];
           newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir);
           if(newList.length == 1) {
             const uid_dir = newList[0];
             newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
             if(newList.includes("fastq_pass")) {
-              minKNOWSampleNames.push(dir);
+              minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
             }
           }
         }
@@ -215,10 +221,8 @@ function scanMinKNOWRunDirectory() {
 
 function makeConfigFileString(form_object) {
   var configFileString = "";
-  var dir1 = getSubDirectories(serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"])[0];
-  var dir2 = getSubDirectories(serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"] + "/" + dir1)[0];
+  configFileString += "RawDataDir:" + form_object["rawDataDir"] + "\n";
   configFileString += "SampleName:" + form_object["martiName"] + "\n";
-  configFileString += "RawDataDir:" + serverOptions["MinKNOWRunDirectory"] + "/" + form_object["sampleName"] + "/" + dir1 + "/" + dir2 + "\n";
   configFileString += "SampleDir:" + form_object["outputDir"] + "/" + form_object["martiName"] + "\n";
   if(form_object.hasOwnProperty('processBarcodeCheck') && form_object["processBarcodeCheck"] == "on") {
     if(Array.isArray(form_object["barcodeCheck"])) {
@@ -311,6 +315,28 @@ observer.on('id-file-added', meta => {
   metaDataUpdateId(meta);
 });
 
+observer.on('id-file-removed', meta => {
+
+  var runId = meta.runId;
+
+  if(sampleMetaDict[runId]){
+
+    for (const [name, newName] of Object.entries(sampleNamesDict[runId])) {
+      if (sampleMetaDict[runId][name]) {
+        sampleMetaDict[runId][name]["sample"]["id"] = sampleMetaDict[runId][name]["sample"]["originalId"];
+      }
+    }
+
+    io.sockets.emit('meta-update-available', {
+      runId: runId,
+      sampleId: ""
+    });
+  }
+
+    delete sampleNamesDict[runId];
+
+});
+
 function metaDataUpdate(meta) {
 
 var data = meta.content;
@@ -328,6 +354,9 @@ if (!data.sample.hasOwnProperty("runId")) {
     sampleMetaDict[runId] = {};
     sampleMetaDict[runId][sampleId] = data;
   }
+  if(sampleNamesDict[runId]){
+    updateMetaDataSampleNames(runId);
+  }
 
   io.sockets.emit('meta-update-available', {
     runId: runId,
@@ -335,31 +364,40 @@ if (!data.sample.hasOwnProperty("runId")) {
   });
 }
 
-// function metaDataUpdateId(meta) {
-//
-//   console.log(meta);
-//
-//   var data = meta.content;
-//   var newIds = meta.content.ids;
-//   var runId = meta.runId;
-//
-//   if (!data.hasOwnProperty("runId")) {
-//     data.sample.runId = runId;
-//   }
-//
-//
-//   if (sampleMetaDict[runId]) {
-//     sampleMetaDict[runId]["newIds"] = newIds;
-//   } else {
-//     sampleMetaDict[runId] = {};
-//     sampleMetaDict[runId]["newIds"] = newIds;
-//   }
-//
-//   io.sockets.emit('meta-id-file-update-available', {
-//     runId: runId
-//   });
-//
-// }
+function updateMetaDataSampleNames(runId) {
+
+    for (const [name, newName] of Object.entries(sampleNamesDict[runId])) {
+      if (sampleMetaDict[runId][name]) {
+        sampleMetaDict[runId][name]["sample"]["id"] = newName;
+        sampleMetaDict[runId][name]["sample"]["originalId"] = name;
+
+      } else {
+
+      }
+    }
+
+
+}
+
+var runIdsToUpdate = [];
+
+function metaDataUpdateId(meta) {
+
+  var data = meta.content;
+  var runId = meta.runId;
+
+  sampleNamesDict[runId] = data;
+
+  if(sampleMetaDict[runId]){
+  updateMetaDataSampleNames(runId);
+
+  io.sockets.emit('meta-update-available', {
+    runId: runId,
+    sampleId: ""
+  });
+  }
+
+}
 
 observer.on('meta-file-added', meta => {
   metaDataUpdate(meta);
@@ -562,6 +600,7 @@ if(serverOptions["MARTiSampleDirectory"].length > 0){
 
 
 var sampleMetaDict = {};
+var sampleNamesDict = {};
 var sampleTreeDict = {};
 var sampleAccumulationDict = {};
 var sampleAmrDict = {};
@@ -576,8 +615,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/indexNode.html');
 });
 
-http.listen(slectedPort, '0.0.0.0', function(){
-  console.log(`[${new Date().toLocaleString()}] listening on port ${slectedPort}`);
+http.listen(selectedPort, '0.0.0.0', function(){
+  console.log(`[${new Date().toLocaleString()}] listening on port ${selectedPort}`);
 });
 
 
@@ -674,7 +713,11 @@ io.on('connect', function(socket){
     }
 
       socket.join(id);
-      io.to(id).emit('register-response', id);
+      // io.to(id).emit('register-response', id);
+      io.to(id).emit('register-response', {
+        id: id,
+        mode: restrictedMode
+      });
 
       console.log(`[${new Date().toLocaleString()}][${id}] Client registered`);
       sendHeartbeat();
@@ -713,16 +756,26 @@ io.on('connect', function(socket){
     var originalId = request.originalId;
     var sampleId = request.pathName;
     var runId = request.pathRun;
-
+    var dir;
+    var idFileContent={};
       if (sampleMetaDict[runId]) {
-        sampleMetaDict[runId][sampleId]["sample"]["originalId"] = originalId;
-        sampleMetaDict[runId][sampleId]["sample"]["id"] = newId;
+        dir = sampleMetaDict[runId][sampleId]["sample"]["dir"]
+        var idFilePath = dir + "/" + runId + "/ids.json";
+
+        if (fsExtra.existsSync(idFilePath)) {
+          idFileContent = fsExtra.readFileSync(idFilePath);
+          idFileContent = JSON.parse(idFileContent);
+        }
+
+        idFileContent[originalId] = newId;
+
+        fsExtra.writeJson(idFilePath, idFileContent, (err) => {
+          if (err) throw err;
+
+        });
+
       }
 
-      io.sockets.emit('meta-update-available', {
-        runId: runId,
-        sampleId: sampleId
-      });
   })
 
   socket.on('default-server-options-request', request => {
@@ -742,7 +795,7 @@ io.on('connect', function(socket){
           runId: runId
         };
         io.to(id).emit('current-dashboard-sample-response', clientData[id].selectedDashboardSample);
-        console.log(`[${new Date().toLocaleString()}][${id}] Dashboard sample selected: ${runId} - ${sampleId}`);
+        // console.log(`[${new Date().toLocaleString()}][${id}] Dashboard sample selected: ${runId} - ${sampleId}`);
   });
 
   socket.on('selected-compare-samples', samples => {
@@ -754,7 +807,7 @@ io.on('connect', function(socket){
       for (const sample of samples) {
         sampleNames.push(sample.name);
       }
-      console.log(`[${new Date().toLocaleString()}][${id}] Compare samples selected: ${sampleNames}`);
+      // console.log(`[${new Date().toLocaleString()}][${id}] Compare samples selected: ${sampleNames}`);
   });
 
   socket.on('current-dashboard-sample-request', request => {

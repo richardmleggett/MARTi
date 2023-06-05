@@ -240,6 +240,7 @@ function thresholdName(r) {
 
 socket = io.connect();
 
+var restrictedMode = false;
 uuid = null;
 currentPage = "";
 currentDashboardSampleName = "";
@@ -267,8 +268,10 @@ socket.on('connect', () => {
 
 
 socket.on('register-response', response => {
-  uuid = response;
-  console.log("id: " + response);
+  uuid = response.id;
+  restrictedMode = response.mode;
+  console.log("id: " + response.id);
+  console.log("mode: " + restrictedMode);
 });
 
 

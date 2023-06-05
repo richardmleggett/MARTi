@@ -4,6 +4,7 @@
  */
 package uk.ac.earlham.marti.core;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import uk.ac.earlham.marti.blast.BlastProcessRunnable;
 import uk.ac.earlham.marti.amr.AMRAnalysisTask;
 import java.util.logging.Level;
@@ -18,10 +19,12 @@ public class MARTiAnalysisRunnable  implements Runnable {
     private MARTiEngineOptions options = null;
     private MARTiPendingTaskList pendingTasksList = null;
     private boolean keepRunning = true;
+    private ConcurrentLinkedQueue<String> fileCompressionQueue;
     
-    public MARTiAnalysisRunnable(MARTiEngineOptions o, MARTiPendingTaskList ptl) {
+    public MARTiAnalysisRunnable(MARTiEngineOptions o, MARTiPendingTaskList ptl, ConcurrentLinkedQueue<String> fcq) {
         options = o;
         pendingTasksList = ptl;
+        fileCompressionQueue = fcq;
     }
     
     public void runAMRTask(AMRAnalysisTask aat) {
@@ -41,7 +44,12 @@ public class MARTiAnalysisRunnable  implements Runnable {
                     switch(mat.getTaskDescriptor()) {
                         case "AMRAnalysis":
                             options.getLog().println("Got AMR analysis task");
-                            runAMRTask((AMRAnalysisTask)mat);
+                            AMRAnalysisTask aat = (AMRAnalysisTask)mat;
+                            runAMRTask(aat);
+                            if(options.getCompressBlastFiles()) {
+                                fileCompressionQueue.add(aat.getNtBlastFilename());
+                                fileCompressionQueue.add(aat.getCARDBlastFilename());
+                            }
                             break;
                         default:
                             System.out.println("Unknown analysis task "+ mat.getTaskDescriptor());
