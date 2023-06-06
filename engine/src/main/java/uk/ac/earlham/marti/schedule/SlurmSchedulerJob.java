@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import uk.ac.earlham.marti.core.MARTiLog;
 
 /**
  * Job scheduler job.
@@ -33,6 +34,7 @@ public class SlurmSchedulerJob {
     public final static int STATE_SUSPENDED = 14;
     public final static int STATE_TIMEOUT = 15;     
         
+    private MARTiLog schedulerLog;
     private String[] commands;
     private Process process = null;
     private String logFilename;
@@ -51,21 +53,23 @@ public class SlurmSchedulerJob {
     private long submittedJobId = 0;
     private int jobState = STATE_UNKNOWN;
 
-    public SlurmSchedulerJob(String name, String[] c, String l, boolean d) {
+    public SlurmSchedulerJob(String name, String[] c, String l, boolean d, MARTiLog s) {
         jobName = name;
         internalJobId = -1;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
+        schedulerLog = s;
     }
 
     
-    public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d) {
+    public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d, MARTiLog s) {
         jobName = name;
         internalJobId = i;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
+        schedulerLog = s;
     }
     
     // Might implement this version (with separate error log) later
@@ -82,14 +86,10 @@ public class SlurmSchedulerJob {
     }
 
     public void run() {
+        String originalCommands[] = commands;        
         if (dontRunCommand) {
-            String newCommands[] = {"sleep", "2", " ; ", "echo", "Hello"};
-            System.out.print("[ Running ");
-            for (int i=0; i<commands.length; i++) {
-                System.out.print(commands[i] + " ");
-            }
-            System.out.println("]");
-            commands = newCommands;
+            System.out.println("Not running command for job "+internalJobId);            
+            submittedJobId = internalJobId;
             return;
         }         
         
@@ -145,7 +145,7 @@ public class SlurmSchedulerJob {
         pbCommands.add("-o"); pbCommands.add(logFilename);
         pbCommands.add("-p"); pbCommands.add(partition);
         pbCommands.add(commandString);
-        
+        System.out.println("Command being run... "+commandString);
         
         //System.out.println(pbCommands);
         
@@ -187,9 +187,11 @@ public class SlurmSchedulerJob {
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
-        }
-        
-        
+        } 
+    }
+    
+    public long getSubmittedJobId() {
+        return submittedJobId;
     }
     
     public boolean hasFinished() {
@@ -201,11 +203,15 @@ public class SlurmSchedulerJob {
     }
     
     public int getExitValue() {
+        int e = 0;
+        
         if (process != null) {
-            return process.exitValue();
-        } else {
-            return 0;
+            if (process.exitValue() != STATE_COMPLETED) {
+                e = process.exitValue();
+            }
         }
+        
+        return e;
     }
     
     public String getCommand() {
@@ -296,6 +302,11 @@ public class SlurmSchedulerJob {
     }
     
     public void queryJobState() {
+        if (dontRunCommand) {
+            jobState=STATE_COMPLETED;
+            return;
+        }
+                
         if (submittedJobId > 0) {
             try {
                 Process process = Runtime.getRuntime().exec("sacct -j "+submittedJobId+" -b -X");

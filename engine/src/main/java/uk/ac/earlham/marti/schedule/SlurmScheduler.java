@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 
@@ -21,11 +23,11 @@ import uk.ac.earlham.marti.core.MARTiLog;
  */
 public class SlurmScheduler implements JobScheduler {
     private static final int MAX_QUICK_JOB_ID = 100000;
-    private Hashtable<Integer, SlurmSchedulerJob> allJobs = new Hashtable<Integer, SlurmSchedulerJob>();
-    private LinkedList<SlurmSchedulerJob> pendingJobs = new LinkedList<SlurmSchedulerJob>();
-    private Hashtable<Integer, SlurmSchedulerJob> runningJobs = new Hashtable<Integer, SlurmSchedulerJob>();
-    private Hashtable<Integer, SlurmSchedulerJob> failedJobs = new Hashtable<Integer, SlurmSchedulerJob>();    
-    private Hashtable<Integer, Integer> jobStatus = new Hashtable<Integer, Integer>();
+    private ConcurrentHashMap<Integer, SlurmSchedulerJob> allJobs = new ConcurrentHashMap<Integer, SlurmSchedulerJob>();
+    private LinkedBlockingDeque<SlurmSchedulerJob> pendingJobs = new LinkedBlockingDeque<SlurmSchedulerJob>();
+    private ConcurrentHashMap<Integer, SlurmSchedulerJob> runningJobs = new ConcurrentHashMap<Integer, SlurmSchedulerJob>();
+    private ConcurrentHashMap<Integer, SlurmSchedulerJob> failedJobs = new ConcurrentHashMap<Integer, SlurmSchedulerJob>();    
+    private ConcurrentHashMap<Integer, Integer> jobStatus = new ConcurrentHashMap<Integer, Integer>();
     private MARTiLog schedulerLog = new MARTiLog();
     private MARTiEngineOptions options;
     private int internalJobId = 1; // Id used in this Java class, not by SLURM
@@ -56,7 +58,7 @@ public class SlurmScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt);
+        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt, schedulerLog);
         pendingJobs.add(j);
         allJobs.put(internalJobId, j);
         jobStatus.put(internalJobId, SlurmSchedulerJob.STATE_PENDING);
@@ -81,7 +83,7 @@ public class SlurmScheduler implements JobScheduler {
     }
     
     // See comment above
-    public synchronized int getExitValue(int i) {
+    public synchronized int getSlurmState(int i) {
         if (jobStatus.containsKey(i)) {    
             return jobStatus.get(i);
         } else {
@@ -90,6 +92,15 @@ public class SlurmScheduler implements JobScheduler {
         return SlurmSchedulerJob.STATE_UNKNOWN;
     }
     
+    public synchronized int getExitValue(int i) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            return ssj.getExitValue();
+        }
+
+        return SlurmSchedulerJob.STATE_UNKNOWN;
+    }
+        
     public synchronized int getRunningJobCount() {
         return runningJobs.size();
     }
@@ -114,6 +125,7 @@ public class SlurmScheduler implements JobScheduler {
             SlurmSchedulerJob ssj = runningJobs.get(id);
             ssj.queryJobState();
             int jState = ssj.getJobState();
+            schedulerLog.println("SLURM job "+id+" state "+jState);
             if (jState == SlurmSchedulerJob.STATE_COMPLETED) {
                 schedulerLog.println("Finished job\t" +ssj.getId() + "\t" + ssj.getCommand());
                 schedulerLog.println("Exit value was "+ssj.getExitValue());
@@ -142,9 +154,10 @@ public class SlurmScheduler implements JobScheduler {
                (pendingJobs.size() > 0))
         {      
             SlurmSchedulerJob ssj = pendingJobs.removeFirst();
+            schedulerLog.println("Running job\t" + ssj.getId() + "\t" +ssj.getCommand());            
             ssj.run();
             runningJobs.put(ssj.getId(), ssj);
-            schedulerLog.println("Running job\t" + ssj.getId() + "\t" +ssj.getCommand());            
+            schedulerLog.println("SLURM id for job "+ssj.getId()+" is "+ssj.getSubmittedJobId());
         }
     }
 }

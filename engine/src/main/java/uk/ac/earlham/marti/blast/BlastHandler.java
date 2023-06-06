@@ -137,18 +137,19 @@ public class BlastHandler {
                 
                 int jobid = 0;
                 if (jobScheduler == null) {
-                    options.getLog().println("Submitting blast command file to SLURM "+commandFile);
-                    ProcessLogger pl = new ProcessLogger();
-                    String[] commands = {"slurmit",
-                                         "-o", logFile,
-                                         "-p", queue,
-                                         "-m", memory,
-                                         "-c", Integer.toString(bp.getNumThreads()),
-                                         "sh "+commandFile};
-                    pl.runCommandToLog(commands, options.getLog());            
+                    System.out.println("Shouldn't get to a null job scheduler!");
+                    //options.getLog().println("Submitting blast command file to SLURM "+commandFile);
+                    //ProcessLogger pl = new ProcessLogger();
+                    //String[] commands = {"slurmit",
+                    //                     "-o", logFile,
+                    //                     "-p", queue,
+                    //                     "-m", memory,
+                    //                     "-c", Integer.toString(bp.getNumThreads()),
+                    //                     "sh "+commandFile};
+                    //pl.runCommandToLog(commands, options.getLog());            
                                         
                     // Need to get the correct LSF ID
-                    blastJobsPending.add(blastJobCount);                    
+                    //blastJobsPending.add(blastJobCount);                    
                 } else {
                     ArrayList<String> commands = new ArrayList<String>( Arrays.asList("blastn",
                                              "-db", blastDb,
@@ -159,7 +160,7 @@ public class BlastHandler {
                                              "-num_threads", Integer.toString(bp.getNumThreads()),
                                              "-task", bp.getBlastTask(),
                                              "-out", outputBlast,
-                                             "-outfmt", defaultFormatString));
+                                             "-outfmt", formatString)); //defaultFormatString));
 
                     if (taxfilter.length() > 1) {
                         commands.add("-taxidlist");

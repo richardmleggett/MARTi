@@ -77,8 +77,8 @@ public class ReadClassifier {
     public boolean checkBLASTCompleted(ReadClassifierItem f, int exitValue) {
         String blastLogFilename = f.getLogFile();
         
-        options.getLog().println("Checking BLAST log for errors "+blastLogFilename);
-        options.getLog().println("  Exit value was "+exitValue);
+        //options.getLog().println("Checking BLAST log for errors "+blastLogFilename);
+        //options.getLog().println("  Exit value was "+exitValue);
         
         if (exitValue != 0) {
             return false;

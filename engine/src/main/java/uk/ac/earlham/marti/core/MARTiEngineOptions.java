@@ -369,8 +369,10 @@ public class MARTiEngineOptions implements Serializable {
                 if (schedulerName.equals("debug")) {
                     jobScheduler.setDontRunCommand();
                 }
+                System.out.println("Using local scheduler");
             } else if (schedulerName.equalsIgnoreCase("slurm")) {
                 jobScheduler = new SlurmScheduler(this);
+                System.out.println("Using SLURM scheduler");
             }
             
             if(resultsFile != null) {
