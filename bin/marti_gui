@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Change this directory to point to the MARTi gui
-MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui
+MARTI_DIR=/Users/martins/GitHub/MARTi/gui
 
 if [ -z "$MARTI_DIR" ] ; then
     echo "Error: You must set MARTI_DIR before running."
