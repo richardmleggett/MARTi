@@ -182,20 +182,20 @@ color:#1cc88a;
 
 
 
-#dashboardAmrDonutLegend svg.amrDonutLegend {
+#dashboardAmrDonutLegend svg.amrDonutLegend, #dashboardAmrHitsDonutLegend svg.amrHitsDonutLegend {
   margin: 5px 0px 5px 10px;
 }
 
-#dashboardAmrDonutLegend {
+#dashboardAmrDonutLegend, #dashboardAmrHitsDonutLegend {
   max-height: 300px;
 }
 
-#dashboardAmrDonutLegend::-webkit-scrollbar {
+#dashboardAmrDonutLegend::-webkit-scrollbar, #dashboardAmrHitsDonutLegend::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
 
-#dashboardAmrDonutLegend::-webkit-scrollbar-thumb {
+#dashboardAmrDonutLegend::-webkit-scrollbar-thumb, #dashboardAmrHitsDonutLegend::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);

@@ -2,8 +2,8 @@ var amrDonutSVG,amrArc;
 
 function initialiseAmrDonut() {
 
-  var width = "350";
-  var height = "350";
+  var width = 350;
+  var height = 350;
 
   amrDonutSVG = d3.select("#dashboardAmrDonutPlot")
     .append("svg")
@@ -331,9 +331,7 @@ var dropdownList = [];
 
 function plotAmrDonut(data) {
 
-// amrDonutColor = dashboardPlotColorPalette;
-
-dashboardAmrDonutPlotByListOptions = [{plotByProp:"drugClass",name:"Drug class"},{plotByProp:"resistanceMechanism",name:"Resistance mechanism"}]
+var dashboardAmrDonutPlotByListOptions = [{plotByProp:"drugClass",name:"Drug class"},{plotByProp:"resistanceMechanism",name:"Resistance mechanism"}]
 dashboardAmrDonutPlotByList = [];
 
 for (const option of dashboardAmrDonutPlotByListOptions) {
@@ -482,8 +480,6 @@ switch(dashboardAmrDonutPlotBy) {
 
 
 
-
-
 var legendItems = [];
 
 for (taxa of plotData) {
@@ -493,9 +489,9 @@ for (taxa of plotData) {
 };
 
 
-  var dataMax = d3.max(plotData, function(d) {
-      return d.value;
-  });
+  // var dataMax = d3.max(plotData, function(d) {
+  //     return d.value;
+  // });
   var dataSum = d3.sum(plotData, function(d) {
       return d.value;
   });
