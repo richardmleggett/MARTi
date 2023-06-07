@@ -122,15 +122,8 @@ public class WalkOutRead {
     }
     
     public String getLCAHit() {
-        String hit = "";
-        String s;
-        
-        if (bacterialHitSet.getNumberOfAlignments() == 0) {
-            System.out.println("Er... no alignments in getLCAHit");
-            System.exit(0);
-        }
-        
-        long id = taxonomy.findAncestor(bacterialHitSet, 10, false);
+        String s;     
+        long id = getLCAHitTaxonID();
         s = taxonomy.getTaxonomyStringFromId(id);
         return s;
     }
@@ -165,6 +158,29 @@ public class WalkOutRead {
 
     public int getMinOverlap() {
         return minOverlap;
+    }
+    
+    public boolean getIsPlasmid() {
+        if (bacterialHitSet.getNumberOfAlignments() == 0) {
+            System.out.println("[WalkOutRead::getIsPlasmid] Error: bacterialHitSet has size 0...");
+            System.exit(0);
+        }
+        
+        // If any of the highest bit score blast hits contain the word "plasmid" in the description then
+        // we count this as a plasmid hit.
+        double bestBitScore = bacterialHitSet.getBestBitscore();
+        boolean isPlasmid = false;
+        for (int i=0; i<bacterialHitSet.getNumberOfAlignments(); i++) {
+            BlastHit bh = bacterialHitSet.getAlignment(i);
+            if(bh.getBitScore() == bestBitScore) {
+                if(bh.getSubjectTitle().toLowerCase().contains("plasmid")) {
+                    isPlasmid = true;
+                    break;
+                }
+            }
+
+        }
+        return isPlasmid;
     }
 
 
