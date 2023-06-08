@@ -90,7 +90,7 @@ public class SimpleJobSchedulerJob {
     
     public int getExitValue() {
         if (process != null) {
-            //System.out.println("EXIT VALUE "+process.exitValue());
+            //System.out.println("EXIT VALUE was "+process.exitValue());
             //System.out.println("LOG WAS "+logFilename);
             return process.exitValue();
         } else {
