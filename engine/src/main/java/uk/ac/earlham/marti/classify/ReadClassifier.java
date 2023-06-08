@@ -270,7 +270,7 @@ public class ReadClassifier {
                         options.getLog().println("Warning: Unexpected blast process " + f.getBlastProcessName());
                     }
                 } else {
-                    System.out.println("Error: Failed BLAST "+f.getBlastFile());
+                    System.out.println("Error: Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId));
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
                 }
             } else {    

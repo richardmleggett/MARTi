@@ -59,8 +59,8 @@ public class BlastHandler {
         int barcode = options.getBarcodeFromPath(inputPathname);
         if(options.runningCARD()) {
             defaultFormatString = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids";
-        }            
-        String formatString = "'" + defaultFormatString + "'";
+        }           
+        String formatString;
         ArrayList<BlastProcess> blastProcesses = options.getBlastProcesses();
         File iff = new File(inputPathname);
         String fileName = iff.getName();
@@ -107,6 +107,12 @@ public class BlastHandler {
             inputFilenames.add(inputPathname);
             blastFilenames.add(outputBlast);
 
+            if (options.getSchedulerName().equals("local")) {
+                formatString = defaultFormatString;
+            } else {
+                formatString = "'" + defaultFormatString + "'";
+            }
+            
             try {
                 options.getLog().println("Writing blast command file "+commandFile);
                 PrintWriter pw = new PrintWriter(new FileWriter(commandFile));
@@ -183,6 +189,10 @@ public class BlastHandler {
                     //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
                     String[] commandString = commands.toArray(new String[commands.size()]);
                     jobid = jobScheduler.submitJob(commandString, logFile, runIt);
+                    if (jobScheduler instanceof SlurmScheduler) {
+                        ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
+                        ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
+                    }
 
                     if (bp.useForClassifying()) {
                         classifyFilename = outputBlast;

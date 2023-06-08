@@ -145,7 +145,8 @@ public class SlurmSchedulerJob {
         pbCommands.add("-o"); pbCommands.add(logFilename);
         pbCommands.add("-p"); pbCommands.add(partition);
         pbCommands.add(commandString);
-        System.out.println("Command being run... "+commandString);
+        schedulerLog.println("Command being run... "+commandString);
+        schedulerLog.println("CPUs: "+nCPUs+" Memory: "+memory+" Partition: "+partition);
         
         //System.out.println(pbCommands);
         
@@ -332,6 +333,14 @@ public class SlurmSchedulerJob {
         } else {
             System.out.println("Job not submitted");
         }
+    }
+    
+    public void setMemory(String m) {
+        memory = m;
+    }
+    
+    public void setCPUs(int n) {
+        nCPUs = n;
     }
 }
 

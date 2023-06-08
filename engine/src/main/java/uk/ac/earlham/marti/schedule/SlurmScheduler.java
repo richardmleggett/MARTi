@@ -65,7 +65,21 @@ public class SlurmScheduler implements JobScheduler {
         schedulerLog.println("Submitted job\t"+internalJobId+"\t"+j.getCommand());
         return internalJobId++;
     }
+    
+    public synchronized void setJobMemory(int i, String s) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            ssj.setMemory(s);
+        }
+    }
 
+    public synchronized void setCPUs(int i, int n) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            ssj.setCPUs(n);
+        }
+    }    
+    
     // The next methods rely on our local list of jobs and don't query SLURM .
     // That's all done by manageQueue. This is because SLURM can sometimes be
     // slow, so we only query it periodically.
