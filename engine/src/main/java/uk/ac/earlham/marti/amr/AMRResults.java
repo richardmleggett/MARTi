@@ -144,16 +144,27 @@ public class AMRResults {
                 speciesBuilder.add("name", speciesName);
                 speciesBuilder.add("ncbiID", id);
                 JsonObjectBuilder speciesCountBuilder = Json.createObjectBuilder();
+                JsonObjectBuilder plasmidCountBuilder = Json.createObjectBuilder();
                 cumulativeCount = 0;
+                int cumalativePlasmidCount = 0;
                 for (int c=0; c<=wor.getMaxChunkNumber(); c++) {
                     int count = gene.getSpeciesCountForChunk(id, c);
                     cumulativeCount += count;
                     if (count > 0) {
                         speciesCountBuilder.add(Integer.toString(c), cumulativeCount);
                     }
+                    int plasmidCount = gene.getPlasmidCountForChunk(id, c);
+                    cumalativePlasmidCount += plasmidCount;
+                    if (plasmidCount > 0) {
+                        plasmidCountBuilder.add(Integer.toString(c), cumalativePlasmidCount);
+                    }
                 }
                 speciesBuilder.add("chunkCounts", speciesCountBuilder);
+                speciesBuilder.add("chunkPlasmidCounts", plasmidCountBuilder);
                 speciesArrayBuilder.add(speciesBuilder);
+              
+                
+                
             }
             geneBuilder.add("species", speciesArrayBuilder);
 

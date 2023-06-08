@@ -130,8 +130,9 @@ initialiseDashboardDonut();
 initialiseDashboardTree();
 initialiseDashboardTreeMap();
 
-initialiseAmrDonut();
 initialiseReadsDonut();
+initialiseAmrDonut();
+initialiseAmrHitsDonut()
 
 dashboardAccumulationDataAvailable = false;
 
@@ -174,28 +175,47 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
 
 
   d3.select('#exportAmrDonutSVG').on('click', function(){
-    dashboardAmrDonutExport();
+    dashboardAmrDonutExport("dashboardAmrDonutPlot","amrDonutLegend");
     var date = getDate() + "_" + getTime();
     var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
     save_as_svg_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,false,'merged-div');
   });
 
   d3.select('#exportAmrDonutPNG').on('click', function(){
-    dashboardAmrDonutExport();
+    dashboardAmrDonutExport("dashboardAmrDonutPlot","amrDonutLegend");
     var date = getDate() + "_" + getTime();
     var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
     save_as_raster_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,2,'png',false,'merged-div');
   });
 
   d3.select('#exportAmrDonutJPG').on('click', function(){
-    dashboardAmrDonutExport();
+    dashboardAmrDonutExport("dashboardAmrDonutPlot","amrDonutLegend");
     var date = getDate() + "_" + getTime();
     var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
     save_as_raster_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,2,'jpg',false,'merged-div');
   });
 
 
+  d3.select('#exportDashboardAmrHitsDonutSVG').on('click', function(){
+    dashboardAmrDonutExport("dashboardAmrHitsDonutPlot","amrHitsDonutLegend");
+    var date = getDate() + "_" + getTime();
+    var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
+    save_as_svg_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,false,'merged-div');
+  });
 
+  d3.select('#exportDashboardAmrHitsDonutPNG').on('click', function(){
+    dashboardAmrDonutExport("dashboardAmrHitsDonutPlot","amrHitsDonutLegend");
+    var date = getDate() + "_" + getTime();
+    var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
+    save_as_raster_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,2,'png',false,'merged-div');
+  });
+
+  d3.select('#exportDashboardAmrHitsDonutJPG').on('click', function(){
+    dashboardAmrDonutExport("dashboardAmrHitsDonutPlot","amrHitsDonutLegend");
+    var date = getDate() + "_" + getTime();
+    var outputFilename = currentDashboardSampleName + "_amr_donut_lca_" + lcaAbundanceDashboard + "_" + date;
+    save_as_raster_with_style('mergedAmrDonut','/css/dashboardAmrDonut.css',outputFilename,2,'jpg',false,'merged-div');
+  });
 
 
   d3.select('#exportTaxaDonutJPG').on('click', function(){
@@ -597,11 +617,11 @@ updateTaxTableColors()
 
 
 function updateTaxTableColors() {
-d3.selectAll("#selectedColumn tbody tr td rect").style("fill", function(d) {
-  var ind = findWithAttr(sorted,"name",this.parentNode.parentNode.parentNode.firstChild.textContent);
+  d3.selectAll("#selectedColumn tbody tr td rect").style("fill", function(d) {
+    var ind = findWithAttr(sorted,"name",this.parentNode.parentNode.parentNode.firstChild.textContent);
 
-  return ((ind < indexOfDonutOtherCategory()) || (indexOfDonutOtherCategory() == -1)) ? dashboardDonutColor(ind % dashboardColorIndex) : dashboardDonutColor((ind+1) % dashboardColorIndex);
-});
+    return ((ind < indexOfDonutOtherCategory()) || (indexOfDonutOtherCategory() == -1)) ? dashboardDonutColor(ind % dashboardColorIndex) : dashboardDonutColor((ind+1) % dashboardColorIndex);
+  });
 
 };
 
@@ -729,7 +749,8 @@ function initialisePlotVisibility(chart,visible) {
 
         $("#"+chart+"Add").click(function() {
            dashboardChartVisibility[chart] = true;
-           if (chart == "dashboardAmrTable" || chart == "dashboardAmrDonut") {
+
+           if (dashboardAmrPlots.includes(chart)) {
              socket.emit('dashboard-dashboardAmrTable-request',{
                clientId: uuid
              });
@@ -858,10 +879,12 @@ $("#addChartOptions").hide();
 $("#accumulationChartRow").hide();
 $("#dashboardAmrTableRow").hide();
 $("#dashboardAmrDonutRow").hide();
+$("#dashboardAmrHitsDonutRow").hide();
 
 $("#accumulationChartAdd").hide();
 $("#dashboardAmrTableAdd").hide();
 $("#dashboardAmrDonutAdd").hide();
+$("#dashboardAmrHitsDonutAdd").hide();
 
 $('#addChartPlusSign').on("click touchstart", function(e){
    $("#addChartOptions, #addChartPlusSign").toggle();
@@ -927,45 +950,75 @@ socket.on('accumulation-update-available', request => {
 
 
 socket.on('dashboard-dashboardAmrTable-response', function(data) {
-  if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrTable")) {
-    dashboardChartVisibility["dashboardAmrTable"] = true;
-    initialisePlotVisibility("dashboardAmrTable",true);
-  }
-
-  if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
-    dashboardChartVisibility["dashboardAmrDonut"] = true;
-    initialisePlotVisibility("dashboardAmrDonut",true);
-  }
-
     dashboardAmrReponseData = data;
-
-  updateAmrTable(dashboardAmrReponseData);
-  plotAmrDonut(dashboardAmrReponseData);
-  });
-
-
-
-  socket.on('amr-update-available', request => {
 
     if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrTable")) {
       dashboardChartVisibility["dashboardAmrTable"] = true;
       initialisePlotVisibility("dashboardAmrTable",true);
     }
 
-    if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
-      dashboardChartVisibility["dashboardAmrDonut"] = true;
-      initialisePlotVisibility("dashboardAmrDonut",true);
+    updateAmrTable(dashboardAmrReponseData);
+
+    if (dashboardAmrReponseData["geneList"].length > 0){
+      if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
+        dashboardChartVisibility["dashboardAmrDonut"] = true;
+        initialisePlotVisibility("dashboardAmrDonut",true);
+      }
+
+
+      plotAmrDonut(dashboardAmrReponseData);
+
+      if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrHitsDonut")) {
+        dashboardChartVisibility["dashboardAmrHitsDonut"] = true;
+        initialisePlotVisibility("dashboardAmrHitsDonut",true);
+      }
+
+      plotAmrHitsDonut(dashboardAmrReponseData);
     }
 
-    if(currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrTable"] == true) {
-      socket.emit('dashboard-dashboardAmrTable-request',{
-        clientId: uuid
-      });
-    } else if (currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrDonut"] == true) {
-      socket.emit('dashboard-dashboardAmrTable-request',{
-        clientId: uuid
-      });
-    };
+  });
+
+  const dashboardAmrPlots = ["dashboardAmrTable","dashboardAmrDonut","dashboardAmrHitsDonut"];
+
+
+  socket.on('amr-update-available', request => {
+
+
+    for (const plot of dashboardAmrPlots){
+      if (!dashboardChartVisibility.hasOwnProperty(plot)) {
+        dashboardChartVisibility[plot] = true;
+        initialisePlotVisibility(plot,true);
+      }
+    }
+
+    for (const plot of dashboardAmrPlots){
+      if(currentPage=="Dashboard" && dashboardChartVisibility[plot] == true) {
+        socket.emit('dashboard-dashboardAmrTable-request',{
+          clientId: uuid
+        });
+        break;
+      }
+    }
+
+    // if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrTable")) {
+    //   dashboardChartVisibility["dashboardAmrTable"] = true;
+    //   initialisePlotVisibility("dashboardAmrTable",true);
+    // }
+    //
+    // if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
+    //   dashboardChartVisibility["dashboardAmrDonut"] = true;
+    //   initialisePlotVisibility("dashboardAmrDonut",true);
+    // }
+
+    // if(currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrTable"] == true) {
+    //   socket.emit('dashboard-dashboardAmrTable-request',{
+    //     clientId: uuid
+    //   });
+    // } else if (currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrDonut"] == true) {
+    //   socket.emit('dashboard-dashboardAmrTable-request',{
+    //     clientId: uuid
+    //   });
+    // };
   });
 
 
@@ -989,7 +1042,11 @@ function firstAmrTableRun() {
   d3.selectAll("input[name='dashboardAmrTableChunk']").on("change", function(){
     dashboardAmrTableChunkSelected = parseInt(d3.select(this).property("value"));
     updateAmrTable(dashboardAmrReponseData);
-    plotAmrDonut(dashboardAmrReponseData);
+    if (dashboardAmrReponseData["geneList"].length > 0){
+      plotAmrDonut(dashboardAmrReponseData);
+      plotAmrHitsDonut(dashboardAmrReponseData);
+    }
+
   });
 
 }

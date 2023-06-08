@@ -1,8 +1,8 @@
 # Default taxonomy directory can be defined here
-TaxonomyDir:/Users/leggettr/Documents/Databases/taxonomy_6Jul20
+TaxonomyDir:/Users/martins/Documents/Projects/MARTi/taxonomy/taxonomy_6Jul20
 
-MinKNOWRunDirectory:/usr/reads
-MARTiSampleDirectory:/usr/output;/usr/MARTi/gui/output
+MinKNOWRunDirectory:/Users/martins/Documents/Projects/MARTi/marti_input
+MARTiSampleDirectory:/Users/martins/Documents/Projects/MARTi/marti_output
 
 # Blast processes can be defined in here and then settings can be simply copied to new config files
 BlastProcess
@@ -26,7 +26,7 @@ BlastProcess
 BlastProcess
     Name:zymo_mock
     Program:megablast
-    Database:/Users/leggettr/Documents/Databases/zymo_mock/zymo_refs_sam.fasta
+    Database:/Users/martins/Documents/Projects/MARTi/databases/zymo_mock/zymo_refs_sam.fasta
     MaxE:0.001
     MaxTargetSeqs:25
     BlastThreads:2
@@ -35,7 +35,7 @@ BlastProcess
 BlastProcess
     Name:card
     Program:blastn
-    Database:/Users/leggettr/Documents/Databases/CARD_3.1.1_Download_10Mar21/nucleotide_fasta_protein_homolog_model.fasta
+    Database:/Users/martins/Documents/Projects/MARTi/databases/CARD_3.1.1_Download_10Mar21/nucleotide_fasta_protein_homolog_model.fasta
     MaxE:0.001
     MaxTargetSeqs:100
     BlastThreads:2

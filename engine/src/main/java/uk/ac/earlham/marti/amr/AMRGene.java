@@ -14,6 +14,7 @@ import java.util.Hashtable;
 public class AMRGene {
     private Hashtable<Integer, AMRGeneChunk> chunks = new Hashtable<Integer,AMRGeneChunk>();
     private Hashtable<Long, Integer> species = new Hashtable<Long, Integer>();
+    private Hashtable<Long, Integer> plasmids = new Hashtable<Long, Integer>();
     int cardNumber = 0;
     String geneName = "Unknown";
     String cardId = "Unknown";
@@ -36,8 +37,16 @@ public class AMRGene {
             System.out.println("Error: couldn't parse "+id);
         }
     }
-
-    public void addHit(int originalChunkNumber, int processedChunkNumber, Long lcaHitTaxonID, boolean isIndependent, double identity) {
+    private void incrementCountHashtable(Hashtable<Long, Integer> countTable, Long taxonID) {
+        int count = 0;
+        if (countTable.containsKey(taxonID)) {
+            count = countTable.get(taxonID);
+        }
+        count++;
+        countTable.put(taxonID, count);
+    }
+    
+    public void addHit(int originalChunkNumber, int processedChunkNumber, Long lcaHitTaxonID, boolean isIndependent, double identity, boolean isPlasmid) {
         AMRGeneChunk chunk;
                 
         //System.out.println("Chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
@@ -50,21 +59,19 @@ public class AMRGene {
             chunks.put(processedChunkNumber, chunk);
         }
     
-        // Check if we have this in he overall species list for this gene
-        int speciesCount = 0;
-        if (species.containsKey(lcaHitTaxonID)) {
-            speciesCount = species.get(lcaHitTaxonID);
-        }
-        speciesCount++;
-        species.put(lcaHitTaxonID, speciesCount);
+        // Increment values in hashtables
+        incrementCountHashtable(species, lcaHitTaxonID);    
+        if(isPlasmid) {
+            incrementCountHashtable(plasmids, lcaHitTaxonID);   
+        }     
             
         // Now pass the species through to this chunk to increment the counter for that species
         // Note there may be no species...  
         if (lcaHitTaxonID != -2l) {
             //System.out.println("addHit to chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
-            chunk.addHit(lcaHitTaxonID, isIndependent, identity);
+            chunk.addHit(lcaHitTaxonID, isIndependent, identity, isPlasmid);
         } else {
-            chunk.addHit(-2l, isIndependent, identity);
+            chunk.addHit(-2l, isIndependent, identity, isPlasmid);
         }
         
         // Keep track of mean identity
@@ -76,6 +83,10 @@ public class AMRGene {
         return species;
     }
     
+    public Hashtable<Long,Integer> getPlasmids() {
+        return plasmids;
+    }
+    
     public int getSpeciesCountForChunk(Long speciesID, int chunk) {
         int count = 0;
 
@@ -85,6 +96,15 @@ public class AMRGene {
        }
        
        return count;         
+    }
+    
+    public int getPlasmidCountForChunk(Long speciesID, int chunk) {
+        int count = 0;
+        if(chunks.containsKey(chunk)) {
+            AMRGeneChunk agg = chunks.get(chunk);
+            count = agg.getPlasmidCountForSpecies(speciesID);    
+        }
+        return count;
     }
     
     public int getOverallCountForChunk(int n) {

@@ -724,7 +724,7 @@
     <div class="card shadow">
       <!-- Card Header - Dropdown -->
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Walkout Analysis</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Walkout Analysis Taxa</h6>
 
         <div class="dropdown no-arrow ml-auto mr-1">
           <a class="dropdown-toggle" href="#" role="button" id="amrDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -765,7 +765,7 @@
             <form>
 
               <div class="form-group">
-                <label for="dashboardAmrDonutPlotBy">Plot</label>
+                <label for="dashboardAmrDonutPlotBy">Plot taxa by</label>
                 <select class="form-control" id="dashboardAmrDonutPlotBy">
 
                 </select>
@@ -792,6 +792,79 @@
               <div class="form-group amr-donut-plot-by" style="display: none;">
                 <label for="dashboardAmrDonutResMechSelect">Resistance mechanism</label>
                 <select class="form-control" id="dashboardAmrDonutResMechSelect">
+                </select>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- AMR Hits Donut Row -->
+<div class="row" id="dashboardAmrHitsDonutRow">
+
+  <div class="col-12 mb-4">
+    <div class="card shadow">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">AMR hits</h6>
+
+        <div class="dropdown no-arrow ml-auto mr-1">
+          <a class="dropdown-toggle" href="#" role="button" id="dashboardAmrHitsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dashboardAmrHitsDropdownMenuLink">
+            <div class="dropdown-header">Options:</div>
+          <!-- <a class="dropdown-item pointer" id="dashboardAmrHitsCsvExport" >Export to CSV</a>
+          <a class="dropdown-item pointer" id="dashboardAmrHitsCopyExport" >Copy to clipboard</a> -->
+          <!-- <div class="dropdown-divider"></div> -->
+          <a class="dropdown-item" id="exportDashboardAmrHitsDonutSVG" href="#">Export as SVG</a>
+          <a class="dropdown-item" id="exportDashboardAmrHitsDonutPNG" href="#">Export as PNG</a>
+          <a class="dropdown-item" id="exportDashboardAmrHitsDonutJPG" href="#">Export as JPG</a>
+          </div>
+        </div>
+
+        <i id="dashboardAmrHitsDonutClose" class="fas fa-fw fa-times text-gray-600 pointer"></i>
+
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+
+        <div class="d-flex form-group">
+          <a class="mr-1">Chunk</a>
+          <a class="dashboard-amr-chunk-value">1/1</a>
+          <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
+          <a class="ml-5 text-nowrap dashboard-amr-chunk-time">1 Jan 2020</a>
+        </div>
+
+        <div class="row">
+          <div class="col-md-5 col-lg-4 overflow-auto mt-4" id="dashboardAmrHitsDonutLegend">
+          </div>
+          <div class="col-md-7 col-lg-5 justify-content-center d-flex d-md-block" id="dashboardAmrHitsDonutPlot">
+          </div>
+          <div class="col-lg-3 pt-4 pr-4" id="dashboardAmrHitsDonutOptions">
+            <form>
+
+              <div class="form-group">
+                <label for="dashboardAmrHitsDonutPlotBy">Plot hits by</label>
+                <select class="form-control" id="dashboardAmrHitsDonutPlotBy">
+
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="dashboardAmrHitsDonutTopN">Show top <a id="dashboardAmrHitsDonutTopNNum" class="font-weight-bold">N</a></label>
+                <input type="range" class="form-control-range" id="dashboardAmrHitsDonutTopN" min="1" max="20" value="10">
+              </div>
+
+              <div class="form-group amr-hits-show" style="display: none;">
+                <label for="dashboardAmrHitsDonutShow">Show hits to</label>
+                <select class="form-control" id="dashboardAmrHitsDonutShow">
                 </select>
               </div>
 
@@ -848,6 +921,16 @@
           <div class="card-body d-flex flex-column justify-content-between">
             <h5 class="card-title">Walkout Analysis</h5>
             <p class="card-text">Donut plot of taxa identified via AMR walkout analysis.</p>
+            <i class="fas fa-plus fa-3x"></i>
+          </div>
+        </div>
+      </div>
+
+      <div id="dashboardAmrHitsDonutAdd" class="col-xl-3 col-md-6">
+        <div class="card add-chart-card pointer h-100">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title">AMR Hits</h5>
+            <p class="card-text">Donut plot of AMR hits.</p>
             <i class="fas fa-plus fa-3x"></i>
           </div>
         </div>

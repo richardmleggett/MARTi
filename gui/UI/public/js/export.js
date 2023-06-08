@@ -94,15 +94,15 @@ return full_svg;
 
 
 
-function dashboardAmrDonutExport(){
+function dashboardAmrDonutExport(donutE,legendE){
 
   var svgNS = "http://www.w3.org/2000/svg";
   var outer = document.getElementById('response');
 
-  var chartSvg = $('#dashboardAmrDonutPlot svg')[0];
+  var chartSvg = $('#' + donutE + ' svg')[0];
   var chartContent = chartSvg.childNodes[0];
 
-  var legendArray = $(".amrDonutLegend");
+  var legendArray = $('.' + legendE);
 
   var merged = document.createElement('div');
   $(merged).attr('id', 'merged-div');
