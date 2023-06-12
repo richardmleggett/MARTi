@@ -4,7 +4,8 @@ SampleDir	/path/to/dir	Path to directory to use for MARTi analysis files (will b
 ProcessBarcodes	01,02,03	If a barcoded sample, indicates which barcodes to process
 BarcodeId<n>	BarcodeSampleId1	Sample ID to use for barcode n
 Scheduler	local	Job scheduler to use - currently only "local" works. Soon will be able to specify "slurm" to run SLURM.
-LocalSchedulerMaxJobs	4	Specifies the maximum number of concurrent jobs that can be run by the local scheduler.
+Queue	ei-medium	The default job submission queue. Currently only required for SLURM and equates to the partition name.
+MaxJobs	4	Specifies the maximum number of concurrent jobs that can be run by the scheduler (local or SLURM).
 InactivityTimeout	10	How long (seconds) before giving up waiting for new reads to appear. After this timeout, all remaining analysis will be completed and analysis will stop. Default timeout is 10 seconds.
 StopProcessingAfter	50000	Stop analysis after this number of reads. Default behaviour is no limit.
 TaxonomyDir	/path/to/dir	Specifies location of NCBI taxonomy files (i.e. the directory containing nodes.dmp and names.dmp).

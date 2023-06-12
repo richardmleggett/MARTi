@@ -25,7 +25,7 @@ MARTi runs on Linux and on macOS. At the moment, Windows is not supported.
 .. Note::
    | The current version of MARTi is for beta testing purposes and the following are not yet fully implemented:
    | 
-   | * Full SLURM support - you can run on an HPC (SLURM or otherwise), but you are restricted to the resources of the HPC node that the MARTi back-end runs on.
+   | * Full SLURM support - implemented, but untested outside of the Earlham Institute. Get in contact if you'd like to try it!
    | * Centrifuge support - currently only BLAST-based analysis is supported.
 
 

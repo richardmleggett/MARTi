@@ -84,7 +84,6 @@ Example file::
      TaxaFilter:/Users/leggettr/Documents/Datasets/bacteria_viruses.txt
      MaxE:0.001
      MaxTargetSeqs:25
-     RunMeganEvery:0
      BlastThreads:4
  
  BlastProcess

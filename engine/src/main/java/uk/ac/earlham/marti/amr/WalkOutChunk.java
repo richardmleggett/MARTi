@@ -135,7 +135,7 @@ public class WalkOutChunk {
                 bacteriaFileStream.close();
             }
 
-            System.out.println("Plasmid count "+plasmidCount + " chromosome count " + chromosomeCount + " other count "+otherCount);
+            options.getLog().println("Debug: Plasmid count "+plasmidCount + " chromosome count " + chromosomeCount + " other count "+otherCount);
             
         } catch (Exception e) {
             System.out.println("Exception in analyseFiles:");
