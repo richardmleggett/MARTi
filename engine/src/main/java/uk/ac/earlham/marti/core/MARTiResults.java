@@ -298,7 +298,7 @@ public class MARTiResults {
 
         options.getLog().println("Finished MARTi tree JSON");
         options.copyFile(jsonFilename, jsonFilenameFinal);
-        //options.copyFile(assignmentsFilename, assignmentsFilenameFinal); // No longer needed by GUI      
+        //options.copyFile(assignmentsFilename,  assignmentsFilenameFinal); // No longer needed by GUI      
     }    
     
     /**
