@@ -25,6 +25,11 @@ public class FileCompressorRunnable implements Runnable {
     
     private boolean compressFile(String filename) {
         //System.out.println("Compressing file " + filename);
+        File f = new File(filename);
+        if(!f.exists()) {
+            return false;
+        }
+        
         byte[] buffer = new byte[1024];
         try {            
             FileInputStream fis = new FileInputStream(filename);
@@ -64,9 +69,7 @@ public class FileCompressorRunnable implements Runnable {
         while(keepRunning) {
             String filename = m_queue.poll();
             if(filename != null) {
-                if(!compressFile(filename)) {
-                    System.out.println("[FileCompressorRunnable] Could not compress file " + filename);
-                } else {
+                if(compressFile(filename)) {
                     removeFile(filename);
                 }          
             } else{
