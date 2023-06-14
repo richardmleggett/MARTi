@@ -41,11 +41,11 @@ public class SlurmScheduler implements JobScheduler {
         schedulerLog.println("maxJobs = "+maxJobs);
     }    
     
-    public void setDontRunCommand() {
+    public synchronized void setDontRunCommand() {
         dontRunCommand = true;
     }
 
-    public void setMaxJobs(int m) {
+    public synchronized void setMaxJobs(int m) {
         maxJobs = m;
         schedulerLog.println("maxJobs = "+maxJobs);
     }    
@@ -165,6 +165,7 @@ public class SlurmScheduler implements JobScheduler {
                 runningJobs.remove(id);
                 failedJobs.put(id, ssj);
                 options.getLog().printlnLogAndScreen("Failed SLURM job "+ssj.getId()+" - see scheduler log");
+                options.getLog().printlnLogAndScreen("Log is at "+ssj.getLog());
             } else if ((jState != SlurmSchedulerJob.STATE_RUNNING) &&
                        (jState != SlurmSchedulerJob.STATE_PENDING)) {
                 schedulerLog.println("Unknown state for job "+ssj.getId()+" "+jState);
@@ -183,4 +184,8 @@ public class SlurmScheduler implements JobScheduler {
             schedulerLog.println("SLURM id for job "+ssj.getId()+" is "+ssj.getSubmittedJobId());
         }
     }
+    
+    public synchronized int getFailedJobCount() {
+        return failedJobs.size();
+    }    
 }

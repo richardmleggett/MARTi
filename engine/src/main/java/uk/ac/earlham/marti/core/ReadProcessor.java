@@ -187,8 +187,16 @@ public class ReadProcessor {
     
     private boolean checkForEnd() {
         boolean fEnd = true;
+        
+        // End if scheduler has failed jobs
+        if (options.getJobScheduler().getFailedJobCount() > 0) {
+            options.getLog().printlnLogAndScreen("ERROR: failed jobs, so exiting early.");
+            return true;
+        }
+        
         // We only exit if...
-        // 1. we have given up looking for new reads (beacuse of time out or number reached)        
+ 
+        // - we have given up looking for new reads (beacuse of time out or number reached)        
         if (!fw.timedOut()) {
             fEnd = false;
             options.getLog().println(MARTiLog.LOGLEVEL_CHECKFORENDTIMEOUT, "Not timed out");
@@ -221,7 +229,7 @@ public class ReadProcessor {
         // MEGAN jobs have all finished
         // Not necessary.
                 
-        // 6. There are no jobs in the scheduler queue (shouldn't be if above all true)
+        // - There are no jobs in the scheduler queue (shouldn't be if above all true)
         if (options.getJobScheduler() != null) {
             if ((options.getJobScheduler().getPendingJobCount() > 0) || 
                 (options.getJobScheduler().getRunningJobCount() > 0)) {

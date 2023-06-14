@@ -274,6 +274,7 @@ public class SlurmSchedulerJob {
         switch(stateString) {
             case "BOOT_FAIL": jobState = STATE_BOOT_FAIL; break;
             case "CANCELLED": jobState = STATE_CANCELLED; break;
+            case "CANCELLED+": jobState = STATE_CANCELLED; break;
             case "COMPLETED": jobState = STATE_COMPLETED; break;
             case "DEADLINE": jobState = STATE_DEADLINE; break;
             case "FAILED": jobState = STATE_FAILED; break;
@@ -337,6 +338,9 @@ public class SlurmSchedulerJob {
                     if (fields[0].compareTo(Long.toString(submittedJobId)) == 0) {
                         String state = fields[1];
                         parseJobState(state);
+                        if (jobState == STATE_UNKNOWN) {
+                            schedulerLog.println("Error: couldn't parse sacct state '"+state+"'");
+                        }
                     }
                 }
 
