@@ -38,6 +38,7 @@ public class SlurmScheduler implements JobScheduler {
     public SlurmScheduler(MARTiEngineOptions o) {
         options = o;
         schedulerLog.open(o.getLogsDir()+File.separator+"scheduler.txt");
+        schedulerLog.println("maxJobs = "+maxJobs);
     }    
     
     public void setDontRunCommand() {
@@ -46,6 +47,7 @@ public class SlurmScheduler implements JobScheduler {
 
     public void setMaxJobs(int m) {
         maxJobs = m;
+        schedulerLog.println("maxJobs = "+maxJobs);
     }    
     
     public synchronized int submitJob(String[] commands, String logFilename, boolean submitJob) {
@@ -79,6 +81,13 @@ public class SlurmScheduler implements JobScheduler {
             ssj.setCPUs(n);
         }
     }    
+
+    public synchronized void setQueue(int i, String q) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            ssj.setQueue(q);
+        }
+    }
     
     // The next methods rely on our local list of jobs and don't query SLURM .
     // That's all done by manageQueue. This is because SLURM can sometimes be
@@ -139,7 +148,7 @@ public class SlurmScheduler implements JobScheduler {
             SlurmSchedulerJob ssj = runningJobs.get(id);
             ssj.queryJobState();
             int jState = ssj.getJobState();
-            schedulerLog.println("SLURM job "+id+" state "+jState);
+            //schedulerLog.println("SLURM job "+id+" state "+jState);
             if (jState == SlurmSchedulerJob.STATE_COMPLETED) {
                 schedulerLog.println("Finished job\t" +ssj.getId() + "\t" + ssj.getCommand());
                 schedulerLog.println("Exit value was "+ssj.getExitValue());

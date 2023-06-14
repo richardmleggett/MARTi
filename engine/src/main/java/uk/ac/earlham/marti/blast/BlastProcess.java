@@ -8,6 +8,7 @@ import uk.ac.earlham.marti.megan.MeganFileSet;
 import java.io.BufferedReader;
 import java.io.File;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
+import uk.ac.earlham.marti.schedule.SlurmScheduler;
 
 /**
  * Represents a BLAST process in the config file - parses and stores options.
@@ -42,6 +43,10 @@ public class BlastProcess {
 
     public String readConfigFile(BufferedReader br) {
         String line = null;
+        
+        // Default job queue
+        jobQueue = options.getQueue();
+        
         boolean keepReading = true;
         try {
             do {
@@ -103,15 +108,17 @@ public class BlastProcess {
             System.exit(1);
         }
 
-        //if (blastMemory == null) {
-        //    System.out.println("Error: missing BLAST memory.");
-        //    System.exit(1);
-        //}
-        
-        //if (jobQueue == null) {
-        //    System.out.println("Error: missing job queue.");
-        //    System.exit(1);
-        //}
+        if (options.getJobScheduler() instanceof SlurmScheduler) {    
+            if (blastMemory == null) {
+                System.out.println("Error: missing memory in BLAST process config.");
+                System.exit(1);
+            }
+            
+            if (jobQueue == null) {
+                System.out.println("Error: missing job queue in BLAST process config.");
+                System.exit(1);
+            }
+        }
         
         //if (blastName.equalsIgnoreCase("nt")) {
         //    classifyThis = true;

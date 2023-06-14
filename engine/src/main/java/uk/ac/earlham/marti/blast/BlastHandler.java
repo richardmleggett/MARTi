@@ -192,6 +192,7 @@ public class BlastHandler {
                     if (jobScheduler instanceof SlurmScheduler) {
                         ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
                         ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
+                        ((SlurmScheduler) jobScheduler).setQueue(jobid, bp.getJobQueue());
                     }
 
                     if (bp.useForClassifying()) {

@@ -80,7 +80,7 @@ public class MARTiEngineOptions implements Serializable {
     private int numThreads = 8; // For ThreadPoolExecutor
     private int fileWatcherTimeout = 10;
     private int readsPerMultiFastq = 1;
-    private String jobQueue = "";
+    private String jobQueue = null;
     private MARTiLog logFile = new MARTiLog();
     private String readsDir = "fast5";
     private int returnValue = 0;
@@ -102,7 +102,7 @@ public class MARTiEngineOptions implements Serializable {
     //private String meganCmdLine="source MEGAN-5.11.3 ; /tgac/software/testing/MEGAN/5.11.3/x86_64/xvfb-run -d MEGAN";
     //private String meganLicense="/tgac/software/testing/MEGAN/5.11.3/x86_64/megan/MEGAN5-academic-license.txt";
     private BarcodesList barcodesList = null;
-    private int localSchedulerMaxJobs = 4;
+    private int maxJobs = 0;
     private boolean doingMeganMinSupport = false;
     private boolean doingMeganMinSupportPercent = true;
     private int meganMinSupport = 1;
@@ -200,6 +200,7 @@ public class MARTiEngineOptions implements Serializable {
             System.out.println("-loglevel <int> to set the level of logging to logs/engine.txt from 0 (none) to " + MARTiLog.LOGLEVEL_MAX +" (maximum) (default "+MARTiLog.LOGLEVEL_DEFAULT+")");           
             //System.out.println("-timeout to set the number of seconds before giving up waiting for new reads (default 2)");
             System.out.println("-fixrandom <long> to fix the random number seed used for debugging");
+            System.out.println("-queue <name> to set default SLURM partition");            
             System.out.println("");
             System.out.println("Or to generate a new config file");
             System.out.println("");
@@ -212,6 +213,9 @@ public class MARTiEngineOptions implements Serializable {
             if (args[i].equalsIgnoreCase("-config")) {
                 configFile = args[i+1];
                 readProcessFile();
+                i+=2;
+            } else if (args[i].equalsIgnoreCase("-queue")) {
+                jobQueue = args[i+1];
                 i+=2;
             } else if (args[i].equalsIgnoreCase("-writeconfig")) {
                 configFile = args[i+1];
@@ -363,15 +367,25 @@ public class MARTiEngineOptions implements Serializable {
                 System.exit(1);
             }
 
+            // Check we have maxJobs set for this job scheduler
+            if (maxJobs == 0) {
+                if (schedulerName.equalsIgnoreCase("slurm")) {
+                    maxJobs = 1000;
+                } else {
+                    maxJobs = 4;
+                }
+            }
+
+            // Create the job scheduler
             if ((schedulerName.equalsIgnoreCase("local") || (schedulerName.equals(""))) || (schedulerName.equals("debug"))) {
-                jobScheduler = new SimpleJobScheduler(maxSchedulerJobs, this);
-                jobScheduler.setMaxJobs(localSchedulerMaxJobs);
+                jobScheduler = new SimpleJobScheduler(maxJobs, this);
                 if (schedulerName.equals("debug")) {
                     jobScheduler.setDontRunCommand();
                 }
                 System.out.println("Using local scheduler");
             } else if (schedulerName.equalsIgnoreCase("slurm")) {
                 jobScheduler = new SlurmScheduler(this);
+                jobScheduler.setMaxJobs(maxJobs);
                 System.out.println("Using SLURM scheduler");
             }
             
@@ -887,10 +901,15 @@ public class MARTiEngineOptions implements Serializable {
                                 }
                             } else if (tokens[0].compareToIgnoreCase("Scheduler") == 0) {
                                 schedulerName = tokens[1];
+                            } else if (tokens[0].compareToIgnoreCase("Queue") == 0) {
+                                if (jobQueue == null) {
+                                    jobQueue = tokens[1];
+                                }
                             } else if (tokens[0].compareToIgnoreCase("InactivityTimeout") == 0) {
                                 fileWatcherTimeout = Integer.parseInt(tokens[1]);
-                            } else if (tokens[0].compareToIgnoreCase("LocalSchedulerMaxJobs") == 0) {
-                                localSchedulerMaxJobs = Integer.parseInt(tokens[1]);
+                            } else if ((tokens[0].compareToIgnoreCase("LocalSchedulerMaxJobs") == 0) ||
+                                       (tokens[0].compareToIgnoreCase("MaxJobs") == 0)) {
+                                maxJobs = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("SampleDir") == 0) {
                                 sampleDirectory = tokens[1];
                                 createSampleDirectory();
@@ -1316,7 +1335,7 @@ public class MARTiEngineOptions implements Serializable {
    }     
     
     public int getMaxJobs() {
-        return localSchedulerMaxJobs;
+        return maxJobs;
     }    
     
     public String getBlastProcessNames() {

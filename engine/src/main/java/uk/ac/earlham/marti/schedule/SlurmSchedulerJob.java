@@ -162,6 +162,24 @@ public class SlurmSchedulerJob {
         //System.out.println("");
         //System.out.println("");
         //System.out.println("Trying..");
+
+        if (nCPUs == 0) {
+            schedulerLog.println("ERROR: nCPUs not defined for SLURM job!");
+            System.out.println("Error: nCPUs not defined for SLURM job!");
+            System.exit(1);
+        }
+        
+        if (memory == null) {
+            schedulerLog.println("ERROR: memory not defined for SLURM job!");
+            System.out.println("Error: memory not defined for SLURM job!");
+            System.exit(1);
+        }
+        
+        if (partition == null) {
+            schedulerLog.println("ERROR: partition not defined for SLURM job!");
+            System.out.println("Error: partition not defined for SLURM job!");
+            System.exit(1);
+        }
         
         
         try {
@@ -341,6 +359,10 @@ public class SlurmSchedulerJob {
     
     public void setCPUs(int n) {
         nCPUs = n;
+    }
+    
+    public void setQueue (String s) {
+        partition = s;
     }
 }
 
