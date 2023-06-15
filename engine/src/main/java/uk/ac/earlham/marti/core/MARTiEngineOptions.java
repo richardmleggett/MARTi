@@ -148,7 +148,7 @@ public class MARTiEngineOptions implements Serializable {
     private String optionsFilename = null;
     private MARTiEngineOptionsFile engineOptionsFile = null;
     private String classifyingBlastName = null;
-    private boolean compressBlastFiles = false;
+    private boolean compressBlastFiles = true;
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -310,8 +310,11 @@ public class MARTiEngineOptions implements Serializable {
             } else if (args[i].equalsIgnoreCase("-options")) {
                 optionsFilename = args[i+1];
                 i+=2;
-            } else if (args[i].equalsIgnoreCase("-compressBlast")) {
+            } else if (args[i].equalsIgnoreCase("-compressblast")) {
                 compressBlastFiles = true;
+                i++;
+            } else if (args[i].equalsIgnoreCase("-dontcompressblast")) {
+                compressBlastFiles = false;
                 i++;
             } else {
                 int iCurrent = i;
