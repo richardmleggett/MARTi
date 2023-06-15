@@ -207,4 +207,8 @@ public class SimpleJobScheduler implements JobScheduler {
     public synchronized int getPendingJobCount() {
         return pendingJobs.size();
     }
+    
+    public synchronized int getFailedJobCount() {
+        return 0;
+    }
 }

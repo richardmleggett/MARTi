@@ -20,6 +20,7 @@ Where possible additional options include:
 
 * ``-options`` to specify the location of a marti_engine_options.txt file to use instead of the files in the default locations.
 * ``-queue`` to set the default queue (partition) when using SLURM. Can also be set in config file.
+* ``-compressBlast`` will compress (gzip) BLAST files once parsed. MARTi can re-parse these compressed files if run again in the future.
 
 Creating a config file
 ----------------------
