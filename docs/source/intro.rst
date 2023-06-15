@@ -54,4 +54,5 @@ The diagram above illustrates the processes that take place inside the MARTi Eng
 * Basecalled reads first pass through a prefilter which removes reads that don't meet a quality or length threshold.
 * Remaining reads are batched into chunks for speedy analysis.
 * By default, MARTi classifies reads with a combination of BLAST and its own Lowest Common Ancestor algorithm to assign reads to taxa. Centrifuge is provided as an alternative for lower powered systems.
+* BLAST files are gzip compressed after analysis to reduce storage requirements.
 * For AMR classification, MARTi uses BLAST and the CARD database.
