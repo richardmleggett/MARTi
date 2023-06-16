@@ -70,11 +70,11 @@ public class MARTiAnalysisRunnable  implements Runnable {
             }
         }
         
-        options.getLog().println("MARTiAnalysisRunnable finalising");        
-        options.getLog().println("Thread exiting");
+        options.getLog().println("MARTiAnalysisRunnable thread exiting");
     }
 
     public void exitThread() {
+        options.getLog().printlnLogAndScreen("Exiting MARTiAnalsisRunnable thread");
         keepRunning = false;
     }
 }

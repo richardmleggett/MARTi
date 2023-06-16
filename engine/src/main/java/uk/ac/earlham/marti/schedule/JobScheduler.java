@@ -18,4 +18,5 @@ public interface JobScheduler {
     public int submitJob(String[] commands, String logFilename, boolean submitJob);
     public boolean checkJobCompleted(int i);
     public int getExitValue(int i);
+    public void markJobAsFailed(int i);
 }

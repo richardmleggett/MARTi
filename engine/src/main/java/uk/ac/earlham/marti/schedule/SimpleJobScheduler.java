@@ -8,6 +8,7 @@ import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 
@@ -18,8 +19,10 @@ import uk.ac.earlham.marti.core.MARTiLog;
  */
 public class SimpleJobScheduler implements JobScheduler {
     private static final int MAX_QUICK_JOB_ID = 100000;
+    private ConcurrentHashMap<Integer, SimpleJobSchedulerJob> allJobs = new ConcurrentHashMap<Integer, SimpleJobSchedulerJob>();
     private LinkedList<SimpleJobSchedulerJob> pendingJobs = new LinkedList<SimpleJobSchedulerJob>();
     private LinkedList<SimpleJobSchedulerJob> runningJobs = new LinkedList<SimpleJobSchedulerJob>();
+    private LinkedList<SimpleJobSchedulerJob> failedJobs = new LinkedList<SimpleJobSchedulerJob>();
     //private LinkedList<SimpleJobSchedulerJob> finishedJobs = new LinkedList<SimpleJobSchedulerJob>();
     private MARTiLog schedulerLog = new MARTiLog();
     private MARTiEngineOptions options;
@@ -84,6 +87,7 @@ public class SimpleJobScheduler implements JobScheduler {
                 
         SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(jobId, commands, logFilename, dontRunIt);
         pendingJobs.add(j);
+        allJobs.put(jobId, j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
         return jobId++;
     }
@@ -209,6 +213,11 @@ public class SimpleJobScheduler implements JobScheduler {
     }
     
     public synchronized int getFailedJobCount() {
-        return 0;
+        return failedJobs.size();
+    }
+
+    public synchronized void markJobAsFailed(int i) {
+        SimpleJobSchedulerJob ssj = allJobs.get(i);
+        failedJobs.add(ssj);
     }
 }

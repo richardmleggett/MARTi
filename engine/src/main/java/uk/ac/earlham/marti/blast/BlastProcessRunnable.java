@@ -129,7 +129,7 @@ public class BlastProcessRunnable implements Runnable {
         
         if (options.getStopProcessingAfter() > 0) {
             if (numberOfReadsProcessed > options.getStopProcessingAfter()) {
-                options.getLog().println("Number of FASTQ reads processed ("+numberOfReadsProcessed+") exceeeds limit ("+options.getStopProcessingAfter()+"). Sending STOP command.");
+                options.getLog().println("Note: Number of FASTQ reads processed ("+numberOfReadsProcessed+") exceeeds limit ("+options.getStopProcessingAfter()+"). Sending STOP command.");
                 options.stopProcessing();
             }
         }

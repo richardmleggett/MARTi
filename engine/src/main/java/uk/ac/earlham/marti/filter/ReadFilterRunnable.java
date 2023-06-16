@@ -348,7 +348,7 @@ public class ReadFilterRunnable implements Runnable {
 //            endChunks();
 //        }
         
-        options.getLog().println("Thread exiting");
+        options.getLog().println("ReadFilterRunnable thread exiting");
 
         outputStats();
     }

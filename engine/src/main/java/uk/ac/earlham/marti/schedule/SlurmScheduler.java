@@ -188,4 +188,12 @@ public class SlurmScheduler implements JobScheduler {
     public synchronized int getFailedJobCount() {
         return failedJobs.size();
     }    
+    
+    public synchronized void markJobAsFailed(int i) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (runningJobs.containsKey(i)) {
+            runningJobs.remove(i);
+        }
+        failedJobs.put(i, ssj);
+    }
 }

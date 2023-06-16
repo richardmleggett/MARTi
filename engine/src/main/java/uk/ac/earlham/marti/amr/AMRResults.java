@@ -69,8 +69,10 @@ public class AMRResults {
 
         WalkOutChunk woc = new WalkOutChunk(options, options.getReadClassifier().getTaxonomy(), aat.getOriginalChunkNumber(), aat.getProcessedChunkNumber());
         woc.load(aat.getCARDBlastFilename(), aat.getNtBlastFilename());
+        options.getLog().println("Chunks loaded, processing hits");
         woc.processHits(wor);
         readCountWithAMRHits += woc.getReadCountWithAMRHits();
+        options.getLog().println("Read count with AMR hits "+readCountWithAMRHits);
         
         writeJSON(aat.getProcessedChunkNumber());
         
@@ -88,6 +90,8 @@ public class AMRResults {
         Taxonomy taxonomy = options.getReadClassifier().getTaxonomy();
         // chunkTime object
         JsonObjectBuilder chunkTimes = Json.createObjectBuilder();
+        
+        options.getLog().println("Writing JSON for chunk "+cn);
         
         for (int c=1; c<=wor.getMaxChunkNumber(); c++) {
            chunkTimes.add(Integer.toString(c), wor.getChunkTime(c));
@@ -213,7 +217,7 @@ public class AMRResults {
             e.printStackTrace();
             System.exit(1);
         }
-                
+        options.getLog().println("JSON written for chunk "+cn);                
     }
     
     public CARDOntology getOntology() {

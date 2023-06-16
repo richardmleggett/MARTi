@@ -63,7 +63,7 @@ public class BlastHit implements LCAHit,Comparable {
             cacheTaxonIdPath();
         }        
     }
-    
+        
     private void parseNanoOKWithStitle(String[] fields ) {
         // NanoOK14: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle staxids"
         // NanoOK15: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids"
@@ -96,7 +96,11 @@ public class BlastHit implements LCAHit,Comparable {
                 queryCoverage = Double.parseDouble(fields[13]);
                 String taxaString = fields[14];
                 String[] taxa = taxaString.split(";");
-                taxonId = Integer.parseInt(taxa[0]);
+                try {
+                    taxonId = Integer.parseInt(taxa[0]);
+                } catch (NumberFormatException e) {                    
+                    taxonId = -2;
+                }
             }
             
             validAlignment = true;

@@ -76,15 +76,38 @@ public class ReadClassifier {
     
     public boolean checkBLASTCompleted(ReadClassifierItem f, int exitValue) {
         String blastLogFilename = f.getLogFile();
-        
-        //options.getLog().println("Checking BLAST log for errors "+blastLogFilename);
-        //options.getLog().println("  Exit value was "+exitValue);
-        
+        boolean completed = true;
+
         if (exitValue != 0) {
-            return false;
+            completed = false;
+            //options.getLog().println("  Exit value was "+exitValue);
+        } else {
+            options.getLog().println("Checking BLAST log for errors "+blastLogFilename);
+            try {
+                File bf = new File(blastLogFilename);
+                if (bf.exists()) {
+                    BufferedReader br;
+                    String line;
+                    br = new BufferedReader(new FileReader(blastLogFilename));
+                    while ((line = br.readLine()) != null) {
+                        if (line.toLowerCase().contains("error")) {
+                            options.getLog().printlnLogAndScreen("Error: Stopping due to error message in "+blastLogFilename);
+                            completed = false;
+                        }
+                    }
+                    br.close();            
+                } else {
+                    options.getLog().println("WARNING: Couldn't find BLAST log "+blastLogFilename);
+                    options.getLog().println("This is usually a bad sign, but continuing to run.");
+                }
+            } catch (Exception e) {
+                System.out.println("checkBLASTCompleted exception");
+                e.printStackTrace();
+                System.exit(1);
+            }                    
         }
 
-        return true;
+        return completed;
     }
     
 //    /**
@@ -272,6 +295,7 @@ public class ReadClassifier {
                 } else {
                     System.out.println("Error: Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId));
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
+                    js.markJobAsFailed(thisId);
                 }
             } else {    
                 options.getLog().println(MARTiLog.LOGLEVEL_NOTCOMPLETED, "Not completed " + f.blastProcessName + " - " + f.blastFile + " - " + f.getJobId());

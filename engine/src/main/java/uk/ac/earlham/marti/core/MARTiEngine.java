@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.zip.*;
+import uk.ac.earlham.marti.amr.WalkOutRead;
 import uk.ac.earlham.marti.schedule.*;
 
 /**
@@ -135,6 +136,9 @@ public class MARTiEngine {
 
             options.getReadClassifier().initialise();
 
+            // DEBUG - Test WalkoutRead
+            WalkOutRead wor = new WalkOutRead("test", options, options.getReadClassifier().getTaxonomy());
+            
             process(options);
 
             //memoryReport();
