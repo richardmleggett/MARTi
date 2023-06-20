@@ -2,10 +2,29 @@
 
 Example and tutorial====================
 
-Docker example
---------------
+Engine-initiated local analysis
+-------------------------------
 
-The following steps will take you through analysis of a small set of nanopore reads from the Zymo Microbial Mock Community using the MARTi docker image.
+1. Install MARTi (Engine and GUI) by following the steps on the :ref:`Download and installation <installation>` page.
+2. Once installed, download the example reads, custom database, and taxonomy files from `here <https://nbicloud-my.sharepoint.com/:u:/g/personal/peeln_nbi_ac_uk/EUwY6lJhyAtHtuq5FB6vW1YBvlxZ-Vcl-9XUyEMPA0TMJA?e=g7jKty>`__.
+3. Extract the downloaded files and navigate to the ``config`` directory. Open ``marti_test.txt`` with a text editor and replace ``/usr`` with the path to your unzipped ``marti_example`` directory.
+4. Open ``~/marti_engine_options.txt`` in a text editor and update the ``TaxonomyDir``, ``MinKNOWRunDirectory``, and ``MARTiSampleDirectory`` paths (replacing ``/path/to/marti_example/`` with the actual path to your unzipped marti_example directory)::
+
+    TaxonomyDir:/path/to/marti_example/databases/taxonomy_6Jul20
+    MinKNOWRunDirectory:/path/to/marti_example/reads
+    MARTiSampleDirectory:/path/to/marti_example/output
+
+5. Open a terminal in the ``marti_example`` directory and run the MARTi Engine with the following command::
+
+    marti -config config/marti_test.txt
+
+6. Open another terminal window and launch the MARTi GUI by running ``marti_gui``, then open a browser and navigate to ``localhost:3000``.
+7. The ``marti_test`` sample should appear in the sample selection table. View the results in the Dashboard by clicking on the Sample ID.
+
+Docker - GUI-initiated local analysis
+-------------------------------------
+
+The following steps will take you through a local MARTi analysis of a small set of nanopore reads from the Zymo Microbial Mock Community using the docker image.
 
 1. A docker image of MARTi, which includes all of the required dependencies, is provided on `Docker Hub <https://hub.docker.com/r/nedpeel/marti/>`__. To get started, ensure that you have installed the `Docker Engine <https://docs.docker.com/engine/install/>`__ on your system.
 2. Once installed, you can pull the MARTi image by running the following command::
