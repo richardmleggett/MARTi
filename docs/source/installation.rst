@@ -19,7 +19,7 @@ Prerequisites
 In order to run the MARTi Engine (back-end), you also need to install the following on the machine where it will be running:
 
 * **BLAST (2.12.0 or greater)** - `download from NCBI <https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download>`_ or, optionally, install with `homebrew on Mac <https://brew.sh>`_. On Ubuntu, using apt-get may install an older version. In which case, it may be easiest to download executables from the NCBI link above.
-* **BLAST databases** - what you'll need will depend on what you're trying to do. But you might want to start with the nt database, `available from the NCBI Blast FTP site <https://ftp.ncbi.nlm.nih.gov/blast/db/>`_.
+* **BLAST databases** - what you'll need will depend on what you're trying to do, but you might want to start with the nt database (:ref:`See Blast database installation information here <blastdbs>`).
 * **NCBI taxonomy** - you can `download this from the NCBI taxonomy FTP site <https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/>`_. You need the taxdump files, specifically the nodes.dmp and names.dmp files.
 * **Java Run Time Environment (OpenJDK 16.0.2 or greater)** - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_). Or install with `homebrew <https://brew.sh>`_ (use brew install openjdk).
 
@@ -74,9 +74,10 @@ The GUI also requires the ``marti_engine_options.txt``. If you've already copied
 
 This file contains the locations of some important directories and you will need to update these for your system installation:
 
-* MinKNOWRunDirectory - the location of the directory containing read data for runs to be analysed by MARTi. The data for each run within the MinKNOWRunDirectory should be in the MinKNOW output directory format. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/minknow`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample should look something like this: ``/Users/peeln/Documents/minknow/Flongle_run_11102022/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass``
-* MARTiSampleDirectory - the location of a directory that contains MARTi output data. The MARTi GUI will monitor this directory for results to display.
 * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
+* MinKNOWRunDirectory - path to the directory containing sequencing runs to be analysed by MARTi. The data for each run directory within the MinKNOWRunDirectory should be in fastq format inside a directory called ``fastq_pass``, ``pass``, or ``fastq``. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/data`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample could look something like this: ``/Users/peeln/Documents/data/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass`` or simply: ``/Users/peeln/Documents/data/Flongle_run_11102022/pass``
+* MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
+
 
 Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
 
