@@ -72,10 +72,10 @@ public class MARTiConfigFile {
             pw.println("# Scheduler tells MARTi how to schedule parallel jobs. Options:");
             pw.println("#     - local - MARTi will handle running jobs.");
             pw.println("#     - slurm - jobs are submitted via SLURM (in development).");
-            pw.println("# LocalSchedulerMaxJobs specifies the maximum number of parallel jobs (e.g. BLAST) the software will initiate.");
+            pw.println("# MaxJobs specifies the maximum number of parallel jobs (e.g. BLAST) the software will initiate.");
             pw.println("");
             pw.println("Scheduler:local");
-            pw.println("LocalSchedulerMaxJobs:" + options.getMaxJobs());
+            pw.println("MaxJobs:" + options.getMaxJobs());
 
             pw.println("");
             pw.println("# InactivityTimeout gives provides a time (in seconds) after which MARTi will stop waiting for new reads.");
@@ -168,7 +168,7 @@ public class MARTiConfigFile {
                         
             pw.println("");
             pw.println("# A Lowest Common Ancestor algorithm is used to assign BLAST hits to taxa. Default parameters are:");
-            pw.println("# LCAMaxHits specifies the maximum number of BLAST hits to inspect in (20).");
+            pw.println("# LCAMaxHits specifies the maximum number of BLAST hits to inspect in (100).");
             pw.println("# LCAScorePercent specifies the percentage of maximum bit score that a hit must achieve to be considered (90).");
             pw.println("# LCAMinIdentity specifies the minimum % identity of a hit to be considered for LCA (60)");
             pw.println("# LCAMinQueryCoverage specifies the minium % query coverage for a hit to be considered (0)");

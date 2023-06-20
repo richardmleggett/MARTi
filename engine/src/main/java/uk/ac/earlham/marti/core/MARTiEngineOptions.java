@@ -116,7 +116,7 @@ public class MARTiEngineOptions implements Serializable {
     private boolean dontRunNt = false;
     private String taxonomyDir = null;
     private String accessionMapFile = "0";
-    private int lcaMaxHits = 20;
+    private int lcaMaxHits = 100;
     private double lcaScorePercent = 90;
     private int lcaMinIdentity = 60;
     private int lcaMinQueryCoverage = 0;
