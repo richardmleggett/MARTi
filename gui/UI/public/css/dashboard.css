@@ -47,12 +47,18 @@
 
 } */
 
-#dashboardAmrTable > thead > tr > th:nth-child(1){
+/* #dashboardAmrTable > thead > tr > th:nth-child(1){
   min-width: 180px;
 }
-#dashboardAmrTable > thead > tr > th:nth-child(6){
+#dashboardAmrTable > thead > tr > th:nth-child(7){
   min-width: 260px;
 }
-#dashboardAmrTable > thead > tr > th:nth-child(9){
+#dashboardAmrTable > thead > tr > th:nth-child(10){
+  min-width: 260px;
+} */
+#dashboardAmrTable > thead > tr > th.wideColumn{
+  min-width: 180px;
+}
+#dashboardAmrTable > thead > tr > th.widerColumn{
   min-width: 260px;
 }

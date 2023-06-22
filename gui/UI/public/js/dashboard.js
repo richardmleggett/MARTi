@@ -61,15 +61,16 @@ function initialiseDashboardPage() {
 
         dashboardAmrTable = $('#dashboardAmrTable').DataTable({
         "columns": [
-          { "title": "Name"},
+          { "title": "Name","className": "wideColumn"},
           { "title": "Antibiotic Resistance Ontology"},
           { "title": "Count"},
+          { "title": "Putative host taxa" },
+          { "title": "Putative plasmid hits" },
           { "title": "Average Accuracy"},
-          { "title": "Walkout Species" },
-          { "title": "Description"},
+          { "title": "Description","className": "widerColumn"},
           { "title": "Resistance Mechanism"},
           { "title": "Gene Family"},
-          { "title": "Drug Class"}
+          { "title": "Drug Class","className": "widerColumn"}
         ],
           columnDefs: [
             { targets: "_all", "className": "dt-center"}
@@ -359,7 +360,13 @@ $("#taxaTreeRow").hide();
 $("#treeMapRow").hide();
 
 
-
+$('input.toggle-vis').on('click', function (e) {
+    // e.preventDefault();
+    // Get the column API object
+    let column = dashboardAmrTable.column($(this).attr('data-column'));
+    // Toggle the visibility
+    column.visible(!column.visible());
+});
 
 
 };
@@ -1000,25 +1007,7 @@ socket.on('dashboard-dashboardAmrTable-response', function(data) {
       }
     }
 
-    // if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrTable")) {
-    //   dashboardChartVisibility["dashboardAmrTable"] = true;
-    //   initialisePlotVisibility("dashboardAmrTable",true);
-    // }
-    //
-    // if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
-    //   dashboardChartVisibility["dashboardAmrDonut"] = true;
-    //   initialisePlotVisibility("dashboardAmrDonut",true);
-    // }
 
-    // if(currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrTable"] == true) {
-    //   socket.emit('dashboard-dashboardAmrTable-request',{
-    //     clientId: uuid
-    //   });
-    // } else if (currentPage=="Dashboard" && dashboardChartVisibility["dashboardAmrDonut"] == true) {
-    //   socket.emit('dashboard-dashboardAmrTable-request',{
-    //     clientId: uuid
-    //   });
-    // };
   });
 
 
@@ -1071,7 +1060,6 @@ amrTableInitiated = true;
 d3.selectAll(".dashboard-amr-chunk-value").text(dashboardAmrTableChunkSelected+"/"+dashboardAmrTableChunkTotal);
 d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashboardAmrTableChunkSelected]);
 
-// var csvString = "";
 
   for (const gene of amrData.geneList){
 
@@ -1109,11 +1097,13 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
       gene.averageAccuracyAtChunk = averageAccuracyAtChunk;
 
     gene.speciesCounts = [];
+    gene.plasmidCounts = [];
 
     if (Array.isArray(gene.species)){
       for (const species of gene.species) {
         var counts = species.chunkCounts;
         var speciesCountAtChunk = 0;
+
         if (counts.hasOwnProperty(dashboardAmrTableChunkSelected)) {
           speciesCountAtChunk = counts[dashboardAmrTableChunkSelected];
         } else {
@@ -1133,7 +1123,17 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
         if (speciesCountAtChunk !== 0) {
           gene.speciesCounts.push(species.name+" ("+speciesCountAtChunk+")");
         }
+
+        if (species.hasOwnProperty("chunkPlasmidCounts")){
+          var plasmidCountAtChunk = getCountAtChunk(species.chunkPlasmidCounts);
+          if (plasmidCountAtChunk !== 0) {
+            gene.plasmidCounts.push(species.name+" ("+plasmidCountAtChunk+")");
+          }
+        }
+
+
       }
+
     } else {
       for (const [species, counts] of Object.entries(gene.species)) {
         var speciesCountAtChunk = 0;
@@ -1161,20 +1161,12 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
     }
 
 
+    sortCounts(gene.speciesCounts);
+    sortCounts(gene.plasmidCounts);
 
-
-
-    gene.speciesCounts.sort(function(a, b) {
-      var regExp = /\(([^)]*)\)[^(]*$/;
-      var countA = parseInt(regExp.exec(a)[1]);
-      var countB = parseInt(regExp.exec(b)[1]);
-      if (countA > countB) {
-        return -1;
-      } else if (countA < countB) {
-        return 1;
-      }
-      return 0;
-    });
+    if (gene.plasmidCounts.length == 0 ){
+      gene.plasmidCounts.push("n/a")
+    }
 
   };
 
@@ -1200,35 +1192,27 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
          drugClass = gene.drugClass.replaceAll(";","; ");
        }
 
-       dashboardAmrTable.row.add([gene.name,cardUrl,gene.totalGeneCount,gene.averageAccuracyAtChunk,gene.speciesCounts.join(", "),gene.description,resMech,geneFam,drugClass]);
+       dashboardAmrTable.row.add([gene.name,cardUrl,gene.totalGeneCount,gene.speciesCounts.join(", "),gene.plasmidCounts.join(", "),gene.averageAccuracyAtChunk,gene.description,resMech,geneFam,drugClass]);
     };
    };
 
   dashboardAmrTable.draw(false);
 
-  // $('#dashboardAmrTable tbody>tr').children(':last-child').on('click', function() {
-  //     var rowData = dashboardAmrTable.row( $(this).closest('tr') ).data();
-  //
-  //     var tableAro = rowData[1].split(">")[1].split("<")[0];
-  //
-  //     var thisGeneData;
-  //
-  //   for (const gene of amrData.geneList) {
-  //     var aroNum = gene.cardId.split(":")[1];
-  //     if (tableAro == aroNum){
-  //       thisGeneData = gene;
-  //     }
-  //   };
-  //
-  //     prepareAmrInfoModal(thisGeneData);
-  //
-  //   $('#amrInfoModal').modal('show');
-  //
-  //
-  // });
-
   };
 
+  function sortCounts(array) {
+    var regExp = /\(([^)]*)\)[^(]*$/;
+    array.sort(function(a, b) {
+      var countA = parseInt(regExp.exec(a)[1]);
+      var countB = parseInt(regExp.exec(b)[1]);
+      if (countA > countB) {
+        return -1;
+      } else if (countA < countB) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   function convertDashboardDataToCSV(data) {
 

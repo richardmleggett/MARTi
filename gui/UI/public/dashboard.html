@@ -698,6 +698,42 @@
           <!-- <span class="range-slider-value">1</span> -->
         </div>
 
+        <div class="d-flex form-group flex-wrap">
+          <div class="col-md-2">
+            <div class="form-check form-check-inline">
+              Toggle column:
+            </div>
+          </div>
+
+          <div class="col-md-10">
+
+            <div class="form-check form-check-inline">
+              <input data-column="3" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox1" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox1">Putative host taxa</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input data-column="4" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox2" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox2">Putative plasmid hits</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input data-column="6" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox3" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox3">Description</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input data-column="7" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox4" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox4">Resistance mechanism</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input data-column="8" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox5" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox5">Gene family</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input data-column="9" class="form-check-input toggle-vis" type="checkbox" id="dashboardAmrTableColCheckbox6" checked>
+              <label class="form-check-label" for="dashboardAmrTableColCheckbox6">Drug class</label>
+            </div>
+          </div>
+        </div>
+
         <div class="dashboardDataTable" id="dashboardAmrTableDiv">
 
           <table id="dashboardAmrTable" class="table table-bordered table-hover" width="100%">
@@ -724,7 +760,7 @@
     <div class="card shadow">
       <!-- Card Header - Dropdown -->
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Walkout Analysis Taxa</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Putative Host Taxa Analysis</h6>
 
         <div class="dropdown no-arrow ml-auto mr-1">
           <a class="dropdown-toggle" href="#" role="button" id="amrDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -919,7 +955,7 @@
       <div id="dashboardAmrDonutAdd" class="col-xl-3 col-md-6">
         <div class="card add-chart-card pointer h-100">
           <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">Walkout Analysis</h5>
+            <h5 class="card-title">Putative Host Analysis</h5>
             <p class="card-text">Donut plot of taxa identified via AMR walkout analysis.</p>
             <i class="fas fa-plus fa-3x"></i>
           </div>
