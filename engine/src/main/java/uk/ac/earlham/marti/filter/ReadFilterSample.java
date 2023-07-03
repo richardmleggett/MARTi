@@ -272,9 +272,11 @@ public class ReadFilterSample {
                 InputStream gzipStream = null;
                 Reader decoder = null;
                 
-                if (fastqPathname.toLowerCase().endsWith(".fastq")) {                
+                if (fastqPathname.toLowerCase().endsWith(".fastq") ||
+                    fastqPathname.toLowerCase().endsWith(".fq")) {                
                     br = new BufferedReader(new FileReader(fastqPathname));
-                } else if (fastqPathname.toLowerCase().endsWith(".fastq.gz")) {
+                } else if ( fastqPathname.toLowerCase().endsWith(".fastq.gz") ||
+                            fastqPathname.toLowerCase().endsWith(".fq.gz")) {
                     fileStream = new FileInputStream(fastqPathname);
                     gzipStream = new GZIPInputStream(fileStream);
                     decoder = new InputStreamReader(gzipStream, "US-ASCII");
@@ -282,7 +284,7 @@ public class ReadFilterSample {
                 }
                 
                 if (br == null) {
-                    System.out.println("Ooops shouldn't have got to here without a .fastq or a .fastq.gz");
+                    System.out.println("Ooops shouldn't have got to here without a .fastq or a .fq or a .fastq.gz or a .fq.gz");
                     System.exit(1);
                 }
                 
@@ -342,7 +344,7 @@ public class ReadFilterSample {
                 }
                 br.close();
                 
-                if (fastqPathname.toLowerCase().endsWith(".fastq.gz")) {
+                if (fastqPathname.toLowerCase().endsWith(".gz")) {
                     decoder.close();
                     gzipStream.close();
                     fileStream.close();

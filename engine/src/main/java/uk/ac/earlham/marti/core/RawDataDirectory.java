@@ -41,8 +41,27 @@ public class RawDataDirectory {
                 if (dir.exists()) {
                     System.out.println("Not got fastq_pass, but found fastq directory: " + fastqPassDir);
                 } else {
-                    System.out.println("ERROR: Can't find 'fastq_pass', 'pass', or 'fastq' directory in " + pathname);
-                    System.exit(1);
+                    //Check to see whether there are any fastq's or fq's in pathname.
+                    boolean fastqInDir = false;       
+                    File pathnameDir = new File (pathname);
+                    File[] files = pathnameDir.listFiles();
+                    for(int i = 0; i < files.length; i++) {
+                        if(files[i].isFile()) {
+                            if( files[i].getName().endsWith(".fastq") || 
+                                files[i].getName().endsWith(".fastq.gz") ||
+                                files[i].getName().endsWith(".fq") ||
+                                files[i].getName().endsWith(".fq.gz")) {
+                                fastqInDir = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!fastqInDir) {
+                        System.out.println("ERROR: Can't find 'fastq_pass', 'pass', or 'fastq' directory in " + pathname);
+                        System.out.println("ERROR: Cannot find files with suffix .fastq or .fq in " + pathname);
+                        System.exit(1);
+                    }
+                    fastqPassDir = pathname;
                 }
             }
         }
