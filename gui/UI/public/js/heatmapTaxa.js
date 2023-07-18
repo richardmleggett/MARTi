@@ -2,7 +2,7 @@ var heatmapTaxaSvg,
   hmTaxaL1,
   hmTaxaL2,
   hmTaxaLegend,
-  defs,
+  hmDefs,
   hmTaxaColourPalette,
   hmTaxaMaxRectWidth,
   compareHmTaxaGrey,
@@ -20,9 +20,9 @@ function initialiseHeatmapTaxa() {
     .attr("transform",
           "translate(" + marginHeatmapTaxa.left + "," + marginHeatmapTaxa.top + ")");
 
-  defs = heatmapTaxaSvg.append("defs");
+  hmDefs = heatmapTaxaSvg.append("defs");
 
-  defs.append("linearGradient")
+  hmDefs.append("linearGradient")
     .attr("id", "hmTaxaLegendGradient")
     .attr("x1", "0%").attr("y1", "0%")
     .attr("x2", "100%").attr("y2", "0%");
@@ -246,9 +246,9 @@ for (var [i,col] of hmTaxaColourPalettes[hmTaxaColourPalette].entries()) {
     .range(hmTaxaColourPalettes[hmTaxaColourPalette])
     .domain(hmTaxaDomain);
 
-  defs.select("#hmTaxaLegendGradient").selectAll("stop").remove();
+  hmDefs.select("#hmTaxaLegendGradient").selectAll("stop").remove();
 
-  hmTaxaLegendGradientStops = defs.select("#hmTaxaLegendGradient").selectAll("stop")
+  hmTaxaLegendGradientStops = hmDefs.select("#hmTaxaLegendGradient").selectAll("stop")
   	.data(hmTaxaColour.range());
 
 
