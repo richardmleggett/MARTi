@@ -27,6 +27,13 @@ if (selectedPort != 3000) {
 
 const restrictedMode = argv.r || false;
 
+const martiVersion = "0.19.1";
+
+
+if (argv.v || argv.version) {
+  console.log(martiVersion);
+  process.exit();
+}
 
 var serverOptions = {};
 serverOptions["MinKNOWRunDirectory"] = "";
