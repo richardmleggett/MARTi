@@ -321,7 +321,7 @@ public class ReadFilterRunnable implements Runnable {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(BlastProcessRunnable.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ReadFilterRunnable.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }

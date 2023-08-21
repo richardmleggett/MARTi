@@ -83,7 +83,7 @@ public class TaxaAccumulation {
     public void storeAccumulation(int fastaChunkNumber, int chunkNumberByOrderCompleted, int nReadsAnalysed, int mins, double minSupport) {
         // Go through all nodes, counting assigned to each of the 9 levels.
         // Then go through leaf nodes and count each leaf node to any levels higher.
-        Taxonomy taxonomy = taxonomy = options.getReadClassifier().getTaxonomy();
+        Taxonomy taxonomy = options.getReadClassifier().getTaxonomy();
         long startTime = System.nanoTime();
         long timeDiff;
         ArrayList<TaxaAccumulationCounts> taxaCounts;

@@ -19,7 +19,9 @@ public class MARTiProgress {
     private int rawFileCount = 0;
     private int chunkCount = 0;
     private int chunksBlasted = 0;
+    private int chunksCentrifuged = 0;
     private int chunksParsed = 0;
+    private int centrifugeChunksParsed = 0;
     private int metamapsCount = 0;
     private int analysisSubmitted = 0;
     private int analysisCompleted = 0;
@@ -59,8 +61,16 @@ public class MARTiProgress {
         chunksBlasted++;
     }
     
+    public synchronized void incrementChunksCentrifugedCount() {
+        chunksCentrifuged++;
+    }
+    
     public synchronized void incrementChunksParsedCount() {
         chunksParsed++;
+    }
+    
+    public synchronized void incrementCentrifugeChunksParsedCount() {
+        centrifugeChunksParsed++;
     }
     
     public synchronized void incrementAnalysisSubmitted() {
@@ -88,13 +98,27 @@ public class MARTiProgress {
     
     public synchronized boolean chunksComplete() {
         int blastProcessCount = options.getBlastProcesses().size();
+        int centrifugeProcessCount = options.getCentrifugeProcesses().size();
         
         boolean complete = false;        
        
-        if ((chunksParsed == chunksBlasted) &&
-            (chunksBlasted == (chunkCount * blastProcessCount)) &&
-            (analysisCompleted == analysisSubmitted)) {
-            complete = true;
+        if(blastProcessCount > 0) {
+            if ((chunksParsed == chunksBlasted) &&
+                (chunksBlasted == (chunkCount * blastProcessCount)) &&
+                (analysisCompleted == analysisSubmitted)) {
+                complete = true;
+            } else {
+                return false;
+            }
+        }
+        
+        if(centrifugeProcessCount > 0) {
+            if( (chunksCentrifuged == (chunkCount * centrifugeProcessCount)) &&
+                (chunksCentrifuged == centrifugeChunksParsed)) {
+                complete = true;
+            } else {
+                return false;
+            }
         }
         
         return complete;

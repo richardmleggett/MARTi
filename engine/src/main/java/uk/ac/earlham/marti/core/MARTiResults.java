@@ -4,11 +4,17 @@
  */
 package uk.ac.earlham.marti.core;
 
+import java.io.BufferedReader;
 import uk.ac.earlham.lcaparse.SimplifiedRank;
 import uk.ac.earlham.marti.amr.AMRResults;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -21,12 +27,15 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 import uk.ac.earlham.lcaparse.LCAFileParser;
 import uk.ac.earlham.lcaparse.LCAHitSet;
 import uk.ac.earlham.lcaparse.Taxonomy;
 import uk.ac.earlham.lcaparse.TaxonomyNode;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
+import uk.ac.earlham.lcaparse.LCAHit;
+import uk.ac.earlham.marti.centrifuge.CentrifugeClassifierItem;
 
 /**
  * Represent overall results (essentially, taxonomic classifications) for all barcodes.
@@ -343,5 +352,73 @@ public class MARTiResults {
         } else {
             options.getLog().printlnLogAndScreen("Error: can't find accumulation data for barcode "+bc);
         }
+    }
+    
+    public int addChunk(int bc, CentrifugeClassifierItem cci) {
+        int fileCount = 0;
+        
+        options.getLog().println("MARTiResults received file for barcode "+bc);
+
+        taxonomy = options.getReadClassifier().getTaxonomy();
+
+        // Read the Centrifuge file - no need for some intermediate class to 
+        // hold all of this data when all we do it write it back out.
+        BufferedReader br;
+        InputStream fileStream = null;
+        InputStream gzipStream = null;
+        Reader decoder = null;
+        String filename = cci.getClassificationFile();
+        try {
+            File f = new File(filename);
+            if(f.exists()){
+                br = new BufferedReader(new FileReader(filename));
+            } else {
+                filename = filename + ".gz";
+                fileStream = new FileInputStream(filename);
+                gzipStream = new GZIPInputStream(fileStream);
+                decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                br = new BufferedReader(decoder);    
+            }
+            
+            //ignore header line
+            String line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split("\\s+");
+                //TODO: min hit length
+                long taxid = Long.parseLong(fields[2]);
+                taxonomy.countRead(bc, taxid);
+            }
+            
+            br.close();
+            if(fileStream != null) {
+                decoder.close();
+                gzipStream.close();
+                fileStream.close();
+            }
+            
+        } catch (Exception e) {
+            System.out.println("readProcessFile Exception:");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+     
+        
+        if (chunkCount.containsKey(bc)) {
+            fileCount = chunkCount.get(bc);
+        }        
+        fileCount++;        
+        chunkCount.put(bc, fileCount);
+
+        ArrayList<String> l;
+        if (fileOrder.containsKey(bc)) {
+            l = fileOrder.get(bc);        
+        } else {
+            l = new ArrayList<String>();
+            fileOrder.put(bc, l);
+        }
+        l.add(filename);
+        
+        return fileCount;
     }
 }

@@ -48,6 +48,9 @@ public class ReadFilterSample {
         pendingPairList = pfl;
         barcode = bc;
         metaData = options.getSampleMetaData(barcode);
+        if(options.isBlastingRead()) {
+            writeFasta = true;
+        }
     }
 
     private String generateFastaFastqChunkPath(String fastqPathname, int type) {

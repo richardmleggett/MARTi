@@ -122,8 +122,7 @@ public class FileWatcher {
     }
     
     public void scan() {
-        int count = 0;
-                        
+        int count = 0;          
         for (int i=0; i<fileDirsToWatch.size(); i++) {
             FileWatcherItem dir = fileDirsToWatch.get(i);
             String dirName = dir.getPathname();

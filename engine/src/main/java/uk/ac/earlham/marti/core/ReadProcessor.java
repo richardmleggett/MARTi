@@ -9,6 +9,8 @@ import uk.ac.earlham.marti.filter.ReadFilterRunnable;
 import uk.ac.earlham.marti.watcher.FileWatcher;
 import uk.ac.earlham.marti.blast.BlastProcess;
 import uk.ac.earlham.marti.blast.BlastProcessRunnable;
+import uk.ac.earlham.marti.centrifuge.CentrifugeProcessRunnable;
+import uk.ac.earlham.marti.centrifuge.CentrifugeClassifier;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -125,7 +127,7 @@ public class ReadProcessor {
         }
     }
     
-    private void addDirsForConvertFastQ() {
+    private void addFastQDirs() {
         if (options.isBarcoded()) {
             for (int b=1; b<=MARTiEngineOptions.MAX_BARCODES; b++) {
                 if (options.getBarcodesList().isBarcodeActive(b)) {
@@ -247,33 +249,45 @@ public class ReadProcessor {
     public void process() throws InterruptedException {   
         String baseDir = "";
         ReadClassifier rc = options.getReadClassifier();
+        CentrifugeClassifier centrifugeClassifier = options.getCentrifugeClassifier();
+        FileCompressorRunnable fileCompressor = null;
         boolean fileWatcherTimedOut = false;
         ReadFilterRunnable readFilter = new ReadFilterRunnable(options, fw, pfl);
-        BlastProcessRunnable blastProcess = new BlastProcessRunnable(options, pfl);
-        MARTiAnalysisRunnable analysisProcess = new MARTiAnalysisRunnable(options, ptl, fileCompressionQueue);
-        FileCompressorRunnable fileCompressor = null;
-
-        rc.setPendingTaskList(ptl);
         
-        options.getLog().println("convertingFastQ: "+options.isConvertingFastQ());
-        options.getLog().println("blastingReads: "+options.isBlastingRead());
-   
-        addDirsForConvertFastQ();
-
+        BlastProcessRunnable blastProcess = null;
+        MARTiAnalysisRunnable analysisProcess = null;
+        CentrifugeProcessRunnable centrifugeProcess = null;
+        
         // Execute thread which checks for new reads to filter
         executor.execute(readFilter);
-        
-        // Execute thread which checks for new BLAST jobs to launch
-        executor.execute(blastProcess);
-
-        // Execute thread which checks for new local MARTi analysis jobs to launch
-        executor.execute(analysisProcess);
-        
         if(options.getCompressBlastFiles()) {
             fileCompressor = new FileCompressorRunnable(fileCompressionQueue);
             rc.setFileCompressionQueue(fileCompressionQueue);
             // Execute thread which checks for files to compress and compresses them
             executor.execute(fileCompressor);
+        }
+        
+        addFastQDirs();
+        
+        if(options.isBlastingRead()) {
+             blastProcess = new BlastProcessRunnable(options, pfl);
+             analysisProcess = new MARTiAnalysisRunnable(options, ptl, fileCompressionQueue);
+
+            rc.setPendingTaskList(ptl);
+        
+            options.getLog().println("convertingFastQ: "+options.isConvertingFastQ());
+            options.getLog().println("blastingReads: "+options.isBlastingRead());
+                  
+            // Execute thread which checks for new BLAST jobs to launch
+            executor.execute(blastProcess);
+
+            // Execute thread which checks for new local MARTi analysis jobs to launch
+            executor.execute(analysisProcess);
+        }
+        if(options.isCentrifugingReads()) {
+             centrifugeProcess = new CentrifugeProcessRunnable(options, pfl);
+             options.getLog().println("centrifuging reads: "+options.isCentrifugingReads());
+             executor.execute(centrifugeProcess);
         }
                         
         //for (int i=0; i<options.getNumberOfThreads(); i++) {
@@ -304,30 +318,47 @@ public class ReadProcessor {
                         
             // Check for reads to classify
             rc.checkForFilesToClassify();
+            if(options.isCentrifugingReads()) {
+                centrifugeClassifier.checkForFilesToClassify();
+            }
 
             Thread.sleep(1000);            
         }           
         
+        System.out.println("Stopping read filter thread...");
         readFilter.exitThread();
-        blastProcess.exitThread();
-        analysisProcess.exitThread();
-                                
+        if(options.isBlastingRead()) {
+            System.out.println("Stopping BLAST threads...");
+            blastProcess.exitThread();
+            analysisProcess.exitThread();
+        }
+        if(options.isCentrifugingReads()) {
+            System.out.println("Stopping centrifuge thread...");
+            centrifugeProcess.exitThread();
+        }
+                                    
         // Write summaries
+        System.out.println("Writing summaries...");
         rc.writeSummaries();
 
         // Rewrite all sample.json to indicate complete
+        System.out.println("Writing SampleJSON...");
         options.writeAllSampleJSON(true);
         
         // Write stop sequencing flag
+        System.out.println("Writing Stop Sequencing flag...");
         options.writeStopSequencingFlag();
         
         // Stop compression thread and compress any remaining files in the queue
         if(options.getCompressBlastFiles()) {         
+            System.out.println("Stopping compression thread...");
             fileCompressor.exitThread();       
         }
                                 
         // That's all - wait for all threads to finish
+        System.out.println("Waiting for threads to finish...");
         executor.shutdown();
+        System.out.println("Threads finished!");
  
         // Remvoe any intermediate files
         FileCleaner fc = new FileCleaner(options);

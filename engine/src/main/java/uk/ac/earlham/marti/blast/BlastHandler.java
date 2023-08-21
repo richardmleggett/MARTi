@@ -212,7 +212,7 @@ public class BlastHandler {
                                                             
                     blastJobsPending.add(jobid);
 
-                    if (options.isClassiftingReads()) {
+                    if (options.isClassifyingReads()) {
                         options.getReadClassifier().addFile(bp.getBlastName(), jobid, inputPathname, outputBlast, logFile, classifierFile);
                     }
 

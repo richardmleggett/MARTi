@@ -7,6 +7,7 @@ package uk.ac.earlham.marti.core;
 import uk.ac.earlham.marti.classify.*;
 import uk.ac.earlham.marti.watcher.*;
 import uk.ac.earlham.marti.blast.*;
+import uk.ac.earlham.marti.centrifuge.*;
 import uk.ac.earlham.marti.schedule.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -69,6 +70,7 @@ public class MARTiEngineOptions implements Serializable {
     private boolean aligningReads = false;
     private boolean parsingReads = false;
     private boolean blastingReads = false;
+    private boolean centrifugingReads = false;
     private boolean classifyingReads = true;
     private boolean mergeFastaFiles = false;
     private boolean force = false;
@@ -94,8 +96,11 @@ public class MARTiEngineOptions implements Serializable {
     private transient WatcherLog watcherntCommandLog = new WatcherLog(this);
     private transient ThreadPoolExecutor executor;
     private BlastHandler blastHandler = new BlastHandler(this);
+    private CentrifugeHandler centrifugeHandler = new CentrifugeHandler(this);
     private ReadClassifier readClassifier = new ReadClassifier(this);
+    private CentrifugeClassifier centrifugeClassifier = new CentrifugeClassifier(this);
     private ArrayList<BlastProcess> blastProcesses = new ArrayList<BlastProcess>();
+    private ArrayList<CentrifugeProcess> centrifugeProcesses = new ArrayList<CentrifugeProcess>();
     private boolean isMac = false;
     private String meganCmdLine = "MEGAN";
     private String meganLicense = "MEGAN5-academic-license.txt";
@@ -147,7 +152,7 @@ public class MARTiEngineOptions implements Serializable {
     private HashMap<Integer, String> sampleIdByBarcode = new HashMap<Integer,String>();
     private String optionsFilename = null;
     private MARTiEngineOptionsFile engineOptionsFile = null;
-    private String classifyingBlastName = null;
+    private String classifyingProcessName = null;
     private boolean compressBlastFiles = true;
     
     public MARTiEngineOptions() {
@@ -358,7 +363,7 @@ public class MARTiEngineOptions implements Serializable {
                 System.exit(1);
             }
             
-            if (this.isClassiftingReads()) {
+            if (this.isClassifyingReads()) {
                 if (taxonomyDir == null) {
                     System.out.println("Error: you must specify a TaxonomyDir in the config file if running a classifier.");
                     System.exit(1);
@@ -721,6 +726,10 @@ public class MARTiEngineOptions implements Serializable {
         return blastingReads;
     }
     
+    public boolean isCentrifugingReads() {
+        return centrifugingReads;
+    }
+    
     public int getFileWatcherTimeout() {
         return fileWatcherTimeout;
     }
@@ -814,7 +823,15 @@ public class MARTiEngineOptions implements Serializable {
                 checkAndMakeDirectory(getSampleDirectory() + File.separator + bp.getBlastTask() + "_" + bp.getBlastName() + File.separator);
                 checkAndMakeDirectory(getLogsDir() + File.separator + bp.getBlastTask() + "_" + bp.getBlastName() + File.separator);
             }
-        }        
+        }
+        
+        if(this.isCentrifugingReads()) {
+            for(int i=0; i<centrifugeProcesses.size(); i++) {
+                CentrifugeProcess cp = centrifugeProcesses.get(i);
+                checkAndMakeDirectory(this.getSampleDirectory() + File.separator + "centrifuge_" + cp.getName() + File.separator);
+                checkAndMakeDirectory(getLogsDir() + File.separator + "centrifuge_" + cp.getName() + File.separator);
+            }
+        }
     }
     
     private void processBarcodeId(String tag, String value) {
@@ -939,14 +956,30 @@ public class MARTiEngineOptions implements Serializable {
                                 }
                                                                 
                                 if (bp.useForClassifying()) {
-                                    if (classifyingBlastName != null) {
-                                        System.out.println("Error: you can't have more than one Blast process with useToClassify set");
+                                    if (classifyingProcessName != null) {
+                                        System.out.println("Error: you can't have more than one process with useToClassify set");
                                         System.exit(1);
                                     } else {
-                                        classifyingBlastName = bp.getBlastName();
-                                        System.out.println("Using " + classifyingBlastName + " for classification");
+                                        classifyingProcessName = bp.getBlastName();
+                                        System.out.println("Using " + classifyingProcessName + " for classification");
                                     }
                                 }
+                            } else if (tokens[0].compareToIgnoreCase("CentrifugeProcess") == 0) {
+                                CentrifugeProcess cp =  new CentrifugeProcess(this);
+                                centrifugeProcesses.add(cp);
+                                line = cp.readConfigFile(br);
+                                readNextLine = false;
+                                centrifugingReads = true;
+                                if (cp.useForClassifying()) {
+                                    if (classifyingProcessName != null) {
+                                        System.out.println("Error: you can't have more than one process with useToClassify set");
+                                        System.exit(1);
+                                    } else {
+                                        classifyingProcessName = cp.getName();
+                                        System.out.println("Using " + classifyingProcessName + " for classification");
+                                    }
+                                }
+                            
                             } else if (tokens[0].compareToIgnoreCase("ReadsPerBlast") == 0) {
                                 readsPerBlast = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("ReadsPerMultiFastQ") == 0) {
@@ -1058,12 +1091,24 @@ public class MARTiEngineOptions implements Serializable {
         return blastHandler;
     }
     
+    public CentrifugeHandler getCentrifugeHandler() {
+        return centrifugeHandler;
+    }
+    
     public ReadClassifier getReadClassifier() {
         return readClassifier;
     }
     
+    public CentrifugeClassifier getCentrifugeClassifier() {
+        return centrifugeClassifier;
+    }
+    
     public ArrayList<BlastProcess> getBlastProcesses() {
         return blastProcesses;
+    }
+    
+    public ArrayList<CentrifugeProcess> getCentrifugeProcesses() {
+        return centrifugeProcesses;
     }
         
     public boolean mergeFastaFiles() {
@@ -1166,7 +1211,7 @@ public class MARTiEngineOptions implements Serializable {
         return initMode;
     }
     
-    public boolean isClassiftingReads() {
+    public boolean isClassifyingReads() {
         return classifyingReads;
     }
     
@@ -1354,19 +1399,19 @@ public class MARTiEngineOptions implements Serializable {
     }
     
     public void checkForClassifyingBlast() {
-        if (classifyingBlastName == null) {
+        if (classifyingProcessName == null) {
             // Check for nt
             for (int i=0; i<blastProcesses.size(); i++) {
                 BlastProcess bp = blastProcesses.get(i);
                 if (bp.getBlastName().equals("nt")) {
                     System.out.println("No Blast classification process found - using nt");
                     bp.setClassifyThis();
-                    classifyingBlastName = "nt";
+                    classifyingProcessName = "nt";
                 }
             }
         }
         
-        if (classifyingBlastName == null) {
+        if (classifyingProcessName == null) {
             System.out.println("Error: couldn't find a BLAST process to classify with!");
             System.exit(1);
         }
@@ -1382,7 +1427,7 @@ public class MARTiEngineOptions implements Serializable {
     }
     
     public String getClassifyingBlastName() {
-        return classifyingBlastName;
+        return classifyingProcessName;
     }
     
     public boolean inTestMode() {
