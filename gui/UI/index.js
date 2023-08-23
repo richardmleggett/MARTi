@@ -1,46 +1,153 @@
 #!/usr/bin/env node
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
 const { v4: uuidv4 } = require('uuid');
 const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 
 var argv = require('minimist')(process.argv.slice(2));
 
+var serverOptions = {};
+serverOptions["MinKNOWRunDirectory"] = "";
+serverOptions["MARTiSampleDirectory"] = [];
+serverOptions["TaxonomyDirectory"] = "";
+serverOptions["MaxSimultaneousAnalyses"] = 10;
+serverOptions["Port"] = "";
+serverOptions["https"] = "false";
+serverOptions["Key"] = "";
+serverOptions["Certificate"] = "";
+var numAnalyses = 0;
+
+var engineOptionsPath = "";
+if (argv.options) {
+  if(fsExtra.existsSync(argv.options)) {
+    engineOptionsPath = argv.options;
+  }
+} else if(fsExtra.existsSync("./marti_engine_options.txt")) {
+    engineOptionsPath = "./marti_engine_options.txt";
+  } else if(fsExtra.existsSync(homedir + "/marti_engine_options.txt")) {
+    engineOptionsPath = homedir + "/marti_engine_options.txt";
+  } else if (fsExtra.existsSync(homedir + "/.marti_engine_options.txt")) {
+    engineOptionsPath = homedir + "/.marti_engine_options.txt";
+  } else {
+    console.log("Warning: Could not find marti_engine_options.txt");
+    // console.log("You must have the file marti_engine_options.txt in your home directory to start new analyses.");
+  }
+
+engineOptionsObject = {processes:[]};
+
+try {
+  const martiEngineOptions = fsExtra.readFileSync(engineOptionsPath, 'UTF-8');
+  const lines = martiEngineOptions.split(/\r?\n/);
+  var newProcess = false;
+  var processFound = false;
+  var currentProcess = {text:""};
+  lines.forEach((line) => {
+      if(line.charAt(0) != '#') {
+
+        if (newProcess == true) {
+          if (line == "") {
+            newProcess = false;
+            engineOptionsObject.processes.push(currentProcess);
+            currentProcess = {text:""};
+          } else {
+            var key = line.split(":")[0].trim();
+            var value;
+            if (key == "UseToClassify") {
+              currentProcess.text += "    " + key + "\n";
+              value = "true";
+            } else {
+              value = line.split(":")[1].trim();
+              currentProcess.text += "    " + key + ":" + value + "\n";
+            }
+            currentProcess[key] = value;
+          }
+        } else if (line.search("BlastProcess") != -1) {
+          newProcess = true;
+          processFound = true;
+        } else {
+          const fields = line.split(":");
+          if(fields[0] == "MARTiSampleDirectory") {
+            const dirs = fields[1].split(";");
+            for (const dir of dirs) {
+              var finalDir;
+              if (dir.endsWith('/')){
+                finalDir = dir.slice(0, -1);
+              } else {
+                finalDir = dir;
+              };
+              serverOptions["MARTiSampleDirectory"].push(finalDir);
+            }
+          } else if (fields[0] == "MaxSimultaneousAnalyses") {
+            serverOptions["MaxSimultaneousAnalyses"] = parseInt(fields[1]);
+          } else {
+            serverOptions[fields[0]] = fields[1];
+          }
+        };
+      }
+  });
+  if( serverOptions["MinKNOWRunDirectory"] == "" ||
+      serverOptions["MARTiSampleDirectory"].length < 1 ||
+      serverOptions["TaxonomyDirectory"] == "") {
+    console.log("Warning: Could not find all fields in " + serverOptionsPath + ".");
+    console.log("Please check this file and restart to start new analyses.");
+  }
+  if (newProcess == true) {
+    newProcess = false;
+    engineOptionsObject.processes.push(currentProcess);
+    currentProcess = {text:""};
+  }
+
+if(processFound == false) {
+    console.log("Warning: Could not find any processes in " + engineOptionsPath);
+}
+} catch (err) {
+}
+
 function checkIfValidPortnumber(num) {
   const regexExp = /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/gi;
   return regexExp.test(num);
 }
 
+//Check for port.
 // const portCandidate = argv.p || 3000;
-var selectedPort = argv.p || 3000;
+if (serverOptions["Port"]) {
+  var selectedPort = serverOptions["Port"];
+} else {
+  var selectedPort = 3000;
+}
 
 if (selectedPort != 3000) {
   if (checkIfValidPortnumber(selectedPort)){
     // selectedPort = portCandidate;
   } else {
     selectedPort = 3000;
+    console.log("Invalid entry for port. Set to default (3000)");
   }
 }
+
+//Check if https is true
+if (serverOptions["https"].toLowerCase() === 'true') {
+  //Create https server and include certificate.
+  const httpsOptions = {
+    key: fsExtra.readFileSync(serverOptions["Key"]),
+    cert: fsExtra.readFileSync(serverOptions["Certificate"]),
+  };
+  var http = require('https').createServer(httpsOptions, app);
+} else { 
+  var http = require('http').createServer(app);
+}
+
+var io = require('socket.io')(http);
 
 const restrictedMode = argv.r || false;
 
 const martiVersion = "0.19.1";
 
-
 if (argv.v || argv.version) {
   console.log(martiVersion);
   process.exit();
 }
-
-var serverOptions = {};
-serverOptions["MinKNOWRunDirectory"] = "";
-serverOptions["MARTiSampleDirectory"] = [];
-serverOptions["TaxonomyDirectory"] = "";
-serverOptions["MaxSimultaneousAnalyses"] = 10;
-var numAnalyses = 0;
 
 // var serverOptionsPath = "";
 // if(fsExtra.existsSync("./marti_server_options.txt")) {
@@ -93,101 +200,6 @@ var numAnalyses = 0;
 // } catch (err) {
 //
 // }
-
-
-var engineOptionsPath = "";
-if (argv.options) {
-  if(fsExtra.existsSync(argv.options)) {
-    engineOptionsPath = argv.options;
-  }
-} else if(fsExtra.existsSync("./marti_engine_options.txt")) {
-    engineOptionsPath = "./marti_engine_options.txt";
-  } else if(fsExtra.existsSync(homedir + "/marti_engine_options.txt")) {
-    engineOptionsPath = homedir + "/marti_engine_options.txt";
-  } else if (fsExtra.existsSync(homedir + "/.marti_engine_options.txt")) {
-    engineOptionsPath = homedir + "/.marti_engine_options.txt";
-  } else {
-    console.log("Warning: Could not find marti_engine_options.txt");
-    // console.log("You must have the file marti_engine_options.txt in your home directory to start new analyses.");
-  }
-
-
-engineOptionsObject = {processes:[]};
-
-try {
-  const martiEngineOptions = fsExtra.readFileSync(engineOptionsPath, 'UTF-8');
-  const lines = martiEngineOptions.split(/\r?\n/);
-  var newProcess = false;
-  var processFound = false;
-  var currentProcess = {text:""};
-  lines.forEach((line) => {
-      if(line.charAt(0) != '#') {
-
-        if (newProcess == true) {
-          if (line == "") {
-            newProcess = false;
-            engineOptionsObject.processes.push(currentProcess);
-            currentProcess = {text:""};
-          } else {
-            var key = line.split(":")[0].trim();
-            var value;
-            if (key == "UseToClassify") {
-              currentProcess.text += "    " + key + "\n";
-              value = "true";
-            } else {
-              value = line.split(":")[1].trim();
-              currentProcess.text += "    " + key + ":" + value + "\n";
-            }
-            currentProcess[key] = value;
-          }
-        } else if (line.search("BlastProcess") != -1) {
-          newProcess = true;
-          processFound = true;
-        } else {
-          const fields = line.split(":");
-          if(fields[0] == "MinKNOWRunDirectory") {
-            serverOptions["MinKNOWRunDirectory"] = fields[1];
-          } else if(fields[0] == "MARTiSampleDirectory") {
-            const dirs = fields[1].split(";");
-            for (const dir of dirs) {
-              var finalDir;
-              if (dir.endsWith('/')){
-                finalDir = dir.slice(0, -1);
-              } else {
-                finalDir = dir;
-              };
-              serverOptions["MARTiSampleDirectory"].push(finalDir);
-            }
-
-          } else if (fields[0] == "TaxonomyDir") {
-            serverOptions["TaxonomyDirectory"] = fields[1];
-          } else if (fields[0] == "MaxSimultaneousAnalyses") {
-            serverOptions["MaxSimultaneousAnalyses"] = parseInt(fields[1]);
-          }
-        };
-      }
-  });
-  if( serverOptions["MinKNOWRunDirectory"] == "" ||
-      serverOptions["MARTiSampleDirectory"].length < 1 ||
-      serverOptions["TaxonomyDirectory"] == "") {
-    console.log("Warning: Could not find all fields in " + serverOptionsPath + ".");
-    console.log("Please check this file and restart to start new analyses.");
-  }
-  if (newProcess == true) {
-    newProcess = false;
-    engineOptionsObject.processes.push(currentProcess);
-    currentProcess = {text:""};
-  }
-
-
-if(processFound == false) {
-    console.log("Warning: Could not find any processes in " + engineOptionsPath);
-}
-} catch (err) {
-
-}
-
-
 
 function getSubDirectories(path) {
   return fsExtra.readdirSync(path).filter(function (file) {

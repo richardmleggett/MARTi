@@ -1,8 +1,11 @@
 # Default taxonomy directory can be defined here
 TaxonomyDir:/Users/martins/Documents/Projects/MARTi/taxonomy/taxonomy_6Jul20
-
 MinKNOWRunDirectory:/Users/martins/Documents/Projects/MARTi/marti_input
 MARTiSampleDirectory:/Users/martins/Documents/Projects/MARTi/marti_output
+Port:3000
+https:false
+Key:
+Certificate:
 
 # Blast processes can be defined in here and then settings can be simply copied to new config files
 BlastProcess
