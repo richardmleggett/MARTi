@@ -25,6 +25,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
+import uk.ac.earlham.marti.blast.BlastProcess;
+import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
 
 /**
  *
@@ -138,26 +140,54 @@ public class SampleMetaData {
         
         String filename = options.getSampleDirectory() + File.separator + "sample_bc"+barcode+".json";
         String filenameFinal = options.getMARTiJSONDirectory(barcode) + File.separator + "sample.json";
+        String classificationProcess = "";
+        boolean foundClassifyingProcess = false;
         JsonObjectBuilder metaBuilder = Json.createObjectBuilder();
         metaBuilder.add("martiVersion", MARTiEngine.VERSION_STRING);
                 
         JsonObjectBuilder classificationObjectBuilder = Json.createObjectBuilder();
-        classificationObjectBuilder.add("algorithm", "BlastLCA");
-        classificationObjectBuilder.add("blastVersion", "0.0.0");
-        classificationObjectBuilder.add("database", "nt");
-        classificationObjectBuilder.add("databaseVersion", "01-01-1900");
-
         JsonObjectBuilder analysisObjectBuilder = Json.createObjectBuilder();
         JsonObjectBuilder amrObjectBuilder = Json.createObjectBuilder();
-
+        
+        ArrayList<BlastProcess> blastProcesses = options.getBlastProcesses();
+        ArrayList<CentrifugeProcess> centrifugeProcesses = options.getCentrifugeProcesses();
+        for(BlastProcess bp : blastProcesses) {
+            if(bp.useForClassifying()) {
+                assert(!foundClassifyingProcess);
+                classificationProcess = "BlastLCA";
+                classificationObjectBuilder.add("algorithm", classificationProcess);
+                classificationObjectBuilder.add("blastTool", bp.getBlastTask());
+                classificationObjectBuilder.add("blastVersion", options.getBlastVersion());
+                classificationObjectBuilder.add("database", bp.getBlastDatabase());
+                //classificationObjectBuilder.add("databaseVersion", "01-01-1900");
+                foundClassifyingProcess = true;
+            }
+            if(bp.getBlastName().equalsIgnoreCase("card")) {
+                assert(options.runningCARD());
+                amrObjectBuilder.add("algorithm", "Blast");
+                amrObjectBuilder.add("blastTool", bp.getBlastTask());
+                amrObjectBuilder.add("blastVersion", options.getBlastVersion());
+                amrObjectBuilder.add("database", bp.getBlastDatabase());
+                //amrObjectBuilder.add("databaseVersion", "0.0.0");              
+            }
+        }
+        
+        for(CentrifugeProcess cp : centrifugeProcesses) {
+            if(cp.useForClassifying()) {
+                assert(!foundClassifyingProcess);
+                classificationProcess = "Centrifuge";
+                classificationObjectBuilder.add("algorithm", classificationProcess);
+                classificationObjectBuilder.add("centrifugeVersion", options.getCentrifugeVersion());
+                classificationObjectBuilder.add("database", cp.getDatabase());
+                //classificationObjectBuilder.add("databaseVersion", "01-01-1900");
+                foundClassifyingProcess = true;
+            }
+        }
+               
         if (options.runningCARD()) {            
-            amrObjectBuilder.add("algorithm", "Blast");
-            amrObjectBuilder.add("blastVersion", "0.0.0");
-            amrObjectBuilder.add("database", "CARD");
-            amrObjectBuilder.add("databaseVersion", "0.0.0");
-            analysisObjectBuilder.add("pipeline", "BlastLCA-CARD");
+            analysisObjectBuilder.add("pipeline", classificationProcess + "-CARD");
         } else {
-            analysisObjectBuilder.add("pipeline", "BlastLCA");
+            analysisObjectBuilder.add("pipeline", classificationProcess);
         }
         
         analysisObjectBuilder.add("classification", classificationObjectBuilder);

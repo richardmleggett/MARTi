@@ -1441,4 +1441,30 @@ public class MARTiEngineOptions implements Serializable {
     public boolean getCompressBlastFiles() {
         return compressBlastFiles;
     }
+    
+    public String getBlastVersion() {
+        try{
+            Process process = new ProcessBuilder("blastn","-version").start();
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String version = br.readLine().split(":")[1];     
+            return version;          
+        } catch(IOException e) {
+            return "Unknown";
+        }
+    }
+    
+    public String getCentrifugeVersion() {
+        try{
+            Process process = new ProcessBuilder("centrifuge","--version").start();
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String version = br.readLine().split(" ")[2];     
+            return version;          
+        } catch(IOException e) {
+            return "Unknown";
+        }
+    }
 }
