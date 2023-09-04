@@ -60,6 +60,9 @@ function initialiseDashboardPage() {
 
 
         dashboardAmrTable = $('#dashboardAmrTable').DataTable({
+          "language": {
+            "emptyTable": "No AMR hits identified."
+          },
         "columns": [
           { "title": "Name","className": "wideColumn"},
           { "title": "Antibiotic Resistance Ontology"},

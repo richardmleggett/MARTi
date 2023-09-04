@@ -97,6 +97,13 @@ function initialiseDashboardTreeMap() {
         taxonomicRankChanged = false;
       });
 
+      d3.selectAll("#dashboardTreeMapShowDomain").on("change", function(){
+        dashboardTreeMapShowDomain = parseInt(this.value);
+        taxonomicRankChanged = true;
+        treeMapUpdate(treeMapData);
+        taxonomicRankChanged = false;
+      });
+
       d3.selectAll("input[name='dashboardTreeMapGroupTitle']").on("change", function() {
         dashboardTreeMapGroupTitle = this.value;
         treeMapUpdate(treeMapData);
@@ -112,11 +119,12 @@ function initialiseDashboardTreeMap() {
       dashboardTreeMapMinTextSize = 5;
       dashboardTreeMapColourBy = "Phylum";
       dashboardTreeMapGroupTitle = "show";
+      dashboardTreeMapShowDomain = 0;
 
       d3.selectAll(".dashboard-tree-map-min-text-size").text(dashboardTreeMapMinTextSize);
 };
 
-
+var dashboardTreeMapShowDomain;
 var dashboardTreeMapLeafCount;
 // var dashboardTreeMapTopNChanged = false;
 var dashboardTreeMapTopNDefault = 250;
@@ -674,7 +682,16 @@ newTreeMap.children.push(hiddenLeavesNode);
 
 function prepareTreeMapData(data,finalData){
 
-  var hideBranchList = [];
+  var domainIdArray = [2,2157,2759,10239];
+
+  var domainToShow = dashboardTreeMapShowDomain;
+  var domainIdsToHide = [];
+  if (domainToShow == 1){
+    domainIdsToHide = [2759,10239]
+  } else if (domainToShow !== 0){
+    domainIdsToHide = domainIdArray.filter(element => element !== domainToShow);
+  }
+
   var newLeafNodeIds = [];
   var higherTaxaIdArray = [];
 
@@ -685,27 +702,35 @@ function prepareTreeMapData(data,finalData){
 
 function recursiveRankFilt(d) {
 
-  if (d.rank < taxonomicRankSelected) {
-    if (d.children && d.children.length > 0) {
-      parentNodeId = d.ncbiID;
-      if (d.name == "root" && dashboardTreeMapRoot == "hide"){
+
+  if (!domainIdsToHide.includes(d.ncbiID)) {
+
+    if (d.rank < taxonomicRankSelected) {
+      if (d.children && d.children.length > 0) {
+        parentNodeId = d.ncbiID;
+        if (d.name == "root" && dashboardTreeMapRoot == "hide"){
+        } else {
+          higherTaxaIdArray.push(d.ncbiID);
+        }
+
+        d.children.forEach(function(c){
+            recursiveRankFilt(c);
+          });
+      } else if (d.name == "unclassified" && dashboardTreeMapUnclassified == "hide"){
+
       } else {
-        higherTaxaIdArray.push(d.ncbiID);
-      }
-
-      d.children.forEach(function(c){
-          recursiveRankFilt(c);
-        });
-    } else if (d.name == "unclassified" && dashboardTreeMapUnclassified == "hide"){
-
-    } else {
-       newLeafNodeIds.push(d.ncbiID);
+         newLeafNodeIds.push(d.ncbiID);
+      };
+    } else if (d.rank == taxonomicRankSelected) {
+        newLeafNodeIds.push(d.ncbiID);
+    } else if (d.rank > taxonomicRankSelected) {
+        newLeafNodeIds.push(parentNodeId);
     };
-  } else if (d.rank == taxonomicRankSelected) {
-      newLeafNodeIds.push(d.ncbiID);
-  } else if (d.rank > taxonomicRankSelected) {
-      newLeafNodeIds.push(parentNodeId);
-  };
+
+
+  }
+
+
 
   if (d.name == "other sequences" && taxonomicRankSelected < 8) {
      newLeafNodeIds.push(d.ncbiID);

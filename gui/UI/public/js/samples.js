@@ -1,7 +1,7 @@
 function initialiseSamplePage() {
 samplePageDataTable = $('#samplePageDataTable').DataTable({
   "language": {
-    "emptyTable": "WARNING: Could not find any MARTi Engine output directories in the 'MARTiSampleDirectory' specified in marti_server_options.txt"
+    "emptyTable": "WARNING: Could not find any MARTi Engine output directories in the 'MARTiSampleDirectory' specified in marti_engine_options.txt"
   },
 "columns": [
   {
