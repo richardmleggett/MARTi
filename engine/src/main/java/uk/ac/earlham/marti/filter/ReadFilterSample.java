@@ -278,19 +278,46 @@ public class ReadFilterSample {
                 if (fastqPathname.toLowerCase().endsWith(".fastq") ||
                     fastqPathname.toLowerCase().endsWith(".fq")) {                
                     br = new BufferedReader(new FileReader(fastqPathname));
+                    if (br == null) {
+                        options.getLog().printlnLogAndScreen("Couldn't open file "+fastqPathname);
+                        System.exit(1);
+                    }
                 } else if ( fastqPathname.toLowerCase().endsWith(".fastq.gz") ||
                             fastqPathname.toLowerCase().endsWith(".fq.gz")) {
                     fileStream = new FileInputStream(fastqPathname);
-                    gzipStream = new GZIPInputStream(fileStream);
-                    decoder = new InputStreamReader(gzipStream, "US-ASCII");
-                    br = new BufferedReader(decoder);                      
-                }
-                
-                if (br == null) {
-                    System.out.println("Ooops shouldn't have got to here without a .fastq or a .fq or a .fastq.gz or a .fq.gz");
+                    if (fileStream != null) {
+                        gzipStream = new GZIPInputStream(fileStream);
+                        if (gzipStream != null) {
+                            decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                            if (decoder != null) {
+                                br = new BufferedReader(decoder);                      
+
+                                if (br == null) {
+                                    options.getLog().printlnLogAndScreen("Couldn't open file "+fastqPathname);
+                                    System.exit(1);
+                                }
+                            } else {
+                                options.getLog().printlnLogAndScreen("Couldn't open decoder for "+fastqPathname);
+                                System.exit(1);
+                            }
+                        } else {
+                            options.getLog().printlnLogAndScreen("Couldn't open GZIP stream for "+fastqPathname);
+                            System.exit(1);
+                        }
+                    } else {
+                        options.getLog().printlnLogAndScreen("Couldn't open filestream for "+fastqPathname);
+                        System.exit(1);
+                    }
+                } else {
+                    options.getLog().printlnLogAndScreen("Unknown suffix for "+fastqPathname);
                     System.exit(1);
                 }
                 
+                if (br == null) {
+                    options.getLog().printlnLogAndScreen("Ooops shouldn't have got to here without a .fastq or a .fq or a .fastq.gz or a .fq.gz");
+                    System.exit(1);
+                }
+                                
                 while (((header = br.readLine()) != null) && (stopProcessingChunks == false)) {
                     if (header.startsWith("@")) {
                         String seq = br.readLine();
