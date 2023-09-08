@@ -57,12 +57,7 @@ public class MARTiEngineOptions implements Serializable {
     private String schedulerName="local";
     private String configFile = null;
     private RawDataDirectory rawDataDir = null;
-    private boolean processPassReads = true;
-    private boolean processFailReads = true;
     private int maxReads = 0;
-    private boolean process2DReads = true;
-    private boolean processTemplateReads = true;
-    private boolean processComplementReads = true;
     private boolean fixRandom = false;
     private long randomSeed = 0;
     private boolean extractingReads = false;
@@ -97,7 +92,7 @@ public class MARTiEngineOptions implements Serializable {
     private transient ThreadPoolExecutor executor;
     private BlastHandler blastHandler = new BlastHandler(this);
     private CentrifugeHandler centrifugeHandler = new CentrifugeHandler(this);
-    private ReadClassifier readClassifier = new ReadClassifier(this);
+    private ReadClassifier readClassifier = null;
     private CentrifugeClassifier centrifugeClassifier = new CentrifugeClassifier(this);
     private ArrayList<BlastProcess> blastProcesses = new ArrayList<BlastProcess>();
     private ArrayList<CentrifugeProcess> centrifugeProcesses = new ArrayList<CentrifugeProcess>();
@@ -154,6 +149,7 @@ public class MARTiEngineOptions implements Serializable {
     private MARTiEngineOptionsFile engineOptionsFile = null;
     private String classifyingProcessName = null;
     private boolean compressBlastFiles = true;
+    private boolean limitToSpecies = false;
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -217,7 +213,6 @@ public class MARTiEngineOptions implements Serializable {
         while (i < (args.length)) {
             if (args[i].equalsIgnoreCase("-config")) {
                 configFile = args[i+1];
-                readProcessFile();
                 i+=2;
             } else if (args[i].equalsIgnoreCase("-queue")) {
                 jobQueue = args[i+1];
@@ -235,36 +230,12 @@ public class MARTiEngineOptions implements Serializable {
             } else if (args[i].equalsIgnoreCase("-maxreads")) {
                 maxReads = Integer.parseInt(args[i+1]);
                 i+=2;
-            } else if (args[i].equalsIgnoreCase("-nofail") || args[i].equalsIgnoreCase("-passonly")) {
-                processPassReads = true;
-                processFailReads = false;  
-                i++;
-            } else if (args[i].equalsIgnoreCase("-nopass") || args[i].equalsIgnoreCase("-failonly")) {
-                processPassReads = false;
-                processFailReads = true;
-                i++;
             } else if (args[i].equalsIgnoreCase("-fasta") || args[i].equalsIgnoreCase("-a")) {
                     readFormat = FASTA;
                 i++;
             } else if (args[i].equalsIgnoreCase("-fastq") || args[i].equalsIgnoreCase("-q")) {
                     readFormat = FASTQ;
                 i++;
-            } else if (args[i].equalsIgnoreCase("-2donly")) {
-                process2DReads = true;
-                processTemplateReads = false;
-                processComplementReads = false;
-                i++;
-            } else if ((args[i].equalsIgnoreCase("-1d")) || 
-                       (args[i].equalsIgnoreCase("-templateonly")) ) {
-                process2DReads = false;
-                processTemplateReads = true;
-                processComplementReads = false;
-                i++;
-            } else if (args[i].equalsIgnoreCase("-complementonly")) {
-                process2DReads = false;
-                processTemplateReads = false;
-                processComplementReads = true;
-                i++;                
             } else if (args[i].equalsIgnoreCase("-fixrandom")) {
                 fixRandom = true;
                 randomSeed = Long.parseLong(args[i+1]);
@@ -334,10 +305,14 @@ public class MARTiEngineOptions implements Serializable {
         engineOptionsFile = new MARTiEngineOptionsFile(this);
         engineOptionsFile.readOptionsFile();
                 
-        if (configFile == null) {
+        if (configFile != null) {
+            readConfigFile();
+        } else {
             System.out.println("Error: you must specify a config file");
             System.exit(1);
         }
+        
+        readClassifier = new ReadClassifier(this);
         
         if (writeConfigMode == true) {
             MARTiConfigFile mcf = new MARTiConfigFile(this);
@@ -572,64 +547,7 @@ public class MARTiEngineOptions implements Serializable {
     public String getAMRDirectory() {
         return sampleDirectory + File.separator + "amr";
     }
-    
-    /**
-     * Check if processing "pass" reads.
-     * @return true to process
-     */
-    public boolean isProcessingPassReads() {
-        return processPassReads;
-    }
-
-    /**
-     * Check if processing "fail" reads.
-     * @return true to process
-     */
-    public boolean isProcessingFailReads() {
-        return processFailReads;
-    }
-    
-    public boolean isProcessingComplementReads() {
-        return processComplementReads;
-    }
-    
-    public boolean isProcessingTemplateReads() {
-        return processTemplateReads;
-    }
-
-    public boolean isProcessing2DReads() {
-        return process2DReads;
-    }
-    
-    public boolean isProcessingReadType(int type) {
-        boolean r = false;
-        
-        switch(type) {
-            case TYPE_ALL:
-                r = true;
-                break;
-            case TYPE_TEMPLATE:
-                r = processTemplateReads;
-                break;
-            case TYPE_COMPLEMENT:
-                r = processComplementReads;
-                break;
-            case TYPE_2D:
-                r = process2DReads;
-                break;
-        }         
-        
-        return r;
-    }
-    
-    public int getNumberOfTypes() {
-        int t = 0;
-        if (processTemplateReads) t++;
-        if (processComplementReads) t++;
-        if (process2DReads) t++;
-        return t;
-    }
-                   
+                                   
     /**
      * Get maximum number of reads (used for debugging)
      * @return maximum number of reads
@@ -746,15 +664,6 @@ public class MARTiEngineOptions implements Serializable {
             f.mkdir();
         }
     }      
-
-    private void checkAndMakeDirectoryWithChildren(String dirname) {
-        checkAndMakeDirectory(dirname);
-        for (int t=0; t<3; t++) {
-            if (this.isProcessingReadType(t)) {
-                checkAndMakeDirectory(dirname + File.separator + MARTiEngineOptions.getTypeFromInt(t));
-            }
-        }        
-    }
     
     // Directory structure
     // fast5
@@ -861,7 +770,7 @@ public class MARTiEngineOptions implements Serializable {
         return id;
     }
         
-    void readProcessFile() {
+    void readConfigFile() {
         BufferedReader br;
         boolean readNextLine = true;
         
@@ -1020,6 +929,10 @@ public class MARTiEngineOptions implements Serializable {
                                 lcaMinQueryCoverage = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("LCAMinCombinedScore") == 0) {
                                 lcaMinCombinedScore = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("LCALimitToSpecies") == 0) {
+                                limitToSpecies = true;
+                            } else if (tokens[0].compareToIgnoreCase("LCADontLimitToSpecies") == 0) {
+                                limitToSpecies = false;
                             } else if (tokens[0].compareToIgnoreCase("LCAMinLength") == 0) {
                                 lcaMinLength = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("ResultsFile") == 0) {
@@ -1096,6 +1009,10 @@ public class MARTiEngineOptions implements Serializable {
     }
     
     public ReadClassifier getReadClassifier() {
+        if (readClassifier == null) {
+            System.out.println("Error: Attempt to get ReadClassifier before initialised - this appears to be a bug. Contact the authors.");
+            System.exit(1);
+        }
         return readClassifier;
     }
     
@@ -1466,5 +1383,9 @@ public class MARTiEngineOptions implements Serializable {
         } catch(IOException e) {
             return "Unknown";
         }
+    }
+    
+    public boolean limitToSpecies() {
+        return limitToSpecies;
     }
 }
