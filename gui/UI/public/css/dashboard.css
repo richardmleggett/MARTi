@@ -62,3 +62,26 @@
 #dashboardAmrTable > thead > tr > th.widerColumn{
   min-width: 260px;
 }
+
+.border-left-marti-green {
+    border-left: 0.25rem solid #B2DF8A !important;
+}
+
+.border-left-marti-blue {
+    border-left: 0.25rem solid #A6CEE3 !important;
+}
+
+.border-left-marti-orange {
+    border-left: 0.25rem solid #FDBF6F !important;
+}
+
+.border-left-marti-yellow {
+    border-left: 0.25rem solid #FEED75 !important;
+}
+
+#dashboardSampleNameEdit {
+  cursor: pointer;
+}
+#dashboardSampleNameEdit:hover {
+  color: #303030
+}

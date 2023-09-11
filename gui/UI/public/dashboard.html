@@ -61,60 +61,94 @@
   </div>
 
 
+  <div class="mt-5 row">
+
+
+                          <div class="col-xl-3 col-md-6 mb-4">
+                              <div class="card border-left-marti-green shadow h-100 py-2">
+                                  <div class="px-3 py-1">
+                                      <div class="align-items-center no-gutters row">
+                                          <div class="col">
+                                              <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                                  Sample ID  <i id="dashboardSampleNameEdit" class="far fa-edit"></i></div>
+                                              <div class="h5 mb-0 text-primary" id="dashboardSampleName"></div>
+                                              <input type="text" class="form-control" id="dashboardSampleNameInput" value="" placeholder="" style="display: none;">
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+
+                          <div class="col-xl-3 col-md-6 mb-4">
+                              <div class="card border-left-marti-blue shadow h-100 py-2">
+                                  <div class="px-3 py-1">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col">
+                                              <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                                  Barcode</div>
+                                              <div class="h5 mb-0 text-primary" id="dashboardInfoCardBarcode">-</div>
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+
+                          <div class="col-xl-3 col-md-6 mb-4">
+                              <div class="card border-left-marti-orange shadow h-100 py-2">
+                                  <div class="px-3 py-1">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-uppercase mb-1">Pipeline
+                                              </div>
+                                              <div class="row no-gutters align-items-center">
+                                                  <div class="col-auto">
+                                                      <div class="h5 mb-0 mr-3 text-primary" id="dashboardInfoCardPipeline">-</div>
+                                                  </div>
+
+                                              </div>
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+
+                          <div class="col-xl-3 col-md-6 mb-4">
+                              <div class="card border-left-marti-yellow shadow h-100 py-2">
+                                  <div class="px-3 py-1">
+                                      <div class="row no-gutters align-items-center">
+                                          <div class="col mr-2">
+                                              <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                                  Engine version</div>
+                                              <div class="h5 mb-0 text-primary" id="dashboardInfoCardEngineVersion">-</div>
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
 
 <!-- Dashboard info panel -->
-<div class="row mt-5">
+<div class="row">
 
   <div class="col mb-4">
 
     <div class="card shadow">
 
       <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Sample</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Reads</h6>
       </div>
 
           <div class="card-body">
 
       <div class="row">
-
-        <div class="col">
-
-            <div class="row">
-              <div class="col-md-6 text-center">
-                <h5 class="">Sample ID</h5>
-                <h4 class="text-primary" id="dashboardSampleName"></h4>
-              </div>
-
-              <div class="col-md-6 text-center">
-                <h5 class="">Analysis status</h5>
-                <h4 class="text-primary" id="dashboardInfoCardMartiStatus"></h4>
-              </div>
-
-            </div>
-
-            <div class="row mb-3">
-            </div>
-
-            <div class="row">
-
-              <div class="col-md-6 text-center">
-                <h5 class="">Pipeline</h5>
-                <h4 class="text-primary" id="dashboardInfoCardPipeline"></h4>
-              </div>
-
-              <div class="col-md-6 text-center">
-                <h5 class="">Basecalled reads</h5>
-                <h4 class="text-primary" id="dashboardInfoCardReadsSequenced"></h4>
-              </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-12 d-xl-none">
-        <hr/>
-        </div>
 
         <div class="col-12 col-xl-auto">
 
@@ -124,10 +158,10 @@
             <div class="col-md-6 col-xl-auto" >
               <div class="row">
 
-                <div class="col-3 pl-2">
+                <div class="col-3 col-xl-1 pl-2">
                 </div>
 
-                <div class="col" id="dashboardReadsDonutLegend">
+                <div class="col-9 col-xl-11" id="dashboardReadsDonutLegend">
                 </div>
 
 
@@ -145,6 +179,89 @@
           </div>
 
         </div>
+
+        <div class="col-12 d-xl-none">
+        <hr/>
+        </div>
+
+        <div class="col">
+
+          <div class="row">
+
+            <!-- <div class="col-md-6 text-center"> -->
+              <div class="col text-center">
+                <h5 class="">Basecalled reads</h5>
+                <h4 class="text-primary" id="dashboardInfoCardReadsSequenced">-</h4>
+              <!-- </div> -->
+
+              <div class="row mb-3">
+              </div>
+
+              <!-- <div class="col"> -->
+              <h5 class="">Database</h5>
+              <h4 class="text-primary" id="dashboardInfoCardDatabase">-</h4>
+              </div>
+
+            <!-- </div> -->
+
+            <div class="col text-center">
+              <h5 class="">Classified reads</h5>
+              <h4 class="text-primary" id="dashboardInfoCardReadsClassified">-</h4>
+
+            <div class="row mb-3">
+            </div>
+
+            <h5 class="">Unclassified reads</h5>
+            <h4 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h4>
+            </div>
+
+            <!-- <div class="col-md-6 text-center">
+              <h5 class="">Classification DB</h5>
+              <h4 class="text-primary" id="dashboardInfoCardDatabase">-</h4>
+            </div>
+
+            <div class="col-md-6 text-center">
+              <h5 class="">Unclassified reads</h5>
+              <h4 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h4>
+            </div> -->
+
+          </div>
+
+            <!-- <div class="row">
+              <div class="col-md-6 text-center">
+                <h5 class="">Basecalled reads</h5>
+                <h4 class="text-primary" id="dashboardInfoCardReadsSequenced">-</h4>
+              </div>
+
+              <div class="col-md-6 text-center">
+                <h5 class="">Classified reads</h5>
+                <h4 class="text-primary" id="dashboardInfoCardReadsClassified">-</h4>
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-6 text-center">
+                <h5 class="">Classification DB</h5>
+                <h4 class="text-primary" id="dashboardInfoCardDatabase">-</h4>
+              </div>
+
+              <div class="col-md-6 text-center">
+                <h5 class="">Unclassified reads</h5>
+                <h4 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h4>
+              </div>
+
+            </div> -->
+
+        </div>
+
+
+
+
 
 
       </div>
