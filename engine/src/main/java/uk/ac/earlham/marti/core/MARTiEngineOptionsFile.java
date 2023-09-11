@@ -58,11 +58,16 @@ public class MARTiEngineOptionsFile {
                                     options.setTaxonomyDir(taxonomyDir);
                                 }
                             } else if ((tokens[0].compareToIgnoreCase("MinKNOWRunDirectory")==0) ||
-                                       (tokens[0].compareToIgnoreCase("MARTiSampleDirectory")==0)) {
+                                       (tokens[0].compareToIgnoreCase("MARTiSampleDirectory")==0) ||
+                                       (tokens[0].compareToIgnoreCase("Port")==0) ||
+                                       (tokens[0].compareToIgnoreCase("https")==0) ||
+                                       (tokens[0].compareToIgnoreCase("Key")==0) ||
+                                       (tokens[0].compareToIgnoreCase("Certificate")==0))
+                            {
                                 System.out.println("Ignoring GUI option "+tokens[0]);
                             } else if (!tokens[0].startsWith("#")) {                                
-                                System.out.println("ERROR: Unknown token "+tokens[0]);
-                                System.exit(1);
+                                System.out.println("ERROR: Unknown token in marti_engine_options "+tokens[0]);
+                                System.out.println("       Token is being ignored");
                             }                                                     
                         }
                     }
