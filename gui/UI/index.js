@@ -33,7 +33,6 @@ if (argv.options) {
     console.log("Warning: Could not find marti_engine_options.txt");
   }
 
-
 engineOptionsObject = {processes:[]};
 
 try {
@@ -44,7 +43,6 @@ try {
   var currentProcess = {text:""};
   lines.forEach((line) => {
       if(line.charAt(0) != '#') {
-
         if (newProcess == true) {
           if (line == "") {
             newProcess = false;
@@ -98,12 +96,10 @@ try {
     currentProcess = {text:""};
   }
 
-
 if(processFound == false) {
     console.log("Warning: Could not find any processes in " + engineOptionsPath);
 }
 } catch (err) {
-
 }
 
 function checkIfValidPortnumber(num) {
