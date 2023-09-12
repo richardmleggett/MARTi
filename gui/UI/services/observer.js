@@ -336,7 +336,15 @@ class Observer extends EventEmitter {
 
           var idFileContent = await fsExtra.readFile(filePath);
 
-          idFileContent = JSON.parse(idFileContent);
+          // idFileContent = JSON.parse(idFileContent);
+
+          try {
+            idFileContent = JSON.parse(idFileContent);
+          } catch (error) {
+            // fsExtra.unlinkSync(filePath);
+            console.error(error);
+            return;
+          }
 
           var split = filePath.split(sep);
           var dir = split.slice(0,-2).join('/');

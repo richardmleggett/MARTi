@@ -43,7 +43,7 @@ public class ReadClassifier {
     }
  
     public synchronized void initialise() {                    
-        lcaParseOptions = new LCAParseOptions(options.getTaxonomyDirectory(), options.getAccessionMap(), "nanook", true, options.getLCAMaxHits(), options.getLCAScorePercent(), options.getLCAMinIdentity(), options.getLCAMinQueryCoverage(), options.getLCAMinCombinedScore(), options.getLCAMinLength());
+        lcaParseOptions = new LCAParseOptions(options.getTaxonomyDirectory(), options.getAccessionMap(), "nanook", options.limitToSpecies(), options.getLCAMaxHits(), options.getLCAScorePercent(), options.getLCAMinIdentity(), options.getLCAMinQueryCoverage(), options.getLCAMinCombinedScore(), options.getLCAMinLength());
         taxonomy = new Taxonomy(options, lcaParseOptions, options.getTaxonomyDirectory() + "/nodes.dmp", options.getTaxonomyDirectory() + "/names.dmp"); 
     }
     
@@ -80,7 +80,7 @@ public class ReadClassifier {
 
         if (exitValue != 0) {
             completed = false;
-            //options.getLog().println("  Exit value was "+exitValue);
+            options.getLog().println("  checkBLASTCompleted exit value was "+exitValue + " so stopping");
         } else {
             options.getLog().println("Checking BLAST log for errors "+blastLogFilename);
             try {
@@ -91,14 +91,17 @@ public class ReadClassifier {
                     br = new BufferedReader(new FileReader(blastLogFilename));
                     while ((line = br.readLine()) != null) {
                         if (line.toLowerCase().contains("error")) {
-                            options.getLog().printlnLogAndScreen("Error: Stopping due to error message in "+blastLogFilename);
-                            completed = false;
+                            options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
+                            options.getLog().printlnLogAndScreen("Message is "+line);
+                            options.getLog().printlnLogAndScreen("Please check results carefully.");
+                            //completed = false;
                         }
                     }
                     br.close();            
                 } else {
                     options.getLog().println("WARNING: Couldn't find BLAST log "+blastLogFilename);
                     options.getLog().println("This is usually a bad sign, but continuing to run.");
+                    options.getLog().printlnLogAndScreen("Please check results carefully.");
                 }
             } catch (Exception e) {
                 System.out.println("checkBLASTCompleted exception");

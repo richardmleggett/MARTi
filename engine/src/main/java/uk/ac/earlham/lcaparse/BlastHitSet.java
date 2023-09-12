@@ -96,7 +96,7 @@ public class BlastHitSet implements LCAHitSet {
         }
         
         if (alignmentsToRemove.size() > 0) {
-            System.out.println("--- TEMPORARY DEBUG --- Removing "+alignmentsToRemove.size()+ "alignments");
+            //System.out.println("Removing "+alignmentsToRemove.size()+ " alignments from "+queryName+" which fail bitscore threshold");
             alignments.removeAll(alignmentsToRemove);
         }
     }
