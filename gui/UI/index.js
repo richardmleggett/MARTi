@@ -149,58 +149,6 @@ if (argv.v || argv.version) {
   process.exit();
 }
 
-// var serverOptionsPath = "";
-// if(fsExtra.existsSync("./marti_server_options.txt")) {
-//   serverOptionsPath = "./marti_server_options.txt";
-// } else if(fsExtra.existsSync(homedir + "/marti_server_options.txt")) {
-//   serverOptionsPath = homedir + "/marti_server_options.txt";
-// } else if (fsExtra.existsSync(homedir + "/.marti_server_options.txt")) {
-//   serverOptionsPath = homedir + "/.marti_server_options.txt";
-// } else {
-//   console.log("Warning: Could not find marti_server_options.txt.");
-//   console.log("You must have the file marti_server_options.txt in your home directory to start new analyses.");
-// }
-
-// try {
-//   const MARTiServerOptions = fsExtra.readFileSync(serverOptionsPath, 'UTF-8');
-//   const lines = MARTiServerOptions.split(/\r?\n/);
-//   lines.forEach((line) => {
-//       if(line.charAt(0) != '#') {
-//         const fields = line.split("\t");
-//         if(fields[0] == "MinKNOWRunDirectory") {
-//           serverOptions["MinKNOWRunDirectory"] = fields[1];
-//         } else if(fields[0] == "MARTiSampleDirectory") {
-//           const dirs = fields[1].split(":");
-//           for (const dir of dirs) {
-//             var finalDir;
-//             if (dir.endsWith('/')){
-//               finalDir = dir.slice(0, -1);
-//             } else {
-//               finalDir = dir;
-//             };
-//             serverOptions["MARTiSampleDirectory"].push(finalDir);
-//           }
-//
-//         } else if (fields[0] == "BlastDatabaseDirectory") {
-//           serverOptions["BlastDatabaseDirectory"] = fields[1];
-//         } else if (fields[0] == "TaxonomyDirectory") {
-//           serverOptions["TaxonomyDirectory"] = fields[1];
-//         } else if (fields[0] == "MaxSimultaneousAnalyses") {
-//           serverOptions["MaxSimultaneousAnalyses"] = parseInt(fields[1]);
-//         }
-//       }
-//   });
-//   if( serverOptions["MinKNOWRunDirectory"] == "" ||
-//       serverOptions["MARTiSampleDirectory"].length < 1 ||
-//       serverOptions["BlastDatabaseDirectory"] == "" ||
-//       serverOptions["TaxonomyDirectory"] == "") {
-//     console.log("Warning: Could not find all fields in " + serverOptionsPath + ".");
-//     console.log("Please check this file and restart to start new analyses.");
-//   }
-// } catch (err) {
-//
-// }
-
 function getSubDirectories(path) {
   return fsExtra.readdirSync(path).filter(function (file) {
     return fsExtra.statSync(path+'/'+file).isDirectory();
@@ -283,40 +231,6 @@ function makeConfigFileString(form_object) {
               configFileString += "\n";
         }
   }
-
-  // if(form_object.hasOwnProperty("processName")) {
-  //   if(Array.isArray(form_object["processName"])) {
-  //   for(var i = 0; i < form_object["processName"].length; i++) {
-  //       configFileString += "BlastProcess\n";
-  //       configFileString += "\tName:" + form_object["processName"][i] + "\n";
-  //       configFileString += "\tProgram:" + form_object["blastProgram"][i] + "\n";
-  //       configFileString += "\tDatabase:" + form_object["databaseDir"][i] + "/" + form_object["blastDatabase"][i] + "\n";
-  //       if(form_object["taxaFilter"][i].length > 0) {
-  //         configFileString += "\tTaxaFilter:" + form_object["taxaFilter"][i] + "\n";
-  //       }
-  //       configFileString += "\tMaxE:" + form_object["maxE"][i] + "\n";
-  //       configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"][i] + "\n";
-  //       configFileString += "\tBlastThreads:" + form_object["blastThreads"][i] + "\n";
-  //       if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"][i] == "on") {
-  //         configFileString += "\tUseToClassify\n";
-  //       }
-  //     }
-  //   } else {
-  //     configFileString += "BlastProcess\n";
-  //     configFileString += "\tName:" + form_object["processName"] + "\n";
-  //     configFileString += "\tProgram:" + form_object["blastProgram"] + "\n";
-  //     configFileString += "\tDatabase:" + form_object["databaseDir"] + "/" + form_object["blastDatabase"] + "\n";
-  //     if(form_object["taxaFilter"].length > 0 ) {
-  //       configFileString += "\tTaxaFilter:" + form_object["taxaFilter"] + "\n";
-  //     }
-  //     configFileString += "\tMaxE:" + form_object["maxE"] + "\n";
-  //     configFileString += "\tMaxTargetSeqs:" + form_object["maxTargetSeqs"] + "\n";
-  //     configFileString += "\tBlastThreads:" + form_object["blastThreads"] + "\n";
-  //     if(form_object.hasOwnProperty("useToClassify") && form_object["useToClassify"] == "on") {
-  //       configFileString += "\tUseToClassify\n";
-  //     }
-  //   }
-  // }
   return configFileString;
 }
 
