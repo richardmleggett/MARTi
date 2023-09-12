@@ -31,8 +31,8 @@ if (argv.options) {
     engineOptionsPath = homedir + "/.marti_engine_options.txt";
   } else {
     console.log("Warning: Could not find marti_engine_options.txt");
-    // console.log("You must have the file marti_engine_options.txt in your home directory to start new analyses.");
   }
+
 
 engineOptionsObject = {processes:[]};
 
@@ -98,10 +98,12 @@ try {
     currentProcess = {text:""};
   }
 
+
 if(processFound == false) {
     console.log("Warning: Could not find any processes in " + engineOptionsPath);
 }
 } catch (err) {
+
 }
 
 function checkIfValidPortnumber(num) {
@@ -112,33 +114,26 @@ function checkIfValidPortnumber(num) {
 //Check for port.
 // const portCandidate = argv.p || 3000;
 if (serverOptions["Port"]) {
-  var selectedPort = serverOptions["Port"];
+  if(checkIfValidPortnumber(serverOptions["Port"])) {
+    var selectedPort = serverOptions["Port"];
 } else {
   var selectedPort = 3000;
-}
-
-if (selectedPort != 3000) {
-  if (checkIfValidPortnumber(selectedPort)){
-    // selectedPort = portCandidate;
-  } else {
-    selectedPort = 3000;
-    console.log("Invalid entry for port. Set to default (3000)");
-  }
-}
+  console.log("No or invalid entry for port. Set to default (3000)");
+}}
 
 //Check if https is true
 if (serverOptions["https"].toLowerCase() === 'true') {
-  //Create https server and include certificate.
-  const httpsOptions = {
-    key: fsExtra.readFileSync(serverOptions["Key"]),
-    cert: fsExtra.readFileSync(serverOptions["Certificate"]),
-  };
-  var http = require('https').createServer(httpsOptions, app);
-} else { 
-  var http = require('http').createServer(app);
-}
-
-var io = require('socket.io')(http);
+    //Create https server and include certificate.
+    const httpsOptions = {
+      key: fsExtra.readFileSync(serverOptions["Key"]),
+      cert: fsExtra.readFileSync(serverOptions["Certificate"]),
+    };
+    var http = require('https').createServer(httpsOptions, app);
+  } else { 
+    var http = require('http').createServer(app);
+  }
+  
+  var io = require('socket.io')(http);
 
 const restrictedMode = argv.r || false;
 
@@ -689,15 +684,22 @@ io.on('connect', function(socket){
     var originalId = request.originalId;
     var sampleId = request.pathName;
     var runId = request.pathRun;
+
     var dir;
     var idFileContent={};
       if (sampleMetaDict[runId]) {
-        dir = sampleMetaDict[runId][sampleId]["sample"]["dir"]
+        dir = sampleMetaDict[runId][sampleId]["sample"]["dir"];
         var idFilePath = dir + "/" + runId + "/ids.json";
 
         if (fsExtra.existsSync(idFilePath)) {
-          idFileContent = fsExtra.readFileSync(idFilePath);
-          idFileContent = JSON.parse(idFileContent);
+          idFileContentTemp = fsExtra.readFileSync(idFilePath);
+          try {
+            idFileContentTemp = JSON.parse(idFileContentTemp);
+            idFileContent = idFileContentTemp;
+
+          } catch (error) {
+            console.error(error);
+          }
         }
 
         idFileContent[originalId] = newId;
@@ -728,7 +730,6 @@ io.on('connect', function(socket){
           runId: runId
         };
         io.to(id).emit('current-dashboard-sample-response', clientData[id].selectedDashboardSample);
-        // console.log(`[${new Date().toLocaleString()}][${id}] Dashboard sample selected: ${runId} - ${sampleId}`);
   });
 
   socket.on('selected-compare-samples', samples => {
@@ -740,7 +741,6 @@ io.on('connect', function(socket){
       for (const sample of samples) {
         sampleNames.push(sample.name);
       }
-      // console.log(`[${new Date().toLocaleString()}][${id}] Compare samples selected: ${sampleNames}`);
   });
 
   socket.on('current-dashboard-sample-request', request => {
