@@ -107,15 +107,22 @@ function checkIfValidPortnumber(num) {
   return regexExp.test(num);
 }
 
-//Check for port.
-// const portCandidate = argv.p || 3000;
-if (serverOptions["Port"]) {
-  if(checkIfValidPortnumber(serverOptions["Port"])) {
-    var selectedPort = serverOptions["Port"];
-} else {
-  var selectedPort = 3000;
-  console.log("No or invalid entry for port. Set to default (3000)");
-}}
+
+  if(serverOptions["Port"] && checkIfValidPortnumber(serverOptions["Port"])) {
+      var selectedPort = serverOptions["Port"];
+  } else {
+    var selectedPort = 3000;
+    console.log("No or invalid entry for port. Set to default (3000)");
+  }
+
+  //Check for port flag and override server options if valid port provided.
+  const portFlag = argv.p;
+  if (typeof portFlag !== 'undefined') {
+    if (checkIfValidPortnumber(portFlag)) {
+      var selectedPort = portFlag;
+    }
+  }
+
 
 //Check if https is true
 if (serverOptions["https"].toLowerCase() === 'true') {
@@ -125,15 +132,15 @@ if (serverOptions["https"].toLowerCase() === 'true') {
       cert: fsExtra.readFileSync(serverOptions["Certificate"]),
     };
     var http = require('https').createServer(httpsOptions, app);
-  } else { 
+  } else {
     var http = require('http').createServer(app);
   }
-  
+
   var io = require('socket.io')(http);
 
 const restrictedMode = argv.r || false;
 
-const martiVersion = "0.19.1";
+const martiVersion = "0.19.2";
 
 if (argv.v || argv.version) {
   console.log(martiVersion);
