@@ -1,47 +1,22 @@
 #!/usr/bin/env node
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
 const { v4: uuidv4 } = require('uuid');
 const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 
 var argv = require('minimist')(process.argv.slice(2));
 
-function checkIfValidPortnumber(num) {
-  const regexExp = /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/gi;
-  return regexExp.test(num);
-}
-
-// const portCandidate = argv.p || 3000;
-var selectedPort = argv.p || 3000;
-
-if (selectedPort != 3000) {
-  if (checkIfValidPortnumber(selectedPort)){
-    // selectedPort = portCandidate;
-  } else {
-    selectedPort = 3000;
-  }
-}
-
-const restrictedMode = argv.r || false;
-
-const martiVersion = "0.19.1";
-
-
-if (argv.v || argv.version) {
-  console.log(martiVersion);
-  process.exit();
-}
-
 var serverOptions = {};
 serverOptions["MinKNOWRunDirectory"] = "";
 serverOptions["MARTiSampleDirectory"] = [];
 serverOptions["TaxonomyDirectory"] = "";
 serverOptions["MaxSimultaneousAnalyses"] = 10;
+serverOptions["Port"] = "";
+serverOptions["https"] = "false";
+serverOptions["Key"] = "";
+serverOptions["Certificate"] = "";
 var numAnalyses = 0;
-
 
 var engineOptionsPath = "";
 if (argv.options) {
@@ -58,7 +33,6 @@ if (argv.options) {
     console.log("Warning: Could not find marti_engine_options.txt");
   }
 
-
 engineOptionsObject = {processes:[]};
 
 try {
@@ -69,7 +43,6 @@ try {
   var currentProcess = {text:""};
   lines.forEach((line) => {
       if(line.charAt(0) != '#') {
-
         if (newProcess == true) {
           if (line == "") {
             newProcess = false;
@@ -92,9 +65,7 @@ try {
           processFound = true;
         } else {
           const fields = line.split(":");
-          if(fields[0] == "MinKNOWRunDirectory") {
-            serverOptions["MinKNOWRunDirectory"] = fields[1];
-          } else if(fields[0] == "MARTiSampleDirectory") {
+          if(fields[0] == "MARTiSampleDirectory") {
             const dirs = fields[1].split(";");
             for (const dir of dirs) {
               var finalDir;
@@ -105,11 +76,10 @@ try {
               };
               serverOptions["MARTiSampleDirectory"].push(finalDir);
             }
-
-          } else if (fields[0] == "TaxonomyDir") {
-            serverOptions["TaxonomyDirectory"] = fields[1];
           } else if (fields[0] == "MaxSimultaneousAnalyses") {
             serverOptions["MaxSimultaneousAnalyses"] = parseInt(fields[1]);
+          } else {
+            serverOptions[fields[0]] = fields[1];
           }
         };
       }
@@ -126,15 +96,49 @@ try {
     currentProcess = {text:""};
   }
 
-
 if(processFound == false) {
     console.log("Warning: Could not find any processes in " + engineOptionsPath);
 }
 } catch (err) {
-
 }
 
+function checkIfValidPortnumber(num) {
+  const regexExp = /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/gi;
+  return regexExp.test(num);
+}
 
+//Check for port.
+// const portCandidate = argv.p || 3000;
+if (serverOptions["Port"]) {
+  if(checkIfValidPortnumber(serverOptions["Port"])) {
+    var selectedPort = serverOptions["Port"];
+} else {
+  var selectedPort = 3000;
+  console.log("No or invalid entry for port. Set to default (3000)");
+}}
+
+//Check if https is true
+if (serverOptions["https"].toLowerCase() === 'true') {
+    //Create https server and include certificate.
+    const httpsOptions = {
+      key: fsExtra.readFileSync(serverOptions["Key"]),
+      cert: fsExtra.readFileSync(serverOptions["Certificate"]),
+    };
+    var http = require('https').createServer(httpsOptions, app);
+  } else { 
+    var http = require('http').createServer(app);
+  }
+  
+  var io = require('socket.io')(http);
+
+const restrictedMode = argv.r || false;
+
+const martiVersion = "0.19.1";
+
+if (argv.v || argv.version) {
+  console.log(martiVersion);
+  process.exit();
+}
 
 function getSubDirectories(path) {
   return fsExtra.readdirSync(path).filter(function (file) {
