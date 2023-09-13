@@ -4,28 +4,38 @@ function export_as_csv(csv,filename) {
   saveAs(csvData, filename+'.csv');
 }
 
+function save_as_svg_with_style(id, css, filename, resetWidth, remove) {
+  fetch(css)
+    .then(response => response.text())
+    .then(text => {
+      var svg_data = document.getElementById(id).innerHTML;
+      var head = '<svg id="' + id + 'Export" title="graph" version="1.1" xmlns="http://www.w3.org/2000/svg">';
 
-function save_as_svg_with_style(id,css,filename,resetWidth,remove){
-fetch(css)
-.then(response => response.text())
-.then(text => {
-    var svgElement = document.getElementById(id);
-    var svg_data = document.getElementById(id).innerHTML;
-    var head = '<svg id="'+ id +'Export" title="graph" version="1.1" xmlns="http://www.w3.org/2000/svg">';
-    var style = "<style>" + text + "</style>";
-    var full_svg = head +  style + svg_data + "</svg>";
+      //Remove any fonts containing "Emoji" from CSS style.
+      var modifiedText = text.replace(/(font-family:\s*("[^"]+"|'[^']+'|[^,]+),[^}]+)}/g, function (match, fontDeclaration) {
+        var modifiedFontDeclaration = fontDeclaration.replace(/("[^"]+"|'[^']+'|[^,]+)(\s*,\s*("[^"]+"|'[^']+'|[^,]+))/g, function (match, font1, font2) {
+          var fonts = [font1, font2].filter(function (font) {
+            return !/Emoji/.test(font);
+          });
+          return fonts.join(',').replace(',,', ',')
+        });
+        return modifiedFontDeclaration + '}';
+      });
 
-    var blob = new Blob([full_svg], {type: "image/svg+xml"});
-    saveAs(blob, filename+".svg");
+      var style = "<style>" + modifiedText + "</style>";
+      var full_svg = head + style + svg_data + "</svg>";
 
-    if (typeof remove !== 'undefined') {
-      $("#"+remove).remove();
-    }
-    if(resetWidth == true) {
-      $("#"+id).attr('width','100%');
-    }
-})
-};
+      var blob = new Blob([full_svg], {type: "image/svg+xml"});
+      saveAs(blob, filename+".svg");
+
+      if (typeof remove !== 'undefined') {
+        $("#"+remove).remove();
+      }
+      if (resetWidth == true) {
+        $("#"+id).attr('width', '100%');
+      }
+    });
+}
 
 function save_as_raster_with_style(id,css,filename,scale,type,resetWidth,remove){
 fetch(css)
