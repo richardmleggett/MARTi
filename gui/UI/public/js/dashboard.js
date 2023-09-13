@@ -6,14 +6,6 @@ function initialiseDashboardPage() {
         { "title": "Rank" },
         { "title": "Read Count" },
         { "title": "Read Proportion"},
-        // {
-        // "title": "View alignments",
-        // "data": null,
-        // "orderable": false,
-        // "searchable": false,
-        // className: "moreInfo",
-        // "defaultContent": ""
-        // },
         null
       ],
       "columnDefs": [
@@ -164,12 +156,7 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
   });
 
 
-  // d3.select('#downloadClassifications').on('click', function(){
-  //   window.open("/"+ dashboardSampleRunId + "/"+ dashboardSampleName + "/" + lcaAbundanceDashboard + "/csv");
-  // });
-
   d3.select('#downloadClassifications').on('click', function(){
-  // console.log(dashboardTaxaData);
   var csvToExport = convertDashboardDataToCSV(dashboardTaxaData);
   var date = getDate() + "_" + getTime();
   var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
@@ -371,10 +358,57 @@ $('input.toggle-vis').on('click', function (e) {
     column.visible(!column.visible());
 });
 
+$("#dashboardSampleNameEdit").on("click", function() {
+  $("#dashboardSampleNameInput").show();
+  $("#dashboardSampleName").hide();
+  $("#dashboardSampleNameInput").focus();
+});
+
+$("#dashboardSampleNameInput").on("blur", function() {
+
+  $("#dashboardSampleNameInput").hide();
+  $("#dashboardSampleName").show();
+  $("#dashboardSampleName").text(dashboardSampleNameUserInput);
+});
+
+
+$("#dashboardSampleNameInput").on('input', function(){
+
+    var inputName = $("#dashboardSampleNameInput").val();
+    var placeholder = $("#dashboardSampleNameInput").attr('placeholder');
+    var setId;
+    if (inputName != ""){
+        setId = inputName;
+    } else {
+        setId = placeholder;
+    }
+
+    dashboardSampleNameUserInput = setId;
+
+    socket.emit('update-sample-name-request',{
+      clientId: uuid,
+      newId: setId,
+      pathRun: dashboardSampleData.pathRun,
+      pathName: dashboardSampleData.pathName,
+      originalId: placeholder
+    });
+  });
+
+  if (restrictedMode){
+      $("#dashboardSampleNameEdit").hide();
+  }
 
 };
 
+function prepareSampleNameInput(data){
 
+  $("#dashboardSampleNameInput").val(data.id);
+  if(data.hasOwnProperty("originalId")){
+    $("#dashboardSampleNameInput").attr('placeholder', data.originalId);
+  } else {
+    $("#dashboardSampleNameInput").attr('placeholder', data.id);
+  }
+}
 
 var taxonomicRankSelected = 10;
 var taxonomicRankSelectedDashboardText = "All Levels";
@@ -390,12 +424,51 @@ var dashboardAccumulationDataAvailable = false;
 var lcaAbundanceDashboard = "0.1";
 var lcaAbundanceDashboardUnformatted = "0.1%";
 
+var dashboardSampleNameUserInput;
+
 socket.on('dashboard-meta-response', function(data) {
   dashboardSampleData = data.sample;
+  let martiVersion = data.meta.martiVersion;
+
   $("#dashboardSampleName").text(dashboardSampleData.id);
+
+  prepareSampleNameInput(dashboardSampleData);
+
+  let displaybc;
+  if (dashboardSampleData.hasOwnProperty("barcode")){
+    if (dashboardSampleData.barcode == 0){
+      displaybc = "None";
+    } else {
+      displaybc = "BC" + dashboardSampleData.barcode;
+    }
+  }
+  $("#dashboardInfoCardBarcode").text(displaybc);
+
+  $("#dashboardInfoCardEngineVersion").text(martiVersion);
+  $("#dashboardInfoCardPipeline").text(dashboardSampleData.analysis.pipeline);
+
   $("#dashboardInfoCardMartiStatus").text(dashboardSampleData.martiStatus);
+
   $("#dashboardInfoCardReadsSequenced").text(thousandsSeparators(dashboardSampleData.readsPassBasecall));
-  $("#dashboardInfoCardPipeline").text(thousandsSeparators(dashboardSampleData.analysis.pipeline));
+
+  $("#dashboardInfoCardReadsClassified").text(thousandsSeparators(dashboardSampleData.readsWithClassification));
+
+  let readsUnclassified = dashboardSampleData.readsAnalysed - dashboardSampleData.readsWithClassification;
+
+  $("#dashboardInfoCardReadsUnclassified").text(thousandsSeparators(readsUnclassified));
+
+  let classificationDb;
+  let dbPath = dashboardSampleData.analysis.classification.database;
+  let dbPathSegments = dbPath.split('/');
+  if (dbPathSegments.length > 1){
+    classificationDb = dbPathSegments.pop() || dbPathSegments.pop();
+  } else {
+    classificationDb = "-";
+  }
+
+  $("#dashboardInfoCardDatabase").text(classificationDb);
+
+
   plotReadsDonut(dashboardSampleData);
 
 });
@@ -839,7 +912,15 @@ $('#taxonomicLevelSelectorMenu').on( 'click', 'a.rank', function () {
             taxonomicRankSelected = taxonomicLevelDict[taxonomicRankSelectedDashboardText];
             taxonomicRankChanged = true;
             treeUpdate(root);
-            treeMapUpdate(treeMapData);
+            if(taxonomicRankSelectedDashboardText == "Domain"){
+              $("#dashboardTreeMapColourBy").prop("selectedIndex",1);
+              dashboardTreeMapColourBy = $("#dashboardTreeMapColourBy").val();
+              treeMapUpdate(treeMapData);
+            } else {
+              $("#dashboardTreeMapColourBy").prop("selectedIndex",0);
+              dashboardTreeMapColourBy = $("#dashboardTreeMapColourBy").val();
+              treeMapUpdate(treeMapData);
+            }
             taxonomicRankChanged = false;
             globUpdate(globDonutData);
             socket.emit('dashboard-accumulationChart-request',{

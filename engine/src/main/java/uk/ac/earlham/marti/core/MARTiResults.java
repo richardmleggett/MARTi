@@ -383,7 +383,7 @@ public class MARTiResults {
             //ignore header line
             String line = br.readLine();
             while ((line = br.readLine()) != null) {
-                String[] fields = line.split("\\s+");
+                String[] fields = line.split("\\t");
                 //TODO: min hit length
                 long taxid = Long.parseLong(fields[2]);
                 taxonomy.countRead(bc, taxid);

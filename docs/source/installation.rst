@@ -1,9 +1,12 @@
 .. _installation:
 
-Download and installation=========================
-Overview
+Download and installation
+=========================
+
+Overview
 --------
-MARTi consists of two main components:
+
+MARTi consists of two main components:
 
 * a back-end which performs the analysis and can be a single desktop/laptop or a high performance cluster.
 * a lightweight web-based front-end which allows users to view analysis results.
@@ -37,7 +40,11 @@ The easiest way to keep up to date with MARTi is to clone the GitHub repository.
 ``git clone https://github.com/richardmleggett/MARTi.git``
 
 Alternatively, you can `visit GitHub <https://github.com/richardmleggett/MARTi>`_ and download a zip file with everything in it.
-MARTi Engine (back-end) installation------------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
+
+MARTi Engine (back-end) installation
+------------------------------------
+
+Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 
 The marti script inside the bin directory is used to launch MARTi Engine. Open this in a text editor and change line 6 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
 
@@ -59,8 +66,13 @@ You can then check the MARTi Engine is installed by typing:
 
 If you see the help text, all is ok.
 
-MARTi GUI (front-end) installation----------------------------------Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
-The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
+
+MARTi GUI (front-end) installation
+----------------------------------
+
+Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
+
+The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
 ``MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui``
 
@@ -85,9 +97,12 @@ Then install the GUI server dependencies by running the following command from i
 
 To start the GUI server, type
 
-``marti_gui [port]``
+``marti_gui --options [/path/to/marti_engine_options.txt]``
 
-Where port is an optional parameter to specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+The following parameters are specific to the GUI:
+
+``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
 
 To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
