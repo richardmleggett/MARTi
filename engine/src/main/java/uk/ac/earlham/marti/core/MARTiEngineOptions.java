@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -142,6 +143,7 @@ public class MARTiEngineOptions implements Serializable {
     private String blastProcessNames = null;
     private String cardDBPath = null;
     private Hashtable<Integer, String> barcodeIDs = new Hashtable<Integer, String>();
+    private Hashtable<Integer, String> barcodeUUIDs = new Hashtable<Integer, String>();
     private Hashtable<Integer, SampleMetaData> metaData = new Hashtable<Integer, SampleMetaData>();
     private BlastProcess vfdbBlastProcess = null;    
     private HashMap<Integer, String> sampleIdByBarcode = new HashMap<Integer,String>();
@@ -755,6 +757,19 @@ public class MARTiEngineOptions implements Serializable {
             getLog().println("Got barcode ID: "+value);
         }
     }
+
+    private void processBarcodeUUID(String tag, String value) {
+        int bc = Integer.parseInt(tag.substring(11));
+        
+        if (bc > 0) {
+            if (barcodeUUIDs.containsKey(bc)) {
+                getLog().printlnLogAndScreen("Warning: already seen UUID for barcode "+bc);
+            } 
+            
+            barcodeUUIDs.put(bc, value);
+            getLog().println("Got barcode UUID: "+value);
+        }
+    }
     
     public String getSampleIdByBarcode(int bc) {
         String id = sampleName;
@@ -769,7 +784,22 @@ public class MARTiEngineOptions implements Serializable {
         
         return id;
     }
+
+    public String getSampleUUIDByBarcode(int bc) {
+        String id = null;
         
+        if (barcodeUUIDs.containsKey(bc)) {
+            id = barcodeUUIDs.get(bc);
+        } else {
+            String s = sampleName + "_bc" + bc;
+            UUID uuid = UUID.nameUUIDFromBytes(s.getBytes());
+            id = uuid.toString();
+        }
+        
+        return id;
+    }    
+    
+    
     void readConfigFile() {
         BufferedReader br;
         boolean readNextLine = true;
@@ -945,6 +975,8 @@ public class MARTiEngineOptions implements Serializable {
                                 readFilterMinLength = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].startsWith("BarcodeId")) {
                                 processBarcodeId(tokens[0], tokens[1]);
+                            } else if (tokens[0].startsWith("BarcodeUUID")) {
+                                processBarcodeUUID(tokens[0], tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("AutodeleteBlastResults") == 0) {
                                 autodeleteBlastFiles = true;
                             } else if (tokens[0].compareToIgnoreCase("AutodeleteFastaChunks") == 0) {

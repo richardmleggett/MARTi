@@ -17,7 +17,7 @@ import uk.ac.earlham.marti.schedule.*;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.15c";
+    public final static String VERSION_STRING = "v0.9.15d";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
@@ -74,7 +74,6 @@ public class MARTiEngine {
         System.out.println("Metagenomic Analysis in Real TIme (MARTi) Engine " + VERSION_STRING);
         System.out.println("Comments/bugs to: richard.leggett@earlham.ac.uk");
         System.out.println("");
-
         
         if (SHOW_NOTES) {
             System.out.println("To do:");
