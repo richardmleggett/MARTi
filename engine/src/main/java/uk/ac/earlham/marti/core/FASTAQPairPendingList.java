@@ -16,7 +16,8 @@ public class FASTAQPairPendingList {
     private int filesToProcess = 0;
     private int filesProcessed = 0;
     private long lastFileTime = System.nanoTime();
-    private LinkedList<FASTAQPair> pendingFiles = new LinkedList<FASTAQPair>();
+    private LinkedList<FASTAQPair> pendingBlastFiles = new LinkedList<FASTAQPair>();
+    private LinkedList<FASTAQPair> pendingCentrifugeFiles = new LinkedList<FASTAQPair>();
 
     public FASTAQPairPendingList(MARTiEngineOptions o) {
         options = o;
@@ -24,24 +25,39 @@ public class FASTAQPairPendingList {
     }    
     
     public synchronized void addPendingPair(String fasta, String fastq) {
-        pendingFiles.add(new FASTAQPair(fasta, fastq));
+        if(options.isBlastingRead()) {
+            pendingBlastFiles.add(new FASTAQPair(fasta, fastq));
+        }
+        if(options.isCentrifugingReads()) {
+            pendingCentrifugeFiles.add(new FASTAQPair(fasta, fastq));
+        }
         filesToProcess++;
         lastFileTime = System.nanoTime();
         options.getLog().println("PendingPair list +1, files to process = "+filesToProcess);        
     }    
 
-    public synchronized FASTAQPair getPendingPair() {
-        if (pendingFiles.size() > 0) {
+    public synchronized FASTAQPair getBlastPendingPair() {
+        if (pendingBlastFiles.size() > 0) {
             filesProcessed++;
             options.getLog().println("PendingPair list -1, files processed = "+filesProcessed);        
-            return pendingFiles.removeFirst();
+            return pendingBlastFiles.removeFirst();
+        } else {
+            return null;
+        }
+    }
+    
+    public synchronized FASTAQPair getCentrifugePendingPair() {
+        if (pendingCentrifugeFiles.size() > 0) {
+            filesProcessed++;
+            options.getLog().println("PendingPair list -1, files processed = "+filesProcessed);        
+            return pendingCentrifugeFiles.removeFirst();
         } else {
             return null;
         }
     }
 
     public synchronized int getPendingFileCount() {
-        return pendingFiles.size();
+        return pendingBlastFiles.size();
     }
     
     public synchronized int getFilesProcessed() {
@@ -53,7 +69,7 @@ public class FASTAQPairPendingList {
         long secsSinceLast = timeSince / 1000000000;
         options.getLog().println("PendingFileList not seen file for " + (secsSinceLast) + "s");
                                
-        if (pendingFiles.size() == 0) {        
+        if (pendingBlastFiles.size() == 0) {        
             // + 5 allows for the FileWatcher to timeout and then for the last pending pair to be recognised
             if (secsSinceLast >= (options.getFileWatcherTimeout() + 5)) {
                 return true;

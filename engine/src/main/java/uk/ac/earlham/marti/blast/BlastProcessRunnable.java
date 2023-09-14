@@ -150,7 +150,7 @@ public class BlastProcessRunnable implements Runnable {
             //while ((fwi == null) && (!fileWatcher.timedOut()) && (options.getStopFlag() == false)) {
             //while ((fa == null) && (!pendingFileList.timedOut()) && (options.getStopFlag() == false)) {
             while ((fa == null) && (keepRunning)) {
-                fa = pendingFileList.getPendingPair();
+                fa = pendingFileList.getBlastPendingPair();
                 if (fa == null) {
                     try {
                         Thread.sleep(500);

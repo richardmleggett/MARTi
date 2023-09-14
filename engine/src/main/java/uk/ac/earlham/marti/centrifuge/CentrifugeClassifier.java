@@ -84,7 +84,7 @@ public class CentrifugeClassifier {
         Set<Integer> asSet = pendingFiles.keySet();
         Integer[] ids = asSet.toArray(new Integer[asSet.size()]);        
 
-        options.getLog().println(MARTiLog.LOGLEVEL_CHECKFORFILESTOCLASSIFY, "In checkForFilesToClassify - size "+ids.length);
+        options.getLog().println(MARTiLog.LOGLEVEL_CHECKFORFILESTOCLASSIFY, "In checkForFilesToClassify Centrifuge - size "+ids.length);
         
         for(int i=0; i<ids.length; i++) {
             int thisId = ids[i];

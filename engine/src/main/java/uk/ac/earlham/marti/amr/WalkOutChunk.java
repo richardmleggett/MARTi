@@ -94,45 +94,47 @@ public class WalkOutChunk {
             }
 
             // Now go through bacteria file
-            InputStream bacteriaFileStream = null;
-            InputStream bacteriaGzipStream = null;
-            Reader bacteriaDecoder = null;
-            BufferedReader bacteriaReader = null;
-            File bacteriaFile = new File(bacteriaFilename);
-            if(bacteriaFile.exists())
-            {
-                bacteriaReader = new BufferedReader(new FileReader(bacteriaFilename));
-            } else {           
-                bacteriaFilename = bacteriaFilename + ".gz";
-                bacteriaFileStream = new FileInputStream(bacteriaFilename);
-                bacteriaGzipStream = new GZIPInputStream(bacteriaFileStream);
-                bacteriaDecoder = new InputStreamReader(bacteriaGzipStream, "US-ASCII");
-                bacteriaReader = new BufferedReader(bacteriaDecoder); 
-            }
-                
-            while ((line = bacteriaReader.readLine()) != null) {
-                if (line.length() > 1) {
-                    BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false, true);
-                    if (bh.isValidAlignment()) {
-                        WalkOutRead wor = reads.get(bh.getQueryId());
-                        if (wor != null) {
-                            if (bh.getSubjectTitle().contains("plasmid")) {
-                                plasmidCount++;
-                            } else if (bh.getSubjectTitle().contains("chromosome")) {
-                                chromosomeCount++;
-                            } else {
-                                otherCount++;
+            if(bacteriaFilename.length() > 0) {
+                InputStream bacteriaFileStream = null;
+                InputStream bacteriaGzipStream = null;
+                Reader bacteriaDecoder = null;
+                BufferedReader bacteriaReader = null;
+                File bacteriaFile = new File(bacteriaFilename);
+                if(bacteriaFile.exists())
+                {
+                    bacteriaReader = new BufferedReader(new FileReader(bacteriaFilename));
+                } else {           
+                    bacteriaFilename = bacteriaFilename + ".gz";
+                    bacteriaFileStream = new FileInputStream(bacteriaFilename);
+                    bacteriaGzipStream = new GZIPInputStream(bacteriaFileStream);
+                    bacteriaDecoder = new InputStreamReader(bacteriaGzipStream, "US-ASCII");
+                    bacteriaReader = new BufferedReader(bacteriaDecoder); 
+                }
+
+                while ((line = bacteriaReader.readLine()) != null) {
+                    if (line.length() > 1) {
+                        BlastHit bh = new BlastHit(taxonomy, null, line, LCAParseOptions.FORMAT_NANOOK, false, true);
+                        if (bh.isValidAlignment()) {
+                            WalkOutRead wor = reads.get(bh.getQueryId());
+                            if (wor != null) {
+                                if (bh.getSubjectTitle().contains("plasmid")) {
+                                    plasmidCount++;
+                                } else if (bh.getSubjectTitle().contains("chromosome")) {
+                                    chromosomeCount++;
+                                } else {
+                                    otherCount++;
+                                }
+                                wor.addBacteriaHit(bh);
                             }
-                            wor.addBacteriaHit(bh);
                         }
                     }
                 }
-            }
-            bacteriaReader.close();
-            if(bacteriaFileStream != null) {
-                bacteriaDecoder.close();
-                bacteriaGzipStream.close();
-                bacteriaFileStream.close();
+                bacteriaReader.close();
+                if(bacteriaFileStream != null) {
+                    bacteriaDecoder.close();
+                    bacteriaGzipStream.close();
+                    bacteriaFileStream.close();
+                }
             }
 
             options.getLog().println("Debug: Plasmid count "+plasmidCount + " chromosome count " + chromosomeCount + " other count "+otherCount);

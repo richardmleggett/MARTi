@@ -226,19 +226,16 @@ public class BlastHandler {
             }
         }
         
-        if (classifyId == 0) {
-            System.out.println("Error: didn't find nt BLAST database description!");
-            options.getLog().println("Error: didn't find nt BLAST database description!");
-            System.exit(1);
-        }
+        if (classifyId != 0) {          
+            options.getReadClassifier().createBlastDependency("nt", classifyFilename, classifyId);
         
-        options.getReadClassifier().createBlastDependency("nt", classifyFilename, classifyId);
+            if (vfdbId > 0) {
+                options.getReadClassifier().addBlastDependency(classifyId, "VFDB", vfdbFilename, vfdbId);
+            }
+            if (cardId > 0) {
+                options.getReadClassifier().addBlastDependency(classifyId, "card", cardFilename, cardId);
+            }
         
-        if (vfdbId > 0) {
-            options.getReadClassifier().addBlastDependency(classifyId, "VFDB", vfdbFilename, vfdbId);
-        }
-        if (cardId > 0) {
-            options.getReadClassifier().addBlastDependency(classifyId, "card", cardFilename, cardId);
         }
         
         //options.getReadClassifier().linkNTToVFDBResults(ntId, vfdbId);

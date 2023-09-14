@@ -46,8 +46,7 @@ public class CentrifugeProcessRunnable implements Runnable {
     }
     
             
-    private void runCentrifuge(String fastqPathname) {
-        options.getLog().println("Adding read chunk "+fastqPathname);        
+    private void runCentrifuge(String fastqPathname) {       
         options.getCentrifugeHandler().addReadChunk(fastqPathname);
         
         if (options.getStopProcessingAfter() > 0) {
@@ -62,10 +61,9 @@ public class CentrifugeProcessRunnable implements Runnable {
     public void run() {
         while (keepRunning) {
             FASTAQPair fa = null;
-            
             // Get next file to process
             while ((fa == null) && (keepRunning)) {
-                fa = pendingFileList.getPendingPair();
+                fa = pendingFileList.getCentrifugePendingPair();
                 if (fa == null) {
                     try {
                         Thread.sleep(500);

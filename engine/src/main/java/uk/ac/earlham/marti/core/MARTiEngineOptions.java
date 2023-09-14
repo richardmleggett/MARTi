@@ -1420,4 +1420,14 @@ public class MARTiEngineOptions implements Serializable {
     public boolean limitToSpecies() {
         return limitToSpecies;
     }
+    
+    public boolean isClassifyingWithBlast() {
+        for (int i=0; i<blastProcesses.size(); i++) {
+            BlastProcess bp = blastProcesses.get(i);
+            if(bp.useForClassifying()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

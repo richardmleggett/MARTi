@@ -161,7 +161,7 @@ public class ReadClassifier {
         Set<Integer> asSet = files.keySet();
         Integer[] ids = asSet.toArray(new Integer[asSet.size()]);        
 
-        options.getLog().println(MARTiLog.LOGLEVEL_CHECKFORFILESTOCLASSIFY, "In checkForFilesToClassify - size "+ids.length);
+        options.getLog().println(MARTiLog.LOGLEVEL_CHECKFORFILESTOCLASSIFY, "In checkForFilesToClassify BLAST - size "+ids.length);
         
         for (int i=0; i<ids.length; i++) {
             int thisId = ids[i];
@@ -181,12 +181,30 @@ public class ReadClassifier {
                         files.remove(thisId);
                         options.getProgressReport().incrementChunksParsedCount();
                     } else if (f.getBlastProcessName().equalsIgnoreCase("card")) {
-                        // If CARD file, we'll process later...
-                        options.getLog().println("Got CARD output " + f.getBlastFile() + " but will process later.");
+                        if(options.isClassifyingWithBlast()) {
+                            // If CARD file, we'll process later...
+                            options.getLog().println("Got CARD output " + f.getBlastFile() + " but will process later.");
+                        } else {                  
+                            options.getLog().println("Time to run parse CARD and do walkout");
+                            String cardFilename = f.getBlastFile();
+                            if (cardFilename != null) {
+                                options.getLog().println("CARD filename: " + cardFilename);
+                                int barcode = options.getBarcodeFromPath(f.getBlastFile());
+                                int fastaChunkNumber = getChunkNumber(f.getBlastFile());
+                                AMRAnalysisTask mat = new AMRAnalysisTask(barcode, fastaChunkNumber, fastaChunkNumber, f.getBlastFile(), "", f.getQueryFile());
+                                options.getProgressReport().incrementAnalysisSubmitted();
+                                pendingAnalysisTasks.addPendingTask(mat);
+                            } else {
+                                System.out.println("Error: couldn't get CARD filename\n");
+                                System.exit(1);
+                            }
+                        }
                         // Remove from list
                         filesProcessed++;
                         files.remove(thisId);
                         options.getProgressReport().incrementChunksParsedCount();
+                        
+                        
                     } else if (f.getBlastProcessName().equalsIgnoreCase(options.getClassifyingBlastName())) {
                         // If nt file, can only parse it if dependencies have been met
                         if (blastDependencies.containsKey(thisId)) {

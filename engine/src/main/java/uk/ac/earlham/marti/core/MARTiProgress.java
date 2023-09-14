@@ -57,7 +57,7 @@ public class MARTiProgress {
         chunkCount--;
     }
     
-    public synchronized void incrementChunksBlastedCount() {
+    public synchronized void incrementChunksBlastedCount() { 
         chunksBlasted++;
     }
     
@@ -87,7 +87,10 @@ public class MARTiProgress {
                    " CB=" + chunksBlasted + 
                    " CP=" + chunksParsed + 
                    " AS=" + analysisSubmitted + 
-                   " AC=" + analysisCompleted;
+                   " AC=" + analysisCompleted + 
+                   " CentC=" + chunksCentrifuged + 
+                   " CentP=" + centrifugeChunksParsed ;
+        
         
         return s;
     }
@@ -98,8 +101,7 @@ public class MARTiProgress {
     
     public synchronized boolean chunksComplete() {
         int blastProcessCount = options.getBlastProcesses().size();
-        int centrifugeProcessCount = options.getCentrifugeProcesses().size();
-        
+        int centrifugeProcessCount = options.getCentrifugeProcesses().size();       
         boolean complete = false;        
        
         if(blastProcessCount > 0) {
