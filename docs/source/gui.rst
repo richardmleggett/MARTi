@@ -105,3 +105,32 @@ The Dashboard and Compare pages have additional page-specific options bars fixed
   :align: center
 
 Many of the plots also have plot-specific options that can be accessed via the three vertical dots menu icon in the top right-hand corner of the plot’s card.
+
+Taxonomic ranks
+---------------
+
+To make it easier for users to filter organisms by their taxonomic ranks within the MARTi GUI, the NCBI taxonomic ranks have been simplified into 10 categories. The following table shows how the NCBI ranks are mapped to MARTi's simplified ranks.
+
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| MARTi rank | Rank no. | NCBI ranks                                                                                                        |
++============+==========+===================================================================================================================+
+| No rank    | 0        | clade, no rank                                                                                                    |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Domain     | 1        | superkingdom                                                                                                      |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| kingdom    | 2        | kingdom, subkingdom, superphylum                                                                                  |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Phylum     | 3        | phylum, subphylum, superclass                                                                                     |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Class      | 4        | class, cohort, infraclass, subclass, subcohort, superorder                                                        |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Order      | 5        | order, infraorder, parvorder, suborder, superfamily                                                               |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Family     | 6        | family, subfamily, subtribe, tribe                                                                                |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Genus      | 7        | genus, section, series, species group, species subgroup, subgenus, subsection                                     |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Species    | 8        | species, genotype, isolate                                                                                        |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
+| Subspecies | 9        | subspecies, biotype, forma, forma specialis, morph, pathogroup, serogroup, serotype, strain, subvariety, varietas |
++------------+----------+-------------------------------------------------------------------------------------------------------------------+
