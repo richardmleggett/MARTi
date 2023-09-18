@@ -427,6 +427,14 @@ var lcaAbundanceDashboardUnformatted = "0.1%";
 var dashboardSampleNameUserInput;
 
 socket.on('dashboard-meta-response', function(data) {
+
+  if (data.sample.hasOwnProperty("uuid")){
+    let uuidAddress = "/sample/" + data.sample.uuid;
+    window.history.pushState(null, document.title, uuidAddress);
+  } else {
+    window.history.pushState(null, document.title, "/");
+  }
+
   dashboardSampleData = data.sample;
   let martiVersion = data.meta.martiVersion;
 

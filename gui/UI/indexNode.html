@@ -282,7 +282,7 @@
             </div>
 
             <div class="copyright text-center my-auto">
-              <span>MARTi GUI v0.19.2</span>
+              <span>MARTi GUI v0.19.3</span>
               <span id="currentClientCount" style="color:white">0</span>
             </div>
           </div>
@@ -444,6 +444,7 @@ $(document).ready(function () {
         activeSidebarIcon(this);
         currentPage = "Samples";
         $("h1#pageTitle").text("Samples");
+        window.history.pushState(null, document.title, "/");
         $("#response").load("/samples.html", function() {
         $("html, body").animate({ scrollTop: "0px" });
         initialiseSamplePage();
@@ -476,6 +477,7 @@ $(document).ready(function () {
         activeSidebarIcon(this);
         currentPage = "Compare";
         $("h1#pageTitle").text("Compare");
+        window.history.pushState(null, document.title, "/");
         $("#response").load("/compare.html", function(){
           $("html, body").animate({ scrollTop: "0px" });
           initialiseComparePage();
@@ -488,6 +490,7 @@ $(document).ready(function () {
       activeSidebarIcon(this);
       currentPage = "New";
       $("h1#pageTitle").text("New analysis");
+      window.history.pushState(null, document.title, "/");
       $("#response").load("/new.html", function() {
       $("html, body").animate({ scrollTop: "0px" });
       initialiseNewPage();

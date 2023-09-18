@@ -314,6 +314,20 @@ socket.on('current-dashboard-sample-response', function(sample) {
 
 });
 
+socket.on('current-dashboard-sample-url-switch', function(sample) {
+
+  currentDashboardSampleRun = sample.runId;
+  currentDashboardSampleName = sample.name;
+
+  activeSidebarIcon($("#dashboard-item"));
+  currentPage = "Dashboard";
+  $("h1#pageTitle").text("Dashboard");
+  $("#response").load("/dashboard.html", function(){
+    $("html, body").animate({ scrollTop: "0px" });
+    initialiseDashboardPage();
+  });
+
+});
 
 socket.on('current-compare-samples-response', function(samples) {
 

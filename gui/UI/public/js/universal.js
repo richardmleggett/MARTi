@@ -247,6 +247,7 @@ currentDashboardSampleName = "";
 currentDashboardSampleRun = "";
 compareSampleObjectArray = [];
 var clientProject = null;
+var clientSample = null;
 
 socket.on('connect', () => {
   console.log("Connected to server");
@@ -257,12 +258,17 @@ socket.on('connect', () => {
     clientProject = windowPath[2];
   }
 
+  if (windowPath[1] == "sample"){
+    clientSample = windowPath[2];
+  }
+
   socket.emit("register-request", {
     uuid: uuid,
     currentDashboardSampleName: currentDashboardSampleName,
     currentDashboardSampleRun: currentDashboardSampleRun,
     compareSampleObjectArray: compareSampleObjectArray,
-    clientProject: clientProject
+    clientProject: clientProject,
+    clientSample: clientSample
   });
 });
 
@@ -294,6 +300,8 @@ socket.on('sample-removed', function(data){
     });
   } else if (currentPage == "Dashboard" && currentDashboardSampleName == data.sampleId) {
     currentDashboardSampleName = "";
+
+    window.history.pushState(null, document.title, "/");
 
     activeSidebarIcon($("#samples-item"));
     currentPage = "Samples";

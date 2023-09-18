@@ -140,7 +140,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiVersion = "0.19.2";
+const martiVersion = "0.19.3";
 
 if (argv.v || argv.version) {
   console.log(martiVersion);
@@ -328,6 +328,21 @@ function metaDataUpdateId(meta) {
   });
   }
 
+}
+
+function handleSampleUrl(clientId,uuid) {
+
+  for (var [run, samples] of Object.entries(sampleMetaDict)) {
+    for (var [sample, data] of Object.entries(samples)) {
+      if (data["sample"].hasOwnProperty("uuid")) {
+        if (data.sample.uuid == uuid) {
+          clientData[clientId]["selectedDashboardSample"]["name"] = sample;
+          clientData[clientId]["selectedDashboardSample"]["runId"] = run;
+          io.to(clientId).emit('current-dashboard-sample-url-switch', clientData[clientId].selectedDashboardSample);
+        }
+      }
+    }
+  }
 }
 
 observer.on('meta-file-added', meta => {
@@ -565,7 +580,9 @@ app.get('/project/:project', function (req, res) {
   res.sendFile(__dirname + '/indexNode.html');
 })
 
-
+app.get('/sample/:sample', function (req, res) {
+  res.sendFile(__dirname + '/indexNode.html');
+})
 
 
 app.post('/new',(req, res) => {
@@ -636,7 +653,8 @@ io.on('connect', function(socket){
           runId: data.currentDashboardSampleRun
         },
         selectedCompareSamples: data.compareSampleObjectArray,
-        project: data.clientProject
+        project: data.clientProject,
+        sample: data.clientSample
       };
       console.log(`[${new Date().toLocaleString()}][${id}] New client ID`);
     } else {
@@ -645,6 +663,10 @@ io.on('connect', function(socket){
 
       socket.join(id);
       // io.to(id).emit('register-response', id);
+
+      handleSampleUrl(id,data.clientSample);
+
+
       io.to(id).emit('register-response', {
         id: id,
         mode: restrictedMode
