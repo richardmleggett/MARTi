@@ -358,7 +358,7 @@ public class MARTiResults {
         int fileCount = 0;
         
         options.getLog().println("MARTiResults received file for barcode "+bc);
-
+        SampleMetaData md = options.getSampleMetaData(bc);
         taxonomy = options.getReadClassifier().getTaxonomy();
 
         // Read the Centrifuge file - no need for some intermediate class to 
@@ -381,12 +381,14 @@ public class MARTiResults {
             }
             
             //ignore header line
+            int readsClassified = 0;
             String line = br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split("\\t");
                 //TODO: min hit length
                 long taxid = Long.parseLong(fields[2]);
                 taxonomy.countRead(bc, taxid);
+                readsClassified++;
             }
             
             br.close();
@@ -395,6 +397,8 @@ public class MARTiResults {
                 gzipStream.close();
                 fileStream.close();
             }
+            
+            md.addToReadsClassified(readsClassified);
             
         } catch (Exception e) {
             System.out.println("readProcessFile Exception:");
