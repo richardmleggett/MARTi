@@ -27,6 +27,7 @@ public class BlastProcess {
     private String negativeTaxaFilter = "";
     private String maxE = "0.001";
     private String maxTargetSeqs = "25";
+    private String dustString = "";
     private int runMeganEvery = 0;
     private int numThreads = 1;
     private boolean classifyThis = false;
@@ -80,6 +81,9 @@ public class BlastProcess {
                                 numThreads = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareTo("UseToClassify") == 0) {
                                 classifyThis = true;
+                            } else if (tokens[0].compareTo("Dust") == 0) {
+                                //dustString = "'" + tokens[1].replaceAll("^'+", "").replaceAll("'+$", "") + "'";
+                                dustString = tokens[1].replaceAll("^'+", "").replaceAll("'+$", "");
                             } else {
                                 keepReading = false;
                             }
@@ -190,5 +194,9 @@ public class BlastProcess {
     
     public void setClassifyThis() {
         classifyThis = true;
+    }
+    
+    public String getDustString() {
+        return dustString;
     }
 }

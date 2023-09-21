@@ -93,6 +93,7 @@ public class BlastHandler {
             String queue = bp.getJobQueue();
             String taxfilter = bp.getTaxaFilter();
             String negativeTaxaFilter = bp.getNegativeTaxaFilter();
+            String dustString = bp.getDustString();
                  
             String outputBlast = this.getBlastFilePathFromFastaFilePath(inputPathname, bp);
             String commandFile = this.getCommandFilePathFromFastaFilePath(inputPathname, bp);
@@ -111,6 +112,7 @@ public class BlastHandler {
                 formatString = defaultFormatString;
             } else {
                 formatString = "'" + defaultFormatString + "'";
+                dustString = "'" + dustString + "'";
             }
             
             try {
@@ -127,7 +129,7 @@ public class BlastHandler {
                           " -max_target_seqs " + bp.getMaxTargetSeqs() +
                           " -show_gis" +
                           " -num_threads " + Integer.toString(bp.getNumThreads()) + 
-                          " -task "+bp.getBlastTask() + 
+                          " -task "+bp.getBlastTask() +
                           " -out " + outputBlast + 
                           " -outfmt "+formatString;
 
@@ -137,7 +139,10 @@ public class BlastHandler {
                 if (negativeTaxaFilter.length() > 1) {
                     command = command + " -negative_taxidlist " + negativeTaxaFilter;
                 }
-
+                if(dustString.length() > 0) {
+                     command = command + " -dust " + dustString; 
+                }
+                
                 pw.write(command);
                 pw.close();
                 
@@ -176,6 +181,11 @@ public class BlastHandler {
                         commands.add("-negative_taxidlist");
                         commands.add(negativeTaxaFilter);
                     }
+                    if(dustString.length() > 0) {
+                        commands.add("-dust");
+                        commands.add(dustString);
+                    }
+                    
 
                     //System.out.println("Submitting with "+bp.getNumThreads() + " threads");
                     boolean runIt = options.runBlastCommand();
