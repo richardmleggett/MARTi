@@ -64,6 +64,7 @@ public class CentrifugeHandler {
             String database = cp.getDatabase();
             String minHitLen = Integer.toString(cp.getMinHitLen());
             String numThreads = Integer.toString(cp.getNumThreads());
+            String primaryAssignments = Integer.toString(cp.getNumPrimaryAssignments());
             
             String classificationFilePath = getCentrifugeFilePathPrefixFromFastqFilePath(inputPathname, cp) + "_classification.txt";
             String reportFilePath = getCentrifugeFilePathPrefixFromFastqFilePath(inputPathname, cp) + "_report.txt";
@@ -88,7 +89,8 @@ public class CentrifugeHandler {
                             " -S " + classificationFilePath + 
                             " --report-file " + reportFilePath + 
                             " --min-hitlen " + minHitLen +
-                            " -p " + numThreads;
+                            " -p " + numThreads + 
+                            " -k " + primaryAssignments;
                 
                 pw.write(command);
                 pw.close();
@@ -104,7 +106,8 @@ public class CentrifugeHandler {
                             " -S ", classificationFilePath, 
                             " --report-file ", reportFilePath, 
                             " --min-hitlen ", minHitLen,
-                            " -p ", numThreads));
+                            " -p ", numThreads,
+                            " -k ", primaryAssignments));
                     
                     boolean runIt = options.runBlastCommand();
                     

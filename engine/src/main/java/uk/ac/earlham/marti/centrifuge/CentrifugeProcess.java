@@ -23,6 +23,7 @@ public class CentrifugeProcess {
     private String centrifugeMemory = null;
     private String jobQueue = null;
     private int minHitLen = 100;
+    private int primaryAssignments = 1;
 
     
     public CentrifugeProcess(MARTiEngineOptions o) {
@@ -125,6 +126,10 @@ public class CentrifugeProcess {
     
     public int getNumThreads() {
         return numThreads;
+    }
+    
+    public int getNumPrimaryAssignments() {
+        return primaryAssignments;
     }
    
 }
