@@ -112,7 +112,9 @@ public class BlastHandler {
                 formatString = defaultFormatString;
             } else {
                 formatString = "'" + defaultFormatString + "'";
-                dustString = "'" + dustString + "'";
+                if(dustString.length() > 0) {
+                    dustString = "'" + dustString + "'";
+                }
             }
             
             try {
