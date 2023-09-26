@@ -43,6 +43,7 @@ public class SampleMetaData {
     private int readsWithPoorAlignments = 0;
     private int readsAnalysed = 0;
     private long totalInputBp = 0;
+    private long totalClassifiedBp = 0;
     private int countByQuality[] = new int[51];
     private double totalQuality = 0;
     private Hashtable<String,Integer> chunkCounts = new Hashtable<String,Integer>();
@@ -116,8 +117,9 @@ public class SampleMetaData {
         }
     }
     
-    public synchronized void addToReadsClassified(int n) {
+    public synchronized void addToReadsClassified(int n, long bp) {
         readsClassified+=n;
+        totalClassifiedBp += bp;
     }
     
     public synchronized void markPoorAlignments(int n) {
@@ -133,6 +135,10 @@ public class SampleMetaData {
         //System.out.println("readsPassedFilter "+readsPassedFilter);
         //System.out.println("readsClassified "+readsClassified);
         return readsAnalysed - readsClassified;
+    }
+    
+    public long getYieldUnclassified() {
+        return totalInputBp - totalClassifiedBp;
     }
     
     public synchronized void writeSampleJSON(boolean martiComplete) {

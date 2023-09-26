@@ -79,9 +79,13 @@ public class TaxonomyNode<T> {
     private int maxAssigned = 0;
     private Hashtable<Integer,Integer> assignedCount = new Hashtable<Integer,Integer>();
     private Hashtable<Integer,Integer> summedCount = new Hashtable<Integer,Integer>();
+    private Hashtable<Integer,Long> assignedYield = new Hashtable<Integer,Long>();
+    private Hashtable<Integer,Long> summedYield = new Hashtable<Integer,Long>();
 //    private Hashtable<Integer,Integer> maxAssignedCount = new Hashtable<Integer,Integer>();
     private Hashtable<Integer,Integer> lcaAssignedCount = new Hashtable<Integer,Integer>();
     private Hashtable<Integer,Integer> lcaSummedCount = new Hashtable<Integer,Integer>();
+    private Hashtable<Integer,Long> lcaYield = new Hashtable<Integer,Long>();
+    private Hashtable<Integer,Long> lcaSummedYield = new Hashtable<Integer,Long>();
     
     public TaxonomyNode(Long id) {
         taxonId = id;
@@ -121,8 +125,8 @@ public class TaxonomyNode<T> {
     public ArrayList<TaxonomyNode> getChildren() {
         return children;
     }
-    
-    public void incrementAssigned(int bc) {        
+            
+    public void incrementAssignedAndAddYield(int bc, long length) {        
         assigned++;
         
         if (assigned > maxAssigned) {
@@ -144,7 +148,13 @@ public class TaxonomyNode<T> {
         
         //if (c > m) {
         //    maxAssignedCount.put(bc, c);
-        //}         
+        //}
+        
+        long yield = length;
+        if(assignedYield.containsKey(bc)) {
+            yield += assignedYield.get(bc);
+        }
+        assignedYield.put(bc, yield);
     }
     
 //    public int getMaxAssigned(int bc) {
@@ -158,7 +168,7 @@ public class TaxonomyNode<T> {
 //        //return maxAssigned;
 //    }
     
-    public void incrementSummed(int bc) {
+    public void incrementSummedAndAddYield(int bc, long length) {
         summed++;
         
         int s = 0;
@@ -167,6 +177,12 @@ public class TaxonomyNode<T> {
         }
         s++;
         summedCount.put(bc, s);
+        
+        long yield = length;
+        if(summedYield.containsKey(bc)) {
+            yield += summedYield.get(bc);
+        }
+        summedYield.put(bc, yield);
     }
     
     public int getAssigned(int bc) {
@@ -194,6 +210,38 @@ public class TaxonomyNode<T> {
         
         return c;
     }
+    
+    public long getAssignedYield(int bc) {
+        long c = 0;    
+        if (assignedYield.containsKey(bc)) {
+            c = assignedYield.get(bc);
+        }    
+        return c;     
+    }
+    
+    public long getSummedYield(int bc) {
+        long c = 0;    
+        if (summedYield.containsKey(bc)) {
+            c = summedYield.get(bc);
+        }    
+        return c;     
+    }  
+    
+    public long getLCAYield(int bc) {
+        long c = 0;    
+        if (lcaYield.containsKey(bc)) {
+            c = lcaYield.get(bc);
+        }    
+        return c;     
+    }
+    
+    public long getLCASummedYield(int bc) {
+        long c = 0;    
+        if (lcaSummedYield.containsKey(bc)) {
+            c = lcaSummedYield.get(bc);
+        }    
+        return c;     
+    }  
     
     public void setDisplayPosition(int c, int r) {
         displayColumn = c;
@@ -373,28 +421,60 @@ public class TaxonomyNode<T> {
         
         lcaAssignedCount.put(bc, a);
         lcaSummedCount.put(bc, s);
+        
+        long yield = 0;
+        long summed = 0;
+        
+        if(assignedYield.containsKey(bc)) {
+            yield = assignedYield.get(bc);
+        }
+        
+        if(summedYield.containsKey(bc)) {
+            summed = summedYield.get(bc);
+        }
+        
+        if (!assignedYield.containsKey(bc) && !summedYield.containsKey(bc)) {
+            System.out.println("Node "+taxonId+" doesn't have assigned or summed");
+        }
+        
+        lcaYield.put(bc, yield);
+        lcaSummedYield.put(bc, summed);
     }
-    
+         
     public void zeroLCACounts(int bc) {
         lcaAssignedCount.put(bc, 0);
         lcaSummedCount.put(bc, 0);
+        lcaYield.put(bc, 0l);
+        lcaSummedYield.put(bc, 0l);  
     }
+    
     
     public void zeroLCAAssignedCount(int bc) {
         lcaAssignedCount.put(bc, 0);
+        lcaYield.put(bc, 0l);
     }
 
     public void zeroLCASummmmarisedCount(int bc) {
         lcaSummedCount.put(bc, 0);
+        lcaSummedYield.put(bc, 0l);
     }
-
-    public void addToLCAAssigned(int bc, int addCount) {
+      
+    public void addToLCAAssigned(int bc, int addCount, long yield) {
         int count = 0;
         if (lcaAssignedCount.containsKey(bc)) {
             count = lcaAssignedCount.get(bc);
         }
         count += addCount;
         
-        lcaAssignedCount.put(bc, count);        
-    }    
+        lcaAssignedCount.put(bc, count);
+        
+        long yieldCount = 0;
+        if (lcaYield.containsKey(bc)) {
+            yieldCount = lcaYield.get(bc);
+        }
+        yieldCount += yield;
+        
+        lcaYield.put(bc, yieldCount);  
+    }
+     
 }

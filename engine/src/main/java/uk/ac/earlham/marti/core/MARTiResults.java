@@ -88,8 +88,9 @@ public class MARTiResults {
         Set<String> keys = hitsByQuery.keySet();        
         for (String queryName : keys) {
             LCAHitSet hs = hitsByQuery.get(queryName);      
-            long taxon = hs.getAssignedTaxon();            
-            taxonomy.countRead(bc, taxon);            
+            long taxon = hs.getAssignedTaxon();
+            long readLength = options.getReadStatistics().getReadLength(bc, queryName, true);
+            taxonomy.countRead(bc, taxon, readLength);            
         }
         
         if (chunkCount.containsKey(bc)) {
@@ -124,14 +125,20 @@ public class MARTiResults {
             String ncbiRankString = n.getRankString();
             int summedCount;
             int assignedCount;
+            long yield;
+            long summedYield;
             int rank = 0;
 
             if (useLCA) {
                 summedCount = n.getLCASummed(bc);
                 assignedCount = n.getLCAAssigned(bc);
+                yield = n.getLCAYield(bc);
+                summedYield = n.getLCASummedYield(bc);
             } else {
                 summedCount = n.getSummed(bc);
                 assignedCount = n.getAssigned(bc);
+                yield = n.getAssignedYield(bc);
+                summedYield = n.getSummedYield(bc);
             }
             
             // If root node, need to add unclassified count
@@ -147,6 +154,8 @@ public class MARTiResults {
             treeBuilder.add("ncbiID", n.getId());
             treeBuilder.add("value", assignedCount);
             treeBuilder.add("summedValue", summedCount);
+            treeBuilder.add("yield", yield);
+            treeBuilder.add("summedYield", summedYield);
             
             pwAssignments.print(taxonomy.getNameFromTaxonId(n.getId()) + ",");
             pwAssignments.println(n.getId() + "," + assignedCount + "," + summedCount);
@@ -176,12 +185,15 @@ public class MARTiResults {
                 JsonObjectBuilder unclassifiedBuilder = Json.createObjectBuilder();
                 JsonArrayBuilder unclassifiedArrayBuilder = Json.createArrayBuilder();
                 int unclassifiedCount = options.getSampleMetaData(bc).getReadsUnclassified();
+                long unclassifiedYield = options.getSampleMetaData(bc).getYieldUnclassified();
                 unclassifiedBuilder.add("name", "unclassified");
                 unclassifiedBuilder.add("rank", 0);
                 unclassifiedBuilder.add("ncbiRank", "no rank");
                 unclassifiedBuilder.add("ncbiID", 0);
                 unclassifiedBuilder.add("value", unclassifiedCount);
                 unclassifiedBuilder.add("summedValue", unclassifiedCount);
+                unclassifiedBuilder.add("yield", unclassifiedYield);
+                unclassifiedBuilder.add("summedYield", unclassifiedYield);
                 unclassifiedBuilder.add("children", unclassifiedArrayBuilder);
                 arrayBuilder.add(unclassifiedBuilder);                  
             }                                    
@@ -382,13 +394,16 @@ public class MARTiResults {
             
             //ignore header line
             int readsClassified = 0;
+            long totalBpClassified = 0l;
             String line = br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split("\\t");
                 //TODO: min hit length
                 long taxid = Long.parseLong(fields[2]);
-                taxonomy.countRead(bc, taxid);
+                long readLength = Long.parseLong(fields[6]);
+                taxonomy.countRead(bc, taxid, readLength);
                 readsClassified++;
+                totalBpClassified += readLength;
             }
             
             br.close();
@@ -398,7 +413,7 @@ public class MARTiResults {
                 fileStream.close();
             }
             
-            md.addToReadsClassified(readsClassified);
+            md.addToReadsClassified(readsClassified, totalBpClassified);
             
         } catch (Exception e) {
             System.out.println("readProcessFile Exception:");

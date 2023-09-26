@@ -228,9 +228,15 @@ public class ReadClassifier {
                                 int readsWithHits = pfp.parseFile(f.getBlastFile());
                                 options.getLog().println("Parsed... now removing poor alignments");
                                 int readsRemoved = pfp.removePoorAlignments();
+                                
+                                long totalBpWithHits = 0l;
+                                Set<String> hits = pfp.getHitsByQuery().keySet();
+                                for(String query : hits) {
+                                    totalBpWithHits += options.getReadStatistics().getReadLength(barcode, query, true);
+                                }
 
                                 options.getLog().println("Adding to reads classified");
-                                md.addToReadsClassified(readsWithHits);
+                                md.addToReadsClassified(readsWithHits, totalBpWithHits);
                                 options.getLog().println("Marking poor alignments");
                                 md.markPoorAlignments(readsRemoved);
                                 options.getLog().println("Registering chunks");

@@ -509,20 +509,20 @@ public class Taxonomy {
         return dumpTaxonomyFromId(id);
     }
     
-    public void countRead(int bc, Long id) {
+    public void countRead(int bc, Long id, long readLength) {
         TaxonomyNode n = getNodeFromTaxonId(id);
         
 //        totalCountCheck++;
         assignedCount[bc]++;
         
         if (n == null) {
-            unclassifiedNode.incrementAssigned(bc);
+            unclassifiedNode.incrementAssignedAndAddYield(bc, readLength);
         } else {
-            n.incrementAssigned(bc);
+            n.incrementAssignedAndAddYield(bc, readLength);
 
             do {
                 Long parent = n.getParent();
-                n.incrementSummed(bc);
+                n.incrementSummedAndAddYield(bc, readLength);
 
                 if (id != parent) {
                     id = parent;
@@ -919,7 +919,7 @@ public class Taxonomy {
         // If this node has insufficient support, move up
         if (currentNode.getLCAAssigned(bc) < minReads) {
             if (parentNode != null) {
-                parentNode.addToLCAAssigned(bc, currentNode.getLCAAssigned(bc));
+                parentNode.addToLCAAssigned(bc, currentNode.getLCAAssigned(bc), currentNode.getLCAYield(bc));
                 
                 // If this node has the samme summed count as assigned, we can safely clear the summed too.
                 // However, if summmed is greater, then there must be a node further down that meets the min reads.

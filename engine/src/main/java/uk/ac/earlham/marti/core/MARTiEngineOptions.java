@@ -152,6 +152,7 @@ public class MARTiEngineOptions implements Serializable {
     private String classifyingProcessName = null;
     private boolean compressBlastFiles = true;
     private boolean limitToSpecies = false;
+    private ReadStatistics readStatistics = new ReadStatistics(this);
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -1429,5 +1430,9 @@ public class MARTiEngineOptions implements Serializable {
             }
         }
         return false;
+    }
+    
+    public ReadStatistics getReadStatistics() {
+        return readStatistics;
     }
 }

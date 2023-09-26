@@ -41,6 +41,7 @@ public class ReadFilterSample {
     private boolean stopProcessingChunks = false;
     private int barcode = 0;
     private SampleMetaData metaData = null;
+    private ReadStatistics readStatistics = null;
     
     public ReadFilterSample(MARTiEngineOptions o, FileWatcher f, FASTAQPairPendingList pfl, int bc) {
         options = o;
@@ -51,6 +52,7 @@ public class ReadFilterSample {
         if(options.isBlastingRead()) {
             writeFasta = true;
         }
+        readStatistics = options.getReadStatistics();
     }
 
     private String generateFastaFastqChunkPath(String fastqPathname, int type) {
@@ -324,6 +326,7 @@ public class ReadFilterSample {
                         String plus = br.readLine();
                         String qual = br.readLine();
                         boolean readPassedFilter = true;
+                        String readID = header.split(" ")[0].substring(1);
                         
                         if (plus.equals("+")) {                        
                             double meanQ = calculateMeanQuality(qual);
@@ -345,6 +348,7 @@ public class ReadFilterSample {
                                 readCountInChunk++;
                                 writtenReadLengths.add(seq.length());
                                 chunkReadLengths.add(seq.length());
+                                readStatistics.addReadLength(barcode, readID,seq.length(), true);
 
                                 if (readCountInChunk == options.getReadsPerBlast()) {
                                     endChunks();
@@ -360,6 +364,7 @@ public class ReadFilterSample {
                                 readsFilteredFromChunk++;
                                 readsFilteredTotal++;
                                 readPassedFilter = false;
+                                readStatistics.addReadLength(barcode, readID,seq.length(), false);
                             }
 
                             metaData.registerNewInputRead(seq.length(), meanQ, readPassedFilter);
