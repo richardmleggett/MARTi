@@ -131,7 +131,13 @@ var time = d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds()
 return time;
 };
 
-
+function urlFormat(){
+  if (clientProject.length > 0){
+    window.history.pushState(null, document.title, "/project/" + clientProject);
+  } else {
+    window.history.pushState(null, document.title, "/");
+  }
+}
 
 $(document).ready(function() {
 
@@ -246,7 +252,7 @@ currentPage = "";
 currentDashboardSampleName = "";
 currentDashboardSampleRun = "";
 compareSampleObjectArray = [];
-var clientProject = null;
+var clientProject = "";
 var clientSample = null;
 
 socket.on('connect', () => {
@@ -301,7 +307,7 @@ socket.on('sample-removed', function(data){
   } else if (currentPage == "Dashboard" && currentDashboardSampleName == data.sampleId) {
     currentDashboardSampleName = "";
 
-    window.history.pushState(null, document.title, "/");
+    urlFormat();
 
     activeSidebarIcon($("#samples-item"));
     currentPage = "Samples";

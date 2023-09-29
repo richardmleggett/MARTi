@@ -444,7 +444,7 @@ $(document).ready(function () {
         activeSidebarIcon(this);
         currentPage = "Samples";
         $("h1#pageTitle").text("Samples");
-        window.history.pushState(null, document.title, "/");
+        urlFormat();
         $("#response").load("/samples.html", function() {
         $("html, body").animate({ scrollTop: "0px" });
         initialiseSamplePage();
@@ -477,7 +477,7 @@ $(document).ready(function () {
         activeSidebarIcon(this);
         currentPage = "Compare";
         $("h1#pageTitle").text("Compare");
-        window.history.pushState(null, document.title, "/");
+        urlFormat();
         $("#response").load("/compare.html", function(){
           $("html, body").animate({ scrollTop: "0px" });
           initialiseComparePage();
@@ -490,7 +490,7 @@ $(document).ready(function () {
       activeSidebarIcon(this);
       currentPage = "New";
       $("h1#pageTitle").text("New analysis");
-      window.history.pushState(null, document.title, "/");
+      urlFormat();
       $("#response").load("/new.html", function() {
       $("html, body").animate({ scrollTop: "0px" });
       initialiseNewPage();
