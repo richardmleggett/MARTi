@@ -307,16 +307,7 @@ public class MARTiEngineOptions implements Serializable {
         
         engineOptionsFile = new MARTiEngineOptionsFile(this);
         engineOptionsFile.readOptionsFile();
-                
-        if (configFile != null) {
-            readConfigFile();
-        } else {
-            System.out.println("Error: you must specify a config file");
-            System.exit(1);
-        }
-        
-        readClassifier = new ReadClassifier(this);
-        
+                        
         if (writeConfigMode == true) {
             MARTiConfigFile mcf = new MARTiConfigFile(this);
             mcf.writeConfigFile(configFile);
@@ -327,6 +318,15 @@ public class MARTiEngineOptions implements Serializable {
                 System.exit(1);
             }
         } else {            
+            if (configFile != null) {
+                readConfigFile();
+            } else {
+                System.out.println("Error: you must specify a config file");
+                System.exit(1);
+            }
+
+            readClassifier = new ReadClassifier(this);
+            
             if (rawDataDir == null) {
                 System.out.println("Error: you must specify a raw data directory in the config file");
                 System.exit(1);
