@@ -331,6 +331,7 @@ var dropdownList = [];
 
 function plotAmrDonut(data) {
 
+
 var dashboardAmrDonutPlotByListOptions = [{plotByProp:"drugClass",name:"Drug class"},{plotByProp:"resistanceMechanism",name:"Resistance mechanism"}]
 dashboardAmrDonutPlotByList = [];
 
@@ -651,6 +652,10 @@ for (taxa of plotData) {
 
 
           });
+
+          if (centrifugeClassification) {
+            $("#dashboardAmrDonutRow").hide();
+          };
 
 
 };

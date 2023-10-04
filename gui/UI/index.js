@@ -140,10 +140,10 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiVersion = "0.19.3";
+const martiGuiVersion = "0.19.4";
 
 if (argv.v || argv.version) {
-  console.log(martiVersion);
+  console.log(martiGuiVersion);
   process.exit();
 }
 
@@ -649,7 +649,11 @@ io.on('connect', function(socket){
 
   clientCount = socket.client.conn.server.clientsCount;
   console.log(`[${new Date().toLocaleString()}] Connection added - users connected: ${clientCount}`);
-  io.sockets.emit('current-client-count', clientCount);
+  var guiVersionAndClientCount = {
+    clientCount: clientCount,
+    guiVersion: martiGuiVersion
+  }
+  io.sockets.emit('current-client-count', guiVersionAndClientCount);
 
   socket.on('hb_pong', function(data){
   });
@@ -954,7 +958,7 @@ socket.on('compare-tree-request', request => {
         socket.on('disconnect', () => {
           clientCount = socket.client.conn.server.clientsCount;
           console.log(`[${new Date().toLocaleString()}] Connection removed - users connected: ${clientCount}`);
-          io.sockets.emit('current-client-count', clientCount);
+          io.sockets.emit('current-client-count', guiVersionAndClientCount);
         });
 
         socket.on('disconnecting', () => {

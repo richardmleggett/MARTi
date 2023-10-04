@@ -476,10 +476,16 @@ socket.on('dashboard-meta-response', function(data) {
 
   $("#dashboardInfoCardDatabase").text(classificationDb);
 
+  if (dashboardSampleData.analysis.classification.algorithm == "Centrifuge") {
+    centrifugeClassification = true;
+    $("#dashboardAmrDonutRow").hide();
+  }
 
   plotReadsDonut(dashboardSampleData);
 
 });
+
+var centrifugeClassification = false;
 
 var root;
 var globDonutData;
@@ -1064,7 +1070,6 @@ socket.on('dashboard-dashboardAmrTable-response', function(data) {
         initialisePlotVisibility("dashboardAmrDonut",true);
       }
 
-
       plotAmrDonut(dashboardAmrReponseData);
 
       if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrHitsDonut")) {
@@ -1289,6 +1294,19 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
    };
 
   dashboardAmrTable.draw(false);
+
+  if (centrifugeClassification) {
+
+    if ($('#dashboardAmrTableColCheckbox1').is(':checked')) {
+    $('#dashboardAmrTableColCheckbox1').click();
+    }
+    if ($('#dashboardAmrTableColCheckbox2').is(':checked')) {
+    $('#dashboardAmrTableColCheckbox2').click();
+    }
+
+    $('#dashboardAmrTableColCheckbox1').prop('disabled', true);
+    $('#dashboardAmrTableColCheckbox2').prop('disabled', true);
+  }
 
   };
 

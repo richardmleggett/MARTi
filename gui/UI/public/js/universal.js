@@ -293,8 +293,10 @@ socket.on('hb_ping', function(data){
     });
 
 socket.on('current-client-count', function(data){
-  console.log("current number of user: " + data);
-  $("#currentClientCount").text(data);
+  console.log("current number of user: " + data.clientCount);
+  $("#currentClientCount").text(data.clientCount);
+  let guiVersion = "MARTi GUI v" + data.guiVersion;
+  $("#currentGuiVersion").text(guiVersion);
     });
 
 socket.on('sample-removed', function(data){
