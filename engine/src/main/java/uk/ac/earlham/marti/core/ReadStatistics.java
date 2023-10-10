@@ -30,7 +30,12 @@ public class ReadStatistics {
                 passLengthsByBarcode.put(bc, new Hashtable<String,Integer>());
                 maxPassLengthByBarcode.put(bc, 0);
             }
-            passLengthsByBarcode.get(bc).put(readId, length);
+            Hashtable<String,Integer> hashtable = passLengthsByBarcode.get(bc);
+            if(hashtable.containsKey(readId)) {
+                options.getLog().printlnLogAndScreen("Warning: Duplicate pass read/sequence ID: " + readId);
+                options.getLog().printlnLogAndScreen("Results based on read length may not be accurate.");
+            }
+            hashtable.put(readId, length);
             int max = maxPassLengthByBarcode.get(bc);
             if(length > max) {
                 maxPassLengthByBarcode.put(bc, length);
@@ -40,7 +45,12 @@ public class ReadStatistics {
                 failLengthsByBarcode.put(bc, new Hashtable<String,Integer>());
                 maxFailLengthByBarcode.put(bc, 0);
             }
-            failLengthsByBarcode.get(bc).put(readId, length);
+            Hashtable<String,Integer> hashtable = failLengthsByBarcode.get(bc);
+            if(hashtable.containsKey(readId)) {
+                options.getLog().printlnLogAndScreen("Warning: Duplicate fail read/sequence ID: " + readId);
+                options.getLog().printlnLogAndScreen("Results based on read length may not be accurate.");
+            }
+            hashtable.put(readId, length);
             int max = maxFailLengthByBarcode.get(bc);
             if(length > max) {
                 maxFailLengthByBarcode.put(bc, length);
