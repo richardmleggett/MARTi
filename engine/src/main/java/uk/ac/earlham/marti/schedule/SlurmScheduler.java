@@ -161,7 +161,7 @@ public class SlurmScheduler implements JobScheduler {
                        (jState == SlurmSchedulerJob.STATE_OOM) ||
                        (jState == SlurmSchedulerJob.STATE_REVOKED) ||
                        (jState == SlurmSchedulerJob.STATE_TIMEOUT)) {
-                schedulerLog.println("Job "+ssj.getId()+" failed with code "+ssj.getExitValue()); 
+                schedulerLog.println("Job "+ssj.getId()+" failed with code "+jState+" and exit value "+ssj.getExitValue()); 
                 runningJobs.remove(id);
                 failedJobs.put(id, ssj);
                 options.getLog().printlnLogAndScreen("Failed SLURM job "+ssj.getId()+" - see scheduler log");
