@@ -198,7 +198,7 @@ public class ReadFilterSample {
             
             options.getLog().println("Moves complete.");
 
-            metaData.registerFilteredFastaChunk(currentFastaChunkFilename, readCountInChunk);  
+            metaData.registerFilteredFastaChunk(currentFastaChunkFilename, readCountInChunk);
             metaData.writeSampleJSON(false);
 
             options.getLog().println("Now to add to pending pair list");
@@ -260,6 +260,10 @@ public class ReadFilterSample {
         //    System.out.println("-dontrunblast specified, so not filtering files");
         //    processThis = false;
         //}        
+        
+        if(metaData.getSequencingTimeString() == "") {
+            metaData.setDateFromSequenceFile(fastqPathname);
+        }
         
         if (stopProcessingChunks) {
             options.getLog().println("Got enough reads, so ignoring file "+fastqPathname);
