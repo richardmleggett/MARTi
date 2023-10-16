@@ -17,6 +17,8 @@ public interface JobScheduler {
     public int getFailedJobCount();
     public int submitJob(String[] commands, String logFilename, boolean submitJob);
     public boolean checkJobCompleted(int i);
+    public boolean checkJobFailed(int i);
     public int getExitValue(int i);
     public void markJobAsFailed(int i);
+    public void resubmitJobIfPossible(int i);
 }

@@ -35,6 +35,7 @@ public class SlurmSchedulerJob {
     public final static int STATE_TIMEOUT = 15;     
         
     private MARTiLog schedulerLog;
+    private MARTiLog slurmLog;
     private String[] commands;
     private Process process = null;
     private String logFilename;
@@ -50,26 +51,36 @@ public class SlurmSchedulerJob {
     private String maxTimeString="6-23:00";
     private String memory = "4G";
     private String partition = "ei-medium";
+    private String dependentFilename = null;
+    private String flagFilename = null;
+    private boolean flagStatus = false;
     private long submittedJobId = 0;
     private int jobState = STATE_UNKNOWN;
+    private long completedTime = 0;
+    private long dependentTime = 0;
+    private long schedulerFileWriteDelay = 30 * 1000; // Allow 30s for file writing to finish before marking job as complete
+    private long schedulerFileTimeout = 10 * 60 * 1000; // 10 minutes as ms
+    private int resubmissionAttempts = 0;
 
-    public SlurmSchedulerJob(String name, String[] c, String l, boolean d, MARTiLog s) {
+    public SlurmSchedulerJob(String name, String[] c, String l, boolean d, MARTiLog s, MARTiLog sl) {
         jobName = name;
         internalJobId = -1;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
         schedulerLog = s;
+        slurmLog = sl;
     }
 
     
-    public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d, MARTiLog s) {
+    public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d, MARTiLog s, MARTiLog sl) {
         jobName = name;
         internalJobId = i;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
         schedulerLog = s;
+        slurmLog = sl;
     }
     
     // Might implement this version (with separate error log) later
@@ -81,12 +92,36 @@ public class SlurmSchedulerJob {
     //    dontRunCommand = d;
     //}
     
+    public void setSchedulerFileTimeout(int l) {
+        schedulerFileTimeout = l;
+    }
+
+    public void setSchedulerFileWriteDelay(int d) {
+        schedulerFileWriteDelay = d;
+    }
+    
+    public void setResubmissionAttempts(int n) {
+        resubmissionAttempts = n;
+    }
+        
+    public void setDependentFilename(String f) {
+        dependentFilename = f;
+        flagFilename = f + ".completed";
+    }
+    
     public void setJobId(int i) {
         internalJobId = i;
     }
 
     public void run() {
-        String originalCommands[] = commands;        
+        if (flagFilename != null) {
+            File f = new File(flagFilename);
+            if (f.exists()) {
+                 schedulerLog.println("Removing flag file "+flagFilename);
+                 f.delete();
+            }
+        }
+        
         if (dontRunCommand) {
             System.out.println("Not running command for job "+internalJobId);            
             submittedJobId = internalJobId;
@@ -103,6 +138,10 @@ public class SlurmSchedulerJob {
             }
         }
 
+        if (flagFilename != null) {
+            commandString += " ; touch "+flagFilename;
+        }
+        
         String wrapString = "echo 'SLURM job output' ; ";
         wrapString += "echo '' ; ";
         wrapString += "echo 'Command: "+commandString+"' ; ";
@@ -118,6 +157,7 @@ public class SlurmSchedulerJob {
         wrapString += "echo -n 'End time: ' ; date";
                 
         ArrayList<String> pbCommands = new ArrayList<String>();
+
 //        pbCommands.add("sbatch");
 //        pbCommands.add("--job-name="+jobName);
 //        pbCommands.add("--nodes="+nNodes);
@@ -147,6 +187,7 @@ public class SlurmSchedulerJob {
         pbCommands.add(commandString);
         schedulerLog.println("Command being run... "+commandString);
         schedulerLog.println("CPUs: "+nCPUs+" Memory: "+memory+" Partition: "+partition);
+        slurmLog.println("Job "+internalJobId+" command "+commandString);
         
         //System.out.println(pbCommands);
         
@@ -199,6 +240,8 @@ public class SlurmSchedulerJob {
                 }
             }
 
+            slurmLog.println("Job "+internalJobId+" SLURM id "+submittedJobId);
+            
             reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));   
             while ((line = reader.readLine()) != null) {
                 System.out.println("Error line: "+line);
@@ -290,9 +333,11 @@ public class SlurmSchedulerJob {
             case "TIMEOUT": jobState = STATE_TIMEOUT; break;
             default: jobState = STATE_UNKNOWN; break;
         }
+        slurmLog.println("Job "+internalJobId+" state parsed "+jobState);
     }
     
     public int getJobState() {
+        slurmLog.println("Job "+internalJobId+" state returned "+jobState);
         return jobState;
     }
     
@@ -321,7 +366,7 @@ public class SlurmSchedulerJob {
         return stateString;
     }
     
-    public void queryJobState() {
+    public void queryJobState() {        
         if (dontRunCommand) {
             jobState=STATE_COMPLETED;
             return;
@@ -329,17 +374,89 @@ public class SlurmSchedulerJob {
                 
         if (submittedJobId > 0) {
             try {
-                Process process = Runtime.getRuntime().exec("sacct -j "+submittedJobId+" -b -X");
+                String command = "sacct -j "+submittedJobId+" -b -X";
+                Process process = Runtime.getRuntime().exec(command);
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));   
                 String line;
+                slurmLog.println("Job "+internalJobId+" running "+command);
                 while ((line = reader.readLine()) != null) {
                     String[] fields = line.trim().split("\\s+");
                     if (fields[0].compareTo(Long.toString(submittedJobId)) == 0) {
+                        slurmLog.println("Job "+internalJobId+"      GOT "+line);
                         String state = fields[1];
                         parseJobState(state);
                         if (jobState == STATE_UNKNOWN) {
                             schedulerLog.println("Error: couldn't parse sacct state '"+state+"'");
+                        }
+                    } else {
+                        slurmLog.println("Job "+internalJobId+" IGNORING "+line);
+                    }
+                }
+                
+                if (jobState == STATE_COMPLETED) {
+                    // Job can be marked as completed by SLURM, but file writing might not have finished
+                    // So we check for dependent file.
+                    
+                    // Note the time it was first observed as completed
+                    if (completedTime == 0) {
+                        slurmLog.println("Job "+internalJobId+" marked as COMPLETED by SLURM");
+                        completedTime = System.nanoTime();
+                    }
+                    
+                    // If we have a dependent file (e.g. a BLAST file being written)...
+                    if (dependentFilename != null) {
+                        File dependentFile = new File(dependentFilename);
+                        File flagFile = new File(flagFilename);
+                        
+                        // Does the file exist?
+                        if (dependentFile.exists()) {
+                            // Note the time it was first observed as existing
+                            if (dependentTime  == 0) {
+                                slurmLog.println("Job "+internalJobId+" got dependent file");
+                                dependentTime = System.nanoTime();
+                                
+                                // If there is a file write delay set, then we can't have met the delay yet, as
+                                // we have only just noticed the dependent file, so we pretend the job is still running.
+                                if (schedulerFileWriteDelay > 0) {
+                                    jobState = STATE_RUNNING;
+                                }
+                            } else {
+                                // How long is it since we first noticed his file
+                                long timeDiff = (System.nanoTime() - dependentTime) / 1000000;
+  
+                                // Make sure it's at least the write delay (defined above)
+                                if (timeDiff >= schedulerFileWriteDelay) {
+                                    slurmLog.println("Job "+internalJobId+" completed write delay");
+                                    if (flagFile.exists()) {
+                                        slurmLog.println("Job "+internalJobId+" got flag filename and deleting");
+                                        flagStatus = true;
+                                        flagFile.delete();
+                                    }
+                                } else {
+                                    // If write delay not exceeded, then pretend SLURM is still running
+                                    slurmLog.println("Job "+internalJobId+" waiting for writes");
+                                    jobState = STATE_RUNNING;
+                                }
+                            }
+                        } else {
+                            // Can't see dependent file yet. So mark as RUNNING if not timed out.
+                            long timeDiff = (System.nanoTime() - completedTime) / 1000000;
+                            slurmLog.println("Warning: Job "+internalJobId+" can't see dependent file "+timeDiff+" ms after COMPLETED.");
+                            
+                            if (flagFile.exists()) {
+                                slurmLog.println("Job "+internalJobId+" flag file exists");
+                            } else {
+                                slurmLog.println("Job "+internalJobId+" flag file missing");
+                            }
+                            
+                            if (timeDiff > (schedulerFileTimeout)) {
+                                jobState = STATE_FAILED;
+                                slurmLog.printlnLogAndScreen("Error: Job "+internalJobId+" marked as FAILED.");                                
+                            } else {
+                                jobState = STATE_RUNNING;
+                                slurmLog.println("Warning: Job "+internalJobId+" marked as PENDING.");                                
+                            }
                         }
                     }
                 }
@@ -347,7 +464,20 @@ public class SlurmSchedulerJob {
                 reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));   
                 while ((line = reader.readLine()) != null) {
                     System.out.println("Error line: "+line);
-                }            
+                }
+                
+                // We may be able to resubmit it and try again...
+                if ((jobState == STATE_FAILED) ||
+                    (jobState == STATE_BOOT_FAIL) ||
+                    (jobState == STATE_CANCELLED) ||
+                    (jobState == STATE_DEADLINE) ||
+                    (jobState == STATE_FAILED) ||
+                    (jobState == STATE_NODE_FAIL) ||
+                    (jobState == STATE_OOM) ||
+                    (jobState == STATE_TIMEOUT))
+                {
+                    tryResubmission();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(1);
@@ -355,6 +485,26 @@ public class SlurmSchedulerJob {
         } else {
             System.out.println("Job not submitted");
         }
+    }
+    
+    public boolean checkJobFailed() {
+        boolean failed = false;
+
+        if (resubmissionAttempts == 0) {        
+            if ((jobState == STATE_FAILED) ||
+                (jobState == STATE_BOOT_FAIL) ||
+                (jobState == STATE_CANCELLED) ||
+                (jobState == STATE_DEADLINE) ||
+                (jobState == STATE_FAILED) ||
+                (jobState == STATE_NODE_FAIL) ||
+                (jobState == STATE_OOM) ||
+                (jobState == STATE_TIMEOUT))
+            {
+                failed = true;
+            }        
+        }
+        
+        return failed;
     }
     
     public void setMemory(String m) {
@@ -367,6 +517,21 @@ public class SlurmSchedulerJob {
     
     public void setQueue (String s) {
         partition = s;
+    }    
+    
+    public boolean tryResubmission() {
+        boolean resubmitted = false;
+        
+        if (resubmissionAttempts > 0) {
+            schedulerLog.println("Job "+internalJobId+" ("+submittedJobId+") failed. Resubmitting.");
+            jobState = STATE_UNKNOWN;
+            this.run();
+            resubmissionAttempts--;
+            resubmitted = true;
+        } else {
+            schedulerLog.println("Job "+internalJobId+" ("+submittedJobId+") failed. No resubmission attempts remaining.");
+        }
+        return resubmitted;
     }
 }
 

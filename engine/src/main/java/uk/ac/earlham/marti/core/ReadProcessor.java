@@ -190,10 +190,11 @@ public class ReadProcessor {
     private boolean checkForEnd() {
         boolean fEnd = true;
         
-        // End if scheduler has failed jobs
+        // Used to end if scheduler has failed jobs. Now we try to continue...
         if (options.getJobScheduler().getFailedJobCount() > 0) {
-            options.getLog().printlnLogAndScreen("ERROR: failed jobs, so exiting early.");
-            return true;
+            //options.getLog().printlnLogAndScreen("ERROR: failed jobs, so exiting early.");
+            options.getLog().println("ERROR: failed jobs, but trying to continue.");
+            //return true;
         }
         
         // We only exit if...

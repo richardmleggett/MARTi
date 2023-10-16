@@ -95,6 +95,10 @@ public class ReadClassifier {
                             options.getLog().printlnLogAndScreen("Message is "+line);
                             options.getLog().printlnLogAndScreen("Please check results carefully.");
                             //completed = false;
+                        } else if (line.toLowerCase().contains("failed")) {
+                            options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
+                            options.getLog().printlnLogAndScreen("Message is "+line);
+                            options.getLog().printlnLogAndScreen("Please check results carefully.");
                         }
                     }
                     br.close();            
@@ -203,8 +207,6 @@ public class ReadClassifier {
                         filesProcessed++;
                         files.remove(thisId);
                         options.getProgressReport().incrementChunksParsedCount();
-                        
-                        
                     } else if (f.getBlastProcessName().equalsIgnoreCase(options.getClassifyingBlastName())) {
                         // If nt file, can only parse it if dependencies have been met
                         if (blastDependencies.containsKey(thisId)) {
@@ -220,7 +222,7 @@ public class ReadClassifier {
                                 SampleMetaData md = options.getSampleMetaData(barcode);
 
                                 options.getLog().println("Got sample metadata");
-                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null, options.runningCARD());
+                                LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null, options.runningCARD(), options.getLog());
                                 
                                 String summaryFilename = f.getClassifierPrefix() + "_summary.txt";
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";
@@ -323,9 +325,19 @@ public class ReadClassifier {
                     System.out.println("Error: Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId));
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
                     js.markJobAsFailed(thisId);
+                    js.resubmitJobIfPossible(thisId);
                 }
             } else {    
                 options.getLog().println(MARTiLog.LOGLEVEL_NOTCOMPLETED, "Not completed " + f.blastProcessName + " - " + f.blastFile + " - " + f.getJobId());
+                if (js.checkJobFailed(thisId)) {
+                    options.getLog().println("ERROR: Job "+thisId+" terminally failed. Attempting to continue without these BLAST results.");
+                    options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
+
+                    // Remove from list of files to process
+                    filesProcessed++;
+                    files.remove(thisId);
+                    options.getProgressReport().incrementChunksParsedCount();                    
+                }
             }
         }        
     }

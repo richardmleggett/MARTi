@@ -29,6 +29,7 @@ public class SlurmScheduler implements JobScheduler {
     private ConcurrentHashMap<Integer, SlurmSchedulerJob> failedJobs = new ConcurrentHashMap<Integer, SlurmSchedulerJob>();    
     private ConcurrentHashMap<Integer, Integer> jobStatus = new ConcurrentHashMap<Integer, Integer>();
     private MARTiLog schedulerLog = new MARTiLog();
+    private MARTiLog slurmLog = new MARTiLog();
     private MARTiEngineOptions options;
     private int internalJobId = 1; // Id used in this Java class, not by SLURM
     private int maxJobs = 1000;
@@ -39,6 +40,7 @@ public class SlurmScheduler implements JobScheduler {
         options = o;
         schedulerLog.open(o.getLogsDir()+File.separator+"scheduler.txt");
         schedulerLog.println("maxJobs = "+maxJobs);
+        slurmLog.open(o.getLogsDir()+File.separator+"slurm.txt");
     }    
     
     public synchronized void setDontRunCommand() {
@@ -60,7 +62,10 @@ public class SlurmScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt, schedulerLog);
+        SlurmSchedulerJob j = new SlurmSchedulerJob("marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt, schedulerLog, slurmLog);
+        j.setSchedulerFileTimeout(options.getSchedulerFileTimeout());
+        j.setSchedulerFileWriteDelay(options.getSchedulerFileWriteDelay());
+        j.setResubmissionAttempts(options.getSchedulerResubmissionAttempts());
         pendingJobs.add(j);
         allJobs.put(internalJobId, j);
         jobStatus.put(internalJobId, SlurmSchedulerJob.STATE_PENDING);
@@ -105,6 +110,18 @@ public class SlurmScheduler implements JobScheduler {
         return false;
     }
     
+    public synchronized boolean checkJobFailed(int i) {
+        boolean failed = false;
+
+        if (jobStatus.containsKey(i)) {    
+            
+        } else {
+            options.getLog().printlnLogAndScreen("Warning: Attempt to check completion on unknown job id " + i);
+        }
+        
+        return failed;
+    }
+    
     // See comment above
     public synchronized int getSlurmState(int i) {
         if (jobStatus.containsKey(i)) {    
@@ -123,6 +140,13 @@ public class SlurmScheduler implements JobScheduler {
 
         return SlurmSchedulerJob.STATE_UNKNOWN;
     }
+    
+    public synchronized void setDependentFilename(int i, String s) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            ssj.setDependentFilename(s);
+        }
+    }
         
     public synchronized int getRunningJobCount() {
         return runningJobs.size();
@@ -136,7 +160,7 @@ public class SlurmScheduler implements JobScheduler {
         // Check state of jobs, but only every minute or two
         long timeNow = System.nanoTime();
         long timeDiff = (timeNow - lastSlurmQuery) / 1000000; // ms
-        if (timeDiff < 1000) {
+        if (timeDiff < (60*1000)) {
             return;
         }
 
@@ -191,9 +215,18 @@ public class SlurmScheduler implements JobScheduler {
     
     public synchronized void markJobAsFailed(int i) {
         SlurmSchedulerJob ssj = allJobs.get(i);
-        if (runningJobs.containsKey(i)) {
-            runningJobs.remove(i);
+        if (ssj != null) {
+            if (runningJobs.containsKey(i)) {
+                runningJobs.remove(i);
+            }
+            failedJobs.put(i, ssj);
         }
-        failedJobs.put(i, ssj);
+    }
+    
+    public synchronized void resubmitJobIfPossible(int i) {
+        SlurmSchedulerJob ssj = allJobs.get(i);
+        if (ssj != null) {
+            ssj.tryResubmission();
+        }
     }
 }

@@ -203,8 +203,18 @@ public class BlastHandler {
                     jobid = jobScheduler.submitJob(commandString, logFile, runIt);
                     if (jobScheduler instanceof SlurmScheduler) {
                         ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
-                        ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
+                        if (options.rmlDebug()) {
+                            if (jobid == 4) {
+                                options.getLog().printlnLogAndScreen("RML DEBUG: If you see this and you're not Richard Leggett, something went wrong");
+                                ((SlurmScheduler) jobScheduler).setJobMemory(jobid, "2G");                            
+                            } else {
+                                ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
+                            }
+                        } else {
+                            ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
+                        }
                         ((SlurmScheduler) jobScheduler).setQueue(jobid, bp.getJobQueue());
+                        ((SlurmScheduler) jobScheduler).setDependentFilename(jobid, outputBlast);
                     }
 
                     if (bp.useForClassifying()) {

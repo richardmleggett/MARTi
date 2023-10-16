@@ -8,6 +8,9 @@ Queue	ei-medium	The default job submission queue. Currently only required for SL
 MaxJobs	4	Specifies the maximum number of concurrent jobs that can be run by the scheduler (local or SLURM).
 InactivityTimeout	10	How long (seconds) before giving up waiting for new reads to appear. After this timeout, all remaining analysis will be completed and analysis will stop. Default timeout is 10 seconds.
 StopProcessingAfter	50000	Stop analysis after this number of reads. Default behaviour is no limit.
+schedulerFileTimeout	600000	For SLURM, the allowed time between a job completing an an output file appearing before concluding a failutre. Default 600000 (i.e. 10m).
+SchedulerFileWriteDelay	30000	For SLURM, the delay after a job completing and an output file appearing before MARTi attempts to read it. Default 30000 (i.e. 30s).
+SchedulerResubmissionAttemplts	2	For SLURM, how many times to try resubmitting a failed job before giving up.
 TaxonomyDir	/path/to/dir	Specifies location of NCBI taxonomy files (i.e. the directory containing nodes.dmp and names.dmp).
 AccessionMap	/path/to/file	Specifies an accession map for mapping accession IDs to taxa. This is generated using the NCBI accession2taxid data by a separte tool. Option should not be required for normal MARTi operation.
 ConvertFastQ	n/a	Deprecated.

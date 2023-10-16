@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
+import uk.ac.earlham.marti.core.MARTiLog;
 
 /**
  * Carry out Lowest Common Ancestor based classification.
@@ -37,15 +38,17 @@ public class LCAFileParser {
     private Taxonomy taxonomy;
     private AccessionTaxonConvertor accTaxConvert;
     private LCAParseOptions options;
+    private MARTiLog log;
     private String lastFilename = "";
     private boolean keepRejectedAlignments = false;
     private boolean runningCARD;
 
-    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard) {
+    public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard, MARTiLog l) {
         taxonomy = t;
         options = o;
         accTaxConvert = atc;
         runningCARD = rCard;
+        log = l;
     }
     
     private void logEqual(String queryName) {
@@ -108,57 +111,63 @@ public class LCAFileParser {
     * @return number of reads with hits
     */
     public int parseFile(String filename) {
-        BufferedReader br;
+        BufferedReader br = null;
         InputStream fileStream = null;
         InputStream gzipStream = null;
         Reader decoder = null;
         
         try {
             File f = new File(filename);
-            if(f.exists()){
+            if (f.exists()) {
                 br = new BufferedReader(new FileReader(filename));
             } else {
                 filename = filename + ".gz";
-                fileStream = new FileInputStream(filename);
-                gzipStream = new GZIPInputStream(fileStream);
-                decoder = new InputStreamReader(gzipStream, "US-ASCII");
-                br = new BufferedReader(decoder);    
-            }
-            
-            String line;
-            String lastQuery = "";
-            int equal = 0;
-
-            do {
-                line = br.readLine();
-                if (line != null) {
-                    if (line.length() > 1) {
-                        LCAHit ah = createNewHit(taxonomy, accTaxConvert, line);
-                        long taxonId = ah.getTaxonId();
-                        String queryName = ah.getQueryName();
-                        LCAHitSet hs;
-                                                
-                        if (hitsByQuery.containsKey(queryName)) {
-                            hs = hitsByQuery.get(queryName);
-                        } else {
-                            hs = createNewHitSet(queryName);
-                        }
-                        hs.addAlignment(ah);
-                        
-                        hitsByQuery.put(queryName, hs);
-                    }
+                if (f.exists()) {
+                    fileStream = new FileInputStream(filename);
+                    gzipStream = new GZIPInputStream(fileStream);
+                    decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                    br = new BufferedReader(decoder);    
+                } else {
+                    log.printlnLogAndScreen("Error: can't find " + filename +" or unzipped version");
                 }
-            } while (line != null);
-            lastFilename = filename;
-            
-            br.close();
-            if(fileStream != null) {
-                decoder.close();
-                gzipStream.close();
-                fileStream.close();
             }
             
-            //printEquals();
+            if (br != null) {
+                String line;
+                String lastQuery = "";
+                int equal = 0;
+
+                do {
+                    line = br.readLine();
+                    if (line != null) {
+                        if (line.length() > 1) {
+                            LCAHit ah = createNewHit(taxonomy, accTaxConvert, line);
+                            long taxonId = ah.getTaxonId();
+                            String queryName = ah.getQueryName();
+                            LCAHitSet hs;
+
+                            if (hitsByQuery.containsKey(queryName)) {
+                                hs = hitsByQuery.get(queryName);
+                            } else {
+                                hs = createNewHitSet(queryName);
+                            }
+                            hs.addAlignment(ah);
+
+                            hitsByQuery.put(queryName, hs);
+                        }
+                    }
+                } while (line != null);
+                lastFilename = filename;
+
+                br.close();
+                if(fileStream != null) {
+                    decoder.close();
+                    gzipStream.close();
+                    fileStream.close();
+                }
+
+                //printEquals();
+            }
         } catch (Exception e) {
             System.out.println("readProcessFile Exception:");
             e.printStackTrace();

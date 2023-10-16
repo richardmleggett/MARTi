@@ -47,7 +47,9 @@ public class MARTiAnalysisRunnable  implements Runnable {
                             AMRAnalysisTask aat = (AMRAnalysisTask)mat;
                             runAMRTask(aat);
                             if(options.getCompressBlastFiles()) {
+                                options.getLog().println("Adding "+aat.getNtBlastFilename()+" to file compression queue");
                                 fileCompressionQueue.add(aat.getNtBlastFilename());
+                                options.getLog().println("Adding "+aat.getCARDBlastFilename()+" to file compression queue");
                                 fileCompressionQueue.add(aat.getCARDBlastFilename());
                             }
                             break;
