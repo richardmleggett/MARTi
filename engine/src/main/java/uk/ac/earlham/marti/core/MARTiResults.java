@@ -157,8 +157,10 @@ public class MARTiResults {
             treeBuilder.add("yield", yield);
             treeBuilder.add("summedYield", summedYield);
             
-            pwAssignments.print(taxonomy.getNameFromTaxonId(n.getId()) + ",");
-            pwAssignments.println(n.getId() + "," + assignedCount + "," + summedCount);
+            if(pwAssignments != null) {
+                pwAssignments.print(taxonomy.getNameFromTaxonId(n.getId()) + ",");
+                pwAssignments.println(n.getId() + "," + assignedCount + "," + summedCount);
+            }
             
             // Now output children as array
             JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
@@ -235,16 +237,6 @@ public class MARTiResults {
         jsonFilenameFinal = options.getMARTiJSONDirectory(bc) + File.separator + "tree_ms" + minSupport + ".json";
         assignmentsFilenameFinal = options.getMARTiJSONDirectory(bc) + File.separator + "assignments_ms" + minSupport + ".csv";
         
-        // Adjust for min support
-        long startTime = System.nanoTime();
-        // minSuppport of 100 is special case to output the non-LCA counts
-        if (minSupport < 100) {
-            taxonomy.adjustForMinSupport(bc, minSupport);
-        }
-        long timeDiff = (System.nanoTime() - startTime) / 1000000;
-        options.getLog().println("Timing: Min support refactoring for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
-
-
         // Open assignments file
         try {
             pwAssignments = new PrintWriter(new FileWriter(assignmentsFilename, false));
@@ -269,6 +261,16 @@ public class MARTiResults {
         // Create tree object
         JsonObjectBuilder treeBuilder = Json.createObjectBuilder();
         
+        // Adjust for min support
+        long startTime = System.nanoTime();
+        // minSuppport of 100 is special case to output the non-LCA counts
+        if (minSupport < 100) {
+            taxonomy.adjustForMinSupport(bc, minSupport, true);
+        }
+        long timeDiff = (System.nanoTime() - startTime) / 1000000;
+        options.getLog().println("Timing: Min support refactoring for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+
+        
         TaxonomyNode n = taxonomy.getNodeFromTaxonId(1L);
 
         // minSuppport of 100 is special case to output the non-LCA counts
@@ -277,6 +279,24 @@ public class MARTiResults {
         } else {
             outputNode(bc, n, treeBuilder, pwAssignments, true);
         }
+                     
+        JsonObjectBuilder treeYieldBuilder = Json.createObjectBuilder();
+        // Adjust for min support
+        startTime = System.nanoTime();
+        // minSuppport of 100 is special case to output the non-LCA counts
+        if (minSupport < 100) {
+            taxonomy.adjustForMinSupport(bc, minSupport, false);
+        }
+        timeDiff = (System.nanoTime() - startTime) / 1000000;
+        options.getLog().println("Timing: Min support refactoring for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+
+        // minSuppport of 100 is special case to output the non-LCA counts
+        if (minSupport == 100) {
+            outputNode(bc, n, treeYieldBuilder, null, false);
+        } else {
+            outputNode(bc, n, treeYieldBuilder, null, true);
+        }
+        
         
         // Build meta data
         JsonObjectBuilder metaBuilder = Json.createObjectBuilder();
@@ -296,6 +316,7 @@ public class MARTiResults {
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
         objectBuilder.add("meta", metaBuilder);
         objectBuilder.add("tree", treeBuilder);
+        objectBuilder.add("treeYield", treeYieldBuilder);
         JsonObject jsonObject = objectBuilder.build();        
 
         // Print it with pretty printing (pacing etc.)
