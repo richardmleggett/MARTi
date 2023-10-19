@@ -140,7 +140,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.19.4";
+const martiGuiVersion = "0.19.5";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);

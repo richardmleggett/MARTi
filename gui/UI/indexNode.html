@@ -10,7 +10,7 @@
   <meta name="author" content="Ned Peel">
 
   <title>MARTi</title>
-
+  <link rel="icon" href="/images/favicon.svg">
   <!-- fonts -->
   <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="/css/googleFontsNunito.css" rel="stylesheet">
@@ -609,6 +609,13 @@ dashboardColorIndex = colourPalettes[selectedPalette].length;
    if(dashboardChartVisibility["dashboardAmrDonut"] == true){
      plotAmrDonut(dashboardAmrReponseData);
    };
+
+   if(dashboardChartVisibility["dashboardAmrHitsDonut"] == true){
+     plotAmrHitsDonut(dashboardAmrReponseData);
+   };
+
+
+
 
  } else if (currentPage == "Compare") {
    updateComparePlots(compareTreeDataGlobal);

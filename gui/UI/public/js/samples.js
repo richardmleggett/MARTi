@@ -106,11 +106,9 @@ var selectedCompareMetaDataArray = [];
 var sampleMetaDataArray = [];
 
 function updateSampleTable(data){
-
 dataSampleList = [];
 
 sampleMetaDataArray = [];
-
 
 samplePageDataTable.clear();
 
@@ -258,6 +256,14 @@ socket.on('meta-response', function(metaData) {
   socket.emit('current-compare-samples-request',{
     clientId: uuid
   });
+
+  if(currentPage=="Dashboard") {
+    socket.emit('dashboard-accumulationChart-request',{
+      clientId: uuid,
+      rank:taxonomicRankSelectedTextLowerCase,
+      lca: "lca_"+lcaAbundanceDashboard
+    });
+  };
 });
 
 socket.on('meta-update-available', request => {

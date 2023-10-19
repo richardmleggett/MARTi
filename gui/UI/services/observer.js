@@ -102,7 +102,7 @@ class Observer extends EventEmitter {
 
           fileContent = JSON.parse(fileContent);
 
-          var treeData = fileContent.tree;
+          var treeData = fileContent;
 
           var split = filePath.split(sep);
 
@@ -219,7 +219,7 @@ class Observer extends EventEmitter {
             // Temporary code to handle old file format
             fileContent = JSON.parse(fileContent);
 
-            var treeData = fileContent.tree;
+            var treeData = fileContent;
 
             var split = filePath.split(sep);
 

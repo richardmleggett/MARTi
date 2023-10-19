@@ -334,10 +334,10 @@ legendTitle;
 
 if(compareHmTaxaRead == "percent"){
   legendPlotMaxVal = plotMaxValue*100;
-  legendTitle = "Classified reads (%)";
+  legendTitle = "Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s (%)";
 } else {
   legendPlotMaxVal = plotMaxValue;
-  legendTitle = "Classified reads";
+  legendTitle = "Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s";
 }
 
 
@@ -396,8 +396,8 @@ if(compareHmTaxaRead == "percent"){
             toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
             "<h5 class='mb-0'>" + d.name + "</h5>" +
             "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
-            "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.taxaReadCount) +
-            "<br/>Read %: " + Math.round((d.proportion*10000))/100)
+            "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId,d.taxaReadCount) +
+            "<br/>" + plotLevelSelectedCompareTooltipPrefix + " %: " + Math.round((d.proportion*10000))/100)
                .style("left", (tooltipPos(d3.event.pageX)) + "px")
                .style("top", (d3.event.pageY - 35) + "px");
 

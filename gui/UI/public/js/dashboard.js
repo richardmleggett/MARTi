@@ -412,7 +412,21 @@ function prepareSampleNameInput(data){
 
 var taxonomicRankSelected = 10;
 var taxonomicRankSelectedDashboardText = "All Levels";
+var plotLevelSelectedDashboardText = "Read count";
+var plotLevelSelectedDashboardId = "read";
+var plotLevelSelectedDashboardTreeName = "tree";
+var plotLevelSelectorChanged = true;
 
+var plotLevelSelectorDashboardObject = {
+  read: {
+    prefix: "Read",
+    treeName: "tree"
+  },
+  base: {
+    prefix: "Base",
+    treeName: "treeYield"
+  }
+};
 
 var taxonomicRankChanged = false;
 var dashboardSampleName;
@@ -461,6 +475,8 @@ socket.on('dashboard-meta-response', function(data) {
 
   $("#dashboardInfoCardReadsClassified").text(thousandsSeparators(dashboardSampleData.readsWithClassification));
 
+  $("#dashboardInfoCardYieldBasecalled").text(totalYieldFormatter(dashboardSampleData.yieldBases));
+
   let readsUnclassified = dashboardSampleData.readsAnalysed - dashboardSampleData.readsWithClassification;
 
   $("#dashboardInfoCardReadsUnclassified").text(thousandsSeparators(readsUnclassified));
@@ -489,10 +505,23 @@ var centrifugeClassification = false;
 
 var root;
 var globDonutData;
+var treeMapDataRaw;
 var treeMapData;
 var dashboardTaxaData;
 
-socket.on('dashboard-tree-response', function(treeData) {
+var treeDataBoth;
+var treeDataBoth2;
+
+socket.on('dashboard-tree-response', function(data) {
+
+  treeDataBoth = data.treeData;
+  treeDataBoth2 = data.treeData2;
+
+  if(treeDataBoth.hasOwnProperty("treeYield")){
+    $("#plotLevelSelectorMenu > a[data-id='base']").show();
+  } else {
+    $("#plotLevelSelectorMenu > a[data-id='base']").hide();
+  }
 
   if ($("#awaitingAnalysisCard").is(":visible")) {
     $("#taxaTableAndDonutRow").show();
@@ -501,31 +530,108 @@ socket.on('dashboard-tree-response', function(treeData) {
     $("#awaitingAnalysisCard").hide();
   }
 
-  var target = {};
-  dashboardSampleName = treeData.id;
-  dashboardSampleRunId = treeData.run;
-  root = treeData.treeData;
-  treeMapData = JSON.parse(JSON.stringify(root));
-  root.x0 = 0;
-  root.y0 = 0;
+  dashboardSampleName = data.id;
+  dashboardSampleRunId = data.run;
+
+  treeMapDataRaw = JSON.parse(JSON.stringify(treeDataBoth));
+
+  switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
+
   newTreeData = true;
+  plotLevelSelectorChanged = true;
   treeUpdate(root);
   treeMapUpdate(treeMapData);
-  globDonutData = treeData.treeData2;
-
   globUpdate(globDonutData);
-
   newTreeData = false;
+  plotLevelSelectorChanged = false;
 
 });
 
+function switchDataAbundanceLevel(treeName) {
+  root = treeDataBoth[treeName];
+  treeMapData = treeMapDataRaw[treeName];
+  root.x0 = 0;
+  root.y0 = 0;
 
+  globDonutData = treeDataBoth2[treeName];
+}
 
 var readCountAtLevelMax;
 var readCountAtLevelSum;
 var newLeafNodes;
 
+
+function spikeInBaseValues(d) {
+    d._value = d.value;
+    d._summedValue = d.summedValue;
+    d.value = d.yield;
+    d.summedValue = d.summedYield;
+    if (d.children) {
+      d.children.forEach(function(c){
+          spikeInBaseValues(c);
+        });
+    } else if(d._children) {
+      d._children.forEach(function(c){
+          spikeInBaseValues(c);
+        });
+      }
+};
+
+function returnReadValues(d) {
+    d.value = d._value;
+    d.summedValue = d._summedValue;
+    d._value = null;
+    d._summedValue = null;
+    if (d.children) {
+      d.children.forEach(function(c){
+          returnReadValues(c);
+        });
+    } else if(d._children) {
+      d._children.forEach(function(c){
+          returnReadValues(c);
+        });
+      }
+};
+
+function replacePlotLevelText() {
+  if (plotLevelSelectedDashboardId == "read"){
+    $("#selectedColumn > thead > tr > th:nth-child(3)").text("Read Count");
+    $("#selectedColumn > thead > tr > th:nth-child(4)").text("Read Proportion");
+  } else {
+    $("#selectedColumn > thead > tr > th:nth-child(3)").text("Bases (bp)");
+    $("#selectedColumn > thead > tr > th:nth-child(4)").text("Base Proportion");
+  }
+
+};
+
+function toolTipValueFormat(id,value) {
+  let formattedValue;
+  if (id == "read") {
+    formattedValue = thousandsSeparators(value);
+  } else {
+    let valueStripped = parseInt(value.toString().replace(/,/g, ""));
+    formattedValue = totalYieldFormatter(valueStripped);
+  }
+  return formattedValue;
+}
+
+function plotLevelDataManipulation(selectedLevel,d){
+
+  if(selectedLevel == "base"){
+    spikeInBaseValues(d);
+  } else {
+    if(d.hasOwnProperty("_value")){
+      returnReadValues(d);
+    }
+  }
+}
+
 function globUpdate(data) {
+
+if (plotLevelSelectorChanged) {
+  plotLevelDataManipulation(plotLevelSelectedDashboardId,data);
+}
+
 
   dashboardTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
 
@@ -645,8 +751,8 @@ tr = d3.select("#selectedColumn tbody").selectAll("tr")
 
              toolTipDiv.html("<h5 class='mb-0'>" + this.parentNode.parentNode.parentNode.firstChild.textContent +
             "</h5><small class='text-gray-800'>" + this.parentNode.parentNode.parentNode.childNodes[1].textContent +
-             "</em></small><hr class='toolTipLine'/>Read count: " + thousandsSeparators(this.parentNode.parentNode.parentNode.childNodes[2].textContent) +
-             "<br/>Read %: " + Math.round((this.parentNode.parentNode.textContent*100))/100)
+             "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s: " + toolTipValueFormat(plotLevelSelectedDashboardId,this.parentNode.parentNode.parentNode.childNodes[2].textContent) +
+             "<br/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + " %: " + Math.round((this.parentNode.parentNode.textContent*100))/100)
                 .style("left", (tooltipPos(d3.event.pageX)) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
             })
@@ -897,13 +1003,51 @@ updateTaxTable()
 
 });
 
+  plotLevelSelectedDashboardText = "Read count";
+  plotLevelSelectedDashboardId = "read";
+  plotLevelSelectorChanged = true;
+  plotLevelSelectedDashboardTreeName = "tree";
 
-  $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedDashboardText);
-  taxonomicRankSelectedText = taxonomicRankSelectedDashboardText;
+  $('#plotLevelSelectorDashboard').text(plotLevelSelectedDashboardText);
 
-$('#rarefactionCardTitleDashboard').text("Taxa accumulation - " + taxonomicRankSelectedText);
+  $('#plotLevelSelectorMenu a.rank:contains(' + plotLevelSelectedDashboardText + ')').addClass("active");
+  replacePlotLevelText();
 
-    taxonomicRankSelectedTextLowerCase = taxonomicRankSelectedText.toLowerCase().replace(" ", "");
+  $('#plotLevelSelectorMenu').on( 'click', 'a.rank', function () {
+          if ( $(this).hasClass('active') ) {
+
+          }
+          else {
+            $('#plotLevelSelectorMenu a.rank').removeClass('active');
+            plotLevelSelectedDashboardText = this.textContent;
+            plotLevelSelectedDashboardId = $(this).data('id');
+            $('#plotLevelSelectorDashboard').text(plotLevelSelectedDashboardText);
+            $(this).addClass('active');
+            plotLevelSelectedDashboardTreeName = plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId]["treeName"];
+            // if (plotLevelSelectedDashboardId == "read"){
+            //   treeData = data.treeData.tree;
+            //   globDonutData = data.treeData2.tree;
+            // } else {
+            //   treeData = data.treeData.treeYield;
+            //   globDonutData = data.treeData2.treeYield;
+            // }
+            console.log("THIS ONE");
+            switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
+            replacePlotLevelText();
+            plotLevelSelectorChanged = true;
+            globUpdate(globDonutData);
+            treeUpdate(root);
+            treeMapUpdate(treeMapData);
+            plotLevelSelectorChanged = false;
+          }
+    });
+
+    $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedDashboardText);
+    taxonomicRankSelectedText = taxonomicRankSelectedDashboardText;
+
+  $('#rarefactionCardTitleDashboard').text("Taxa accumulation - " + taxonomicRankSelectedText);
+
+      taxonomicRankSelectedTextLowerCase = taxonomicRankSelectedText.toLowerCase().replace(" ", "");
 
   $('#taxonomicLevelSelectorMenu a.rank:contains(' + taxonomicRankSelectedDashboardText + ')').addClass("active");
 
@@ -1021,17 +1165,19 @@ socket.on('tree-update-available', request => {
 
 socket.on('dashboard-accumulationChart-response', function(data) {
 
-  if (!dashboardChartVisibility.hasOwnProperty("accumulationChart")) {
-    dashboardChartVisibility["accumulationChart"] = true;
-    initialisePlotVisibility("accumulationChart",true);
-  };
-  if (!dashboardAccumulationDataAvailable) {
-    initialiseCompareAccumulation();
-    dashboardAccumulationDataAvailable = true;
+  if (!sampleMetaDataArray.length == 0){
+    if (!dashboardChartVisibility.hasOwnProperty("accumulationChart")) {
+      dashboardChartVisibility["accumulationChart"] = true;
+      initialisePlotVisibility("accumulationChart",true);
+    };
+    if (!dashboardAccumulationDataAvailable) {
+      initialiseCompareAccumulation();
+      dashboardAccumulationDataAvailable = true;
+    }
+    rareData = data;
+    $('#no-data-accumulation').addClass('d-none');
+    plotRarefactionCompare(rareData);
   }
-  rareData = data;
-  $('#no-data-accumulation').addClass('d-none');
-  plotRarefactionCompare(rareData);
 
 });
 
@@ -1041,7 +1187,6 @@ socket.on('accumulation-update-available', request => {
     dashboardChartVisibility["accumulationChart"] = true;
     initialisePlotVisibility("accumulationChart",true);
   };
-
 
   if(currentPage=="Dashboard" && dashboardChartVisibility["accumulationChart"] == true) {
     socket.emit('dashboard-accumulationChart-request',{
@@ -1331,7 +1476,11 @@ d3.selectAll(".dashboard-amr-chunk-time").text(dashboardAmrTableChunkTime[dashbo
 
     var dataArray = [];
     var header = [];
-    header.push('Taxon','NCBI ID','NCBI Rank','Read count','Summed read count');
+    var abundanceLevel = plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix;
+    var nodeCount = abundanceLevel + " count";
+    var summedNodeCount = "Summed " + abundanceLevel.toLowerCase() + " count";
+    header.push('Taxon','NCBI ID','NCBI Rank',nodeCount,summedNodeCount);
+
     // for (var sample of sortCompareNameArray) {
       // var sampleNameRunCount = sample + " (" + run + ") Read count";
       // header.push(sampleNameRunCount);

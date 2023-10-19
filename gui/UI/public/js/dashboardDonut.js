@@ -249,20 +249,12 @@ function donutUpdate(data) {
 
         slice.on("mousemove", function(d) {
 
-
-
             toolTipDiv.style("opacity", .95)
                 .html("<h5 class='mb-0'>" + d.data.label + "</h5><small class='text-gray-800'>" + d.data.ncbiRank +
-                "</em></small><hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.value) +
-                "<br/>Read %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
-
-                // .style("left", (d3.event.pageX) + "px")
-                // .style("top", (d3.event.pageY - 35) + "px");
-
+                "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.value) +
+                "<br/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + " %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
                 .style("left", (tooltipPos(d3.event.pageX)) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
-
-
         });
 
         slice.on("mouseover", function(d, i) {

@@ -141,8 +141,6 @@ var rc_yAxis = d3.svg.axis()
 
 function plotRarefactionCompare(data) {
 
-
-
 data.sort(function(a, b){
   return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
 })
@@ -160,7 +158,6 @@ data.sort(function(a, b){
   } else if (currentPage=="Compare") {
     selectedLca = lcaAbundanceCompare;
   }
-
 
   if (selectedLca == "0.0") {
     $("#accumulationPlotWarning").hide();
@@ -246,6 +243,8 @@ for (var line of multilineData) {
 }
 
 accumulationData = multilineData;
+
+
 
 var rarefactionCompareLegend = d3.select("#compareRarefactionPlotLegend").selectAll(".rarefactionCompareLegend")
     .data(idList);
@@ -427,7 +426,7 @@ mouseG.select('rect')
             if (dx.readCount > largestX.readCount) {
               largestX = dx;
             }
-          
+
 
           d3.select(this).select('text')
             .text(dx.taxaCount + " (" + thousandsSeparators(dx.readCount) + " reads)");

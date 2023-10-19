@@ -1,3 +1,8 @@
+var plotLevelSelectedCompareText = "Read count";
+var plotLevelSelectedCompareId = "read";
+var plotLevelSelectedCompareTooltipPrefix;
+var plotLevelSelectedCompareTreeName = "tree";
+
 function initialiseComparePage() {
 
 
@@ -64,6 +69,37 @@ function initialiseComparePage() {
               });
           }
   });
+
+
+  plotLevelSelectedCompareText = "Read count";
+  plotLevelSelectedCompareId = "read";
+  plotLevelSelectorChanged = true;
+  plotLevelSelectedCompareTooltipPrefix = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId].prefix;
+  plotLevelSelectedCompareTreeName = "tree";
+
+  $('#plotLevelSelectorCompare').text(plotLevelSelectedCompareText);
+
+  $('#plotLevelSelectorMenu a.rank:contains(' + plotLevelSelectedCompareText + ')').addClass("active");
+  // replacePlotLevelText();
+
+  $('#plotLevelSelectorMenu').on( 'click', 'a.rank', function () {
+          if ( $(this).hasClass('active') ) {
+
+          }
+          else {
+            $('#plotLevelSelectorMenu a.rank').removeClass('active');
+            plotLevelSelectedCompareText = this.textContent;
+            plotLevelSelectedCompareId = $(this).data('id');
+            $('#plotLevelSelectorCompare').text(plotLevelSelectedCompareText);
+            $(this).addClass('active');
+            plotLevelSelectedCompareTooltipPrefix = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId].prefix;
+            plotLevelSelectedCompareTreeName = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId]["treeName"];
+            plotLevelSelectorChanged = true;
+            updateComparePlots(compareTreeDataGlobal);
+            plotLevelSelectorChanged = false;
+          }
+    });
+
 
 
   sampleOrdertype = "ID ascending";
@@ -559,8 +595,11 @@ for (var sampleData of selectedCompareMetaDataArray) {
   sample.jsonId = id;
   sample.jsonRunId = runId;
 
-  var data = sample.tree;
+  var data = sample["tree"][plotLevelSelectedCompareTreeName];
 
+  if (plotLevelSelectorChanged) {
+    plotLevelDataManipulation(plotLevelSelectedCompareId,data);
+  }
 
   var sampleLeaves = [];
   var sampleTaxaAtRank = [];
@@ -853,6 +892,10 @@ function updateCompareSampleNameList(names) {
             return d.id;})
           .attr("data-run", function(d) {
               return d.runId;})
+          .attr("data-pathname", function(d) {
+              return d.pathName;})
+          .attr("data-pathrun", function(d) {
+              return d.pathRun;})
           // .text(function(d) {return d.id + " - " + d.runId;});
           .html(function(d) {return "<a>" + d.id + "</a><br>" + "<a class='compareSampleNameListRun'>" + d.runId + "</a>";});
 
@@ -861,8 +904,8 @@ function updateCompareSampleNameList(names) {
 
 
       compareSampleList.on("click", function(d) {
-              var sampleName = $(this).data().id;
-              var runId = $(this).data().run;
+              var sampleName = $(this).data().pathname;
+              var runId = $(this).data().pathrun;
 
               socket.emit('selected-dashboard-sample',{
                 clientId: uuid,
@@ -887,9 +930,26 @@ var newCompareTreeData = false;
 
 socket.on('compare-tree-response', function(treeData) {
   compareTreeDataGlobal = treeData;
+  let yieldCheck = true;
+
+  for (const sample of treeData) {
+    if (!sample.tree.hasOwnProperty("treeYield")) {
+      yieldCheck = false;
+      break;
+    }
+  }
+
+  if (yieldCheck) {
+    $("#plotLevelSelectorMenu > a[data-id='base']").show();
+  } else {
+    $("#plotLevelSelectorMenu > a[data-id='base']").hide();
+  }
+
   newCompareTreeData = true;
+  plotLevelSelectorChanged = true;
   updateComparePlots(compareTreeDataGlobal);
   newCompareTreeData = false;
+  plotLevelSelectorChanged = false;
 
 });
 
@@ -957,7 +1017,8 @@ function buildCompareTree(data){
   compareTreeSampleNodes = {};
 
     for (var sample of data) {
-      var tree = sample.tree;
+      // var tree = sample.tree;
+      var tree = sample["tree"][plotLevelSelectedCompareTreeName];
 
       var sampleRun = sample.jsonId + "_" + sample.jsonRunId;
       var nodes = d3.layout.tree().nodes(tree);
@@ -1295,13 +1356,14 @@ function topNCompareAmrHm(sample,run,data,threshold){
 function convertDataToCSV(data) {
   var dataArray = [];
   var header = [];
+  var abundanceLevel = plotLevelSelectedCompareTooltipPrefix;
   header.push('Taxon','NCBI ID','NCBI Rank');
   for (var sample of sortCompareNameArray) {
-    var sampleNameRunCount = sample.name + " (" + sample.runId + ") Read count";
+    var sampleNameRunCount = sample.name + " (" + sample.runId + ") " + abundanceLevel + " count";
     header.push(sampleNameRunCount);
   };
   for (var sample of sortCompareNameArray) {
-    var sampleNameRunSummed = sample.name + " (" + sample.runId + ") Summed read count";
+    var sampleNameRunSummed = sample.name + " (" + sample.runId + ") Summed " + abundanceLevel.toUpperCase().toLowerCase() + " count";
     header.push(sampleNameRunSummed);
   };
   dataArray.push(header);
