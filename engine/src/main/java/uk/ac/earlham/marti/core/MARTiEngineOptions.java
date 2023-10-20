@@ -17,14 +17,11 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Representation of program options and some global constants.
@@ -144,7 +141,7 @@ public class MARTiEngineOptions implements Serializable {
     private String cardDBPath = null;
     private Hashtable<Integer, String> barcodeIDs = new Hashtable<Integer, String>();
     private Hashtable<Integer, String> barcodeUUIDs = new Hashtable<Integer, String>();
-    private Hashtable<Integer, SampleMetaData> metaData = new Hashtable<Integer, SampleMetaData>();
+    private Hashtable<Integer, SampleMetaData> sampleMetaData = new Hashtable<Integer, SampleMetaData>();
     private BlastProcess vfdbBlastProcess = null;    
     private HashMap<Integer, String> sampleIdByBarcode = new HashMap<Integer,String>();
     private String optionsFilename = null;
@@ -157,6 +154,7 @@ public class MARTiEngineOptions implements Serializable {
     private int schedulerFileTimeout = 10 * 60 * 1000; // Allow 10 minutes between job completing and file appearing
     private int schedulerResubmissionAttempts = 2;
     private boolean rmlDebug = false;
+    private ArrayList<MetaData> metaDataList = new ArrayList<MetaData>();
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -927,6 +925,11 @@ public class MARTiEngineOptions implements Serializable {
                                     }
                                 }
                             
+                            } else if (tokens[0].compareToIgnoreCase("MetaData") == 0) {
+                                MetaData md = new MetaData(this);
+                                line = md.readConfigFile(br);
+                                metaDataList.add(md);
+                                readNextLine = false;
                             } else if (tokens[0].compareToIgnoreCase("ReadsPerBlast") == 0) {
                                 readsPerBlast = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("ReadsPerMultiFastQ") == 0) {
@@ -1278,12 +1281,12 @@ public class MARTiEngineOptions implements Serializable {
     public SampleMetaData getSampleMetaData(int bc) {
         SampleMetaData m = null;
         
-        if (metaData.containsKey(bc)) {
-            m = metaData.get(bc);
+        if (sampleMetaData.containsKey(bc)) {
+            m = sampleMetaData.get(bc);
         } else {
             m = new SampleMetaData(this, bc);
             m.writeSampleJSON(false);
-            metaData.put(bc, m);
+            sampleMetaData.put(bc, m);
         }
         
         return m;
@@ -1381,10 +1384,10 @@ public class MARTiEngineOptions implements Serializable {
     }
     
     public void writeAllSampleJSON(boolean martiComplete) {
-        Set<Integer> keys = metaData.keySet();
+        Set<Integer> keys = sampleMetaData.keySet();
         
         for (int bc : keys) {        
-            SampleMetaData md = metaData.get(bc);
+            SampleMetaData md = sampleMetaData.get(bc);
             md.writeSampleJSON(martiComplete);
         }
     }
@@ -1463,5 +1466,11 @@ public class MARTiEngineOptions implements Serializable {
     
     public boolean rmlDebug() {
         return rmlDebug;
+    }
+
+    public void writeMetadataJSONs() {
+        for(MetaData md : metaDataList) {
+            md.writeMetaDataFile();
+        }
     }
 }
