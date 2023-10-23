@@ -26,6 +26,7 @@ className: "moreInfo",
 "defaultContent": ""
 },
 null,
+null,
 null
 ],
 "columnDefs": [
@@ -33,6 +34,11 @@ null
         "targets": [ 11,12 ],
         "visible": false,
         "searchable": false
+    },
+    {
+        "targets": [ 13 ],
+        "visible": false,
+        "searchable": true
     }
 ],
   "dom": 't',
@@ -120,12 +126,16 @@ samplePageDataTable.clear();
     var dirSampleId = sample;
     sampleMetaDataArray.push(sampleData);
     dataSampleList.push(sample);
+    var keywords = "";
+    if (sampleData.hasOwnProperty("metadatafile")){
+      keywords = sampleData.metadatafile.keywords;
+    }
     // sampleData.readsPassBasecall = thousandsSeparators(sampleData.readsPassBasecall);
     // sampleData.readsAnalysed = thousandsSeparators(sampleData.readsAnalysed);
 
      sampleListCurrent.push(sampleData.id);
 
-       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,sampleData.sequencingDate.replace('T',' '),sampleData.analysisDate.replace('T',' '),null,dirRunId,dirSampleId]);
+       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,sampleData.sequencingDate.replace('T',' '),sampleData.analysisDate.replace('T',' '),null,dirRunId,dirSampleId,keywords]);
 
      };
  };
@@ -277,6 +287,16 @@ socket.on('meta-update-available', request => {
     });
   };
 });
+
+// socket.on('metadata-file-update-available', request => {
+//   if(currentPage=="Samples") {
+//     socket.emit('metadata-file-request',{
+//       clientId: uuid
+//     });
+//   }
+// });
+
+
 
 // socket.on('meta-id-file-update-available', request => {
 //   if(currentPage=="Samples") {
