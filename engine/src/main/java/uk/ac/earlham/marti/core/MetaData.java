@@ -140,19 +140,19 @@ public class MetaData {
                 metaBuilder.add("runId", options.getSampleName());
                 
                 if(location.length() > 0) {
-                    metaBuilder.add("SampleLocation", location);
+                    metaBuilder.add("sampleLocation", location);
                 }
                 if(sampleDate.length() > 0) {
-                    metaBuilder.add("SampleDate", sampleDate);
+                    metaBuilder.add("sampleDate", sampleDate);
                 }
                 if(sampleTime.length() > 0) {
-                    metaBuilder.add("SampleTime", sampleTime);
+                    metaBuilder.add("sampleTime", sampleTime);
                 }
                 if(!Float.isNaN(temperature)) {
-                    metaBuilder.add("Temperature", temperature);
+                    metaBuilder.add("temperature", temperature);
                 }
                 if(!Float.isNaN(humidity)) {
-                    metaBuilder.add("Humidity", humidity);
+                    metaBuilder.add("humidity", humidity);
                 }
 
                 String keywordsString = "";
@@ -160,7 +160,7 @@ public class MetaData {
                     keywordsString += keyword + ", ";
                 }
                 if(keywordsString.length() > 0) {
-                    metaBuilder.add("Keywords", keywordsString.substring(0, keywordsString.length() - 2));
+                    metaBuilder.add("keywords", keywordsString.substring(0, keywordsString.length() - 2));
                 }
 
                 // Print it with pretty printing (pacing etc.)
