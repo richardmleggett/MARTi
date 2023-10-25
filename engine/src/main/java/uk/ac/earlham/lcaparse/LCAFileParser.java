@@ -122,6 +122,7 @@ public class LCAFileParser {
                 br = new BufferedReader(new FileReader(filename));
             } else {
                 filename = filename + ".gz";
+                f = new File(filename);
                 if (f.exists()) {
                     fileStream = new FileInputStream(filename);
                     gzipStream = new GZIPInputStream(fileStream);
