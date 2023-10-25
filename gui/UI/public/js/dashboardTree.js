@@ -358,6 +358,9 @@ var preNodes;
 var preReadCountSum;
 
 function treeUpdate(source) {
+  if (plotLevelSelectorChanged) {
+    plotLevelDataManipulation(plotLevelSelectedDashboardId,root);
+  }
 
   if (dashboardTreeLinkType == "straight") {
     diagonal = function (d, i) {
@@ -402,6 +405,14 @@ if (newTreeData == true || taxonomicRankChanged == true) {
 if (newTreeData == true && Object.keys(oldNodes).length !== 0) {
 copyCollapseState(root,oldNodes);
 duration = 0;
+};
+
+
+let treeSummedYield;
+
+if (d3.layout.tree().nodes(root)[0].hasOwnProperty("summedYield")) {
+  treeSummedYield = d3.layout.tree().nodes(root)[0].summedYield;
+  $("#dashboardInfoCardYieldClassified").text(totalYieldFormatter(treeSummedYield));
 };
 
 
@@ -464,16 +475,6 @@ else {
 
     readCountMax = d3.max(nodes, function(d) { return d.children ? d.value : d.summedValue; });
     readCountSum = d3.sum(nodes, function(d) { return d.children ? d.value : d.summedValue; });
-
-
-if (readCountSum > preReadCountSum) {
-
-} else {
-
-}
-
-
-
     // d3.selectAll(".dashboard-taxa-tree-read-perc").text(Number.parseFloat((readCountSum/preReadCountSum)*100).toPrecision(3));
 
 
@@ -540,9 +541,8 @@ if (readCountSum > preReadCountSum) {
            toolTipDiv.transition()
               .duration(0)
               .style("opacity", .95);
-
-              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at node: " +
-              thousandsSeparators(d.value) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
+              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s at this node: " +
+              toolTipValueFormat(plotLevelSelectedDashboardId,d.value) + "<br/>Summed " + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix.toLowerCase() + " count: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.summedValue))
               .style("color", "black")
               .style("left", (tooltipPos(d3.event.pageX)) + "px")
               .style("top", (d3.event.pageY - 35) + "px");

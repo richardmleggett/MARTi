@@ -361,8 +361,8 @@ donutSlices.on("mousemove", function(d, i) {
   toolTipDiv.html("<small class='text-gray-800'>" + d.data.sample + "</small>" +
   "<h5 class='mb-0'>" + d.data.name + "</h5>" +
   "<small class='text-gray-800'>" + d.data.ncbiRank + "</small>" +
-  "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.data.taxaReadCount) +
-  "<br/>Read %: " + Math.round(((d.data.taxaReadCount/d.data.totalReadCount)*10000))/100)
+  "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId,d.data.taxaReadCount) +
+  "<br/>" + plotLevelSelectedCompareTooltipPrefix + " %: " + Math.round(((d.data.taxaReadCount/d.data.totalReadCount)*10000))/100)
      .style("left", (tooltipPos(d3.event.pageX)) + "px")
      .style("top", (d3.event.pageY - 35) + "px");
 

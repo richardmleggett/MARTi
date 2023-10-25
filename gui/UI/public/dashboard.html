@@ -1,16 +1,15 @@
 
-
 <div data-html2canvas-ignore="true" class="fixed-options-bar shadow align-items-center d-flex">
 
   <!-- <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4"><i class="fas fa-download fa-sm text-white-50"></i> Report</a> -->
   <a id="downloadClassifications" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4 mr-auto"><i class="fas fa-download fa-sm text-white-50"></i> Assignments</a>
 
 
-  <a class="d-lg-none">Minimum abundance:</a>
-  <a class="d-none d-lg-block">LCA minimum abundance cutoff:</a>
+  <a class="d-none d-md-block d-xl-none">LCA cutoff:</a>
+  <a class="d-none d-xl-block">LCA minimum abundance cutoff:</a>
   <a class="mr-2"></a>
 
-    <div id="minimumAbundanceButtonDashboard" class="btn-group btn-group-sm abundance-button mr-3" role="group" aria-label="LCA minimum abundance cutoff">
+    <div id="minimumAbundanceButtonDashboard" class="btn-group btn-group-sm abundance-button mr-md-3" role="group" aria-label="LCA minimum abundance cutoff">
       <button type="button" class="btn btn-primary">0%</button>
       <button type="button" class="btn btn-primary active">0.1%</button>
       <button type="button" class="btn btn-primary">1%</button>
@@ -21,11 +20,11 @@
       <!-- <h1 class="h5 my-auto mb-0 mr-2 text-center">Rank:</h1> -->
     </div>
 
-  <a class="d-lg-none">Rank:</a>
+  <a class="d-none d-md-block d-lg-none">Rank:</a>
   <a class="d-none d-lg-block">Taxonomic rank:</a>
   <a class="mr-2"></a>
 
-    <div class="dropdown mr-4">
+    <div class="dropdown mr-md-3">
       <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="taxonomicLevelSelectorDashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         All Levels
       </a>
@@ -56,6 +55,21 @@
       </div>
     </div>
 
+    <!-- <a class="d-none d-md-block d-lg-none">Plot:</a>
+    <a class="d-none d-lg-block">Abundance:</a> -->
+    <a class="d-none d-md-block">Abundance:</a>
+    <a class="mr-2"></a>
+
+    <div class="dropdown mr-4">
+      <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="plotLevelSelectorDashboard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!-- Read count -->
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="plotLevelSelectorDashboard" style="min-width: 8.5rem;" id="plotLevelSelectorMenu">
+        <a data-id="read" class="dropdown-item dropdown-nonhref rank">Read count</a>
+        <a data-id="base" class="dropdown-item dropdown-nonhref rank">bp yield</a>
+      </div>
+    </div>
 
 
   </div>
@@ -190,29 +204,42 @@
 
             <!-- <div class="col-md-6 text-center"> -->
               <div class="col text-center">
-                <h5 class="">Basecalled reads</h5>
-                <h4 class="text-primary" id="dashboardInfoCardReadsSequenced">-</h4>
+                <p class="readCardHeader" class="">Basecalled reads</p>
+                <h5 class="text-primary" id="dashboardInfoCardReadsSequenced">-</h5>
               <!-- </div> -->
 
               <div class="row mb-3">
               </div>
 
               <!-- <div class="col"> -->
-              <h5 class="">Database</h5>
-              <h4 class="text-primary" id="dashboardInfoCardDatabase">-</h4>
+              <p class="readCardHeader" class="">Database</p>
+              <h5 class="text-primary" id="dashboardInfoCardDatabase">-</h5>
               </div>
 
             <!-- </div> -->
 
             <div class="col text-center">
-              <h5 class="">Classified reads</h5>
-              <h4 class="text-primary" id="dashboardInfoCardReadsClassified">-</h4>
+              <p class="readCardHeader" class="">Classified reads</p>
+              <h5 class="text-primary" id="dashboardInfoCardReadsClassified">-</h5>
 
             <div class="row mb-3">
             </div>
 
-            <h5 class="">Unclassified reads</h5>
-            <h4 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h4>
+            <p class="readCardHeader" class="">Unclassified reads</p>
+            <h5 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h5>
+            </div>
+
+
+            <div class="col text-center">
+              <p class="readCardHeader" class="">Basecalled yield</p>
+              <h5 class="text-primary" id="dashboardInfoCardYieldBasecalled">-</h5>
+
+            <div class="row mb-3">
+            </div>
+
+              <p class="readCardHeader" class="">Classified yield</p>
+              <h5 class="text-primary" id="dashboardInfoCardYieldClassified">-</h5>
+
             </div>
 
             <!-- <div class="col-md-6 text-center">

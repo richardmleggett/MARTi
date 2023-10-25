@@ -25,6 +25,7 @@ function initialiseCompareStackedBar() {
           .attr("class", "y axis");
 
       layer2.append("text")
+          .attr("id","compareStackedBarYAxisTitle")
           .attr("transform", "translate("+ (-50) +","+(heightStacked/2)+")rotate(-90)")
           .style("text-anchor", "middle")
           .text("Classified reads");
@@ -162,6 +163,9 @@ var stackedTaxa;
 
 
 function plotStackedBar(data,taxaTotalCounts) {
+
+  d3.select("#compareStackedBarYAxisTitle")
+  .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
 
 stackedBarColor = d3.scale.ordinal()
       .range(colourPalettes[selectedPalette]);
@@ -371,8 +375,8 @@ if (data.length <= 2) {
         toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
         "<h5 class='mb-0'>" + d.component + "</h5>" +
         "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
-        "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.readCount) +
-        "<br/>Read %: " + Math.round(((d.readCount/d.totalReadCount)*10000))/100)
+        "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId,d.readCount) +
+        "<br/>" + plotLevelSelectedCompareTooltipPrefix + " %: " + Math.round(((d.readCount/d.totalReadCount)*10000))/100)
            .style("left", (tooltipPos(d3.event.pageX)) + "px")
            .style("top", (d3.event.pageY - 35) + "px");
 

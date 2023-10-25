@@ -85,3 +85,7 @@
 #dashboardSampleNameEdit:hover {
   color: #303030
 }
+
+.readCardHeader {
+  font-size: 1.35rem;
+}

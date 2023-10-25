@@ -173,6 +173,10 @@ var newTreeMap;
 
 function treeMapUpdate(data) {
 
+  if (plotLevelSelectorChanged) {
+    plotLevelDataManipulation(plotLevelSelectedDashboardId,data);
+  }
+
 treeMapGroupTitleData = {};
 treeMapGroupTitleArray = [];
 
@@ -370,8 +374,8 @@ cell.select("tspan")
               .duration(0)
               .style("opacity", .95);
 
-              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>Reads at this node: " +
-              thousandsSeparators(d.count) + "<br/>Summed read count: " + thousandsSeparators(d.summedValue))
+              toolTipDiv.html("<h5 class='mb-0'>" + d.name + "</h5><small class='text-gray-800'>" + d.ncbiRank + "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s at this node: " +
+              toolTipValueFormat(plotLevelSelectedDashboardId,d.count) + "<br/>Summed " + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix.toLowerCase() + " count: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.summedValue))
               .style("color", "black")
               .style("left", (tooltipPos(d3.event.pageX)) + "px")
               .style("top", (d3.event.pageY - 35) + "px");

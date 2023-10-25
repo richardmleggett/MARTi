@@ -471,10 +471,10 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
       <tr>
       <th scope='col'></th>
       <th scope='col'>Sample</th>
-      <th scope='col'>Reads at node</th>
-      <th scope='col'>Summed read count</th>
-      <th scope='col'>Read %</th>
-      <th scope='col'>Summed count %</th>
+      <th scope='col'>${plotLevelSelectedCompareTooltipPrefix}s at node</th>
+      <th scope='col'>Summed ${plotLevelSelectedCompareTooltipPrefix} count</th>
+      <th scope='col'>${plotLevelSelectedCompareTooltipPrefix} %</th>
+      <th scope='col'>Summed ${plotLevelSelectedCompareTooltipPrefix} %</th>
       </tr>
       </thead>
       <tbody>
@@ -487,8 +487,10 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
           var sampleName = sample.name;
           var sampleRun = sample.name + "_" + sample.runId;
           var indexOfSampleValue = d.values.findIndex(e => e.sampleId == sample.name && e.runId == sample.runId);
-          var readCount = thousandsSeparators(d["values"][indexOfSampleValue]["readCount"]);
-          var summedCount = thousandsSeparators(d["values"][indexOfSampleValue]["summedCount"]);
+          // var readCount = thousandsSeparators(d["values"][indexOfSampleValue]["readCount"]);
+          var readCount = toolTipValueFormat(plotLevelSelectedCompareId,d["values"][indexOfSampleValue]["readCount"]);
+          // var summedCount = thousandsSeparators(d["values"][indexOfSampleValue]["summedCount"]);
+          var summedCount = toolTipValueFormat(plotLevelSelectedCompareId,d["values"][indexOfSampleValue]["summedCount"]);
           var proportion = Math.round(((d["values"][indexOfSampleValue]["proportion"]*100) + Number.EPSILON) * 100)/100;
           var summedProportion = Math.round(((d["values"][indexOfSampleValue]["summedProportion"]*100) + Number.EPSILON) * 100)/100;
 

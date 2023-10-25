@@ -65,27 +65,6 @@ class Observer extends EventEmitter {
           fileContent.sample.pathRun = runId;
 
 
-          // var idFilePath = split.slice(0,-3).join('/') + "/ids.json";
-          //
-          // if (fsExtra.existsSync(idFilePath)) {
-          //
-          //   var idFileContent = await fsExtra.readFile(idFilePath);
-          //
-          //   idFileContent = JSON.parse(idFileContent);
-          //
-          //
-          //   if (idFileContent.hasOwnProperty(sampleName)){
-          //     fileContent.sample.originalId = fileContent.sample.id;
-          //     fileContent.sample.id = idFileContent[sampleName];
-          //   }
-          //
-          //
-          //
-          //   console.log(
-          //     `[${new Date().toLocaleString()}] ${idFilePath} has been ADDED.`
-          //   );
-          // }
-
           this.emit('meta-file-added', {
             id: sampleName,
             runId: runId,
@@ -102,7 +81,7 @@ class Observer extends EventEmitter {
 
           fileContent = JSON.parse(fileContent);
 
-          var treeData = fileContent.tree;
+          var treeData = fileContent;
 
           var split = filePath.split(sep);
 
@@ -147,7 +126,7 @@ class Observer extends EventEmitter {
             `[${new Date().toLocaleString()}] ${filePath} has been ADDED.`
           );
 
-        }else if (filePath.includes('amr.json')) {
+        } else if (filePath.includes('amr.json')) {
 
           var fileContent = await fsExtra.readFile(filePath);
 
@@ -178,6 +157,23 @@ class Observer extends EventEmitter {
             `[${new Date().toLocaleString()}] ${filePath} has been ADDED.`
           );
 
+        } else if (filePath.includes('metadata.json')) {
+
+          var fileContent = await fsExtra.readFile(filePath);
+          fileContent = JSON.parse(fileContent);
+          var split = filePath.split(sep);
+          var sampleName = split[split.length - 2]
+          var runName = split[split.length - 4];
+
+          this.emit('metadata-file-added', {
+            id: sampleName,
+            runId: runName,
+            content: fileContent
+          });
+
+          console.log(
+            `[${new Date().toLocaleString()}] ${filePath} has been ADDED.`
+          );
         }
       });
 
@@ -219,7 +215,7 @@ class Observer extends EventEmitter {
             // Temporary code to handle old file format
             fileContent = JSON.parse(fileContent);
 
-            var treeData = fileContent.tree;
+            var treeData = fileContent;
 
             var split = filePath.split(sep);
 
@@ -290,6 +286,23 @@ class Observer extends EventEmitter {
             id: sampleName,
             runName: runName,
             content: amrData
+          });
+
+          console.log(
+            `[${new Date().toLocaleString()}] ${filePath} has been CHANGED.`
+          );
+        } else if (filePath.includes('metadata.json')) {
+
+          var fileContent = await fsExtra.readFile(filePath);
+          fileContent = JSON.parse(fileContent);
+          var split = filePath.split(sep);
+          var sampleName = split[split.length - 2]
+          var runName = split[split.length - 4];
+
+          this.emit('metadata-file-added', {
+            id: sampleName,
+            runId: runName,
+            content: fileContent
           });
 
           console.log(

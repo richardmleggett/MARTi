@@ -1,14 +1,13 @@
 <div class="fixed-options-bar shadow align-items-center d-flex">
 
   <a id="downloadCompareAssignments" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4 mr-auto"><i class="fas fa-download fa-sm text-white-50"></i> Assignments</a>
-  <!-- <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-5 mr-auto "><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-  <a class="ml-4 mr-auto" ></a>
-  <a class="d-lg-none">Minimum abundance:</a>
-  <a class="d-none d-lg-block">LCA minimum abundance cutoff:</a>
+
+  <a class="d-none d-md-block d-xl-none">LCA cutoff:</a>
+  <a class="d-none d-xl-block">LCA minimum abundance cutoff:</a>
   <a class="mr-2"></a>
 
 
-    <div id="minimumAbundanceButtonCompare" class="btn-group btn-group-sm abundance-button mr-3" role="group" aria-label="LCA minimum abundance cutoff">
+    <div id="minimumAbundanceButtonCompare" class="btn-group btn-group-sm abundance-button mr-md-3" role="group" aria-label="LCA minimum abundance cutoff">
       <button type="button" class="btn btn-primary">0%</button>
       <button type="button" class="btn btn-primary active">0.1%</button>
       <button type="button" class="btn btn-primary">1%</button>
@@ -19,11 +18,11 @@
       <!-- <h1 class="h5 my-auto mb-0 mr-2 text-center">Rank:</h1> -->
     </div>
 
-    <a class="d-lg-none">Rank:</a>
+    <a class="d-none d-md-block d-lg-none">Rank:</a>
     <a class="d-none d-lg-block">Taxonomic rank:</a>
     <a class="mr-2"></a>
 
-    <div class="dropdown mr-4">
+    <div class="dropdown mr-md-3">
       <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="taxonomicLevelSelectorCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         All Levels
       </a>
@@ -37,19 +36,20 @@
         <a class="dropdown-item dropdown-nonhref rank">Family</a>
         <a class="dropdown-item dropdown-nonhref rank">Genus</a>
         <a class="dropdown-item dropdown-nonhref rank">Species</a>
-        <!-- <div class="dropdown-divider"></div>
-        <div class="dropdown-header">Options:</div>
-        <a class="dropdown-item radio-dropdown" style="padding:0.25rem 0.8rem;" href="#">
-        <table>
-        <tr>
-          <td colspan="2">Include ancestors:</td>
-        </tr>
-        <tr>
-          <td><label><input type="radio" name="includeAncestorNodes" value="off" checked> No</label></td>
-          <td><label><input type="radio" name="includeAncestorNodes" value="on"> Yes</label></td>
-        </tr>
-      </table>
-      </a> -->
+      </div>
+    </div>
+
+    <a class="d-none d-md-block">Abundance:</a>
+    <a class="mr-2"></a>
+
+    <div class="dropdown mr-4">
+      <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="plotLevelSelectorCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!-- Read count -->
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="plotLevelSelectorCompare" style="min-width: 8.5rem;" id="plotLevelSelectorMenu">
+        <a data-id="read" class="dropdown-item dropdown-nonhref rank">Read count</a>
+        <a data-id="base" class="dropdown-item dropdown-nonhref rank">bp yield</a>
       </div>
     </div>
 
@@ -224,7 +224,7 @@
 
                       <div>
                         <label>Y-axis:</label>
-                        <label><input type="radio" name="stackedBar" value="read"> Read count</label>
+                        <label><input type="radio" name="stackedBar" value="read"> Count</label>
                         <label><input type="radio" name="stackedBar" value="percent" checked> Percent</label>
                       </div>
                       <div>
@@ -301,12 +301,12 @@
 
                       <div class="">
                         <label>Donut area:</label>
-                        <label><input type="radio" name="donutArea" value="read" > Read count</label>
+                        <label><input type="radio" name="donutArea" value="read" > Count</label>
                         <label><input type="radio" name="donutArea" value="equal" checked> Equal</label>
                       </div>
 
                       <div class="">
-                        <label>Read count:</label>
+                        <label>Count label:</label>
                         <label><input type="radio" name="showDonutReadCount" value="on" > On</label>
                         <label><input type="radio" name="showDonutReadCount" value="off" checked> Off</label>
                       </div>
@@ -499,7 +499,7 @@
                       </div>
 
                       <div>
-                        <label> Read:</label>
+                        <label> Value:</label>
                         <label><input type="radio" name="compareHmTaxaRead" value="percent" checked>  Percent</label>
                         <label><input type="radio" name="compareHmTaxaRead" value="count" >  Count</label>
                       </div>
@@ -566,7 +566,7 @@
                   <div>
                     <label> Value:</label>
                     <label><input type="radio" name="compareTreeRead" value="percent" checked>  Percent</label>
-                    <label><input type="radio" name="compareTreeRead" value="count" >  Read count</label>
+                    <label><input type="radio" name="compareTreeRead" value="count" >  Count</label>
                   </div>
 
                   <div>
@@ -728,7 +728,7 @@
             </div>
 
             <div>
-              <label> Read:</label>
+              <label> Value:</label>
               <label><input type="radio" name="compareAmrHmRead" value="percent" checked>  Percent</label>
               <label><input type="radio" name="compareAmrHmRead" value="count" >  Count</label>
             </div>

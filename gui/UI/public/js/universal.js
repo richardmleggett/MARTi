@@ -31,6 +31,18 @@ function thousandsSeparators(num) {
   return num_parts.join(".");
 };
 
+function totalYieldFormatter(num) {
+    if (num >= 1000000000) {
+      return (num / 1000000000).toFixed(2) + " Gbp";
+    } else if (num >= 1000000) {
+      return (num / 1000000).toFixed(2) + " Mbp";
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(2) + " Kbp";
+    } else {
+      return num + " bp";
+    }
+};
+
 function lcaFormat(lca){
   var output;
     if (lca.length == 3) {

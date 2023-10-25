@@ -51,6 +51,7 @@ public class Taxonomy {
     private int nTrees = 0;
     private boolean warningId = false;
     private int[] assignedCount = new int[MARTiEngineOptions.MAX_BARCODES];
+    private long[] assignedYield = new long[MARTiEngineOptions.MAX_BARCODES];
 //    private int totalAssignedReads = 0;
 //    private int assignedThreshold = 2;
 //    private int otherCount = 0;
@@ -74,6 +75,7 @@ public class Taxonomy {
         
         for (int i=0; i<MARTiEngineOptions.MAX_BARCODES; i++) {
             assignedCount[i] = 0;
+            assignedYield[i] = 0;
         }
         
         try {
@@ -514,6 +516,7 @@ public class Taxonomy {
         
 //        totalCountCheck++;
         assignedCount[bc]++;
+        assignedYield[bc] += readLength;
         
         if (n == null) {
             unclassifiedNode.incrementAssignedAndAddYield(bc, readLength);
@@ -904,14 +907,14 @@ public class Taxonomy {
         return isSpeciesOrBelow;
     }
     
-    private void adjustNode(int bc, int minReads, TaxonomyNode currentNode, TaxonomyNode parentNode) {        
+    private void adjustNodeByCount(int bc, int minReads, TaxonomyNode currentNode, TaxonomyNode parentNode) {        
         // Go down children
         if (!currentNode.isLeafNode()) {
             ArrayList<TaxonomyNode> children = currentNode.getChildren();
             for (int i=0; i<children.size(); i++) {
                 TaxonomyNode childNode = children.get(i);
                 if (childNode.getLCASummed(bc) > 0) {
-                    adjustNode(bc, minReads, childNode, currentNode);
+                    adjustNodeByCount(bc, minReads, childNode, currentNode);
                 }
             }
         }
@@ -930,6 +933,36 @@ public class Taxonomy {
                 currentNode.zeroLCAAssignedCount(bc);
             } else {
                 martiOptions.getLog().println("Null parentId for "+currentNode.getId()+" assigned is "+currentNode.getLCAAssigned(bc)+" summed is "+currentNode.getLCASummed(bc)+" minReads is "+minReads);
+            }
+        }
+    }
+    
+    private void adjustNodeByYield(int bc, long minYield, TaxonomyNode currentNode, TaxonomyNode parentNode) {        
+        // Go down children
+        if (!currentNode.isLeafNode()) {
+            ArrayList<TaxonomyNode> children = currentNode.getChildren();
+            for (int i=0; i<children.size(); i++) {
+                TaxonomyNode childNode = children.get(i);
+                if (childNode.getLCASummedYield(bc) > 0) {
+                    adjustNodeByYield(bc, minYield, childNode, currentNode);
+                }
+            }
+        }
+        
+        // If this node has insufficient support, move up
+        if (currentNode.getLCAYield(bc) < minYield) {
+            if (parentNode != null) {
+                parentNode.addToLCAAssigned(bc, currentNode.getLCAAssigned(bc), currentNode.getLCAYield(bc));
+                
+                // If this node has the samme summed count as assigned, we can safely clear the summed too.
+                // However, if summmed is greater, then there must be a node further down that meets the min reads.
+                if (currentNode.getLCASummedYield(bc) == currentNode.getLCAYield(bc)) {
+                    currentNode.zeroLCASummmmarisedCount(bc);
+                }
+                
+                currentNode.zeroLCAAssignedCount(bc);
+            } else {
+                martiOptions.getLog().println("Null parentId for "+currentNode.getId()+" yield is "+currentNode.getLCAYield(bc)+" summed is "+currentNode.getLCASummedYield(bc)+" minYield is "+minYield);
             }
         }
     }
@@ -953,25 +986,40 @@ public class Taxonomy {
     }
     
     
-    public synchronized void adjustForMinSupport(int bc, double ms) {
+    public synchronized void adjustForMinSupport(int bc, double ms, boolean byCount) {
         // Basing percentage on total assigned reads.
         // But should it be on total reads?
-        double minReadsD = ((double)assignedCount[bc] * ms) / 100.0;
-        long minReadsL = Math.round(minReadsD);
-        int minReads = (int)minReadsL; 
-        
-        if (minReads < 1) {
-            minReads = 1;
-        }
-                
-        martiOptions.getLog().println("LCA adjustment assigned count "+assignedCount[bc]);
-        martiOptions.getLog().println("LCA adjustment min reads for "+ms+" percent is "+minReads);
+        if(byCount) {
+            double minReadsD = ((double)assignedCount[bc] * ms) / 100.0;
+            long minReadsL = Math.round(minReadsD);
+            int minReads = (int)minReadsL; 
 
-        // Make copy of tree assignments
-        copyLCAAssignments(bc);     
-        
-        // Start at root and check recursively...
-        TaxonomyNode n = nodesById.get(1L);
-        adjustNode(bc, minReads, n, null);
+            if (minReads < 1) {
+                minReads = 1;
+            }
+
+            martiOptions.getLog().println("LCA adjustment assigned count "+assignedCount[bc]);
+            martiOptions.getLog().println("LCA adjustment min reads for "+ms+" percent is "+minReads);
+
+            // Make copy of tree assignments
+            copyLCAAssignments(bc);     
+
+            // Start at root and check recursively...
+            TaxonomyNode n = nodesById.get(1L);
+            adjustNodeByCount(bc, minReads, n, null);
+        } else { // by yield
+            double minYieldD = ((double)assignedYield[bc] * ms) / 100.;
+            long minYield = Math.round(minYieldD);
+            if(minYield < 1) {
+                minYield = 1;
+            }
+     
+            martiOptions.getLog().println("LCA adjustment assigned yield " + assignedYield[bc]);
+            martiOptions.getLog().println("LCA adjustment min yield for "+ms+" percent is " + minYield);
+
+            copyLCAAssignments(bc);
+            TaxonomyNode n = nodesById.get(1L);
+            adjustNodeByYield(bc, minYield, n, null);
+        }
     }
 }

@@ -140,7 +140,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.19.4";
+const martiGuiVersion = "0.19.6";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);
@@ -289,6 +289,12 @@ if (!data.sample.hasOwnProperty("runId")) {
     updateMetaDataSampleNames(runId);
   }
 
+  if (sampleMetadataDict[runId]) {
+    if (sampleMetadataDict[runId][sampleId]){
+      sampleMetaDict[runId][sampleId]["sample"]["metadatafile"] = sampleMetadataDict[runId][sampleId];
+    }
+  }
+
   io.sockets.emit('meta-update-available', {
     runId: runId,
     sampleId: sampleId
@@ -395,6 +401,39 @@ observer.on('meta-file-removed', meta => {
 
 
 });
+
+
+
+observer.on('metadata-file-added', data => {
+  metadataFileUpdate(data);
+});
+
+function metadataFileUpdate(meta) {
+
+var data = meta.content;
+var sampleId = meta.id;
+var runId = meta.runId;
+
+  if (sampleMetadataDict[runId]) {
+    sampleMetadataDict[runId][sampleId] = data;
+  } else {
+    sampleMetadataDict[runId] = {};
+    sampleMetadataDict[runId][sampleId] = data;
+  }
+
+  if (sampleMetaDict[runId]) {
+    if (sampleMetaDict[runId][sampleId]){
+
+      sampleMetaDict[runId][sampleId]["sample"]["metadatafile"] = data;
+
+      io.sockets.emit('meta-update-available', {
+        runId: runId,
+        sampleId: sampleId
+      });
+    }
+  }
+
+}
 
 observer.on('tree-file-added', tree => {
 
@@ -563,6 +602,7 @@ if(serverOptions["MARTiSampleDirectory"].length > 0){
 
 
 var sampleMetaDict = {};
+var sampleMetadataDict = {};
 var sampleNamesDict = {};
 var sampleTreeDict = {};
 var sampleAccumulationDict = {};
@@ -844,6 +884,7 @@ io.on('connect', function(socket){
     io.to(id).emit('dashboard-meta-response', sampleMetaDict[selectedDashboardSampleRunId][selectedDashboardSampleName]);
     console.log(`[${new Date().toLocaleString()}][${id}] Dashboard meta data sent`);
     });
+
 
 socket.on('compare-tree-request', request => {
   var id = request.clientId;

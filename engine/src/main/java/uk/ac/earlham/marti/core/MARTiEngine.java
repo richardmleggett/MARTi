@@ -24,6 +24,7 @@ public class MARTiEngine {
     private static void process(MARTiEngineOptions options) throws InterruptedException {
         ReadProcessor rp = new ReadProcessor(options, options.getProgressReport());
         options.makeDirectories();
+        options.writeMetadataJSONs();
         rp.process();
     }    
     
