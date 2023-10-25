@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 
 /**
@@ -34,6 +35,7 @@ public class SlurmSchedulerJob {
     public final static int STATE_SUSPENDED = 14;
     public final static int STATE_TIMEOUT = 15;     
         
+    private MARTiEngineOptions options;
     private MARTiLog schedulerLog;
     private MARTiLog slurmLog;
     private String[] commands;
@@ -61,26 +63,20 @@ public class SlurmSchedulerJob {
     private long schedulerFileWriteDelay = 30 * 1000; // Allow 30s for file writing to finish before marking job as complete
     private long schedulerFileTimeout = 10 * 60 * 1000; // 10 minutes as ms
     private int resubmissionAttempts = 0;
-
-    public SlurmSchedulerJob(String name, String[] c, String l, boolean d, MARTiLog s, MARTiLog sl) {
-        jobName = name;
-        internalJobId = -1;
-        commands = c;
-        logFilename = l;
-        dontRunCommand = d;
-        schedulerLog = s;
-        slurmLog = sl;
-    }
-
+    private String identifier = "UNKNOWN";
     
-    public SlurmSchedulerJob(String name, int i, String[] c, String l, boolean d, MARTiLog s, MARTiLog sl) {
+    public SlurmSchedulerJob(MARTiEngineOptions o, String id, String name, int i, String[] c, String l, boolean d) {
+        options = o;
+        identifier = id;
         jobName = name;
         internalJobId = i;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
-        schedulerLog = s;
-        slurmLog = sl;
+        
+        schedulerLog = options.getJobScheduler().getSchedulerLog();
+        SlurmScheduler ss = (SlurmScheduler) options.getJobScheduler();
+        slurmLog = ss.getSlurmLog();
     }
     
     // Might implement this version (with separate error log) later
@@ -458,6 +454,11 @@ public class SlurmSchedulerJob {
                                 slurmLog.println("Warning: Job "+internalJobId+" marked as PENDING.");                                
                             }
                         }
+                    }
+                    
+                    // If we still think this is COMPLETED, then log it...
+                    if (jobState == STATE_COMPLETED) {
+                        options.getProgressReport().recordCompleted(identifier);
                     }
                 }
 

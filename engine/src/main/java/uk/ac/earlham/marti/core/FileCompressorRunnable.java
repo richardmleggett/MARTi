@@ -19,11 +19,18 @@ import java.util.zip.GZIPOutputStream;
  * @author martins
  */
 public class FileCompressorRunnable implements Runnable {
-    
+    private MARTiEngineOptions options;
     private ConcurrentLinkedQueue<String> m_queue;
     private boolean keepRunning = true;
+
+    public FileCompressorRunnable(MARTiEngineOptions o, ConcurrentLinkedQueue<String> queue) {
+        options = o;
+        m_queue = queue;
+    }
     
     private boolean compressFile(String filename) {
+        String identifier = "gzip_"+filename;
+        
         //System.out.println("Compressing file " + filename);
         File f = new File(filename);
         if(!f.exists()) {
@@ -44,7 +51,7 @@ public class FileCompressorRunnable implements Runnable {
             fis.close();
             gzos.finish();
             gzos.close();
- 
+            options.getProgressReport().recordCompleted(identifier);
         } catch (IOException ex) {
             ex.printStackTrace();
             return false;
@@ -60,11 +67,7 @@ public class FileCompressorRunnable implements Runnable {
             e.printStackTrace();
         }
     }
-    
-    public FileCompressorRunnable(ConcurrentLinkedQueue<String> queue) {
-        m_queue = queue;
-    }
-    
+        
     public void run() {
         while(keepRunning) {
             String filename = m_queue.poll();

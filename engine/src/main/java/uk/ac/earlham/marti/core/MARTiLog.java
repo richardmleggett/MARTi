@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 
 /**
  * Log class
@@ -53,16 +54,26 @@ public class MARTiLog implements Serializable {
         }
     }
     
+    public GregorianCalendar stringToCalendar(String s) {
+        Pattern p = Pattern.compile("^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$");
+        System.out.println("Parsed "+s+" to ");
+        return new GregorianCalendar();
+    }
+    
+    public String calendarToString(GregorianCalendar gc) {
+        String s = String.format("%d/%d/%d %02d:%02d:%02d",
+                                 gc.get(Calendar.DAY_OF_MONTH),
+                                 gc.get(Calendar.MONTH)+1,
+                                 gc.get(Calendar.YEAR),
+                                 gc.get(Calendar.HOUR_OF_DAY),
+                                 gc.get(Calendar.MINUTE),
+                                 gc.get(Calendar.SECOND));
+        return s;
+    }
+    
     public String getTime() {
         GregorianCalendar timeNow = new GregorianCalendar();
-        String s = String.format("%d/%d/%d %02d:%02d:%02d",
-                                 timeNow.get(Calendar.DAY_OF_MONTH),
-                                 timeNow.get(Calendar.MONTH)+1,
-                                 timeNow.get(Calendar.YEAR),
-                                 timeNow.get(Calendar.HOUR_OF_DAY),
-                                 timeNow.get(Calendar.MINUTE),
-                                 timeNow.get(Calendar.SECOND));
-        return s;
+        return calendarToString(timeNow);
     }
 
     public synchronized void writeTimeStamp() {

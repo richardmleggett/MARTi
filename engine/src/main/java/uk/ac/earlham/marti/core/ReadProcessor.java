@@ -262,7 +262,7 @@ public class ReadProcessor {
         // Execute thread which checks for new reads to filter
         executor.execute(readFilter);
         if(options.getCompressBlastFiles()) {
-            fileCompressor = new FileCompressorRunnable(fileCompressionQueue);
+            fileCompressor = new FileCompressorRunnable(options, fileCompressionQueue);
             rc.setFileCompressionQueue(fileCompressionQueue);
             // Execute thread which checks for files to compress and compresses them
             executor.execute(fileCompressor);

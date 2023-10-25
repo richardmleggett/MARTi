@@ -171,6 +171,7 @@ public class ReadFilterSample {
                 Path dest = Paths.get(currentFastqChunkFilename);
                 try {
                     Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
+                    options.getProgressReport().recordCompleted("chunk_"+currentFastqChunkFilename);
                 } catch (Exception e) {
                     options.getLog().println("Move failed");
                     options.getLog().println("Source was "+source);
@@ -187,6 +188,7 @@ public class ReadFilterSample {
                 Path dest = Paths.get(currentFastaChunkFilename);
                 try {
                     Files.move(source, dest, StandardCopyOption.REPLACE_EXISTING);
+                    options.getProgressReport().recordCompleted("chunk_"+currentFastaChunkFilename);
                 } catch (Exception e) {
                     options.getLog().println("Move failed");
                     options.getLog().println("Source was "+source);
@@ -271,8 +273,7 @@ public class ReadFilterSample {
         }
 
         if (!stopProcessingChunks) {
-            options.getLog().println("Processing file "+fastqPathname);
-            System.out.println("Processing file "+fastqPathname);
+            options.getLog().printlnLogAndScreen("Processing file (RFS) "+fastqPathname);
 
             try {
                 String header;
@@ -393,6 +394,8 @@ public class ReadFilterSample {
                 System.out.println("runConvertFastQ exception");
                 e.printStackTrace();
             }
+                        
+            options.getProgressReport().recordCompleted("filter_"+fastqPathname);
         }
     }                
       

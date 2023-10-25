@@ -82,6 +82,7 @@ public class CentrifugeHandler {
                 PrintWriter pw = new PrintWriter(new FileWriter(commandFilePath));
                 String command = "";
                 JobScheduler jobScheduler = options.getJobScheduler();
+                String identifier = "centrifuge_"+inputPathname;
                 
                 command =   "centrifuge" + 
                             " -x " + database + 
@@ -112,7 +113,7 @@ public class CentrifugeHandler {
                     boolean runIt = options.runBlastCommand();
                     
                     String[] commandString = commands.toArray(new String[commands.size()]);
-                    jobid = jobScheduler.submitJob(commandString, logFilePath, runIt);
+                    jobid = jobScheduler.submitJob(identifier, commandString, logFilePath, runIt);
                     if (jobScheduler instanceof SlurmScheduler) {
                         ((SlurmScheduler) jobScheduler).setCPUs(jobid, cp.getNumThreads());
                         ((SlurmScheduler) jobScheduler).setJobMemory(jobid, cp.getMemory());
