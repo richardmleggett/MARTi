@@ -7,6 +7,7 @@ package uk.ac.earlham.marti.schedule;
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import uk.ac.earlham.marti.core.MARTiEngineOptions;
 
 /**
  * Job scheduler job.
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  * @author Richard M. Leggett
  */
 public class SimpleJobSchedulerJob {
+    private MARTiEngineOptions options;
     private String[] commands;
     private Process process = null;
     private String logFilename;
@@ -21,8 +23,12 @@ public class SimpleJobSchedulerJob {
     private int jobId;
     private ArrayList<Integer> dependencies = new ArrayList<Integer>();
     private boolean dontRunCommand = false;
+    private boolean completed = false;
+    private String identifier = "UNKNOWN";
 
-    public SimpleJobSchedulerJob(String[] c, String l, boolean d) {
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, String[] c, String l, boolean d) {
+        options = o;
+        identifier = id;
         jobId = -1;
         commands = c;
         logFilename = l;
@@ -30,14 +36,18 @@ public class SimpleJobSchedulerJob {
     }
 
     
-    public SimpleJobSchedulerJob(int i, String[] c, String l, boolean d) {
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, int i, String[] c, String l, boolean d) {
+        options = o;
+        identifier = id;
         jobId = i;
         commands = c;
         logFilename = l;
         dontRunCommand = d;
     }
     
-    public SimpleJobSchedulerJob(int i, String[] c, String l, String e, boolean d) {
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, int i, String[] c, String l, String e, boolean d) {
+        options = o;
+        identifier = id;
         jobId = i;
         commands = c;
         logFilename = l;
@@ -52,11 +62,11 @@ public class SimpleJobSchedulerJob {
     public void run() {
         if (dontRunCommand) {
             String newCommands[] = {"sleep", "2"};
-            System.out.print("[ Running ");
+            String logText = "[ Running ";
             for (int i=0; i<commands.length; i++) {
-                System.out.print(commands[i] + " ");
+                logText += commands[i] + " ";
             }
-            System.out.println("]");
+            options.getLog().println(logText);
             commands = newCommands;
             return;
         }         
@@ -81,11 +91,29 @@ public class SimpleJobSchedulerJob {
     }
     
     public boolean hasFinished() {
+        boolean rc = false;
+        
         if (dontRunCommand) {
-            return true;
+            rc = true;
         } else {
-            return process.isAlive() ? false:true;   
+            rc = process.isAlive() ? false:true;   
         }
+
+        // Only first time we notice this has finished do we record the completion.
+        if ((rc == true) && (completed == false)) {
+            if (getExitValue() == 0) {
+                completed = true;
+                options.getProgressReport().recordCompleted(identifier);
+            } else {
+                System.out.println("ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue());
+                System.out.println("Results are unpredictable...");
+            }
+            
+            // TODO:
+            // What do we do if getExitValue doesn't return 0?
+        }
+        
+        return rc;
     }
     
     public int getExitValue() {

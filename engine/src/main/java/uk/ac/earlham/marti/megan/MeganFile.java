@@ -79,7 +79,8 @@ public class MeganFile {
             }
         }
     
-         int jobid = options.getJobScheduler().submitJob(commands, logPathname, false);
+        String identifier = "megan_"+cmdPathname;
+        int jobid = options.getJobScheduler().submitJob(identifier, commands, logPathname, false);
     }
     
     private void writeMeganLaunchFile(String launchPathname, String slurmLogPathname, String cmdPathname) {

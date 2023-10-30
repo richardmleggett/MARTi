@@ -106,7 +106,7 @@ public class MARTiEngine {
             SlurmScheduler ss = new SlurmScheduler(options);
             System.out.println("Test mode");
             String commands[] = {"sleep", "10"};
-            int jobid = ss.submitJob(commands, "testlog.txt", true);
+            int jobid = ss.submitJob("test", commands, "testlog.txt", true);
             //ssj.run();
             while(true) {
                 ss.manageQueue();

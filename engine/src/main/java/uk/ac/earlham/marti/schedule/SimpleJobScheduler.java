@@ -76,7 +76,7 @@ public class SimpleJobScheduler implements JobScheduler {
         maxJobs = m;
     }
         
-    public synchronized int submitJob(String[] commands, String logFilename, boolean submitJob) {
+    public synchronized int submitJob(String identifier, String[] commands, String logFilename, boolean submitJob) {
         if (MARTiEngineOptions.DEBUG_DONT_SUBMIT_JOB) {
             commands = new String[]{"echo","Hello"};
         }
@@ -86,20 +86,20 @@ public class SimpleJobScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(jobId, commands, logFilename, dontRunIt);
+        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, identifier, jobId, commands, logFilename, dontRunIt);
         pendingJobs.add(j);
         allJobs.put(jobId, j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
         return jobId++;
     }
 
-    public synchronized int submitJob(String[] commands, String logFilename, String errorFilename, boolean submitJob) {
+    public synchronized int submitJob(String identifier, String[] commands, String logFilename, String errorFilename, boolean submitJob) {
         boolean dontRunIt = false;
         if ((dontRunCommand == true) || (submitJob == false)) {
             dontRunIt = true;
         }
         
-        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(jobId, commands, logFilename, errorFilename, dontRunIt);
+        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, identifier, jobId, commands, logFilename, errorFilename, dontRunIt);
         pendingJobs.add(j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
         return jobId++;
@@ -233,5 +233,9 @@ public class SimpleJobScheduler implements JobScheduler {
     public synchronized void resubmitJobIfPossible(int i) {
         // Resubmission not possible with local job scheduler.
         // Probably pointless, unlike with SLURM where it may make a differencece.
+    }
+
+    public MARTiLog getSchedulerLog() {
+        return schedulerLog;
     }
 }

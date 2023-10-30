@@ -204,8 +204,8 @@ public class ReadFilterRunnable implements Runnable {
 //    }
 
     private void processFile(String fastqPathname) {
-        options.getLog().println("Processing file "+fastqPathname);
-        System.out.println("Processing file "+fastqPathname);
+        options.getLog().printlnLogAndScreen("Processing file (RFR) "+fastqPathname);
+
         int barcode = options.getBarcodeFromPath(fastqPathname);
         if (samples[barcode] == null) {
             samples[barcode] = new ReadFilterSample(options, fileWatcher, pendingPairList, barcode);

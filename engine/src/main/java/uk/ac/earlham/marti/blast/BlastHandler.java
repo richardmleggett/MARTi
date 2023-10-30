@@ -123,6 +123,7 @@ public class BlastHandler {
                 // TODO: -task option shouldn't be hardcoded
                 String command = "";
                 JobScheduler jobScheduler = options.getJobScheduler();
+                String identifier = bp.getBlastName()+"_"+bp.getBlastTask()+"_"+outputBlast;
 
                 command = "blastn" + 
                           " -db " + blastDb +
@@ -200,7 +201,7 @@ public class BlastHandler {
                     }
                     //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
                     String[] commandString = commands.toArray(new String[commands.size()]);
-                    jobid = jobScheduler.submitJob(commandString, logFile, runIt);
+                    jobid = jobScheduler.submitJob(identifier, commandString, logFile, runIt);
                     if (jobScheduler instanceof SlurmScheduler) {
                         ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
                         if (options.rmlDebug()) {

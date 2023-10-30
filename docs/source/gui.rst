@@ -63,6 +63,7 @@ This page features four cards:
 
 
 .. _startinganalysis:
+
 New analysis page
 -----------------
 
@@ -134,3 +135,4 @@ To make it easier for users to filter organisms by their taxonomic ranks within 
 +------------+----------+-------------------------------------------------------------------------------------------------------------------+
 | Subspecies | 9        | subspecies, biotype, forma, forma specialis, morph, pathogroup, serogroup, serotype, strain, subvariety, varietas |
 +------------+----------+-------------------------------------------------------------------------------------------------------------------+
+
