@@ -10,7 +10,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var serverOptions = {};
 serverOptions["MinKNOWRunDirectory"] = "";
 serverOptions["MARTiSampleDirectory"] = [];
-serverOptions["TaxonomyDirectory"] = "";
+serverOptions["TaxonomyDir"] = "";
 serverOptions["MaxSimultaneousAnalyses"] = 10;
 serverOptions["Port"] = "";
 serverOptions["https"] = "false";
@@ -86,7 +86,7 @@ try {
   });
   if( serverOptions["MinKNOWRunDirectory"] == "" ||
       serverOptions["MARTiSampleDirectory"].length < 1 ||
-      serverOptions["TaxonomyDirectory"] == "") {
+      serverOptions["TaxonomyDir"] == "") {
     console.log("Warning: Could not find all fields in " + serverOptionsPath + ".");
     console.log("Please check this file and restart to start new analyses.");
   }
@@ -208,7 +208,7 @@ function makeConfigFileString(form_object) {
   configFileString += "LocalSchedulerMaxJobs:" + form_object["maxJobs"] + "\n";
   configFileString += "InactivityTimeout:" + form_object["inactivityTimeout"] + "\n";
   configFileString += "StopProcessingAfter:" + form_object["stopProcessingAfter"] + "\n";
-  configFileString += "TaxonomyDir:" + serverOptions["TaxonomyDirectory"] + "\n";
+  configFileString += "TaxonomyDir:" + serverOptions["TaxonomyDir"] + "\n";
   configFileString += "LCAMaxHits:" + form_object["maxHits"] + "\n";
   configFileString += "LCAScorePercent:" + form_object["scorePercent"] + "\n";
   configFileString += "LCAMinIdentity:" + form_object["minimumIdentity"] + "\n";
