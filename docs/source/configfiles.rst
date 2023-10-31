@@ -45,6 +45,16 @@ You can run multiple BLAST processes. Each begins with the Keyword BlastProcess.
    :file: table4.csv
    :delim: tab
 
+Metadata
+---------------
+
+Metadata blocks are optional blocks that contain data describing the collection of samples. A metadata block could describe the whole run or a subset of barcodes.
+
+.. csv-table::
+   :header: "Keyword", "Example", "Meaning"
+   :file: table5.csv
+   :delim: tab
+
 Example
 -------
 
@@ -93,4 +103,14 @@ Example file::
      MaxE:0.001
      MaxTargetSeqs:100
      BlastThreads:1
+ 
+ Metadata
+     Location:52.62170,1.21900
+     Date:31/10/23
+     Time: 11:41
+     Temperature:21.7C
+     Humidity:49%
+     Keywords:bambi
+
+
 

@@ -1,0 +1,9 @@
+Metadata	n/a	Defines the start of a metadata block
+Location	52.62170,1.21900	GPS coordinates of location where sample was collected.
+Date	31/10/23	Date of sample collection
+Time	11:41	Time of sample collection
+Temperature	21.7C	Temperature at location at time of collection.
+Humidity	49%	Humidity at location at time of collection.
+Keywords	field,potatoes,infected	Comma-separated list of keywords to describe the sample. Used for searching.
+Barcodes	01,02,03,04,05	Optional comma-separated list of barcodes for which this metadata applies. Do not include this field to use metadata for all barcodes.
+
