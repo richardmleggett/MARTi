@@ -409,12 +409,13 @@ function updateProcessCheckboxes(data) {
           .attr("class", "row mb-2")
           .html(function(d) {
             var name = d.Name;
+            var type = d.type;
             var divToAppend = '<div class="process-options col-3 d-flex align-items-center pl-4">' +
                   '<input class="" type="checkbox" value="'+ name +'" name="analysisCheck">'+
                   '<label class="h5">'+name+'</label>'+
                 '</div>'+
                 '<div class="col-9">'+
-                  '<textarea disabled class="form-control" name="analysisName" type="text">BlastProcess\n'+d.text+'</textarea>'+
+                  '<textarea disabled class="form-control" name="analysisName" type="text">' + type + 'Process\n'+d.text+'</textarea>'+
                 '</div>';
             return divToAppend;});
 
@@ -428,7 +429,7 @@ socket.on('default-server-options-response', response => {
 
   // martiDatabaseDirPath = response.BlastDatabaseDirectory + "/[DATABASE_DIRECTORY]";
   // $("input[name='databaseDir']").val(martiDatabaseDirPath);
-  //console.log(response);
+  console.log(response);
   options = response;
   updateRawDataDirOptions(response.minKNOWSampleNames);
   updateMartiOutputDirOptions(response.MARTiSampleDirectory);

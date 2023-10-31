@@ -39,6 +39,8 @@ try {
   const martiEngineOptions = fsExtra.readFileSync(engineOptionsPath, 'UTF-8');
   const lines = martiEngineOptions.split(/\r?\n/);
   var newProcess = false;
+  var newBlastProcess = false;
+  var newCentrifugeProcess = false;
   var processFound = false;
   var currentProcess = {text:""};
   lines.forEach((line) => {
@@ -46,6 +48,14 @@ try {
         if (newProcess == true) {
           if (line == "") {
             newProcess = false;
+
+            if (newBlastProcess) {
+              currentProcess.type = "Blast";
+            } else if (newCentrifugeProcess) {
+              currentProcess.type = "Centrifuge";
+            }
+            newBlastProcess = false;
+            newCentrifugeProcess = false;
             engineOptionsObject.processes.push(currentProcess);
             currentProcess = {text:""};
           } else {
@@ -63,6 +73,11 @@ try {
         } else if (line.search("BlastProcess") != -1) {
           newProcess = true;
           processFound = true;
+          newBlastProcess = true;
+        } else if (line.search("CentrifugeProcess") != -1) {
+          newProcess = true;
+          processFound = true;
+          newCentrifugeProcess = true;
         } else {
           const fields = line.split(":");
           if(fields[0] == "MARTiSampleDirectory") {
