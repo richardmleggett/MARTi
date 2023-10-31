@@ -128,6 +128,7 @@ public class CentrifugeClassifier {
                     filesProcessed++;
                     pendingFiles.remove(thisId);
                     options.getProgressReport().incrementCentrifugeChunksParsedCount();
+                    md.writeSampleJSON(false);
                                   
                 }
             }
