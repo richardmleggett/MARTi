@@ -522,8 +522,6 @@ var treeMapGroups = [];
         };
       };
 
-
-
       var group = node["lineage"][dashboardTreeMapColourBy.toLowerCase()];
       if (group == "n/a"){
         group = "higher taxa";
