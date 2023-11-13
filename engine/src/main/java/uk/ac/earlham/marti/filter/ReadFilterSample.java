@@ -30,6 +30,7 @@ public class ReadFilterSample {
     PrintWriter pwFasta = null;
     private int chunkNumber = -1;
     private int readCountInChunk = 0;
+    private long bpInChunk = 0;
     private String currentFastqChunkFilename = null;
     private String currentFastaChunkFilename = null;
     private ArrayList<Integer> allReadLengths = new ArrayList<Integer>();
@@ -200,7 +201,7 @@ public class ReadFilterSample {
             
             options.getLog().println("Moves complete.");
 
-            metaData.registerFilteredFastaChunk(currentFastaChunkFilename, readCountInChunk);
+            metaData.registerFilteredFastaChunk(currentFastaChunkFilename, readCountInChunk, bpInChunk);
             metaData.writeSampleJSON(false);
 
             options.getLog().println("Now to add to pending pair list");
@@ -211,6 +212,7 @@ public class ReadFilterSample {
             options.getLog().println("Reads filtered from chunk = "+readsFilteredFromChunk);
 
             readCountInChunk = 0;
+            bpInChunk = 0l;
             
             if (options.getStopProcessingAfter() > 0) {
                 if (writtenReadLengths.size() >= options.getStopProcessingAfter()) {
@@ -351,6 +353,7 @@ public class ReadFilterSample {
                                 }
 
                                 readCountInChunk++;
+                                bpInChunk += seq.length();
                                 writtenReadLengths.add(seq.length());
                                 chunkReadLengths.add(seq.length());
                                 readStatistics.addReadLength(barcode, readID,seq.length(), true);

@@ -17,8 +17,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -34,7 +32,6 @@ import uk.ac.earlham.lcaparse.Taxonomy;
 import uk.ac.earlham.lcaparse.TaxonomyNode;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
-import uk.ac.earlham.lcaparse.LCAHit;
 import uk.ac.earlham.marti.centrifuge.CentrifugeClassifierItem;
 
 /**
@@ -144,6 +141,7 @@ public class MARTiResults {
             // If root node, need to add unclassified count
             if (n.getId() == 1) {
                 summedCount += options.getSampleMetaData(bc).getReadsUnclassified();
+                summedYield  += options.getSampleMetaData(bc).getYieldUnclassified();
             }            
                      
             rank = mr.getRankFromString(ncbiRankString);

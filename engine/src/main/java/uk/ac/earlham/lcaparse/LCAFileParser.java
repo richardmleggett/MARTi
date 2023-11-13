@@ -178,7 +178,7 @@ public class LCAFileParser {
         return hitsByQuery.size();
     }
     
-    public int removePoorAlignments() {
+    public ArrayList<String> removePoorAlignments() {
         Set<String> keys = hitsByQuery.keySet();
         ArrayList<String> idsToRemove = new ArrayList<String>();
         for (String queryName : keys) {
@@ -194,7 +194,7 @@ public class LCAFileParser {
             hitsByQuery.remove(idsToRemove.get(i));
         }
         
-        return idsToRemove.size();
+        return idsToRemove;
     }
         
     /**

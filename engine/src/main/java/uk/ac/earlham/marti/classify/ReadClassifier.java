@@ -228,19 +228,25 @@ public class ReadClassifier {
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";
                                 options.getLog().println("Got LCAFileParse instance, now parsing");
                                 int readsWithHits = pfp.parseFile(f.getBlastFile());
-                                options.getLog().println("Parsed... now removing poor alignments");
-                                int readsRemoved = pfp.removePoorAlignments();
-                                
                                 long totalBpWithHits = 0l;
                                 Set<String> hits = pfp.getHitsByQuery().keySet();
                                 for(String query : hits) {
                                     totalBpWithHits += options.getReadStatistics().getReadLength(barcode, query, true);
                                 }
+                                
+                                options.getLog().println("Parsed... now removing poor alignments");
+                                ArrayList<String> queriesToRemove = pfp.removePoorAlignments();
+                                int readsRemoved = queriesToRemove.size();
+                                                               
+                                long bpRemoved = 0l;
+                                for(String query : queriesToRemove) {
+                                    bpRemoved += options.getReadStatistics().getReadLength(barcode, query, true);
+                                }
 
                                 options.getLog().println("Adding to reads classified");
                                 md.addToReadsClassified(readsWithHits, totalBpWithHits);
                                 options.getLog().println("Marking poor alignments");
-                                md.markPoorAlignments(readsRemoved);
+                                md.markPoorAlignments(readsRemoved, bpRemoved);
                                 options.getLog().println("Registering chunks");
                                 md.registerChunkAnalysed(f.getQueryFile());
 
