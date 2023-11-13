@@ -477,6 +477,13 @@ socket.on('dashboard-meta-response', function(data) {
 
   $("#dashboardInfoCardYieldBasecalled").text(totalYieldFormatter(dashboardSampleData.yieldBases));
 
+  let classifiedYield = "-";
+  if (dashboardSampleData.hasOwnProperty("classifiedYield")){
+    classifiedYield = totalYieldFormatter(parseInt(dashboardSampleData.classifiedYield));
+  }
+
+  $("#dashboardInfoCardYieldClassified").text(classifiedYield);
+
   let readsUnclassified = dashboardSampleData.readsAnalysed - dashboardSampleData.readsWithClassification;
 
   $("#dashboardInfoCardReadsUnclassified").text(thousandsSeparators(readsUnclassified));
