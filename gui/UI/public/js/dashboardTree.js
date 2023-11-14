@@ -408,15 +408,6 @@ duration = 0;
 };
 
 
-let treeSummedYield;
-
-if (d3.layout.tree().nodes(root)[0].hasOwnProperty("summedYield")) {
-  treeSummedYield = d3.layout.tree().nodes(root)[0].summedYield;
-  $("#dashboardInfoCardYieldClassified").text(totalYieldFormatter(treeSummedYield));
-};
-
-
-
   var tempNodes = d3.layout.tree().nodes(root).reverse(),
 	   tempLinks = d3.layout.tree().links(tempNodes);
 
