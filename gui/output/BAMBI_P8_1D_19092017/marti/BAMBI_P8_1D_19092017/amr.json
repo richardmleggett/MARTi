@@ -1,55 +1,24 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.12",
-        "fileWritten": "2023-05-16T15:17:53"
+        "martiVersion": "v0.9.15i",
+        "fileWritten": "2023-11-15T10:29:09"
     },
     "amr": {
         "currentChunk": 9,
         "chunkTime": {
-            "1": "16 May 2023 13:40:22",
-            "2": "16 May 2023 14:51:29",
-            "3": "16 May 2023 14:53:57",
-            "4": "16 May 2023 14:54:14",
-            "5": "16 May 2023 15:11:08",
-            "6": "16 May 2023 15:11:57",
-            "7": "16 May 2023 15:13:36",
-            "8": "16 May 2023 15:13:45",
-            "9": "16 May 2023 15:17:53"
+            "1": "15 Nov 2023 10:27:34",
+            "2": "15 Nov 2023 10:27:48",
+            "3": "15 Nov 2023 10:28:00",
+            "4": "15 Nov 2023 10:28:11",
+            "5": "15 Nov 2023 10:28:23",
+            "6": "15 Nov 2023 10:28:35",
+            "7": "15 Nov 2023 10:28:46",
+            "8": "15 Nov 2023 10:28:58",
+            "9": "15 Nov 2023 10:29:09"
         },
         "readsWithAMRHits": 195,
         "geneList": [
-            {
-                "cardId": "ARO:3002895",
-                "name": "SAT-2",
-                "description": "SAT-2 is a plasmid-mediated streptothricin acetyltransferase",
-                "shortName": "SAT-2",
-                "drugClass": "nucleoside antibiotic",
-                "geneFamily": "streptothricin acetyltransferase (SAT)",
-                "resistanceMechanism": "antibiotic inactivation",
-                "count": {
-                    "5": 1,
-                    "6": 2,
-                    "7": 3,
-                    "9": 4
-                },
-                "averageAccuracy": {
-                    "5": 85.19,
-                    "6": 84.93,
-                    "7": 84.76,
-                    "9": 84.7
-                },
-                "species": {
-                    "Enterobacterales": {
-                        "5": 1,
-                        "7": 2,
-                        "9": 3
-                    },
-                    "Proteus mirabilis": {
-                        "6": 1
-                    }
-                }
-            },
             {
                 "cardId": "ARO:3004089",
                 "name": "ANT(3'')-IIa",
@@ -59,19 +28,74 @@
                 "geneFamily": "ANT(3'')",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "3": 1,
+                    "8": 1,
                     "9": 2
                 },
                 "averageAccuracy": {
-                    "3": 80.57,
+                    "8": 83.07,
                     "9": 81.82
                 },
-                "species": {
-                    "Enterobacterales": {
-                        "3": 1,
-                        "9": 2
+                "species": [
+                    {
+                        "name": "Enterobacterales",
+                        "ncbiID": 91347,
+                        "rank": 5,
+                        "chunkCounts": {
+                            "8": 1,
+                            "9": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "8": 1,
+                            "9": 2
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3002895",
+                "name": "SAT-2",
+                "description": "SAT-2 is a plasmid-mediated streptothricin acetyltransferase",
+                "shortName": "SAT-2",
+                "drugClass": "nucleoside antibiotic",
+                "geneFamily": "streptothricin acetyltransferase (SAT)",
+                "resistanceMechanism": "antibiotic inactivation",
+                "count": {
+                    "3": 1,
+                    "4": 2,
+                    "5": 3,
+                    "8": 4
+                },
+                "averageAccuracy": {
+                    "3": 84.67,
+                    "4": 84.93,
+                    "5": 84.76,
+                    "8": 84.7
+                },
+                "species": [
+                    {
+                        "name": "Enterobacterales",
+                        "ncbiID": 91347,
+                        "rank": 5,
+                        "chunkCounts": {
+                            "4": 1,
+                            "5": 2,
+                            "8": 3
+                        },
+                        "chunkPlasmidCounts": {
+                            "8": 1
+                        }
+                    },
+                    {
+                        "name": "Proteus mirabilis",
+                        "ncbiID": 584,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3003922",
@@ -82,34 +106,48 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1,
-                    "3": 5,
-                    "4": 7,
-                    "6": 9,
-                    "7": 10,
+                    "3": 2,
+                    "5": 3,
+                    "6": 5,
+                    "7": 6,
+                    "8": 10,
                     "9": 14
                 },
                 "averageAccuracy": {
-                    "2": 82.84,
-                    "3": 83.89,
-                    "4": 83.15,
-                    "6": 82.8,
-                    "7": 83.1,
+                    "3": 81.59,
+                    "5": 82.97,
+                    "6": 82.3,
+                    "7": 82.39,
+                    "8": 82.86,
                     "9": 83.23
                 },
-                "species": {
-                    "Enterobacteriaceae": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Enterobacteriaceae",
+                        "ncbiID": 543,
+                        "rank": 6,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "2": 1,
-                        "3": 5,
-                        "4": 6,
-                        "6": 8,
-                        "7": 9,
-                        "9": 13
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 2,
+                            "5": 3,
+                            "6": 4,
+                            "7": 5,
+                            "8": 9,
+                            "9": 13
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005047",
@@ -120,40 +158,54 @@
                 "geneFamily": "pmr phosphoethanolamine transferase",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "2": 1,
-                    "3": 3,
-                    "4": 4,
-                    "5": 9,
-                    "6": 12,
-                    "7": 14,
-                    "8": 19,
+                    "2": 5,
+                    "3": 8,
+                    "4": 13,
+                    "5": 15,
+                    "6": 16,
+                    "7": 17,
+                    "8": 21,
                     "9": 23
                 },
                 "averageAccuracy": {
-                    "2": 87.62,
-                    "3": 86.79,
-                    "4": 85.38,
-                    "5": 85.39,
-                    "6": 84.63,
-                    "7": 84.52,
-                    "8": 84.62,
+                    "2": 84.88,
+                    "3": 83.92,
+                    "4": 84.49,
+                    "5": 84.41,
+                    "6": 84.21,
+                    "7": 84.41,
+                    "8": 84.65,
                     "9": 84.8
                 },
-                "species": {
-                    "Klebsiella": {
-                        "8": 1
+                "species": [
+                    {
+                        "name": "Klebsiella",
+                        "ncbiID": 570,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "2": 1,
-                        "3": 3,
-                        "4": 4,
-                        "5": 9,
-                        "6": 12,
-                        "7": 14,
-                        "8": 18,
-                        "9": 22
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 4,
+                            "3": 7,
+                            "4": 12,
+                            "5": 14,
+                            "6": 15,
+                            "7": 16,
+                            "8": 20,
+                            "9": 22
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003154",
@@ -165,24 +217,31 @@
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
                     "1": 1,
-                    "3": 2,
-                    "7": 3,
-                    "8": 4
+                    "2": 2,
+                    "5": 3,
+                    "9": 4
                 },
                 "averageAccuracy": {
                     "1": 83.35,
-                    "3": 86.69,
-                    "7": 85.12,
-                    "8": 84.37
+                    "2": 82.73,
+                    "5": 82.48,
+                    "9": 84.37
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "1": 1,
-                        "3": 2,
-                        "7": 3,
-                        "8": 4
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 2,
+                            "5": 3,
+                            "9": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003923",
@@ -194,39 +253,53 @@
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "2": 1,
-                    "3": 2,
-                    "4": 4,
-                    "5": 5,
-                    "6": 8,
+                    "3": 4,
+                    "4": 5,
+                    "5": 8,
+                    "6": 10,
                     "7": 11,
-                    "8": 12,
+                    "8": 14,
                     "9": 15
                 },
                 "averageAccuracy": {
-                    "2": 85.51,
-                    "3": 85.41,
-                    "4": 83.8,
-                    "5": 83.32,
-                    "6": 82.95,
-                    "7": 84.15,
-                    "8": 84.08,
+                    "2": 83.36,
+                    "3": 82.6,
+                    "4": 82.36,
+                    "5": 84.22,
+                    "6": 83.82,
+                    "7": 83.97,
+                    "8": 83.92,
                     "9": 84.01
                 },
-                "species": {
-                    "Enterobacteriaceae": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Enterobacteriaceae",
+                        "ncbiID": 543,
+                        "rank": 6,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "2": 1,
-                        "3": 2,
-                        "4": 3,
-                        "5": 4,
-                        "6": 7,
-                        "7": 10,
-                        "8": 11,
-                        "9": 14
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1,
+                            "3": 4,
+                            "4": 5,
+                            "5": 8,
+                            "6": 9,
+                            "7": 10,
+                            "8": 13,
+                            "9": 14
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000804",
@@ -237,16 +310,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "6": 1
+                    "3": 1
                 },
                 "averageAccuracy": {
-                    "6": 80.82
+                    "3": 80.82
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "6": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004075",
@@ -257,16 +337,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "6": 1
+                    "3": 1
                 },
                 "averageAccuracy": {
-                    "6": 82.01
+                    "3": 82.01
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "6": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003152",
@@ -277,56 +364,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "9": 1
+                    "8": 1
                 },
                 "averageAccuracy": {
-                    "9": 83.55
+                    "8": 83.55
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "9": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "8": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
-            },
-            {
-                "cardId": "ARO:3003209",
-                "name": "fosA5",
-                "description": "fosA5 is a fosfomycin resistance gene isolated from clinical strain of Escherichia coli E265. It is susceptible to amikacin",
-                "shortName": "fosA5",
-                "drugClass": "phosphonic acid antibiotic",
-                "geneFamily": "fosfomycin thiol transferase",
-                "resistanceMechanism": "antibiotic inactivation",
-                "count": {
-                    "7": 1
-                },
-                "averageAccuracy": {
-                    "7": 82.14
-                },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "7": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000518",
-                "name": "CRP",
-                "description": "CRP is a global regulator that represses MdtEF multidrug efflux pump expression.",
-                "shortName": "CRP",
-                "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;penam",
-                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
-                "resistanceMechanism": "antibiotic efflux",
-                "count": {
-                    "7": 1
-                },
-                "averageAccuracy": {
-                    "7": 81.75
-                },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "7": 1
-                    }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001125",
@@ -337,16 +391,77 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "4": 1
+                    "6": 1
                 },
                 "averageAccuracy": {
-                    "4": 85.59
+                    "6": 85.59
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3003209",
+                "name": "fosA5",
+                "description": "fosA5 is a fosfomycin resistance gene isolated from clinical strain of Escherichia coli E265. It is susceptible to amikacin",
+                "shortName": "fosA5",
+                "drugClass": "aminoglycoside antibiotic;fluoroquinolone antibiotic;phosphonic acid antibiotic",
+                "geneFamily": "fosfomycin thiol transferase",
+                "resistanceMechanism": "antibiotic inactivation",
+                "count": {
+                    "5": 1
+                },
+                "averageAccuracy": {
+                    "5": 82.14
+                },
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "5": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
+            },
+            {
+                "cardId": "ARO:3000518",
+                "name": "CRP",
+                "description": "CRP is a global regulator that represses MdtEF multidrug efflux pump expression.",
+                "shortName": "CRP",
+                "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;penam",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "5": 1
+                },
+                "averageAccuracy": {
+                    "5": 81.75
+                },
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "5": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3005053",
@@ -358,39 +473,46 @@
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
                     "1": 1,
-                    "2": 2,
-                    "3": 3,
-                    "4": 4,
-                    "5": 7,
-                    "6": 8,
-                    "7": 12,
+                    "2": 3,
+                    "3": 4,
+                    "4": 7,
+                    "5": 11,
+                    "6": 12,
+                    "7": 13,
                     "8": 14,
                     "9": 15
                 },
                 "averageAccuracy": {
                     "1": 81.97,
-                    "2": 84.41,
-                    "3": 83.29,
-                    "4": 83.34,
-                    "5": 83.22,
-                    "6": 83.02,
-                    "7": 84.38,
-                    "8": 84.34,
+                    "2": 83.4,
+                    "3": 82.96,
+                    "4": 83.0,
+                    "5": 84.49,
+                    "6": 84.41,
+                    "7": 84.6,
+                    "8": 84.39,
                     "9": 84.17
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "1": 1,
-                        "2": 2,
-                        "3": 3,
-                        "4": 4,
-                        "5": 7,
-                        "6": 8,
-                        "7": 12,
-                        "8": 14,
-                        "9": 15
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 3,
+                            "3": 4,
+                            "4": 7,
+                            "5": 11,
+                            "6": 12,
+                            "7": 13,
+                            "8": 14,
+                            "9": 15
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004597",
@@ -401,16 +523,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "9": 1
+                    "8": 1
                 },
                 "averageAccuracy": {
-                    "9": 81.82
+                    "8": 81.82
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "9": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "8": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004657",
@@ -421,39 +550,26 @@
                 "geneFamily": "chloramphenicol acetyltransferase (CAT)",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "2": 1,
-                    "3": 2
+                    "7": 1,
+                    "9": 2
                 },
                 "averageAccuracy": {
-                    "2": 80.89,
-                    "3": 82.78
+                    "7": 80.89,
+                    "9": 82.78
                 },
-                "species": {
-                    "Proteus mirabilis": {
-                        "2": 1,
-                        "3": 2
+                "species": [
+                    {
+                        "name": "Proteus mirabilis",
+                        "ncbiID": 584,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "7": 1,
+                            "9": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
-            },
-            {
-                "cardId": "ARO:3003049",
-                "name": "rosB",
-                "description": "rosB is part of an efflux pump/potassium antiporter system (RosAB) in Yersinia that confers resistance to cationic antimicrobial peptides such as polymyxin B.",
-                "shortName": "rosB",
-                "drugClass": "peptide antibiotic",
-                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
-                "resistanceMechanism": "antibiotic efflux",
-                "count": {
-                    "8": 1
-                },
-                "averageAccuracy": {
-                    "8": 80.2
-                },
-                "species": {
-                    "Proteus mirabilis": {
-                        "8": 1
-                    }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004588",
@@ -464,34 +580,69 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1,
-                    "4": 2,
-                    "5": 3,
-                    "6": 5,
-                    "7": 7,
-                    "8": 8,
+                    "2": 1,
+                    "3": 3,
+                    "4": 4,
+                    "5": 6,
+                    "6": 7,
+                    "8": 9,
                     "9": 10
                 },
                 "averageAccuracy": {
-                    "3": 80.91,
-                    "4": 83.15,
-                    "5": 82.84,
-                    "6": 83.99,
-                    "7": 83.98,
-                    "8": 84.24,
+                    "2": 86.06,
+                    "3": 85.83,
+                    "4": 84.92,
+                    "5": 84.61,
+                    "6": 84.72,
+                    "8": 85.04,
                     "9": 84.63
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "3": 1,
-                        "4": 2,
-                        "5": 3,
-                        "6": 5,
-                        "7": 7,
-                        "8": 8,
-                        "9": 10
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1,
+                            "3": 3,
+                            "4": 4,
+                            "5": 6,
+                            "6": 7,
+                            "8": 9,
+                            "9": 10
+                        },
+                        "chunkPlasmidCounts": {
+                            "3": 1
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3003049",
+                "name": "rosB",
+                "description": "rosB is part of an efflux pump/potassium antiporter system (RosAB) in Yersinia that confers resistance to cationic antimicrobial peptides such as polymyxin B.",
+                "shortName": "rosB",
+                "drugClass": "peptide antibiotic",
+                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 80.2
+                },
+                "species": [
+                    {
+                        "name": "Proteus mirabilis",
+                        "ncbiID": 584,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3000177",
@@ -502,19 +653,26 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1,
+                    "8": 1,
                     "9": 2
                 },
                 "averageAccuracy": {
-                    "3": 88.46,
+                    "8": 82.74,
                     "9": 85.6
                 },
-                "species": {
-                    "Proteus mirabilis": {
-                        "3": 1,
-                        "9": 2
+                "species": [
+                    {
+                        "name": "Proteus mirabilis",
+                        "ncbiID": 584,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "8": 1,
+                            "9": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005044",
@@ -526,29 +684,43 @@
                 "resistanceMechanism": "reduced permeability to antibiotic",
                 "count": {
                     "3": 1,
-                    "5": 2,
-                    "6": 3,
-                    "7": 5,
+                    "4": 2,
+                    "5": 4,
+                    "8": 5,
                     "9": 6
                 },
                 "averageAccuracy": {
-                    "3": 86.04,
-                    "5": 85.2,
-                    "6": 84.77,
-                    "7": 86.99,
+                    "3": 83.91,
+                    "4": 84.13,
+                    "5": 87.23,
+                    "8": 86.5,
                     "9": 86.43
                 },
-                "species": {
-                    "Klebsiella": {
-                        "3": 1
+                "species": [
+                    {
+                        "name": "Klebsiella",
+                        "ncbiID": 570,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "9": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "5": 1,
-                        "6": 2,
-                        "7": 4,
-                        "9": 5
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1,
+                            "4": 2,
+                            "5": 4,
+                            "8": 5
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000830",
@@ -559,16 +731,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "9": 1
+                    "8": 1
                 },
                 "averageAccuracy": {
-                    "9": 80.05
+                    "8": 80.05
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "9": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "8": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004122",
@@ -579,37 +758,53 @@
                 "geneFamily": "General Bacterial Porin with reduced permeability to beta-lactams",
                 "resistanceMechanism": "reduced permeability to antibiotic",
                 "count": {
-                    "2": 3,
-                    "3": 6,
-                    "4": 8,
-                    "5": 9,
-                    "7": 14,
-                    "8": 16,
+                    "2": 2,
+                    "4": 3,
+                    "5": 8,
+                    "6": 10,
+                    "7": 13,
+                    "8": 14,
                     "9": 17
                 },
                 "averageAccuracy": {
-                    "2": 85.28,
-                    "3": 85.43,
-                    "4": 85.33,
-                    "5": 85.4,
-                    "7": 85.18,
-                    "8": 84.61,
+                    "2": 80.58,
+                    "4": 82.36,
+                    "5": 83.88,
+                    "6": 84.11,
+                    "7": 84.38,
+                    "8": 84.27,
                     "9": 84.5
                 },
-                "species": {
-                    "Klebsiella": {
-                        "8": 1
+                "species": [
+                    {
+                        "name": "Klebsiella",
+                        "ncbiID": 570,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "2": 3,
-                        "3": 6,
-                        "4": 8,
-                        "5": 9,
-                        "7": 14,
-                        "8": 15,
-                        "9": 16
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1,
+                            "4": 2,
+                            "5": 7,
+                            "6": 9,
+                            "7": 12,
+                            "8": 13,
+                            "9": 16
+                        },
+                        "chunkPlasmidCounts": {
+                            "5": 1,
+                            "9": 2
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004580",
@@ -617,37 +812,44 @@
                 "description": "KpnE subunit of KpnEF resembles EbrAB from E. coli. Mutation in KpnEF resulted in increased susceptibility to cefepime",
                 "shortName": "Kpne_KpnE",
                 "drugClass": "aminoglycoside antibiotic;cephalosporin;disinfecting agents and antiseptics;macrolide antibiotic;peptide antibiotic;rifamycin antibiotic;tetracycline antibiotic",
-                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "geneFamily": "small multidrug resistance (SMR) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "2": 2,
-                    "3": 3,
-                    "4": 4,
-                    "5": 8,
-                    "6": 10,
+                    "3": 4,
+                    "4": 8,
+                    "6": 9,
+                    "7": 11,
                     "8": 12,
                     "9": 13
                 },
                 "averageAccuracy": {
-                    "2": 87.49,
-                    "3": 85.36,
-                    "4": 84.59,
-                    "5": 84.08,
-                    "6": 83.56,
-                    "8": 83.99,
+                    "2": 86.15,
+                    "3": 83.8,
+                    "4": 83.69,
+                    "6": 83.53,
+                    "7": 84.25,
+                    "8": 84.44,
                     "9": 84.18
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "2": 2,
-                        "3": 3,
-                        "4": 4,
-                        "5": 8,
-                        "6": 10,
-                        "8": 12,
-                        "9": 13
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 2,
+                            "3": 4,
+                            "4": 8,
+                            "6": 9,
+                            "7": 11,
+                            "8": 12,
+                            "9": 13
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004111",
@@ -658,34 +860,41 @@
                 "geneFamily": "fosfomycin thiol transferase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "3": 2,
-                    "4": 4,
-                    "5": 5,
-                    "6": 7,
-                    "7": 8,
+                    "2": 2,
+                    "3": 4,
+                    "4": 5,
+                    "5": 6,
+                    "6": 8,
                     "8": 10,
                     "9": 12
                 },
                 "averageAccuracy": {
-                    "3": 86.03,
-                    "4": 85.52,
-                    "5": 84.9,
-                    "6": 84.99,
-                    "7": 84.93,
-                    "8": 84.4,
+                    "2": 82.26,
+                    "3": 83.73,
+                    "4": 83.47,
+                    "5": 83.65,
+                    "6": 83.99,
+                    "8": 83.9,
                     "9": 84.26
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "3": 2,
-                        "4": 4,
-                        "5": 5,
-                        "6": 7,
-                        "7": 8,
-                        "8": 10,
-                        "9": 12
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 2,
+                            "3": 4,
+                            "4": 5,
+                            "5": 6,
+                            "6": 8,
+                            "8": 10,
+                            "9": 12
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005231",
@@ -696,16 +905,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "4": 1
+                    "6": 1
                 },
                 "averageAccuracy": {
-                    "4": 82.22
+                    "6": 82.22
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3002854",
@@ -717,23 +933,39 @@
                 "resistanceMechanism": "antibiotic target replacement",
                 "count": {
                     "3": 1,
-                    "6": 2,
+                    "8": 2,
                     "9": 3
                 },
                 "averageAccuracy": {
-                    "3": 83.64,
-                    "6": 83.24,
+                    "3": 82.84,
+                    "8": 86.8,
                     "9": 85.75
                 },
-                "species": {
-                    "Enterobacterales": {
-                        "3": 1,
-                        "9": 2
+                "species": [
+                    {
+                        "name": "Enterobacterales",
+                        "ncbiID": 91347,
+                        "rank": 5,
+                        "chunkCounts": {
+                            "8": 1,
+                            "9": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "8": 1,
+                            "9": 2
+                        }
                     },
-                    "Proteus mirabilis": {
-                        "6": 1
+                    {
+                        "name": "Proteus mirabilis",
+                        "ncbiID": 584,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001062",
@@ -744,16 +976,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "8": 1
+                    "2": 1
                 },
                 "averageAccuracy": {
-                    "8": 82.65
+                    "2": 82.65
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "8": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000676",
@@ -764,22 +1003,29 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump;resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1,
-                    "5": 2,
-                    "6": 3
+                    "3": 1,
+                    "4": 2,
+                    "7": 3
                 },
                 "averageAccuracy": {
-                    "2": 82.51,
-                    "5": 82.22,
-                    "6": 81.48
+                    "3": 80.0,
+                    "4": 80.97,
+                    "7": 81.48
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "2": 1,
-                        "5": 2,
-                        "6": 3
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1,
+                            "4": 2,
+                            "7": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004041",
@@ -790,37 +1036,44 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 3,
-                    "3": 4,
-                    "4": 5,
-                    "5": 9,
-                    "6": 11,
-                    "7": 13,
-                    "8": 17,
+                    "2": 4,
+                    "3": 6,
+                    "4": 10,
+                    "5": 12,
+                    "6": 13,
+                    "7": 16,
+                    "8": 19,
                     "9": 20
                 },
                 "averageAccuracy": {
-                    "2": 85.22,
-                    "3": 84.06,
-                    "4": 84.73,
-                    "5": 84.1,
-                    "6": 84.3,
-                    "7": 83.96,
-                    "8": 84.07,
+                    "2": 84.43,
+                    "3": 84.69,
+                    "4": 84.14,
+                    "5": 83.8,
+                    "6": 84.08,
+                    "7": 84.29,
+                    "8": 84.27,
                     "9": 84.09
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "2": 3,
-                        "3": 4,
-                        "4": 5,
-                        "5": 9,
-                        "6": 11,
-                        "7": 13,
-                        "8": 17,
-                        "9": 20
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 4,
+                            "3": 6,
+                            "4": 10,
+                            "5": 12,
+                            "6": 13,
+                            "7": 16,
+                            "8": 19,
+                            "9": 20
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001168",
@@ -831,16 +1084,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "8": 1
+                    "2": 1
                 },
                 "averageAccuracy": {
-                    "8": 81.87
+                    "2": 81.87
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "8": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001341",
@@ -851,16 +1111,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "2": 1
+                    "7": 1
                 },
                 "averageAccuracy": {
-                    "2": 92.03
+                    "7": 92.03
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "2": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "7": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001123",
@@ -871,16 +1138,23 @@
                 "geneFamily": "SHV beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "5": 1
+                    "4": 1
                 },
                 "averageAccuracy": {
-                    "5": 89.77
+                    "4": 89.77
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "5": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000826",
@@ -891,61 +1165,82 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "5": 2
+                    "4": 2
                 },
                 "averageAccuracy": {
-                    "5": 80.37
+                    "4": 80.37
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "5": 2
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005059",
                 "name": "LptD",
-                "description": "LptD is involved in LPS transport in a ABC Transporter efflux system. It confers resistance to carbapenems",
+                "description": "LptD is involved in LPS transport in a ABC Transporter efflux system. It confers resistance to rifamycin",
                 "shortName": "LptD",
-                "drugClass": "aminocoumarin antibiotic;carbapenem;peptide antibiotic;rifamycin antibiotic",
+                "drugClass": "aminocoumarin antibiotic;peptide antibiotic;rifamycin antibiotic",
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 4,
-                    "3": 6,
-                    "4": 11,
-                    "5": 13,
-                    "6": 16,
+                    "2": 2,
+                    "3": 5,
+                    "4": 7,
+                    "5": 10,
+                    "6": 15,
                     "7": 19,
-                    "8": 21,
+                    "8": 22,
                     "9": 24
                 },
                 "averageAccuracy": {
-                    "2": 86.64,
-                    "3": 85.71,
-                    "4": 85.3,
-                    "5": 85.07,
-                    "6": 84.91,
-                    "7": 84.73,
-                    "8": 84.43,
+                    "2": 81.53,
+                    "3": 83.13,
+                    "4": 83.32,
+                    "5": 83.46,
+                    "6": 83.91,
+                    "7": 84.49,
+                    "8": 84.55,
                     "9": 84.49
                 },
-                "species": {
-                    "Klebsiella": {
-                        "6": 1,
-                        "9": 3
+                "species": [
+                    {
+                        "name": "Klebsiella",
+                        "ncbiID": 570,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "3": 1,
+                            "8": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Klebsiella pneumoniae": {
-                        "2": 4,
-                        "3": 6,
-                        "4": 11,
-                        "5": 13,
-                        "6": 15,
-                        "7": 18,
-                        "8": 20,
-                        "9": 21
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 2,
+                            "3": 4,
+                            "4": 6,
+                            "5": 9,
+                            "6": 14,
+                            "7": 18,
+                            "8": 19,
+                            "9": 21
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000794",
@@ -956,16 +1251,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "4": 1
+                    "6": 1
                 },
                 "averageAccuracy": {
-                    "4": 81.46
+                    "6": 81.46
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004583",
@@ -973,37 +1275,44 @@
                 "description": "KpnF subunit of KpnEF resembles EbrAB from E. coli. Mutation in KpnEF resulted in increased susceptibility to cefepime",
                 "shortName": "Kpne_KpnF",
                 "drugClass": "aminoglycoside antibiotic;cephalosporin;disinfecting agents and antiseptics;macrolide antibiotic;peptide antibiotic;rifamycin antibiotic;tetracycline antibiotic",
-                "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
+                "geneFamily": "small multidrug resistance (SMR) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "2": 2,
-                    "3": 3,
-                    "4": 4,
-                    "5": 9,
-                    "6": 11,
+                    "3": 4,
+                    "4": 9,
+                    "6": 10,
+                    "7": 12,
                     "8": 13,
                     "9": 14
                 },
                 "averageAccuracy": {
-                    "2": 86.39,
-                    "3": 84.69,
-                    "4": 84.72,
-                    "5": 84.96,
-                    "6": 84.27,
-                    "8": 84.74,
+                    "2": 87.34,
+                    "3": 84.26,
+                    "4": 84.76,
+                    "6": 84.76,
+                    "7": 85.03,
+                    "8": 84.9,
                     "9": 84.65
                 },
-                "species": {
-                    "Klebsiella pneumoniae": {
-                        "2": 2,
-                        "3": 3,
-                        "4": 4,
-                        "5": 9,
-                        "6": 11,
-                        "8": 13,
-                        "9": 14
+                "species": [
+                    {
+                        "name": "Klebsiella pneumoniae",
+                        "ncbiID": 573,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 2,
+                            "3": 4,
+                            "4": 9,
+                            "6": 10,
+                            "7": 12,
+                            "8": 13,
+                            "9": 14
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             }
         ]
     }

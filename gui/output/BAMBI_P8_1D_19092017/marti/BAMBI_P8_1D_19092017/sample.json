@@ -1,20 +1,24 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.12"
+        "martiVersion": "v0.9.15i"
     },
     "sample": {
         "id": "BAMBI_P8_1D_19092017",
+        "uuid": "517db13f-ae28-3ea4-b73a-bdb4b9f180c4",
+        "barcode": 0,
         "runId": "BAMBI_P8_1D_19092017",
-        "sequencingDate": "2023-05-16T12:18:02",
-        "analysisDate": "2023-05-16T12:18:02",
+        "sequencingDate": "2017-09-19T22:01:59Z",
+        "analysisDate": "2023-11-15T10:25:38",
         "yieldBases": 186692555,
         "yieldGb": 0.186692555,
         "readsPassBasecall": 100000,
         "readsFailedFilter": 59254,
         "readsPassedFilter": 40746,
-        "readsWithClassification": 39935,
-        "readsUnclassified": 811,
+        "readsWithClassification": 39942,
+        "readsUnclassified": 804,
+        "classifiedYield": 98305394,
+        "unclassifiedYield": 567519,
         "readsWithPoorAlignments": 20,
         "readsAnalysed": 40746,
         "sequencingStatus": "Complete",
@@ -23,16 +27,16 @@
             "pipeline": "BlastLCA-CARD",
             "classification": {
                 "algorithm": "BlastLCA",
-                "blastVersion": "0.0.0",
-                "database": "nt",
-                "databaseVersion": "01-01-1900"
+                "blastTool": "megablast",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/public/databases/blast/ncbi/nt_20230303/nt"
             },
             "accumulation": "true",
             "amr": {
                 "algorithm": "Blast",
-                "blastVersion": "0.0.0",
-                "database": "CARD",
-                "databaseVersion": "0.0.0"
+                "blastTool": "blastn",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/data/databases/card/CARD_3.2.7/nucleotide_fasta_protein_homolog_model.fasta"
             }
         }
     }

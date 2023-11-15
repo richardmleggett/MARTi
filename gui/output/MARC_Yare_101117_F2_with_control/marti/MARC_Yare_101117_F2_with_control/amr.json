@@ -1,0 +1,45 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.15i",
+        "fileWritten": "2023-11-15T10:31:33"
+    },
+    "amr": {
+        "currentChunk": 20,
+        "chunkTime": {
+            "1": "15 Nov 2023 10:27:37",
+            "2": "15 Nov 2023 10:27:49",
+            "3": "15 Nov 2023 10:28:00"
+        },
+        "readsWithAMRHits": 1,
+        "geneList": [
+            {
+                "cardId": "ARO:3000804",
+                "name": "MexF",
+                "description": "MexF is the multidrug inner membrane transporter of the MexEF-OprN complex. mexF corresponds to 2 loci in Pseudomonas aeruginosa PAO1 (gene name: mexF/mexB) and 4 loci in Pseudomonas aeruginosa LESB58 (gene name: mexD/mexB).",
+                "shortName": "MexF",
+                "drugClass": "diaminopyrimidine antibiotic;fluoroquinolone antibiotic;phenicol antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "3": 1
+                },
+                "averageAccuracy": {
+                    "3": 80.39
+                },
+                "species": [
+                    {
+                        "name": "Limnohabitans sp. TEGF004",
+                        "ncbiID": 2986281,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

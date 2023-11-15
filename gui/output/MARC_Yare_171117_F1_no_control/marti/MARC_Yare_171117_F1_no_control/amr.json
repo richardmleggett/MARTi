@@ -1,0 +1,15 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.15i",
+        "fileWritten": "2023-11-15T10:29:41"
+    },
+    "amr": {
+        "currentChunk": 12,
+        "chunkTime": {
+        },
+        "readsWithAMRHits": 0,
+        "geneList": [
+        ]
+    }
+}
