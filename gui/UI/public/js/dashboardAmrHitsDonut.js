@@ -211,13 +211,21 @@ function generateAmrHitsSpeciesArray(data){
           if (geneCountAtChunk > 0) {
             let speciesDropdownListIndex = findWithAttr(speciesDropdownList, "ncbiID", taxa.ncbiID);
             if (speciesDropdownListIndex == -1){
-              let speciesInformationIndex = findWithAttr(donutNodes, "ncbiID", taxa.ncbiID);
-              if (speciesInformationIndex != -1) {
-                let speciesInfo = donutNodes[speciesInformationIndex];
-                if (speciesInfo.rank == 8) {
-                  speciesDropdownList.push({ncbiID:taxa.ncbiID, name:taxa.name})
+              if (taxa.hasOwnProperty("rank")) {
+                if (taxa.rank >= 8) {
+                  speciesDropdownList.push({ncbiID:taxa.ncbiID, name:taxa.name});
+                }
+              } else {
+                let speciesInformationIndex = findWithAttr(donutNodes, "ncbiID", taxa.ncbiID);
+                if (speciesInformationIndex != -1) {
+                  let speciesInfo = donutNodes[speciesInformationIndex];
+                  if (speciesInfo.rank >= 8) {
+                    speciesDropdownList.push({ncbiID:taxa.ncbiID, name:taxa.name})
+                  }
                 }
               }
+
+
             }
           }
         }
