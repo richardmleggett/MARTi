@@ -646,10 +646,14 @@ var donutLeaves = [];
 var donutTaxaAtRank = [];
 
 function taxaAtRank(d) {
-
   if (d.rank < taxonomicRankSelected) {
     if(taxonomicRankSelected == 10){
-      donutTaxaAtRank.push(d);
+      if (d.name == "unclassified" && dashboardTaxaDonutUnclassified == "hide"){
+
+      } else {
+        donutTaxaAtRank.push(d);
+      }
+
     };
     if (d.children) {
       d.children.forEach(function(c){

@@ -155,7 +155,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.19.6";
+const martiGuiVersion = "0.19.7";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);
