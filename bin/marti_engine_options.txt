@@ -42,3 +42,9 @@ BlastProcess
     MaxE:0.001
     MaxTargetSeqs:100
     BlastThreads:2
+
+CentrifugeProcess
+    Name:ref_prok
+    Database:/Users/leggettr/Documents/Databases/centrifuge/p_2018_4_15/p_compressed
+    CentrifugeThreads:1
+    UseToClassify

@@ -1,19 +1,19 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.12",
-        "fileWritten": "2023-05-16T15:55:49"
+        "martiVersion": "v0.9.15i",
+        "fileWritten": "2023-11-15T10:28:59"
     },
     "amr": {
         "currentChunk": 7,
         "chunkTime": {
-            "1": "16 May 2023 15:36:24",
-            "2": "16 May 2023 15:46:29",
-            "3": "16 May 2023 15:46:37",
-            "4": "16 May 2023 15:48:26",
-            "5": "16 May 2023 15:49:39",
-            "6": "16 May 2023 15:53:03",
-            "7": "16 May 2023 15:55:49"
+            "1": "15 Nov 2023 10:27:39",
+            "2": "15 Nov 2023 10:27:52",
+            "3": "15 Nov 2023 10:28:05",
+            "4": "15 Nov 2023 10:28:19",
+            "5": "15 Nov 2023 10:28:33",
+            "6": "15 Nov 2023 10:28:46",
+            "7": "15 Nov 2023 10:28:59"
         },
         "readsWithAMRHits": 111,
         "geneList": [
@@ -26,36 +26,23 @@
                 "geneFamily": "rifamycin-resistant beta-subunit of RNA polymerase (rpoB)",
                 "resistanceMechanism": "antibiotic target alteration;antibiotic target replacement",
                 "count": {
-                    "3": 1
+                    "4": 1
                 },
                 "averageAccuracy": {
-                    "3": 80.0
+                    "4": 80.0
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "3": 1
+                "species": [
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
-            },
-            {
-                "cardId": "ARO:3007122",
-                "name": "tet(O/W/32/O)",
-                "description": "Tet(O/W/32/O) is a mosaic tetracycline resistance gene and ribosomal protection protein.",
-                "shortName": "tet(O/W/32/O)",
-                "drugClass": "tetracycline antibiotic",
-                "geneFamily": "tetracycline-resistant ribosomal protection protein",
-                "resistanceMechanism": "antibiotic target protection",
-                "count": {
-                    "3": 1
-                },
-                "averageAccuracy": {
-                    "3": 90.39
-                },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "3": 1
-                    }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003576",
@@ -66,36 +53,50 @@
                 "geneFamily": "pmr phosphoethanolamine transferase",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "2": 1
-                },
-                "averageAccuracy": {
-                    "2": 85.54
-                },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "2": 1
-                    }
-                }
-            },
-            {
-                "cardId": "ARO:3000617",
-                "name": "mecA",
-                "description": "A foreign PBP2a acquired by lateral gene transfer that able to perform peptidoglycan synthesis in the presence of beta-lactams.",
-                "shortName": "mecA",
-                "drugClass": "carbapenem;cephalosporin;cephamycin;monobactam;penam",
-                "geneFamily": "methicillin resistant PBP2",
-                "resistanceMechanism": "antibiotic target replacement",
-                "count": {
                     "7": 1
                 },
                 "averageAccuracy": {
-                    "7": 94.93
+                    "7": 85.54
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "7": 1
+                "species": [
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "7": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3007122",
+                "name": "tet(O/W/32/O)",
+                "description": "Tet(O/W/32/O) is a mosaic tetracycline resistance gene and ribosomal protection protein.",
+                "shortName": "tet(O/W/32/O)",
+                "drugClass": "tetracycline antibiotic",
+                "geneFamily": "tetracycline-resistant ribosomal protection protein",
+                "resistanceMechanism": "antibiotic target protection",
+                "count": {
+                    "4": 1
+                },
+                "averageAccuracy": {
+                    "4": 90.39
+                },
+                "species": [
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3004480",
@@ -106,45 +107,101 @@
                 "geneFamily": "rifamycin-resistant beta-subunit of RNA polymerase (rpoB)",
                 "resistanceMechanism": "antibiotic target alteration;antibiotic target replacement",
                 "count": {
-                    "1": 9,
-                    "2": 16,
-                    "3": 22,
+                    "1": 7,
+                    "2": 14,
+                    "3": 23,
                     "4": 29,
                     "5": 37,
                     "6": 44,
                     "7": 51
                 },
                 "averageAccuracy": {
-                    "1": 84.46,
-                    "2": 83.47,
-                    "3": 83.02,
-                    "4": 83.08,
-                    "5": 83.31,
-                    "6": 83.58,
+                    "1": 83.26,
+                    "2": 83.55,
+                    "3": 83.91,
+                    "4": 83.48,
+                    "5": 83.62,
+                    "6": 83.84,
                     "7": 83.61
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "1": 8,
-                        "2": 14,
-                        "3": 18,
-                        "4": 25,
-                        "5": 32,
-                        "6": 38,
-                        "7": 45
+                "species": [
+                    {
+                        "name": "Bifidobacterium bifidum",
+                        "ncbiID": 1681,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "root": {
-                        "6": 1
+                    {
+                        "name": "Bifidobacterium",
+                        "ncbiID": 1678,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "3": 1,
+                            "4": 2,
+                            "5": 3,
+                            "7": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bifidobacterium bifidum": {
-                        "1": 1,
-                        "3": 3,
-                        "5": 4
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 7,
+                            "2": 14,
+                            "3": 22,
+                            "4": 26,
+                            "5": 33,
+                            "6": 39,
+                            "7": 45
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bifidobacterium": {
-                        "2": 1
+                    {
+                        "name": "root",
+                        "ncbiID": 1,
+                        "rank": 0,
+                        "chunkCounts": {
+                            "6": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3000617",
+                "name": "mecA",
+                "description": "A foreign PBP2a acquired by lateral gene transfer that is able to perform peptidoglycan synthesis in the presence of beta-lactams.",
+                "shortName": "mecA",
+                "drugClass": "carbapenem;cephalosporin;cephamycin;monobactam;penam",
+                "geneFamily": "methicillin resistant PBP2",
+                "resistanceMechanism": "antibiotic target replacement",
+                "count": {
+                    "2": 1
+                },
+                "averageAccuracy": {
+                    "2": 94.93
+                },
+                "species": [
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3007119",
@@ -155,16 +212,23 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "2": 1
+                    "7": 1
                 },
                 "averageAccuracy": {
-                    "2": 95.87
+                    "7": 95.87
                 },
-                "species": {
-                    "Terrabacteria group": {
-                        "2": 1
+                "species": [
+                    {
+                        "name": "Terrabacteria group",
+                        "ncbiID": 1783272,
+                        "rank": 0,
+                        "chunkCounts": {
+                            "7": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3007123",
@@ -175,22 +239,29 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "3": 1,
+                    "1": 1,
                     "4": 2,
                     "5": 4
                 },
                 "averageAccuracy": {
-                    "3": 89.69,
+                    "1": 95.87,
                     "4": 92.78,
                     "5": 88.25
                 },
-                "species": {
-                    "Bacteria": {
-                        "3": 1,
-                        "4": 2,
-                        "5": 4
+                "species": [
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "1": 1,
+                            "4": 2,
+                            "5": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3007120",
@@ -202,35 +273,56 @@
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
                     "1": 1,
-                    "2": 2,
-                    "4": 3,
-                    "5": 4,
-                    "6": 5,
+                    "2": 3,
+                    "3": 4,
+                    "5": 5,
+                    "6": 6,
                     "7": 7
                 },
                 "averageAccuracy": {
-                    "1": 82.93,
-                    "2": 86.46,
-                    "4": 86.72,
-                    "5": 88.38,
-                    "6": 89.51,
+                    "1": 87.23,
+                    "2": 91.45,
+                    "3": 89.32,
+                    "5": 90.13,
+                    "6": 90.78,
                     "7": 90.67
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "4": 1,
-                        "5": 2,
-                        "7": 3
+                "species": [
+                    {
+                        "name": "Terrabacteria group",
+                        "ncbiID": 1783272,
+                        "rank": 0,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Terrabacteria group": {
-                        "7": 1
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "3": 1,
+                            "6": 2,
+                            "7": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bacteria": {
-                        "1": 1,
-                        "2": 2,
-                        "6": 3
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 2,
+                            "5": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003730",
@@ -241,39 +333,50 @@
                 "geneFamily": "antibiotic-resistant isoleucyl-tRNA synthetase (ileS)",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "1": 9,
-                    "2": 17,
-                    "3": 20,
-                    "4": 24,
-                    "6": 25,
+                    "1": 4,
+                    "2": 10,
+                    "3": 19,
+                    "4": 22,
+                    "6": 23,
                     "7": 31
                 },
                 "averageAccuracy": {
-                    "1": 82.26,
-                    "2": 83.74,
-                    "3": 83.75,
-                    "4": 83.66,
-                    "6": 83.98,
+                    "1": 83.24,
+                    "2": 85.05,
+                    "3": 83.73,
+                    "4": 83.73,
+                    "6": 84.07,
                     "7": 84.42
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "1": 9,
-                        "2": 16,
-                        "3": 19,
-                        "4": 22,
-                        "6": 23,
-                        "7": 27
+                "species": [
+                    {
+                        "name": "Bifidobacterium",
+                        "ncbiID": 1678,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 2,
+                            "7": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bifidobacterium bifidum": {
-                        "2": 1,
-                        "7": 2
-                    },
-                    "Bifidobacterium": {
-                        "4": 1,
-                        "7": 2
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 3,
+                            "2": 8,
+                            "3": 17,
+                            "4": 20,
+                            "6": 21,
+                            "7": 28
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000190",
@@ -284,43 +387,81 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "1": 2,
-                    "3": 7,
-                    "4": 8,
-                    "5": 11,
-                    "6": 12,
-                    "7": 13
+                    "1": 1,
+                    "2": 2,
+                    "3": 4,
+                    "4": 9,
+                    "5": 12,
+                    "6": 13
                 },
                 "averageAccuracy": {
-                    "1": 89.52,
-                    "3": 90.25,
-                    "4": 90.4,
-                    "5": 90.53,
-                    "6": 90.71,
-                    "7": 90.53
+                    "1": 91.46,
+                    "2": 89.93,
+                    "3": 89.72,
+                    "4": 90.18,
+                    "5": 90.35,
+                    "6": 90.53
                 },
-                "species": {
-                    "Bifidobacterium breve": {
-                        "1": 2,
-                        "4": 3,
-                        "5": 4
+                "species": [
+                    {
+                        "name": "Terrabacteria group",
+                        "ncbiID": 1783272,
+                        "rank": 0,
+                        "chunkCounts": {
+                            "4": 1,
+                            "5": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "4": 1,
+                            "5": 2
+                        }
                     },
-                    "Streptococcus": {
-                        "3": 1
+                    {
+                        "name": "Bifidobacterium",
+                        "ncbiID": 1678,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Terrabacteria group": {
-                        "3": 1,
-                        "5": 2
+                    {
+                        "name": "Streptococcus",
+                        "ncbiID": 1301,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bacteria": {
-                        "3": 3,
-                        "5": 4,
-                        "6": 5
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "4": 3,
+                            "5": 4,
+                            "6": 5
+                        },
+                        "chunkPlasmidCounts": {
+                            "5": 1
+                        }
                     },
-                    "Bifidobacterium": {
-                        "7": 1
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 1,
+                            "3": 3,
+                            "5": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             }
         ]
     }

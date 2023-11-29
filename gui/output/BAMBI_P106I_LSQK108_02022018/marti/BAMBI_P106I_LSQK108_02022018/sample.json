@@ -1,21 +1,25 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.12"
+        "martiVersion": "v0.9.15i"
     },
     "sample": {
         "id": "BAMBI_P106I_LSQK108_02022018",
+        "uuid": "025164a5-ca8a-3f33-970e-b75de64b3cf1",
+        "barcode": 0,
         "runId": "BAMBI_P106I_LSQK108_02022018",
-        "sequencingDate": "2023-05-16T14:31:40",
-        "analysisDate": "2023-05-16T14:31:40",
+        "sequencingDate": "2018-02-02T13:07:58Z",
+        "analysisDate": "2023-11-15T10:25:39",
         "yieldBases": 68783794,
         "yieldGb": 0.068783794,
         "readsPassBasecall": 120000,
         "readsFailedFilter": 52566,
         "readsPassedFilter": 67434,
-        "readsWithClassification": 65086,
-        "readsUnclassified": 2348,
-        "readsWithPoorAlignments": 29,
+        "readsWithClassification": 65092,
+        "readsUnclassified": 2342,
+        "classifiedYield": 44292997,
+        "unclassifiedYield": 1472667,
+        "readsWithPoorAlignments": 28,
         "readsAnalysed": 67434,
         "sequencingStatus": "Complete",
         "martiStatus": "Complete",
@@ -23,16 +27,16 @@
             "pipeline": "BlastLCA-CARD",
             "classification": {
                 "algorithm": "BlastLCA",
-                "blastVersion": "0.0.0",
-                "database": "nt",
-                "databaseVersion": "01-01-1900"
+                "blastTool": "megablast",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/public/databases/blast/ncbi/nt_20230303/nt"
             },
             "accumulation": "true",
             "amr": {
                 "algorithm": "Blast",
-                "blastVersion": "0.0.0",
-                "database": "CARD",
-                "databaseVersion": "0.0.0"
+                "blastTool": "blastn",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/data/databases/card/CARD_3.2.7/nucleotide_fasta_protein_homolog_model.fasta"
             }
         }
     }

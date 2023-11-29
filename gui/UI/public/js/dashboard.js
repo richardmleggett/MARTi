@@ -477,6 +477,13 @@ socket.on('dashboard-meta-response', function(data) {
 
   $("#dashboardInfoCardYieldBasecalled").text(totalYieldFormatter(dashboardSampleData.yieldBases));
 
+  let classifiedYield = "-";
+  if (dashboardSampleData.hasOwnProperty("classifiedYield")){
+    classifiedYield = totalYieldFormatter(parseInt(dashboardSampleData.classifiedYield));
+  }
+
+  $("#dashboardInfoCardYieldClassified").text(classifiedYield);
+
   let readsUnclassified = dashboardSampleData.readsAnalysed - dashboardSampleData.readsWithClassification;
 
   $("#dashboardInfoCardReadsUnclassified").text(thousandsSeparators(readsUnclassified));
@@ -639,10 +646,14 @@ var donutLeaves = [];
 var donutTaxaAtRank = [];
 
 function taxaAtRank(d) {
-
   if (d.rank < taxonomicRankSelected) {
     if(taxonomicRankSelected == 10){
-      donutTaxaAtRank.push(d);
+      if (d.name == "unclassified" && dashboardTaxaDonutUnclassified == "hide"){
+
+      } else {
+        donutTaxaAtRank.push(d);
+      }
+
     };
     if (d.children) {
       d.children.forEach(function(c){

@@ -1,0 +1,43 @@
+
+{
+    "meta": {
+        "martiVersion": "v0.9.15i"
+    },
+    "sample": {
+        "id": "MARC_Yare_171117_F1_no_control",
+        "uuid": "eeb0e498-6671-3b13-9b37-3b8771f163af",
+        "barcode": 0,
+        "runId": "MARC_Yare_171117_F1_no_control",
+        "sequencingDate": "2017-11-17T17:53:50Z",
+        "analysisDate": "2023-11-15T10:25:41",
+        "yieldBases": 256839351,
+        "yieldGb": 0.256839351,
+        "readsPassBasecall": 100000,
+        "readsFailedFilter": 40404,
+        "readsPassedFilter": 59596,
+        "readsWithClassification": 11054,
+        "readsUnclassified": 48542,
+        "classifiedYield": 30055167,
+        "unclassifiedYield": 125534729,
+        "readsWithPoorAlignments": 2050,
+        "readsAnalysed": 59596,
+        "sequencingStatus": "Complete",
+        "martiStatus": "Complete",
+        "analysis": {
+            "pipeline": "BlastLCA-CARD",
+            "classification": {
+                "algorithm": "BlastLCA",
+                "blastTool": "megablast",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/public/databases/blast/ncbi/nt_20230303/nt"
+            },
+            "accumulation": "true",
+            "amr": {
+                "algorithm": "Blast",
+                "blastTool": "blastn",
+                "blastVersion": " 2.10.0+",
+                "database": "/ei/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/data/databases/card/CARD_3.2.7/nucleotide_fasta_protein_homolog_model.fasta"
+            }
+        }
+    }
+}

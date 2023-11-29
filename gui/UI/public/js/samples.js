@@ -399,8 +399,6 @@ function prepareSampleInfoModal(data){
 
   if (restrictedMode == false){
       $('#sampleDataSampleName').removeAttr('disabled');
-  } else {
-    console.log("restrictedMode: " + restrictedMode);
   }
 
   $("#sampleDataSampleName").val(data.id);

@@ -1,5 +1,5 @@
 
-var radius, pie, arc, outerArc, key;
+var radius, pie, arc, outerArc, key, dashboardTaxaDonutUnclassified;
 
 function initialiseDashboardDonut() {
 
@@ -50,7 +50,12 @@ key = function(d) {
 
       d3.selectAll(".dashboard-taxa-donut-top-n").text(dashboardTaxaDonutTopN);
 
+      d3.selectAll("input[name='dashboardTaxaDonutUnclassified']").on("change", function() {
+        dashboardTaxaDonutUnclassified = this.value;
+        globUpdate(globDonutData);
+      });
 
+      dashboardTaxaDonutUnclassified = "show";
 
 };
 

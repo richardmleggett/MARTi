@@ -1,32 +1,32 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.12",
-        "fileWritten": "2023-05-16T18:22:51"
+        "martiVersion": "v0.9.15i",
+        "fileWritten": "2023-11-15T10:31:54"
     },
     "amr": {
         "currentChunk": 20,
         "chunkTime": {
-            "1": "16 May 2023 16:14:45",
-            "2": "16 May 2023 16:25:04",
-            "3": "16 May 2023 16:27:21",
-            "4": "16 May 2023 16:28:05",
-            "5": "16 May 2023 16:29:06",
-            "6": "16 May 2023 16:29:37",
-            "7": "16 May 2023 16:29:49",
-            "8": "16 May 2023 16:32:14",
-            "9": "16 May 2023 16:32:33",
-            "10": "16 May 2023 16:36:14",
-            "11": "16 May 2023 18:05:27",
-            "12": "16 May 2023 18:08:39",
-            "13": "16 May 2023 18:11:41",
-            "14": "16 May 2023 18:16:06",
-            "15": "16 May 2023 18:18:02",
-            "16": "16 May 2023 18:19:09",
-            "17": "16 May 2023 18:21:40",
-            "18": "16 May 2023 18:21:45",
-            "19": "16 May 2023 18:22:22",
-            "20": "16 May 2023 18:22:51"
+            "1": "15 Nov 2023 10:27:39",
+            "2": "15 Nov 2023 10:27:54",
+            "3": "15 Nov 2023 10:28:07",
+            "4": "15 Nov 2023 10:28:21",
+            "5": "15 Nov 2023 10:28:35",
+            "6": "15 Nov 2023 10:28:49",
+            "7": "15 Nov 2023 10:29:03",
+            "8": "15 Nov 2023 10:29:16",
+            "9": "15 Nov 2023 10:29:29",
+            "10": "15 Nov 2023 10:29:42",
+            "11": "15 Nov 2023 10:29:56",
+            "12": "15 Nov 2023 10:30:09",
+            "13": "15 Nov 2023 10:30:22",
+            "14": "15 Nov 2023 10:30:35",
+            "15": "15 Nov 2023 10:30:49",
+            "16": "15 Nov 2023 10:31:02",
+            "17": "15 Nov 2023 10:31:15",
+            "18": "15 Nov 2023 10:31:28",
+            "19": "15 Nov 2023 10:31:41",
+            "20": "15 Nov 2023 10:31:54"
         },
         "readsWithAMRHits": 162,
         "geneList": [
@@ -39,16 +39,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "7": 1
+                    "19": 1
                 },
                 "averageAccuracy": {
-                    "7": 80.87
+                    "19": 80.87
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "7": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "19": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000676",
@@ -59,24 +66,38 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump;resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "6": 1,
-                    "8": 2,
-                    "9": 3
+                    "11": 1,
+                    "12": 2,
+                    "18": 3
                 },
                 "averageAccuracy": {
-                    "6": 82.01,
-                    "8": 85.04,
-                    "9": 83.5
+                    "11": 82.01,
+                    "12": 81.21,
+                    "18": 83.5
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "6": 1,
-                        "9": 2
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "11": 1,
+                            "12": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Enterobacter hormaechei": {
-                        "8": 1
+                    {
+                        "name": "Enterobacter hormaechei",
+                        "ncbiID": 158836,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "18": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003922",
@@ -87,19 +108,26 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "7": 1,
-                    "8": 3
+                    "18": 2,
+                    "19": 3
                 },
                 "averageAccuracy": {
-                    "7": 82.14,
-                    "8": 81.76
+                    "18": 81.57,
+                    "19": 81.76
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "7": 1,
-                        "8": 3
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "18": 2,
+                            "19": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3002986",
@@ -110,25 +138,32 @@
                 "geneFamily": "undecaprenyl pyrophosphate related proteins",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "6": 1,
-                    "8": 2,
-                    "14": 3,
-                    "17": 4
+                    "2": 1,
+                    "6": 2,
+                    "11": 3,
+                    "18": 4
                 },
                 "averageAccuracy": {
-                    "6": 81.57,
-                    "8": 81.84,
-                    "14": 81.37,
-                    "17": 81.21
+                    "2": 80.75,
+                    "6": 80.59,
+                    "11": 80.91,
+                    "18": 81.21
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "6": 1,
-                        "8": 2,
-                        "14": 3,
-                        "17": 4
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "2": 1,
+                            "6": 2,
+                            "11": 3,
+                            "18": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000804",
@@ -139,39 +174,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "12": 1
+                    "10": 1
                 },
                 "averageAccuracy": {
-                    "12": 80.7
+                    "10": 80.7
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "12": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "10": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
-            },
-            {
-                "cardId": "ARO:3000502",
-                "name": "AcrF",
-                "description": "AcrF is a inner membrane transporter",
-                "shortName": "AcrF",
-                "drugClass": "cephalosporin;cephamycin;fluoroquinolone antibiotic;penam",
-                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
-                "resistanceMechanism": "antibiotic efflux",
-                "count": {
-                    "8": 1,
-                    "10": 2
-                },
-                "averageAccuracy": {
-                    "8": 83.05,
-                    "10": 82.03
-                },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "8": 1,
-                        "10": 2
-                    }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001832",
@@ -182,16 +201,54 @@
                 "geneFamily": "ACT beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "7": 1
+                    "19": 1
                 },
                 "averageAccuracy": {
-                    "7": 83.12
+                    "19": 83.12
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "7": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "19": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3000502",
+                "name": "AcrF",
+                "description": "AcrF is a inner membrane transporter",
+                "shortName": "AcrF",
+                "drugClass": "cephalosporin;cephamycin;fluoroquinolone antibiotic;penam",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "16": 1,
+                    "18": 2
+                },
+                "averageAccuracy": {
+                    "16": 81.0,
+                    "18": 82.03
+                },
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "16": 1,
+                            "18": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "16": 1
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3004597",
@@ -202,16 +259,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "15": 1
+                    "9": 1
                 },
                 "averageAccuracy": {
-                    "15": 86.96
+                    "9": 86.96
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "15": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "9": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000216",
@@ -223,36 +287,51 @@
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
                     "1": 1,
-                    "3": 2,
-                    "5": 3,
-                    "9": 4,
-                    "11": 5,
-                    "13": 7,
-                    "16": 8,
+                    "3": 4,
+                    "5": 5,
+                    "8": 7,
+                    "12": 8,
+                    "15": 9,
+                    "17": 10,
                     "20": 11
                 },
                 "averageAccuracy": {
-                    "1": 80.43,
-                    "3": 80.45,
-                    "5": 80.49,
-                    "9": 80.63,
-                    "11": 80.85,
-                    "13": 81.05,
-                    "16": 81.04,
+                    "1": 81.74,
+                    "3": 81.61,
+                    "5": 81.49,
+                    "8": 81.5,
+                    "12": 81.44,
+                    "15": 81.33,
+                    "17": 81.26,
                     "20": 81.18
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "1": 1,
-                        "3": 2,
-                        "5": 3,
-                        "9": 4,
-                        "11": 5,
-                        "13": 7,
-                        "16": 8,
-                        "20": 11
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "3": 4,
+                            "5": 5,
+                            "8": 7,
+                            "12": 8,
+                            "15": 9,
+                            "17": 10,
+                            "20": 11
+                        },
+                        "chunkPlasmidCounts": {
+                            "1": 1,
+                            "3": 4,
+                            "5": 5,
+                            "8": 7,
+                            "12": 8,
+                            "15": 9,
+                            "17": 10,
+                            "20": 11
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000621",
@@ -263,19 +342,26 @@
                 "geneFamily": "BlaZ beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "8": 1,
-                    "14": 2
+                    "6": 1,
+                    "18": 2
                 },
                 "averageAccuracy": {
-                    "8": 86.43,
-                    "14": 84.79
+                    "6": 83.15,
+                    "18": 84.79
                 },
-                "species": {
-                    "Staphylococcus": {
-                        "8": 1,
-                        "14": 2
+                "species": [
+                    {
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "6": 1,
+                            "18": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003950",
@@ -286,22 +372,29 @@
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "12": 2,
-                    "18": 3,
-                    "19": 4
+                    "4": 1,
+                    "7": 2,
+                    "10": 4
                 },
                 "averageAccuracy": {
-                    "12": 80.49,
-                    "18": 80.6,
-                    "19": 80.58
+                    "4": 80.51,
+                    "7": 80.67,
+                    "10": 80.58
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "12": 2,
-                        "18": 3,
-                        "19": 4
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "4": 1,
+                            "7": 2,
+                            "10": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005044",
@@ -312,21 +405,35 @@
                 "geneFamily": "General Bacterial Porin with reduced permeability to peptide antibiotics",
                 "resistanceMechanism": "reduced permeability to antibiotic",
                 "count": {
-                    "10": 1,
-                    "19": 2
+                    "4": 1,
+                    "16": 2
                 },
                 "averageAccuracy": {
-                    "10": 86.23,
-                    "19": 87.76
+                    "4": 89.29,
+                    "16": 87.76
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "19": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Enterobacter hormaechei": {
-                        "10": 1
+                    {
+                        "name": "Enterobacter hormaechei",
+                        "ncbiID": 158836,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "16": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000518",
@@ -337,42 +444,56 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1,
+                    "1": 1,
                     "3": 2,
-                    "8": 4,
-                    "11": 5,
-                    "12": 6,
-                    "13": 8,
+                    "6": 4,
+                    "7": 6,
+                    "8": 8,
+                    "10": 9,
                     "14": 10,
-                    "18": 12,
-                    "20": 13
+                    "15": 11,
+                    "18": 13
                 },
                 "averageAccuracy": {
-                    "2": 83.21,
-                    "3": 83.36,
-                    "8": 84.76,
-                    "11": 83.94,
-                    "12": 83.52,
-                    "13": 83.67,
-                    "14": 83.56,
-                    "18": 83.51,
-                    "20": 83.7
+                    "1": 80.65,
+                    "3": 83.29,
+                    "6": 83.2,
+                    "7": 83.23,
+                    "8": 83.45,
+                    "10": 83.22,
+                    "14": 83.22,
+                    "15": 83.25,
+                    "18": 83.7
                 },
-                "species": {
-                    "Enterobacter": {
-                        "2": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "3": 2,
+                            "6": 4,
+                            "7": 6,
+                            "8": 8,
+                            "10": 9,
+                            "15": 10,
+                            "18": 12
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Enterobacter cloacae complex": {
-                        "3": 1,
-                        "8": 3,
-                        "11": 4,
-                        "12": 5,
-                        "13": 7,
-                        "14": 9,
-                        "18": 11,
-                        "20": 12
+                    {
+                        "name": "Enterobacter",
+                        "ncbiID": 547,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "14": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001329",
@@ -383,16 +504,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "16": 1
+                    "5": 1
                 },
                 "averageAccuracy": {
-                    "16": 83.17
+                    "5": 83.17
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "16": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "5": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3001328",
@@ -403,36 +531,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "16": 1
+                    "5": 1
                 },
                 "averageAccuracy": {
-                    "16": 80.0
+                    "5": 80.0
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "16": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "5": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
-            },
-            {
-                "cardId": "ARO:3000377",
-                "name": "MexA",
-                "description": "MexA is the membrane fusion protein of the MexAB-OprM multidrug efflux complex.",
-                "shortName": "MexA",
-                "drugClass": "aminocoumarin antibiotic;carbapenem;cephalosporin;cephamycin;diaminopyrimidine antibiotic;fluoroquinolone antibiotic;macrolide antibiotic;monobactam;penam;penem;peptide antibiotic;phenicol antibiotic;sulfonamide antibiotic;tetracycline antibiotic",
-                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
-                "resistanceMechanism": "antibiotic efflux",
-                "count": {
-                    "18": 1
-                },
-                "averageAccuracy": {
-                    "18": 80.2
-                },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "18": 1
-                    }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000026",
@@ -443,16 +558,50 @@
                 "geneFamily": "multidrug and toxic compound extrusion (MATE) transporter",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "1": 1
+                    "20": 1
                 },
                 "averageAccuracy": {
-                    "1": 86.95
+                    "20": 86.95
                 },
-                "species": {
-                    "Staphylococcus aureus": {
-                        "1": 1
+                "species": [
+                    {
+                        "name": "Staphylococcus aureus",
+                        "ncbiID": 1280,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "20": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
+            },
+            {
+                "cardId": "ARO:3000377",
+                "name": "MexA",
+                "description": "MexA is the membrane fusion protein of the MexAB-OprM multidrug efflux complex.",
+                "shortName": "MexA",
+                "drugClass": "aminocoumarin antibiotic;carbapenem;cephalosporin;cephamycin;diaminopyrimidine antibiotic;fluoroquinolone antibiotic;macrolide antibiotic;monobactam;penam;penem;peptide antibiotic;phenicol antibiotic;sulfonamide antibiotic;tetracycline antibiotic",
+                "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "7": 1
+                },
+                "averageAccuracy": {
+                    "7": 80.2
+                },
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "7": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
             },
             {
                 "cardId": "ARO:3000186",
@@ -463,16 +612,23 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "9": 1
+                    "12": 1
                 },
                 "averageAccuracy": {
-                    "9": 86.34
+                    "12": 86.34
                 },
-                "species": {
-                    "Bacteria": {
-                        "9": 1
+                "species": [
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "12": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3006250",
@@ -483,52 +639,66 @@
                 "geneFamily": "ACT beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "1": 2,
-                    "2": 3,
-                    "3": 5,
-                    "4": 6,
-                    "5": 7,
-                    "6": 8,
-                    "10": 10,
-                    "14": 11,
-                    "15": 12,
+                    "3": 2,
+                    "5": 3,
+                    "6": 4,
+                    "7": 5,
+                    "9": 6,
+                    "11": 7,
+                    "13": 8,
+                    "14": 9,
+                    "15": 11,
                     "16": 13,
-                    "18": 14,
+                    "17": 14,
                     "20": 16
                 },
                 "averageAccuracy": {
-                    "1": 88.63,
-                    "2": 87.8,
-                    "3": 85.78,
-                    "4": 85.82,
-                    "5": 86.84,
-                    "6": 86.7,
-                    "10": 86.78,
-                    "14": 87.14,
-                    "15": 87.05,
-                    "16": 87.07,
-                    "18": 87.05,
+                    "3": 85.5,
+                    "5": 86.11,
+                    "6": 87.27,
+                    "7": 87.18,
+                    "9": 86.99,
+                    "11": 86.8,
+                    "13": 86.7,
+                    "14": 86.64,
+                    "15": 85.94,
+                    "16": 86.11,
+                    "17": 86.6,
                     "20": 86.86
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "1": 2,
-                        "2": 3,
-                        "3": 5,
-                        "4": 6,
-                        "5": 7,
-                        "6": 8,
-                        "10": 10,
-                        "14": 11,
-                        "15": 12,
-                        "16": 13,
-                        "18": 14,
-                        "20": 15
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "3": 1,
+                            "5": 2,
+                            "6": 3,
+                            "7": 4,
+                            "9": 5,
+                            "11": 6,
+                            "13": 7,
+                            "14": 8,
+                            "15": 10,
+                            "16": 12,
+                            "17": 13,
+                            "20": 15
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bacteria": {
-                        "20": 1
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000319",
@@ -539,19 +709,28 @@
                 "geneFamily": "macrolide phosphotransferase (MPH)",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "2": 1,
-                    "20": 2
+                    "3": 1,
+                    "14": 2
                 },
                 "averageAccuracy": {
-                    "2": 90.82,
-                    "20": 90.15
+                    "3": 89.48,
+                    "14": 90.15
                 },
-                "species": {
-                    "Staphylococcus": {
-                        "2": 1,
-                        "20": 2
+                "species": [
+                    {
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "3": 1,
+                            "14": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "3": 1,
+                            "14": 2
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000074",
@@ -562,16 +741,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "16": 1
+                    "5": 1
                 },
                 "averageAccuracy": {
-                    "16": 83.81
+                    "5": 83.81
                 },
-                "species": {
-                    "Enterobacteriaceae": {
-                        "16": 1
+                "species": [
+                    {
+                        "name": "Enterobacteriaceae",
+                        "ncbiID": 543,
+                        "rank": 6,
+                        "chunkCounts": {
+                            "5": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3006255",
@@ -582,25 +768,32 @@
                 "geneFamily": "ACT beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "4": 1,
-                    "6": 2,
-                    "7": 3,
-                    "12": 5
+                    "10": 2,
+                    "11": 3,
+                    "13": 4,
+                    "19": 5
                 },
                 "averageAccuracy": {
-                    "4": 92.86,
-                    "6": 87.77,
-                    "7": 87.95,
-                    "12": 88.78
+                    "10": 90.02,
+                    "11": 87.58,
+                    "13": 88.9,
+                    "19": 88.78
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "4": 1,
-                        "6": 2,
-                        "7": 3,
-                        "12": 5
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "10": 2,
+                            "11": 3,
+                            "13": 4,
+                            "19": 5
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000815",
@@ -611,16 +804,23 @@
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump;major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "9": 1
+                    "12": 1
                 },
                 "averageAccuracy": {
-                    "9": 90.0
+                    "12": 90.0
                 },
-                "species": {
-                    "Staphylococcus epidermidis": {
-                        "9": 1
+                "species": [
+                    {
+                        "name": "Staphylococcus epidermidis",
+                        "ncbiID": 1282,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "12": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003923",
@@ -631,52 +831,59 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "4": 1,
-                    "5": 3,
-                    "6": 4,
-                    "8": 6,
-                    "10": 9,
-                    "11": 10,
-                    "12": 11,
-                    "14": 13,
-                    "15": 15,
-                    "16": 16,
-                    "17": 17,
-                    "18": 20,
-                    "19": 21
+                    "1": 1,
+                    "2": 2,
+                    "4": 3,
+                    "5": 4,
+                    "6": 6,
+                    "7": 9,
+                    "9": 11,
+                    "10": 12,
+                    "11": 13,
+                    "13": 14,
+                    "16": 17,
+                    "17": 19,
+                    "18": 21
                 },
                 "averageAccuracy": {
-                    "4": 81.0,
-                    "5": 81.73,
-                    "6": 81.63,
-                    "8": 82.76,
-                    "10": 82.09,
-                    "11": 81.97,
-                    "12": 81.8,
-                    "14": 81.73,
-                    "15": 81.56,
-                    "16": 81.47,
-                    "17": 81.58,
-                    "18": 81.46,
-                    "19": 81.51
+                    "1": 80.96,
+                    "2": 82.16,
+                    "4": 82.28,
+                    "5": 81.76,
+                    "6": 81.62,
+                    "7": 81.34,
+                    "9": 81.17,
+                    "10": 81.08,
+                    "11": 81.1,
+                    "13": 81.09,
+                    "16": 81.03,
+                    "17": 81.14,
+                    "18": 81.51
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "4": 1,
-                        "5": 3,
-                        "6": 4,
-                        "8": 6,
-                        "10": 9,
-                        "11": 10,
-                        "12": 11,
-                        "14": 13,
-                        "15": 15,
-                        "16": 16,
-                        "17": 17,
-                        "18": 20,
-                        "19": 21
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 2,
+                            "4": 3,
+                            "5": 4,
+                            "6": 6,
+                            "7": 9,
+                            "9": 11,
+                            "10": 12,
+                            "11": 13,
+                            "13": 14,
+                            "16": 17,
+                            "17": 19,
+                            "18": 21
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000391",
@@ -687,16 +894,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "17": 1
+                    "2": 1
                 },
                 "averageAccuracy": {
-                    "17": 91.76
+                    "2": 91.76
                 },
-                "species": {
-                    "Staphylococcus epidermidis": {
-                        "17": 1
+                "species": [
+                    {
+                        "name": "Staphylococcus epidermidis",
+                        "ncbiID": 1282,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "2": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004041",
@@ -707,16 +921,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "4": 1
+                    "13": 1
                 },
                 "averageAccuracy": {
-                    "4": 80.58
+                    "13": 80.58
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "4": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "13": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000251",
@@ -727,19 +948,28 @@
                 "geneFamily": "msr-type ABC-F protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "2": 1,
-                    "15": 2
+                    "9": 1,
+                    "14": 2
                 },
                 "averageAccuracy": {
-                    "2": 89.3,
-                    "15": 88.37
+                    "9": 87.44,
+                    "14": 88.37
                 },
-                "species": {
-                    "Staphylococcus": {
-                        "2": 1,
-                        "15": 2
+                "species": [
+                    {
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "9": 1,
+                            "14": 2
+                        },
+                        "chunkPlasmidCounts": {
+                            "9": 1,
+                            "14": 2
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004042",
@@ -750,37 +980,52 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1,
-                    "4": 3,
-                    "10": 4,
-                    "11": 6,
-                    "13": 7,
-                    "14": 8,
+                    "1": 2,
+                    "3": 3,
+                    "6": 4,
+                    "8": 5,
+                    "9": 6,
+                    "13": 8,
                     "15": 9,
-                    "20": 10
+                    "16": 10
                 },
                 "averageAccuracy": {
-                    "3": 81.7,
-                    "4": 85.37,
-                    "10": 84.31,
-                    "11": 85.44,
-                    "13": 84.97,
-                    "14": 84.43,
-                    "15": 83.95,
-                    "20": 84.64
+                    "1": 87.71,
+                    "3": 88.73,
+                    "6": 86.71,
+                    "8": 85.8,
+                    "9": 84.85,
+                    "13": 85.44,
+                    "15": 85.03,
+                    "16": 84.63
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "3": 1,
-                        "4": 3,
-                        "10": 4,
-                        "11": 6,
-                        "13": 7,
-                        "14": 8,
-                        "15": 9,
-                        "20": 10
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 2,
+                            "3": 3,
+                            "6": 4,
+                            "8": 5,
+                            "9": 6,
+                            "13": 8,
+                            "15": 9,
+                            "16": 10
+                        },
+                        "chunkPlasmidCounts": {
+                            "1": 2,
+                            "3": 3,
+                            "6": 4,
+                            "8": 5,
+                            "9": 6,
+                            "13": 8,
+                            "15": 9,
+                            "16": 10
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000794",
@@ -791,22 +1036,29 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1,
-                    "6": 2,
-                    "18": 3
+                    "7": 1,
+                    "11": 2,
+                    "15": 3
                 },
                 "averageAccuracy": {
-                    "3": 80.72,
-                    "6": 80.69,
-                    "18": 80.76
+                    "7": 80.9,
+                    "11": 80.78,
+                    "15": 80.76
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "3": 1,
-                        "6": 2,
-                        "18": 3
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "7": 1,
+                            "11": 2,
+                            "15": 3
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000796",
@@ -817,16 +1069,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "12": 1
+                    "10": 1
                 },
                 "averageAccuracy": {
-                    "12": 81.31
+                    "10": 81.31
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "12": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "10": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000516",
@@ -837,19 +1096,35 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "7": 1,
-                    "8": 2
+                    "18": 1,
+                    "19": 2
                 },
                 "averageAccuracy": {
-                    "7": 82.28,
-                    "8": 81.22
+                    "18": 80.16,
+                    "19": 81.22
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "7": 1,
-                        "8": 2
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "18": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    },
+                    {
+                        "name": "Enterobacter",
+                        "ncbiID": 547,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "19": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000491",
@@ -860,16 +1135,23 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "13": 1
+                    "8": 1
                 },
                 "averageAccuracy": {
-                    "13": 82.3
+                    "8": 82.3
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "13": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "8": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000178",
@@ -880,22 +1162,32 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "4": 1,
-                    "6": 2,
-                    "12": 3
+                    "10": 1,
+                    "11": 2,
+                    "13": 3
                 },
                 "averageAccuracy": {
-                    "4": 86.73,
-                    "6": 89.95,
-                    "12": 89.29
+                    "10": 87.97,
+                    "11": 90.57,
+                    "13": 89.29
                 },
-                "species": {
-                    "Staphylococcus": {
-                        "4": 1,
-                        "6": 2,
-                        "12": 3
+                "species": [
+                    {
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "10": 1,
+                            "11": 2,
+                            "13": 3
+                        },
+                        "chunkPlasmidCounts": {
+                            "10": 1,
+                            "11": 2,
+                            "13": 3
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000263",
@@ -906,22 +1198,29 @@
                 "geneFamily": "General Bacterial Porin with reduced permeability to beta-lactams;resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux;reduced permeability to antibiotic",
                 "count": {
-                    "8": 1,
-                    "13": 2,
-                    "19": 4
+                    "4": 2,
+                    "8": 3,
+                    "18": 4
                 },
                 "averageAccuracy": {
-                    "8": 82.6,
-                    "13": 82.8,
-                    "19": 83.04
+                    "4": 83.27,
+                    "8": 83.18,
+                    "18": 83.04
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "8": 1,
-                        "13": 2,
-                        "19": 4
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "4": 2,
+                            "8": 3,
+                            "18": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3007010",
@@ -932,16 +1231,23 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "5": 1
+                    "17": 1
                 },
                 "averageAccuracy": {
-                    "5": 96.24
+                    "17": 96.24
                 },
-                "species": {
-                    "Staphylococcus aureus": {
-                        "5": 1
+                "species": [
+                    {
+                        "name": "Staphylococcus aureus",
+                        "ncbiID": 1280,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "17": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3002875",
@@ -952,16 +1258,23 @@
                 "geneFamily": "trimethoprim resistant dihydrofolate reductase dfr",
                 "resistanceMechanism": "antibiotic target replacement",
                 "count": {
-                    "11": 1
+                    "1": 1
                 },
                 "averageAccuracy": {
-                    "11": 88.49
+                    "1": 88.49
                 },
-                "species": {
-                    "Enterococcus faecalis": {
-                        "11": 1
+                "species": [
+                    {
+                        "name": "Enterococcus faecalis",
+                        "ncbiID": 1351,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "1": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3006269",
@@ -972,16 +1285,23 @@
                 "geneFamily": "ACT beta-lactamase",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "5": 1
+                    "17": 1
                 },
                 "averageAccuracy": {
-                    "5": 87.1
+                    "17": 87.1
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "5": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "17": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000830",
@@ -992,19 +1312,26 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "11": 1,
-                    "15": 2
+                    "1": 1,
+                    "9": 2
                 },
                 "averageAccuracy": {
-                    "11": 81.43,
-                    "15": 82.44
+                    "1": 81.43,
+                    "9": 82.44
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "11": 1,
-                        "15": 2
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "9": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3004480",
@@ -1015,63 +1342,75 @@
                 "geneFamily": "rifamycin-resistant beta-subunit of RNA polymerase (rpoB)",
                 "resistanceMechanism": "antibiotic target alteration;antibiotic target replacement",
                 "count": {
-                    "1": 2,
-                    "3": 3,
+                    "1": 1,
+                    "2": 2,
+                    "3": 4,
                     "4": 5,
-                    "5": 6,
-                    "6": 9,
-                    "7": 10,
-                    "8": 12,
-                    "9": 13,
-                    "11": 14,
-                    "13": 15,
-                    "16": 17,
+                    "5": 7,
+                    "7": 9,
+                    "8": 10,
+                    "11": 13,
+                    "12": 14,
+                    "13": 16,
+                    "15": 17,
                     "17": 18,
                     "18": 20,
                     "19": 21,
                     "20": 23
                 },
                 "averageAccuracy": {
-                    "1": 82.69,
-                    "3": 83.12,
-                    "4": 82.56,
-                    "5": 82.47,
-                    "6": 82.2,
-                    "7": 82.31,
-                    "8": 82.1,
-                    "9": 82.16,
-                    "11": 82.05,
-                    "13": 82.01,
-                    "16": 81.84,
+                    "1": 80.71,
+                    "2": 80.78,
+                    "3": 80.54,
+                    "4": 81.34,
+                    "5": 81.12,
+                    "7": 81.52,
+                    "8": 81.5,
+                    "11": 81.54,
+                    "12": 81.63,
+                    "13": 81.64,
+                    "15": 81.78,
                     "17": 81.79,
-                    "18": 81.9,
-                    "19": 82.02,
+                    "18": 81.72,
+                    "19": 81.79,
                     "20": 81.87
                 },
-                "species": {
-                    "Bifidobacterium longum subsp. infantis": {
-                        "1": 1,
-                        "3": 2,
-                        "4": 3,
-                        "5": 4,
-                        "6": 7,
-                        "7": 8,
-                        "8": 10,
-                        "9": 11,
-                        "11": 12,
-                        "13": 13,
-                        "16": 15,
-                        "17": 16,
-                        "18": 18,
-                        "19": 19,
-                        "20": 20
+                "species": [
+                    {
+                        "name": "Bifidobacterium longum",
+                        "ncbiID": 216816,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "20": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     },
-                    "Bifidobacterium longum": {
-                        "1": 1,
-                        "4": 2,
-                        "20": 3
+                    {
+                        "name": "Bifidobacterium",
+                        "ncbiID": 1678,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "1": 1,
+                            "2": 2,
+                            "3": 4,
+                            "4": 5,
+                            "5": 7,
+                            "7": 9,
+                            "8": 10,
+                            "11": 13,
+                            "12": 14,
+                            "13": 16,
+                            "15": 17,
+                            "17": 18,
+                            "18": 20,
+                            "19": 21,
+                            "20": 22
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3003730",
@@ -1082,57 +1421,71 @@
                 "geneFamily": "antibiotic-resistant isoleucyl-tRNA synthetase (ileS)",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
-                    "3": 1,
-                    "7": 2,
-                    "9": 3,
-                    "13": 4,
-                    "14": 5,
-                    "17": 6,
-                    "18": 7,
+                    "2": 1,
+                    "4": 2,
+                    "6": 3,
+                    "7": 4,
+                    "8": 5,
+                    "12": 6,
+                    "15": 7,
                     "19": 8
                 },
                 "averageAccuracy": {
-                    "3": 80.41,
-                    "7": 80.61,
-                    "9": 82.07,
-                    "13": 82.02,
-                    "14": 81.79,
-                    "17": 82.06,
-                    "18": 82.03,
+                    "2": 83.43,
+                    "4": 83.54,
+                    "6": 82.64,
+                    "7": 82.45,
+                    "8": 82.33,
+                    "12": 82.78,
+                    "15": 82.44,
                     "19": 82.24
                 },
-                "species": {
-                    "Bifidobacterium longum subsp. infantis": {
-                        "3": 1,
-                        "7": 2,
-                        "9": 3,
-                        "13": 4,
-                        "14": 5,
-                        "17": 6,
-                        "18": 7,
-                        "19": 8
+                "species": [
+                    {
+                        "name": "Bifidobacterium",
+                        "ncbiID": 1678,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "2": 1,
+                            "4": 2,
+                            "6": 3,
+                            "7": 4,
+                            "8": 5,
+                            "12": 6,
+                            "15": 7,
+                            "19": 8
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3005059",
                 "name": "LptD",
-                "description": "LptD is involved in LPS transport in a ABC Transporter efflux system. It confers resistance to carbapenems",
+                "description": "LptD is involved in LPS transport in a ABC Transporter efflux system. It confers resistance to rifamycin",
                 "shortName": "LptD",
-                "drugClass": "aminocoumarin antibiotic;carbapenem;peptide antibiotic;rifamycin antibiotic",
+                "drugClass": "aminocoumarin antibiotic;peptide antibiotic;rifamycin antibiotic",
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 1
+                    "14": 1
                 },
                 "averageAccuracy": {
-                    "2": 80.77
+                    "14": 80.77
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "2": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "14": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000237",
@@ -1143,16 +1496,23 @@
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump;major facilitator superfamily (MFS) antibiotic efflux pump;resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "5": 1
+                    "17": 1
                 },
                 "averageAccuracy": {
-                    "5": 81.91
+                    "17": 81.91
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "5": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "17": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             },
             {
                 "cardId": "ARO:3000823",
@@ -1163,16 +1523,23 @@
                 "geneFamily": "General Bacterial Porin with reduced permeability to beta-lactams;resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux;reduced permeability to antibiotic",
                 "count": {
-                    "13": 1
+                    "8": 1
                 },
                 "averageAccuracy": {
-                    "13": 82.09
+                    "8": 82.09
                 },
-                "species": {
-                    "Enterobacter cloacae complex": {
-                        "13": 1
+                "species": [
+                    {
+                        "name": "Enterobacter cloacae complex",
+                        "ncbiID": 354276,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "8": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
                     }
-                }
+                ]
             }
         ]
     }

@@ -20,6 +20,7 @@ import uk.ac.earlham.lcaparse.Taxonomy;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
+import uk.ac.earlham.lcaparse.TaxonomyNode;
 import uk.ac.earlham.marti.core.MARTiEngine;
 
 /**
@@ -145,8 +146,16 @@ public class AMRResults {
                 if(id == -2l){
                     speciesName = "Unassigned";
                 }
+                
+                short rank = 0;
+                TaxonomyNode node = taxonomy.getNodeFromTaxonId(id);
+                if(node != null) {
+                    rank = node.getSimplifiedRank();
+                }
+                
                 speciesBuilder.add("name", speciesName);
                 speciesBuilder.add("ncbiID", id);
+                speciesBuilder.add("rank", rank);
                 JsonObjectBuilder speciesCountBuilder = Json.createObjectBuilder();
                 JsonObjectBuilder plasmidCountBuilder = Json.createObjectBuilder();
                 cumulativeCount = 0;
