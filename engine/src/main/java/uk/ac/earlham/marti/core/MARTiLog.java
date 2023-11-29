@@ -43,7 +43,7 @@ public class MARTiLog implements Serializable {
         try {
             pw = new PrintWriter(new FileWriter(filename, false));
         } catch (IOException e) {
-            System.out.println("NanoOKLog exception");
+            System.out.println("MARTiLog exception");
             e.printStackTrace();
         }        
     }

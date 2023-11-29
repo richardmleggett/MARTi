@@ -353,14 +353,19 @@ public class ReadClassifier {
     
     public void writeSummaries() {
         System.out.println("");
-        
-        if (barcodes.size() == 0) {
-            writeSummary(null);
-        } else {
-            Set<String> bcodes = barcodes.keySet();
-            for (String bc: bcodes) {
-                writeSummary(bc);
+        try {
+            if (barcodes.size() == 0) {
+                writeSummary(null);
+            } else {
+                Set<String> bcodes = barcodes.keySet();
+                for (String bc: bcodes) {
+                    writeSummary(bc);
+                }
             }
+        } catch (Exception e) {
+            options.getLog().println("Error: exception writing summaries");
+            System.out.println("Error: exception writing summaries");
+            e.printStackTrace();            
         }
     }
     
