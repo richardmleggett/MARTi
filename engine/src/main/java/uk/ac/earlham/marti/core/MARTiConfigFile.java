@@ -181,6 +181,49 @@ public class MARTiConfigFile {
             pw.println("LCAMinQueryCoverage:" + options.getLCAMinQueryCoverage());
             pw.println("LCAMinCombinedScore:" + options.getLCAMinCombinedScore());
             pw.println("LCAMinLength:" + options.getLCAMinLength());
+            
+            pw.println("");
+            pw.println("# Metadata blocks can be used to describe the sample being analysed.");
+            pw.println("# Each field is optional and can be removed if not required.");
+            pw.println("# The 'keywords' field is used for searching in the GUI.");
+            if (options.isBarcoded()) {
+                BarcodesList bl = options.getBarcodesList();
+                String barcodes[] = bl.getCommaSeparatedList().split(",");
+                String barcodeString2 = "";
+                for(int i = 1; i < barcodes.length; i ++) {
+                    barcodeString2 += barcodes[i] + ",";
+                }
+                pw.println("# Each block can be assigned to one or more barcodes.");
+                pw.println("# If no barcode is specified the block is assumed to describe all barcodes.");
+                pw.println("");
+                pw.println("Metadata");
+                pw.println("    Location:");
+                pw.println("    Date:");
+                pw.println("    Time:");
+                pw.println("    Temperature:");
+                pw.println("    Humidity:");
+                pw.println("    Keywords:");
+                pw.println("    Barcodes:" + barcodes[0]);
+                pw.println("");
+                pw.println("Metadata");
+                pw.println("    Location:");
+                pw.println("    Date:");
+                pw.println("    Time:");
+                pw.println("    Temperature:");
+                pw.println("    Humidity:");
+                pw.println("    Keywords:");
+                pw.println("    Barcodes:" + barcodeString2.substring(0, barcodeString2.length() - 1));
+            } else {
+                pw.println("");
+                pw.println("Metadata");
+                pw.println("    Location:");
+                pw.println("    Date:");
+                pw.println("    Time:");
+                pw.println("    Temperature:");
+                pw.println("    Humidity:");
+                pw.println("    Keywords:");
+            }
+            
             pw.close();
             
             System.out.println("Config file writen to "+filename);
