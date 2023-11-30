@@ -354,192 +354,6 @@
           </div>
 
 
-          <!-- Rarefaction Row -->
-          <div class="row" id="accumulationChartRow">
-
-
-            <div class="col-12 mb-4">
-
-              <!-- Rarefaction card -->
-              <div class="card shadow" id="compareRarefactionCard">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa accumulation</h6>
-
-                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareRarefactionFullScreen);">
-                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
-                  </div>
-
-                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
-                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
-                  </div> -->
-
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRarefactionCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuRarefactionCompare">
-                      <div class="dropdown-header">Options:</div>
-                      <form class="dropdown-form">
-
-                        <!-- <div>
-                          <label>X-axis:</label>
-                          <label><input type="radio" name="rareXAxis" value="reads" checked> Reads</label>
-                          <label><input type="radio" name="rareXAxis" value="time"> Time</label>
-                        </div> -->
-
-                      <div>
-                        <label>Curve:</label>
-                        <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
-                        <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
-                        <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
-                      </div>
-
-                    </form>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
-
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
-                    <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
-                    <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
-
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="card-body-custom text-center">
-
-                  <div id="accumulationPlotWarning" class="row">
-                    <div class="col-auto pl-5 pt-4">
-                        <a class=""><i class="fas fa-exclamation-triangle"></i> When LCA minimum abundance cutoff is not 0%, curve may go down as well as up</a>
-                    </div>
-                  </div>
-
-                <div id="no-data-accumulation" class="text-center text-gray-500 m-5">
-                    <div class="mb-2">
-                      <i class="fas fa-exclamation-circle fa-5x"></i>
-                    </div>
-                    <h3 class="font-weight-bold ">Data Not Available</h3>
-                    <h4 class="font-weight-bold ">Please run accumulation analysis to see this plot</h4>
-                </div>
-
-
-                <div class="compareRarefactionCard">
-                  <div id='compareRarefactionPlotLegend' class="text-center">
-
-                </div>
-                  <div id='compareRarefactionPlot'>
-
-                </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-          </div>
-
-
-          <!-- Heatmap Taxa row -->
-          <div class="row" id="heatmapTaxaRow">
-
-
-            <div class="col-12 mb-4">
-
-              <div class="card shadow" id="heatmapTaxaCard">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa heatmap</h6>
-
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuHeatmapTaxa" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuHeatmapTaxa">
-                      <div class="dropdown-header">Options:</div>
-
-                      <form class="dropdown-form">
-
-                        <div class="form-group">
-                          <label for="compareHmTaxaTopN">Show top <a id="compareHmTaxaTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
-                          <input type="range" class="form-control-range" id="compareHmTaxaTopN" min="1" max="30" value="10">
-                        </div>
-
-                        <div>
-                          <label> Unclassified node:</label>
-                          <label><input type="radio" name="compareHmTaxaUnclassified" value="show" checked>  Show</label>
-                          <label><input type="radio" name="compareHmTaxaUnclassified" value="hide" >  Hide</label>
-                        </div>
-
-                      <div class="form-group row">
-                        <div class="col-sm-5">
-                          <label class="">Colour palette:</label>
-                        </div>
-                        <div class="col-auto">
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="blue" checked> Blue</label>
-                          </div>
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="viridis"> Viridis</label>
-                          </div>
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="magma"> Magma</label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label> Grey zero:</label>
-                        <label><input type="radio" name="compareHmTaxaGrey" value="off" checked>  Off</label>
-                        <label><input type="radio" name="compareHmTaxaGrey" value="on" >  On</label>
-                      </div>
-
-                      <div>
-                        <label> Value:</label>
-                        <label><input type="radio" name="compareHmTaxaRead" value="percent" checked>  Percent</label>
-                        <label><input type="radio" name="compareHmTaxaRead" value="count" >  Count</label>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="compareHmTaxaMaxRectWidth">Max cell width: <a id="compareHmTaxaMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
-                        <input type="range" class="form-control-range" name="compareHmTaxaMaxRectWidth" min="24" max="160" value="80">
-                      </div>
-
-                    </form>
-
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="exportCompareHmTaxaSVG" href="#">Export as SVG</a>
-                    <a class="dropdown-item" id="exportCompareHmTaxaPNG" href="#">Export as PNG</a>
-                    <a class="dropdown-item" id="exportCompareHmTaxaJPG" href="#">Export as JPG</a>
-
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="card-body-custom">
-
-
-                <div class="compareHeatmapTaxaCard">
-                  <div id='compareHeatmapTaxaLegend' class="text-center">
-
-                </div>
-                  <div id='compareHeatmapTaxaPlot'>
-
-                </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-          </div>
-
-
           <!-- Content Row -->
 <div class="row" id="compareTaxaTreeRow">
 
@@ -678,7 +492,191 @@
   </div>
 </div>
 
+          <!-- Heatmap Taxa row -->
+          <div class="row" id="heatmapTaxaRow">
 
+
+            <div class="col-12 mb-4">
+
+              <div class="card shadow" id="heatmapTaxaCard">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa heatmap</h6>
+
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuHeatmapTaxa" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuHeatmapTaxa">
+                      <div class="dropdown-header">Options:</div>
+
+                      <form class="dropdown-form">
+
+                        <div class="form-group">
+                          <label for="compareHmTaxaTopN">Show top <a id="compareHmTaxaTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
+                          <input type="range" class="form-control-range" id="compareHmTaxaTopN" min="1" max="30" value="10">
+                        </div>
+
+                        <div>
+                          <label> Unclassified node:</label>
+                          <label><input type="radio" name="compareHmTaxaUnclassified" value="show" checked>  Show</label>
+                          <label><input type="radio" name="compareHmTaxaUnclassified" value="hide" >  Hide</label>
+                        </div>
+
+                      <div class="form-group row">
+                        <div class="col-sm-5">
+                          <label class="">Colour palette:</label>
+                        </div>
+                        <div class="col-auto">
+                          <div class="">
+                              <label><input type="radio" name="compareHmTaxaColour" value="blue" checked> Blue</label>
+                          </div>
+                          <div class="">
+                              <label><input type="radio" name="compareHmTaxaColour" value="viridis"> Viridis</label>
+                          </div>
+                          <div class="">
+                              <label><input type="radio" name="compareHmTaxaColour" value="magma"> Magma</label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label> Grey zero:</label>
+                        <label><input type="radio" name="compareHmTaxaGrey" value="off" checked>  Off</label>
+                        <label><input type="radio" name="compareHmTaxaGrey" value="on" >  On</label>
+                      </div>
+
+                      <div>
+                        <label> Value:</label>
+                        <label><input type="radio" name="compareHmTaxaRead" value="percent" checked>  Percent</label>
+                        <label><input type="radio" name="compareHmTaxaRead" value="count" >  Count</label>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="compareHmTaxaMaxRectWidth">Max cell width: <a id="compareHmTaxaMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
+                        <input type="range" class="form-control-range" name="compareHmTaxaMaxRectWidth" min="24" max="160" value="80">
+                      </div>
+
+                    </form>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="exportCompareHmTaxaSVG" href="#">Export as SVG</a>
+                    <a class="dropdown-item" id="exportCompareHmTaxaPNG" href="#">Export as PNG</a>
+                    <a class="dropdown-item" id="exportCompareHmTaxaJPG" href="#">Export as JPG</a>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="card-body-custom">
+
+
+                <div class="compareHeatmapTaxaCard">
+                  <div id='compareHeatmapTaxaLegend' class="text-center">
+
+                </div>
+                  <div id='compareHeatmapTaxaPlot'>
+
+                </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          </div>
+
+
+
+<!-- Rarefaction Row -->
+<div class="row" id="accumulationChartRow">
+
+
+  <div class="col-12 mb-4">
+
+    <!-- Rarefaction card -->
+    <div class="card shadow" id="compareRarefactionCard">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa accumulation</h6>
+
+        <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareRarefactionFullScreen);">
+          <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
+        </div>
+
+        <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
+          <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
+        </div> -->
+
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRarefactionCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuRarefactionCompare">
+            <div class="dropdown-header">Options:</div>
+            <form class="dropdown-form">
+
+              <!-- <div>
+                <label>X-axis:</label>
+                <label><input type="radio" name="rareXAxis" value="reads" checked> Reads</label>
+                <label><input type="radio" name="rareXAxis" value="time"> Time</label>
+              </div> -->
+
+            <div>
+              <label>Curve:</label>
+              <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
+              <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
+            </div>
+
+            <div class="form-group">
+              <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
+              <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
+            </div>
+
+          </form>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
+          <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
+          <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-body-custom text-center">
+
+        <div id="accumulationPlotWarning" class="row">
+          <div class="col-auto pl-5 pt-4">
+              <a class=""><i class="fas fa-exclamation-triangle"></i> When LCA minimum abundance cutoff is not 0%, curve may go down as well as up</a>
+          </div>
+        </div>
+
+      <div id="no-data-accumulation" class="text-center text-gray-500 m-5">
+          <div class="mb-2">
+            <i class="fas fa-exclamation-circle fa-5x"></i>
+          </div>
+          <h3 class="font-weight-bold ">Data Not Available</h3>
+          <h4 class="font-weight-bold ">Please run accumulation analysis to see this plot</h4>
+      </div>
+
+
+      <div class="compareRarefactionCard">
+        <div id='compareRarefactionPlotLegend' class="text-center">
+
+      </div>
+        <div id='compareRarefactionPlot'>
+
+      </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
 
 <!-- Heatmap Amr row -->
 <div class="row" id="compareAmrHmRow">
