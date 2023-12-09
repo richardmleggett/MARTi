@@ -103,8 +103,8 @@ public class ReadClassifier {
                     }
                     br.close();            
                 } else {
-                    options.getLog().println("WARNING: Couldn't find BLAST log "+blastLogFilename);
-                    options.getLog().println("This is usually a bad sign, but continuing to run.");
+                    options.getLog().printlnLogAndScreen("WARNING: Couldn't find BLAST log "+blastLogFilename);
+                    options.getLog().printlnLogAndScreen("This is usually a bad sign, but continuing to run.");
                     options.getLog().printlnLogAndScreen("Please check results carefully.");
                 }
             } catch (Exception e) {
