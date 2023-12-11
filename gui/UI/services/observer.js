@@ -89,7 +89,7 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
+          var lca = "lca_" + filePath.split("tree_ms")[1].split(".json")[0];
 
           this.emit('tree-file-added', {
             id: sampleName,
