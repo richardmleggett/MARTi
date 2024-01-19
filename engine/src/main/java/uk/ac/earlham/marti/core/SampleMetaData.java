@@ -38,6 +38,7 @@ import javax.json.*;
 import javax.json.stream.JsonGenerator;
 import uk.ac.earlham.marti.blast.BlastProcess;
 import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
+import uk.ac.earlham.marti.kraken2.Kraken2Process;
 
 /**
  *
@@ -178,6 +179,7 @@ public class SampleMetaData {
         
         ArrayList<BlastProcess> blastProcesses = options.getBlastProcesses();
         ArrayList<CentrifugeProcess> centrifugeProcesses = options.getCentrifugeProcesses();
+        ArrayList<Kraken2Process> kraken2Processes = options.getKraken2Processes();
         for(BlastProcess bp : blastProcesses) {
             if(bp.useForClassifying()) {
                 assert(!foundClassifyingProcess);
@@ -206,6 +208,18 @@ public class SampleMetaData {
                 classificationObjectBuilder.add("algorithm", classificationProcess);
                 classificationObjectBuilder.add("centrifugeVersion", options.getCentrifugeVersion());
                 classificationObjectBuilder.add("database", cp.getDatabase());
+                //classificationObjectBuilder.add("databaseVersion", "01-01-1900");
+                foundClassifyingProcess = true;
+            }
+        }
+        
+        for(Kraken2Process k2p : kraken2Processes) {
+            if(k2p.useForClassifying()) {
+                assert(!foundClassifyingProcess);
+                classificationProcess = "Kraken2";
+                classificationObjectBuilder.add("algorithm", classificationProcess);
+                classificationObjectBuilder.add("kraken2Version", options.getKraken2Version());
+                classificationObjectBuilder.add("database", k2p.getDatabase());
                 //classificationObjectBuilder.add("databaseVersion", "01-01-1900");
                 foundClassifyingProcess = true;
             }

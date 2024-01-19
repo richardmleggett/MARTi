@@ -11,6 +11,8 @@ import uk.ac.earlham.marti.blast.BlastProcess;
 import uk.ac.earlham.marti.blast.BlastProcessRunnable;
 import uk.ac.earlham.marti.centrifuge.CentrifugeProcessRunnable;
 import uk.ac.earlham.marti.centrifuge.CentrifugeClassifier;
+import uk.ac.earlham.marti.kraken2.Kraken2ProcessRunnable;
+import uk.ac.earlham.marti.kraken2.Kraken2Classifier;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -251,6 +253,7 @@ public class ReadProcessor {
         String baseDir = "";
         ReadClassifier rc = options.getReadClassifier();
         CentrifugeClassifier centrifugeClassifier = options.getCentrifugeClassifier();
+        Kraken2Classifier kraken2Classifier = options.getKraken2Classifier();
         FileCompressorRunnable fileCompressor = null;
         boolean fileWatcherTimedOut = false;
         ReadFilterRunnable readFilter = new ReadFilterRunnable(options, fw, pfl);
@@ -258,6 +261,7 @@ public class ReadProcessor {
         BlastProcessRunnable blastProcess = null;
         MARTiAnalysisRunnable analysisProcess = null;
         CentrifugeProcessRunnable centrifugeProcess = null;
+        Kraken2ProcessRunnable kraken2Process = null;
         
         // Execute thread which checks for new reads to filter
         executor.execute(readFilter);
@@ -287,8 +291,13 @@ public class ReadProcessor {
         }
         if(options.isCentrifugingReads()) {
              centrifugeProcess = new CentrifugeProcessRunnable(options, pfl);
-             options.getLog().println("centrifuging reads: "+options.isCentrifugingReads());
+             options.getLog().println("centrifuging reads: " + options.isCentrifugingReads());
              executor.execute(centrifugeProcess);
+        }
+        if(options.isKraken2ingReads()) {
+            kraken2Process = new Kraken2ProcessRunnable(options, pfl);
+            options.getLog().println("kraken2'ing reads: " + options.isKraken2ingReads());
+            executor.execute(kraken2Process);
         }
                         
         //for (int i=0; i<options.getNumberOfThreads(); i++) {
@@ -322,6 +331,9 @@ public class ReadProcessor {
             if(options.isCentrifugingReads()) {
                 centrifugeClassifier.checkForFilesToClassify();
             }
+            if(options.isKraken2ingReads()) {
+                kraken2Classifier.checkForFilesToClassify();
+            }
 
             Thread.sleep(1000);            
         }           
@@ -336,6 +348,10 @@ public class ReadProcessor {
         if(options.isCentrifugingReads()) {
             System.out.println("Stopping centrifuge thread...");
             centrifugeProcess.exitThread();
+        }
+        if(options.isKraken2ingReads()) {
+            System.out.println("Stopping kraken2 thread...");
+            kraken2Process.exitThread();          
         }
                                     
         // Write summaries

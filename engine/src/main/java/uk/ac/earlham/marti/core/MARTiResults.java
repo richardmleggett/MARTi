@@ -33,6 +33,7 @@ import uk.ac.earlham.lcaparse.TaxonomyNode;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
 import uk.ac.earlham.marti.centrifuge.CentrifugeClassifierItem;
+import uk.ac.earlham.marti.kraken2.Kraken2ClassifierItem;
 
 /**
  * Represent overall results (essentially, taxonomic classifications) for all barcodes.
@@ -423,6 +424,82 @@ public class MARTiResults {
                 taxonomy.countRead(bc, taxid, readLength);
                 readsClassified++;
                 totalBpClassified += readLength;
+            }
+            
+            br.close();
+            if(fileStream != null) {
+                decoder.close();
+                gzipStream.close();
+                fileStream.close();
+            }
+            
+            md.addToReadsClassified(readsClassified, totalBpClassified);
+            
+        } catch (Exception e) {
+            System.out.println("readProcessFile Exception:");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+     
+        
+        if (chunkCount.containsKey(bc)) {
+            fileCount = chunkCount.get(bc);
+        }        
+        fileCount++;        
+        chunkCount.put(bc, fileCount);
+
+        ArrayList<String> l;
+        if (fileOrder.containsKey(bc)) {
+            l = fileOrder.get(bc);        
+        } else {
+            l = new ArrayList<String>();
+            fileOrder.put(bc, l);
+        }
+        l.add(filename);
+        
+        return fileCount;
+    }
+    
+    public int addChunk(int bc, Kraken2ClassifierItem k2ci) {
+        int fileCount = 0;
+        
+        options.getLog().println("MARTiResults received file for barcode "+bc);
+        SampleMetaData md = options.getSampleMetaData(bc);
+        taxonomy = options.getReadClassifier().getTaxonomy();
+
+        // Read the Kraken2 file - no need for some intermediate class to 
+        // hold all of this data when all we do is write it back out.
+        BufferedReader br;
+        InputStream fileStream = null;
+        InputStream gzipStream = null;
+        Reader decoder = null;
+        String filename = k2ci.getClassificationFile();
+        try {
+            File f = new File(filename);
+            if(f.exists()){
+                br = new BufferedReader(new FileReader(filename));
+            } else {
+                filename = filename + ".gz";
+                fileStream = new FileInputStream(filename);
+                gzipStream = new GZIPInputStream(fileStream);
+                decoder = new InputStreamReader(gzipStream, "US-ASCII");
+                br = new BufferedReader(decoder);    
+            }
+            
+            //ignore header line
+            int readsClassified = 0;
+            long totalBpClassified = 0l;
+            String line = br.readLine();
+            while ((line = br.readLine()) != null) {           
+                String[] fields = line.split("\\t");
+                if(fields[0].equalsIgnoreCase("C")) {
+                    long taxid = Long.parseLong(fields[2]);
+                    long readLength = Long.parseLong(fields[3]);
+                    taxonomy.countRead(bc, taxid, readLength);
+                    readsClassified++;
+                    totalBpClassified += readLength;   
+                }
             }
             
             br.close();

@@ -28,8 +28,10 @@ public class MARTiProgress {
     private int chunkCount = 0;
     private int chunksBlasted = 0;
     private int chunksCentrifuged = 0;
+    private int chunksKraken2d = 0;
     private int chunksParsed = 0;
     private int centrifugeChunksParsed = 0;
+    private int kraken2ChunksParsed = 0;
     private int metamapsCount = 0;
     private int analysisSubmitted = 0;
     private int analysisCompleted = 0;
@@ -75,12 +77,20 @@ public class MARTiProgress {
         chunksCentrifuged++;
     }
     
+    public synchronized void incrementChunksKraken2dCount() {
+        chunksKraken2d++;
+    }
+    
     public synchronized void incrementChunksParsedCount() {
         chunksParsed++;
     }
     
     public synchronized void incrementCentrifugeChunksParsedCount() {
         centrifugeChunksParsed++;
+    }
+    
+    public synchronized void incrementKraken2ChunksParsedCount() {
+        kraken2ChunksParsed++;
     }
     
     public synchronized void incrementAnalysisSubmitted() {
@@ -99,7 +109,9 @@ public class MARTiProgress {
                    " AS=" + analysisSubmitted + 
                    " AC=" + analysisCompleted + 
                    " CentC=" + chunksCentrifuged + 
-                   " CentP=" + centrifugeChunksParsed ;
+                   " CentP=" + centrifugeChunksParsed +
+                   " KrakC=" + chunksKraken2d +
+                   " KrakP=" + kraken2ChunksParsed;
         
         
         return s;
@@ -111,7 +123,8 @@ public class MARTiProgress {
     
     public synchronized boolean chunksComplete() {
         int blastProcessCount = options.getBlastProcesses().size();
-        int centrifugeProcessCount = options.getCentrifugeProcesses().size();       
+        int centrifugeProcessCount = options.getCentrifugeProcesses().size();
+        int kraken2ProcessCount = options.getKraken2Processes().size();
         boolean complete = false;        
        
         if(blastProcessCount > 0) {
@@ -131,6 +144,15 @@ public class MARTiProgress {
             } else {
                 return false;
             }
+        }
+        
+        if(kraken2ProcessCount > 0) {
+              if( (chunksKraken2d == (chunkCount * kraken2ProcessCount)) &&
+                (chunksKraken2d == kraken2ChunksParsed)) {
+                complete = true;
+            } else {
+                return false;
+            }          
         }
         
         return complete;

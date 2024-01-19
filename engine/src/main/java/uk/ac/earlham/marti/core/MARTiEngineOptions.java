@@ -8,6 +8,7 @@ import uk.ac.earlham.marti.classify.*;
 import uk.ac.earlham.marti.watcher.*;
 import uk.ac.earlham.marti.blast.*;
 import uk.ac.earlham.marti.centrifuge.*;
+import uk.ac.earlham.marti.kraken2.*;
 import uk.ac.earlham.marti.schedule.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -64,6 +65,7 @@ public class MARTiEngineOptions implements Serializable {
     private boolean parsingReads = false;
     private boolean blastingReads = false;
     private boolean centrifugingReads = false;
+    private boolean kraken2ingReads = false;
     private boolean classifyingReads = true;
     private boolean mergeFastaFiles = false;
     private boolean force = false;
@@ -90,10 +92,13 @@ public class MARTiEngineOptions implements Serializable {
     private transient ThreadPoolExecutor executor;
     private BlastHandler blastHandler = new BlastHandler(this);
     private CentrifugeHandler centrifugeHandler = new CentrifugeHandler(this);
+    private Kraken2Handler kraken2Handler = new Kraken2Handler(this);
     private ReadClassifier readClassifier = null;
     private CentrifugeClassifier centrifugeClassifier = new CentrifugeClassifier(this);
+    private Kraken2Classifier kraken2Classifier = new Kraken2Classifier(this);
     private ArrayList<BlastProcess> blastProcesses = new ArrayList<BlastProcess>();
     private ArrayList<CentrifugeProcess> centrifugeProcesses = new ArrayList<CentrifugeProcess>();
+    private ArrayList<Kraken2Process> kraken2Processes = new ArrayList<Kraken2Process>();
     private boolean isMac = false;
     private String meganCmdLine = "MEGAN";
     private String meganLicense = "MEGAN5-academic-license.txt";
@@ -656,6 +661,10 @@ public class MARTiEngineOptions implements Serializable {
         return centrifugingReads;
     }
     
+    public boolean isKraken2ingReads() {
+        return kraken2ingReads;
+    }
+    
     public int getFileWatcherTimeout() {
         return fileWatcherTimeout;
     }
@@ -748,6 +757,14 @@ public class MARTiEngineOptions implements Serializable {
                 checkAndMakeDirectory(this.getSampleDirectory() + File.separator + "centrifuge_" + cp.getName() + File.separator);
                 checkAndMakeDirectory(getLogsDir() + File.separator + "centrifuge_" + cp.getName() + File.separator);
             }
+        }
+        
+        if(this.isKraken2ingReads()) {
+            for(int i = 0; i < kraken2Processes.size(); i++) {
+                Kraken2Process k2p = kraken2Processes.get(i);
+                checkAndMakeDirectory(this.getSampleDirectory() + File.separator + "kraken2_" + k2p.getName() + File.separator);
+                checkAndMakeDirectory(getLogsDir() + File.separator + "kraken2_" + k2p.getName() + File.separator);
+            }        
         }
     }
     
@@ -925,6 +942,22 @@ public class MARTiEngineOptions implements Serializable {
                                     }
                                 }
                             
+                            } else if (tokens[0].compareToIgnoreCase("Kraken2Process") == 0) {
+                                Kraken2Process k2p =  new Kraken2Process(this);
+                                kraken2Processes.add(k2p);
+                                line = k2p.readConfigFile(br);
+                                readNextLine = false;
+                                kraken2ingReads = true;
+                                if (k2p.useForClassifying()) {
+                                    if (classifyingProcessName != null) {
+                                        System.out.println("Error: you can't have more than one process with useToClassify set");
+                                        System.exit(1);
+                                    } else {
+                                        classifyingProcessName = k2p.getName();
+                                        System.out.println("Using " + classifyingProcessName + " for classification");
+                                    }
+                                }
+                            
                             } else if (tokens[0].compareToIgnoreCase("MetaData") == 0) {
                                 MetaData md = new MetaData(this);
                                 line = md.readConfigFile(br);
@@ -1057,6 +1090,10 @@ public class MARTiEngineOptions implements Serializable {
         return centrifugeHandler;
     }
     
+    public Kraken2Handler getKraken2Handler() {
+        return kraken2Handler;
+    }
+    
     public ReadClassifier getReadClassifier() {
         if (readClassifier == null) {
             System.out.println("Error: Attempt to get ReadClassifier before initialised - this appears to be a bug. Contact the authors.");
@@ -1069,12 +1106,20 @@ public class MARTiEngineOptions implements Serializable {
         return centrifugeClassifier;
     }
     
+    public Kraken2Classifier getKraken2Classifier() {
+        return kraken2Classifier;
+    }
+    
     public ArrayList<BlastProcess> getBlastProcesses() {
         return blastProcesses;
     }
     
     public ArrayList<CentrifugeProcess> getCentrifugeProcesses() {
         return centrifugeProcesses;
+    }
+    
+    public ArrayList<Kraken2Process> getKraken2Processes() {
+        return kraken2Processes;
     }
         
     public boolean mergeFastaFiles() {
@@ -1422,7 +1467,7 @@ public class MARTiEngineOptions implements Serializable {
     }
     
     public String getCentrifugeVersion() {
-        try{
+        try {
             Process process = new ProcessBuilder("centrifuge","--version").start();
             InputStream is = process.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
@@ -1432,6 +1477,19 @@ public class MARTiEngineOptions implements Serializable {
         } catch(IOException e) {
             return "Unknown";
         }
+    }
+    
+    public String getKraken2Version() {
+        try {
+            Process process = new ProcessBuilder("kraken2","--version").start();
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String version = br.readLine().split(" ")[2];     
+            return version;          
+        } catch(IOException e) {
+            return "Unknown";
+        }    
     }
     
     public boolean limitToSpecies() {

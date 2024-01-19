@@ -18,6 +18,7 @@ public class FASTAQPairPendingList {
     private long lastFileTime = System.nanoTime();
     private LinkedList<FASTAQPair> pendingBlastFiles = new LinkedList<FASTAQPair>();
     private LinkedList<FASTAQPair> pendingCentrifugeFiles = new LinkedList<FASTAQPair>();
+    private LinkedList<FASTAQPair> pendingKraken2Files = new LinkedList<FASTAQPair>();
 
     public FASTAQPairPendingList(MARTiEngineOptions o) {
         options = o;
@@ -30,6 +31,9 @@ public class FASTAQPairPendingList {
         }
         if(options.isCentrifugingReads()) {
             pendingCentrifugeFiles.add(new FASTAQPair(fasta, fastq));
+        }
+        if(options.isKraken2ingReads()) {
+            pendingKraken2Files.add(new FASTAQPair(fasta, fastq));
         }
         filesToProcess++;
         lastFileTime = System.nanoTime();
@@ -51,6 +55,16 @@ public class FASTAQPairPendingList {
             filesProcessed++;
             options.getLog().println("PendingPair list -1, files processed = "+filesProcessed);        
             return pendingCentrifugeFiles.removeFirst();
+        } else {
+            return null;
+        }
+    }
+    
+     public synchronized FASTAQPair getKraken2PendingPair() {
+        if (pendingKraken2Files.size() > 0) {
+            filesProcessed++;
+            options.getLog().println("PendingPair list -1, files processed = "+filesProcessed);        
+            return pendingKraken2Files.removeFirst();
         } else {
             return null;
         }
