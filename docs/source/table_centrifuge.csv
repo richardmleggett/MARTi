@@ -1,0 +1,7 @@
+CentrifugeProcess	n/a	Defines the start of a Centrifuge process
+Name	cent_nt	Name of process
+Database	/path/to/db	Path to Centrifuge database
+UseToClassify	n/a	Use Centrifuge results for classification (can only be set for 1 classification process)
+CentrifugeThreads 	4	Number of threads to use when running Centrifuge. Note: for SLURM scheduler, MARTi also uses this value for the SLURM --cpus-per-task option.
+Memory	16G	For SLURM scheduler, the memory to use per Centrifuge job. Passed with the SLURM --mem parameter.
+Queue	ei-medium	The job submission queue to use. Can be left out and the default queue (see above) will be used. Currently only required for SLURM and equates to the partition name.

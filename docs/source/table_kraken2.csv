@@ -1,0 +1,7 @@
+Kraken2Process	n/a	Defines the start of a Krakaen2 process
+Name	k2_refseq	Name of process
+Database	/path/to/db/	Path to directory containing Kraken2 database
+UseToClassify	n/a	Use Kraken2 results for classification (can only be set for 1 classification process)
+Kraken2Threads 	4	Number of threads to use when running Kraken2. Note: for SLURM scheduler, MARTi also uses this value for the SLURM --cpus-per-task option.
+Memory	16G	For SLURM scheduler, the memory to use per Kraken2 job. Passed with the SLURM --mem parameter.
+Queue	ei-medium	The job submission queue to use. Can be left out and the default queue (see above) will be used. Currently only required for SLURM and equates to the partition name.

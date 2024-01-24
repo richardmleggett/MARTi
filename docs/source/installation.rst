@@ -26,6 +26,11 @@ In order to run the MARTi Engine (back-end), you also need to install the follow
 * **NCBI taxonomy** - you can `download this from the NCBI taxonomy FTP site <https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/>`_. You need the taxdump files, specifically the nodes.dmp and names.dmp files.
 * **Java Run Time Environment (OpenJDK 16.0.2 or greater)** - the simplest option is to `install OpenJDK <https://openjdk.java.net>`_. Note, on Macs, the documentation for OpenJDK isn't great. Once you download the JDK, you need to move the directory into /Library/Java/VirtualMachines (`as described here <https://java.tutorials24x7.com/blog/how-to-install-openjdk-14-on-mac>`_). Or install with `homebrew <https://brew.sh>`_ (use brew install openjdk).
 
+If you want to use Centrifuge or Kraken2 to classify reads, these will also need to be installed and available on the path. As with BLAST, you can use any database built for these tools (either by downloading one directly, or building your own following the tools' instructions):
+
+* **Centrifuge** - prebuilt binaries are available `here <https://ccb.jhu.edu/software/centrifuge/>`_, or it can be built from source from `GitHub <https://github.com/DaehwanKimLab/centrifuge>`_.
+* **Kraken2** - download `here <https://ccb.jhu.edu/software/kraken2/>`_ or on `GitHub <https://github.com/DerrickWood/kraken2>`_.
+
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
 * **Node.js (14.17.5 or greater)** - you can download it from `nodejs.org <https://nodejs.org/en/download/>`_. NPM, a package manager for Node.js packages, is included with the Node.js installation and therefore doesn't need to be installed separately. On Ubuntu, using apt-get may install an older version. In which case, see `the Installation instructions here <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
