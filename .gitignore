@@ -10,3 +10,5 @@ bin/marti_engine_options.txt
 bin/marti_gui
 gui/UI/package-lock.json
 docs/.DS_Store
+docs/.DS_Store
+docs/source/.DS_Store
