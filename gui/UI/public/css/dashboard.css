@@ -56,12 +56,36 @@
 #dashboardAmrTable > thead > tr > th:nth-child(10){
   min-width: 260px;
 } */
-#dashboardAmrTable > thead > tr > th.wideColumn{
+/* #dashboardAmrTable > thead > tr > th.wideColumn{
   min-width: 180px;
 }
 #dashboardAmrTable > thead > tr > th.widerColumn{
   min-width: 260px;
+} */
+
+#selectedColumn tbody td {
+  padding: 6px 10px;
 }
+
+#selectedColumn tbody {
+  font-size: 0.9rem;
+}
+
+#dashboardAmrTable tbody td {
+  padding: 6px 10px;
+}
+
+#dashboardAmrTable tbody {
+  font-size: 0.9rem;
+}
+
+thead > tr > th.wideColumn{
+  min-width: 180px;
+}
+thead > tr > th.widerColumn{
+  min-width: 260px;
+}
+
 
 .border-left-marti-green {
     border-left: 0.25rem solid #B2DF8A !important;
@@ -87,5 +111,10 @@
 }
 
 .readCardHeader {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.3rem;
+}
+
+.h55 {
+  font-size: 1.2rem;
 }

@@ -85,7 +85,7 @@
                                           <div class="col">
                                               <div class="text-xs font-weight-bold text-uppercase mb-1">
                                                   Sample ID  <i id="dashboardSampleNameEdit" class="far fa-edit"></i></div>
-                                              <div class="h5 mb-0 text-primary" id="dashboardSampleName"></div>
+                                              <div class="h6 mb-0 text-primary" id="dashboardSampleName"></div>
                                               <input type="text" class="form-control" id="dashboardSampleNameInput" value="" placeholder="" style="display: none;">
                                           </div>
 
@@ -102,7 +102,7 @@
                                           <div class="col">
                                               <div class="text-xs font-weight-bold text-uppercase mb-1">
                                                   Barcode</div>
-                                              <div class="h5 mb-0 text-primary" id="dashboardInfoCardBarcode">-</div>
+                                              <div class="h6 mb-0 text-primary" id="dashboardInfoCardBarcode">-</div>
                                           </div>
 
                                       </div>
@@ -120,7 +120,7 @@
                                               </div>
                                               <div class="row no-gutters align-items-center">
                                                   <div class="col-auto">
-                                                      <div class="h5 mb-0 mr-3 text-primary" id="dashboardInfoCardPipeline">-</div>
+                                                      <div class="h6 mb-0 mr-3 text-primary" id="dashboardInfoCardPipeline">-</div>
                                                   </div>
 
                                               </div>
@@ -139,7 +139,7 @@
                                           <div class="col mr-2">
                                               <div class="text-xs font-weight-bold text-uppercase mb-1">
                                                   Engine version</div>
-                                              <div class="h5 mb-0 text-primary" id="dashboardInfoCardEngineVersion">-</div>
+                                              <div class="h6 mb-0 text-primary" id="dashboardInfoCardEngineVersion">-</div>
                                           </div>
 
                                       </div>
@@ -200,12 +200,12 @@
 
         <div class="col">
 
-          <div class="row">
+          <div class="row pt-xl-2">
 
             <!-- <div class="col-md-6 text-center"> -->
               <div class="col text-center">
                 <p class="readCardHeader" class="">Basecalled reads</p>
-                <h5 class="text-primary" id="dashboardInfoCardReadsSequenced">-</h5>
+                <h5 class="text-primary h55" id="dashboardInfoCardReadsSequenced">-</h5>
               <!-- </div> -->
 
               <div class="row mb-3">
@@ -213,32 +213,32 @@
 
               <!-- <div class="col"> -->
               <p class="readCardHeader" class="">Database</p>
-              <h5 class="text-primary" id="dashboardInfoCardDatabase">-</h5>
+              <h5 class="text-primary h55" id="dashboardInfoCardDatabase">-</h5>
               </div>
 
             <!-- </div> -->
 
             <div class="col text-center">
               <p class="readCardHeader" class="">Classified reads</p>
-              <h5 class="text-primary" id="dashboardInfoCardReadsClassified">-</h5>
+              <h5 class="text-primary h55" id="dashboardInfoCardReadsClassified">-</h5>
 
             <div class="row mb-3">
             </div>
 
             <p class="readCardHeader" class="">Unclassified reads</p>
-            <h5 class="text-primary" id="dashboardInfoCardReadsUnclassified">-</h5>
+            <h5 class="text-primary h55" id="dashboardInfoCardReadsUnclassified">-</h5>
             </div>
 
 
             <div class="col text-center">
               <p class="readCardHeader" class="">Basecalled yield</p>
-              <h5 class="text-primary" id="dashboardInfoCardYieldBasecalled">-</h5>
+              <h5 class="text-primary h55" id="dashboardInfoCardYieldBasecalled">-</h5>
 
             <div class="row mb-3">
             </div>
 
               <p class="readCardHeader" class="">Classified yield</p>
-              <h5 class="text-primary" id="dashboardInfoCardYieldClassified">-</h5>
+              <h5 class="text-primary h55" id="dashboardInfoCardYieldClassified">-</h5>
 
             </div>
 
@@ -366,10 +366,14 @@
 
 
 <!-- <div class="w-100 d-lg-none"></div> -->
+</div>
 
+
+<!-- Content Row -->
+<div class="row" id="donutRow">
 
   <!-- Donut chart -->
-  <div class="col-xl-auto col-12 mb-4">
+  <div class="col-12 mb-4">
     <div class="card shadow" id="donutCard">
       <!-- Card Header - Dropdown -->
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
@@ -407,7 +411,7 @@
 
             <div class="form-group">
               <label for="dashboardTaxaDonutTopN">Show top <a class="dashboard-taxa-donut-top-n font-weight-bold">N</a> taxa</label>
-              <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="20" value="10">
+              <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="30" value="10">
             </div>
 
             <div>
@@ -427,20 +431,20 @@
         </div>
       </div>
       <!-- Card Body -->
-      <div class="card-body-custom">
+      <div class="card-body">
 
 
         <div class="row" id="dashboardTaxaDonutRow">
-          <div class="col-md-5 col-lg-4 d-xl-none overflow-auto mt-4" id="dashboardTaxaDonutLegend">
+          <div class="col-md-5 col-lg-4 overflow-auto mt-4" id="dashboardTaxaDonutLegend">
           </div>
-          <div class="col-md-7 col-lg-5 col-xl-12 donut-card align-items-center justify-content-center d-flex d-md-block" id="dashboardTaxaDonutPlot">
+          <div class="col-md-7 col-lg-5 donut-card align-items-center justify-content-center d-flex d-md-block" id="dashboardTaxaDonutPlot">
           </div>
-          <div class="col-lg-3 d-xl-none d-none d-lg-block pt-4" id="dashboardTaxaDonutOptions">
+          <div class="col-lg-3 pt-4 pr-4" id="dashboardTaxaDonutOptions">
             <form>
 
               <div class="form-group">
                 <label for="dashboardTaxaDonutTopN">Show top <a class="dashboard-taxa-donut-top-n font-weight-bold">N</a> taxa</label>
-                <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="20" value="10">
+                <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="30" value="10">
               </div>
 
 
@@ -454,10 +458,7 @@
     </div>
   </div>
 
-
 </div>
-
-
 
 <!-- Content Row -->
 <div class="row" id="taxaTreeRow">
@@ -645,7 +646,7 @@
 
             <div class="form-group">
               <label for="dashboardTreeMapMinTextSize">Min font size: <a class="dashboard-tree-map-min-text-size font-weight-bold">N</a> px</label>
-              <input type="range" class="form-control-range" name="dashboardTreeMapMinTextSize" min="0" max="12" value="5">
+              <input type="range" class="form-control-range" name="dashboardTreeMapMinTextSize" min="0" max="12" value="0">
             </div>
 
             <div class="form-group">
