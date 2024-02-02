@@ -196,6 +196,15 @@ public class LCAFileParser {
         
         return idsToRemove;
     }
+    
+    public void registerTaxonomyData() {
+        Set<String> keys = hitsByQuery.keySet();
+        ArrayList<String> idsToRemove = new ArrayList<String>();
+        for (String queryName : keys) {
+            LCAHitSet hs = hitsByQuery.get(queryName);
+            taxonomy.registerNodeData(hs.getAssignedTaxon(), hs.getMeanIdentity(), hs.getBestIdentity());
+        }
+    }
         
     /**
     * Write results to summary file. 
@@ -240,13 +249,19 @@ public class LCAFileParser {
                             ancestorRank = n.getRankString();
                         }
 
-                        pwPerRead.println(queryName + "\t" + ancestor + "\t" + taxonomy.getNameFromTaxonId(ancestor)+ "\t" +ancestorRank);
+                        pwPerRead.print(queryName + "\t");
+                        pwPerRead.print(ancestor + "\t");
+                        pwPerRead.print(taxonomy.getNameFromTaxonId(ancestor)+ "\t");
+                        pwPerRead.print(ancestorRank + "\t");
+                        pwPerRead.printf("%.1f\t", hs.getBestIdentity());
+                        pwPerRead.printf("%.1f", hs.getMeanIdentity());
+                        pwPerRead.println("");
                         hs.setAssignedTaxon(ancestor);
                     } else {
-                        pwPerRead.println(queryName + "\t0\tUnassigned\tBadAlignment");
+                        pwPerRead.println(queryName + "\t0\tUnassigned\tBadAlignment\t0\t0");
                     }                
                 } else {
-                    pwPerRead.println(queryName + "\t0\tUnassigned\tNoAlignments");
+                    pwPerRead.println(queryName + "\t0\tUnassigned\tNoAlignments\t0\t0");
                 }
             }
             

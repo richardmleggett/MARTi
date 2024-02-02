@@ -24,4 +24,6 @@ public interface LCAHitSet {
     public boolean hasGoodAlignment();
     public void sortHits();
     public void removeRejectedAlignments();
+    public double getBestIdentity();
+    public double getMeanIdentity();
 }

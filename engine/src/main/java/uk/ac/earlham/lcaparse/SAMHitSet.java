@@ -18,6 +18,7 @@ public class SAMHitSet implements LCAHitSet{
     private ArrayList<LCAHit> alignments = new ArrayList<LCAHit>();
     private int unknownTaxa = 0;
     private long assignedTaxon = -2;
+    private double bestIdentity = 0;
     
     public SAMHitSet(String query) {
         queryName = query;
@@ -84,4 +85,20 @@ public class SAMHitSet implements LCAHitSet{
 
     public void removeRejectedAlignments() {};
 
+    public double getBestIdentity() {
+        return bestIdentity;
+    }    
+
+    public double getMeanIdentity() {
+        double total = 0.0;
+        double meanId;
+
+        for (int i=0; i<alignments.size(); i++) {
+            total += alignments.get(i).getIdentity();
+        }
+
+        meanId = total / alignments.size();
+
+        return meanId;
+    }
 }

@@ -124,7 +124,7 @@ public class MARTiEngineOptions implements Serializable {
     private int lcaMinIdentity = 60;
     private int lcaMinQueryCoverage = 0;
     private int lcaMinCombinedScore = 0;
-    private int lcaMinLength = 100;
+    private int lcaMinLength = 150;
     private int readFilterMinQ = 8;
     private int readFilterMinLength = 500;
     private MARTiResults martiResults = new MARTiResults(this);

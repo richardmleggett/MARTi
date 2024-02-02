@@ -32,6 +32,7 @@ import uk.ac.earlham.lcaparse.Taxonomy;
 import uk.ac.earlham.lcaparse.TaxonomyNode;
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
+import uk.ac.earlham.lcaparse.TaxonomyNodeData;
 import uk.ac.earlham.marti.centrifuge.CentrifugeClassifierItem;
 import uk.ac.earlham.marti.kraken2.Kraken2ClassifierItem;
 
@@ -155,6 +156,15 @@ public class MARTiResults {
             treeBuilder.add("summedValue", summedCount);
             treeBuilder.add("yield", yield);
             treeBuilder.add("summedYield", summedYield);
+            
+            TaxonomyNodeData tnd = taxonomy.getNodeData(n.getId());
+            if (tnd != null) {
+                String meanStr = String.format("%.1f", tnd.getMeanMean());
+                String maxStr = String.format("%.1f", tnd.getMeanMax());
+                tnd.calculateMeans();
+                treeBuilder.add("meanIdentity", meanStr);
+                treeBuilder.add("meanMaxIdentity", maxStr);               
+            }
             
             if(pwAssignments != null) {
                 pwAssignments.print(taxonomy.getNameFromTaxonId(n.getId()) + ",");

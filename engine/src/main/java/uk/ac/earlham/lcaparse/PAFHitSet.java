@@ -112,9 +112,26 @@ public class PAFHitSet implements LCAHitSet {
         return alignments.size() > 0 ? true:false;
     }
 
-     public void sortHits() {
-         //Collections.sort(alignments);
-     }
-     
-     public void removeRejectedAlignments() {};
+    public void sortHits() {
+        //Collections.sort(alignments);
+    }
+
+    public void removeRejectedAlignments() {};
+
+    public double getBestIdentity() {
+        return bestIdentity;
+    }
+
+    public double getMeanIdentity() {
+        double total = 0.0;
+        double meanId;
+
+        for (int i=0; i<alignments.size(); i++) {
+            total += alignments.get(i).getIdentity();
+        }
+
+        meanId = total / alignments.size();
+
+        return meanId;
+    }
 }

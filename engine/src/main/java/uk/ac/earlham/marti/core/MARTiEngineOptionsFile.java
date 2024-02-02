@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import uk.ac.earlham.marti.blast.BlastProcess;
+import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
 
 /**
  *
@@ -52,6 +53,11 @@ public class MARTiEngineOptionsFile {
                                 line = bp.readConfigFile(br);
                                 blastProcessesByName.put(bp.getBlastName(), bp);
                                 readNextLine = false;                                
+                            } else if (tokens[0].compareToIgnoreCase("CentrifugeProcess") == 0) {
+                                CentrifugeProcess cp = new CentrifugeProcess(options);
+                                line = cp.readConfigFile(br);
+                                //blastProcessesByName.put(bp.getBlastName(), bp);
+                                readNextLine = false;                                
                             } else if (tokens[0].compareToIgnoreCase("TaxonomyDir")==0) { 
                                 taxonomyDir = tokens[1];
                                 if (options.getTaxonomyDirectory() == null) {
@@ -64,7 +70,7 @@ public class MARTiEngineOptionsFile {
                                        (tokens[0].compareToIgnoreCase("Key")==0) ||
                                        (tokens[0].compareToIgnoreCase("Certificate")==0))
                             {
-                                System.out.println("Ignoring GUI option "+tokens[0]);
+                                //System.out.println("Ignoring GUI option "+tokens[0]);
                             } else if (!tokens[0].startsWith("#")) {                                
                                 System.out.println("ERROR: Unknown token in marti_engine_options "+tokens[0]);
                                 System.out.println("       Token is being ignored");

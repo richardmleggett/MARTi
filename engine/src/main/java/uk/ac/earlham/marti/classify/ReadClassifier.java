@@ -237,7 +237,7 @@ public class ReadClassifier {
                                 options.getLog().println("Parsed... now removing poor alignments");
                                 ArrayList<String> queriesToRemove = pfp.removePoorAlignments();
                                 int readsRemoved = queriesToRemove.size();
-                                                               
+                                                                                               
                                 long bpRemoved = 0l;
                                 for(String query : queriesToRemove) {
                                     bpRemoved += options.getReadStatistics().getReadLength(barcode, query, true);
@@ -253,6 +253,7 @@ public class ReadClassifier {
                                 timeDiff = (System.nanoTime() - startTime) / 1000000;
                                 options.getLog().println("Timing: LCA parse on " + f.getBlastFile() + " completed in " + timeDiff + " ms");
                                 
+                                // Taxon doesn't get assigned until writeResults
                                 startTime = System.nanoTime();
                                 pfp.writeResults(summaryFilename, perReadFilename);
                                 timeDiff = (System.nanoTime() - startTime) / 1000000;
@@ -264,6 +265,9 @@ public class ReadClassifier {
 
                                 int fastaChunkNumber = getChunkNumber(f.getBlastFile());
                                 int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
+
+                                // Register mean identity etc.
+                                pfp.registerTaxonomyData();
                                 
                                 // Write files for min support 0, 0.1, 1 and 2
                                 startTime = System.nanoTime();

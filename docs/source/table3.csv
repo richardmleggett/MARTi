@@ -1,6 +1,7 @@
 LCAMaxHits	100	Maximum number of BLAST hits to consider in LCA assignment. Default 100.
 LCAScorePercent	90	Only consider hits within this percentage of the top hit for a given read. Default 90.
 LCAMinIdentity	60	Only consider hits with this minimum identity. Default 60.
+LCAMinLength	150	Minimum length of alignment to consider. Default 150.
 LCAMinQueryCoverage	70	Only consider hits with this minmum percent coverage of query. Default 0.
 LCAMinCombinedScore	120	Only consider hits where identity % added to query coverage % is greater than this value. Default 0.
 LCALimitToSpecies	n/a	Limit LCA classification to species level and no lower.

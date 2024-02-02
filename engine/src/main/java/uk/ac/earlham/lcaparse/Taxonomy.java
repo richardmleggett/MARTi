@@ -63,6 +63,7 @@ public class Taxonomy {
     private Hashtable<Long, TaxonomyRank> taxonIdToRank = new Hashtable<Long, TaxonomyRank>();
     private Hashtable<String, TaxonomyRank> ranksTable = new Hashtable<String, TaxonomyRank>();
     private Hashtable<Long, TaxonomyNode> leafNodes = new Hashtable<Long, TaxonomyNode>();
+    private Hashtable<Long, TaxonomyNodeData> nodeData = new Hashtable<Long, TaxonomyNodeData>();
     //private ArrayList<TaxonomyNode> leafNodes = new ArrayList<TaxonomyNode>();
     private SimplifiedRank simplifiedRank = new SimplifiedRank();
     
@@ -1021,5 +1022,27 @@ public class Taxonomy {
             TaxonomyNode n = nodesById.get(1L);
             adjustNodeByYield(bc, minYield, n, null);
         }
+    }
+    
+    public synchronized void registerNodeData(long taxon, double meanId, double maxId) {
+        TaxonomyNodeData nd;
+        if (nodeData.containsKey(taxon)) {
+            nd = nodeData.get(taxon);
+        } else {
+            nd = new TaxonomyNodeData();
+            nodeData.put(taxon, nd);
+        }
+        
+        nd.registerHit(meanId, maxId);
+    }
+    
+    public TaxonomyNodeData getNodeData(long taxon) {
+        TaxonomyNodeData tnd = null;
+                
+        if (nodeData.containsKey(taxon)) {
+            tnd = nodeData.get(taxon);
+        }
+        
+        return tnd;
     }
 }
