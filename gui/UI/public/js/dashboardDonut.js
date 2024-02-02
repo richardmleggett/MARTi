@@ -286,17 +286,17 @@ function donutUpdate(data) {
                 };
             });
 
-            d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-              var tempID = taxonomyDataTable.row(this).data()[4];
-              var match = "ncbiID";
-              if (tempID == "n/a"){
-                tempID = x.label;
-                match = "label";
-              };
-                if (tempID == d["data"][match]) {
-                    d3.select(this).classed("donut-table-hover", true);
-                };
-            });
+            // d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
+            //   var tempID = taxonomyDataTable.row(this).data()[4];
+            //   var match = "ncbiID";
+            //   if (tempID == "n/a"){
+            //     tempID = x.label;
+            //     match = "label";
+            //   };
+            //     if (tempID == d["data"][match]) {
+            //         d3.select(this).classed("donut-table-hover", true);
+            //     };
+            // });
 
 
         });
@@ -326,17 +326,17 @@ function donutUpdate(data) {
             });
 
 
-            d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-              var tempID = taxonomyDataTable.row(this).data()[4];
-              var match = "ncbiID";
-              if (tempID == "n/a"){
-                tempID = x.label;
-                match = "label";
-              };
-                if (tempID == d["data"][match]) {
-                    d3.select(this).classed("donut-table-hover", false);
-                };
-            });
+            // d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
+            //   var tempID = taxonomyDataTable.row(this).data()[4];
+            //   var match = "ncbiID";
+            //   if (tempID == "n/a"){
+            //     tempID = x.label;
+            //     match = "label";
+            //   };
+            //     if (tempID == d["data"][match]) {
+            //         d3.select(this).classed("donut-table-hover", false);
+            //     };
+            // });
 
 
 

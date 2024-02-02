@@ -39,23 +39,15 @@ try {
   const martiEngineOptions = fsExtra.readFileSync(engineOptionsPath, 'UTF-8');
   const lines = martiEngineOptions.split(/\r?\n/);
   var newProcess = false;
-  var newBlastProcess = false;
-  var newCentrifugeProcess = false;
   var processFound = false;
   var currentProcess = {text:""};
+  var processType = ""
   lines.forEach((line) => {
       if(line.charAt(0) != '#') {
         if (newProcess == true) {
           if (line == "") {
             newProcess = false;
-
-            if (newBlastProcess) {
-              currentProcess.type = "Blast";
-            } else if (newCentrifugeProcess) {
-              currentProcess.type = "Centrifuge";
-            }
-            newBlastProcess = false;
-            newCentrifugeProcess = false;
+            currentProcess.type = processType;
             engineOptionsObject.processes.push(currentProcess);
             currentProcess = {text:""};
           } else {
@@ -70,14 +62,10 @@ try {
             }
             currentProcess[key] = value;
           }
-        } else if (line.search("BlastProcess") != -1) {
+        } else if ((line.search("BlastProcess") != -1) || (line.search("CentrifugeProcess") != -1) || (line.search("Kraken2Process")) {
           newProcess = true;
           processFound = true;
-          newBlastProcess = true;
-        } else if (line.search("CentrifugeProcess") != -1) {
-          newProcess = true;
-          processFound = true;
-          newCentrifugeProcess = true;
+          processType = line.split("Process")[0]
         } else {
           const fields = line.split(":");
           if(fields[0] == "MARTiSampleDirectory") {
@@ -155,7 +143,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.19.7";
+const martiGuiVersion = "0.19.8";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);

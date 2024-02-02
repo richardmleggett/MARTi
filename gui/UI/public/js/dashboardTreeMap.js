@@ -116,7 +116,7 @@ function initialiseDashboardTreeMap() {
       dashboardTreeMapRoot = "hide";
       dashboardTreeMapHigherTaxaNode = "show";
       // dashboardTreeMapRevealHigherTaxa = "hide";
-      dashboardTreeMapMinTextSize = 5;
+      dashboardTreeMapMinTextSize = 0;
       dashboardTreeMapColourBy = "Phylum";
       dashboardTreeMapGroupTitle = "show";
       dashboardTreeMapShowDomain = 0;
