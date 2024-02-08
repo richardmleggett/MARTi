@@ -157,7 +157,7 @@ public class MARTiResults {
             treeBuilder.add("yield", yield);
             treeBuilder.add("summedYield", summedYield);
             
-            TaxonomyNodeData tnd = taxonomy.getNodeData(n.getId());
+            TaxonomyNodeData tnd = taxonomy.getNodeData(bc, n.getId());
             if (tnd != null) {
                 String meanStr = String.format("%.1f", tnd.getMeanMean());
                 String maxStr = String.format("%.1f", tnd.getMeanMax());

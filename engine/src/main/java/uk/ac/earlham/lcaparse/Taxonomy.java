@@ -38,6 +38,7 @@ public class Taxonomy {
     private Hashtable<Long, String> nameById = new Hashtable<Long, String>();
     private Hashtable<String, Long> idByName = new Hashtable<String, Long>();
     private Hashtable<String, Long> accessionToTaxon = new Hashtable<String, Long>();
+    private Hashtable<Integer, AssignedTaxonomyStats> assignedTaxonomyStats = new Hashtable<Integer, AssignedTaxonomyStats>();
     private TaxonomyNode unclassifiedNode = new TaxonomyNode(0L);
     private long humanId = 0;
     private long bacteriaId = 0;
@@ -1024,25 +1025,25 @@ public class Taxonomy {
         }
     }
     
-    public synchronized void registerNodeData(long taxon, double meanId, double maxId) {
-        TaxonomyNodeData nd;
-        if (nodeData.containsKey(taxon)) {
-            nd = nodeData.get(taxon);
+    public synchronized void registerNodeData(int barcode, long taxon, double meanId, double maxId) {
+        AssignedTaxonomyStats ats;
+        if (assignedTaxonomyStats.containsKey(barcode)) {
+            ats = assignedTaxonomyStats.get(barcode);
         } else {
-            nd = new TaxonomyNodeData();
-            nodeData.put(taxon, nd);
+            ats = new AssignedTaxonomyStats();
+            assignedTaxonomyStats.put(barcode, ats);
         }
         
-        nd.registerHit(meanId, maxId);
+        ats.registerNodeData(taxon, meanId, maxId);        
     }
     
-    public TaxonomyNodeData getNodeData(long taxon) {
+    public TaxonomyNodeData getNodeData(int barcode, long taxon) {
         TaxonomyNodeData tnd = null;
-                
-        if (nodeData.containsKey(taxon)) {
-            tnd = nodeData.get(taxon);
-        }
-        
+        AssignedTaxonomyStats ats;
+        if (assignedTaxonomyStats.containsKey(barcode)) {
+            ats = assignedTaxonomyStats.get(barcode);
+            tnd = ats.getNodeData(taxon);
+        }               
         return tnd;
     }
 }

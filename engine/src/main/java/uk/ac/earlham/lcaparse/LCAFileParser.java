@@ -71,6 +71,9 @@ public class LCAFileParser {
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAB) || 
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAXON))
         {
+            // RML 8 Feb 24
+            // Weord that this is passing through runningCARD for the last parameter.
+            // However, have made this option redundnant now.
             hit = new BlastHit(t, atc, line, options.getFileFormat(), true, runningCARD);
         } else {
             System.out.println("Error in crerateNewHit - unexpected format\n");
@@ -197,12 +200,12 @@ public class LCAFileParser {
         return idsToRemove;
     }
     
-    public void registerTaxonomyData() {
+    public void registerTaxonomyData(int barcode) {
         Set<String> keys = hitsByQuery.keySet();
         ArrayList<String> idsToRemove = new ArrayList<String>();
         for (String queryName : keys) {
             LCAHitSet hs = hitsByQuery.get(queryName);
-            taxonomy.registerNodeData(hs.getAssignedTaxon(), hs.getMeanIdentity(), hs.getBestIdentity());
+            taxonomy.registerNodeData(barcode, hs.getAssignedTaxon(), hs.getMeanIdentity(), hs.getBestIdentity());
         }
     }
         

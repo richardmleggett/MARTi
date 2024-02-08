@@ -47,11 +47,11 @@ public class BlastHit implements LCAHit,Comparable {
         parseTaxon = parse;
                 
         if (format == LCAParseOptions.FORMAT_NANOOK) {
-            if(formatHasStitle) {
-                parseNanoOKWithStitle(fields);
-            } else {
+            //if(formatHasStitle) {
+            //    parseNanoOKWithStitle(fields);
+            //} else {
                 parseNanoOK(fields);
-            }
+            //}
         } else if ((format == LCAParseOptions.FORMAT_BLASTTAB) ||
                    (format == LCAParseOptions.FORMAT_BLASTTAXON)) {
             parseBlastTab(fields);
@@ -63,7 +63,8 @@ public class BlastHit implements LCAHit,Comparable {
             cacheTaxonIdPath();
         }        
     }
-        
+            
+    // This method now redundant and merged into next one
     private void parseNanoOKWithStitle(String[] fields ) {
         // NanoOK14: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle staxids"
         // NanoOK15: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids"
@@ -105,16 +106,20 @@ public class BlastHit implements LCAHit,Comparable {
             
             validAlignment = true;
         } else {
-            System.out.println("Error: input format doesn't seem to be NanoOK");
+            System.out.println("Error: input format doesn't seem to be NanoOK (with)");
+            System.out.println("Field length was "+fields.length);
             System.exit(1);
         }
     }
     
     private void parseNanoOK(String[] fields ) {
-        // NanoOK13: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids"
-        // NanoOK14: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs staxids"
-
-        if ((fields.length == 13) || (fields.length == 14)) {        
+        // NanoOK13 : "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids"
+        // NanoOK14a: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs staxids" CURRENT
+        // NanoOK14b: "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle staxids"
+        // NanoOK15 : "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle qcovs staxids"
+        
+        
+        if ((fields.length >= 13) || (fields.length <= 15)) {        
             queryName = fields[0];
             targetName = fields[1];
             identity = Double.parseDouble(fields[2]);
@@ -138,15 +143,36 @@ public class BlastHit implements LCAHit,Comparable {
                     taxonId = -2;
                 }
             } else if (fields.length == 14) {
-                queryCoverage = Double.parseDouble(fields[12]);
+                // Two scenarios:
+                // 13th field is numerical (in which case qcovs)
+                // Else alphabetical (in which case stitle)
+                // Else ignore
+                if (Character.isDigit(fields[12].charAt(0))) {
+                    queryCoverage = Double.parseDouble(fields[12]);
+                } else if (Character.isAlphabetic(fields[12].charAt(0))) {
+                    stitle = fields[12];
+                }                
+                //queryCoverage = Double.parseDouble(fields[12]);
+                
+                // Taxa string
                 String taxaString = fields[13];
                 String[] taxa = taxaString.split(";");
                 taxonId = Integer.parseInt(taxa[0]);
+            } else if (fields.length == 15) {
+                queryCoverage = Double.parseDouble(fields[13]);
+                String taxaString = fields[14];
+                String[] taxa = taxaString.split(";");
+                try {
+                    taxonId = Integer.parseInt(taxa[0]);
+                } catch (NumberFormatException e) {                    
+                    taxonId = -2;
+                }
             }
             
             validAlignment = true;
         } else {
             System.out.println("Error: input format doesn't seem to be NanoOK");
+            System.out.println("Field length was "+fields.length);
             System.exit(1);
         }
     }

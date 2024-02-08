@@ -267,7 +267,7 @@ public class ReadClassifier {
                                 int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
 
                                 // Register mean identity etc.
-                                pfp.registerTaxonomyData();
+                                pfp.registerTaxonomyData(barcode);
                                 
                                 // Write files for min support 0, 0.1, 1 and 2
                                 startTime = System.nanoTime();

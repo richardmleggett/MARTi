@@ -2,7 +2,7 @@
 ${licenseFirst}
 </#if>
 ${licensePrefix}Author: Richard M. Leggett
-${licensePrefix}© Copyright 2021-22 Earlham Institute
+${licensePrefix}© Copyright 2021-24 Earlham Institute
 <#if licenseLast??>
 ${licenseLast}
 </#if>
