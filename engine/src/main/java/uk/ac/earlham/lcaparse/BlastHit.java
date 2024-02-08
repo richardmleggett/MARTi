@@ -159,6 +159,7 @@ public class BlastHit implements LCAHit,Comparable {
                 String[] taxa = taxaString.split(";");
                 taxonId = Integer.parseInt(taxa[0]);
             } else if (fields.length == 15) {
+                stitle = fields[12];
                 queryCoverage = Double.parseDouble(fields[13]);
                 String taxaString = fields[14];
                 String[] taxa = taxaString.split(";");
