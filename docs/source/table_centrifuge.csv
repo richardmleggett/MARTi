@@ -5,3 +5,4 @@ UseToClassify	n/a	Use Centrifuge results for classification (can only be set for
 CentrifugeThreads 	4	Number of threads to use when running Centrifuge. Note: for SLURM scheduler, MARTi also uses this value for the SLURM --cpus-per-task option.
 Memory	16G	For SLURM scheduler, the memory to use per Centrifuge job. Passed with the SLURM --mem parameter.
 Queue	ei-medium	The job submission queue to use. Can be left out and the default queue (see above) will be used. Currently only required for SLURM and equates to the partition name.
+MinHitLen	500	This value is passed to the Centrifuge option --min-hitlen for this process.
