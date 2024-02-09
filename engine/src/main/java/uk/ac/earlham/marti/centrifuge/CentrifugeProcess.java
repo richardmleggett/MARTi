@@ -58,6 +58,8 @@ public class CentrifugeProcess {
                                 numThreads = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareTo("UseToClassify") == 0) {
                                 classifyThis = true;
+                            } else if (tokens[0].compareToIgnoreCase("MinHitLen") == 0) {
+                                minHitLen = Integer.parseInt(tokens[1]);
                             } else {
                                 keepReading = false;
                             }
