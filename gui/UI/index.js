@@ -62,7 +62,7 @@ try {
             }
             currentProcess[key] = value;
           }
-        } else if ((line.search("BlastProcess") != -1) || (line.search("CentrifugeProcess") != -1) || (line.search("Kraken2Process")) {
+        } else if ((line.search("BlastProcess") != -1) || (line.search("CentrifugeProcess") != -1) || (line.search("Kraken2Process"))) {
           newProcess = true;
           processFound = true;
           processType = line.split("Process")[0]
