@@ -1460,7 +1460,7 @@ public class MARTiEngineOptions implements Serializable {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String version = br.readLine().split(":")[1];     
-            return version;          
+            return version.strip();          
         } catch(IOException e) {
             return "Unknown";
         }
