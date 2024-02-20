@@ -100,8 +100,11 @@ Then install the GUI server dependencies by running the following command from i
 
 ``npm install``
 
-To start the GUI server, type
+To start the GUI server, type:
 
+``marti_gui``
+
+Or, if you want to specify an alternative engine options file:
 ``marti_gui --options [/path/to/marti_engine_options.txt]``
 
 The following parameters are specific to the GUI:
