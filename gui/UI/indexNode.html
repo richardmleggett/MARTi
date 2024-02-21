@@ -302,7 +302,7 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Dashboard Modal -->
+  <!-- Options Modal -->
   <div class="modal" id="optionsModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -426,6 +426,28 @@
 </div>
 </div>
 
+
+<!-- Portrait Modal -->
+<div class="modal" id="portraitModal" tabindex="-1" role="dialog">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Portrait detected!</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>MARTi works best in landscape. Please rotate your device.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
 </body>
 
 
@@ -439,6 +461,24 @@
 
 
 $(document).ready(function () {
+
+  function detectOrientation(mediaQueryList) {
+      if (mediaQueryList.matches) {
+          console.log("Landscape orientation");
+      } else {
+          console.log("Portrait orientation");
+          $('#portraitModal').modal('show')
+      }
+  }
+
+  const mediaQuery = window.matchMedia("(orientation: landscape)");
+
+  // Call the function initially
+  detectOrientation(mediaQuery);
+
+  // Listen for orientation changes
+  mediaQuery.addListener(detectOrientation);
+
     $("h1#pageTitle").text("Samples");
     activeSidebarIcon($("#samples-item"));
     currentPage = "Samples";

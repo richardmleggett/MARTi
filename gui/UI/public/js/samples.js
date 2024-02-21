@@ -426,3 +426,128 @@ function prepareSampleInfoModal(data){
 
 
 }
+
+
+
+
+function postToGrassroots(){
+  const grassrootsUrl = 'https://grassroots.tools/beta/grassroots/public_backend';
+
+  for (var sampleData of selectedCompareMetaDataArray){
+    if (sampleData.hasOwnProperty("metadatafile")){
+      var missingFields = [];
+      var sampleName = sampleData.id;
+      var sampleUuid = sampleData.uuid;
+      var siteName = "";
+      if (sampleData.metadatafile.hasOwnProperty("locationName")) {
+        siteName = sampleData.metadatafile.locationName;
+      } else {
+        missingFields.push("site name");
+      }
+      var keywords = "";
+      if (sampleData.metadatafile.hasOwnProperty("keywords")) {
+        keywords = sampleData.metadatafile.keywords;
+        keywords = keywords.replace(/,\s+/g, ',');
+      }
+      var latitude = 0.0;
+      var longitude = 0.0;
+      if (sampleData.metadatafile.hasOwnProperty("location")) {
+        const [lat, lon] = sampleData.metadatafile.location.split(',');
+        latitude = parseFloat(lat);
+        longitude = parseFloat(lon);
+      } else {
+        missingFields.push("location");
+      }
+      var date = "";
+      if (sampleData.metadatafile.hasOwnProperty("sampleDate")) {
+        date = sampleData.metadatafile.sampleDate;
+      } else {
+        missingFields.push("date");
+      }
+      var time = "12:00:00"
+      if (sampleData.metadatafile.hasOwnProperty("sampleTime")) {
+        time = sampleData.metadatafile.sampleTime;
+      } else {
+        missingFields.push("time");
+      }
+
+      var dateTime = date + "T" + time;
+      var postTemplate = {
+        "services": [
+            {
+                "so:name": "MARTi submission service",
+                "start_service": true,
+                "parameter_set": {
+                    "level": "simple",
+                    "parameters": [
+                        {
+                            "param": "Sample Name",
+                            "current_value": sampleName
+                        },
+                        {
+                            "param": "MARTi Id",
+                            "current_value": sampleUuid
+                        },
+                        {
+                            "param": "Site Name",
+                            "current_value": siteName
+                        },
+                        {
+                            "param": "Description",
+                            "current_value": keywords
+                        },
+                        {
+                            "param": "Latitude",
+                            "current_value": latitude
+                        },
+                        {
+                            "param": "Longitude",
+                            "current_value": longitude
+                        },
+                        {
+                            "param": "Date",
+                            "current_value": dateTime
+                        }
+                    ]
+                }
+            }
+        ]
+      }
+
+      if(missingFields.length > 0) {
+          console.log(sampleData.id + " not posted. Missing field(s):", missingFields.join(", "))
+      } else {
+
+        console.log("Posting " + sampleData.id + "...")
+        // console.log(JSON.stringify(postTemplate))
+
+        fetch(grassrootsUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if required by the API
+            },
+            body: JSON.stringify(postTemplate)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse the JSON response
+        })
+        .then(data => {
+            console.log('Response from API:', data);
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+
+      }
+
+
+    } else {
+      console.log(sampleData.id + " not posted. No metadata found.")
+    }
+  }
+
+}
