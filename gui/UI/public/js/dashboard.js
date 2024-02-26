@@ -14,6 +14,7 @@ function initialiseDashboardPage() {
       ],
       "columnDefs": [
         // { "targets": [0,1,2,3,4], "className": "dt-center"},
+        { "targets": [2], "className": 'text-nowrap' },
         { "targets": [1,3,4,5], "className": "dt-right"},
         { "targets": [0,2], "className": "dt-left"}
           // {

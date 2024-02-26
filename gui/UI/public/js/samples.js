@@ -518,29 +518,35 @@ function postToGrassroots(){
           console.log(sampleData.id + " not posted. Missing field(s):", missingFields.join(", "))
       } else {
 
-        console.log("Posting " + sampleData.id + "...")
+        // console.log("Posting " + sampleData.id + "...")
         // console.log(JSON.stringify(postTemplate))
 
-        fetch(grassrootsUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any additional headers if required by the API
-            },
-            body: JSON.stringify(postTemplate)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Parse the JSON response
-        })
-        .then(data => {
-            console.log('Response from API:', data);
-        })
-        .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
+        socket.emit('post-to-grassroots-request',{
+          clientId: uuid,
+          sample:sampleData.id,
+          body: JSON.stringify(postTemplate)
         });
+
+        // fetch(grassrootsUrl, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         // Add any additional headers if required by the API
+        //     },
+        //     body: JSON.stringify(postTemplate)
+        // })
+        // .then(response => {
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     return response.json(); // Parse the JSON response
+        // })
+        // .then(data => {
+        //     console.log('Response from API:', data);
+        // })
+        // .catch(error => {
+        //     console.error('There was a problem with your fetch operation:', error);
+        // });
 
       }
 

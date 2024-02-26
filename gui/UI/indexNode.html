@@ -464,14 +464,15 @@ $(document).ready(function () {
 
   function detectOrientation(mediaQueryList) {
       if (mediaQueryList.matches) {
-          console.log("Landscape orientation");
+          console.log("Show portrait orientation warning");
+          $('#portraitModal').modal('show');
       } else {
-          console.log("Portrait orientation");
-          $('#portraitModal').modal('show')
+          console.log("Hide portrait orientation warning");
+          $('#portraitModal').modal('hide');
       }
   }
 
-  const mediaQuery = window.matchMedia("(orientation: landscape)");
+  const mediaQuery = window.matchMedia("(orientation: portrait) and (max-width: 600px)");
 
   // Call the function initially
   detectOrientation(mediaQuery);

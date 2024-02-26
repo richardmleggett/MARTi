@@ -61,6 +61,12 @@ function initialiseCompareTree() {
 
   compareTreeValueScale = "linear";
 
+  d3.selectAll("input[name='compareTreeType']").on("change", function(){
+    compareTreeType = this.value;
+    plotCompareTree(newCompareTree);
+  });
+
+  compareTreeType = "tree";
 
   d3.selectAll("input[name='compareTreeHorizontalPath']").on("input", function() {
     ctHorizontalPath = parseInt(this.value);
@@ -135,7 +141,8 @@ var ctHorizontalSeparation;
 var ctHorizontalPath,
 ctSiblingSeparation,
 ctCousinSeparation,
-compareTreeValueScale;
+compareTreeValueScale,
+compareTreeType;
 
 var ctCard = false;
 
@@ -356,16 +363,42 @@ var tempHeight = highestDepthValue * 110;
   };
 
 
+  var tree, nodes, links;
 
-    var tree = d3.layout.tree()
-        .nodeSize([ctVerticalSeparation, ctHorizontalSeparation])
-        .separation(function separation(a, b) {
-        return a.parent == b.parent ? ctSiblingSeparation : ctCousinSeparation;
-      });
+  if (compareTreeType == "tree") {
+
+    tree = d3.layout.tree()
+      .nodeSize([ctVerticalSeparation, ctHorizontalSeparation])
+      .separation(function separation(a, b) {
+      return a.parent == b.parent ? ctSiblingSeparation : ctCousinSeparation;
+    });
+
+    nodes = tree.nodes(newCompareTree).reverse();
+  	links = tree.links(nodes);
+  }
+  else {
+
+    tree = d3.layout.cluster()
+    .nodeSize([ctVerticalSeparation, ctHorizontalSeparation])
+    .separation(function separation(a, b) {
+    return a.parent == b.parent ? ctSiblingSeparation : ctCousinSeparation;
+  });
 
 
-    var nodes = tree.nodes(newCompareTree).reverse();
-  	var links = tree.links(nodes);
+    nodes = tree.nodes(newCompareTree).reverse();
+    links = tree.links(nodes);
+  }
+
+
+    // var tree = d3.layout.tree()
+    //     .nodeSize([ctVerticalSeparation, ctHorizontalSeparation])
+    //     .separation(function separation(a, b) {
+    //     return a.parent == b.parent ? ctSiblingSeparation : ctCousinSeparation;
+    //   });
+    //
+    //
+    // var nodes = tree.nodes(newCompareTree).reverse();
+  	// var links = tree.links(nodes);
 
 
 
