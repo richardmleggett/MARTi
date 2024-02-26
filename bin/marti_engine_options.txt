@@ -43,8 +43,15 @@ BlastProcess
     MaxTargetSeqs:100
     BlastThreads:2
 
+Kraken2Process
+      Name:pluspf-8
+      Database:/Users/leggettr/Documents/Databases/kraken2/k2_pluspf_08gb_20230314_db/
+      Kraken2Threads:4
+      UseToClassify
+
 CentrifugeProcess
-    Name:ref_prok
-    Database:/Users/leggettr/Documents/Databases/centrifuge/p_2018_4_15/p_compressed
-    CentrifugeThreads:1
-    UseToClassify
+      Name:metagenomic
+      Database:/Users/leggettr/Documents/Databases/centrifuge/202311_meta/
+      CentrifugeThreads:4
+      MinHitLen:25
+      UseToClassify
