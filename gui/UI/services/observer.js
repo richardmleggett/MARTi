@@ -44,7 +44,7 @@ class Observer extends EventEmitter {
         }
 
 
-      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
+      var watcher = chokidar.watch(filesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 5000 }});
 
       watcher.on('add', async filePath => {
         if (filePath.includes('sample.json')) {
@@ -343,7 +343,7 @@ class Observer extends EventEmitter {
         }
       });
 
-      var idFileWatcher = chokidar.watch(idFilesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 100 }});
+      var idFileWatcher = chokidar.watch(idFilesToWatch, { persistent: true, usePolling: true, atomic: true, awaitWriteFinish: {stabilityThreshold: 1000, pollInterval: 5000 }});
 
       idFileWatcher.on('add', async filePath => {
 
