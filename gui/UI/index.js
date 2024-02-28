@@ -4,6 +4,7 @@ var app = express();
 const { v4: uuidv4 } = require('uuid');
 const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
+const https = require('https');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -817,6 +818,54 @@ io.on('connect', function(socket){
         });
 
       }
+
+  })
+
+  socket.on('post-to-grassroots-request', request => {
+
+    console.log("Posting " + request.sample + "...")
+    const grassrootsUrl = 'https://grassroots.tools/beta/grassroots/public_backend';
+
+    const bodyString = request.body;
+    console.log(bodyString);
+
+    const options = {
+      hostname: 'grassroots.tools',
+      port: 443,
+      path: '/beta/grassroots/private_backend',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        // Add any additional headers if required
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      console.log(`Status: ${res.statusCode}`);
+      console.log(`Headers: ${JSON.stringify(res.headers)}`);
+
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      res.on('end', () => {
+        try {
+          const responseData = JSON.parse(data);
+          console.log('Response from API:', responseData);
+        } catch (error) {
+          console.error('Error parsing response:', error);
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      console.error('Error making request:', error);
+    });
+
+    req.write(bodyString);
+    req.end();
+
 
   })
 

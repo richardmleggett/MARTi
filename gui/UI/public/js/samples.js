@@ -481,7 +481,7 @@ function postToGrassroots(){
                     "level": "simple",
                     "parameters": [
                         {
-                            "param": "Sample Name",
+                            "param": "Name",
                             "current_value": sampleName
                         },
                         {
@@ -505,7 +505,7 @@ function postToGrassroots(){
                             "current_value": longitude
                         },
                         {
-                            "param": "Date",
+                            "param": "Start Date",
                             "current_value": dateTime
                         }
                     ]
