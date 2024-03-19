@@ -206,7 +206,6 @@ function initialiseNewPage() {
             var form = $(this);
             var url = form.attr('action');
 
-
             $.ajax({
                 type: "POST",
                 url: url,
@@ -251,9 +250,28 @@ function initialiseNewPage() {
     });
 
     $('#downloadConfigButton').on("click touchstart", function() {
-      console.log("pressed")
-      var form = $(this);
-      console.log(form.serialize())
+      var form = $("#newForm").serializeArray();
+      var jsonForm = {};
+      var arrayFields = ["barcodeCheck","barcodeName","analysisCheck","analysisName"];
+      for (var field of form) {
+            if(arrayFields.includes(field.name)) {
+              if (jsonForm.hasOwnProperty(field.name)) {
+                jsonForm[field.name].push(field.value);
+              } else {
+                jsonForm[field.name] = [field.value];
+              }
+            } else {
+              jsonForm[field.name] = field.value;
+            }
+      }
+      var configString = makeConfigFileString(jsonForm);
+
+      // Create a Blob with the text content
+      const blob = new Blob([configString], { type: "text/plain;charset=utf-8" });
+      var date = getDate() + "_" + getTime();
+      // Save the Blob as a text file
+      saveAs(blob, jsonForm.martiName + "_" + date + "_config.txt");
+
     });
 
 
@@ -410,7 +428,7 @@ function makeConfigFileString(form_object) {
   configFileString += "LocalSchedulerMaxJobs:" + form_object["maxJobs"] + "\n";
   configFileString += "InactivityTimeout:" + form_object["inactivityTimeout"] + "\n";
   configFileString += "StopProcessingAfter:" + form_object["stopProcessingAfter"] + "\n";
-  configFileString += "TaxonomyDir:" + serverOptions["TaxonomyDir"] + "\n";
+  configFileString += "TaxonomyDir:" + options["TaxonomyDir"] + "\n";
   configFileString += "LCAMaxHits:" + form_object["maxHits"] + "\n";
   configFileString += "LCAScorePercent:" + form_object["scorePercent"] + "\n";
   configFileString += "LCAMinIdentity:" + form_object["minimumIdentity"] + "\n";

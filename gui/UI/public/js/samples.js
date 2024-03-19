@@ -129,24 +129,26 @@ function initialiseExportCard(){
 
       $('#sampleExportButton').on("click touchstart", function() {
 
-        exportCardObject = {};
+        if (selectedCompareMetaDataArray.length == 0){
+            $('#exportModal').modal('show');
+        } else {
+          exportCardObject = {};
 
-        exportCardObject.lca = $('input[type="radio"][name="exportLcaCutoffToggle"]:checked').val();
-        exportCardObject.rankName = $('select[name="exportTaxRank"] option:selected').text();
-        exportCardObject.rankNum = getValueCaseInsensitive(taxonomicLevelDict, exportCardObject.rankName);
-        exportCardObject.columns = {};
-        $("input:checkbox.export-col:checked").each(function() {
-          exportCardObject.columns[$(this).data("value")] = {
-            header:$(this).data("header")
-          }
-        });
-        exportCardObject.delimiterName = $('input[type="radio"][name="exportDelimiterToggle"]:checked').val();
-        exportCardObject.delimiter = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("delimiter");
-        exportCardObject.extension = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("extension");
+          exportCardObject.lca = $('input[type="radio"][name="exportLcaCutoffToggle"]:checked').val();
+          exportCardObject.rankName = $('select[name="exportTaxRank"] option:selected').text();
+          exportCardObject.rankNum = getValueCaseInsensitive(taxonomicLevelDict, exportCardObject.rankName);
+          exportCardObject.columns = {};
+          $("input:checkbox.export-col:checked").each(function() {
+            exportCardObject.columns[$(this).data("value")] = {
+              header:$(this).data("header")
+            }
+          });
+          exportCardObject.delimiterName = $('input[type="radio"][name="exportDelimiterToggle"]:checked').val();
+          exportCardObject.delimiter = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("delimiter");
+          exportCardObject.extension = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("extension");
 
-        console.log(exportCardObject);
-
-        requestExportData(exportCardObject.lca);
+          requestExportData(exportCardObject.lca);
+        }
       });
 
 

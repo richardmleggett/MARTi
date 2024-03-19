@@ -1017,8 +1017,6 @@ function makeAssignmentExportData(compareSampleData) {
                 thisSampleTreeSorted.push(unclassifiedNode);
             }
 
-            console.log(thisSampleTreeSorted);
-
               for (const [i,taxa] of thisSampleTreeSorted.entries()) {
 
                 if (!assignmentExportData.hasOwnProperty(taxa.ncbiID)){
@@ -1542,11 +1540,9 @@ function convertDataForExport(data,prefix,orderArray,options) {
   var abundanceLevel = prefix;
   var header = [];
   var excludedKeys = ["readCount","summedCount","meanIdentity","meanMaxIdentity"];
-  console.log(data)
 
   for (const [key, value] of Object.entries(options.columns)) {
     if (!excludedKeys.includes(key)){
-      console.log(key);
       header.push(value.header);
     }
   }
