@@ -103,10 +103,54 @@ $("#sampleDataSampleName").on('input', function(){
 
 });
 
-
+initialiseExportCard();
 
 };
 
+var exportCardObject = {};
+
+function initialiseExportCard(){
+
+
+  var taxRankArray = ["All levels","Domain","Phylum","Class","Order","Family","Genus","Species"];
+  // var defaultMaxJobs = 4;
+
+  var taxRankOptions = d3.select("select[name='exportTaxRank']").selectAll("option")
+      .data(taxRankArray);
+
+  taxRankOptions.enter()
+      .append("option")
+      .text(function(d) {
+          return d;
+      });
+
+  taxRankOptions.exit()
+      .remove();
+
+      $('#sampleExportButton').on("click touchstart", function() {
+
+        exportCardObject = {};
+
+        exportCardObject.lca = $('input[type="radio"][name="exportLcaCutoffToggle"]:checked').val();
+        exportCardObject.rankName = $('select[name="exportTaxRank"] option:selected').text();
+        exportCardObject.rankNum = getValueCaseInsensitive(taxonomicLevelDict, exportCardObject.rankName);
+        exportCardObject.columns = {};
+        $("input:checkbox.export-col:checked").each(function() {
+          exportCardObject.columns[$(this).data("value")] = {
+            header:$(this).data("header")
+          }
+        });
+        exportCardObject.delimiterName = $('input[type="radio"][name="exportDelimiterToggle"]:checked').val();
+        exportCardObject.delimiter = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("delimiter");
+        exportCardObject.extension = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("extension");
+
+        console.log(exportCardObject);
+
+        requestExportData(exportCardObject.lca);
+      });
+
+
+};
 
 var selectedCompareMetaDataArray = [];
 var sampleMetaDataArray = [];
@@ -255,6 +299,16 @@ function emitSelectedCompareSamples() {
     clientId: uuid,
     data: selectedSamplesData
   });
+}
+
+function requestExportData(lca) {
+
+  socket.emit('compare-tree-request',{
+    clientId: uuid,
+    lca: "lca_"+lca
+  });
+
+
 }
 
 
@@ -431,8 +485,6 @@ function prepareSampleInfoModal(data){
 
 
 function postToGrassroots(){
-  const grassrootsUrl = 'https://grassroots.tools/beta/grassroots/public_backend';
-
   for (var sampleData of selectedCompareMetaDataArray){
     if (sampleData.hasOwnProperty("metadatafile")){
       var missingFields = [];
@@ -517,40 +569,13 @@ function postToGrassroots(){
       if(missingFields.length > 0) {
           console.log(sampleData.id + " not posted. Missing field(s):", missingFields.join(", "))
       } else {
-
-        // console.log("Posting " + sampleData.id + "...")
-        // console.log(JSON.stringify(postTemplate))
-
         socket.emit('post-to-grassroots-request',{
           clientId: uuid,
           sample:sampleData.id,
           body: JSON.stringify(postTemplate)
         });
 
-        // fetch(grassrootsUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         // Add any additional headers if required by the API
-        //     },
-        //     body: JSON.stringify(postTemplate)
-        // })
-        // .then(response => {
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     return response.json(); // Parse the JSON response
-        // })
-        // .then(data => {
-        //     console.log('Response from API:', data);
-        // })
-        // .catch(error => {
-        //     console.error('There was a problem with your fetch operation:', error);
-        // });
-
       }
-
-
     } else {
       console.log(sampleData.id + " not posted. No metadata found.")
     }

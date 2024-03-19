@@ -1,5 +1,5 @@
 
-var radius, pie, arc, outerArc, key, dashboardTaxaDonutUnclassified;
+var radius, pie, arc, outerArc, key, dashboardTaxaDonutUnclassified, dashboardTaxaDonutHigherTaxaNode;
 
 function initialiseDashboardDonut() {
 
@@ -39,7 +39,8 @@ key = function(d) {
     dashboardTaxaDonutTopN = 10;
 
     d3.selectAll("input[name='dashboardTaxaDonutTopN']").on("change", function(){
-      donutUpdate(returnTopTaxa(donutNodes));
+      // donutUpdate(returnTopTaxa(donutNodes));
+      globUpdate(globDonutData);
     });
 
     d3.selectAll("input[name='dashboardTaxaDonutTopN']").on("input", function(){
@@ -55,7 +56,13 @@ key = function(d) {
         globUpdate(globDonutData);
       });
 
+      d3.selectAll("input[name='dashboardTaxaDonutHigherTaxaNode']").on("change", function() {
+        dashboardTaxaDonutHigherTaxaNode = this.value;
+        globUpdate(globDonutData);
+      });
+
       dashboardTaxaDonutUnclassified = "show";
+      dashboardTaxaDonutHigherTaxaNode = "show";
 
 };
 
@@ -138,7 +145,10 @@ function returnTopTaxa(data) {
               ncbiID: ncbiID(v),
               donutValue: d3.sum(v, function(d) {
                 return d.donutValue;
-            })
+              }),
+              percOfRootTotal: d3.sum(v, function(d) {
+                return d.percOfRootTotal;
+              })
           }
         })
         .entries(sorted)
@@ -147,7 +157,8 @@ function returnTopTaxa(data) {
                 label: g.values.thresholdName,
                 value: g.values.donutValue,
                 ncbiRank: g.values.ncbiRank,
-                ncbiID: g.values.ncbiID
+                ncbiID: g.values.ncbiID,
+                percOfRootTotal: g.values.percOfRootTotal
             }
         })
         .sort(function(a, b) {
@@ -257,7 +268,10 @@ function donutUpdate(data) {
             toolTipDiv.style("opacity", .95)
                 .html("<h5 class='mb-0'>" + d.data.label + "</h5><small class='text-gray-800'>" + d.data.ncbiRank +
                 "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.value) +
-                "<br/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + " %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
+                // "<br/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + " %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
+                "<br/>Donut %: " + Math.round(((d.value / dataSum) * 10000)) / 100 +
+                "<br/>% of analysed: " + Math.round(d.data.percOfRootTotal * 100)/100)
+
                 .style("left", (tooltipPos(d3.event.pageX)) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
         });

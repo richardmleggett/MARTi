@@ -31,6 +31,17 @@ function thousandsSeparators(num) {
   return num_parts.join(".");
 };
 
+function getValueCaseInsensitive(obj, inputKey) {
+    const normalizedInputKey = inputKey.toLowerCase(); // Normalize the input key
+    const matchingKey = Object.keys(obj).find(key => key.toLowerCase() === normalizedInputKey);
+
+    if (matchingKey !== undefined) {
+        return obj[matchingKey]; // Return the value associated with the matching key
+    } else {
+        return undefined; // Key not found
+    }
+}
+
 function totalYieldFormatter(num) {
     if (num >= 1000000000) {
       return (num / 1000000000).toFixed(2) + " Gbp";
@@ -42,6 +53,11 @@ function totalYieldFormatter(num) {
       return num + " bp";
     }
 };
+
+function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
 function lcaFormat(lca){
   var output;

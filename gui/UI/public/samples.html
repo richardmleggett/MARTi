@@ -4,7 +4,6 @@
 
 
 <div class="card shadow mb-4">
-
   <div class="card-body text-center text-primary">
     <div class="marti-logo-full mb-4"></div>
     <p class="card-text mb-3">To get MARTi, see <a class="visibleUrl" href="https://marti.readthedocs.io/" target="_blank">Documentation</a></p>
@@ -12,11 +11,113 @@
     <p class="card-text mb-0">Click the <i class="fas fa-tachometer-alt"></i> icon next to the sample you wish to load into Dashboard mode.</p>
     <p class="card-text mt-3 mb-0"><b>Compare</b> - Comparison plots for real-time and previously analysed samples.</p>
     <p class="card-text mb-0">To access Compare mode, select at least one sample using the <i class="far fa-check-square"></i> below. </p>
+  </div>
+</div>
 
 
+
+<!-- Export card-->
+<div class="card shadow mb-4" id="sampleExportCard">
+<div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseSampleExport" aria-expanded="false" data-toggle="collapse" role="button"">
+<h6 class="m-0 font-weight-bold text-primary">Export data</h6>
+
+</div>
+
+  <div class="card-body-custom p-4 collapse" id="collapseSampleExport"">
+
+
+    <div class="form-group row">
+      <div class="col-sm-3 col-form-label">
+        <label for="exportLcaCutoff">LCA minimum abundance cutoff:</label>
+        <!-- <i class="fas fa-info-circle" data-tooltip="LCA minimum abundance cutoff."></i> -->
+      </div>
+
+      <div class="col-auto col-form-label" name="exportLcaCutoff">
+        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="0.0" >  0%</label>
+        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="0.1" checked>  0.1%</label>
+        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="1.0" >  1%</label>
+        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="2.0" >  2%</label>
+      </div>
+    </div>
+
+
+
+    <div class="form-group row">
+      <div class="col-sm-3 col-form-label">
+        <label for="exportTaxRank">Taxonomic rank:</label>
+        <!-- <i class="fas fa-info-circle" data-tooltip="Specifies the taxonomic rank to export."></i> -->
+      </div>
+
+      <div class="col-auto">
+        <select class="form-control" name="exportTaxRank">
+
+        </select>
+      </div>
+    </div>
+
+
+  <div class="form-group row">
+
+    <div class="col-sm-3 col-form-label">
+      <label for="exportColumns">Columns:</label>
+      <!-- <i class="fas fa-info-circle" data-tooltip="Select columns to export."></i> -->
+    </div>
+
+    <div class="col-auto col-form-label">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="name" data-header="Name" checked>
+      <label class="form-check-label" for="exportColCheckbox1">Name</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="ncbiId" data-header="NCBI ID" checked>
+      <label class="form-check-label" for="exportColCheckbox2">NCBI ID</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="ncbiRank" data-header="NCBI Rank" checked>
+      <label class="form-check-label" for="exportColCheckbox3">Rank</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="readCount" data-header="Read count" checked>
+      <label class="form-check-label" for="exportColCheckbox4">Read count</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="summedCount" data-header="Summed count" checked>
+      <label class="form-check-label" for="exportColCheckbox5">Summed read count</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="meanIdentity" data-header="Mean identity">
+      <label class="form-check-label" for="exportColCheckbox5">Mean identity</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="meanMaxIdentity" data-header="Mean max identity">
+      <label class="form-check-label" for="exportColCheckbox5">Mean max identity</label>
+    </div>
+  </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-3 col-form-label">
+      <label for="exportDelimiter">Field separator:</label>
+      <!-- <i class="fas fa-info-circle" data-tooltip="LCA minimum abundance cutoff."></i> -->
+    </div>
+
+    <div class="col-auto col-form-label" name="exportDelimiter">
+      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter="," data-extension="csv" value="comma" checked>  Comma</label>
+      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter="\t" data-extension="tsv" value="tab" >  Tab</label>
+      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=":" data-extension="txt" value="colon" >  Colon</label>
+      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=";" data-extension="txt" value="semicolon" >  Semicolon</label>
+      <!-- <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=" " data-extension="txt" value="space" >  Space</label> -->
+    </div>
+  </div>
+
+  <input class="btn btn-primary mb-1" id="sampleExportButton" type="button" value="Export">
 
   </div>
 </div>
+
+
+
+
 
             <div class="card shadow mb-4">
               <div class="card-header d-flex flex-row align-items-center justify-content-between">
@@ -130,42 +231,6 @@
 
                     <dt class="col-sm-6">Pipeline:</dt>
                     <dd class="col-sm-6" id="sampleDataAnalysisPipeline">BlastLCA</dd>
-
-                    <!-- <div class="col-12 sampleDataHeader"><h5 class="text-dark">Classification</h5></div>
-
-                    <dt class="col-sm-6">Algorithm:</dt>
-                    <dd class="col-sm-6" id="sampleDataClassificationAlgorithm">Blast</dd>
-
-                    <dt class="col-sm-6">Blast version:</dt>
-                    <dd class="col-sm-6" id="sampleDataClassificationAlgorithmVersion">0.0.0</dd>
-
-                    <dt class="col-sm-6">Database:</dt>
-                    <dd class="col-sm-6" id="sampleDataClassificationDatabase">database_name</dd>
-
-                    <dt class="col-sm-6">Database version:</dt>
-                    <dd class="col-sm-6" id="sampleDataClassificationDatabaseVersion">0.0.0</dd>
-
-                    <div class="col-12 sampleDataHeader"><h5 class="text-dark">AMR</h5></div>
-
-                    <dt class="col-sm-6">Algorithm:</dt>
-                    <dd class="col-sm-6" id="sampleDataAmrAlgorithm">Blast</dd>
-
-                    <dt class="col-sm-6">Blast version:</dt>
-                    <dd class="col-sm-6" id="sampleDataAmrAlgorithmVersion">0.0.0</dd>
-
-                    <dt class="col-sm-6">Database:</dt>
-                    <dd class="col-sm-6" id="sampleDataAmrDatabase">database_name</dd>
-
-                    <dt class="col-sm-6">Database version:</dt>
-                    <dd class="col-sm-6" id="sampleDataAmrDatabaseVersion">0.0.0</dd> -->
-
-                    <!-- <dt class="col-sm-3">Nesting</dt>
-                    <dd class="col-sm-9">
-                      <dl class="row">
-                        <dt class="col-sm-4">Nested definition list</dt>
-                        <dd class="col-sm-8">Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc.</dd>
-                      </dl>
-                    </dd> -->
                   </dl>
 
                 </div>

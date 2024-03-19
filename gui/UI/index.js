@@ -63,10 +63,10 @@ try {
             }
             currentProcess[key] = value;
           }
-        } else if ((line.search("BlastProcess") != -1) || (line.search("CentrifugeProcess") != -1) || (line.search("Kraken2Process") != -1 )) {
+        } else if (checkForProcessType(line) != "") {
           newProcess = true;
           processFound = true;
-          processType = line.split("Process")[0]
+          processType = checkForProcessType(line);
         } else {
           const fields = line.split(":");
           if(fields[0] == "MARTiSampleDirectory") {
@@ -104,6 +104,20 @@ if(processFound == false) {
     console.log("Warning: Could not find any processes in " + engineOptionsPath);
 }
 } catch (err) {
+}
+
+function checkForProcessType(line) {
+    const searchStrings = ["BlastProcess", "CentrifugeProcess", "Kraken2Process"];
+    const lowerLine = line.toLowerCase();
+
+    var processString = "";
+
+    for (const searchString of searchStrings) {
+        if (lowerLine.includes(searchString.toLowerCase())) {
+            processString = searchString;
+        }
+    }
+    return processString;
 }
 
 function checkIfValidPortnumber(num) {
@@ -144,7 +158,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.19.8";
+const martiGuiVersion = "0.20.0";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);
@@ -824,8 +838,6 @@ io.on('connect', function(socket){
   socket.on('post-to-grassroots-request', request => {
 
     console.log("Posting " + request.sample + "...")
-    const grassrootsUrl = 'https://grassroots.tools/beta/grassroots/public_backend';
-
     const bodyString = request.body;
     console.log(bodyString);
 
