@@ -980,6 +980,7 @@ socket.on('compare-tree-request', request => {
 
     for (var sample of selectedCompareSamples){
       if (sampleAccumulationDict.hasOwnProperty(sample.runId)) {
+        console.log(sample);
         if (sampleAccumulationDict[sample.runId].hasOwnProperty(sample.name)) {
           compareAccumulationData.push({
             id: sample.name,

@@ -113,7 +113,7 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
+          var lca = "lca_" + filePath.split("accumulation_ms")[1].split(".json")[0];
 
           this.emit('accumulation-file-added', {
             id: sampleName,
@@ -247,7 +247,7 @@ class Observer extends EventEmitter {
 
           var runName = split[split.length - 4];
 
-          var lca = "lca_" + filePath.split("ms")[1].split(".json")[0];
+          var lca = "lca_" + filePath.split("accumulation_ms")[1].split(".json")[0];
 
           this.emit('accumulation-file-updated', {
             id: sampleName,
