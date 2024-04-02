@@ -1378,7 +1378,9 @@ function updateAmrPlots(amrData){
 
           var speciesCounts = [];
 
-          for (const [species, counts] of Object.entries(gene.species)) {
+          for (const speciesObject of gene.species) {
+            var species = speciesObject.name;
+            var counts = speciesObject.chunkCounts;
             var speciesCountAtChunk;
             if (counts.hasOwnProperty(highestChunk)) {
               speciesCountAtChunk = counts[highestChunk];
@@ -1393,6 +1395,7 @@ function updateAmrPlots(amrData){
             }
 
               speciesCounts.push(species+" ("+speciesCountAtChunk+")");
+
           }
 
           speciesCounts.sort(function(a, b) {
@@ -1669,6 +1672,8 @@ function generateCompareAmrCsv(data) {
       };
       for (var sample of sortCompareNameArray) {
         if (checkNested(value.values, sample.runId, sample.name)) {
+          console.log(sample);
+          console.log(value["values"][sample.runId][sample.name]);
           keyRow.push((value["values"][sample.runId][sample.name]['species'].join(';')));
         } else {
           keyRow.push('n/a');
