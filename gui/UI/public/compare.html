@@ -704,6 +704,15 @@
             <form class="dropdown-form">
 
               <div class="form-group">
+                <label for="compareAmrHmPlotBy">Plot hits by</label>
+                <select class="form-control" id="compareAmrHmPlotBy">
+                  <option data-value="cardId" selected>Gene</option>
+                  <option data-value="drugClass">Drug class</option>
+                  <option data-value="resMech">Resistance mechanism</option>
+                </select>
+              </div>
+
+              <div class="form-group">
                 <label for="compareAmrHmTopN">Show top <a id="compareAmrHmTopNNum" class="font-weight-bold">N</a> per sample</label>
                 <input type="range" class="form-control-range" id="compareAmrHmTopN" min="1" max="100" value="10">
               </div>

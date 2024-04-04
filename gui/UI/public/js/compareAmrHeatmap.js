@@ -150,9 +150,17 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
     });
 
 
+    d3.select("#compareAmrHmPlotBy").on("change", function(){
+      compareAmrHmPlotBy = $('#compareAmrHmPlotBy option:selected').data("value");
+      updateAmrPlots(rawAmrData);
+    });
+
+
 
 
 };
+
+var compareAmrHmPlotBy = "cardId";
 
 // function convertDataToCSV(data) {
 //   var dataArray = [];
@@ -211,7 +219,6 @@ var marginAmrHm = {top: 30, right: 80, bottom: 30, left: 60},
 
 function plotAmrHm(data,taxa) {
 
-
 for (var [i, sample] of data.entries()){
   sample.index = i;
 };
@@ -235,21 +242,24 @@ yAxisAmrHm = d3.svg.axis()
 var yDomain = [];
 
 
-if (compareAmrHmGenesSnAvailable){
-  for (var id of taxa) {
-    if(id !== "Other") {
-      yDomain.push(compareAmrData[id]["shortName"]);
-    } else {
-      yDomain.push("Other");
-    }
-    // yDomain.push(id);
-  }
-} else {
-  for (var id of taxa) {
-    yDomain.push(id);
-  }
-}
+// if (compareAmrHmGenesSnAvailable){
+//   for (var id of taxa) {
+//     if(id !== "Other") {
+//       yDomain.push(compareAmrData[id]["shortName"]);
+//     } else {
+//       yDomain.push("Other");
+//     }
+//     // yDomain.push(id);
+//   }
+// } else {
+//   for (var id of taxa) {
+//     yDomain.push(id);
+//   }
+// }
 
+for (var id of taxa) {
+  yDomain.push(id);
+}
 
 yScaleAmrHm.domain(yDomain);
 
@@ -277,7 +287,8 @@ data.forEach(function(d) {
 
     if(aroID !== "Other"){
       if (compareAmrHmGenesSnAvailable){
-        name = compareAmrData[aroID]["shortName"];
+        // name = compareAmrData[aroID]["shortName"];
+        name = aroID;
       } else {
         name = aroID;
       }
@@ -288,17 +299,27 @@ data.forEach(function(d) {
     if (d[aroID]) {
       readCount = d[aroID]["value"];
       prop = d[aroID]["proportion"];
-
     } else {
       readCount = 0;
       prop = 0;
+      var categoryIndex = findWithAttr(compareAmrCategoryReferenceDataArray, "category", aroID);
+      if(categoryIndex != -1){
 
-      if (checkNested(compareAmrData, aroID, 'values', d.runId, d.sample, 'count')) {
-        readCount = compareAmrData[aroID]["values"][d.runId][d.sample]["count"];
-        prop = readCount/d.totalAmrReadCount;
-        readCountToSubtractFromOther += readCount;
-        propToSubtractFromOther += prop;
-        };
+        var foundSample = compareAmrCategoryReferenceDataArray[categoryIndex]["values"].find(obj => obj.sample === d.sample && obj.run === d.runId);
+        if (foundSample) {
+          readCount = foundSample.count;
+          prop = foundSample.proportion;
+          readCountToSubtractFromOther += readCount;
+          propToSubtractFromOther += prop;
+        }
+      }
+
+      // if (checkNested(compareAmrData, aroID, 'values', d.runId, d.sample, 'count')) {
+      //   readCount = compareAmrData[aroID]["values"][d.runId][d.sample]["count"];
+      //   prop = readCount/d.totalAmrReadCount;
+      //   readCountToSubtractFromOther += readCount;
+      //   propToSubtractFromOther += prop;
+      //   };
     };
 
     if(compareAmrHmRead == "percent") {

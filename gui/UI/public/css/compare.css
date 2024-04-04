@@ -81,6 +81,10 @@
   cursor:default;
 }
 
+.dropdown-menu[aria-labelledby="dropdownMenuCompareAmrHm"] {
+  min-width:16rem;
+}
+
 #compareTreePlot {
   overflow-x: scroll;
 }

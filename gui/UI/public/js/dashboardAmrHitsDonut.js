@@ -158,12 +158,6 @@ function topTaxaAmrHits(data,plotBy,speciesID){
       })
     }
 
-    // d3.ascending(plotCountsArray, d => parseFloat(d.count));
-
-    // plotCountsArray.sort(function(a, b) {
-    //     return parseFloat(b.count) - parseFloat(a.count);
-    // });
-
     plotCountsArray.sort(function(a, b) {
         return b.count - a.count;
     });
@@ -224,8 +218,6 @@ function generateAmrHitsSpeciesArray(data){
                   }
                 }
               }
-
-
             }
           }
         }
