@@ -39,8 +39,10 @@ Where:
 * ``-runname`` specifies the name of this run.
 * ``-barcodes`` specifies the barcodes being used, or can be left out if the run is not barcoded.
 * ``-blast`` provides a comma separated list of the BLAST processes to carry out.
+* ``-centrifuge`` provides a comma separated list of the Centrifuge processes to carry out.
+* ``-kraken2`` provides a comma separated list of the Kraken2 processes to carry out.
 
-MARTi will generate a config file will default options and these can then be edited in a text editor.
+MARTi will generate a config file with default options and these can then be edited in a text editor.
 
 Blast process configuration
 ---------------------------

@@ -143,6 +143,8 @@ public class MARTiEngineOptions implements Serializable {
     private boolean autodeleteFastqChunks = false;
     private boolean autodeleteMetaMapsFiles = false;
     private String blastProcessNames = null;
+    private String centrifugeProcessNames = null;
+    private String kraken2ProcessNames = null;
     private String cardDBPath = null;
     private Hashtable<Integer, String> barcodeIDs = new Hashtable<Integer, String>();
     private Hashtable<Integer, String> barcodeUUIDs = new Hashtable<Integer, String>();
@@ -292,6 +294,12 @@ public class MARTiEngineOptions implements Serializable {
                 i+=2; 
             } else if (args[i].equalsIgnoreCase("-blast")) {                
                 blastProcessNames = args[i+1];
+                i+=2; 
+            } else if (args[i].equalsIgnoreCase("-centrifuge")) {                
+                centrifugeProcessNames = args[i+1];
+                i+=2; 
+            } else if (args[i].equalsIgnoreCase("-kraken2")) {                
+                kraken2ProcessNames = args[i+1];
                 i+=2; 
             } else if (args[i].equalsIgnoreCase("-options")) {
                 optionsFilename = args[i+1];
@@ -1399,6 +1407,14 @@ public class MARTiEngineOptions implements Serializable {
     
     public String getBlastProcessNames() {
         return blastProcessNames;
+    }
+    
+    public String getCentrifugeProcessNames() {
+        return centrifugeProcessNames;
+    }
+    
+    public String getKraken2ProcessNames() {
+        return kraken2ProcessNames;
     }
     
     public MARTiEngineOptionsFile getOptionsFile() {

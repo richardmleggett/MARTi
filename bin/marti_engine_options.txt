@@ -8,6 +8,7 @@ Key:
 Certificate:
 
 # Blast processes can be defined in here and then settings can be simply copied to new config files
+
 BlastProcess
     Name:nt
     Program:megablast
@@ -43,15 +44,16 @@ BlastProcess
     MaxTargetSeqs:100
     BlastThreads:2
 
-Kraken2Process
-      Name:pluspf-8
-      Database:/Users/leggettr/Documents/Databases/kraken2/k2_pluspf_08gb_20230314_db/
-      Kraken2Threads:4
-      UseToClassify
-
 CentrifugeProcess
-      Name:metagenomic
-      Database:/Users/leggettr/Documents/Databases/centrifuge/202311_meta/
-      CentrifugeThreads:4
-      MinHitLen:25
-      UseToClassify
+    Name:metagenomic
+    Database:/Users/leggettr/Documents/Databases/centrifuge/202311_meta/
+    CentrifugeThreads:4
+    MinHitLen:25
+    UseToClassify
+
+Kraken2Process
+    Name:pluspf-8
+    Database:/Users/leggettr/Documents/Databases/kraken2/k2_pluspf_08gb_20230314_db/
+    Kraken2Threads:4
+    UseToClassify
+

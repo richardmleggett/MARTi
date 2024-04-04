@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import uk.ac.earlham.marti.blast.BlastProcess;
+import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
+import uk.ac.earlham.marti.kraken2.Kraken2Process;
 
 /**
  *
@@ -165,7 +167,48 @@ public class MARTiConfigFile {
                     }
                 }
             }
-                        
+            
+            String centrifugeProcessList = options.getCentrifugeProcessNames();
+            if(centrifugeProcessList != null) {
+                String[] centrifugeProcesses = centrifugeProcessList.split(",");
+                for (int i=0; i<centrifugeProcesses.length; i++) {
+                    pw.println("");
+                    CentrifugeProcess cp = optionsFile.getCentrifugeProcess(centrifugeProcesses[i]);
+                    if (cp != null) {
+                        pw.println("CentrifugeProcess");
+                        pw.println("    Name:" + cp.getName());
+                        pw.println("    Database:" + cp.getDatabase());
+                        pw.println("    CentrifugeThreads:" + cp.getNumThreads());
+                        pw.println("    MinHitLen:" + cp.getMinHitLen());
+                        if (cp.useForClassifying()) {
+                            pw.println("    UseToClassify");
+                        }
+                    } else {
+                        System.out.println("WARNING: Could not find Centrifuge process " + centrifugeProcesses[i]);
+                    }
+                }
+            }
+            
+            String kraken2ProcessList = options.getKraken2ProcessNames();
+            if(kraken2ProcessList != null) {
+                String[] kraken2Processes = kraken2ProcessList.split(",");
+                for (int i=0; i<kraken2Processes.length; i++) {
+                    pw.println("");
+                    Kraken2Process k2p = optionsFile.getKraken2Process(kraken2Processes[i]);
+                    if (k2p != null) {
+                        pw.println("Kraken2Process");
+                        pw.println("    Name:" + k2p.getName());
+                        pw.println("    Database:" + k2p.getDatabase());
+                        pw.println("    Kraken2Threads:" + k2p.getNumThreads());
+                        if (k2p.useForClassifying()) {
+                            pw.println("    UseToClassify");
+                        }
+                    } else {
+                        System.out.println("WARNING: Could not find Kraken2 process " + kraken2Processes[i]);
+                    }
+                }
+            }
+            
             pw.println("");
             pw.println("# A Lowest Common Ancestor algorithm is used to assign BLAST hits to taxa. Default parameters are:");
             pw.println("# LCAMaxHits specifies the maximum number of BLAST hits to inspect in (100).");

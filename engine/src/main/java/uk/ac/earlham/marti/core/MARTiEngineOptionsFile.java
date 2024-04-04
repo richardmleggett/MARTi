@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import uk.ac.earlham.marti.blast.BlastProcess;
 import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
+import uk.ac.earlham.marti.kraken2.Kraken2Process;
 
 /**
  *
@@ -21,6 +22,8 @@ import uk.ac.earlham.marti.centrifuge.CentrifugeProcess;
 public class MARTiEngineOptionsFile {
     private MARTiEngineOptions options;
     private Hashtable<String, BlastProcess> blastProcessesByName = new Hashtable<String, BlastProcess>();
+    private Hashtable<String, CentrifugeProcess> centrifugeProcessesByName = new Hashtable<String, CentrifugeProcess>();
+    private Hashtable<String, Kraken2Process> kraken2ProcessesByName = new Hashtable<String, Kraken2Process>();
     private String taxonomyDir = null;
     
     public MARTiEngineOptionsFile(MARTiEngineOptions o) {
@@ -52,12 +55,22 @@ public class MARTiEngineOptionsFile {
                                 BlastProcess bp = new BlastProcess(options);
                                 line = bp.readConfigFile(br);
                                 blastProcessesByName.put(bp.getBlastName(), bp);
+                                System.out.println("Added process " + bp.getBlastName());
                                 readNextLine = false;                                
                             } else if (tokens[0].compareToIgnoreCase("CentrifugeProcess") == 0) {
+                                System.out.println("Adding centrifuge process... ");
                                 CentrifugeProcess cp = new CentrifugeProcess(options);
                                 line = cp.readConfigFile(br);
-                                //blastProcessesByName.put(bp.getBlastName(), bp);
-                                readNextLine = false;                                
+                                // This needs refactoring so that blast processes, centrifuge processes,
+                                // and kraken2 processes all inherit from process.
+                                centrifugeProcessesByName.put(cp.getName(), cp);
+                                System.out.println("Added process " + cp.getName());
+                                readNextLine = false;          
+                            } else if (tokens[0].compareToIgnoreCase("Kraken2Process") == 0) {
+                                Kraken2Process k2p = new Kraken2Process(options);
+                                line = k2p.readConfigFile(br);
+                                kraken2ProcessesByName.put(k2p.getName(), k2p);
+                                readNextLine = false;
                             } else if (tokens[0].compareToIgnoreCase("TaxonomyDir")==0) { 
                                 taxonomyDir = tokens[1];
                                 if (options.getTaxonomyDirectory() == null) {
@@ -72,7 +85,7 @@ public class MARTiEngineOptionsFile {
                             {
                                 //System.out.println("Ignoring GUI option "+tokens[0]);
                             } else if (!tokens[0].startsWith("#")) {                                
-                                System.out.println("ERROR: Unknown token in marti_engine_options "+tokens[0]);
+                                System.out.println("WARNING: Unknown token in marti_engine_options "+tokens[0]);
                                 System.out.println("       Token is being ignored");
                             }                                                     
                         }
@@ -95,6 +108,22 @@ public class MARTiEngineOptionsFile {
         }
         
         return bp;
+    }
+    
+    public CentrifugeProcess getCentrifugeProcess(String name) {
+        CentrifugeProcess cp = null;
+        if(centrifugeProcessesByName.containsKey(name)) {
+            cp = centrifugeProcessesByName.get(name);
+        }
+        return cp;
+    }
+    
+    public Kraken2Process getKraken2Process(String name) {
+        Kraken2Process k2p = null;
+        if(kraken2ProcessesByName.containsKey(name)) {
+            k2p = kraken2ProcessesByName.get(name);
+        }
+        return k2p;
     }
     
     public String getTaxonomyDir() {
