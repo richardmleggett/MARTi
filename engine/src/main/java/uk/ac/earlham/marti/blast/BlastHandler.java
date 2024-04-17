@@ -94,6 +94,12 @@ public class BlastHandler {
             String taxfilter = bp.getTaxaFilter();
             String negativeTaxaFilter = bp.getNegativeTaxaFilter();
             String dustString = bp.getDustString();
+            String processName = "blastn";
+            if(bp.getBlastTask().equals("blastx")) {
+                processName = "blastx";
+            } else if(bp.getBlastTask().equals("tblastx")) {
+                processName = "tblastx";
+            }
                  
             String outputBlast = this.getBlastFilePathFromFastaFilePath(inputPathname, bp);
             String commandFile = this.getCommandFilePathFromFastaFilePath(inputPathname, bp);
@@ -107,140 +113,194 @@ public class BlastHandler {
             
             inputFilenames.add(inputPathname);
             blastFilenames.add(outputBlast);
-
-            if (options.getSchedulerName().equals("local")) {
-                formatString = defaultFormatString;
-            } else {
-                formatString = "'" + defaultFormatString + "'";
-                if(dustString.length() > 0) {
-                    dustString = "'" + dustString + "'";
-                }
-            }
             
             try {
-                options.getLog().println("Writing blast command file "+commandFile);
-                PrintWriter pw = new PrintWriter(new FileWriter(commandFile));
-                // TODO: -task option shouldn't be hardcoded
-                String command = "";
                 JobScheduler jobScheduler = options.getJobScheduler();
+                PrintWriter pw = new PrintWriter(new FileWriter(commandFile));
                 String identifier = bp.getBlastName()+"_"+bp.getBlastTask()+"_"+outputBlast;
-
-                command = "blastn" + 
-                          " -db " + blastDb +
-                          " -query " + inputPathname +
-                          " -evalue " + bp.getMaxE() +
-                          " -max_target_seqs " + bp.getMaxTargetSeqs() +
-                          " -show_gis" +
-                          " -num_threads " + Integer.toString(bp.getNumThreads()) + 
-                          " -task "+bp.getBlastTask() +
-                          " -out " + outputBlast + 
-                          " -outfmt "+formatString;
-
-                if (taxfilter.length() > 1) {
-                    command = command + " -taxidlist " + taxfilter;
-                }
-                if (negativeTaxaFilter.length() > 1) {
-                    command = command + " -negative_taxidlist " + negativeTaxaFilter;
-                }
-                if(dustString.length() > 0) {
-                     command = command + " -dust " + dustString; 
-                }
-                
-                pw.write(command);
-                pw.close();
-                
+                String command = "";   
+                ArrayList<String> commands = new ArrayList<String>();
                 int jobid = 0;
-                if (jobScheduler == null) {
-                    System.out.println("Shouldn't get to a null job scheduler!");
-                    //options.getLog().println("Submitting blast command file to SLURM "+commandFile);
-                    //ProcessLogger pl = new ProcessLogger();
-                    //String[] commands = {"slurmit",
-                    //                     "-o", logFile,
-                    //                     "-p", queue,
-                    //                     "-m", memory,
-                    //                     "-c", Integer.toString(bp.getNumThreads()),
-                    //                     "sh "+commandFile};
-                    //pl.runCommandToLog(commands, options.getLog());            
-                                        
-                    // Need to get the correct LSF ID
-                    //blastJobsPending.add(blastJobCount);                    
-                } else {
-                    ArrayList<String> commands = new ArrayList<String>( Arrays.asList("blastn",
-                                             "-db", blastDb,
-                                             "-query", inputPathname,
-                                             "-evalue", bp.getMaxE(),
-                                             "-max_target_seqs", bp.getMaxTargetSeqs(),
-                                             "-show_gis",
-                                             "-num_threads", Integer.toString(bp.getNumThreads()),
-                                             "-task", bp.getBlastTask(),
-                                             "-out", outputBlast,
-                                             "-outfmt", formatString)); //defaultFormatString));
+                
+                if(bp.getBlastTask().equalsIgnoreCase("diamond")) {
+                    options.getLog().println("Writing diamond command file "+commandFile);
+                    identifier = "diamond_blastx_" + outputBlast;
+                    processName = "diamond";
+                    defaultFormatString = defaultFormatString.replace("qcovs", "qcovhsp");
 
+                    command = processName + " blastx " + 
+                              " --db " + blastDb +
+                              " --query " + inputPathname +
+                              " --evalue " + bp.getMaxE() +
+                              " --max-target-seqs " + bp.getMaxTargetSeqs() +
+                              " --threads " + Integer.toString(bp.getNumThreads()) + 
+                              " --out " + outputBlast + 
+                              " --outfmt " + defaultFormatString;
+                    
                     if (taxfilter.length() > 1) {
-                        commands.add("-taxidlist");
-                        commands.add(taxfilter);                                    
+                        command = command + " --taxonlist " + taxfilter;
                     }
                     if (negativeTaxaFilter.length() > 1) {
-                        commands.add("-negative_taxidlist");
-                        commands.add(negativeTaxaFilter);
+                        command = command + " --taxon-exclude " + negativeTaxaFilter;
                     }
-                    if(dustString.length() > 0) {
-                        commands.add("-dust");
-                        commands.add(dustString);
-                    }
-                    
+                                       
+                    pw.write(command);
+                    pw.close();
 
-                    //System.out.println("Submitting with "+bp.getNumThreads() + " threads");
-                    boolean runIt = options.runBlastCommand();
-                    
-                    if (bp.getBlastName().equals("nt")) {
-                        if (options.dontRunNt()) {
-                            runIt=false;
-                            System.out.println("Debug: Not running nt BLAST");
+                    if (jobScheduler == null) {
+                        System.out.println("Shouldn't get to a null job scheduler!");
+                        System.exit(-1);
+                    } else {
+                        commands.addAll(new ArrayList<String>( Arrays.asList(processName,
+                                                 "blastx",
+                                                 "--db", blastDb,
+                                                 "--query", inputPathname,
+                                                 "--evalue", bp.getMaxE(),
+                                                 "--max-target-seqs", bp.getMaxTargetSeqs(),
+                                                 "--threads", Integer.toString(bp.getNumThreads()),
+                                                 "--out", outputBlast,
+                                                 "--outfmt", defaultFormatString)));
+
+                        if (taxfilter.length() > 1) {
+                            commands.add("--taxonlist");
+                            commands.add(taxfilter);                                    
+                        }
+                        if (negativeTaxaFilter.length() > 1) {
+                            commands.add("--taxon-exclude");
+                            commands.add(negativeTaxaFilter);
                         }
                     }
-                    //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
-                    String[] commandString = commands.toArray(new String[commands.size()]);
-                    jobid = jobScheduler.submitJob(identifier, commandString, logFile, runIt);
-                    if (jobScheduler instanceof SlurmScheduler) {
-                        ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
-                        if (options.rmlDebug()) {
-                            if (jobid == 4) {
-                                options.getLog().printlnLogAndScreen("RML DEBUG: If you see this and you're not Richard Leggett, something went wrong");
-                                ((SlurmScheduler) jobScheduler).setJobMemory(jobid, "2G");                            
-                            } else {
-                                ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
-                            }
+                    
+                }
+                else {                    
+                    if (options.getSchedulerName().equals("local")) {
+                        formatString = defaultFormatString;
+                    } else {
+                        formatString = "'" + defaultFormatString + "'";
+                        if(dustString.length() > 0) {
+                            dustString = "'" + dustString + "'";
+                        }
+                    }
+                                
+                    options.getLog().println("Writing blast command file "+commandFile);                        
+                    command = processName + 
+                              " -db " + blastDb +
+                              " -query " + inputPathname +
+                              " -evalue " + bp.getMaxE() +
+                              " -max_target_seqs " + bp.getMaxTargetSeqs() +
+                              " -show_gis" +
+                              " -num_threads " + Integer.toString(bp.getNumThreads()) + 
+                              " -task "+bp.getBlastTask() +
+                              " -out " + outputBlast + 
+                              " -outfmt "+formatString;
+
+                    if (taxfilter.length() > 1) {
+                        command = command + " -taxidlist " + taxfilter;
+                    }
+                    if (negativeTaxaFilter.length() > 1) {
+                        command = command + " -negative_taxidlist " + negativeTaxaFilter;
+                    }
+                    if(dustString.length() > 0) {
+                         command = command + " -dust " + dustString; 
+                    }
+
+                    pw.write(command);
+                    pw.close();
+
+                    if (jobScheduler == null) {
+                        System.out.println("Shouldn't get to a null job scheduler!");
+                        System.exit(-1);
+                        //options.getLog().println("Submitting blast command file to SLURM "+commandFile);
+                        //ProcessLogger pl = new ProcessLogger();
+                        //String[] commands = {"slurmit",
+                        //                     "-o", logFile,
+                        //                     "-p", queue,
+                        //                     "-m", memory,
+                        //                     "-c", Integer.toString(bp.getNumThreads()),
+                        //                     "sh "+commandFile};
+                        //pl.runCommandToLog(commands, options.getLog());            
+
+                        // Need to get the correct LSF ID
+                        //blastJobsPending.add(blastJobCount);                    
+                    } else {
+                        commands.addAll( Arrays.asList(processName,
+                                                 "-db", blastDb,
+                                                 "-query", inputPathname,
+                                                 "-evalue", bp.getMaxE(),
+                                                 "-max_target_seqs", bp.getMaxTargetSeqs(),
+                                                 "-show_gis",
+                                                 "-num_threads", Integer.toString(bp.getNumThreads()),
+                                                 "-task", bp.getBlastTask(),
+                                                 "-out", outputBlast,
+                                                 "-outfmt", formatString)); //defaultFormatString));
+
+                        if (taxfilter.length() > 1) {
+                            commands.add("-taxidlist");
+                            commands.add(taxfilter);                                    
+                        }
+                        if (negativeTaxaFilter.length() > 1) {
+                            commands.add("-negative_taxidlist");
+                            commands.add(negativeTaxaFilter);
+                        }
+                        if(dustString.length() > 0) {
+                            commands.add("-dust");
+                            commands.add(dustString);
+                        }
+                    }
+                }
+                    
+
+                //System.out.println("Submitting with "+bp.getNumThreads() + " threads");
+                boolean runIt = options.runBlastCommand();
+
+                if (bp.getBlastName().equals("nt")) {
+                    if (options.dontRunNt()) {
+                        runIt=false;
+                        System.out.println("Debug: Not running nt BLAST");
+                    }
+                }
+                //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
+                String[] commandString = commands.toArray(new String[commands.size()]);
+                jobid = jobScheduler.submitJob(identifier, commandString, logFile, runIt);
+                if (jobScheduler instanceof SlurmScheduler) {
+                    ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
+                    if (options.rmlDebug()) {
+                        if (jobid == 4) {
+                            options.getLog().printlnLogAndScreen("RML DEBUG: If you see this and you're not Richard Leggett, something went wrong");
+                            ((SlurmScheduler) jobScheduler).setJobMemory(jobid, "2G");                            
                         } else {
                             ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
                         }
-                        ((SlurmScheduler) jobScheduler).setQueue(jobid, bp.getJobQueue());
-                        ((SlurmScheduler) jobScheduler).setDependentFilename(jobid, outputBlast);
+                    } else {
+                        ((SlurmScheduler) jobScheduler).setJobMemory(jobid, bp.getBlastMemory());
                     }
+                    ((SlurmScheduler) jobScheduler).setQueue(jobid, bp.getJobQueue());
+                    ((SlurmScheduler) jobScheduler).setDependentFilename(jobid, outputBlast);
+                }
 
-                    if (bp.useForClassifying()) {
-                        classifyFilename = outputBlast;
-                        classifyId = jobid;
-                    } else if (bp.getBlastName().equalsIgnoreCase("vfdb")) {
-                        vfdbFilename = outputBlast;
-                        vfdbId = jobid;
-                    } else if (bp.getBlastName().equalsIgnoreCase("card")) {
-                        cardFilename = outputBlast;
-                        cardId = jobid;
-                    }
-                    //else if (bp.needsClassifying()) {
-                    //    ntFilename = outputBlast;
-                    //    ntId = jobid;
-                    //}
-                                                            
-                    blastJobsPending.add(jobid);
+                if (bp.useForClassifying()) {
+                    classifyFilename = outputBlast;
+                    classifyId = jobid;
+                } else if (bp.getBlastName().equalsIgnoreCase("vfdb")) {
+                    vfdbFilename = outputBlast;
+                    vfdbId = jobid;
+                } else if (bp.getBlastName().equalsIgnoreCase("card")) {
+                    cardFilename = outputBlast;
+                    cardId = jobid;
+                }
+                //else if (bp.needsClassifying()) {
+                //    ntFilename = outputBlast;
+                //    ntId = jobid;
+                //}
 
-                    if (options.isClassifyingReads()) {
-                        options.getReadClassifier().addFile(bp.getBlastName(), jobid, inputPathname, outputBlast, logFile, classifierFile);
-                    }
+                blastJobsPending.add(jobid);
 
-                    bp.getMeganFileSet().addBlastResult(inputPathname, outputBlast, jobid);            
-                }  
+                if (options.isClassifyingReads()) {
+                    options.getReadClassifier().addFile(bp.getBlastName(), jobid, inputPathname, outputBlast, logFile, classifierFile);
+                }
+
+                bp.getMeganFileSet().addBlastResult(inputPathname, outputBlast, jobid);            
+                
                 options.getProgressReport().incrementChunksBlastedCount();                                    
                 blastJobCount++;
             } catch (IOException e) {
