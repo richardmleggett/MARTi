@@ -6,8 +6,10 @@ MARTi - Metagenomic Analysis in Real Time
    
    intro
    installation
-   blastdbs
-   docker
+     installationbyhand
+     installationbioconda
+     docker
+     blastdbs
    running
    cmdline
    gui
