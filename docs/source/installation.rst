@@ -1,5 +1,12 @@
 .. _installation:
 
+.. toctree::
+   :hidden:
+
+   installationbioconda
+   docker
+   blastdbs
+
 Download and installation
 =========================
 
