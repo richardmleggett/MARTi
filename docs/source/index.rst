@@ -4,9 +4,9 @@ MARTi - Metagenomic Analysis in Real Time
 .. toctree::
    intro
    installation
-   installationbyhand
-   installationbioconda
-   docker
+      installationbyhand
+      installationbioconda
+      docker
    blastdbs
    running
    cmdline
