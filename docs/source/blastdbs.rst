@@ -3,7 +3,7 @@
 Database Installation
 ===========================
 
-Pre-build Blast databases
+Pre-built Blast databases
 -------------------------
 
 MARTi classifies reads with a combination of BLAST and its own Lowest Common Ancestor (LCA) algorithm. Users can provide a pre-built BLAST database, such as the nucleotide sequence database (nt) or Prokaryotic RefSeq database, or build and use a custom BLAST database.
