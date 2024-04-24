@@ -3,7 +3,7 @@ MARTi - Metagenomic Analysis in Real Time
 
 .. toctree::
    :maxdepth: 4
-   :caption: Introduction
+   :caption: Start here
 
    intro
 

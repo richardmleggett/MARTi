@@ -1,10 +1,7 @@
 .. _installation:
 
-Installation
-============
-
-Overview
---------
+Installation overview
+=====================
 
 MARTi consists of two main components:
 
@@ -22,8 +19,5 @@ Because MARTi makes use of a number of other tools (e.g. BLAST, Centrifuge etc.)
 * :ref:`docker`
 
 Click on each of the links above to access the instructions for that method.
-
-Database installation
----------------------
 
 Once you've installed the software, you will need to install some databases on the computer running the MARTi Engine. See the :ref:`BLAST database installation page <blastdbs>`.
