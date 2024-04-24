@@ -14,9 +14,9 @@ You need to copy the MARTi software onto any computer that will be running the M
 
 Because MARTi makes use of a number of other tools (e.g. BLAST, Centrifuge etc.), there are a few dependencies that need to be installed. So we've tried to make this as simole as possible by offering a number of different ways of installing depending on what you're comfortable with:
 
-* ** :ref:`installationbyhand` ** from the GitHub repository
-* ** :ref:`installationbioconda`**
-* ** :ref:`docker` **
+* :ref:`installationbyhand` from the GitHub repository
+* :ref:`installationbioconda`
+* :ref:`docker`
 
 Click on each of the links above to access the instructions for that method.
 
