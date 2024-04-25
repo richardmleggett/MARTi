@@ -7,6 +7,8 @@ package uk.ac.earlham.marti.core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -156,5 +158,57 @@ public class MARTiEngineOptionsFile {
         if (f.exists()) {
             readFile(f.getAbsolutePath());
         }
+    }
+    
+    public void writeOptionsFile(String filename) {
+        if (filename == null) {
+            filename = new String("marti_engine_options.txt");           
+        }
+        
+        System.out.println("Writing "+filename);
+        
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(filename));            
+
+            pw.println("# Default taxonomy directory can be defined here");
+            pw.println("TaxonomyDir:/path/to/ncbi/taxdmp");
+            pw.println("");
+            pw.println("# Specify path to directory containing MinKNOW run directories. Multiple paths can be specified delimited by a semicolon \"/path/to/minknow/data;/path/to/minknow/data2\"");
+            pw.println("MinKNOWRunDirectory:/path/to/minknow/data");
+            pw.println("");
+            pw.println("# Directory containing MARTi output directories. Multiple paths can be specified delimited by a semicolon");
+            pw.println("MARTiSampleDirectory:/path/to/marti/output");
+            pw.println("");
+            pw.println("Port:3000");
+            pw.println("https:false");
+            pw.println("");
+            pw.println("# Analysis processes defined here will appear as options in MARTi GUI and can be included in config files generated with the marti -writeconfig command");
+            pw.println("BlastProcess");
+            pw.println("    Name:blast_example");
+            pw.println("    Program:megablast");
+            pw.println("    Database:/path/to/blast_database/prefix");
+            pw.println("    MaxE:0.001");
+            pw.println("    MaxTargetSeqs:25");
+            pw.println("    BlastThreads:1");
+            pw.println("    UseToClassify");
+            pw.println("");
+            pw.println("CentrifugeProcess");
+            pw.println("    Name:centrifuge_example");
+            pw.println("    Database:/path/to/centrifuge_database/prefix");
+            pw.println("    CentrifugeThreads:1");
+            pw.println("    UseToClassify");
+            pw.println("");
+            pw.println("Kraken2Process");
+            pw.println("    Name:kraken2_example");
+            pw.println("    Database:/path/to/kraken2_database/prefix");
+            pw.println("    Kraken2Threads:1");
+            pw.println("    UseToClassify");
+            
+            pw.close();
+        } catch (Exception e) {
+            System.out.println("writeOptionsFile Exception:");
+            e.printStackTrace();
+            System.exit(1);
+        }   
     }
 }
