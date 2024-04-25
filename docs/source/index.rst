@@ -1,36 +1,6 @@
 MARTi - Metagenomic Analysis in Real Time
 =========================================
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Start here
-
-   intro
-
-.. toctree::
-   :maxdepth: 4
-   :caption: Installation
-
-   installation
-   installationbyhand
-   installationbioconda
-   docker
-   jobschedulers
-   blastdbs
-
-.. toctree::
-   :maxdepth: 4
-   :caption: Using MARTi
-
-   running
-   cmdline
-   gui
-   configfiles
-   advanced
-   faqs
-   example
-   history
-
 MARTi is a software package designed for performing real-time analysis of metagenomic samples using nanopore sequencing. If you're not working in real-time, MARTi may still be a quick and easy analysis solution for you. And if you're not using nanopore sequencing, you may still benefit from using MARTi to analyse your data.
 
 You can try MARTi out at `http://marti.cyverseuk.org <http://marti.cyverseuk.org>`_. 
