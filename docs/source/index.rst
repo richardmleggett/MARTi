@@ -6,7 +6,7 @@ MARTi is a software package designed for performing real-time analysis of metage
 You can try out the MARTi browser interface at `http://marti.cyverseuk.org <http://marti.cyverseuk.org>`_. 
 
 Getting MARTi
-=============
+-------------
 
 First of all, read the :ref:`intro` to understand how MARTi fits together.
 
@@ -15,17 +15,17 @@ Next head to :ref:`installation` to choose the best way to install MARTi for you
 MARTi runs on Linux and on macOS. At the moment, Windows is not supported.
 
 Papers
-======
+------
 
 Coming soon.
 
 Talks and posters
-=================
+-----------------
 
 * `Richard Leggett's talk at London Calling 2021 <https://www.youtube.com/watch?v=Ccw1872jzOE>`_.
 
 Follow us
-=========
+---------
 
 You can follow MARTi updates on twitter `@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
 
