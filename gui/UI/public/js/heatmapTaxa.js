@@ -181,7 +181,6 @@ if (widthHeatmapTaxa > maxWidth - yAxisWidth) {
 var plotMaxValue = 0;
 
 
-
 data.forEach(function(d) {
   var readCountToSubtractFromOther = 0;
   var propToSubtractFromOther = 0;
