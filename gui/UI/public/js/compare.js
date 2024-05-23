@@ -521,9 +521,10 @@ var opacityTransitionTime = 450;
 
 
         topTaxaArray.push({
-            name: taxa.name,
+            // name: taxa.name,
+            name: compareTaxaData[taxa.ncbiID]["name"],
             value: taxa.chartValue,
-            ncbiRank: taxa.ncbiRank,
+            ncbiRank: compareTaxaData[taxa.ncbiID]["ncbiRank"],
             ncbiID: taxa.ncbiID,
             threshold: thresholdVal
         });
@@ -566,14 +567,14 @@ var opacityTransitionTime = 450;
 
         var sampleDataArray = {sample:sample,totalReadCount:sampleReadCount,runId:run};
 
-
         topTaxaCompareArray.forEach(function(d) {
           var proportion = d.value/sampleReadCount;
             sampleDataArray[d.label] = {value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
             sampleDataArray[d.ncbiID] = {name:d.label,value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
 
 
-            var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.name == d.label);
+            // var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.name == d.label);
+            var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.ncbiID == d.ncbiID);
 
             if (findTaxa != -1) {
               taxaTotalCounts[chart][findTaxa].totalValue += d.value;
@@ -895,12 +896,7 @@ taxaTotalCounts["hmTaxa"].sort(function(a, b) {
 
 
 donutCompareTaxa = [];
-stackedBarCompareTaxa = [];
 hmTaxaTaxa = [];
-
-for (var taxa of taxaTotalCounts["stackedBar"]) {
-  stackedBarCompareTaxa.push(taxa.name);
-}
 
 for (var taxa of taxaTotalCounts["donut"]) {
   donutCompareTaxa.push(taxa.name);
@@ -913,7 +909,7 @@ for (var taxa of taxaTotalCounts["hmTaxa"]) {
 
 plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 
-plotCompareDonut(donutCompareData,donutCompareTaxa);
+plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 
 plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
 

@@ -187,9 +187,9 @@ data.forEach(function(d) {
   d.taxa = taxa.map(function(ncbiID) {
     var name, readCount, rank, prop, plotValue;
     if (d[ncbiID]) {
-      name = d[ncbiID]["name"];
+      name = compareTaxaData[ncbiID]["name"];
       readCount = d[ncbiID]["value"];
-      rank = d[ncbiID]["ncbiRank"];
+      rank = compareTaxaData[ncbiID]["ncbiRank"];
       prop = d[ncbiID]["proportion"];
 
     } else {

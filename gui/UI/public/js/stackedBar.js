@@ -144,7 +144,7 @@ function transitionRects(stacked) {
             return yScale(d.y0) - yScale(d.y0 + d.y);
         });
 
-    stackedSvg.selectAll(".y.axis").transition().call(yAxis);
+    stackedSvg.selectAll(".y.axis").transition("sbYAxis").call(yAxis);
 }
 
 // function makeData(stackedTaxa, data) {
@@ -190,13 +190,13 @@ function makeData(data, ids) {
             if (d[ncbiID]) {
                 readCount = d[ncbiID]["value"];
                 proportion = d[ncbiID]["proportion"];
-                name = d[ncbiID]["name"];
+                name = compareTaxaData[ncbiID]["name"];
                 if (compareStackedBarYAxis == "percent") {
                     yVal = proportion;
                 } else {
                     yVal = readCount;
                 }
-                rank = d[ncbiID]["ncbiRank"];
+                rank = compareTaxaData[ncbiID]["ncbiRank"];
             } else {
                 name = compareTaxaData[ncbiID]["name"];
                 readCount = 0;
@@ -224,6 +224,7 @@ function makeData(data, ids) {
                 sample: d.sample,
                 runId: d.runId,
                 component: name,
+                ncbiID:ncbiID,
                 readCount: readCount,
                 totalReadCount: d["totalReadCount"],
                 ncbiRank: rank
@@ -250,12 +251,11 @@ function makeData(data, ids) {
         }
     }
 
-
     return dataArray;
 }
 
 var stackedBarInputData;
-var stackedTaxa;
+// var stackedTaxa;
 var stackedBarNcbiIDs = [];
 
 
@@ -266,7 +266,8 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarColor = d3.scale.ordinal()
         .range(colourPalettes[selectedPalette]);
 
-    stackedTaxa = [];
+    // stackedTaxa = [];
+
 
     if (compareStackedBarYAxis == "percent") {
         taxaTotalCounts.sort(function(a, b) {
@@ -281,7 +282,7 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarNcbiIDs = [];
 
     for (var taxa of taxaTotalCounts) {
-        stackedTaxa.push(taxa.name);
+        // stackedTaxa.push(taxa.name);
         stackedBarNcbiIDs.push(taxa.ncbiID);
     }
 
@@ -290,7 +291,6 @@ function plotStackedBar(data, taxaTotalCounts) {
     for (var [i, sample] of data.entries()) {
         sample.index = i;
     };
-
 
     var stacked = stack(makeData(data, stackedBarNcbiIDs));
     // var stacked = stack(makeData(stackedTaxa, data));
@@ -374,7 +374,8 @@ function plotStackedBar(data, taxaTotalCounts) {
 
 
     var stackedBarLegend = d3.select("#stackedBarLegend").selectAll(".stackedBarLegend")
-        .data(stackedTaxa);
+        // .data(stackedTaxa);
+        .data(taxaTotalCounts);
 
     var stackedBarLegendEnter = stackedBarLegend.enter().append("svg")
         .attr("class", "stackedBarLegend")
@@ -394,13 +395,13 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     stackedBarLegend.select("g rect")
         .style("fill", function(d) {
-            return stackedBarColor(d);
+            return stackedBarColor(d.name);
         });
 
     stackedBarLegend.select("g text")
         .style("text-anchor", "start")
         .text(function(d) {
-            return d;
+            return d.name;
         });
 
     stackedBarLegend
@@ -416,13 +417,13 @@ function plotStackedBar(data, taxaTotalCounts) {
         stackedSvg.selectAll("g.taxa rect").filter(function(x) {
 
 
-            if (x.component == d) {} else {
+            if (x.ncbiID == d.ncbiID) {} else {
                 d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
             };
         });
 
         d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (x == d) {
+            if (x.ncbiID == d.ncbiID) {
                 d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
             } else {
                 d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
@@ -436,7 +437,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
         stackedSvg.selectAll("g.taxa rect").filter(function(x) {
 
-            if (x.component == d) {
+            if (x.ncbiID == d.ncbiID) {
 
             } else {
                 d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
@@ -444,7 +445,7 @@ function plotStackedBar(data, taxaTotalCounts) {
         });
 
         d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (x == d) {
+            if (x.ncbiID == d.ncbiID) {
                 d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
             } else {
                 d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
@@ -464,7 +465,7 @@ function plotStackedBar(data, taxaTotalCounts) {
     function mouseoverFunc(d) {
 
         d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (d.component == x) {
+            if (d.ncbiID == x.ncbiID) {
                 d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
             } else {
                 d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
@@ -473,7 +474,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
 
         stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-            if (d.component == x.component) {} else {
+            if (d.ncbiID == x.ncbiID) {} else {
                 d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
             };
         });
@@ -502,7 +503,7 @@ function plotStackedBar(data, taxaTotalCounts) {
     function mouseoutFunc(d) {
 
         d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (d.component == x) {
+            if (d.ncbiID == x.ncbiID) {
                 d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
             } else {
                 d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
@@ -511,7 +512,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
 
         stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-            if (d.component == x.component) {} else {
+            if (d.ncbiID == x.ncbiID) {} else {
                 d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
             };
         });
