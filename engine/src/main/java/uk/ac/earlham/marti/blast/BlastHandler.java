@@ -127,6 +127,7 @@ public class BlastHandler {
                     identifier = "diamond_blastx_" + outputBlast;
                     processName = "diamond";
                     defaultFormatString = defaultFormatString.replace("qcovs", "qcovhsp");
+                    String processOptions = bp.getProcessOptions();
 
                     command = processName + " blastx " + 
                               " --db " + blastDb +
@@ -136,6 +137,10 @@ public class BlastHandler {
                               " --threads " + Integer.toString(bp.getNumThreads()) + 
                               " --out " + outputBlast + 
                               " --outfmt " + defaultFormatString;
+                    
+                    if (processOptions.length() > 0) {
+                        command = command + " " + processOptions;
+                    }
                     
                     if (taxfilter.length() > 1) {
                         command = command + " --taxonlist " + taxfilter;
@@ -152,7 +157,7 @@ public class BlastHandler {
                         System.exit(-1);
                     } else {
                         commands.addAll(new ArrayList<String>( Arrays.asList(processName,
-                                                 "blastx",
+                                                 "blastx",                                          
                                                  "--db", blastDb,
                                                  "--query", inputPathname,
                                                  "--evalue", bp.getMaxE(),
@@ -160,7 +165,10 @@ public class BlastHandler {
                                                  "--threads", Integer.toString(bp.getNumThreads()),
                                                  "--out", outputBlast,
                                                  "--outfmt", defaultFormatString)));
-
+                        
+                        if (processOptions.length() > 0) {
+                            commands.addAll(new ArrayList<String>(Arrays.asList(processOptions.split(" "))));
+                        }
                         if (taxfilter.length() > 1) {
                             commands.add("--taxonlist");
                             commands.add(taxfilter);                                    

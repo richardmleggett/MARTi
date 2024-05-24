@@ -28,6 +28,7 @@ public class BlastProcess {
     private String maxE = "0.001";
     private String maxTargetSeqs = "25";
     private String dustString = "";
+    private String processOptions = "";
     private int runMeganEvery = 0;
     private int numThreads = 1;
     private boolean classifyThis = false;
@@ -84,7 +85,9 @@ public class BlastProcess {
                             } else if (tokens[0].compareTo("Dust") == 0) {
                                 //dustString = "'" + tokens[1].replaceAll("^'+", "").replaceAll("'+$", "") + "'";
                                 dustString = tokens[1].replaceAll("^'+", "").replaceAll("'+$", "");
-                            } else {
+                            } else if (tokens[0].compareTo("options") == 0) {
+                                processOptions = tokens[1];
+                            }else {
                                 keepReading = false;
                             }
                         }
@@ -198,5 +201,9 @@ public class BlastProcess {
     
     public String getDustString() {
         return dustString;
+    }
+    
+    public String getProcessOptions() {
+        return processOptions;
     }
 }
