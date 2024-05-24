@@ -45,6 +45,16 @@ You can run multiple BLAST processes. Each begins with the Keyword BlastProcess.
    :file: table4.csv
    :delim: tab
 
+Diamond processes
+-----------------
+
+Diamond can be used to classify reads against a Diamond database that is built with taxonomy information. For example, to build a compatible diamond database using NCBI taxonomy, use the command
+
+``diamond makedb --threads 8 --in nr.gz -d nr.diamond-2.0.9 --taxonmap prot.accession2taxid.FULL.gz --taxonnodes nodes.dmp --taxonnames names.dmp``
+
+The fields ``--taxonmap``, ``--taxonnodes``, and ``--taxonnames`` must be specified for the database to be compatible with MARTi.
+
+Diamond processes are a subset of BLAST processes, with the ``Program`` field set to ``diamond``. All compatible fields from the BLAST process are passed through to Diamond. Diamond processes have an additional ``options`` field to specify the sensistivity mode (or any other options). See below for an example.
 
 Centrifuge processes
 --------------------
@@ -177,5 +187,43 @@ Different classification processes can be performed in the same MARTi process (b
      MaxE:0.001
      MaxTargetSeqs:100
      BlastThreads:1
+
+
+To classify using Diamond and a compatible database, use a ``BlastProcess`` with the ``Program`` field set to ``diamond``. For example ::
+
+ SampleName:BAMBI_1D_19092017_MARTi
+ RawDataDir:/Users/leggettr/Documents/Datasets/BAMBI_1D_19092017_MARTi
+ SampleDir:/Users/leggettr/Documents/Projects/MARTiTest/BAMBI_1D_19092017_MARTi
+ ProcessBarcodes:
+ BarcodeId1:SampleNameHere
  
+ Scheduler:local
+ LocalSchedulerMaxJobs:4
+ 
+ InactivityTimeout:10
+ StopProcessingAfter:50000000
+ 
+ TaxonomyDir:/Users/leggettr/Documents/Databases/taxonomy_6Jul20
+ LCAMaxHits:20
+ LCAScorePercent:90
+ LCAMinIdentity:60
+ LCAMinQueryCoverage:0
+ LCAMinCombinedScore:0
+ LCAMinLength:50
+ 
+ ConvertFastQ 
+
+ ReadsPerBlast:8000
+ 
+ ReadFilterMinQ:9
+ ReadFilterMinLength:500
+ 
+ BlastProcess
+     Name:diamond-nr
+     Program:diamond
+     Database:/Users/leggettr/Documents/Databases/diamond/nr.diamond-2.0.9
+     MaxE:0.001
+     MaxTargetSeqs:100
+     BlastThreads:2
+     options: --sensitive --range-culling
 
