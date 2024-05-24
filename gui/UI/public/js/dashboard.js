@@ -1088,10 +1088,12 @@ function resizeOptionsFullscreen() {
             switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
             replacePlotLevelText();
             plotLevelSelectorChanged = true;
+            taxonomicRankChanged = true;
             globUpdate(globDonutData);
             treeUpdate(root);
             treeMapUpdate(treeMapData);
             plotLevelSelectorChanged = false;
+            taxonomicRankChanged = false;
           }
     });
 

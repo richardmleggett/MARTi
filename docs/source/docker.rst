@@ -1,7 +1,7 @@
 .. _docker:
 
-Using the Docker image
-======================
+Using the MARTi Docker image
+============================
 
 A docker image of MARTi, which includes all of the required dependencies, is provided on `Docker Hub <https://hub.docker.com/r/nedpeel/marti/>`__. To get started, ensure that you have installed the `Docker Engine <https://docs.docker.com/engine/install/>`__ on your system. Once installed, you can easily pull the MARTi image by running the following command::
 

@@ -55,6 +55,7 @@ public class MARTiEngineOptions implements Serializable {
     private String sampleName = null;
     private String schedulerName="local";
     private String configFile = null;
+    private String optionsFile = null;
     private RawDataDirectory rawDataDir = null;
     private int maxReads = 0;
     private boolean fixRandom = false;
@@ -131,6 +132,7 @@ public class MARTiEngineOptions implements Serializable {
     private String resultsFile = null;
     private boolean initMode = false;
     private boolean writeConfigMode = false;
+    private boolean writeOptionsMode = false;
     private String initDir = null;
     private boolean haveReachedReadOrTimeLimit = false;
     private long startTime = System.nanoTime();
@@ -199,8 +201,19 @@ public class MARTiEngineOptions implements Serializable {
      */
     public void parseArgs(String[] args) {
         int i=0;
+        boolean helpRequested = false;
+
+        if (args.length < 1) {
+            helpRequested = true;
+        }
         
-        if (args.length <= 1) {
+        if (args.length == 1) {
+            if ((args[0].equalsIgnoreCase("-help")) || (args[0].equalsIgnoreCase("-h"))) {
+                helpRequested = true;
+            }
+        }
+        
+        if (helpRequested) {
             System.out.println("To run a MARTi analysis:");
             System.out.println("");
             System.out.println("    marti -config <file> [options]");
@@ -215,9 +228,13 @@ public class MARTiEngineOptions implements Serializable {
             System.out.println("-fixrandom <long> to fix the random number seed used for debugging");
             System.out.println("-queue <name> to set default SLURM partition");            
             System.out.println("");
-            System.out.println("Or to generate a new config file");
+            System.out.println("To generate a new config file");
             System.out.println("");
             System.out.println("    marti -writeconfig <file> [options]");
+            System.out.println("");
+            System.out.println("To generate a new options file");
+            System.out.println("");
+            System.out.println("    marti -writeoptions <file>");
             System.out.println("");
             System.exit(0);
         }
@@ -232,6 +249,12 @@ public class MARTiEngineOptions implements Serializable {
             } else if (args[i].equalsIgnoreCase("-writeconfig")) {
                 configFile = args[i+1];
                 writeConfigMode = true;
+                i+=2;
+            } else if (args[i].equalsIgnoreCase("-writeoptions")) {
+                if (args.length >= i+2) {
+                    optionsFile = args[i+1];
+                }
+                writeOptionsMode = true;
                 i+=2;
             } else if (args[i].equalsIgnoreCase("-test")) {
                 testMode = true;
@@ -324,6 +347,12 @@ public class MARTiEngineOptions implements Serializable {
         }
         
         engineOptionsFile = new MARTiEngineOptionsFile(this);
+
+        if (writeOptionsMode == true) {
+            engineOptionsFile.writeOptionsFile(optionsFile);
+            return;
+        }
+        
         engineOptionsFile.readOptionsFile();
                         
         if (writeConfigMode == true) {
@@ -1224,6 +1253,10 @@ public class MARTiEngineOptions implements Serializable {
     
     public boolean isWriteConfigMode() {
         return writeConfigMode;
+    }
+
+    public boolean isWriteOptionsMode() {
+        return writeOptionsMode;
     }
     
     public boolean isInitMode() {

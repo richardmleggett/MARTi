@@ -247,7 +247,8 @@ function rank(r) {
 
 function ncbiID(r) {
   var firstData = r[0];
-  if (r.length > 1 ){
+  // if (r.length > 1 ){
+  if (firstData.threshold == "Other" ){
     return "n/a"
   } else {
     return firstData.ncbiID

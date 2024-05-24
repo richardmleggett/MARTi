@@ -185,18 +185,19 @@ var treeLeafCounts = {"compare":0,"dashboard":0};
 
 function taxonomicRankFilt(tree,plot,rank) {
 
-
    var leafCount = 0
    var hideBranchList = [];
             function recursiveRankFilt(d) {
-
-
               if (d.rank < rank) {
-
                 if (d.children) {
-                  d.children.forEach(function(c){
-                      recursiveRankFilt(c);
-                    });
+                  if (d.children.length != 0) {
+                    d.children.forEach(function(c){
+                        recursiveRankFilt(c);
+                      });
+                  } else {
+                    leafCount += 1;
+                  }
+
                 } else if (d._children) {
                   d._children.forEach(function(c){
                       recursiveRankFilt(c);
@@ -252,8 +253,6 @@ function updateDashboardTaxaTreeTopNMax() {
   d3.selectAll("input[name='dashboardTaxaTreeTopN']").property("value",dashboardTaxaTreeTopN);
   d3.selectAll(".dashboard-taxa-tree-top-n-text").text(dashboardTaxaTreeTopN);
   d3.selectAll(".dashboard-taxa-tree-total-n-text").text(dashboardTreeLeafCount);
-
-
 
 };
 

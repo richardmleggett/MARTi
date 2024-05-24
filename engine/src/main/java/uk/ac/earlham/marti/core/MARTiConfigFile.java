@@ -271,7 +271,7 @@ public class MARTiConfigFile {
             
             System.out.println("Config file writen to "+filename);
         } catch (Exception e) {
-            System.out.println("writeSimulationResults Exception:");
+            System.out.println("writeConfigFile Exception:");
             e.printStackTrace();
             System.exit(1);
         }        

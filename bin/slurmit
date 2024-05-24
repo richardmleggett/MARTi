@@ -1,0 +1,95 @@
+#!/bin/bash
+
+commandtorun=""
+nodes=1
+ntasks=1
+mem=2G
+maxtime="6-23:00"
+outfile=""
+partition=""
+constraint=""
+cpuspertask=1
+sendemail=0
+afterok=""
+jobname="slurmit"
+maxtime=""
+
+function usage
+{
+cat << EOF
+
+Submit commands to SLURM
+
+Usage: slurmit [options] "command to execute"
+
+Submission script for SLURM
+
+OPTIONS:
+	-h	Show this message
+	-c	Number of processors per task (--cpus-per-task parameter) (dedault 1)	
+	-I	constrain to Intel CPUs
+	-J	specifies job name (default "slurmit")
+	-m	memory required per node (--mem parameter) (defualt "2G")
+	-n	maximum number of tasks (--ntasks parameter) (default 1)
+	-o	Output file (stdout and stderr) (default undefined)
+	-p	Parition (e.g. "ei-medium") (default undefined)
+	-t	Time limit (--time parameter) (e.g. "6-23:00")
+	-N	minimum number of nodes (--nodes parameter) (default 1)
+	-a	JobID for dependency (--dependency=afterok parameter) (default none)
+
+Example: slurmit -o logfile.txt "ls -l"
+
+Don't forget to backslash dollar variables, as appropriate.
+
+EOF
+}
+
+
+while getopts c:ehm:n:o:p:t:N:a:IJ: OPTION
+do
+    case $OPTION in
+	c) cpuspertask=$OPTARG;;
+	e) sendemail=1;;
+	h) usage ; exit 1 ;;
+	I) constraint=" --constraint=intel";;
+	J) myjobname=$OPTARG;;
+	m) mem=$OPTARG;;
+	n) ntasks=$OPTARG;;
+ 	o) outfile=" -o $OPTARG";;
+	p) partition=" -p $OPTARG";;
+	t) maxtime=$OPTARG;;
+	N) nodes=$OPTARG;;
+	a) afterok=$OPTARG;;
+    esac
+done
+shift $((OPTIND-1))
+
+commandtorun=$@
+
+if [ "$commandtorun" == "" ] ; then
+    echo "You must specify a command to run"
+    exit
+fi
+
+if [ ${sendemail} -eq 1 ] ; then
+    userid=`whoami`
+    emailcmd=" ; echo 'Finished running ${commandtorun}' | mail -s 'Slurmit has finished' ${userid}@nbi.ac.uk"
+    #echo ${emailcmd}
+else
+    emailcmd=""
+fi
+
+if [ "${afterok}" == "" ] ; then
+	afterokcmd=""
+else
+	afterokcmd=" --dependency=afterok:${afterok} "
+fi
+
+if [ "${maxtime}" == "" ] ; then
+    maxtimecmd=""
+else
+    maxtimecmd=" --time ${maxtime}"
+fi
+
+sbatch --job-name=${myjobname} --nodes ${nodes} ${afterokcmd} --cpus-per-task=${cpuspertask} --ntasks ${ntasks}${maxtimecmd} --mem ${mem}${outfile}${partition}${constraint} --wrap="echo \"SLURM job output\" ; echo "" ; echo \"Command: ${commandtorun}\" ; echo \"Job ID: \${SLURM_JOB_ID}\" ; echo -n \"Start time: \" ; date ; echo -n \"Machine: \" ; hostname ; printf \"%0.s-\" {1..70} ; printf \"\n\n\" ; ${commandtorun} ; printf \"\n\" ; printf \"%0.s-\" {1..70} ; printf \"\n\n\" ; sstat -j \${SLURM_JOB_ID}.batch ; printf \"\n\" ; echo \"SLURM ended\"; echo -n \"End time: \" ; date${emailcmd}"
+

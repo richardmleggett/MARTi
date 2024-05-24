@@ -10,7 +10,7 @@ function save_as_svg_with_style(id, css, filename, resetWidth, remove) {
     .then(text => {
       var svg_data = document.getElementById(id).innerHTML;
       var head = '<svg id="' + id + 'Export" title="graph" version="1.1" xmlns="http://www.w3.org/2000/svg">';
-
+      console.log(text);
       //Remove any fonts containing "Emoji" from CSS style.
       var modifiedText = text.replace(/(font-family:\s*("[^"]+"|'[^']+'|[^,]+),[^}]+)}/g, function (match, fontDeclaration) {
         var modifiedFontDeclaration = fontDeclaration.replace(/("[^"]+"|'[^']+'|[^,]+)(\s*,\s*("[^"]+"|'[^']+'|[^,]+))/g, function (match, font1, font2) {
@@ -21,7 +21,7 @@ function save_as_svg_with_style(id, css, filename, resetWidth, remove) {
         });
         return modifiedFontDeclaration + '}';
       });
-
+      console.log(modifiedText);
       var style = "<style>" + modifiedText + "</style>";
       var full_svg = head + style + svg_data + "</svg>";
 

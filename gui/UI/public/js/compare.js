@@ -60,7 +60,7 @@ function initialiseComparePage() {
               $('#rarefactionCardTitleCompare').text("Taxa accumulation - " + taxonomicRankSelectedText);
               taxonomicRankSelectedCompare = taxonomicLevelDict[taxonomicRankSelectedCompareText];
               taxonomicRankChangedCompare = true;
-              updateComparePlots(compareTreeDataGlobal);
+              updateComparePlots(compareTreeDataGlobal,true);
               taxonomicRankChangedCompare = false;
               socket.emit('compare-accumulation-request',{
                 clientId: uuid,
@@ -95,8 +95,10 @@ function initialiseComparePage() {
             plotLevelSelectedCompareTooltipPrefix = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId].prefix;
             plotLevelSelectedCompareTreeName = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId]["treeName"];
             plotLevelSelectorChanged = true;
-            updateComparePlots(compareTreeDataGlobal);
+            newCompareTreeData = true;
+            updateComparePlots(compareTreeDataGlobal,true);
             plotLevelSelectorChanged = false;
+            newCompareTreeData = false;
           }
     });
 
@@ -116,8 +118,9 @@ function initialiseComparePage() {
               $(this).addClass('active');
               sampleOrdertype = this.textContent;
               $('#sampleOrderCompareButton').text(sampleOrdertype);
-
-              updateComparePlots(compareTreeDataGlobal);
+              newCompareTreeData = true;
+              updateComparePlots(compareTreeDataGlobal,true);
+              newCompareTreeData = false;
               plotRarefactionCompare(rareData);
           }
   });
@@ -174,7 +177,9 @@ function initialiseComparePage() {
         sampleOrdertype = "Manual";
         $('#sampleOrderCompareMenu a.rank:contains(' + sampleOrdertype + ')').addClass("active");
         $('#sampleOrderCompareButton').text(sampleOrdertype);
-        updateComparePlots(compareTreeDataGlobal);
+        newCompareTreeData = true;
+        updateComparePlots(compareTreeDataGlobal,true);
+        newCompareTreeData = false;
         plotRarefactionCompare(rareData);
       }
 
@@ -481,19 +486,19 @@ var opacityTransitionTime = 450;
     } else if (unclassified == "show" && unclassifiedIndex == -1){
         if (unclassifiedNode !== undefined) {
         thisSampleTree.push(unclassifiedNode);
+        // thisSampleTree.unshift(unclassifiedNode);
         }
     };
 
-      // var sorted = thisSampleTree.sort(function(a, b) {
-      //     return b.chartValue - a.chartValue
-      // })
+      var sorted = thisSampleTree.sort(function(a, b) {
+          return b.chartValue - a.chartValue
+      })
 
-      var sorted = thisSampleTree;
+      // var sorted = thisSampleTree;
 
       var topTaxaArray = [];
 
       for (const [i,taxa] of sorted.entries()) {
-
         var thresholdVal;
 
         if(i < thresholdSelected) {
@@ -516,9 +521,10 @@ var opacityTransitionTime = 450;
 
 
         topTaxaArray.push({
-            name: taxa.name,
+            // name: taxa.name,
+            name: compareTaxaData[taxa.ncbiID]["name"],
             value: taxa.chartValue,
-            ncbiRank: taxa.ncbiRank,
+            ncbiRank: compareTaxaData[taxa.ncbiID]["ncbiRank"],
             ncbiID: taxa.ncbiID,
             threshold: thresholdVal
         });
@@ -561,14 +567,14 @@ var opacityTransitionTime = 450;
 
         var sampleDataArray = {sample:sample,totalReadCount:sampleReadCount,runId:run};
 
-
         topTaxaCompareArray.forEach(function(d) {
           var proportion = d.value/sampleReadCount;
             sampleDataArray[d.label] = {value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
             sampleDataArray[d.ncbiID] = {name:d.label,value:d.value,ncbiRank:d.ncbiRank,ncbiID:d.ncbiID,proportion:proportion};
 
 
-            var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.name == d.label);
+            // var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.name == d.label);
+            var findTaxa = taxaTotalCounts[chart].findIndex(taxa => taxa.ncbiID == d.ncbiID);
 
             if (findTaxa != -1) {
               taxaTotalCounts[chart][findTaxa].totalValue += d.value;
@@ -594,7 +600,7 @@ var taxaTotalCounts = {"donut":[],"stackedBar":[]};
 
 var donutCompareData = [];
 
-function updateComparePlots(compareSampleData) {
+function updateComparePlots(compareSampleData,treeplot) {
 
 compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
 
@@ -890,12 +896,7 @@ taxaTotalCounts["hmTaxa"].sort(function(a, b) {
 
 
 donutCompareTaxa = [];
-stackedBarCompareTaxa = [];
 hmTaxaTaxa = [];
-
-for (var taxa of taxaTotalCounts["stackedBar"]) {
-  stackedBarCompareTaxa.push(taxa.name);
-}
 
 for (var taxa of taxaTotalCounts["donut"]) {
   donutCompareTaxa.push(taxa.name);
@@ -908,29 +909,30 @@ for (var taxa of taxaTotalCounts["hmTaxa"]) {
 
 plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 
-plotCompareDonut(donutCompareData,donutCompareTaxa);
-
+plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 
 plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
 
 
 
+if (treeplot){
 
-  if (sortCompareNameArray.length <= 6){
-    ctCard = true;
 
-    var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
-    if (ctIsExpanded == "false") {
-      $('#compareTaxaTreeCard div.card-header:not(dropdown)').trigger('click');
+    if (sortCompareNameArray.length <= 6){
+      ctCard = true;
+
+      var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
+      if (ctIsExpanded == "false") {
+        $('#compareTaxaTreeCard div.card-header:not(dropdown)').trigger('click');
+      }
+
     }
+    if (ctCard) {
+      buildCompareTree(compareSampleData)
+      plotCompareTree(newCompareTree);
+    };
 
-  }
-  if (ctCard) {
-    buildCompareTree(compareSampleData)
-    plotCompareTree(newCompareTree);
-  };
-
-
+}
 
       };
 
@@ -1127,7 +1129,7 @@ socket.on('compare-tree-response', function(treeData) {
 
   newCompareTreeData = true;
   plotLevelSelectorChanged = true;
-  updateComparePlots(compareTreeDataGlobal);
+  updateComparePlots(compareTreeDataGlobal,true);
   newCompareTreeData = false;
   plotLevelSelectorChanged = false;
 } else {

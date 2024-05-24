@@ -181,16 +181,15 @@ if (widthHeatmapTaxa > maxWidth - yAxisWidth) {
 var plotMaxValue = 0;
 
 
-
 data.forEach(function(d) {
   var readCountToSubtractFromOther = 0;
   var propToSubtractFromOther = 0;
   d.taxa = taxa.map(function(ncbiID) {
     var name, readCount, rank, prop, plotValue;
     if (d[ncbiID]) {
-      name = d[ncbiID]["name"];
+      name = compareTaxaData[ncbiID]["name"];
       readCount = d[ncbiID]["value"];
-      rank = d[ncbiID]["ncbiRank"];
+      rank = compareTaxaData[ncbiID]["ncbiRank"];
       prop = d[ncbiID]["proportion"];
 
     } else {

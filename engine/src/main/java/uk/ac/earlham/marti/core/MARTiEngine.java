@@ -128,7 +128,7 @@ public class MARTiEngine {
             jf.outputVersions(true);
             jf.closeFile();
             System.out.println("Written " + initFilename);
-        } else if (!options.isWriteConfigMode()) {        
+        } else if (!options.isWriteConfigMode() && !options.isWriteOptionsMode()) {        
             File logsDir = new File(options.getLogsDir());
             if (!logsDir.exists()) {
                 logsDir.mkdir();
