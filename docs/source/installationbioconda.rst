@@ -57,4 +57,4 @@ You should then update the paths for your installation.
 
 The MARTi GUI should automatically detect the ``marti_engine_options.txt`` if it is present in the home directory. However, you can also specify an alternative engine options file::
 
-  marti_gui --options [/path/to/marti_engine_options.txt]
+  marti_gui --options /path/to/marti_engine_options.txt
