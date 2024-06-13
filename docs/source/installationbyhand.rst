@@ -51,13 +51,12 @@ MARTi Engine (back-end) installation
 
 Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 
+First, you need to add the marti bin directory to the list of directories specified in the `PATH environment variable <https://en.wikipedia.org/wiki/PATH_(variable)>`_. You can do this by adding an export command to your ~/.bashrc file. For example:
+export PATH=/path/to/MARTi/bin:$PATH
+
 The marti script inside the bin directory is used to launch MARTi Engine. Open this in a text editor and change line 6 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
 
 ``MARTI_DIR=/Users/leggettr/Documents/github/MARTiEngine/bin``
-
-Then move this marti script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
-
-``mv bin/marti /usr/local/bin``
 
 Finally, you need to create an options file in your home directory that is required by the Engine. An example is provided in the bin directory. To copy it to your home directory, type:
 
@@ -71,19 +70,16 @@ You can then check the MARTi Engine is installed by typing:
 
 If you see the help text, all is ok.
 
-
 MARTi GUI (front-end) installation
 ----------------------------------
 
 Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 
+As with the back-end, the marti bin directory needs to be specified in your PATH environment variable - see above.
+
 The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
 ``MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui``
-
-Then move this marti_gui script into somewhere in your search path. For Macs, this might be /usr/local/bin - e.g.:
-
-``mv bin/marti_gui /usr/local/bin``
 
 The GUI also requires the ``marti_engine_options.txt``. If you've already copied this to your home directory for the MARTi Engine then you can skip this step. Otherwise, copy it to your home directory, type:
 
@@ -94,7 +90,6 @@ This file contains the locations of some important directories and you will need
 * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
 * MinKNOWRunDirectory - path to the directory containing sequencing runs to be analysed by MARTi. The data for each run directory within the MinKNOWRunDirectory should be in fastq format inside a directory called ``fastq_pass``, ``pass``, or ``fastq``. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/data`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample could look something like this: ``/Users/peeln/Documents/data/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass`` or simply: ``/Users/peeln/Documents/data/Flongle_run_11102022/pass``
 * MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
-
 
 Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
 
