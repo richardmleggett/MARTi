@@ -67,9 +67,9 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
 You can check the MARTi Engine is installed by typing:
 
-   ``marti -h``
+``marti -h``
 
-   If you see the help text, all is ok.
+If you see the help text, all is ok.
 
 MARTi GUI (front-end) installation
 ----------------------------------
@@ -110,7 +110,7 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
 To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
-   ``localhost:3000``
+``localhost:3000``
 
 **macOS differences**
 
