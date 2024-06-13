@@ -65,7 +65,7 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
    More details on what this file contains is provided in :ref:`cmdline`.
 
-#. You can then check the MARTi Engine is installed by typing:
+You can check the MARTi Engine is installed by typing:
 
    ``marti -h``
 
@@ -108,7 +108,7 @@ Having copied the MARTi software onto the computer or cluster being used for the
    * ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
    * ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
 
-#. To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
+To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
    ``localhost:3000``
 
