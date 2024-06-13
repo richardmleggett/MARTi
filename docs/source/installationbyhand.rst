@@ -53,23 +53,23 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
 #. First, you need to add the marti bin directory to the list of directories specified in the `PATH environment variable <https://en.wikipedia.org/wiki/PATH_(variable)>`_. You can do this by adding an export command to your ~/.bashrc file. For example:
 
-``export PATH=/path/to/MARTi/bin:$PATH``
+   ``export PATH=/path/to/MARTi/bin:$PATH``
 
 #. The marti script inside the bin directory is used to launch MARTi Engine. Open this in a text editor and change line 6 to point to the location of the bin directory containing MARTiEngine.jar, e.g.:
 
-``MARTI_DIR=/Users/leggettr/Documents/github/MARTiEngine/bin``
+   ``MARTI_DIR=/Users/leggettr/Documents/github/MARTiEngine/bin``
 
 #. Finally, you need to create an options file in your home directory that is required by the Engine. An example is provided in the bin directory. To copy it to your home directory, type:
 
-``cp bin/marti_engine_options.txt ~/``
+   ``cp bin/marti_engine_options.txt ~/``
 
-More details on what this file contains is provided in :ref:`cmdline`.
+   More details on what this file contains is provided in :ref:`cmdline`.
 
 #. You can then check the MARTi Engine is installed by typing:
 
-``marti -h``
+   ``marti -h``
 
-If you see the help text, all is ok.
+   If you see the help text, all is ok.
 
 MARTi GUI (front-end) installation
 ----------------------------------
