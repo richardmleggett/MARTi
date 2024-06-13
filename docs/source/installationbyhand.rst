@@ -113,7 +113,8 @@ To view the GUI, open a browser and navigate to GUI's port. For example, if usin
 
 ``localhost:3000``
 
-**Possible macOS differences**
+Possible macOS differences
+--------------------------
 
 On some versions of macOS, you may get an error about fsevents.node the first time you run it:
 
