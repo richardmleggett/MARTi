@@ -105,9 +105,8 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
    The following parameters are specific to the GUI:
 
-   ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
-
-   ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
+   * ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+   * ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
 
 #. To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
