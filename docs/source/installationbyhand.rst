@@ -76,7 +76,7 @@ MARTi GUI (front-end) installation
 
 Having copied the MARTi software onto the computer or cluster being used for the back-end, you need to perform a couple of additional actions.
 
-#. As with the back-end, the marti bin directory needs to be specified in your PATH environment variable - see above.
+#. If you're only installing the front-end and not the back-end, you still need to add the marti bin directory to your PATH environment variable - follow this step from the back-end installation if you haven't already done so.
 
 #. The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
@@ -106,6 +106,7 @@ Having copied the MARTi software onto the computer or cluster being used for the
    The following parameters are specific to the GUI:
 
    ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+
    ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
 
 #. To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
