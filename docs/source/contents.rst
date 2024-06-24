@@ -24,6 +24,13 @@
    gui
    configfiles
    advanced
-   faqs
    example
    history
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Troubleshooting
+
+   engineproblems
+   guiproblems
+   faqs
