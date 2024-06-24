@@ -112,8 +112,12 @@
 <script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="/js/buttons.html5.min.js"></script>
 
+<link href="/vendor/leaflet/leaflet.css" rel="stylesheet">
+<script src="/vendor/leaflet/leaflet.js" type="text/javascript"></script>
 
-
+<link href="/vendor/leaflet/MarkerCluster.css" rel="stylesheet">
+<link href="/vendor/leaflet/MarkerCluster.Default.css" rel="stylesheet">
+<script src="/vendor/leaflet/leaflet.markercluster.js" type="text/javascript"></script>
 
 <style type="text/css" media="screen">
 
@@ -133,8 +137,8 @@
     <ul class="navbar-nav sidebar sidebar-dark accordion fixed-left" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-        <div class="sidebar-brand-icon marti-logo">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center">
+        <div class="pointer sidebar-brand-icon marti-logo" id="sidebar-brand">
         </div>
       </a>
 
@@ -144,26 +148,26 @@
       <!-- Nav Items -->
     <div id="sidebar-placeholder">
 
-      <li class="nav-item" id="samples-item">
+      <li class="nav-item pointer" id="samples-item">
         <a class="nav-link">
           <i class="fas fa-fw fa-table"></i>
           <span>Samples</span></a>
       </li>
 
       <!-- Divider -->
-      <li class="nav-item" id="dashboard-item">
+      <li class="nav-item pointer" id="dashboard-item">
         <a class="nav-link">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
 
-      <li class="nav-item" id="compare-item">
+      <li class="nav-item pointer" id="compare-item">
         <a class="nav-link">
           <i class="fas fa-fw fa-chart-bar"></i>
           <span>Compare</span></a>
       </li>
 
-      <li class="nav-item" id="new-item">
+      <li class="nav-item pointer" id="new-item">
         <a class="nav-link">
           <i class="fas fa-fw fa-folder-plus"></i>
           <span>New analysis</span></a>
@@ -498,7 +502,18 @@ $(document).ready(function () {
 
     });
 
-
+    $("#sidebar-brand").click(function () {
+      if (currentPage !== "Samples"){
+        activeSidebarIcon($("#samples-item"));
+        currentPage = "Samples";
+        $("h1#pageTitle").text("Samples");
+        urlFormat();
+        $("#response").load("/samples.html", function() {
+        $("html, body").animate({ scrollTop: "0px" });
+        initialiseSamplePage();
+        });
+      };
+    });
 
     $("#samples-item").click(function () {
         activeSidebarIcon(this);
@@ -691,6 +706,17 @@ dashboardColorIndex = colourPalettes[selectedPalette].length;
  }
 
 });
+
+$(window).on('online', updateOnlineStatus);
+$(window).on('offline', updateOnlineStatus);
+
+function updateOnlineStatus() {
+    if (navigator.onLine) {
+      $('#sampleMapPlotWarning').hide();
+    } else {
+      $('#sampleMapPlotWarning').show();
+    }
+}
 
 </script>
 

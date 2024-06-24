@@ -121,3 +121,49 @@ table.dataTable tbody>tr.checkSelected, table.dataTable tbody>tr>.checkSelected,
 #sampleDataSampleName {
   height: 32px;
 }
+
+#sampleMap {
+  height: 512px;
+}
+
+#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(1) > td:nth-child(2) {
+  text-decoration: underline;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.leaflet-popup-content table td.select-checkbox:before {
+  content: ' ';
+  /* margin-top: -6px;
+  margin-left: -6px; */
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.leaflet-popup-content table td.select-checkbox:before, .leaflet-popup-content table td.select-checkbox:after {
+  display: block;
+  position: absolute;
+  /* top: 1.2em;
+  left: 50%; */
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.leaflet-popup-content table tr.checkSelected td.select-checkbox:after {
+  content: '\2714';
+  font-size: large;
+  margin-top: -2px;
+  margin-left: 0px;
+  text-align: center;
+  text-shadow: 1px 1px #B0BED9, -1px -1px #B0BED9, 1px -1px #B0BED9, -1px 1px #B0BED9;
+}
+
+.leaflet-popup-content table td.select-checkbox {
+    position: relative;
+}
+
+.leaflet-popup-content table tr.checkSelected {
+    background-color: #B0BED9;
+    color: #333;
+}

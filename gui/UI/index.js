@@ -158,7 +158,7 @@ if (serverOptions["https"].toLowerCase() === 'true') {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.20.4";
+const martiGuiVersion = "0.21.0";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);
@@ -920,6 +920,47 @@ io.on('connect', function(socket){
       var id = request.clientId;
       io.to(id).emit('current-compare-samples-response', clientData[id].selectedCompareSamples);
   });
+
+
+  socket.on('compare-taxa-id-request', (request, callback) => {
+
+    function recursiveIds(node, taxIds = []) {
+    if (node.name) {
+        taxIds.push(node.name);
+    }
+    if (node.children) {
+        for (let child of node.children) {
+            recursiveIds(child, taxIds);
+        }
+    }
+    return taxIds;
+    }
+
+    var id = request.clientId;
+    var lca = "lca_0.0";
+    var selectedCompareSamples = clientData[id].selectedCompareSamples;
+    var compareTaxaData = [];
+    for (var sample of selectedCompareSamples){
+      if (sampleTreeDict.hasOwnProperty(sample.runId)) {
+        if (sampleTreeDict[sample.runId].hasOwnProperty(sample.name)) {
+
+          var tree = sampleTreeDict[sample.runId][sample.name][lca]["tree"];
+          var taxIdArray = recursiveIds(tree);
+
+          taxIdArray.shift();
+
+          compareTaxaData.push({
+            id: sample.name,
+            runId: sample.runId,
+            taxIds: taxIdArray
+          });
+          };
+        };
+      };
+
+  const response = { data: compareTaxaData};
+  callback(response);
+});
 
   socket.on('dashboard-tree-request', request => {
     var id = request.clientId;

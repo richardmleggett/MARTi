@@ -74,11 +74,42 @@ sampleListCurrent = [];
 $("#sampleTableSearchBox").keyup(function() {
 samplePageDataTable.search(this.value).draw();
 
-var selectAllToggle = $('thead>tr').children(':first-child');
+var selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child');
 
   if(selectAllToggle.hasClass('checkSelected')){
     selectAllToggle.removeClass('checkSelected');
   };
+
+  // Clear all existing markers from the cluster group
+    markers.clearLayers();
+    existingMarkers = [];
+
+    var currentSamples = [];
+
+    // Loop through the current table rows and add markers back to the cluster group
+    $('#samplePageDataTable tbody tr').each(function() {
+
+        var rowData = samplePageDataTable.row( $(this) ).data();
+
+        if (rowData != null) {
+          var rowName = rowData[12];
+          var rowRun = rowData[11];
+          currentSamples.push({pathName:rowName,pathRun:rowRun});
+        }
+
+    });
+
+    for (const sampleMetaData of sampleMetaDataArray) {
+      for (const sample of currentSamples) {
+        if (sampleMetaData.pathName == sample.pathName && sampleMetaData.pathRun == sample.pathRun) {
+          if (sampleMetaData.hasOwnProperty("metadatafile")){
+            if (sampleMetaData.metadatafile.hasOwnProperty("location")){
+              addSampleMarkerToMap(sampleMetaData);
+            }
+          }
+        }
+      }
+    }
 
 });
 
@@ -104,8 +135,95 @@ $("#sampleDataSampleName").on('input', function(){
 });
 
 initialiseExportCard();
+existingMarkers = [];
+initialiseSampleMap();
 
 };
+
+var map, markers;
+
+function initialiseSampleMap(){
+
+  updateOnlineStatus();
+
+
+  map = L.map('sampleMap').setView([51.505, -0.09], 4);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  L.control.scale().addTo(map);
+
+  markers = L.markerClusterGroup();
+
+
+  $('#sampleMapCard').on('shown.bs.collapse', function () {
+    map.invalidateSize();
+  });
+
+
+  $('#collapseSampleMap').on('click', '#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(1) > td:nth-child(2)', function() {
+
+      var markerTable = $(this).closest('table');
+      var sampleName = markerTable.data('path-name');
+      var runId = markerTable.data('path-run');
+
+      socket.emit('selected-dashboard-sample',{
+        clientId: uuid,
+        name: sampleName,
+        runId: runId
+      });
+
+      activeSidebarIcon($("#dashboard-item"));
+      currentPage = "Dashboard";
+      $("h1#pageTitle").text("Dashboard");
+      $("#response").load("/dashboard.html", function(){
+        $("html, body").animate({ scrollTop: "0px" });
+        initialiseDashboardPage();
+      });
+
+  });
+
+
+  $('#collapseSampleMap').on('click', '#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5) > td:nth-child(2)', function() {
+
+    var markerTable = $(this).closest('table');
+    var sampleName = markerTable.data('path-name');
+    var runId = markerTable.data('path-run');
+
+    $(this).closest('tr').toggleClass('checkSelected');
+
+    $('#samplePageDataTable tbody tr').each(function() {
+      var rowData = samplePageDataTable.row( $(this) ).data();
+      var rowName = rowData[12];
+      var rowRun = rowData[11];
+
+      if (sampleName == rowName && runId == rowRun) {
+        $(this).closest('tr').toggleClass('checkSelected');
+      }
+    });
+
+    emitSelectedCompareSamples();
+  });
+
+  map.on('popupopen', function(e) {
+    var markerTable = $('.leaflet-popup .table');
+    for (var sampleData of selectedCompareMetaDataArray){
+      if (markerTable.data('path-name') == sampleData.pathName && markerTable.data('path-run') == sampleData.pathRun) {
+        $('#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5)').addClass("checkSelected");
+      }
+    }
+  });
+
+}
+
+function showSampleMap(){
+
+
+}
+
+
 
 var exportCardObject = {};
 
@@ -154,6 +272,73 @@ function initialiseExportCard(){
 
 };
 
+
+
+
+function validateAndExtractLocation(location) {
+    // Define the regex pattern for the location string
+    const pattern = /^\s*(-?\d{1,3}\.\d+),\s*(-?\d{1,3}\.\d+)\s*$/;
+
+    const match = location.match(pattern);
+    if (!match) {
+        return { isValid: false, latitude: null, longitude: null };
+    }
+
+    // Extract latitude and longitude from the regex groups
+    const latitude = parseFloat(match[1]);
+    const longitude = parseFloat(match[2]);
+
+    // Validate the ranges of latitude and longitude
+    if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+        return { isValid: true, latitude: latitude, longitude: longitude };
+    }
+    return { isValid: false, latitude: null, longitude: null };
+}
+
+var existingMarkers = [];
+
+function addSampleMarkerToMap(data){
+
+  var findMarker = existingMarkers.findIndex(e => e.pathName == data.pathName && e.pathRun == data.pathRun);
+
+  if (findMarker == -1) {
+    var location = data.metadatafile.location;
+
+    const result = validateAndExtractLocation(location);
+
+    if (result.isValid){
+
+      $('#sampleMapCard').show();
+
+      // var marker = L.marker([result.latitude, result.longitude]).addTo(map);
+      var marker = L.marker([result.latitude, result.longitude]);
+
+      var popupContent = "";
+      // popupContent += '<table class="table table-bordered"><thead><tr><th width="50%"><strong>Sample</strong> </th><th width="50%"><strong>Values</strong> </th></tr></thead><thead></thead><tbody>';
+      popupContent += '<table class="table table-bordered" data-path-name="' + data.pathName + '" data-path-run="' + data.pathRun + '"><tbody>';
+      popupContent += "<tr><td><strong>Sample Name:</strong></td>";
+      popupContent += "<td>" + data.id + "</td></tr>";
+      popupContent += "<tr><td><strong>Run Name:</strong></td>";
+      popupContent += "<td>" + data.runId + "</td></tr>";
+      popupContent += "<tr><td><strong>Location:</strong></td>";
+      popupContent += "<td>" + data.metadatafile.locationName + "</td></tr>";
+      popupContent += "<tr><td><strong>Coordinates:</strong></td>";
+      popupContent += "<td>" + location + "</td></tr>";
+      popupContent += "<tr><td><strong>Compare:</strong></td>";
+      popupContent += '<td class="select-checkbox">' + "</td></tr>";
+      popupContent += "</tbody></table>";
+
+      // marker.bindPopup("<b>" + data.id + "</b><br>" + location);
+      marker.bindPopup(popupContent);
+
+      markers.addLayer(marker);
+      map.addLayer(markers);
+
+      existingMarkers.push({pathName:data.pathName,pathRun:data.pathRun});
+    }
+  }
+}
+
 var selectedCompareMetaDataArray = [];
 var sampleMetaDataArray = [];
 
@@ -163,6 +348,8 @@ dataSampleList = [];
 sampleMetaDataArray = [];
 
 samplePageDataTable.clear();
+markers.clearLayers();
+existingMarkers = [];
 
   for (const [runId, samples] of Object.entries(data)) {
     var dirRunId = runId;
@@ -175,6 +362,10 @@ samplePageDataTable.clear();
     var keywords = "";
     if (sampleData.hasOwnProperty("metadatafile")){
       keywords = sampleData.metadatafile.keywords;
+      if (sampleData.metadatafile.hasOwnProperty("location")){
+        addSampleMarkerToMap(sampleData);
+      }
+
     }
     // sampleData.readsPassBasecall = thousandsSeparators(sampleData.readsPassBasecall);
     // sampleData.readsAnalysed = thousandsSeparators(sampleData.readsAnalysed);
@@ -189,7 +380,7 @@ samplePageDataTable.clear();
 samplePageDataTable.draw(false);
 
 
-  $('table>tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
+  $('#samplePageDataTable tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
     var rowData = samplePageDataTable.row( $(this).closest('tr') ).data();
       var sampleName = rowData[12];
       var runId = rowData[11];
@@ -210,19 +401,20 @@ samplePageDataTable.draw(false);
   });
 
 
-    $('tbody>tr').children(':not(:nth-child(2)):not(:last-child)').on('click', function() {
+    $('#samplePageDataTable tbody>tr').children(':not(:nth-child(2)):not(:last-child)').on('click', function() {
       $(this).closest('tr').toggleClass('checkSelected');
       emitSelectedCompareSamples();
 
     });
 
-    $('thead>tr').children(':first-child').on('click', function() {
+    $('#samplePageDataTable thead>tr').children(':first-child').on('click', function() {
       if($(this).hasClass('checkSelected')){
         $(this).removeClass('checkSelected');
-        $('tbody>tr').removeClass('checkSelected');
+        $('#samplePageDataTable tbody>tr').removeClass('checkSelected');
       } else{
         $(this).addClass('checkSelected');
-        $('tbody>tr').addClass('checkSelected');
+        $('#samplePageDataTable tbody>tr').addClass('checkSelected');
+
       }
 
       emitSelectedCompareSamples();
@@ -230,7 +422,7 @@ samplePageDataTable.draw(false);
     });
 
 
-$('tbody>tr').children(':last-child').on('click', function() {
+$('#samplePageDataTable tbody>tr').children(':last-child').on('click', function() {
     var rowData = samplePageDataTable.row( $(this).closest('tr') ).data();
     var sampleName = rowData[1];
     var runId = rowData[2];
@@ -249,6 +441,10 @@ $('tbody>tr').children(':last-child').on('click', function() {
 
 
 });
+
+  if (existingMarkers.length == 0) {
+    $('#sampleMapCard').hide();
+  }
 
 
 };
@@ -413,6 +609,7 @@ socket.on('current-dashboard-sample-url-switch', function(sample) {
 
 socket.on('current-compare-samples-response', function(samples) {
 
+
   if(isEmpty(samples)) {
     comparePageUnlocked = false;
   } else {
@@ -421,6 +618,7 @@ socket.on('current-compare-samples-response', function(samples) {
 
   selectedCompareMetaDataArray = [];
 
+  var mapPopupSelected = false;
 
   for (const sampleMetaData of sampleMetaDataArray) {
     for (const sample of samples) {
@@ -440,11 +638,26 @@ socket.on('current-compare-samples-response', function(samples) {
             };
           });
 
+          if ($('.leaflet-popup').length > 0) {
+            var markerTable = $('.leaflet-popup .table');
+            if (markerTable.data('path-name') == sample.name && markerTable.data('path-run') == sample.runId) {
+              mapPopupSelected = true;
+              // $('#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5)').addClass("checkSelected");
+            };
+          }
+
         };
 
       };
     };
   };
+
+  if (mapPopupSelected) {
+    $('#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5)').addClass("checkSelected");
+  } else {
+    $('#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5)').removeClass("checkSelected");
+  }
+
 });
 
 var currentSampleInfoModalData;
@@ -485,9 +698,38 @@ function prepareSampleInfoModal(data){
 
 
 
+function emitAsync(socket, event, data) {
+  return new Promise((resolve, reject) => {
+    socket.emit(event, data, (response) => {
+      if (response.error) {
+        reject(response.error);
+      } else {
+        resolve(response.data);
+      }
+    });
+  });
+}
 
-function postToGrassroots(){
+
+async function postToGrassroots(){
+var taxIdArray = [];
+  try {
+    const responseData = await emitAsync(socket, 'compare-taxa-id-request', { clientId: uuid });
+    taxIdArray = responseData;
+  } catch (error) {
+      console.error('Error:', error);
+  }
+
   for (var sampleData of selectedCompareMetaDataArray){
+
+    var sampleTaxIdArray = [];
+
+    for (var sampleTaxData of taxIdArray) {
+      if (sampleTaxData.id == sampleData.pathName && sampleTaxData.runId == sampleData.pathRun) {
+        sampleTaxIdArray = sampleTaxData.taxIds;
+      }
+    };
+
     if (sampleData.hasOwnProperty("metadatafile")){
       var missingFields = [];
       var sampleName = sampleData.id;
@@ -571,11 +813,11 @@ function postToGrassroots(){
       if(missingFields.length > 0) {
           console.log(sampleData.id + " not posted. Missing field(s):", missingFields.join(", "))
       } else {
-        socket.emit('post-to-grassroots-request',{
-          clientId: uuid,
-          sample:sampleData.id,
-          body: JSON.stringify(postTemplate)
-        });
+        // socket.emit('post-to-grassroots-request',{
+        //   clientId: uuid,
+        //   sample:sampleData.id,
+        //   body: JSON.stringify(postTemplate)
+        // });
 
       }
     } else {

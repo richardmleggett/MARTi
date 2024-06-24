@@ -5,12 +5,32 @@
 
 <div class="card shadow mb-4">
   <div class="card-body text-center text-primary">
-    <div class="marti-logo-full mb-4"></div>
-    <p class="card-text mb-3">To get MARTi, see <a class="visibleUrl" href="https://marti.readthedocs.io/" target="_blank">Documentation</a></p>
-    <p class="card-text mb-0"><b>Dashboard</b> - Ideal for monitoring a single run/sample in real-time.</p>
-    <p class="card-text mb-0">Click the <i class="fas fa-tachometer-alt"></i> icon next to the sample you wish to load into Dashboard mode.</p>
-    <p class="card-text mt-3 mb-0"><b>Compare</b> - Comparison plots for real-time and previously analysed samples.</p>
-    <p class="card-text mb-0">To access Compare mode, select at least one sample using the <i class="far fa-check-square"></i> below. </p>
+
+    <div class="row">
+      <div class="col border-right">
+        <div class="marti-logo-full mb-4"></div>
+        <p class="card-text">For installation and usage instructions, see <a class="visibleUrl" href="https://marti.readthedocs.io/" target="_blank">Documentation</a></p>
+      </div>
+      <div class="col border-right mt-3">
+        <div>
+          <p class="card-text h5 mb-3 font-weight-bold">Dashboard mode</p>
+          <p class="card-text mb-1">Ideal for monitoring a single run/sample in real-time.</p>
+          <p class="card-text mb-0">Click the <i class="fas fa-tachometer-alt"></i> icon next to the sample you wish to load into Dashboard mode.</p>
+        </div>
+      </div>
+      <div class="col mt-3">
+        <div>
+          <p class="card-text h5 mb-3 font-weight-bold">Compare mode</p>
+          <p class="card-text mb-1">Comparison plots for real-time and previously analysed samples.</p>
+          <p class="card-text mb-0">To access Compare mode, select at least one sample using the <i class="far fa-check-square"></i> below. </p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
   </div>
 </div>
 
@@ -115,7 +135,29 @@
   </div>
 </div>
 
+<!-- Map card-->
+<div class="card shadow mb-4" id="sampleMapCard">
+<div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseSampleMap" aria-expanded="false" data-toggle="collapse" role="button">
+<!-- <div class="card-header d-flex flex-row align-items-center justify-content-between pointer" href="#collapseSampleMap" aria-expanded="true" data-toggle="collapse" role="button""> -->
+<h6 class="m-0 font-weight-bold text-primary">Sample Map</h6>
+</div>
 
+  <div class="card-body-custom collapse" id="collapseSampleMap">
+  <!-- <div class="card-body-custom collapse show" id="collapseSampleMap"> -->
+
+  <div id="sampleMapPlotWarning" class="row">
+     <div class="col-auto pl-5 p-2">
+         <a class=""><i class="fas fa-exclamation-triangle"></i> Unstable internet connection detected!</a>
+     </div>
+   </div>
+
+ <div id="sampleMap">
+
+ </div>
+
+
+  </div>
+</div>
 
 
 
