@@ -26,7 +26,7 @@ public class BlastProcess {
     private String taxaFilter = "";
     private String negativeTaxaFilter = "";
     private String maxE = "0.001";
-    private String maxTargetSeqs = "25";
+    private String maxTargetSeqs = "100";
     private String dustString = "";
     private String processOptions = "";
     private int runMeganEvery = 0;
