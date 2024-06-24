@@ -228,13 +228,14 @@ public class ReadClassifier {
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";
                                 options.getLog().println("Got LCAFileParse instance, now parsing");
                                 int readsWithHits = pfp.parseFile(f.getBlastFile());
+                                options.getLog().println("Parsed "+f.getBlastFile());
                                 long totalBpWithHits = 0l;
                                 Set<String> hits = pfp.getHitsByQuery().keySet();
                                 for(String query : hits) {
                                     totalBpWithHits += options.getReadStatistics().getReadLength(barcode, query, true);
                                 }
                                 
-                                options.getLog().println("Parsed... now removing poor alignments");
+                                options.getLog().println("Removing poor alignments");
                                 ArrayList<String> queriesToRemove = pfp.removePoorAlignments();
                                 int readsRemoved = queriesToRemove.size();
                                                                                                
