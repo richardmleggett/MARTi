@@ -17,7 +17,7 @@ public interface JobScheduler {
     public int getRunningJobCount();
     public int getPendingJobCount();
     public int getFailedJobCount();
-    public int submitJob(String identifier, String[] commands, String logFilename, boolean submitJob);
+    public int submitJob(String jobPrefix, String uniqueIdentifier, String[] commands, String logFilename, boolean submitJob);
     public boolean checkJobCompleted(int i);
     public boolean checkJobFailed(int i);
     public int getExitValue(int i);

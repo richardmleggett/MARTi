@@ -104,7 +104,7 @@ public class Kraken2Handler {
                     boolean runIt = options.runBlastCommand();
                     
                     String[] commandString = commands.toArray(new String[commands.size()]);
-                    jobid = jobScheduler.submitJob(identifier, commandString, logFilePath, runIt);
+                    jobid = jobScheduler.submitJob("kraken2", identifier, commandString, logFilePath, runIt);
                     if (jobScheduler instanceof SlurmScheduler) {
                         ((SlurmScheduler) jobScheduler).setCPUs(jobid, k2p.getNumThreads());
                         ((SlurmScheduler) jobScheduler).setJobMemory(jobid, k2p.getMemory());

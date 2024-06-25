@@ -52,7 +52,7 @@ public class SlurmScheduler implements JobScheduler {
         schedulerLog.println("maxJobs = "+maxJobs);
     }    
     
-    public synchronized int submitJob(String identifier, String[] commands, String logFilename, boolean submitJob) {
+    public synchronized int submitJob(String jobPrefix, String uniqueIdentifier, String[] commands, String logFilename, boolean submitJob) {
         if (MARTiEngineOptions.DEBUG_DONT_SUBMIT_JOB) {
             commands = new String[]{"echo","Hello"};
         }
@@ -62,7 +62,7 @@ public class SlurmScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SlurmSchedulerJob j = new SlurmSchedulerJob(options, identifier, "marti"+internalJobId, internalJobId, commands, logFilename, dontRunIt);
+        SlurmSchedulerJob j = new SlurmSchedulerJob(options, uniqueIdentifier, jobPrefix+internalJobId, internalJobId, commands, logFilename, dontRunIt);
         j.setSchedulerFileTimeout(options.getSchedulerFileTimeout());
         j.setSchedulerFileWriteDelay(options.getSchedulerFileWriteDelay());
         j.setResubmissionAttempts(options.getSchedulerResubmissionAttempts());

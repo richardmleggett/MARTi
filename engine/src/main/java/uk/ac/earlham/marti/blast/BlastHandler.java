@@ -269,7 +269,7 @@ public class BlastHandler {
                 }
                 //jobid = jobScheduler.submitJob(commands, logFile, options.runBlastCommand());
                 String[] commandString = commands.toArray(new String[commands.size()]);
-                jobid = jobScheduler.submitJob(identifier, commandString, logFile, runIt);
+                jobid = jobScheduler.submitJob("blast", identifier, commandString, logFile, runIt);
                 if (jobScheduler instanceof SlurmScheduler) {
                     ((SlurmScheduler) jobScheduler).setCPUs(jobid, bp.getNumThreads());
                     if (options.rmlDebug()) {

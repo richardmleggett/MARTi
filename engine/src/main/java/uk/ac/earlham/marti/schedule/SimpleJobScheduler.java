@@ -76,7 +76,7 @@ public class SimpleJobScheduler implements JobScheduler {
         maxJobs = m;
     }
         
-    public synchronized int submitJob(String identifier, String[] commands, String logFilename, boolean submitJob) {
+    public synchronized int submitJob(String jobPrefix, String uniqueIdentifier, String[] commands, String logFilename, boolean submitJob) {
         if (MARTiEngineOptions.DEBUG_DONT_SUBMIT_JOB) {
             commands = new String[]{"echo","Hello"};
         }
@@ -86,7 +86,7 @@ public class SimpleJobScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, identifier, jobId, commands, logFilename, dontRunIt);
+        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, uniqueIdentifier, jobId, commands, logFilename, dontRunIt);
         pendingJobs.add(j);
         allJobs.put(jobId, j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
