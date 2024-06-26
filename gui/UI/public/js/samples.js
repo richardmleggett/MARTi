@@ -1,4 +1,5 @@
 function initialiseSamplePage() {
+mapUpdated = false;
 samplePageDataTable = $('#samplePageDataTable').DataTable({
   "language": {
     "emptyTable": "WARNING: Could not find any MARTi Engine output directories in the 'MARTiSampleDirectory' specified in marti_engine_options.txt"
@@ -83,6 +84,7 @@ var selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child'
   // Clear all existing markers from the cluster group
     markers.clearLayers();
     existingMarkers = [];
+    markerCoords = [];
 
     var currentSamples = [];
 
@@ -141,6 +143,8 @@ initialiseSampleMap();
 };
 
 var map, markers;
+var mapUpdated = false;
+var markerCoords = [];
 
 function initialiseSampleMap(){
 
@@ -160,6 +164,11 @@ function initialiseSampleMap(){
 
   $('#sampleMapCard').on('shown.bs.collapse', function () {
     map.invalidateSize();
+    if (mapUpdated == false) {
+      var bounds = L.latLngBounds(markerCoords);
+      map.fitBounds(bounds);
+    }
+    mapUpdated = true;
   });
 
 
@@ -217,12 +226,6 @@ function initialiseSampleMap(){
   });
 
 }
-
-function showSampleMap(){
-
-
-}
-
 
 
 var exportCardObject = {};
@@ -312,6 +315,7 @@ function addSampleMarkerToMap(data){
 
       // var marker = L.marker([result.latitude, result.longitude]).addTo(map);
       var marker = L.marker([result.latitude, result.longitude]);
+      markerCoords.push([result.latitude, result.longitude]);
 
       var popupContent = "";
       // popupContent += '<table class="table table-bordered"><thead><tr><th width="50%"><strong>Sample</strong> </th><th width="50%"><strong>Values</strong> </th></tr></thead><thead></thead><tbody>';
@@ -343,6 +347,7 @@ var selectedCompareMetaDataArray = [];
 var sampleMetaDataArray = [];
 
 function updateSampleTable(data){
+
 dataSampleList = [];
 
 sampleMetaDataArray = [];
@@ -361,7 +366,9 @@ existingMarkers = [];
     dataSampleList.push(sample);
     var keywords = "";
     if (sampleData.hasOwnProperty("metadatafile")){
-      keywords = sampleData.metadatafile.keywords;
+      if (sampleData.metadatafile.hasOwnProperty("keywords")){
+        keywords = sampleData.metadatafile.keywords;
+      }
       if (sampleData.metadatafile.hasOwnProperty("location")){
         addSampleMarkerToMap(sampleData);
       }
