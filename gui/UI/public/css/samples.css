@@ -132,6 +132,10 @@ table.dataTable tbody>tr.checkSelected, table.dataTable tbody>tr>.checkSelected,
   cursor: pointer;
 }
 
+.leaflet-popup-content {
+  width: unset !important;
+}
+
 .leaflet-popup-content table td.select-checkbox:before {
   content: ' ';
   /* margin-top: -6px;
