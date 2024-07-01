@@ -24,6 +24,7 @@
    gui
    configfiles
    advanced
+   downstream
    example
    history
 

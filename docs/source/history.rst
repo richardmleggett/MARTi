@@ -1,8 +1,21 @@
 Change history
 ==============
 
-Version 0.9.15 (Coming soon)
-----------------------------
+Version 0.9.17
+--------------
+
+* New map view in samples view.
+* Changes to default options.
+* Minor changes to job handling on SLURM (e.g. naming)
+
+Version 0.9.16
+--------------
+
+* Added DIAMOND support.
+* Various GUI updates.
+
+Version 0.9.15
+--------------
 
 * Centrifuge support.
 * Metadata support.
