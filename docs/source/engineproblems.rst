@@ -12,6 +12,15 @@ If the MARTi Engine doesn't seem to be working, there are a number of places to 
 * The MARTiEngine log - found as sampledir/logs/engine.txt.
 * The MARTiEngine scheduler log - found as sampledir/logs/scheduler.txt.
 
+BLAST problems
+--------------
+
+BLAST problems can often be diagnosed by looking at the screen output. For example::
+
+   Warning: Error message found in /mnt/shared/projects/LocationSampling/LonCol_Pool2_12092019/marti/logs/megablast_nt/barcode06/fastq_runid_1fec5f69d7b44c09bd896163c8d8b9fd176f2adb_0_filtered_812.log
+   Message is BLAST Database error: No alias or index file found for nucleotide database [/mnt/shared/projects/LocationSampling/240615_rerun/3_marti/blast_nt_ln/nt] in search path [/mnt/shared/projects/LocationSampling/240615_rerun/3_marti::]
+   Please check results carefully.
+
 Java heap problems
 ------------------
 
