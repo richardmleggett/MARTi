@@ -21,6 +21,8 @@ BLAST problems can often be diagnosed by looking at the screen output. For examp
    Message is BLAST Database error: No alias or index file found for nucleotide database [/mnt/shared/projects/LocationSampling/240615_rerun/3_marti/blast_nt_ln/nt] in search path [/mnt/shared/projects/LocationSampling/240615_rerun/3_marti::]
    Please check results carefully.
 
+Messages like these come straight from BLAST and problems can be diagnosed without reference to MARTi. In the example above, there are missing BLAST files in the specified database path.
+
 Java heap problems
 ------------------
 
