@@ -847,7 +847,8 @@ io.on('connect', function(socket){
       path: '/beta/grassroots/private_backend',
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(bodyString)
         // Add any additional headers if required
       }
     };
@@ -863,8 +864,9 @@ io.on('connect', function(socket){
 
       res.on('end', () => {
         try {
-          const responseData = JSON.parse(data);
-          console.log('Response from API:', responseData);
+          // const responseData = JSON.parse(data);
+          // console.log('Response from API:', responseData);
+          console.log('Response from API:', data);
         } catch (error) {
           console.error('Error parsing response:', error);
         }
