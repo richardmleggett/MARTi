@@ -333,7 +333,8 @@ public class ReadFilterSample {
                         String plus = br.readLine();
                         String qual = br.readLine();
                         boolean readPassedFilter = true;
-                        String readID = header.split(" ")[0].substring(1);
+                        //String readID = header.split(" ")[0].substring(1);
+                        String readID = header.split("\\s+")[0].substring(1);
                         
                         if (plus.equals("+")) {                        
                             double meanQ = calculateMeanQuality(qual);
@@ -356,7 +357,7 @@ public class ReadFilterSample {
                                 bpInChunk += seq.length();
                                 writtenReadLengths.add(seq.length());
                                 chunkReadLengths.add(seq.length());
-                                readStatistics.addReadLength(barcode, readID,seq.length(), true);
+                                readStatistics.addReadLength(barcode, readID, seq.length(), true);
 
                                 if (readCountInChunk == options.getReadsPerBlast()) {
                                     endChunks();
@@ -372,7 +373,7 @@ public class ReadFilterSample {
                                 readsFilteredFromChunk++;
                                 readsFilteredTotal++;
                                 readPassedFilter = false;
-                                readStatistics.addReadLength(barcode, readID,seq.length(), false);
+                                readStatistics.addReadLength(barcode, readID, seq.length(), false);
                             }
 
                             metaData.registerNewInputRead(seq.length(), meanQ, readPassedFilter);

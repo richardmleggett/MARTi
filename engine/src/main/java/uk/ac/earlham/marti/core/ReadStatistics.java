@@ -61,10 +61,33 @@ public class ReadStatistics {
        
     public int getReadLength(int bc, String queryid, boolean pass) {
         if(pass) {
-            return passLengthsByBarcode.get(bc).get(queryid);
+            if (passLengthsByBarcode.containsKey(bc)) {
+                if (passLengthsByBarcode.get(bc).containsKey(queryid)) {
+                    return passLengthsByBarcode.get(bc).get(queryid);
+                } else {
+                    options.getLog().printlnLogAndScreen("Error: can't find pass length of "+queryid);
+                    System.exit(1);
+                }
+            } else {
+                options.getLog().printlnLogAndScreen("Error: can't find pass barcode "+bc);
+                System.exit(1);
+            }
         } else {
-            return failLengthsByBarcode.get(bc).get(queryid);
+            if (failLengthsByBarcode.containsKey(bc)) {
+                if (failLengthsByBarcode.get(bc).containsKey(queryid)) {
+                    return failLengthsByBarcode.get(bc).get(queryid);
+                } else {
+                    options.getLog().printlnLogAndScreen("Error: can't find fail length of "+queryid);
+                    System.exit(1);
+                }
+            } else {
+                options.getLog().printlnLogAndScreen("Error: can't find fail barcode "+bc);
+                System.exit(1);
+            }
         }
+        
+        options.getLog().printlnLogAndScreen("Error: shouldn't have got here in getReadLength "+bc+" "+queryid+" " +pass);
+        return 0;
     }
     
     public int getN50(int bc, boolean pass) {
