@@ -327,7 +327,7 @@ function addSampleMarkerToMap(data){
       popupContent += "<tr><td><strong>Location:</strong></td>";
       popupContent += "<td>" + data.metadatafile.locationName + "</td></tr>";
       popupContent += "<tr><td><strong>Coordinates:</strong></td>";
-      popupContent += "<td>" + location + "</td></tr>";
+      popupContent += '<td><a href="https://www.google.com/maps?q=' + location + '" target="_blank">' + location + "</td></tr>";
       popupContent += "<tr><td><strong>Compare:</strong></td>";
       popupContent += '<td class="select-checkbox">' + "</td></tr>";
       popupContent += "</tbody></table>";
@@ -737,6 +737,8 @@ var taxIdArray = [];
       }
     };
 
+
+
     if (sampleData.hasOwnProperty("metadatafile")){
       var missingFields = [];
       var sampleName = sampleData.id;
@@ -810,6 +812,10 @@ var taxIdArray = [];
                         {
                             "param": "Start Date",
                             "current_value": dateTime
+                        },
+                        {
+                            "param": "Taxa",
+                            "current_value": sampleTaxIdArray
                         }
                     ]
                 }
@@ -820,11 +826,13 @@ var taxIdArray = [];
       if(missingFields.length > 0) {
           console.log(sampleData.id + " not posted. Missing field(s):", missingFields.join(", "))
       } else {
-        // socket.emit('post-to-grassroots-request',{
-        //   clientId: uuid,
-        //   sample:sampleData.id,
-        //   body: JSON.stringify(postTemplate)
-        // });
+        console.log(JSON.stringify(postTemplate));
+
+        socket.emit('post-to-grassroots-request',{
+          clientId: uuid,
+          sample:sampleData.id,
+          body: JSON.stringify(postTemplate)
+        });
 
       }
     } else {
