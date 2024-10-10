@@ -338,4 +338,26 @@ public class LCAParseOptions {
     public boolean sortHitsbyBitscore() {
         return sortHitsByBitScore;
     }
+    
+    public void displayOptions() {
+        System.out.println("inputFilename="+inputFilename);
+        System.out.println("outputPrefix="+outputPrefix);
+        System.out.println("taxonomyDirectory="+taxonomyDirectory);
+        System.out.println("mapFilename="+mapFilename);
+        System.out.println("fileFormat="+fileFormat);
+        System.out.println("maxHitsToConsider="+maxHitsToConsider);
+        System.out.println("scorePercent="+scorePercent);
+        System.out.println("minIdentity="+minIdentity);
+        System.out.println("minLength="+minLength);
+        System.out.println("minQueryCoverage="+minQueryCoverage);
+        System.out.println("minCombinedScore="+minCombinedScore);
+        System.out.println("limitToSpecies="+limitToSpecies);
+        System.out.println("expectedTaxon="+expectedTaxon);
+        System.out.println("relatedTaxon="+relatedTaxon);
+        System.out.println("doingMakeMap="+doingMakeMap);
+        System.out.println("doingRanks="+doingRanks);
+        System.out.println("withWarnings="+withWarnings);
+        System.out.println("doingAnnotate="+doingAnnotate);
+        System.out.println("sortHitsByBitScore="+sortHitsByBitScore);
+    }
 }

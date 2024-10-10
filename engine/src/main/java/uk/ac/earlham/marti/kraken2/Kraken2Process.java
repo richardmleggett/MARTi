@@ -24,7 +24,7 @@ public class Kraken2Process {
     private String jobQueue = null;
     private int minHitGroups = 1;
     private int primaryAssignments = 1;
-
+    private String processOptions = "";
     
     public Kraken2Process(MARTiEngineOptions o) {
         options = o;
@@ -58,6 +58,8 @@ public class Kraken2Process {
                                 numThreads = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareTo("UseToClassify") == 0) {
                                 classifyThis = true;
+                            } else if (tokens[0].compareTo("options") == 0) {
+                                processOptions = tokens[1];
                             } else {
                                 keepReading = false;
                             }
@@ -131,5 +133,8 @@ public class Kraken2Process {
     public int getNumPrimaryAssignments() {
         return primaryAssignments;
     }
-   
+
+    public String getProcessOptions() {
+        return processOptions;
+    }
 }

@@ -80,8 +80,15 @@ public class Kraken2Handler {
                 String command = "";
                 JobScheduler jobScheduler = options.getJobScheduler();
                 String identifier = "kraken2_"+inputPathname;
+                String processOptions = k2p.getProcessOptions();
                 
-                command =   "kraken2" + 
+                command = "kraken2";
+
+                if (processOptions.length() > 0) {
+                    command = command + " " + processOptions;
+                }
+                
+                command = command +
                             " --db " + database +
                             " --output " + classificationFilePath +
                             " --threads " + numThreads + " " +

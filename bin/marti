@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAVA_ARGS="-Xms1g -Xmx16g"
+JAVA_ARGS="-Xms1g -Xmx32g"
 
 # Change this directory to point to the MARTi bin
 MARTI_DIR=/Users/leggettr/Documents/github/MARTi/bin

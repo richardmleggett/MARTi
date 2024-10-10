@@ -87,7 +87,7 @@ public class BlastProcess {
                                 dustString = tokens[1].replaceAll("^'+", "").replaceAll("'+$", "");
                             } else if (tokens[0].compareTo("options") == 0) {
                                 processOptions = tokens[1];
-                            }else {
+                            } else {
                                 keepReading = false;
                             }
                         }

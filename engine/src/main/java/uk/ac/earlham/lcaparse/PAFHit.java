@@ -74,7 +74,20 @@ public class PAFHit implements LCAHit {
             System.exit(1);
         }
         
-        taxonId = accTaxConvert.getTaxonFromAccession(targetName);
+        if (targetName.startsWith("taxid|")) {
+            String rest = targetName.substring(6);
+            if (rest.contains("|")) {
+                String taxonIdString = rest.substring(0, rest.indexOf("|"));
+                //System.out.println("Got string "+taxonIdString);
+                taxonId = Integer.parseInt(taxonIdString);
+                //System.out.println("And taxon ID is "+taxonId);
+            } else {
+                System.out.println("Strangely formatted target name: "+targetName+" ("+rest+")");
+            }
+        } else {
+            taxonId = accTaxConvert.getTaxonFromAccession(targetName);
+        }
+        
         if (taxonId == -1) {
             taxonomy.warnTaxa(targetName);
         } else {

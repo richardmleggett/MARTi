@@ -310,25 +310,30 @@ public class SlurmSchedulerJob {
     }
     
     private void parseJobState(String stateString) {
-        switch(stateString) {
-            case "BOOT_FAIL": jobState = STATE_BOOT_FAIL; break;
-            case "CANCELLED": jobState = STATE_CANCELLED; break;
-            case "CANCELLED+": jobState = STATE_CANCELLED; break;
-            case "COMPLETED": jobState = STATE_COMPLETED; break;
-            case "DEADLINE": jobState = STATE_DEADLINE; break;
-            case "FAILED": jobState = STATE_FAILED; break;
-            case "NODE_FAIL": jobState = STATE_NODE_FAIL; break;
-            case "OUT_OF_MEMORY": jobState = STATE_OOM; break;
-            case "PENDING": jobState = STATE_PENDING; break;
-            case "PREEMPTED": jobState = STATE_PREEMPTED; break;
-            case "RUNNING": jobState = STATE_RUNNING; break;
-            case "REQUEUED": jobState = STATE_REQUEUED; break;
-            case "RESIZING": jobState = STATE_RESIZING; break;
-            case "REVOKED": jobState = STATE_REVOKED; break;
-            case "SUSPENDED": jobState = STATE_SUSPENDED; break;
-            case "TIMEOUT": jobState = STATE_TIMEOUT; break;
-            default: jobState = STATE_UNKNOWN; break;
+        if (stateString.startsWith("OUT_OF_ME")) {
+            jobState = STATE_OOM;
+        } else {
+            switch(stateString) {
+                case "BOOT_FAIL": jobState = STATE_BOOT_FAIL; break;
+                case "CANCELLED": jobState = STATE_CANCELLED; break;
+                case "CANCELLED+": jobState = STATE_CANCELLED; break;
+                case "COMPLETED": jobState = STATE_COMPLETED; break;
+                case "DEADLINE": jobState = STATE_DEADLINE; break;
+                case "FAILED": jobState = STATE_FAILED; break;
+                case "NODE_FAIL": jobState = STATE_NODE_FAIL; break;
+                case "OUT_OF_MEMORY": jobState = STATE_OOM; break;
+                case "PENDING": jobState = STATE_PENDING; break;
+                case "PREEMPTED": jobState = STATE_PREEMPTED; break;
+                case "RUNNING": jobState = STATE_RUNNING; break;
+                case "REQUEUED": jobState = STATE_REQUEUED; break;
+                case "RESIZING": jobState = STATE_RESIZING; break;
+                case "REVOKED": jobState = STATE_REVOKED; break;
+                case "SUSPENDED": jobState = STATE_SUSPENDED; break;
+                case "TIMEOUT": jobState = STATE_TIMEOUT; break;
+                default: jobState = STATE_UNKNOWN; break;
+            }
         }
+        
         slurmLog.println("Job "+internalJobId+" state parsed "+jobState);
     }
     
