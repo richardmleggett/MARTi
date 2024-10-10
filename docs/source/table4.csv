@@ -11,4 +11,4 @@ BlastThreads 	4	Number of threads to use when running BLAST. Note: for SLURM sch
 Memory	16G	For SLURM scheduler, the memory to use per BLAST job. Passed with the SLURM --mem parameter.
 Queue	ei-medium	The job submission queue to use. Can be left out and the default queue (see above) will be used. Currently only required for SLURM and equates to the partition name.
 Dust	15 64 1 	Dust string to be passed on to all blast commands for this blast process (optional).
-Options	 -ungapped	Any additional options to pass to BLAST
+Options	 -ungapped	Any additional options to pass to BLAST (multiple options can be separated with spaces)
