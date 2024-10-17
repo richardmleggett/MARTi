@@ -96,7 +96,10 @@ var stack = d3.layout
 
 function transitionPercent() {
 
-    yAxis.tickFormat(d3.format("%"));
+    yAxis.tickFormat(function(d) { return d * 100; });
+    d3.select("#compareStackedBarYAxisTitle")
+    .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s (%)");
+    // yAxis.tickFormat(d3.format("%"));
     stack.offset("zero");
     // var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
     var stacked = stack(makeData(stackedBarInputData, stackedBarNcbiIDs));
@@ -106,6 +109,8 @@ function transitionPercent() {
 function transitionCount() {
 
     yAxis.tickFormat(d3.format(".2s"));
+    d3.select("#compareStackedBarYAxisTitle")
+    .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
     stack.offset("zero");
     // var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
     var stacked = stack(makeData(stackedBarInputData, stackedBarNcbiIDs));
