@@ -575,45 +575,54 @@ observer.on('amr-file-updated', data => {
 
 });
 
-var martiDirs = [];
+
 var projectsEnabled = false;
 var projectsDatabase = {};
+var defaultProject;
 
-if(serverOptions["MARTiSampleDirectory"].length > 0){
+if (serverOptions["MARTiSampleDirectory"].length > 0) {
   for (var dir of serverOptions["MARTiSampleDirectory"]) {
     if (!dir.endsWith("/")) {
       dir = dir + "/";
-    };
+    }
 
     try {
       const projectsObj = fsExtra.readJsonSync(dir + "projects.json");
-      for (const [project,selectors] of Object.entries(projectsObj)){
-        var projectRuns = [];
-        var projectDirectories = [];
-        var projectSamples = [];
+      
+      // Read default project from the JSON
+      if (projectsObj.defaultProject) {
+        defaultProject = projectsObj.defaultProject;
+      }
 
-        for (const [selector,values] of Object.entries(selectors)){
-          if (selector == "directories"){
-            projectDirectories = values;
-          } else if (selector == "runs") {
-            projectRuns = values;
-          } else if (selector == "samples") {
-            projectSamples = values;
+      for (const [project, selectors] of Object.entries(projectsObj)) {
+        if (project !== "defaultProject") {
+          var projectRuns = [];
+          var projectDirectories = [];
+          var projectSamples = [];
+
+          for (const [selector, values] of Object.entries(selectors)) {
+            if (selector === "directories") {
+              projectDirectories = values;
+            } else if (selector === "runs") {
+              projectRuns = values;
+            } else if (selector === "samples") {
+              projectSamples = values;
+            }
           }
+          projectsDatabase[project] = {
+            "directories": projectDirectories,
+            "runs": projectRuns,
+            "samples": projectSamples
+          };
         }
-        projectsDatabase[project] = {
-          "directories":projectDirectories,
-          "runs":projectRuns,
-          "samples":projectSamples
-        };
       }
       projectsEnabled = true;
     } catch (err) {
+      // console.error("Error reading projects.json:", err);
     }
 
     observer.watchFolder(dir);
   }
-
 } else {
   console.log("MARTiSampleDirectory not specified.");
 }
@@ -626,15 +635,13 @@ var sampleTreeDict = {};
 var sampleAccumulationDict = {};
 var sampleAmrDict = {};
 
-var database = [];
-
-
 var clientData = {};
 
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/indexNode.html');
 });
+
 
 http.listen(selectedPort, '0.0.0.0', function(){
   console.log(`[${new Date().toLocaleString()}] listening on port ${selectedPort}`);
@@ -760,46 +767,53 @@ io.on('connect', function(socket){
 
   socket.on('meta-request', request => {
     var id = request.clientId;
+    var samplesToSend;
 
-    if (!projectsEnabled){
-    io.to(id).emit('meta-response', sampleMetaDict);
-    console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
-  } else {
-    if (clientData[id]["project"]){
-      var project = clientData[id]["project"];
-      if(projectsDatabase.hasOwnProperty(project)){
-        var customMetaDict = {};
-        for (const [run,samples] of Object.entries(sampleMetaDict)){
-
-          if(projectsDatabase[project]["runs"].includes(run)){
-            customMetaDict[run] = samples;
-          } else {
-            for (const [sample,info] of Object.entries(samples)){
-
-              if (projectsDatabase[project]["samples"].includes(sample)){
-                if (customMetaDict.hasOwnProperty(run)) {
-                  customMetaDict[run][sample] = info;
-                } else {
-                  customMetaDict[run] = {};
-                  customMetaDict[run][sample] = info;
-                }
-              } else if (projectsDatabase[project]["directories"].includes(info.sample.dir)){
-                if (customMetaDict.hasOwnProperty(run)) {
-                  customMetaDict[run][sample] = info;
-                } else {
-                  customMetaDict[run] = {};
-                  customMetaDict[run][sample] = info;
-                }
-              }
-            }
-          }
+    if (!projectsEnabled) {
+        samplesToSend = sampleMetaDict;
+    } else {
+        var project;
+        if (clientData[id]["project"] === "") {
+            project = defaultProject;
+        } else {
+            project = clientData[id]["project"];
         }
-        io.to(id).emit('meta-response', customMetaDict);
-        console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
-      }
+
+        // Check if the project exists in the projectsDatabase
+        if (projectsDatabase.hasOwnProperty(project)) {
+            var customMetaDict = {};
+            for (const [run, samples] of Object.entries(sampleMetaDict)) {
+                if (projectsDatabase[project]["runs"].includes(run)) {
+                    customMetaDict[run] = samples;
+                } else {
+                    for (const [sample, info] of Object.entries(samples)) {
+                        if (projectsDatabase[project]["samples"].includes(sample)) {
+                            if (customMetaDict.hasOwnProperty(run)) {
+                                customMetaDict[run][sample] = info;
+                            } else {
+                                customMetaDict[run] = {};
+                                customMetaDict[run][sample] = info;
+                            }
+                        } else if (projectsDatabase[project]["directories"].includes(info.sample.dir)) {
+                            if (customMetaDict.hasOwnProperty(run)) {
+                                customMetaDict[run][sample] = info;
+                            } else {
+                                customMetaDict[run] = {};
+                                customMetaDict[run][sample] = info;
+                            }
+                        }
+                    }
+                }
+            }
+            samplesToSend = customMetaDict;
+        }
     }
-  }
-  });
+
+    // Emit the response after determining samplesToSend
+    io.to(id).emit('meta-response', samplesToSend);
+    console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
+});
+
 
   socket.on('update-sample-name-request', request => {
     var newId = request.newId;
