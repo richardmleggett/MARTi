@@ -101,12 +101,25 @@ public class Kraken2Handler {
                 if (jobScheduler == null) {
                     System.out.println("Shouldn't get to a null job scheduler!");                  
                 } else {
-                    ArrayList<String> commands = new ArrayList<String>( 
-                            Arrays.asList( "kraken2", 
-                            "--db", database,
-                            "--output", classificationFilePath,
-                            "--threads", numThreads, " ",
-                            inputPathname));
+                    //ArrayList<String> commands = new ArrayList<String>( 
+                    //        Arrays.asList( "kraken2", 
+                    //        "--db", database,
+                    //        "--output", classificationFilePath,
+                    //        "--threads", numThreads, " ",
+                    //        inputPathname));
+
+                    ArrayList<String> commands = new ArrayList<String>();
+                    commands.add("kraken2");
+                    if (processOptions.length() > 0) {
+                        commands.addAll(new ArrayList<String>(Arrays.asList(processOptions.split(" "))));
+                    }
+                    commands.add("--db");
+                    commands.add(database);
+                    commands.add("--output");
+                    commands.add(classificationFilePath);
+                    commands.add("--threads");
+                    commands.add(numThreads);
+                    commands.add(inputPathname);                 
                     
                     boolean runIt = options.runBlastCommand();
                     

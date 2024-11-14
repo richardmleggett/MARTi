@@ -53,11 +53,11 @@ public class PAFHit implements LCAHit {
             matches = Integer.parseInt(fields[9]);
             basesInMapping = Integer.parseInt(fields[10]);
             quality = Integer.parseInt(fields[11]);
-            identity = (double)((double)matches / (double)basesInMapping);
+            identity = (double)((100.0 * (double)matches) / (double)basesInMapping);
             
             if (fields[12].startsWith("NM:i:")) {
                 mismatchesAndGaps = Integer.parseInt(fields[12].substring(5));
-                queryCover = (double)((double)(basesInMapping - mismatchesAndGaps) / (double)queryLength);
+                queryCover = (double)((100.0 * (double)(basesInMapping - mismatchesAndGaps)) / (double)queryLength);
             } else {
                 System.out.println("Warning: couldn't read NM field "+fields[12]);
             }
@@ -144,5 +144,9 @@ public class PAFHit implements LCAHit {
             }
         }
         return 0;
+    }   
+    
+    public int getLength() {
+        return basesInMapping;
     }    
 }

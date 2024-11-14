@@ -120,14 +120,14 @@ public class BlastHandler {
                 String identifier = bp.getBlastName()+"_"+bp.getBlastTask()+"_"+outputBlast;
                 String command = "";   
                 ArrayList<String> commands = new ArrayList<String>();
+                String processOptions = bp.getProcessOptions();
                 int jobid = 0;
                 
-                if(bp.getBlastTask().equalsIgnoreCase("diamond")) {
+                if (bp.getBlastTask().equalsIgnoreCase("diamond")) {
                     options.getLog().println("Writing diamond command file "+commandFile);
                     identifier = "diamond_blastx_" + outputBlast;
                     processName = "diamond";
                     defaultFormatString = defaultFormatString.replace("qcovs", "qcovhsp");
-                    String processOptions = bp.getProcessOptions();
 
                     command = processName + " blastx " + 
                               " --db " + blastDb +
@@ -179,8 +179,7 @@ public class BlastHandler {
                         }
                     }
                     
-                }
-                else {                    
+                } else {                    
                     if (options.getSchedulerName().equals("local")) {
                         formatString = defaultFormatString;
                     } else {
@@ -210,6 +209,9 @@ public class BlastHandler {
                     }
                     if(dustString.length() > 0) {
                          command = command + " -dust " + dustString; 
+                    }                    
+                    if (processOptions.length() > 0) {
+                        command = command + " " + processOptions;
                     }
 
                     pw.write(command);
@@ -250,9 +252,12 @@ public class BlastHandler {
                             commands.add("-negative_taxidlist");
                             commands.add(negativeTaxaFilter);
                         }
-                        if(dustString.length() > 0) {
+                        if (dustString.length() > 0) {
                             commands.add("-dust");
                             commands.add(dustString);
+                        }
+                        if (processOptions.length() > 0) {
+                            commands.addAll(new ArrayList<String>(Arrays.asList(processOptions.split(" "))));
                         }
                     }
                 }

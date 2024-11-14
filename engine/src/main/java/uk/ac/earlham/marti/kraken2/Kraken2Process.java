@@ -56,9 +56,9 @@ public class Kraken2Process {
                                 jobQueue = tokens[1];
                             } else if (tokens[0].compareToIgnoreCase("Kraken2Threads") == 0) {
                                 numThreads = Integer.parseInt(tokens[1]);
-                            } else if (tokens[0].compareTo("UseToClassify") == 0) {
+                            } else if (tokens[0].compareToIgnoreCase("UseToClassify") == 0) {
                                 classifyThis = true;
-                            } else if (tokens[0].compareTo("options") == 0) {
+                            } else if (tokens[0].compareToIgnoreCase("options") == 0) {
                                 processOptions = tokens[1];
                             } else {
                                 keepReading = false;

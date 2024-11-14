@@ -14,19 +14,24 @@ import java.util.Collections;
  * @author Richard M. Leggett
  */
 public class PAFHitSet implements LCAHitSet {    
+    private LCAParseOptions options;
     private String queryName;
     private ArrayList<LCAHit> alignments = new ArrayList<LCAHit>();
     private double bestQueryCover = 0;
     private double bestIdentity = 0;
+    private int bestLength = 0;
+    private double bestQueryCoverage = 0;
     private int unknownTaxa = 0;
     private long assignedTaxon = -2;
 
     
-    public PAFHitSet(String query) {
+    public PAFHitSet(String query, LCAParseOptions o) {
         queryName = query;
+        options = o;
     }
 
-    public void addAlignment(LCAHit ph) {
+    public void addAlignment(LCAHit hit) {
+        PAFHit ph = (PAFHit)hit;
         boolean addAlignment = false;
         boolean updateBest = false;
         
@@ -62,6 +67,8 @@ public class PAFHitSet implements LCAHitSet {
         if (updateBest) {
             bestQueryCover = ph.getQueryCover();
             bestIdentity = ph.getIdentity();
+            bestLength = ph.getLength();
+            bestQueryCoverage = ph.getQueryCover();
         }
     }
     
@@ -109,7 +116,40 @@ public class PAFHitSet implements LCAHitSet {
      }
 
     public boolean hasGoodAlignment() {
-        return alignments.size() > 0 ? true:false;
+        //return alignments.size() > 0 ? true:false;
+        boolean goodAlignment = true;
+        
+        if (alignments.size() == 0) {
+            goodAlignment = false;
+        } else {        
+            // Only accept alignment if long enough
+            if (bestLength < options.getMinLength()) {
+                goodAlignment = false;
+                System.out.println(queryName + " length " + bestLength + " < " + options.getMinLength());
+            }
+
+            // Only accept if high enough identity
+            if (bestIdentity < options.getMinIdentity()) {
+                goodAlignment = false;
+                System.out.println(queryName + " id " + bestIdentity + " < " + options.getMinIdentity());
+            }
+
+            // Only accept if query coverage high enough and combined high enough
+            if (bestQueryCoverage != BlastHit.UNKNOWN) { 
+                if (bestQueryCoverage < options.getMinQueryCoverage()) {
+                    goodAlignment = false;
+                    System.out.println(queryName + " querycov " + bestQueryCoverage + " < " + options.getMinQueryCoverage());
+                }
+
+                double combined = bestQueryCoverage + bestIdentity;
+                if (combined < options.getMinCombinedScore()) {
+                    goodAlignment = false;
+                    System.out.println(queryName + " combined " + (bestQueryCoverage + bestIdentity) + " < " + options.getMinCombinedScore());
+                }
+            }        
+        }
+        
+        return goodAlignment;
     }
 
     public void sortHits() {

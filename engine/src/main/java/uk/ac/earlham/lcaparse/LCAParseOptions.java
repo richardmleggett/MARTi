@@ -207,14 +207,14 @@ public class LCAParseOptions {
             }
         }
         
-        if (doingMakeMap == false) {  
-            if ((fileFormat == FORMAT_BLASTTAB) || (fileFormat == FORMAT_PAF) || (fileFormat == FORMAT_SAM)) {
-                if (mapFilename == null) {
-                    System.out.println("Error: you must specify a -mapfile parameter");
-                    System.exit(1);
-                }        
-            }
-        }
+        //if (doingMakeMap == false) {  
+        //    if ((fileFormat == FORMAT_BLASTTAB) || (fileFormat == FORMAT_PAF) || (fileFormat == FORMAT_SAM)) {
+        //        if (mapFilename == null) {
+        //            System.out.println("Error: you must specify a -mapfile parameter");
+        //            System.exit(1);
+        //        }        
+        //    }
+        //}
         
         if (fileFormat == FORMAT_UNKNOWN) {
             System.out.println("Error: you must specify the file format.");

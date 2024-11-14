@@ -87,7 +87,7 @@ public class LCAFileParser {
         LCAHitSet hs = null;
         
         if (options.getFileFormat() == LCAParseOptions.FORMAT_PAF) {
-            hs = new PAFHitSet(query);
+            hs = new PAFHitSet(query, options);
         } else if (options.getFileFormat() == LCAParseOptions.FORMAT_SAM) {
             hs = new SAMHitSet(query);
         } else if ((options.getFileFormat() == LCAParseOptions.FORMAT_NANOOK) ||

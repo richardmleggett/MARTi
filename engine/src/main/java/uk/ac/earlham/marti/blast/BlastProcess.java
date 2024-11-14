@@ -80,12 +80,12 @@ public class BlastProcess {
                                 runMeganEvery = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("BlastThreads") == 0) {
                                 numThreads = Integer.parseInt(tokens[1]);
-                            } else if (tokens[0].compareTo("UseToClassify") == 0) {
+                            } else if (tokens[0].compareToIgnoreCase("UseToClassify") == 0) {
                                 classifyThis = true;
-                            } else if (tokens[0].compareTo("Dust") == 0) {
+                            } else if (tokens[0].compareToIgnoreCase("Dust") == 0) {
                                 //dustString = "'" + tokens[1].replaceAll("^'+", "").replaceAll("'+$", "") + "'";
                                 dustString = tokens[1].replaceAll("^'+", "").replaceAll("'+$", "");
-                            } else if (tokens[0].compareTo("options") == 0) {
+                            } else if (tokens[0].compareToIgnoreCase("options") == 0) {
                                 processOptions = tokens[1];
                             } else {
                                 keepReading = false;
