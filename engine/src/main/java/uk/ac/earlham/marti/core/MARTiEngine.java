@@ -17,7 +17,7 @@ import uk.ac.earlham.marti.schedule.*;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.19";
+    public final static String VERSION_STRING = "v0.9.19b";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
@@ -94,7 +94,7 @@ public class MARTiEngine {
         }
 
         MARTiEngineOptions options = new MARTiEngineOptions();
-               
+        
         Locale.setDefault(new Locale("en", "US"));
         
         // Parse command line

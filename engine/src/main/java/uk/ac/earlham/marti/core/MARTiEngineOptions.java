@@ -403,10 +403,11 @@ public class MARTiEngineOptions implements Serializable {
             // Check we have maxJobs set for this job scheduler
             if (maxJobs == 0) {
                 if (schedulerName.equalsIgnoreCase("slurm")) {
-                    maxJobs = 1000;
+                    maxJobs = 20;
                 } else {
-                    maxJobs = 4;
+                    maxJobs = 2;
                 }
+                System.out.println("Warning: MaxJobs not defined, so setting to "+maxJobs);
             }
 
             // Create the job scheduler
@@ -1579,5 +1580,5 @@ public class MARTiEngineOptions implements Serializable {
         for(MetaData md : metaDataList) {
             md.writeMetaDataFile();
         }
-    }
+    }    
 }

@@ -261,6 +261,7 @@ public class ReadClassifier {
                                 options.getLog().println("Written " + summaryFilename);
                                 options.getLog().println("Written " + perReadFilename);
                                 options.getLog().println("Timing: Results file for " + f.getBlastFile() + " written in " + timeDiff + " ms");
+                                options.getLog().displayMemory();
                                 
                                 summaryFiles.add(summaryFilename);
 

@@ -120,4 +120,10 @@ public class MARTiLog implements Serializable {
     public synchronized PrintWriter getPrintWriter() {
         return pw;
     }    
+    
+    public synchronized void displayMemory() {
+        this.println("Memory: Total "+ (Runtime.getRuntime().totalMemory() / (1024*1024)) + " Mb" + 
+                     "\tFree  "+ (Runtime.getRuntime().freeMemory() / (1024*1024)) + " Mb" +
+                     "\tUsed "+ ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024*1024)) + " Mb");
+    }      
 }

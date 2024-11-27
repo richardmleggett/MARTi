@@ -10,8 +10,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath uk.ac.earlham.marti.core.MARTiEngine</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.appArgs>-config /Users/leggettr/Documents/Projects/MARTiTest/config_files/BAMBI_1D_19092017_MARTi.txt -dontrunblast</exec.appArgs>
+                <exec.vmArgs></exec.vmArgs>
+                <exec.mainClass>uk.ac.earlham.marti.core.MARTiEngine</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -24,9 +27,12 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath uk.ac.earlham.marti.core.MARTiEngine</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
+                <exec.appArgs>-config /Users/leggettr/Documents/Projects/MARTiTest/config_files/BAMBI_1D_19092017_MARTi.txt -dontrunblast</exec.appArgs>
+                <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+                <exec.mainClass>uk.ac.earlham.marti.core.MARTiEngine</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -39,8 +45,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath uk.ac.earlham.marti.core.MARTiEngine</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.appArgs>-config /Users/leggettr/Documents/Projects/MARTiTest/config_files/BAMBI_1D_19092017_MARTi.txt -dontrunblast</exec.appArgs>
+                <exec.vmArgs></exec.vmArgs>
+                <exec.mainClass>uk.ac.earlham.marti.core.MARTiEngine</exec.mainClass>
             </properties>
         </action>
     </actions>

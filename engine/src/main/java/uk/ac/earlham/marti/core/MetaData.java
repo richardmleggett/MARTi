@@ -53,29 +53,43 @@ public class MetaData {
                         if (!line.startsWith("#")) {
                             String[] tokens = line.split(":");
                             if (tokens[0].compareToIgnoreCase("Location") == 0) {
-                                location = tokens[1];
+                                if (tokens.length >= 2) {
+                                    location = tokens[1];
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Date") == 0) {
-                                sampleDate = line.substring(line.indexOf(":") + 1);
+                                if (tokens.length >= 2) {
+                                    sampleDate = line.substring(line.indexOf(":") + 1);
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Time") == 0) {
-                                sampleTime = line.substring(line.indexOf(":") + 1);
+                                if (tokens.length >= 2) {
+                                    sampleTime = line.substring(line.indexOf(":") + 1);
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Temperature") == 0) {
-                                temperature = Float.parseFloat(tokens[1]);
+                                if (tokens.length >= 2) {
+                                    temperature = Float.parseFloat(tokens[1]);
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Humidity") == 0) {
-                                humidity = Float.parseFloat(tokens[1]);
+                                if (tokens.length >= 2) {
+                                    humidity = Float.parseFloat(tokens[1]);
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Keywords") == 0) {
-                                keywords = Arrays.asList(tokens[1].split(","));
+                                if (tokens.length >= 2) {
+                                    keywords = Arrays.asList(tokens[1].split(","));
+                                }
                             } else if (tokens[0].compareToIgnoreCase("Barcodes") == 0) {
-                                String[] barcodesString = tokens[1].split(",");
-                                for(String bc : barcodesString) {
-                                    int iBc = Integer.parseInt(bc);
-                                    if(allBarcodes.contains(iBc)) {
-                                        options.getLog().printlnLogAndScreen("WARNING: Barcode " + bc + " is specified in multiple Metadata blocks in config file.");
-                                        options.getLog().printlnLogAndScreen("Metadata for this barcode may not be correct.");
-                                    } else {
-                                        allBarcodes.add(iBc);
-                                        barcodes.add(iBc);
+                                if (tokens.length >= 2) {
+                                    String[] barcodesString = tokens[1].split(",");
+                                    for(String bc : barcodesString) {
+                                        int iBc = Integer.parseInt(bc);
+                                        if(allBarcodes.contains(iBc)) {
+                                            options.getLog().printlnLogAndScreen("WARNING: Barcode " + bc + " is specified in multiple Metadata blocks in config file.");
+                                            options.getLog().printlnLogAndScreen("Metadata for this barcode may not be correct.");
+                                        } else {
+                                            allBarcodes.add(iBc);
+                                            barcodes.add(iBc);
+                                        }
+
                                     }
-                                    
                                 }
                             } else {
                                 keepReading = false;
