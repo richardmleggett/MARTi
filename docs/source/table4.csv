@@ -1,7 +1,7 @@
 BlastProcess	n/a	Defines the start of a BLAST process
 Name	nt	Name of process
 Program	megablast	Blast algorithm to use e.g megablast, blastn
-Database	/path/to/db	Path to BLAST database
+Database	/path/to/db	Database (path)name. Note, this should be the same as you would specify to the BLAST command line with the -db parameter i.e. it is typically a prefix, or may point to the FASTQ file that the database was built from.
 UseToClassify	n/a	Use BLAST results for classification (can only be set for 1 BLAST process)
 TaxaFilter	/path/to/file.txt	Taxa filter file to use with BLAST (e.g. to filter to bacteria/viruses)
 MaxE	0.001	Max E value for BLAST
