@@ -126,6 +126,7 @@ public class MARTiEngineOptions implements Serializable {
     private int lcaMinQueryCoverage = 0;
     private int lcaMinCombinedScore = 0;
     private int lcaMinLength = 150;
+    private int lcaMinReadLength = 0;
     private int readFilterMinQ = 8;
     private int readFilterMinLength = 500;
     private MARTiResults martiResults = new MARTiResults(this);
@@ -1047,6 +1048,8 @@ public class MARTiEngineOptions implements Serializable {
                                 limitToSpecies = false;
                             } else if (tokens[0].compareToIgnoreCase("LCAMinLength") == 0) {
                                 lcaMinLength = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("LCAMinReadLength") == 0) {
+                                lcaMinReadLength = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("ResultsFile") == 0) {
                                 resultsFile = tokens[1];
                             } else if (tokens[0].compareToIgnoreCase("InitDir") == 0) {
@@ -1282,6 +1285,10 @@ public class MARTiEngineOptions implements Serializable {
 
     public int getLCAMinLength() {
         return lcaMinLength;
+    }
+    
+    public int getLCAMinReadLength() {
+        return lcaMinReadLength;
     }
 
     public int getReadFilterMinQ() {

@@ -34,11 +34,25 @@ public class PAFHitSet implements LCAHitSet {
         PAFHit ph = (PAFHit)hit;
         boolean addAlignment = false;
         boolean updateBest = false;
+        double combinedScore = ph.getIdentity() + ph.getQueryCover();
+
+        System.out.print("QC: "+ph.getQueryCover() + " (" + options.getMinQueryCoverage() +") ");
+        System.out.print("ID: "+ph.getIdentity() + " (" + options.getMinIdentity() +") ");
+        System.out.print("CS: "+combinedScore + " (" + options.getMinCombinedScore() +") ");            
+        System.out.print("LE: "+ph.getLength() + " (" + options.getMinLength() +") ");
+        System.out.println("TX: "+ph.getTaxonId());
+
+        if ((ph.getQueryCover() >= options.getMinQueryCoverage()) &&
+            (ph.getIdentity() >= options.getMinIdentity() &&
+            (combinedScore >= options.getMinCombinedScore()) &&
+            (ph.getLength() >= options.getMinLength()))) {
+            addAlignment = true;
+        }
         
         if (alignments.size() > 0) {
             // Is this better than our best?
             boolean foundNewBest = false;
-
+            
             if (ph.getQueryCover() > bestQueryCover) {
                 alignments.clear();
                 addAlignment = true;

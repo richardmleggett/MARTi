@@ -31,6 +31,7 @@ public class LCAParseOptions {
     private double scorePercent = 90;
     private int minIdentity = 0;
     private int minLength = 0;
+    private int minReadLength = 0;
     private int minQueryCoverage = 0;
     private int minCombinedScore = 0;
     private boolean limitToSpecies = false;
@@ -45,7 +46,7 @@ public class LCAParseOptions {
     public LCAParseOptions() {
     }
     
-    public LCAParseOptions(String taxonomyDir, String mapFile, String format, boolean limitSpecies, int maxHits, double scorePc, int minId, int minCov, int minCom, int minLen) {
+    public LCAParseOptions(String taxonomyDir, String mapFile, String format, boolean limitSpecies, int maxHits, double scorePc, int minId, int minCov, int minCom, int minLen, int minRL) {
         taxonomyDirectory = taxonomyDir;
         mapFilename = mapFile;
         processFormat(format);
@@ -56,6 +57,7 @@ public class LCAParseOptions {
         minQueryCoverage = minCov;
         minCombinedScore = minCom;
         minLength = minLen;
+        minReadLength = minRL;
     }
     
     public void displayHelp() {
@@ -273,7 +275,11 @@ public class LCAParseOptions {
     public int getMinLength() {
         return minLength;
     }
-        
+
+    public int getMinReadLength() {
+        return minReadLength;
+    }
+
     public boolean limitToSpecies() {
         return limitToSpecies;
     }
@@ -349,6 +355,7 @@ public class LCAParseOptions {
         System.out.println("scorePercent="+scorePercent);
         System.out.println("minIdentity="+minIdentity);
         System.out.println("minLength="+minLength);
+        System.out.println("minReadLength="+minReadLength);
         System.out.println("minQueryCoverage="+minQueryCoverage);
         System.out.println("minCombinedScore="+minCombinedScore);
         System.out.println("limitToSpecies="+limitToSpecies);

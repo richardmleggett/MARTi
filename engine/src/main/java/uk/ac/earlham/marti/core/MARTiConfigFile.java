@@ -217,6 +217,7 @@ public class MARTiConfigFile {
             pw.println("# LCAMinQueryCoverage specifies the minium % query coverage for a hit to be considered (0)");
             pw.println("# LCAMinCombinedScore specifies the minimum combined identity + query coverage for a hit to be considered (0)");
             pw.println("# LCAMinLength specifies the minimum length of hit to consider");
+            pw.println("# LCAMinReadLength specifies the minimum length of read to consider");
             pw.println("");
             pw.println("LCAMaxHits:" + options.getLCAMaxHits());
             pw.println("LCAScorePercent:" + options.getLCAScorePercent());
@@ -224,6 +225,7 @@ public class MARTiConfigFile {
             pw.println("LCAMinQueryCoverage:" + options.getLCAMinQueryCoverage());
             pw.println("LCAMinCombinedScore:" + options.getLCAMinCombinedScore());
             pw.println("LCAMinLength:" + options.getLCAMinLength());
+            pw.println("LCAMinReadLength:" + options.getLCAMinReadLength());
             
             pw.println("");
             pw.println("# Metadata blocks can be used to describe the sample being analysed.");

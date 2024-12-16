@@ -43,7 +43,7 @@ public class ReadClassifier {
     }
  
     public synchronized void initialise() {                    
-        lcaParseOptions = new LCAParseOptions(options.getTaxonomyDirectory(), options.getAccessionMap(), "nanook", options.limitToSpecies(), options.getLCAMaxHits(), options.getLCAScorePercent(), options.getLCAMinIdentity(), options.getLCAMinQueryCoverage(), options.getLCAMinCombinedScore(), options.getLCAMinLength());
+        lcaParseOptions = new LCAParseOptions(options.getTaxonomyDirectory(), options.getAccessionMap(), "nanook", options.limitToSpecies(), options.getLCAMaxHits(), options.getLCAScorePercent(), options.getLCAMinIdentity(), options.getLCAMinQueryCoverage(), options.getLCAMinCombinedScore(), options.getLCAMinLength(), options.getLCAMinReadLength());
         taxonomy = new Taxonomy(options, lcaParseOptions, options.getTaxonomyDirectory() + "/nodes.dmp", options.getTaxonomyDirectory() + "/names.dmp"); 
     }
     
@@ -222,7 +222,9 @@ public class ReadClassifier {
                                 SampleMetaData md = options.getSampleMetaData(barcode);
 
                                 options.getLog().println("Got sample metadata");
+                                BarcodeReadLengthService rls = new BarcodeReadLengthService(options.getReadStatistics(), barcode);
                                 LCAFileParser pfp = new LCAFileParser(taxonomy, lcaParseOptions, null, options.runningCARD(), options.getLog());
+                                pfp.setReadLengthService(rls);
                                 
                                 String summaryFilename = f.getClassifierPrefix() + "_summary.txt";
                                 String perReadFilename = f.getClassifierPrefix() + "_perread.txt";

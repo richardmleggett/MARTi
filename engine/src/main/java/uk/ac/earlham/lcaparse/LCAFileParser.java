@@ -42,6 +42,7 @@ public class LCAFileParser {
     private String lastFilename = "";
     private boolean keepRejectedAlignments = false;
     private boolean runningCARD;
+    private ReadLengthService readLengthService = null;
 
     public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard, MARTiLog l) {
         taxonomy = t;
@@ -49,6 +50,10 @@ public class LCAFileParser {
         accTaxConvert = atc;
         runningCARD = rCard;
         log = l;
+    }
+    
+    public void setReadLengthService(ReadLengthService rls) {
+        readLengthService = rls;
     }
     
     private void logEqual(String queryName) {
@@ -236,8 +241,14 @@ public class LCAFileParser {
                         if (options.sortHitsbyBitscore()) {
                             hs.sortHits();                
                         }
-                        
-                        long ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
+
+                        long ancestor = 1L; // Root
+                        int readLength = readLengthService.getReadLength(queryName);
+                        if (readLength >= options.getMinReadLength()) {
+                            ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
+                        } else {
+                            log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
+                        }
                         int count = 0;
                         if (countsPerTaxon.containsKey(ancestor)) {
                             count = countsPerTaxon.get(ancestor);
