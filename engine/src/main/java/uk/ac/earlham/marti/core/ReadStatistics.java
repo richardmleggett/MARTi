@@ -59,7 +59,7 @@ public class ReadStatistics {
         
     }
        
-    public int getReadLength(int bc, String queryid, boolean pass) {
+        public int getReadLength(int bc, String queryid, boolean pass) {
         if(pass) {
             if (passLengthsByBarcode.containsKey(bc)) {
                 if (passLengthsByBarcode.get(bc).containsKey(queryid)) {

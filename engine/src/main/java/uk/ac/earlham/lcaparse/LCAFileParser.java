@@ -43,6 +43,7 @@ public class LCAFileParser {
     private boolean keepRejectedAlignments = false;
     private boolean runningCARD;
     private ReadLengthService readLengthService = null;
+    private boolean warningReadLengthService = false;
 
     public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard, MARTiLog l) {
         taxonomy = t;
@@ -225,6 +226,13 @@ public class LCAFileParser {
         int unknownTaxaCount = 0;
         Set<String> keys = hitsByQuery.keySet();
         
+        if (readLengthService == null) {
+            if (warningReadLengthService == false) {
+                System.out.println("WARNING: No read length service, so can't do min read length filtering.");
+                warningReadLengthService = true;
+            }
+        }        
+        
         try {
             //System.out.println("Writing "+perReadFilename);
             PrintWriter pwPerRead = new PrintWriter(new FileWriter(perReadFilename));
@@ -243,12 +251,19 @@ public class LCAFileParser {
                         }
 
                         long ancestor = 1L; // Root
-                        int readLength = readLengthService.getReadLength(queryName);
-                        if (readLength >= options.getMinReadLength()) {
+                        
+                        if (readLengthService == null) {
+                            //System.out.println("No read length service, so can't do min read length filtering.");
                             ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
-                        } else {
-                            log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
+                        } else {                        
+                            int readLength = readLengthService.getReadLength(queryName);
+                            if (readLength >= options.getMinReadLength()) {
+                                ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
+                            } else {
+                                log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
+                            }
                         }
+                        
                         int count = 0;
                         if (countsPerTaxon.containsKey(ancestor)) {
                             count = countsPerTaxon.get(ancestor);
