@@ -43,6 +43,7 @@ d3.select("#compareDonutTopN").on("input", function(){
 d3.select("#compareDonutTopNNum").text(compareDonutTopN);
 
 
+
 };
 
 
@@ -97,6 +98,7 @@ var maxLinesWrapped;
 
 
 function plotCompareDonut(data,taxaTotalCounts) {
+
 
 donutNcbiIDs = [];
 

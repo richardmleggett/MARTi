@@ -8,6 +8,33 @@ const https = require('https');
 
 var argv = require('minimist')(process.argv.slice(2));
 
+const restrictedMode = argv.r || false;
+
+const martiGuiVersion = "0.22.0";
+
+if (argv.h || argv.help) {
+  console.log(`
+MARTi GUI Version: ${martiGuiVersion}
+
+Usage: node index.js [options]
+
+Options:
+--taxonomy <path>      Path to NCBI taxonomy directory (e.g., /path/to/taxdmp).
+--minknow <path>       Path to the MinKNOW run directory or other directory containing nanopore data.
+--marti <paths>        Semicolon-separated list of MARTi sample directories for the GUI to monitor.
+--port, -p <number>    Port number to run the server (default: 3000).
+--https <true|false>   Enable or disable HTTPS (default: false).
+--key <path>           Path to the SSL key file (required if HTTPS is true).
+--cert <path>          Path to the SSL certificate file (required if HTTPS is true).
+--help, -h             Show this help message.
+
+Examples:
+node index.js --taxonomy "/path/to/taxonomy" --minknow "/path/to/minknow/data" --marti "dir1;dir2"
+node index.js --help
+`);
+  process.exit(0); // Exit after displaying the help message
+}
+
 var serverOptions = {};
 serverOptions["MinKNOWRunDirectory"] = "";
 serverOptions["MARTiSampleDirectory"] = [];
@@ -126,6 +153,17 @@ function checkIfValidPortnumber(num) {
 }
 
 
+serverOptions["TaxonomyDir"] = argv.taxonomy || serverOptions["TaxonomyDir"];
+serverOptions["MinKNOWRunDirectory"] = argv.minknow || serverOptions["MinKNOWRunDirectory"];
+if (argv.marti) {
+    serverOptions["MARTiSampleDirectory"] = argv.marti.split(";");
+}
+serverOptions["Port"] = argv.port || argv.p || serverOptions["Port"];
+serverOptions["https"] = argv.https || serverOptions["https"];
+serverOptions["Key"] = argv.key || serverOptions["Key"];
+serverOptions["Certificate"] = argv.cert || serverOptions["Certificate"];
+
+
   if(serverOptions["Port"] && checkIfValidPortnumber(serverOptions["Port"])) {
       var selectedPort = serverOptions["Port"];
   } else {
@@ -134,12 +172,12 @@ function checkIfValidPortnumber(num) {
   }
 
   //Check for port flag and override server options if valid port provided.
-  const portFlag = argv.p;
-  if (typeof portFlag !== 'undefined') {
-    if (checkIfValidPortnumber(portFlag)) {
-      var selectedPort = portFlag;
-    }
-  }
+  // const portFlag = argv.p;
+  // if (typeof portFlag !== 'undefined') {
+  //   if (checkIfValidPortnumber(portFlag)) {
+  //     var selectedPort = portFlag;
+  //   }
+  // }
 
 
 //Check if https is true
@@ -154,11 +192,12 @@ if (serverOptions["https"].toLowerCase() === 'true') {
     var http = require('http').createServer(app);
   }
 
+ 
+
+
   var io = require('socket.io')(http);
 
-const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.21.1";
 
 if (argv.v || argv.version) {
   console.log(martiGuiVersion);
@@ -176,7 +215,6 @@ function scanMinKNOWRunDirectory() {
   if(serverOptions["MinKNOWRunDirectory"] != "") {
     try {
       const MinKNOWRunDirectory = serverOptions["MinKNOWRunDirectory"];
-      var sampleDirs = [];
       var list = getSubDirectories(MinKNOWRunDirectory);
       list.forEach(function(dir) {
         var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);

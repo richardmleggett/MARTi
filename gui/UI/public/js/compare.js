@@ -122,6 +122,7 @@ function initialiseComparePage() {
               updateComparePlots(compareTreeDataGlobal,true);
               newCompareTreeData = false;
               plotRarefactionCompare(rareData);
+              reorderAmrHm();
           }
   });
 
@@ -181,6 +182,7 @@ function initialiseComparePage() {
         updateComparePlots(compareTreeDataGlobal,true);
         newCompareTreeData = false;
         plotRarefactionCompare(rareData);
+        reorderAmrHm();
       }
 
   });
@@ -359,6 +361,27 @@ updateComparePlots(compareTreeDataGlobal);
   compareDonutUnclassified = "show",
   compareHmTaxaUnclassified = "show";
 
+d3.selectAll("input[name='compareDonutHigherTaxaNode']").on("change", function() {
+  compareDonutHigherTaxaNode = this.value;
+  updateComparePlots(compareTreeDataGlobal);
+});
+
+d3.selectAll("input[name='compareHmTaxaHigherTaxaNode']").on("change", function() {
+  compareHmTaxaHigherTaxaNode = this.value;
+  updateComparePlots(compareTreeDataGlobal);
+});
+
+d3.selectAll("input[name='compareStackedBarHigherTaxaNode']").on("change", function() {
+  compareStackedBarHigherTaxaNode = this.value;
+  updateComparePlots(compareTreeDataGlobal);
+});
+
+  
+compareHmTaxaHigherTaxaNode = "show";  
+compareDonutHigherTaxaNode = "show";
+compareStackedBarHigherTaxaNode = "show";
+
+
   $(document).ready(function () {
       updateCompareSampleNameList(selectedCompareMetaDataArray);
   });
@@ -447,7 +470,10 @@ ctCard = false;
 
 var compareStackedBarUnclassified,
 compareDonutUnclassified,
-compareHmTaxaUnclassified;
+compareHmTaxaUnclassified,
+compareDonutHigherTaxaNode,
+compareHmTaxaHigherTaxaNode,
+compareStackedBarHigherTaxaNode;
 
 var taxonomicRankChangedCompare = false;
 
@@ -478,7 +504,9 @@ var opacityTransitionTime = 450;
 
 
 
-    function topTaxaCompare(sample,run,thisSampleTree,chart,thresholdSelected,unclassified,unclassifiedNode) {
+    function topTaxaCompare(sample,run,inputSampleTree,chart,thresholdSelected,unclassified,unclassifiedNode,higherTaxaShow) {
+
+    let thisSampleTree = [...inputSampleTree];
 
     var unclassifiedIndex = findWithAttr(thisSampleTree, "name", "unclassified");
     if (unclassified == "hide" && unclassifiedIndex != -1) {
@@ -486,15 +514,28 @@ var opacityTransitionTime = 450;
     } else if (unclassified == "show" && unclassifiedIndex == -1){
         if (unclassifiedNode !== undefined) {
         thisSampleTree.push(unclassifiedNode);
-        // thisSampleTree.unshift(unclassifiedNode);
         }
     };
+
+    const sumOfChartValues = thisSampleTree.reduce((sum, node) => sum + node.chartValue, 0);
+    if (higherTaxaShow == "show") {  
+      var rootTotal = compareTaxaData["-5"]["values"][run][sample]["rootSum"];
+      var higherTaxaNodeValue = rootTotal - sumOfChartValues;
+      if (unclassified == "hide") {
+        higherTaxaNodeValue -= unclassifiedNode.chartValue;
+      }
+
+      if (higherTaxaNodeValue > 0) {
+        assignToObject(compareTaxaData, ["-5", 'values', run, sample, 'chartValue'], higherTaxaNodeValue);
+        var higherTaxaNode = {name: "Higher taxa", ncbiRank: "n/a", ncbiID: -5, chartValue: higherTaxaNodeValue};
+        thisSampleTree.push(higherTaxaNode);
+      }
+    }
+
 
       var sorted = thisSampleTree.sort(function(a, b) {
           return b.chartValue - a.chartValue
       })
-
-      // var sorted = thisSampleTree;
 
       var topTaxaArray = [];
 
@@ -507,21 +548,8 @@ var opacityTransitionTime = 450;
           thresholdVal = "Other";
         };
 
-        // if (!compareTaxaData.hasOwnProperty(taxa.ncbiID)){
-        //   compareTaxaData[taxa.ncbiID] = {
-        //     name: taxa.name,
-        //     values: {},
-        //     ncbiRank: taxa.ncbiRank
-        //   };
-        // };
-        //
-        // assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'count'], taxa.value);
-        // assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'summedCount'], taxa.summedValue);
-        // assignToObject(compareTaxaData, [taxa.ncbiID, 'values', run, sample, 'chartValue'], taxa.chartValue);
-
 
         topTaxaArray.push({
-            // name: taxa.name,
             name: compareTaxaData[taxa.ncbiID]["name"],
             value: taxa.chartValue,
             ncbiRank: compareTaxaData[taxa.ncbiID]["ncbiRank"],
@@ -602,7 +630,7 @@ var donutCompareData = [];
 
 function updateComparePlots(compareSampleData,treeplot) {
 
-compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
+compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"},"-5":{name: "Higher taxa", ncbiRank: "n/a", values: {}}};
 
     if(isEmpty(compareSampleData)) {
 
@@ -634,6 +662,8 @@ for (var sampleData of selectedCompareMetaDataArray) {
   if (plotLevelSelectorChanged) {
     plotLevelDataManipulation(plotLevelSelectedCompareId,data);
   }
+
+  assignToObject(compareTaxaData, ["-5", 'values', runId, id, 'rootSum'], data.summedValue);
 
   var sampleLeaves = [];
   var sampleTaxaAtRank = [];
@@ -705,11 +735,11 @@ for (var sampleData of selectedCompareMetaDataArray) {
 
 
 
-  topTaxaCompare(id,runId,thisSampleTreeSorted,"donut",compareDonutTopN,compareDonutUnclassified,unclassifiedNode);
+  topTaxaCompare(id,runId,thisSampleTreeSorted,"donut",compareDonutTopN,compareDonutUnclassified,unclassifiedNode,compareDonutHigherTaxaNode);
 
-  topTaxaCompare(id,runId,thisSampleTreeSorted,"stackedBar",compareStackedBarTopN,compareStackedBarUnclassified,unclassifiedNode);
+  topTaxaCompare(id,runId,thisSampleTreeSorted,"stackedBar",compareStackedBarTopN,compareStackedBarUnclassified,unclassifiedNode,compareStackedBarHigherTaxaNode);
 
-  topTaxaCompare(id,runId,thisSampleTreeSorted,"hmTaxa",compareHmTaxaTopN,compareHmTaxaUnclassified,unclassifiedNode);
+  topTaxaCompare(id,runId,thisSampleTreeSorted,"hmTaxa",compareHmTaxaTopN,compareHmTaxaUnclassified,unclassifiedNode,compareHmTaxaHigherTaxaNode);
 
 
   };
@@ -1077,7 +1107,7 @@ function updateCompareSampleNameList(names) {
           .attr("data-pathrun", function(d) {
               return d.pathRun;})
           // .text(function(d) {return d.id + " - " + d.runId;});
-          .html(function(d) {return "<a>" + d.id + "</a><br>" + "<a class='compareSampleNameListRun'>" + d.runId + "</a>";});
+          .html(function(d) {return "<a>" + d.id + "</a>" + "<a class='compareSampleNameListRun'> - " + d.runId + "</a>";});
 
       compareSampleList.exit()
           .remove();
@@ -1472,6 +1502,27 @@ orderedAmrHmData = [];
 
 plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
 
+
+}
+
+function reorderAmrHm(){
+
+  if (Array.isArray(formattedAmrData)) {
+  orderedAmrHmData = [];
+
+  for (const sample of sortCompareNameArray){
+
+
+      for (const sampleData of formattedAmrData) {
+        if (sampleData.sample == sample.name && sampleData.runId == sample.runId) {
+          orderedAmrHmData.push(sampleData);
+        }
+      }
+  }
+
+  plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
+
+  }
 
 }
 
