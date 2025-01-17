@@ -26,6 +26,7 @@ Options:
 --https <true|false>   Enable or disable HTTPS (default: false).
 --key <path>           Path to the SSL key file (required if HTTPS is true).
 --cert <path>          Path to the SSL certificate file (required if HTTPS is true).
+--options <path>       Path to a custom marti_engine_options.txt file (overrides default locations).
 --help, -h             Show this help message.
 
 Examples:
