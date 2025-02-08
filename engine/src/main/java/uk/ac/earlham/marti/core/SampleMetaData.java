@@ -51,12 +51,14 @@ public class SampleMetaData {
     private int readsPassedFilter = 0;
     private int readsPassedFilterByChunk = 0; // Using this to check for bug in counting
     private int readsFailedFilter = 0;
+    private int readsFailedLCAFilter = 0;
     private int readsClassified = 0;
     private int readsWithPoorAlignments = 0;
     private int readsAnalysed = 0;
     private long bpAnalysed = 0;
     private long totalInputBp = 0;
     private long totalClassifiedBp = 0;
+    private long failedLCAFilterBp = 0;
     private int countByQuality[] = new int[51];
     private double totalQuality = 0;
     private Hashtable<String,Integer> chunkCounts = new Hashtable<String,Integer>();
@@ -141,6 +143,13 @@ public class SampleMetaData {
     public synchronized void addToReadsClassified(int n, long bp) {
         readsClassified+=n;
         totalClassifiedBp += bp;
+    }
+    
+    public synchronized void markReadsFailedLCAFilter(int n, long bp) {
+        readsClassified -= n;
+        totalClassifiedBp -= bp;
+        readsFailedLCAFilter += n;
+        failedLCAFilterBp += bp;
     }
     
     public synchronized void markPoorAlignments(int n, long bp) {
@@ -252,8 +261,10 @@ public class SampleMetaData {
         sampleObjectBuilder.add("readsPassedFilter", readsPassedFilter);
         sampleObjectBuilder.add("readsWithClassification", readsClassified);
         sampleObjectBuilder.add("readsUnclassified", getReadsUnclassified());
+        sampleObjectBuilder.add("readsFailedLCAFilter", readsFailedLCAFilter);        
         sampleObjectBuilder.add("classifiedYield", totalClassifiedBp);
         sampleObjectBuilder.add("unclassifiedYield", getYieldUnclassified());
+        sampleObjectBuilder.add("failedLCAFilterYield", failedLCAFilterBp);
         sampleObjectBuilder.add("readsWithPoorAlignments", readsWithPoorAlignments);
         sampleObjectBuilder.add("readsAnalysed", readsAnalysed);    
         sampleObjectBuilder.add("sequencingStatus", "Complete");

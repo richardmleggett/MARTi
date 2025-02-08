@@ -258,7 +258,8 @@ public class ReadClassifier {
                                 
                                 // Taxon doesn't get assigned until writeResults
                                 startTime = System.nanoTime();
-                                pfp.writeResults(summaryFilename, perReadFilename);
+                                pfp.findAncestorAndWriteResults(summaryFilename, perReadFilename);
+                                options.getSampleMetaData(barcode).markReadsFailedLCAFilter(pfp.getNumberOfReadsFailedLCA(), pfp.getBpFailedLCA());
                                 timeDiff = (System.nanoTime() - startTime) / 1000000;
                                 options.getLog().println("Written " + summaryFilename);
                                 options.getLog().println("Written " + perReadFilename);

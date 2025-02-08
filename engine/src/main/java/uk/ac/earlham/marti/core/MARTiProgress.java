@@ -162,6 +162,9 @@ public class MARTiProgress {
         try {
             options.getLog().println("Writing progress file");
             PrintWriter pw = new PrintWriter(options.getSampleDirectory() + File.separator + "progress.info");
+            options.writeOptionsToFile(pw);            
+            
+            
             //pw.println("RawReads");
             //Set<String> files = rawSequenceFiles.keySet();
             //for (String filename : files) {
@@ -224,7 +227,7 @@ public class MARTiProgress {
         String timeString = options.getLog().getTime();
 
         if (startedIdentifiers.containsKey(identifier)) {
-            options.getLog().println("Error: identifier already found in recordCompleted");
+            options.getLog().printlnLogAndScreen("Error: identifier "+identifier+ " already found in recordStarted. Please report this to the authors.");
         } else {
             startedIdentifiers.put(identifier, new GregorianCalendar());
         }            
@@ -234,7 +237,7 @@ public class MARTiProgress {
         String timeString = options.getLog().getTime();
                 
         if (completedIdentifiers.containsKey(identifier)) {
-            options.getLog().println("Error: identifier already found in recordCompleted");
+            options.getLog().printlnLogAndScreen("Error: identifier "+identifier+" already found in recordCompleted. Please report this to the authors.");
         } else {
             completedIdentifiers.put(identifier, new GregorianCalendar());
         }            

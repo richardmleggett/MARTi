@@ -44,7 +44,9 @@ public class LCAFileParser {
     private boolean runningCARD;
     private ReadLengthService readLengthService = null;
     private boolean warningReadLengthService = false;
-
+    private int nReadsFailedLCA = 0;
+    private long bpFailedLCA = 0;
+    
     public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard, MARTiLog l) {
         taxonomy = t;
         options = o;
@@ -101,6 +103,7 @@ public class LCAFileParser {
                    (options.getFileFormat() == LCAParseOptions.FORMAT_BLASTTAXON))
         {
             BlastHitSet bhs = new BlastHitSet(query, options);
+            
             if (keepRejectedAlignments) {
                 bhs.setKeepRejectedAlignments();
             }
@@ -221,7 +224,7 @@ public class LCAFileParser {
     * @param  summaryFilename   per taxon summary file
     * @param  perReadFilename   per read file
     */
-    public void writeResults(String summaryFilename, String perReadFilename) {
+    public void findAncestorAndWriteResults(String summaryFilename, String perReadFilename) {
         int totalCount = 0;
         int unknownTaxaCount = 0;
         Set<String> keys = hitsByQuery.keySet();
@@ -260,7 +263,11 @@ public class LCAFileParser {
                             if (readLength >= options.getMinReadLength()) {
                                 ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
                             } else {
-                                log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
+                                ancestor = 0L; // unassigned
+                                log.println("Read " + queryName + " moved to unassigned due to length ("+readLength+")");
+                                nReadsFailedLCA++;
+                                bpFailedLCA += readLength;
+                                //log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
                             }
                         }
                         
@@ -456,4 +463,12 @@ public class LCAFileParser {
     public LCAParseOptions getOptions() {
         return options;
     }
+    
+    public int getNumberOfReadsFailedLCA() {
+        return nReadsFailedLCA;
+    }
+    
+    public long getBpFailedLCA() {
+        return bpFailedLCA;
+    }    
 }

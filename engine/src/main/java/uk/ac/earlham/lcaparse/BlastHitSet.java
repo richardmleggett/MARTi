@@ -106,7 +106,12 @@ public class BlastHitSet implements LCAHitSet {
         
         if (alignments.size() == 0) {
             goodAlignment = false;
-        } else {        
+        } else {      
+            // Only accept alignment if read long enough
+            //if (bestLength < options.getMinLength()) {
+            //    goodAlignment = false;
+            //}
+            
             // Only accept alignment if long enough
             if (bestLength < options.getMinLength()) {
                 goodAlignment = false;

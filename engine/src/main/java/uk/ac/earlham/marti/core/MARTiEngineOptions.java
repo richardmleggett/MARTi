@@ -128,7 +128,7 @@ public class MARTiEngineOptions implements Serializable {
     private int lcaMinLength = 150;
     private int lcaMinReadLength = 0;
     private int readFilterMinQ = 8;
-    private int readFilterMinLength = 500;
+    private int readFilterMinLength = 150;
     private MARTiResults martiResults = new MARTiResults(this);
     private String resultsFile = null;
     private boolean initMode = false;
@@ -1587,5 +1587,54 @@ public class MARTiEngineOptions implements Serializable {
         for(MetaData md : metaDataList) {
             md.writeMetaDataFile();
         }
-    }    
+    }
+    
+    public void writeOptionsToFile(PrintWriter pw) {
+        if (pw != null) {
+            pw.println("Options:");
+            pw.println("barcodesList=" + barcodesList);
+            pw.println("maxJobs=" + maxJobs);
+            pw.println("stopProcessingAfter=" + stopProcessingAfter);
+            pw.println("timeLimit=" + timeLimit);
+            pw.println("stopFlag=" + stopFlag);
+            pw.println("runBlastCommand=" + runBlastCommand);
+            pw.println("dontRunNt=" + dontRunNt);
+            pw.println("taxonomyDir=" + taxonomyDir);
+            pw.println("accessionMapFile=" + accessionMapFile);
+            pw.println("lcaMaxHits=" + lcaMaxHits);
+            pw.println("lcaScorePercent=" + lcaScorePercent);
+            pw.println("lcaMinIdentity=" + lcaMinIdentity);
+            pw.println("lcaMinQueryCoverage=" + lcaMinQueryCoverage);
+            pw.println("lcaMinCombinedScore=" + lcaMinCombinedScore);
+            pw.println("lcaMinLength=" + lcaMinLength);
+            pw.println("lcaMinReadLength=" + lcaMinReadLength);
+            pw.println("readFilterMinQ=" + readFilterMinQ);
+            pw.println("readFilterMinLength=" + readFilterMinLength);
+            pw.println("resultsFile=" + resultsFile);
+            pw.println("initMode=" + initMode);
+            pw.println("writeConfigMode=" + writeConfigMode);
+            pw.println("writeOptionsMode=" + writeOptionsMode);
+            pw.println("initDir=" + initDir);
+            pw.println("walkoutMaxE=" + walkoutMaxE);
+            pw.println("walkoutMinID=" + walkoutMinID);
+            pw.println("walkoutMinLength=" + walkoutMinLength);   
+            pw.println("runningCARD=" + runningCARD);
+            pw.println("autodeleteBlastFiles=" + autodeleteBlastFiles);
+            pw.println("autodeleteFastaChunks=" + autodeleteFastaChunks);
+            pw.println("autodeleteFastqChunks=" + autodeleteFastqChunks);
+            pw.println("autodeleteMetaMapsFiles=" + autodeleteMetaMapsFiles);
+            pw.println("blastProcessNames=" + blastProcessNames);
+            pw.println("centrifugeProcessNames=" + centrifugeProcessNames);
+            pw.println("kraken2ProcessNames=" + kraken2ProcessNames);
+            pw.println("cardDBPath=" + cardDBPath);
+            pw.println("barcodeIDs=" + barcodeIDs);
+            pw.println("barcodeUUIDs=" + barcodeUUIDs);
+            pw.println("sampleMetaData=" + sampleMetaData);
+            pw.println("optionsFilename=" + optionsFilename);
+            pw.println("engineOptionsFile=" + engineOptionsFile);
+            pw.println("classifyingProcessName=" + classifyingProcessName);
+            pw.println("compressBlastFiles=" + compressBlastFiles);
+            pw.println("limitToSpecies=" + limitToSpecies);            
+        }
+    }
 }

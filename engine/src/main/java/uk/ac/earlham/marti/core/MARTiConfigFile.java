@@ -80,7 +80,7 @@ public class MARTiConfigFile {
             pw.println("MaxJobs:" + options.getMaxJobs());
 
             pw.println("");
-            pw.println("# InactivityTimeout gives provides a time (in seconds) after which MARTi will stop waiting for new reads.");
+            pw.println("# InactivityTimeout is the time (in seconds) after which MARTi will stop waiting for new reads.");
             pw.println("#     It will continue processing all existing reads and exit upon completion.");        
             pw.println("# StopProcessingAfter tells MARTi to stop processing after X reads have been processed. For indefinite, use 0.");
             pw.println("");

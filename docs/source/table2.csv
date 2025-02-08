@@ -1,2 +1,2 @@
 ReadFilterMinQ	9	Minimmum mean quality value. Reads with mean Q below this are not processed. Default 0 (all reads). |
-ReadFilterMinLength	500	Minimum read length. Reads shorter than this are not processed. Default 0 (all reads). |
+ReadFilterMinLength	150	Minimum read length. Reads shorter than this are not processed. Default 150.

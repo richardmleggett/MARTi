@@ -117,7 +117,7 @@ public class BlastHandler {
             try {
                 JobScheduler jobScheduler = options.getJobScheduler();
                 PrintWriter pw = new PrintWriter(new FileWriter(commandFile));
-                String identifier = bp.getBlastName()+"_"+bp.getBlastTask()+"_"+outputBlast;
+                String identifier = bp.getBlastTask()+"_"+bp.getBlastName()+"_"+outputBlast;
                 String command = "";   
                 ArrayList<String> commands = new ArrayList<String>();
                 String processOptions = bp.getProcessOptions();
