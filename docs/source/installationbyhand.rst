@@ -59,12 +59,6 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
    ``MARTI_DIR=/path/to/MARTi/bin``
 
-#. Finally, you need to create an options file in your home directory that is required by the Engine. An example is provided in the bin directory. To copy it to your home directory, type:
-
-   ``cp bin/marti_engine_options.txt ~/``
-
-   More details on what this file contains is provided in :ref:`cmdline`.
-
 You can check the MARTi Engine is installed by typing:
 
 ``marti -h``
@@ -81,17 +75,6 @@ Having copied the MARTi software onto the computer or cluster being used for the
 #. The marti_gui script inside the bin directory is used to launch MARTi GUI. Open this in a text editor and change line 4 to point to the location of the ``gui`` directory e.g.:
 
    ``MARTI_DIR=/Users/leggettr/Documents/github/MARTi/gui``
-
-#. The GUI also requires the ``marti_engine_options.txt``. If you've already copied this to your home directory for the MARTi Engine then you can skip this step. Otherwise, copy it to your home directory, type:
-
-   ``cp bin/marti_engine_options.txt ~/``
-
-   This file contains the locations of some important directories and you will need to update these for your system installation:
-
-   * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
-   * MinKNOWRunDirectory - path to the directory containing sequencing runs to be analysed by MARTi. The data for each run directory within the MinKNOWRunDirectory should be in fastq format inside a directory called ``fastq_pass``, ``pass``, or ``fastq``. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/data`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample could look something like this: ``/Users/peeln/Documents/data/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass`` or simply: ``/Users/peeln/Documents/data/Flongle_run_11102022/pass``
-   * MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
-
 
 #. Then install the GUI server dependencies by running the following command from inside the gui/UI/ directory (e.g. ``cd gui/UI``) :
 
@@ -112,6 +95,26 @@ Having copied the MARTi software onto the computer or cluster being used for the
 To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
 ``localhost:3000``
+
+marti_engine_options.txt
+------------------------
+
+Both the engine and the GUI can make use of the optional ``marti_engine_options.txt`` file which can be placed in your home directory. This file contains the default locations of taxonomy directories and database definitions which are used in two ways:
+
+    * By the Engine when using the ``-writeconfig`` option. The processes defined in the options file will then be written to the example config Gile.
+    * By the GUI when the user is creating a new analysis. The options will be used to populate the New analysis webpage, but can be changed.
+
+An example marti_engine_options file is provided in the bin directory and can be copied to your home directory:
+
+   ``cp bin/marti_engine_options.txt ~/``
+
+This file contains the locations of some important directories and you will need to update these for your system installation:
+
+   * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
+   * MinKNOWRunDirectory - path to the directory containing sequencing runs to be analysed by MARTi. The data for each run directory within the MinKNOWRunDirectory should be in fastq format inside a directory called ``fastq_pass``, ``pass``, or ``fastq``. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/data`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample could look something like this: ``/Users/peeln/Documents/data/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass`` or simply: ``/Users/peeln/Documents/data/Flongle_run_11102022/pass``
+   * MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
+
+You can also modify the template BLAST processes for your configuration.
 
 Possible macOS differences
 --------------------------

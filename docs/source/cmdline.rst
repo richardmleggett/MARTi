@@ -23,7 +23,7 @@ Where possible additional options include:
 * ``-dontcompressblast`` will stop compression of BLAST files once parsed. 
 * ``-dontrunblast`` will avoid re-running BLAST and will use the previously generated BLAST files. 
 * ``-dontrunnt`` will avoid re-running BLAST nt and will use the previously generated BLAST files. BLAST processes other than 'nt' will still be run.
-
+* ``-dontcontinue`` will make the analysis start from scratch, rather than continuing from where a previous one was stopped.
 
 Creating a config file
 ----------------------
