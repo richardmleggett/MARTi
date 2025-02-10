@@ -87,11 +87,6 @@ Having copied the MARTi software onto the computer or cluster being used for the
    Or, if you want to specify an engine options file:
    ``marti_gui --options [/path/to/marti_engine_options.txt]``
 
-   The following parameters are specific to the GUI:
-
-   * ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
-   * ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
-
 To view the GUI, open a browser and navigate to GUI's port. For example, if using the default port enter the following into the address bar:
 
 ``localhost:3000``
@@ -115,6 +110,11 @@ This file contains the locations of some important directories and you will need
    * MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
 
 You can also modify the template BLAST processes for your configuration.
+
+The following parameters are specific to the GUI:
+
+   * ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
+   * ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
 
 Possible macOS differences
 --------------------------
