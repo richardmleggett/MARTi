@@ -227,3 +227,66 @@ To classify using Diamond and a compatible database, use a ``BlastProcess`` with
      BlastThreads:2
      options: --sensitive --range-culling
 
+
+
+Processing Barcodes Example
+----------------------------
+
+The following example demonstrates how to configure MARTi to process multiple barcodes.
+
+::
+
+   RunName:Sample_Name
+   RawDataDir:/path/to/data/reads
+   SampleDir:/path/to/marti_output/Sample_Name
+
+   ProcessBarcodes:01,02,03,04,05,06,07,08,09,10,11,12
+   BarcodeId1:Kessingland1
+   BarcodeId2:Kessingland2
+   BarcodeId3:CarltonMarshes1
+   BarcodeId4:CarltonMarshe2
+   BarcodeId5:ThetfordForest1
+   BarcodeId6:ThetfordForest2
+   BarcodeId7:CityCentre1
+   BarcodeId8:CityCentre2
+   BarcodeId9:Brancaster1
+   BarcodeId10:Brancaster2
+   BarcodeId11:FoxleyWood1
+   BarcodeId12:FoxleyWood2
+
+   Scheduler:local
+   MaxJobs:64
+   InactivityTimeout:10
+   StopProcessingAfter:0
+   TaxonomyDir:/path/to/databases/taxonomy/taxdump_2024_03_09
+   ReadFilterMinQ:8
+   ReadFilterMinLength:150
+   ConvertFastQ
+   ReadsPerBlast:10000
+
+   BlastProcess
+   Name:nt
+   Program:megablast
+   Database:/path/to/databases/blast/ncbi/nt_20240305/nt
+   NegativeTaxaFilter:/path/to/results/marti/exclude/other_sequences_taxids.txt
+   MaxE:0.001
+   MaxTargetSeqs:25
+   UseToClassify
+
+   LCAMaxHits:100
+   LCAScorePercent:90.0
+   LCAMinIdentity:75
+   LCAMinQueryCoverage:0
+   LCAMinCombinedScore:0
+   LCAMinLength:150
+
+The ``ProcessBarcodes`` line specifies which barcodes MARTi should analyse during the run. The lines following ``ProcessBarcodes`` (e.g., ``BarcodeId1:Kessingland1``) are used to assign custom names to each barcode. If these lines are omitted, MARTi will assign default names using the run name followed by the barcode number (e.g., ``Sample_Name_bc01``).
+
+Users can also rename barcodes after running MARTi. This can be done through the GUI or by creating an ``ids.json`` file in the MARTi output directory. For this example, the file would be placed at ``/path/to/marti_output/Sample_Name/ids.json``.
+
+Here is an example of an ``ids.json`` file to rename two samples after the analysis has been completed::
+
+    {
+        "Kessingland1": "Kessingland1_Autumn24",
+        "Kessingland2": "Kessingland2_Autumn24"
+    }

@@ -16,7 +16,6 @@ Because MARTi makes use of a number of other tools (e.g. BLAST, Centrifuge etc.)
 
 * :ref:`installationbyhand` from the GitHub repository
 * :ref:`installationbioconda`
-* :ref:`docker`
 
 Click on each of the links above to access the instructions for that method.
 

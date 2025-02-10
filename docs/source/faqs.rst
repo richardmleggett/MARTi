@@ -18,3 +18,8 @@ How can leaf nodes have more reads below the node?
 --------------------------------------------------
 
 Reads are assigned to nodes based on the Lowest Common Ancestor settings. However, what nodes are shown depends on the taxonomic level selected. If you select, say, genus level, there will still be reads assigned to species. These won't be shown, but they count towards the "Summed read count" that will show at genus and higher taxonomic levels.
+
+Why do AMR hits on the heatmap sum to over 100% when grouped by "Drug class"?
+-----------------------------------------------------------------------------
+
+When grouping by "Drug class" on the AMR heatmap, it's possible for the total AMR hits to exceed 100% for a sample. This is because individual AMR genes can be associated with multiple drug classes. As a result, a single gene may contribute to more than one category, leading to overlapping counts.

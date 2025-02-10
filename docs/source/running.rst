@@ -17,7 +17,7 @@ Key concept
 
 In summary, MARTi works as follows:
 
-#. The MARTi Engine accesses read data in nanopore run directories, specifically the fastq_pass directory from MinKNOW or the fastq directory from guppy.
+#. The MARTi Engine accesses read data in nanopore run directories, specifically the fastq_pass directory from MinKNOW or the fastq directory from guppy or dorado.
 #. The MARTi Engine writes analysis results to a MARTi run directory, named for the run.
 #. The MARTi GUI anticipates that MARTi run directories are contained within a single parent directory. The GUI scans this parent directory to look for run analyses which are displayed within the GUI.
 

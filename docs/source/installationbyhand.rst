@@ -6,7 +6,7 @@ Installation by hand
 Overview
 --------
 
-This page describes how to install MARTi by hand, from the GitHub repository. If you would prefer a different installation method (e.g. bioconda, Docker), go back to :ref:`installation`.
+This page describes how to install MARTi by hand, from the GitHub repository. If you would prefer a different installation method (e.g. bioconda), go back to :ref:`installation`.
 
 MARTi consists of two main components:
 

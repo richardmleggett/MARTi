@@ -34,7 +34,7 @@ To generate a new config file:
 
 Where:
 
-* ``-rawdir`` specifies a path to a MinKNOW raw data directory (the directory containing fastq_pass directory or fastq directory for guppy run separately).
+* ``-rawdir`` specifies a path to a MinKNOW raw data directory (the directory containing fastq_pass directory or fastq directory for guppy/dorado run separately).
 * ``-sampledir`` specifies a path to a directory where MARTi will write intermediate and final files. If this doesn't exist, it will be created.
 * ``-runname`` specifies the name of this run.
 * ``-barcodes`` specifies the barcodes being used, or can be left out if the run is not barcoded.
@@ -55,4 +55,4 @@ MARTi looks for marti_engine_options.txt in three locations:
 2. If not in the current directory, in the user's home directory (i.e. ~/marti_engine_options.txt).
 3. If not in the user's home directory, in the directory containing the MARTiEngine.jar, which unless you have changed things will be the bin directory.
 
-Alternatively, you can specify the location of the file using the -options command line option. This is useful when running the docker image.
+Alternatively, you can specify the location of the file using the -options command line option.
