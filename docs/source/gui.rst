@@ -136,3 +136,41 @@ To make it easier for users to filter organisms by their taxonomic ranks within 
 | Subspecies | 9        | subspecies, biotype, forma, forma specialis, morph, pathogroup, serogroup, serotype, strain, subvariety, varietas |
 +------------+----------+-------------------------------------------------------------------------------------------------------------------+
 
+Projects
+--------
+
+Projects in MARTi GUI allow users to group MARTi results for easier management and navigation. Once projects are set up, they can be accessed directly via the GUI using a URL like ``http://localhost:3000/project/airseq``.
+
+To set up projects, create a ``projects.json`` file and place it in one of the MARTi output directories. You can specify entire directories, specific runs, or individual samples within a barcoded run. These directories must also be listed in the ``marti_engine_options.txt`` file as a ``MARTiSampleDirectory`` or specified in the ``marti_gui`` command like so:
+
+``marti_gui --marti "/path/to/marti_output/marc;/path/to/marti_output/airseq"``
+
+Here is an example of a ``projects.json`` file:
+
+::
+
+    {
+        "defaultProject": "bambi",
+        "bambi": {
+            "directories": [],
+            "runs": [
+                "BAMBI_P103M_400ng_RAD4_20122017",
+                "BAMBI_P106I_LSQK108_02022018",
+                "BAMBI_P116I_SQK108_02022018",
+                "BAMBI_P205G_1D_12012018",
+                "BAMBI_P8_1D_19092017"
+            ],
+            "samples": []
+        },
+        "marc": {
+            "directories": ["/path/to/marti_output/marc"],
+            "runs": [],
+            "samples": []
+        },
+        "airseq": {
+            "directories": ["/path/to/marti_output/airseq"],
+            "samples": ["NorfolkSeq_test_sample"]
+        }
+    }
+
+In this example, the ``bambi`` project groups specific MARTi runs, ``marc`` uses a directory path, and ``airseq`` includes both a directory and a specific sample.

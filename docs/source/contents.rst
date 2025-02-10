@@ -11,7 +11,6 @@
    installation
    installationbyhand
    installationbioconda
-   docker
    jobschedulers
    blastdbs
 
