@@ -6,7 +6,8 @@ var amrHmSvg,
   amrHmColourPalette,
   amrHmMaxRectWidth,
   compareAmrHmGrey,
-  compareAmrHmRead;
+  compareAmrHmRead,
+  compareAmrHmPlotBy;
 
 
 function initialiseAmrHm() {
@@ -68,6 +69,7 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
     amrHmMaxRectWidth = 80;
     compareAmrHmGrey = "off";
     compareAmrHmRead = "percent";
+    compareAmrHmPlotBy = "cardId";
 
     d3.select("#compareAmrHmTopN").on("change", function(){
       updateAmrPlots(rawAmrData);
@@ -160,7 +162,6 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
 
 };
 
-var compareAmrHmPlotBy = "cardId";
 
 // function convertDataToCSV(data) {
 //   var dataArray = [];

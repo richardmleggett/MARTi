@@ -97,18 +97,19 @@ try {
           processType = checkForProcessType(line);
         } else {
           const fields = line.split(":");
-          if(fields[0] == "MARTiSampleDirectory") {
+            if(fields[0] == "MARTiSampleDirectory") {
             const dirs = fields[1].split(";");
-            for (const dir of dirs) {
+            for (let dir of dirs) {
+              dir = dir.trim();
               var finalDir;
               if (dir.endsWith('/')){
-                finalDir = dir.slice(0, -1);
+              finalDir = dir.slice(0, -1);
               } else {
-                finalDir = dir;
+              finalDir = dir;
               };
               serverOptions["MARTiSampleDirectory"].push(finalDir);
             }
-          } else if (fields[0] == "MaxSimultaneousAnalyses") {
+            } else if (fields[0] == "MaxSimultaneousAnalyses") {
             serverOptions["MaxSimultaneousAnalyses"] = parseInt(fields[1]);
           } else {
             serverOptions[fields[0]] = fields[1];

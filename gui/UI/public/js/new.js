@@ -342,27 +342,74 @@ function updateBarcodeNameFields() {
 
 
 function updateProcessCheckboxes(data) {
+    console.log(data);
+
+    var defaultProcesses = [
+        {
+            Name: "example",
+            type: "BlastProcess",
+            text: `    Name:example_blast
+    Program:megablast
+    Database:/path/to/databases/nt_20240305/nt
+    MaxE:0.001
+    MaxTargetSeqs:25
+    UseToClassify`
+        },
+        {
+            Name: "example_card",
+            type: "BlastProcess",
+            text: `    Name:example_card
+    Program:blastn
+    Database:/path/to/databases/card/CARD_3.3.0/nucleotide_fasta_protein_homolog_model.fasta
+    MaxE:0.001
+    MaxTargetSeqs:100`
+        }
+    ];
+
+    
+    var processList = data.concat(defaultProcesses);
+
     var processCheckboxes = d3.select("#processList").selectAll("div")
-        .data(data);
+        .data(processList, d => d.Name); 
 
     processCheckboxes.enter()
         .append("div")
         .attr("class", "row mb-2")
         .html(function(d) {
-            var name = d.Name;
-            var type = d.type;
-            var divToAppend = '<div class="process-options col-3 d-flex align-items-center pl-4">' +
-                '<input class="" type="checkbox" value="' + name + '" name="analysisCheck">' +
-                '<label class="h5">' + name + '</label>' +
-                '</div>' +
-                '<div class="col-9">' +
-                '<textarea disabled class="form-control" name="analysisName" type="text">' + type + '\n' + d.text + '</textarea>' +
-                '</div>';
-            return divToAppend;
+            return `
+                <div class="process-options col-3 d-flex align-items-center pl-4">
+                    <input type="checkbox" value="${d.Name}" name="analysisCheck">
+                    <label class="h5">${d.Name}</label>
+                </div>
+                <div class="col-9">
+                    <textarea disabled class="form-control" name="analysisName" type="text">${d.type}\n${d.text}</textarea>
+                </div>
+            `;
         });
 
-    processCheckboxes.exit()
-        .remove();
+    processCheckboxes.exit().remove();
+
+    // var processCheckboxes = d3.select("#processList").selectAll("div")
+    //     .data(processList);
+
+    // processCheckboxes.enter()
+    //     .append("div")
+    //     .attr("class", "row mb-2")
+    //     .html(function(d) {
+    //         var name = d.Name;
+    //         var type = d.type;
+    //         var divToAppend = '<div class="process-options col-3 d-flex align-items-center pl-4">' +
+    //             '<input class="" type="checkbox" value="' + name + '" name="analysisCheck">' +
+    //             '<label class="h5">' + name + '</label>' +
+    //             '</div>' +
+    //             '<div class="col-9">' +
+    //             '<textarea disabled class="form-control" name="analysisName" type="text">' + type + '\n' + d.text + '</textarea>' +
+    //             '</div>';
+    //         return divToAppend;
+    //     });
+
+    // processCheckboxes.exit()
+    //     .remove();
 
 
 }
