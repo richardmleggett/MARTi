@@ -16,7 +16,7 @@ if (argv.h || argv.help) {
   console.log(`
 MARTi GUI Version: ${martiGuiVersion}
 
-Usage: node index.js [options]
+Usage: marti_gui [options]
 
 Options:
 --taxonomy <path>      Path to NCBI taxonomy directory (e.g., /path/to/taxdmp).
@@ -30,8 +30,8 @@ Options:
 --help, -h             Show this help message.
 
 Examples:
-node index.js --taxonomy "/path/to/taxonomy" --minknow "/path/to/minknow/data" --marti "dir1;dir2"
-node index.js --help
+marti_gui --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data --marti dir1;dir2
+marti_gui --help
 `);
   process.exit(0); // Exit after displaying the help message
 }

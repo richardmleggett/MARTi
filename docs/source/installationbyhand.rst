@@ -82,7 +82,7 @@ Having copied the MARTi software onto the computer or cluster being used for the
 
 #. To start the GUI server, type:
 
-   ``marti_gui --marti "/path/to/marti_output"``
+   ``marti_gui --marti /path/to/marti_output``
 
    Or, if you want to specify an engine options file:
    ``marti_gui --options [/path/to/marti_engine_options.txt]``
