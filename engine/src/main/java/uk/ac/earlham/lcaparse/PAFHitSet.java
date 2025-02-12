@@ -36,11 +36,11 @@ public class PAFHitSet implements LCAHitSet {
         boolean updateBest = false;
         double combinedScore = ph.getIdentity() + ph.getQueryCover();
 
-        System.out.print("QC: "+ph.getQueryCover() + " (" + options.getMinQueryCoverage() +") ");
-        System.out.print("ID: "+ph.getIdentity() + " (" + options.getMinIdentity() +") ");
-        System.out.print("CS: "+combinedScore + " (" + options.getMinCombinedScore() +") ");            
-        System.out.print("LE: "+ph.getLength() + " (" + options.getMinLength() +") ");
-        System.out.println("TX: "+ph.getTaxonId());
+        //System.out.print("QC: "+ph.getQueryCover() + " (" + options.getMinQueryCoverage() +") ");
+        //System.out.print("ID: "+ph.getIdentity() + " (" + options.getMinIdentity() +") ");
+        //System.out.print("CS: "+combinedScore + " (" + options.getMinCombinedScore() +") ");            
+        //System.out.print("LE: "+ph.getLength() + " (" + options.getMinLength() +") ");
+        //System.out.println("TX: "+ph.getTaxonId());
 
         if ((ph.getQueryCover() >= options.getMinQueryCoverage()) &&
             (ph.getIdentity() >= options.getMinIdentity() &&

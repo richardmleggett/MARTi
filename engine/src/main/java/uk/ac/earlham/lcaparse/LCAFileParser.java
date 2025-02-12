@@ -44,8 +44,9 @@ public class LCAFileParser {
     private boolean runningCARD;
     private ReadLengthService readLengthService = null;
     private boolean warningReadLengthService = false;
-    private int nReadsFailedLCA = 0;
-    private long bpFailedLCA = 0;
+    private int nReadsFailedLCAMinLength = 0;
+    private int nReadsFailedGoodAlignment = 0;
+    private long bpFailedLCAMinLength = 0;
     
     public LCAFileParser(Taxonomy t, LCAParseOptions o, AccessionTaxonConvertor atc, boolean rCard, MARTiLog l) {
         taxonomy = t;
@@ -193,11 +194,35 @@ public class LCAFileParser {
     public ArrayList<String> removePoorAlignments() {
         Set<String> keys = hitsByQuery.keySet();
         ArrayList<String> idsToRemove = new ArrayList<String>();
+        
+        if (readLengthService == null) {
+            if (warningReadLengthService == false) {
+                System.out.println("\nWARNING: No read length service, so can't do min read length filtering.\n");
+                warningReadLengthService = true;
+            }
+        }        
+                
         for (String queryName : keys) {
             LCAHitSet hs = hitsByQuery.get(queryName);
-            if (!hs.hasGoodAlignment()) {
+            int readLength = 0;
+            boolean removeThis = false;
+
+            if (readLengthService != null) {
+                readLength = readLengthService.getReadLength(queryName);
+                if (readLength < options.getMinReadLength()) {
+                    removeThis = true;
+                    nReadsFailedLCAMinLength++;
+                    bpFailedLCAMinLength += readLength;
+                }
+            }
+            
+            if ((removeThis == false) && (!hs.hasGoodAlignment())) {
+                nReadsFailedGoodAlignment++;
+                removeThis = true;
+            }
+
+            if (removeThis) {
                 idsToRemove.add(queryName);
-                //System.out.println("Removed poor alignment for read "+queryName);
             }
         }    
                 
@@ -211,7 +236,6 @@ public class LCAFileParser {
     
     public void registerTaxonomyData(int barcode) {
         Set<String> keys = hitsByQuery.keySet();
-        ArrayList<String> idsToRemove = new ArrayList<String>();
         for (String queryName : keys) {
             LCAHitSet hs = hitsByQuery.get(queryName);
             taxonomy.registerNodeData(barcode, hs.getAssignedTaxon(), hs.getMeanIdentity(), hs.getBestIdentity());
@@ -228,14 +252,7 @@ public class LCAFileParser {
         int totalCount = 0;
         int unknownTaxaCount = 0;
         Set<String> keys = hitsByQuery.keySet();
-        
-        if (readLengthService == null) {
-            if (warningReadLengthService == false) {
-                System.out.println("WARNING: No read length service, so can't do min read length filtering.");
-                warningReadLengthService = true;
-            }
-        }        
-        
+                
         try {
             //System.out.println("Writing "+perReadFilename);
             PrintWriter pwPerRead = new PrintWriter(new FileWriter(perReadFilename));
@@ -245,6 +262,8 @@ public class LCAFileParser {
                 
                 if (hs.getNumberOfAlignments() > 0) {
                     if (hs.hasGoodAlignment()) {
+                        long ancestor = 1L; // Root
+
                         if (hs.hasUnknownTaxa()) {
                             unknownTaxaCount++;
                         }
@@ -253,24 +272,8 @@ public class LCAFileParser {
                             hs.sortHits();                
                         }
 
-                        long ancestor = 1L; // Root
-                        
-                        if (readLengthService == null) {
-                            //System.out.println("No read length service, so can't do min read length filtering.");
-                            ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
-                        } else {                        
-                            int readLength = readLengthService.getReadLength(queryName);
-                            if (readLength >= options.getMinReadLength()) {
-                                ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
-                            } else {
-                                ancestor = 0L; // unassigned
-                                log.println("Read " + queryName + " moved to unassigned due to length ("+readLength+")");
-                                nReadsFailedLCA++;
-                                bpFailedLCA += readLength;
-                                //log.println("Query " + queryName + " assigned to root due to length ("+readLength+")");
-                            }
-                        }
-                        
+                        ancestor = taxonomy.findAncestor(hs, options.getMaxHitsToConsider(), options.limitToSpecies());
+
                         int count = 0;
                         if (countsPerTaxon.containsKey(ancestor)) {
                             count = countsPerTaxon.get(ancestor);
@@ -294,9 +297,11 @@ public class LCAFileParser {
                         pwPerRead.println("");
                         hs.setAssignedTaxon(ancestor);
                     } else {
+                        // Don't think execution should ever get here since adding removePoorAlignments method
                         pwPerRead.println(queryName + "\t0\tUnassigned\tBadAlignment\t0\t0");
                     }                
                 } else {
+                    // Don't think execution should ever get here since adding removePoorAlignments method
                     pwPerRead.println(queryName + "\t0\tUnassigned\tNoAlignments\t0\t0");
                 }
             }
@@ -464,11 +469,15 @@ public class LCAFileParser {
         return options;
     }
     
-    public int getNumberOfReadsFailedLCA() {
-        return nReadsFailedLCA;
+    public int getNumberOfReadsFailedLCAMinLength() {
+        return nReadsFailedLCAMinLength;
     }
     
-    public long getBpFailedLCA() {
-        return bpFailedLCA;
-    }    
+    public long getBpFailedLCAMinLength() {
+        return bpFailedLCAMinLength;
+    }
+
+    public int getNumberOfReadsFailedGoodAlignment() {    
+        return nReadsFailedGoodAlignment;
+    }
 }

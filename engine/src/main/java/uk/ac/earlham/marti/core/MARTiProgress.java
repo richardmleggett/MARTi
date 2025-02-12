@@ -201,15 +201,19 @@ public class MARTiProgress {
         try {
             File progressFile = new File(options.getSampleDirectory() + File.separator + "progress.info");
             if (progressFile.exists()) {
-                options.getLog().printlnLogAndScreen("Existing progress file found. Attempting to continue from last saved position.");
+                options.getLog().printlnLogAndScreen("Existing progress file found. Will attempt to continue from last saved position.");
                 BufferedReader br = new BufferedReader(new FileReader(progressFile));
                 String line = br.readLine();
-                if (line.startsWith("Identifiers:")) {    
-                    int idCount = Integer.parseInt(line.substring(12));
-                    while ((line = br.readLine()) != null) {
-                        String[] tokens = line.split("\t");
-                        String id = tokens[0];
-                        String timeString = tokens[1];
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("Identifiers:")) {    
+                        int idCount = Integer.parseInt(line.substring(12));
+                        while ((line = br.readLine()) != null) {
+                            String[] tokens = line.split("\t");
+                            String id = tokens[0];
+                            String timeString = tokens[1];
+                            System.out.println("    Completed "+id);
+                            recordCompleted(id);
+                        }
                     }
                 }
                 br.close();
@@ -237,7 +241,9 @@ public class MARTiProgress {
         String timeString = options.getLog().getTime();
                 
         if (completedIdentifiers.containsKey(identifier)) {
-            options.getLog().printlnLogAndScreen("Error: identifier "+identifier+" already found in recordCompleted. Please report this to the authors.");
+            if (!options.continueFromPrevious()) {
+                options.getLog().printlnLogAndScreen("Error: identifier "+identifier+" already found in recordCompleted. Please report this to the authors.");
+            }
         } else {
             completedIdentifiers.put(identifier, new GregorianCalendar());
         }            

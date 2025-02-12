@@ -165,6 +165,7 @@ public class MARTiEngineOptions implements Serializable {
     private int schedulerResubmissionAttempts = 2;
     private boolean rmlDebug = false;
     private ArrayList<MetaData> metaDataList = new ArrayList<MetaData>();
+    private boolean continueFromPreviousPlace = true;
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -298,6 +299,9 @@ public class MARTiEngineOptions implements Serializable {
                 i++;
             } else if (args[i].equalsIgnoreCase("-dontrunnt")) {
                 dontRunNt = true;
+                i++;
+            } else if (args[i].equalsIgnoreCase("-dontcontinue")) {
+                continueFromPreviousPlace = false;
                 i++;
             } else if (args[i].equalsIgnoreCase("-init")) {
                 initMode = true;
@@ -1589,6 +1593,10 @@ public class MARTiEngineOptions implements Serializable {
         }
     }
     
+    public boolean continueFromPrevious() {
+        return continueFromPreviousPlace;
+    }
+    
     public void writeOptionsToFile(PrintWriter pw) {
         if (pw != null) {
             pw.println("Options:");
@@ -1629,9 +1637,7 @@ public class MARTiEngineOptions implements Serializable {
             pw.println("cardDBPath=" + cardDBPath);
             pw.println("barcodeIDs=" + barcodeIDs);
             pw.println("barcodeUUIDs=" + barcodeUUIDs);
-            pw.println("sampleMetaData=" + sampleMetaData);
             pw.println("optionsFilename=" + optionsFilename);
-            pw.println("engineOptionsFile=" + engineOptionsFile);
             pw.println("classifyingProcessName=" + classifyingProcessName);
             pw.println("compressBlastFiles=" + compressBlastFiles);
             pw.println("limitToSpecies=" + limitToSpecies);            

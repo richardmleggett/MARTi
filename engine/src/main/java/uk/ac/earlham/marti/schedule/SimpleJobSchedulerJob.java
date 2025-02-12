@@ -60,6 +60,16 @@ public class SimpleJobSchedulerJob {
     }
 
     public void run() {
+        // Check completed already?
+        // If not, check if we've got dontrunblast selected
+        if (options.continueFromPrevious()) {
+            if (options.getProgressReport().checkCompleted(identifier)) {
+                options.getLog().printlnLogAndScreen("Job "+identifier+" already completed, so not rerunning.");
+                dontRunCommand = true;
+                return;
+            }            
+        }
+        
         if (dontRunCommand) {
             String newCommands[] = {"sleep", "2"};
             String logText = "[ Running ";
@@ -69,8 +79,8 @@ public class SimpleJobSchedulerJob {
             options.getLog().println(logText);
             commands = newCommands;
             return;
-        }         
-
+        }      
+        
         try {
             ProcessBuilder pb = new ProcessBuilder(commands);
 

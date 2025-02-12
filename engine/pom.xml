@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>leggett</groupId>
     <artifactId>MARTiEngine</artifactId>
-    <version>0.9.20</version>
+    <version>0.9.22</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

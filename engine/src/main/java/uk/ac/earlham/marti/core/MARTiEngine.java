@@ -17,11 +17,11 @@ import uk.ac.earlham.marti.schedule.*;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.21";
+    public final static String VERSION_STRING = "v0.9.22";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
-    private static void process(MARTiEngineOptions options) throws InterruptedException {
+    private static void processReads(MARTiEngineOptions options) throws InterruptedException {
         ReadProcessor rp = new ReadProcessor(options, options.getProgressReport());
         options.makeDirectories();
         options.writeMetadataJSONs();
@@ -99,7 +99,8 @@ public class MARTiEngine {
         
         // Parse command line
         options.parseArgs(args);
-        
+
+        // TEST MODE
         if (options.inTestMode()) {
             //testUnzip();
             // SLURM development
@@ -120,7 +121,9 @@ public class MARTiEngine {
             };
                     
             System.out.println("Done");
-        } else if (options.isInitMode()) {
+        }
+        // DEPRECATED INIT MODE
+        else if (options.isInitMode()) {
             System.out.println("Init mode");
             MARTiJSONFile jf = new MARTiJSONFile();
             String initFilename = options.getInitDir() + File.separator + "init.json";
@@ -128,23 +131,20 @@ public class MARTiEngine {
             jf.outputVersions(true);
             jf.closeFile();
             System.out.println("Written " + initFilename);
-        } else if (!options.isWriteConfigMode() && !options.isWriteOptionsMode()) {        
+        }
+        // NORMAL MARTi MODE
+        else if (!options.isWriteConfigMode() && !options.isWriteOptionsMode()) {        
             File logsDir = new File(options.getLogsDir());
             if (!logsDir.exists()) {
                 logsDir.mkdir();
             }
-
-            options.getReadClassifier().initialise();
-
-            // DEBUG - Test WalkoutRead
-            WalkOutRead wor = new WalkOutRead("test", options, options.getReadClassifier().getTaxonomy());
             
-            process(options);
-
-            //memoryReport();
-
+            options.getReadClassifier().initialise();
+            if (options.continueFromPrevious()) {
+                options.getProgressReport().readProgressFile();
+            }
+            processReads(options);
             options.getLog().close();
-
             options.getThreadExecutor().shutdown();
 
             if (options.getReturnValue() != 0) {

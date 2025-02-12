@@ -117,6 +117,15 @@ public class SlurmSchedulerJob {
                  f.delete();
             }
         }
+
+        // Check completed already?
+        // If not, check if we've got dontrunblast selected
+        if (options.continueFromPrevious()) {
+            if (options.getProgressReport().checkCompleted(identifier)) {
+                options.getLog().printlnLogAndScreen("Job "+identifier+" already completed, so not rerunning.");
+                dontRunCommand = true;
+            }            
+        }
         
         if (dontRunCommand) {
             System.out.println("Not running command for job "+internalJobId);            
@@ -482,6 +491,7 @@ public class SlurmSchedulerJob {
                     (jobState == STATE_OOM) ||
                     (jobState == STATE_TIMEOUT))
                 {
+                    schedulerLog.printlnLogAndScreen("Job "+internalJobId+" ("+submittedJobId+") failed with state "+jobState+" "+getJobStateString());
                     tryResubmission();
                 }
             } catch (Exception e) {
@@ -506,6 +516,7 @@ public class SlurmSchedulerJob {
                 (jobState == STATE_OOM) ||
                 (jobState == STATE_TIMEOUT))
             {
+                schedulerLog.println("Job "+internalJobId+" ("+submittedJobId+") failed with state "+jobState+" "+getJobStateString());
                 failed = true;
             }        
         }
@@ -529,7 +540,7 @@ public class SlurmSchedulerJob {
         boolean resubmitted = false;
         
         if (resubmissionAttempts > 0) {
-            schedulerLog.println("Job "+internalJobId+" ("+submittedJobId+") failed. Resubmitting.");
+            schedulerLog.println("Job "+internalJobId+" ("+submittedJobId+") resubmitting.");
             jobState = STATE_UNKNOWN;
             this.run();
             resubmissionAttempts--;

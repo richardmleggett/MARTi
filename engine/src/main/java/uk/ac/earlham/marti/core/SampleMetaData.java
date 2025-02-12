@@ -51,14 +51,16 @@ public class SampleMetaData {
     private int readsPassedFilter = 0;
     private int readsPassedFilterByChunk = 0; // Using this to check for bug in counting
     private int readsFailedFilter = 0;
-    private int readsFailedLCAFilter = 0;
-    private int readsClassified = 0;
+    private int readsFailedLCAMinLength = 0;
+    private int readsFailedGoodAlignment = 0;
     private int readsWithPoorAlignments = 0;
+    private int initialReadsClassified = 0; // Before appluing LCA which might remove reads from classified to unclassified
+    private int readsClassified = 0; // After applying LCA. Although with Kraken and Centrifuge, will be same as initial.
     private int readsAnalysed = 0;
     private long bpAnalysed = 0;
     private long totalInputBp = 0;
     private long totalClassifiedBp = 0;
-    private long failedLCAFilterBp = 0;
+    private long bpFailedLCAMinLength = 0;
     private int countByQuality[] = new int[51];
     private double totalQuality = 0;
     private Hashtable<String,Integer> chunkCounts = new Hashtable<String,Integer>();
@@ -141,17 +143,24 @@ public class SampleMetaData {
     }
     
     public synchronized void addToReadsClassified(int n, long bp) {
+        initialReadsClassified+=n;
         readsClassified+=n;
         totalClassifiedBp += bp;
     }
     
-    public synchronized void markReadsFailedLCAFilter(int n, long bp) {
-        readsClassified -= n;
-        totalClassifiedBp -= bp;
-        readsFailedLCAFilter += n;
-        failedLCAFilterBp += bp;
+    public synchronized void markReadsFailedLCAMinLength(int n, long bp) {
+        readsFailedLCAMinLength += n;
+        bpFailedLCAMinLength += bp;
+    }
+
+    public synchronized void markFailedGoodAlignment(int n) {
+        readsFailedGoodAlignment += n;
     }
     
+    public synchronized int getFailedGoodAlignment() {
+        return readsFailedGoodAlignment;
+    }
+
     public synchronized void markPoorAlignments(int n, long bp) {
         readsClassified-=n;
         totalClassifiedBp -= bp;
@@ -261,11 +270,13 @@ public class SampleMetaData {
         sampleObjectBuilder.add("readsPassedFilter", readsPassedFilter);
         sampleObjectBuilder.add("readsWithClassification", readsClassified);
         sampleObjectBuilder.add("readsUnclassified", getReadsUnclassified());
-        sampleObjectBuilder.add("readsFailedLCAFilter", readsFailedLCAFilter);        
         sampleObjectBuilder.add("classifiedYield", totalClassifiedBp);
         sampleObjectBuilder.add("unclassifiedYield", getYieldUnclassified());
-        sampleObjectBuilder.add("failedLCAFilterYield", failedLCAFilterBp);
         sampleObjectBuilder.add("readsWithPoorAlignments", readsWithPoorAlignments);
+        sampleObjectBuilder.add("readsFailedLCAFilter", readsFailedLCAMinLength);        
+        sampleObjectBuilder.add("readsFailedGoodAlignment", readsFailedGoodAlignment);        
+        sampleObjectBuilder.add("initialReadsClassified", initialReadsClassified);
+        sampleObjectBuilder.add("readsWithoutAnyHits", readsPassedFilter - initialReadsClassified);        
         sampleObjectBuilder.add("readsAnalysed", readsAnalysed);    
         sampleObjectBuilder.add("sequencingStatus", "Complete");
         sampleObjectBuilder.add("martiStatus", martiComplete ? "Complete":"Processing");

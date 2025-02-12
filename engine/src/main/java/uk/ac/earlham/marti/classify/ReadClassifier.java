@@ -246,6 +246,9 @@ public class ReadClassifier {
                                     bpRemoved += options.getReadStatistics().getReadLength(barcode, query, true);
                                 }
 
+                                options.getSampleMetaData(barcode).markReadsFailedLCAMinLength(pfp.getNumberOfReadsFailedLCAMinLength(), pfp.getBpFailedLCAMinLength());
+                                options.getSampleMetaData(barcode).markFailedGoodAlignment(pfp.getNumberOfReadsFailedGoodAlignment());
+                                
                                 options.getLog().println("Adding to reads classified");
                                 md.addToReadsClassified(readsWithHits, totalBpWithHits);
                                 options.getLog().println("Marking poor alignments");
@@ -259,7 +262,6 @@ public class ReadClassifier {
                                 // Taxon doesn't get assigned until writeResults
                                 startTime = System.nanoTime();
                                 pfp.findAncestorAndWriteResults(summaryFilename, perReadFilename);
-                                options.getSampleMetaData(barcode).markReadsFailedLCAFilter(pfp.getNumberOfReadsFailedLCA(), pfp.getBpFailedLCA());
                                 timeDiff = (System.nanoTime() - startTime) / 1000000;
                                 options.getLog().println("Written " + summaryFilename);
                                 options.getLog().println("Written " + perReadFilename);
@@ -271,7 +273,7 @@ public class ReadClassifier {
                                 int fastaChunkNumber = getChunkNumber(f.getBlastFile());
                                 int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
 
-                                // Register mean identity etc.
+                                // Register assignment with main list
                                 pfp.registerTaxonomyData(barcode);
                                 
                                 // Write files for min support 0, 0.1, 1 and 2
