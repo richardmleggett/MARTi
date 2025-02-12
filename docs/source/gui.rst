@@ -20,6 +20,8 @@ To quickly get started, you can run the GUI by providing a path to the MARTi out
 
 ``marti_gui --marti /path/to/marti_output``
 
+Once the server is running, open a browser and navigate to ``http://localhost:3000`` to access the GUI. The default port is 3000, but you can specify a different port using the ``--port`` option.
+
 If you want to initiate analyses from the New Analysis page you will also need to provide paths to the NCBI taxonomy files and your read data or MinKNOW run directory:
 
 ``marti_gui --marti /path/to/marti_output --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data``
