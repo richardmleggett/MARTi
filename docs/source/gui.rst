@@ -11,6 +11,49 @@ The MARTi GUI is a browser-based interface for viewing and interacting with anal
 #. **New analysis** - for configuring and initiating local **MARTi Engine** analyses.
 
 
+Launching the GUI
+-----------------
+
+The MARTi GUI can be launched with minimal configuration or with customised options, depending on your needs.
+
+To quickly get started, you can run the GUI by providing a path to the MARTi output directories you want to monitor:
+
+``marti_gui --marti /path/to/marti_output``
+
+If you want to initiate analyses from the New Analysis page you will also need to provide paths to the NCBI taxonomy files and your read data or MinKNOW run directory:
+
+``marti_gui --marti /path/to/marti_output --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data``
+
+Alternatively, you can store all these paths in a ``marti_engine_options.txt`` file and simply launch the GUI with:
+
+``marti_gui``
+
+**Usage:**
+
+``marti_gui [options]``
+
+**Options:**
+
+* ``--taxonomy <path>``      Path to the NCBI taxonomy directory (e.g., ``/path/to/taxdmp``).
+* ``--minknow <path>``       Path to the MinKNOW run directory or another directory containing nanopore data.
+* ``--marti <paths>``        Semicolon-separated list of MARTi sample directories for the GUI to monitor.
+* ``--port, -p <number>``    Port number for the server (default: 3000).
+* ``--https <true|false>``   Enable or disable HTTPS (default: false).
+* ``--key <path>``           Path to the SSL key file (required if HTTPS is enabled).
+* ``--cert <path>``          Path to the SSL certificate file (required if HTTPS is enabled).
+* ``--options <path>``       Path to a custom ``marti_engine_options.txt`` file (overrides default locations).
+* ``--help, -h``             Display this help message.
+
+**Examples:**
+
+Run the GUI while monitoring multiple output directories and specifying taxonomy and data paths:
+
+``marti_gui --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data --marti /path/to/output1;/path/to/output2``
+
+Display the help message:
+
+``marti_gui --help``
+
 The Samples page
 ----------------
 
@@ -106,49 +149,6 @@ The Dashboard and Compare pages have additional page-specific options bars fixed
   :align: center
 
 Many of the plots also have plot-specific options that can be accessed via the three vertical dots menu icon in the top right-hand corner of the plot’s card.
-
-Command Line Options
---------------------
-
-The MARTi GUI can be launched with minimal configuration or with customised options, depending on your needs.
-
-To quickly get started, you can run the GUI by providing a path to the MARTi output directories you want to monitor:
-
-``marti_gui --marti /path/to/marti_output``
-
-If you want to initiate analyses from the New Analysis you will also need to provide paths to the NCBI taxonomy files and your read data or MinKNOW run directory:
-
-``marti_gui --marti /path/to/marti_output --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data``
-
-Alternatively, you can store all these paths in a ``marti_engine_options.txt`` file and simply launch the GUI with:
-
-``marti_gui``
-
-**Usage:**
-
-``marti_gui [options]``
-
-**Options:**
-
-* ``--taxonomy <path>``      Path to the NCBI taxonomy directory (e.g., ``/path/to/taxdmp``).
-* ``--minknow <path>``       Path to the MinKNOW run directory or another directory containing nanopore data.
-* ``--marti <paths>``        Semicolon-separated list of MARTi sample directories for the GUI to monitor.
-* ``--port, -p <number>``    Port number for the server (default: 3000).
-* ``--https <true|false>``   Enable or disable HTTPS (default: false).
-* ``--key <path>``           Path to the SSL key file (required if HTTPS is enabled).
-* ``--cert <path>``          Path to the SSL certificate file (required if HTTPS is enabled).
-* ``--options <path>``       Path to a custom ``marti_engine_options.txt`` file (overrides default locations).
-* ``--help, -h``             Display this help message.
-
-**Examples:**
-
-Run the GUI while monitoring multiple output directories and specifying taxonomy and data paths:
-
-``marti_gui --taxonomy /path/to/taxonomy --minknow /path/to/minknow/data --marti /path/to/output1;/path/to/output2``
-
-Display the help message:
-
-``marti_gui --help``
 
 
 Taxonomic ranks
