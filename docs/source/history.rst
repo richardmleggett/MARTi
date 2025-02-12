@@ -1,21 +1,36 @@
 Change history
 ==============
 
-Version 0.9.17
---------------
+Version 0.9.22 (TBC)
+--------------------
+
+* Added ability to continue from aborted position.
+* Removed need for marti_engine_options.txt file.
+* Reads filtered through LCAMinReadLength are now marked as unclassified.
+* Better reporting of SLURM errors.
+* GUI updates and fixes.
+
+Version 0.9.20 (23 Jan 2025)
+----------------------------
+
+* GUI updates and fixes.
+* Added LCAMinReadLength option.
+
+Version 0.9.18 (17 Oct 2024)
+----------------------------
 
 * New map view in samples view.
 * Changes to default options.
 * Minor changes to job handling on SLURM (e.g. naming)
 
-Version 0.9.16
---------------
+Version 0.9.16 (1 Mar 2024)
+---------------------------
 
 * Added DIAMOND support.
 * Various GUI updates.
 
-Version 0.9.15
---------------
+Version 0.9.15 (30 Nov 2023)
+----------------------------
 
 * Centrifuge support.
 * Metadata support.

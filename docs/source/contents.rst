@@ -22,6 +22,7 @@
    cmdline
    gui
    configfiles
+   continuing
    advanced
    downstream
    example

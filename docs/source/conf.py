@@ -50,7 +50,7 @@ master_doc = 'contents'
 
 # General information about the project.
 project = u'MARTi'
-copyright = u'2021-24, Earlham Institute'
+copyright = u'2021-25, Earlham Institute'
 author = u'Richard M. Leggett, Ned Peel, Sam Martin'
 
 # The version info for the project you're documenting, acts as replacement for
