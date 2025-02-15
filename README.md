@@ -1,8 +1,8 @@
 # MARTi
 Metagenomic Analysis in Real Time
 
-Documentation: https://marti.readthedocs.io/en/latest/
+Please see the documentation page at https://marti.readthedocs.io/en/latest/
 
-Try MARTi out at http://marti.cyverseuk.org
+Try MARTi out before you install at http://marti.cyverseuk.org
 
-Current version is for beta testing purposes.
+MARTi is open source and supplied under an MIT license.

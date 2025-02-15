@@ -5,6 +5,8 @@ MARTi is a software package designed for performing real-time analysis of metage
 
 You can try out the MARTi browser interface at `http://marti.cyverseuk.org <http://marti.cyverseuk.org>`_. 
 
+MARTi is open source software supplied under an MIT license. See the `GitHub <https://github.com/richardmleggett/MARTi>`_ for more details.
+
 Getting MARTi
 -------------
 
