@@ -20,7 +20,7 @@ Where possible additional options include:
 
 * ``-options`` to specify the location of a marti_engine_options.txt file to use instead of the files in the default locations.
 * ``-queue`` to set the default queue (partition) when using SLURM. Can also be set in config file.
-* ``-dontcompressblast`` will stop compression of BLAST files once parsed. 
+* ``-dontcompressblast`` will stop compression of BLAST files once parsed. By default, BLAST files are gzipped to reduce space.
 * ``-dontrunblast`` will avoid re-running BLAST and will use the previously generated BLAST files. 
 * ``-dontrunnt`` will avoid re-running BLAST nt and will use the previously generated BLAST files. BLAST processes other than 'nt' will still be run.
 * ``-dontcontinue`` will make the analysis start from scratch, rather than continuing from where a previous one was stopped.
