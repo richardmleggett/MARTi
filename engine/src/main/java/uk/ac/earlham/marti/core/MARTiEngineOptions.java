@@ -166,6 +166,7 @@ public class MARTiEngineOptions implements Serializable {
     private boolean rmlDebug = false;
     private ArrayList<MetaData> metaDataList = new ArrayList<MetaData>();
     private boolean continueFromPreviousPlace = true;
+    private MARTiAlertsList alertsList = new MARTiAlertsList();
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -772,6 +773,7 @@ public class MARTiEngineOptions implements Serializable {
         checkAndMakeDirectory(this.getFastaDir() + "_chunks");
 
         checkAndMakeDirectory(getMARTiDirectory());        
+        getAlertsList().setAlertsFilename(getMARTiDirectory() + File.separator + "alerts.json");
         
         if (this.isBlastingRead()) {
             //checkAndMakeDirectory(this.getReadDir() + "_chunks");
@@ -1642,5 +1644,9 @@ public class MARTiEngineOptions implements Serializable {
             pw.println("compressBlastFiles=" + compressBlastFiles);
             pw.println("limitToSpecies=" + limitToSpecies);            
         }
+    }
+    
+    public MARTiAlertsList getAlertsList() {
+        return alertsList;
     }
 }

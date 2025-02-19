@@ -94,11 +94,13 @@ public class ReadClassifier {
                             options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
                             options.getLog().printlnLogAndScreen("Message is "+line);
                             options.getLog().printlnLogAndScreen("Please check results carefully.");
+                            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
                             //completed = false;
                         } else if (line.toLowerCase().contains("failed")) {
                             options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
                             options.getLog().printlnLogAndScreen("Message is "+line);
                             options.getLog().printlnLogAndScreen("Please check results carefully.");
+                            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
                         }
                     }
                     br.close();            
@@ -200,6 +202,8 @@ public class ReadClassifier {
                                 pendingAnalysisTasks.addPendingTask(mat);
                             } else {
                                 System.out.println("Error: couldn't get CARD filename\n");
+                                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: couldn't get CARD filename. Analysis stopped."));
+                                options.getAlertsList().writeAlertsFile();
                                 System.exit(1);
                             }
                         }
@@ -315,6 +319,8 @@ public class ReadClassifier {
                                         pendingAnalysisTasks.addPendingTask(mat);
                                     } else {
                                         System.out.println("Error: couldn't get CARD filename\n");
+                                        options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: couldn't get CARD filename. Analysis stopped."));
+                                        options.getAlertsList().writeAlertsFile();                   
                                         System.exit(1);
                                     }
                                 } else {
@@ -341,6 +347,7 @@ public class ReadClassifier {
                 } else {
                     System.out.println("Error: Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId));
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
+                    options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId)));                            
                     js.markJobAsFailed(thisId);
                     js.resubmitJobIfPossible(thisId);
                 }
@@ -349,7 +356,8 @@ public class ReadClassifier {
                 if (js.checkJobFailed(thisId)) {
                     options.getLog().println("ERROR: Job "+thisId+" terminally failed. Attempting to continue without these BLAST results.");
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
-
+                    options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile()));
+                    
                     // Remove from list of files to process
                     filesProcessed++;
                     files.remove(thisId);
@@ -495,6 +503,8 @@ public class ReadClassifier {
         } else {
             options.getLog().println("Error: no dependency set up for id "+nt);
             System.out.println("Error: no dependency set up for id "+nt);
+            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: no dependency set up for id "+nt+" - Analysis stopped."));
+            options.getAlertsList().writeAlertsFile();
             System.exit(1);
         }
     }

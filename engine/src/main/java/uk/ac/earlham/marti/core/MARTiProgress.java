@@ -200,8 +200,10 @@ public class MARTiProgress {
     public synchronized void readProgressFile() {
         try {
             File progressFile = new File(options.getSampleDirectory() + File.separator + "progress.info");
+            //File progressFile = new File("/Users/leggettr/Desktop/progress.info");
             if (progressFile.exists()) {
                 options.getLog().printlnLogAndScreen("Existing progress file found. Will attempt to continue from last saved position.");
+                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Existing progress file found - will attempt to continue from last saved position."));
                 BufferedReader br = new BufferedReader(new FileReader(progressFile));
                 String line = br.readLine();
                 while ((line = br.readLine()) != null) {
@@ -209,10 +211,14 @@ public class MARTiProgress {
                         int idCount = Integer.parseInt(line.substring(12));
                         while ((line = br.readLine()) != null) {
                             String[] tokens = line.split("\t");
-                            String id = tokens[0];
-                            String timeString = tokens[1];
-                            System.out.println("    Completed "+id);
-                            recordCompleted(id);
+                            if (tokens.length == 2) {
+                                String id = tokens[0];
+                                String timeString = tokens[1];
+                                System.out.println("    Completed "+id);
+                                recordCompleted(id);
+                            } else {
+                                options.getLog().printlnLogAndScreen("Unrecognised string in progress.info: ["+line+"]");
+                            }
                         }
                     }
                 }
@@ -221,10 +227,11 @@ public class MARTiProgress {
                 options.getLog().println("No existing progress file. Starting from scratch.");
             }
         } catch (Exception e) {
-            System.out.println("writeProgressFile Exception:");
+            System.out.println("readProgressFile Exception:");
             e.printStackTrace();
             System.exit(1);
         }
+        //System.exit(0);
     }
     
     public synchronized void recordStarted(String identifier) {

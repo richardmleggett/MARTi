@@ -7,6 +7,7 @@ package uk.ac.earlham.marti.schedule;
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import uk.ac.earlham.marti.core.MARTiAlert;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 
 /**
@@ -117,6 +118,7 @@ public class SimpleJobSchedulerJob {
             } else {
                 System.out.println("ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue());
                 System.out.println("Results are unpredictable...");
+                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue() + " - results are unpredictable"));
             }
             
             // TODO:

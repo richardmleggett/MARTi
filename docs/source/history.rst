@@ -1,8 +1,13 @@
 Change history
 ==============
 
-Version 0.9.22 (TBC)
+Version 0.9.23 (TBC)
 --------------------
+
+* Added alerts.json file generation to back-end.
+
+Version 0.9.22 (16 Feb 2025)
+----------------------------
 
 * Added ability to continue from aborted position.
 * Removed need for marti_engine_options.txt file.
