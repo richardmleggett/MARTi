@@ -57,7 +57,7 @@ public class CARDOntology {
                 }
             } else {
                 options.getLog().println("Error: badly formatted ARO file - don't understand header line");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: badly formatted CARD ARO file - don't understand header line"));
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: badly formatted CARD ARO file - don't understand header line"));
             }
 
             br.close();
@@ -116,7 +116,7 @@ public class CARDOntology {
                 }
             } else {
                 options.getLog().println("Error: badly formatted ARO file - don't understand header line");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: badly formatted CARD ARO file - don't understand header line"));
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: badly formatted CARD ARO file - don't understand header line"));
             }
 
             br.close();
@@ -179,7 +179,7 @@ public class CARDOntology {
                 } else {
                     System.out.println("Error: Unexpected file format in "+pathname);
                     System.out.println("CARD details will be missing from output.");
-                    options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Unexpected file format in " + pathname + " - CARD details will be missing from output."));
+                    options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Unexpected file format in " + pathname + " - CARD details will be missing from output."));
                 }
 
                 br.close();
@@ -189,7 +189,7 @@ public class CARDOntology {
         } else {
             System.out.println("Error: can't find file "+pathname);
             System.out.println("CARD details will be missing from output.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: can't find file "+pathname + " - CARD details will be missing from output."));
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: can't find file "+pathname + " - CARD details will be missing from output."));
         }
     }
     

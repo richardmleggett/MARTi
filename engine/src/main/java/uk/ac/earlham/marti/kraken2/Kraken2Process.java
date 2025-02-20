@@ -76,30 +76,30 @@ public class Kraken2Process {
         
         if (kraken2Name == null) {
             System.out.println("Error: missing Kraken2 name.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing name in Kraken2 process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing name in Kraken2 process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (kraken2Database == null) {
             System.out.println("Error: missing Kraken2 database.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing database in Kraken2 process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing database in Kraken2 process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (options.getJobScheduler() instanceof SlurmScheduler) {    
             if (kraken2Memory == null) {
                 System.out.println("Error: missing memory in Kraken2 process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in Kraken2 process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in Kraken2 process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
             
             if (jobQueue == null) {
                 System.out.println("Error: missing job queue in Kraken2 process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing queue in Kraken2 process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing queue in Kraken2 process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
         }

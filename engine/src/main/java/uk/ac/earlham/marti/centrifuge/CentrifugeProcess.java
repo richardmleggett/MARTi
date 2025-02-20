@@ -76,30 +76,30 @@ public class CentrifugeProcess {
         
         if (centrifugeName == null) {
             System.out.println("Error: missing Centrifuge name.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing name in Centrifuge process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing name in Centrifuge process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (centrifugeDatabase == null) {
             System.out.println("Error: missing Centrifuge database.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing database in Centrifuge process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing database in Centrifuge process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (options.getJobScheduler() instanceof SlurmScheduler) {    
             if (centrifugeMemory == null) {
                 System.out.println("Error: missing memory in Centrifuge process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in Centrifuge process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in Centrifuge process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
             
             if (jobQueue == null) {
                 System.out.println("Error: missing job queue in Centrifuge process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing queue in Centrifuge process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing queue in Centrifuge process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
         }

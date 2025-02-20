@@ -381,11 +381,11 @@ public class ReadFilterSample {
                             numberOfReadsProcessed++;
                         } else {
                             System.out.println("ERROR: Badly formatted FASTQ entry in "+fastqPathname);
-                            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
+                            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
                         }
                     } else {
                         System.out.println("ERROR: Badly formatted FASTQ file: "+fastqPathname);
-                        options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
+                        options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
                     }
                 }
                 br.close();

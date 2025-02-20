@@ -27,15 +27,16 @@ import javax.json.stream.JsonGenerator;
  * @author leggettr
  */
 public class MARTiAlertsList {
+    private MARTiEngineOptions options = null;
     private Hashtable<Integer, MARTiAlert> alerts = new Hashtable<Integer, MARTiAlert>(); 
     int count = 0;
-    private String alertsFilename = null;
     private long lastWriteTime = 0;
     
-    public MARTiAlertsList() {
+    public MARTiAlertsList(MARTiEngineOptions o) {
+        options = o;
     }
     
-    public synchronized void writeAlertsFile() {
+    public synchronized void writeAlertsFile(String alertsFilename) {
         if (alertsFilename != null) {            
             // Build top-level object
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -84,18 +85,6 @@ public class MARTiAlertsList {
     
     public synchronized void addAlert(MARTiAlert a) {
         count++;
-        alerts.put(count, a);
-        
-        // Only write every minute
-        long timeSince = System.nanoTime() - lastWriteTime;
-        long secsSinceWrite = timeSince / 1000000000;
-        if (secsSinceWrite >= 10) {
-            writeAlertsFile();
-            lastWriteTime = System.nanoTime();
-        }
-    }
-    
-    public void setAlertsFilename(String f) {
-        alertsFilename = f;
-    }
+        alerts.put(count, a);        
+    }    
 }

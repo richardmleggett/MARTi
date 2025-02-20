@@ -103,37 +103,37 @@ public class BlastProcess {
         
         if (blastName == null) {
             System.out.println("Error: missing BLAST name.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST name in BLAST process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST name in BLAST process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (blastTask == null) {
             System.out.println("Error: missing BLAST program.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST program in BLAST process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST program in BLAST process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (blastDatabase == null) {
             System.out.println("Error: missing BLAST database.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST database in BLAST process. Analysis stopped."));
-            options.getAlertsList().writeAlertsFile();
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing BLAST database in BLAST process. Analysis stopped."));
+            options.writeAlertsFile();
             System.exit(1);
         }
 
         if (options.getJobScheduler() instanceof SlurmScheduler) {    
             if (blastMemory == null) {
                 System.out.println("Error: missing memory in BLAST process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in BLAST process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing memory in BLAST process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
             
             if (jobQueue == null) {
                 System.out.println("Error: missing job queue in BLAST process config.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing job queue in BLAST process. Analysis stopped."));
-                options.getAlertsList().writeAlertsFile();
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: missing job queue in BLAST process. Analysis stopped."));
+                options.writeAlertsFile();
                 System.exit(1);
             }
         }

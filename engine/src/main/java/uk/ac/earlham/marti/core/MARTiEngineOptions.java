@@ -166,7 +166,8 @@ public class MARTiEngineOptions implements Serializable {
     private boolean rmlDebug = false;
     private ArrayList<MetaData> metaDataList = new ArrayList<MetaData>();
     private boolean continueFromPreviousPlace = true;
-    private MARTiAlertsList alertsList = new MARTiAlertsList();
+    private MARTiAlertsList alertsList = new MARTiAlertsList(this);
+    private long lastWriteTime = 0L;
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -773,7 +774,6 @@ public class MARTiEngineOptions implements Serializable {
         checkAndMakeDirectory(this.getFastaDir() + "_chunks");
 
         checkAndMakeDirectory(getMARTiDirectory());        
-        getAlertsList().setAlertsFilename(getMARTiDirectory() + File.separator + "alerts.json");
         
         if (this.isBlastingRead()) {
             //checkAndMakeDirectory(this.getReadDir() + "_chunks");
@@ -1648,5 +1648,30 @@ public class MARTiEngineOptions implements Serializable {
     
     public MARTiAlertsList getAlertsList() {
         return alertsList;
+    }
+
+    public void addAlert(MARTiAlert a) {
+        alertsList.addAlert(a);
+
+        // Only write every minute
+        long timeSince = System.nanoTime() - lastWriteTime;
+        long secsSinceWrite = timeSince / 1000000000;
+        if (secsSinceWrite >= 10) {
+            this.writeAlertsFile();
+            lastWriteTime = System.nanoTime();
+        }        
+    }
+    
+    public void writeAlertsFile() {
+        if (isBarcoded()) {
+            Set<Integer> keys = barcodeIDs.keySet();
+            for (Integer bc : keys) {
+                this.getLog().println("Writing alerts.json for bc"+bc);
+                alertsList.writeAlertsFile(getMARTiJSONDirectory(bc) + File.separator + "alerts.json");
+            }
+        } else {
+            this.getLog().println("Writing alerts.json");
+            alertsList.writeAlertsFile(getMARTiJSONDirectory(0) + File.separator + "alerts.json");
+        }
     }
 }

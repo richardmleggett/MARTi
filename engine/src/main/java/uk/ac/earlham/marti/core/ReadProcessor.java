@@ -196,7 +196,7 @@ public class ReadProcessor {
         if (options.getJobScheduler().getFailedJobCount() > 0) {
             //options.getLog().printlnLogAndScreen("ERROR: failed jobs, so exiting early.");
             options.getLog().println("ERROR: failed jobs, but trying to continue.");
-            options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: failed jobs, but trying to continue."));
+            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: failed jobs, but trying to continue."));
             //return true;
         }
         
@@ -264,7 +264,7 @@ public class ReadProcessor {
         CentrifugeProcessRunnable centrifugeProcess = null;
         Kraken2ProcessRunnable kraken2Process = null;
         
-        options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Analysis started"));
+        options.addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Analysis started"));
         
         // Execute thread which checks for new reads to filter
         executor.execute(readFilter);
@@ -388,8 +388,8 @@ public class ReadProcessor {
         System.out.println("");
         System.out.println("");
         System.out.println("DONE");
-        options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_SUCCESS, "Analysis completed")); 
-        options.getAlertsList().writeAlertsFile();
+        options.addAlert(new MARTiAlert(MARTiAlert.TYPE_SUCCESS, "Analysis completed")); 
+        options.writeAlertsFile();
     }
     
 //    public void oldProcess() throws InterruptedException {      

@@ -118,7 +118,7 @@ public class SimpleJobSchedulerJob {
             } else {
                 System.out.println("ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue());
                 System.out.println("Results are unpredictable...");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue() + " - results are unpredictable"));
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue() + " - results are unpredictable"));
             }
             
             // TODO:

@@ -203,7 +203,7 @@ public class MARTiProgress {
             //File progressFile = new File("/Users/leggettr/Desktop/progress.info");
             if (progressFile.exists()) {
                 options.getLog().printlnLogAndScreen("Existing progress file found. Will attempt to continue from last saved position.");
-                options.getAlertsList().addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Existing progress file found - will attempt to continue from last saved position."));
+                options.addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Existing progress file found - will attempt to continue from last saved position."));
                 BufferedReader br = new BufferedReader(new FileReader(progressFile));
                 String line = br.readLine();
                 while ((line = br.readLine()) != null) {
