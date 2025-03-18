@@ -611,16 +611,20 @@ $(document).ready(function () {
 
 dashboardPageUnlocked = false;
 comparePageUnlocked = false;
-
-
-
   
 
 if (window.location.href.includes("marti.cyverseuk.org")) {
   $("#cyverseLogo").removeClass("d-none");
 }
 
+    setTimeout(function () {
 
+        initialiseSamplePage();
+        socket.emit('client-version-request',{
+          clientId: uuid
+        });
+
+      }, 50);
 
 });
 

@@ -155,6 +155,10 @@ var markerCoords = [];
 
 function initialiseSampleMap(){
 
+  if ($('#sampleMap').length === 0) {
+    return;
+  }
+
   updateOnlineStatus();
 
   if (map !== undefined && map !== null) {
