@@ -341,6 +341,10 @@ socket.on('register-response', response => {
   restrictedMode = response.mode;
   console.log("id: " + response.id);
   console.log("mode: " + restrictedMode);
+
+  socket.emit('client-version-request',{
+    clientId: uuid
+  });
 });
 
 
@@ -352,7 +356,7 @@ socket.on('hb_ping', function(data){
 socket.on('current-client-count', function(data){
   console.log("current number of user: " + data.clientCount);
   $("#currentClientCount").text(data.clientCount);
-  let guiVersion = "MARTi GUI v" + data.guiVersion;
+  let guiVersion = "MARTi GUI v" + data.martiGuiVersion;
   $("#currentGuiVersion").text(guiVersion);
     });
 

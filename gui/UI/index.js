@@ -427,17 +427,6 @@ function updateAlertsData(data) {
 
 function handleSampleUrl(clientId,uuid) {
 
-  // for (var [run, samples] of Object.entries(sampleMetaDict)) {
-  //   for (var [sample, data] of Object.entries(samples)) {
-  //     if (data["sample"].hasOwnProperty("uuid")) {
-  //       if (data.sample.uuid == uuid) {
-  //         clientData[clientId]["selectedDashboardSample"]["name"] = sample;
-  //         clientData[clientId]["selectedDashboardSample"]["runId"] = run;
-  //         // io.to(clientId).emit('current-dashboard-sample-url-switch', clientData[clientId].selectedDashboardSample);
-  //       }
-  //     }
-  //   }
-  // }
 
   let sampleFound = false;
 
@@ -802,15 +791,15 @@ function sendHeartbeat(){
 
 var clientCount;
 
+
+
+
+
 io.on('connect', function(socket){
 
   clientCount = socket.client.conn.server.clientsCount;
   console.log(`[${new Date().toLocaleString()}] Connection added - users connected: ${clientCount}`);
-  var guiVersionAndClientCount = {
-    clientCount: clientCount,
-    guiVersion: martiGuiVersion
-  }
-  io.sockets.emit('current-client-count', guiVersionAndClientCount);
+
 
   socket.on('hb_pong', function(data){
   });
@@ -840,9 +829,10 @@ io.on('connect', function(socket){
     }
 
       socket.join(id);
-      // io.to(id).emit('register-response', id);
 
-      handleSampleUrl(id,data.clientSample);
+      if (data.clientSample) {
+        handleSampleUrl(id, data.clientSample);
+      }
 
 
       io.to(id).emit('register-response', {
@@ -856,6 +846,12 @@ io.on('connect', function(socket){
 
   });
 
+  socket.on('client-version-request', request => {
+  var id = request.clientId;
+  clientCount = socket.client.conn.server.clientsCount;
+  let guiVersionAndClientCount = {clientCount, martiGuiVersion};
+  io.to(id).emit('current-client-count', guiVersionAndClientCount);
+  });
 
   socket.on('meta-request', request => {
     var id = request.clientId;
@@ -1241,7 +1237,8 @@ socket.on('compare-tree-request', request => {
 
 
         socket.on('disconnect', () => {
-          clientCount = socket.client.conn.server.clientsCount;
+          clientCount = socket.client.conn.server.clientsCount; 
+          let guiVersionAndClientCount = {clientCount, martiGuiVersion};
           console.log(`[${new Date().toLocaleString()}] Connection removed - users connected: ${clientCount}`);
           io.sockets.emit('current-client-count', guiVersionAndClientCount);
         });
