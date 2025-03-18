@@ -158,6 +158,10 @@ socket.emit('dashboard-dashboardAmrTable-request',{
   clientId: uuid
 });
 
+socket.emit('dashboard-alerts-request', {
+  clientId: uuid
+});
+
 d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
   globUpdate(globDonutData);
   });
@@ -406,6 +410,9 @@ $("#dashboardSampleNameInput").on('input', function(){
       $("#dashboardSampleNameEdit").hide();
   }
 
+  toggleAlertsDropdown();
+
+
 };
 
 function prepareSampleNameInput(data){
@@ -562,6 +569,75 @@ socket.on('dashboard-tree-response', function(data) {
   plotLevelSelectorChanged = false;
 
 });
+
+
+socket.on('dashboard-alerts-response', function(data) {
+
+  var alertsDropdown = $(".dropdown-list"); // The dropdown container
+  var alertsDropdownHeader = $("#alertsDropdownHeader");
+  
+  // Clear existing alerts before adding new ones
+  alertsDropdown.find(".dropdown-item").not("#alertsDropdownHeader").remove(); 
+
+  if (!data.alerts || data.alerts.length === 0) {
+      // No alerts available, show the "No alerts" message
+      alertsDropdown.append(`
+          <a class="dropdown-item text-center small text-gray-500" href="#">No alerts</a>
+      `);
+      return;
+  }
+
+      // Sort alerts by date in descending order (most recent first)
+      data.alerts.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+  // Loop through alerts and populate the dropdown
+  data.alerts.forEach(alert => {
+      // let alertTypeClass = "bg-primary"; // Default color
+      let alertTypeClass = "bg-secondary"; // Default color
+      let alertIcon = "fas fa-file-alt"; // Default icon (neutral)
+
+      // Determine alert icon & color based on type
+      switch (alert.type) {
+        case "success":
+            alertTypeClass = "bg-success";
+            alertIcon = "fas fa-check-circle";
+            break;
+        case "warning":
+            alertTypeClass = "bg-warning";
+            alertIcon = "fas fa-exclamation-circle";
+            break;
+        case "error":
+            alertTypeClass = "bg-danger";
+            alertIcon = "fas fa-exclamation-triangle";
+            break;
+        case "neutral":
+        default:
+            alertTypeClass = "bg-secondary";
+            alertIcon = "fas fa-file-alt";
+            break;
+    }
+
+      let alertItem = `
+          <a class="dropdown-item d-flex align-items-center" href="#">
+              <div class="mr-3">
+                  <div class="icon-circle ${alertTypeClass}">
+                      <i class="${alertIcon} text-white"></i>
+                  </div>
+              </div>
+              <div>
+                  <div class="small text-gray-500">${new Date(alert.time).toLocaleString()}</div>
+                  <span class="font-weight-bold">${alert.content}</span>
+              </div>
+          </a>
+      `;
+
+      alertsDropdown.append(alertItem);
+  });
+
+  // Highlight the alerts icon to indicate new alerts
+  $("#alertBellCounter").show(); 
+});
+
 
 function switchDataAbundanceLevel(treeName) {
   root = treeDataBoth[treeName];
@@ -1084,7 +1160,6 @@ function resizeOptionsFullscreen() {
             //   treeData = data.treeData.treeYield;
             //   globDonutData = data.treeData2.treeYield;
             // }
-            console.log("THIS ONE");
             switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
             replacePlotLevelText();
             plotLevelSelectorChanged = true;
@@ -1207,6 +1282,13 @@ $(document).mouseup(function (e) {
 fullScreenIconStart();
 
 };
+
+socket.on('alerts-update-available', function() {
+
+  socket.emit('dashboard-alerts-request', {
+      clientId: uuid
+  });
+});
 
 
 socket.on('tree-update-available', request => {

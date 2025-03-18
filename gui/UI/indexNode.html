@@ -211,12 +211,35 @@
 
           <ul class="navbar-nav ml-auto">
 
+                    <!-- Nav Item - Alerts -->
+          <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display: none;">
+              <i id="alertBellIcon" class="fas fa-bell fa-fw"></i>
+              <span id="alertBellCounter" class="badge badge-danger badge-counter" style="display: none;">!</span>
+            </a>
+
+
+              <div id="alertsDropdownMenu" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 id="alertsDropdownHeader" class="dropdown-header">
+                  Alerts
+                </h6>
+
+                <a class="dropdown-item text-center small text-gray-500" href="#">No alerts</a>
+
+              </div>
+            </li>
+
             <!-- Nav Item - modal -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="modal" data-target="#optionsModal">
                 <i class="fas fa-cog fa-fw"></i>
               </a>
             </li>
+
+
+
+
+
           </ul>
 
           <!-- Nav Item - modal -->
@@ -224,23 +247,6 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="modal" data-target="#sampleModal">
               <i class="fas fa-file-import fa-fw"></i>
             </a>
-          </li> -->
-
-        <!-- Nav Item - Alerts -->
-        <!-- <li class="nav-item dropdown no-arrow mx-1">
-          <a class="nav-link dropdown-toggle navbar-height" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i id="alertBellIcon" class="fas fa-bell fa-fw"></i>
-          </a>
-
-
-          <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-            <h6 id="alertsDropdownHeader" class="dropdown-header">
-              Alerts
-            </h6>
-
-            <a class="dropdown-item text-center small text-gray-500" href="#">Alerts menu</a>
-
-          </div>
           </li> -->
 
 
@@ -484,23 +490,46 @@ $(document).ready(function () {
   // Listen for orientation changes
   mediaQuery.addListener(detectOrientation);
 
-    $("h1#pageTitle").text("Samples");
-    activeSidebarIcon($("#samples-item"));
-    currentPage = "Samples";
-    $("#response").load("/samples.html", function() {
-      let checkId = function() {
-        setTimeout(function () {
-          if (uuid === null) {
-            checkId();
-          }
-          else {
-              initialiseSamplePage();
-          }
-        }, 50);
-      };
-      checkId();
 
-    });
+  let windowPath = window.location.pathname.split("/");
+  let clientSample = null;
+  if (windowPath[1] == "sample"){
+    clientSample = windowPath[2];
+  }
+
+    if (clientSample) {
+        // If there's a sample ID in the URL, go to the Dashboard
+        $("h1#pageTitle").text("Dashboard");
+        activeSidebarIcon($("#dashboard-item")); // Highlight Dashboard
+        currentPage = "Dashboard";
+
+        $("#response").load("/dashboard.html", function(){
+          $("html, body").animate({ scrollTop: "0px" });
+          initialiseDashboardPage();
+        });
+
+    } else {
+      $("h1#pageTitle").text("Samples");
+      activeSidebarIcon($("#samples-item"));
+      currentPage = "Samples";
+      $("#response").load("/samples.html", function() {
+        let checkId = function() {
+          setTimeout(function () {
+            if (uuid === null) {
+              checkId();
+            }
+            else {
+                initialiseSamplePage();
+            }
+          }, 50);
+        };
+        checkId();
+
+      });
+
+      }
+
+
 
     $("#sidebar-brand").click(function () {
       if (currentPage !== "Samples"){
@@ -585,36 +614,7 @@ comparePageUnlocked = false;
 
 
 
-    socket.on('sampleLoadedAlert', function(sampleLoadedAlert) {
-      sampleAddedAlert(sampleLoadedAlert.sampleName,sampleLoadedAlert.date,sampleLoadedAlert.icon);
-    });
-
-    function sampleAddedAlert(sampleName,date,icon){
-
-    console.log(sampleName + " loaded alert");
-
-      var newAlert = '<a class="dropdown-item d-flex align-items-center" href="#">\
-        <div class="mr-3">\
-          <div class="icon-circle bg-primary">\
-            <i class="fas ' + icon + ' text-white"></i>\
-          </div>\
-        </div>\
-        <div>\
-          <div class="small text-gray-500">' + date + '</div>\
-          <span class="font-weight-bold">' + sampleName + ' has been loaded successfully!</span>\
-        </div>\
-      </a>'
-
-    $( "#alertsDropdownHeader" ).after( newAlert );
-
-    $( "#alertBellIcon" ).after( '<span class="alertIconBadge badge badge-danger badge-counter">!</span>' );
-
-
-    };
-
-    $('#alertsDropdown').on( 'click', function () {
-      $( ".alertIconBadge" ).remove();
-    });
+  
 
 if (window.location.href.includes("marti.cyverseuk.org")) {
   $("#cyverseLogo").removeClass("d-none");

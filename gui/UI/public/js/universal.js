@@ -174,7 +174,35 @@ toolTipDiv = d3.select("body").append("div")
     .style("opacity", 0)
     .style("color", "black");
 
+
+
+
+  toggleAlertsDropdown(); // Run on page load
+
+  // Detect sidebar navigation clicks (if using dynamic navigation)
+  $(".nav-item").on("click", function () {
+      setTimeout(toggleAlertsDropdown, 100); // Small delay for page update
+  });
+
 });
+
+function toggleAlertsDropdown() {
+
+  let currentPage = $("#pageTitle").text().trim();
+
+    console.log("Current Page: " + currentPage);
+  if (currentPage === "Dashboard") {
+      $("#alertsDropdown").show(); // Show alert icon
+  } else {
+      $("#alertsDropdown").hide(); // Hide alert icon
+  }
+
+
+    $("#alertsDropdown").on("click", function () {
+      $("#alertBellCounter").fadeOut();
+  });
+
+}
 
 function tooltipPos(x){
   var width = toolTipDiv[0][0].clientWidth;

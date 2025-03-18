@@ -9,6 +9,30 @@ class Observer extends EventEmitter {
     super();
   }
 
+  async processJsonFile(filePath, eventType, eventName) {
+    try {
+        var fileContent = await fsExtra.readFile(filePath);
+        fileContent = JSON.parse(fileContent);
+        var split = filePath.split(sep);
+        var sampleName = split[split.length - 2];
+        var runName = split[split.length - 4];
+
+        console.log(sampleName + " " + runName);
+
+        this.emit(eventName, {
+            id: sampleName,
+            runId: runName,
+            content: fileContent
+        });
+
+        console.log(
+            `[${new Date().toLocaleString()}] ${filePath} has been ${eventType.toUpperCase()}.`
+        );
+    } catch (error) {
+        console.error(`[ERROR] Failed to process ${filePath}:`, error);
+    }
+  }
+
   watchFolder(folder) {
     try {
 
@@ -31,7 +55,7 @@ class Observer extends EventEmitter {
           );
             filesToWatch = folder + "marti/**/*.json";
             dirToMonitor = folder + "marti/";
-            idFilesToWatch = folder + "ids.json"
+            idFilesToWatch = folder + "ids.json";
             console.log(
               `[${new Date().toLocaleString()}] Monitoring MARTi Engine output files in the following directory: ${dirToMonitor}`
             );
@@ -174,6 +198,8 @@ class Observer extends EventEmitter {
           console.log(
             `[${new Date().toLocaleString()}] ${filePath} has been ADDED.`
           );
+        } else if (filePath.includes('alerts.json')) {
+          await this.processJsonFile(filePath, "added", "alerts-file-added");
         }
       });
 
@@ -308,6 +334,8 @@ class Observer extends EventEmitter {
           console.log(
             `[${new Date().toLocaleString()}] ${filePath} has been CHANGED.`
           );
+        } else if (filePath.includes('alerts.json')) {
+          await this.processJsonFile(filePath, "changed", "alerts-file-added");
         }
       });
 
