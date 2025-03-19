@@ -55,9 +55,15 @@ if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
 
 
 
-socket.emit('meta-request',{
-  clientId: uuid
-});
+// socket.emit('meta-request',{
+//   clientId: uuid
+// });
+
+setTimeout(() => {
+  socket.emit('meta-request', {
+      clientId: uuid
+  });
+}, 100);
 
 
 $('.compareSamplesInput').on('click', function() {
