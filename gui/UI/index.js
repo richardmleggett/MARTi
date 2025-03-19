@@ -861,11 +861,27 @@ io.on('connect', function(socket){
         samplesToSend = sampleMetaDict;
     } else {
         var project;
+
+      if (clientData[id] && clientData[id]["project"] !== undefined) {
         if (clientData[id]["project"] === "") {
-            project = defaultProject;
-        } else {
-            project = clientData[id]["project"];
-        }
+              project = defaultProject;
+          } else {
+              project = clientData[id]["project"];
+          }
+      } else {
+          console.error(`[${new Date().toLocaleString()}][${id}] Warning: clientData[${id}] is undefined. Retrying in 100ms...`);
+          setTimeout(() => {
+              io.to(id).emit('meta-update-available', { runId: id, sampleId: "" });
+          }, 100);
+
+          return;
+      }
+
+        // if (clientData[id]["project"] === "") {
+        //     project = defaultProject;
+        // } else {
+        //     project = clientData[id]["project"];
+        // }
 
         // Check if the project exists in the projectsDatabase
         if (projectsDatabase.hasOwnProperty(project)) {
