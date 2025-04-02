@@ -1,11 +1,15 @@
 function initialiseSamplePage() {
 mapUpdated = false;
+$('#sampleMapCard').hide();
 
 if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
 
   samplePageDataTable = $('#samplePageDataTable').DataTable({
     "language": {
-      "emptyTable": "WARNING: Could not find any MARTi Engine output directories in the 'MARTiSampleDirectory' specified in marti_engine_options.txt"
+      "emptyTable": "No samples found.<br><br>\
+  You can specify a directory to monitor using the following command:<br>\
+  <code>marti_gui --marti /path/to/marti_output</code><br><br>\
+  For more details, visit: <a href='https://marti.readthedocs.io/en/latest/gui.html' target='_blank' style='text-decoration: underline;'>MARTi GUI Documentation</a>"
     },
   "columns": [
     {
@@ -471,6 +475,8 @@ $('#samplePageDataTable tbody>tr').children(':last-child').on('click', function(
 
   if (existingMarkers.length == 0) {
     $('#sampleMapCard').hide();
+  } else {
+    $('#sampleMapCard').show();
   }
 
 
@@ -538,6 +544,9 @@ function requestExportData(lca) {
 
 
 socket.on('meta-response', function(metaData) {
+  if (!metaData || typeof metaData !== "object") {
+    return;
+  }
   if(currentPage=="Samples") {
     updateSampleTable(metaData);
   }
