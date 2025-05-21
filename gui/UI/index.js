@@ -404,8 +404,7 @@ observer.on('alerts-file-added', data => {
 });
 
 function updateAlertsData(data) {
-  console.log(data);
-  // var content = data.content;
+
   var sampleId = data.id;
   var runId = data.runId;
 

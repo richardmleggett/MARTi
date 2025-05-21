@@ -326,6 +326,10 @@ var existingMarkers = [];
 
 function addSampleMarkerToMap(data){
 
+  if ($('#sampleMap').length === 0) {
+    return;
+  }
+
   var findMarker = existingMarkers.findIndex(e => e.pathName == data.pathName && e.pathRun == data.pathRun);
 
   if (findMarker == -1) {
@@ -438,19 +442,22 @@ samplePageDataTable.draw(false);
 
     });
 
-    $('#samplePageDataTable thead>tr').children(':first-child').on('click', function() {
+
+  $('#samplePageDataTable thead>tr').children(':first-child')
+    .off('click')
+    .on('click', function(event) {
+      event.stopPropagation();
+  
       if($(this).hasClass('checkSelected')){
         $(this).removeClass('checkSelected');
         $('#samplePageDataTable tbody>tr').removeClass('checkSelected');
-      } else{
+      } else {
         $(this).addClass('checkSelected');
         $('#samplePageDataTable tbody>tr').addClass('checkSelected');
-
       }
-
+  
       emitSelectedCompareSamples();
-
-    });
+  });
 
 
 $('#samplePageDataTable tbody>tr').children(':last-child').on('click', function() {
@@ -691,6 +698,17 @@ socket.on('current-compare-samples-response', function(samples) {
               $(this).addClass("checkSelected");
             };
           });
+
+          const allRows = $('#samplePageDataTable tbody>tr');
+          const allSelected = allRows.length > 0 && allRows.filter('.checkSelected').length === allRows.length;
+
+          const selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child');
+
+          if (allSelected) {
+            selectAllToggle.addClass('checkSelected');
+          } else {
+            selectAllToggle.removeClass('checkSelected');
+          }
 
           if ($('.leaflet-popup').length > 0) {
             var markerTable = $('.leaflet-popup .table');
