@@ -341,6 +341,15 @@ socket.on('register-response', response => {
   restrictedMode = response.mode;
   console.log("id: " + response.id);
   console.log("mode: " + restrictedMode);
+
+  socket.emit('client-version-request',{
+    clientId: uuid
+  });
+
+  if (currentPage == "Samples"){
+    initialiseSamplePage();
+  };
+
 });
 
 

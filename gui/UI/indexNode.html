@@ -617,14 +617,11 @@ if (window.location.href.includes("marti.cyverseuk.org")) {
   $("#cyverseLogo").removeClass("d-none");
 }
 
-    setTimeout(function () {
+    // setTimeout(function () {
 
-        initialiseSamplePage();
-        socket.emit('client-version-request',{
-          clientId: uuid
-        });
+    //     initialiseSamplePage();
 
-      }, 50);
+    //   }, 50);
 
 });
 
