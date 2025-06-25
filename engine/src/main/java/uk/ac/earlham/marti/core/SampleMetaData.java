@@ -101,8 +101,14 @@ public class SampleMetaData {
         int qualityInt = (int) Math.round(meanQ);
         if (qualityInt > 50) {
             qualityInt = 50;
-            System.out.println("Warning: unlikely MeanQ of "+meanQ+" ("+qualityInt+") rounded fown to 50");
+            System.out.println("Warning: unlikely MeanQ of "+meanQ+" ("+qualityInt+") rounded down to 50");
         }
+        
+        if (qualityInt < 0) {
+            qualityInt = 0;
+            System.out.println("Warning: unlikely MeanQ of "+meanQ+" ("+qualityInt+") rounded to 0");
+        }
+        
         countByQuality[qualityInt]++;
         
         if (passed) {

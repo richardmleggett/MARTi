@@ -28,7 +28,8 @@ import javax.json.stream.JsonGenerator;
  */
 public class MARTiAlertsList {
     private MARTiEngineOptions options = null;
-    private Hashtable<Integer, MARTiAlert> alerts = new Hashtable<Integer, MARTiAlert>(); 
+    private Hashtable<Integer, MARTiAlert> alertsByOrder = new Hashtable<Integer, MARTiAlert>(); 
+    private Hashtable<String, MARTiAlert> alertsByMessage = new Hashtable<String, MARTiAlert>(); 
     int count = 0;
     private long lastWriteTime = 0;
     
@@ -44,7 +45,7 @@ public class MARTiAlertsList {
             JsonArrayBuilder alertsBuilder = Json.createArrayBuilder();
             for (int i=1; i<=count; i++) {
                 JsonObjectBuilder thisAlertBuilder = Json.createObjectBuilder();
-                MARTiAlert a = alerts.get(i);
+                MARTiAlert a = alertsByOrder.get(i);
                 thisAlertBuilder.add("time", a.getTimeString());
                 thisAlertBuilder.add("type", a.getTypeString());
                 thisAlertBuilder.add("content", a.getMessageTex());
@@ -85,6 +86,11 @@ public class MARTiAlertsList {
     
     public synchronized void addAlert(MARTiAlert a) {
         count++;
-        alerts.put(count, a);        
+        alertsByOrder.put(count, a);
+        alertsByMessage.put(a.getMessageTex(), a);
     }    
+    
+    public synchronized boolean alertExistsAlready(MARTiAlert a) {
+        return alertsByMessage.containsKey(a.getMessageTex());
+    }
 }

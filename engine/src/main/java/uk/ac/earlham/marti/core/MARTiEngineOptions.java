@@ -1650,6 +1650,12 @@ public class MARTiEngineOptions implements Serializable {
         return alertsList;
     }
 
+    public void addAlertOnlyOnce(MARTiAlert a) {
+        if (!alertsList.alertExistsAlready(a)) {
+            this.addAlert(a);
+        }
+    }
+    
     public void addAlert(MARTiAlert a) {
         alertsList.addAlert(a);
 

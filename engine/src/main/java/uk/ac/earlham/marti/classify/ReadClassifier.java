@@ -94,13 +94,13 @@ public class ReadClassifier {
                             options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
                             options.getLog().printlnLogAndScreen("Message is "+line);
                             options.getLog().printlnLogAndScreen("Please check results carefully.");
-                            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
+                            options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
                             //completed = false;
                         } else if (line.toLowerCase().contains("failed")) {
                             options.getLog().printlnLogAndScreen("Warning: Error message found in "+blastLogFilename);
                             options.getLog().printlnLogAndScreen("Message is "+line);
                             options.getLog().printlnLogAndScreen("Please check results carefully.");
-                            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
+                            options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error message found in "+blastLogFilename));                            
                         }
                     }
                     br.close();            
@@ -347,7 +347,7 @@ public class ReadClassifier {
                 } else {
                     System.out.println("Error: Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId));
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
-                    options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId)));                            
+                    options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId)));                            
                     js.markJobAsFailed(thisId);
                     js.resubmitJobIfPossible(thisId);
                 }
@@ -356,7 +356,7 @@ public class ReadClassifier {
                 if (js.checkJobFailed(thisId)) {
                     options.getLog().println("ERROR: Job "+thisId+" terminally failed. Attempting to continue without these BLAST results.");
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
-                    options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile()));
+                    options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile()));
                     
                     // Remove from list of files to process
                     filesProcessed++;

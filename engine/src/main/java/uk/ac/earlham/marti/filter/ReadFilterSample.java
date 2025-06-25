@@ -283,10 +283,11 @@ public class ReadFilterSample {
                 InputStream fileStream = null;
                 InputStream gzipStream = null;
                 Reader decoder = null;
+                int bufferSize = 4*1024*1024;
                 
                 if (fastqPathname.toLowerCase().endsWith(".fastq") ||
                     fastqPathname.toLowerCase().endsWith(".fq")) {                
-                    br = new BufferedReader(new FileReader(fastqPathname));
+                    br = new BufferedReader(new FileReader(fastqPathname), bufferSize); // 4Mb buffer
                     if (br == null) {
                         options.getLog().printlnLogAndScreen("Couldn't open file "+fastqPathname);
                         System.exit(1);
@@ -299,7 +300,7 @@ public class ReadFilterSample {
                         if (gzipStream != null) {
                             decoder = new InputStreamReader(gzipStream, "US-ASCII");
                             if (decoder != null) {
-                                br = new BufferedReader(decoder);                      
+                                br = new BufferedReader(decoder, bufferSize);                      
 
                                 if (br == null) {
                                     options.getLog().printlnLogAndScreen("Couldn't open file "+fastqPathname);
@@ -328,15 +329,29 @@ public class ReadFilterSample {
                 }
                                 
                 while (((header = br.readLine()) != null) && (stopProcessingChunks == false)) {
-                    if (header.startsWith("@")) {
+                    if (!header.startsWith("@")) {
+                        options.getLog().printlnLogAndScreen("ERROR: Badly formatted FASTQ file (didn't find header when expected) in "+fastqPathname);
+                        options.getLog().printlnLogAndScreen("H: "+header);
+                        options.getLog().printlnLogAndScreen("Attempting to continue, but recommend checking file");
+                        options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
+                    } else {
                         String seq = br.readLine();
+                        br.mark(bufferSize);
                         String plus = br.readLine();
-                        String qual = br.readLine();
-                        boolean readPassedFilter = true;
-                        //String readID = header.split(" ")[0].substring(1);
-                        String readID = header.split("\\s+")[0].substring(1);
                         
-                        if (plus.equals("+")) {                        
+                        if (!plus.equals("+")) {
+                            options.getLog().printlnLogAndScreen("ERROR: Badly formatted FASTQ entry (missing + before quality scores) in "+fastqPathname);
+                            options.getLog().printlnLogAndScreen("H: "+header);
+                            options.getLog().printlnLogAndScreen("S: "+seq);
+                            options.getLog().printlnLogAndScreen("P: "+plus);
+                            options.getLog().printlnLogAndScreen("Attempting to continue without this read, but recommend checking file");
+                            options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
+                            br.reset(); 
+                        } else {                        
+                            String qual = br.readLine();
+                            boolean readPassedFilter = true;
+                            //String readID = header.split(" ")[0].substring(1);
+                            String readID = header.split("\\s+")[0].substring(1);
                             double meanQ = calculateMeanQuality(qual);
                             allReadLengths.add(seq.length());
 
@@ -377,15 +392,9 @@ public class ReadFilterSample {
                             }
 
                             metaData.registerNewInputRead(seq.length(), meanQ, readPassedFilter);
-                            
-                            numberOfReadsProcessed++;
-                        } else {
-                            System.out.println("ERROR: Badly formatted FASTQ entry in "+fastqPathname);
-                            options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
+
+                            numberOfReadsProcessed++;                                                    
                         }
-                    } else {
-                        System.out.println("ERROR: Badly formatted FASTQ file: "+fastqPathname);
-                        options.addAlert(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Error: Badly formatted FASTQ entry in "+fastqPathname));
                     }
                 }
                 br.close();
