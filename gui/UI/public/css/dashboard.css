@@ -118,3 +118,15 @@ thead > tr > th.widerColumn{
 .h55 {
   font-size: 1.2rem;
 }
+
+#alertsDropdownMenu {
+  max-height: 40rem; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (min-width: 576px) {
+  #alertsDropdownMenu {
+      width: 30rem !important;
+  }
+}

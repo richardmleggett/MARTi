@@ -174,7 +174,35 @@ toolTipDiv = d3.select("body").append("div")
     .style("opacity", 0)
     .style("color", "black");
 
+
+
+
+  toggleAlertsDropdown(); // Run on page load
+
+  // Detect sidebar navigation clicks (if using dynamic navigation)
+  $(".nav-item").on("click", function () {
+      setTimeout(toggleAlertsDropdown, 100); // Small delay for page update
+  });
+
 });
+
+function toggleAlertsDropdown() {
+
+  let currentPage = $("#pageTitle").text().trim();
+
+    console.log("Current Page: " + currentPage);
+  if (currentPage === "Dashboard") {
+      $("#alertsDropdown").show(); // Show alert icon
+  } else {
+      $("#alertsDropdown").hide(); // Hide alert icon
+  }
+
+
+    $("#alertsDropdown").on("click", function () {
+      $("#alertBellCounter").fadeOut();
+  });
+
+}
 
 function tooltipPos(x){
   var width = toolTipDiv[0][0].clientWidth;
@@ -313,6 +341,15 @@ socket.on('register-response', response => {
   restrictedMode = response.mode;
   console.log("id: " + response.id);
   console.log("mode: " + restrictedMode);
+
+  socket.emit('client-version-request',{
+    clientId: uuid
+  });
+
+  if (currentPage == "Samples"){
+    initialiseSamplePage();
+  };
+
 });
 
 
@@ -324,7 +361,7 @@ socket.on('hb_ping', function(data){
 socket.on('current-client-count', function(data){
   console.log("current number of user: " + data.clientCount);
   $("#currentClientCount").text(data.clientCount);
-  let guiVersion = "MARTi GUI v" + data.guiVersion;
+  let guiVersion = "MARTi GUI v" + data.martiGuiVersion;
   $("#currentGuiVersion").text(guiVersion);
     });
 

@@ -1,56 +1,73 @@
 function initialiseSamplePage() {
 mapUpdated = false;
-samplePageDataTable = $('#samplePageDataTable').DataTable({
-  "language": {
-    "emptyTable": "WARNING: Could not find any MARTi Engine output directories in the 'MARTiSampleDirectory' specified in marti_engine_options.txt"
+$('#sampleMapCard').hide();
+
+if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
+
+  samplePageDataTable = $('#samplePageDataTable').DataTable({
+    "language": {
+      "emptyTable": "No samples found.<br><br>\
+  You can specify a directory to monitor using the following command:<br>\
+  <code>marti_gui --marti /path/to/marti_output</code><br><br>\
+  For more details, visit: <a href='https://marti.readthedocs.io/en/latest/gui.html' target='_blank' style='text-decoration: underline;'>MARTi GUI Documentation</a>"
+    },
+  "columns": [
+    {
+    "data": null,
+    "orderable": false,
+    className: "select-checkbox",
+    "defaultContent": ""
   },
-"columns": [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
   {
   "data": null,
   "orderable": false,
-  className: "select-checkbox",
+  className: "moreInfo",
   "defaultContent": ""
-},
-null,
-null,
-null,
-null,
-null,
-null,
-null,
-null,
-null,
-{
-"data": null,
-"orderable": false,
-className: "moreInfo",
-"defaultContent": ""
-},
-null,
-null,
-null
-],
-"columnDefs": [
-    {
-        "targets": [ 11,12 ],
-        "visible": false,
-        "searchable": false
-    },
-    {
-        "targets": [ 13 ],
-        "visible": false,
-        "searchable": true
-    }
-],
-  "dom": 't',
-  "paging" : false,
-  "order": [ 9, 'desc' ]
-});
+  },
+  null,
+  null,
+  null
+  ],
+  "columnDefs": [
+      {
+          "targets": [ 11,12 ],
+          "visible": false,
+          "searchable": false
+      },
+      {
+          "targets": [ 13 ],
+          "visible": false,
+          "searchable": true
+      }
+  ],
+    "dom": 't',
+    "paging" : false,
+    "order": [ 9, 'desc' ]
+  });
+
+}
 
 
-socket.emit('meta-request',{
-  clientId: uuid
-});
+
+
+// socket.emit('meta-request',{
+//   clientId: uuid
+// });
+
+setTimeout(() => {
+  socket.emit('meta-request', {
+      clientId: uuid
+  });
+}, 100);
 
 
 $('.compareSamplesInput').on('click', function() {
@@ -148,8 +165,15 @@ var markerCoords = [];
 
 function initialiseSampleMap(){
 
+  if ($('#sampleMap').length === 0) {
+    return;
+  }
+
   updateOnlineStatus();
 
+  if (map !== undefined && map !== null) {
+    map.remove(); // Destroy the existing map instance before re-creating
+  }
 
   map = L.map('sampleMap').setView([51.505, -0.09], 4);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -302,6 +326,10 @@ var existingMarkers = [];
 
 function addSampleMarkerToMap(data){
 
+  if ($('#sampleMap').length === 0) {
+    return;
+  }
+
   var findMarker = existingMarkers.findIndex(e => e.pathName == data.pathName && e.pathRun == data.pathRun);
 
   if (findMarker == -1) {
@@ -414,19 +442,22 @@ samplePageDataTable.draw(false);
 
     });
 
-    $('#samplePageDataTable thead>tr').children(':first-child').on('click', function() {
+
+  $('#samplePageDataTable thead>tr').children(':first-child')
+    .off('click')
+    .on('click', function(event) {
+      event.stopPropagation();
+  
       if($(this).hasClass('checkSelected')){
         $(this).removeClass('checkSelected');
         $('#samplePageDataTable tbody>tr').removeClass('checkSelected');
-      } else{
+      } else {
         $(this).addClass('checkSelected');
         $('#samplePageDataTable tbody>tr').addClass('checkSelected');
-
       }
-
+  
       emitSelectedCompareSamples();
-
-    });
+  });
 
 
 $('#samplePageDataTable tbody>tr').children(':last-child').on('click', function() {
@@ -451,6 +482,8 @@ $('#samplePageDataTable tbody>tr').children(':last-child').on('click', function(
 
   if (existingMarkers.length == 0) {
     $('#sampleMapCard').hide();
+  } else {
+    $('#sampleMapCard').show();
   }
 
 
@@ -518,7 +551,12 @@ function requestExportData(lca) {
 
 
 socket.on('meta-response', function(metaData) {
-  updateSampleTable(metaData);
+  if (!metaData || typeof metaData !== "object") {
+    return;
+  }
+  if(currentPage=="Samples") {
+    updateSampleTable(metaData);
+  }
   socket.emit('current-dashboard-sample-request',{
     clientId: uuid
   });
@@ -599,20 +637,36 @@ socket.on('current-dashboard-sample-response', function(sample) {
 
 });
 
-socket.on('current-dashboard-sample-url-switch', function(sample) {
+// socket.on('current-dashboard-sample-url-switch', function(sample) {
 
-  currentDashboardSampleRun = sample.runId;
-  currentDashboardSampleName = sample.name;
+//   currentDashboardSampleRun = sample.runId;
+//   currentDashboardSampleName = sample.name;
 
-  activeSidebarIcon($("#dashboard-item"));
-  currentPage = "Dashboard";
-  $("h1#pageTitle").text("Dashboard");
-  $("#response").load("/dashboard.html", function(){
-    $("html, body").animate({ scrollTop: "0px" });
-    initialiseDashboardPage();
+//   activeSidebarIcon($("#dashboard-item"));
+//   currentPage = "Dashboard";
+//   $("h1#pageTitle").text("Dashboard");
+//   $("#response").load("/dashboard.html", function(){
+//     $("html, body").animate({ scrollTop: "0px" });
+//     initialiseDashboardPage();
+//   });
+
+// });
+
+socket.on('sample-not-found-url-switch', function(data) {
+
+  activeSidebarIcon(this);
+  currentPage = "Samples";
+  $("h1#pageTitle").text("Samples");
+  urlFormat();
+  $("#response").load("/samples.html", function() {
+  $("html, body").animate({ scrollTop: "0px" });
+  initialiseSamplePage();
   });
 
 });
+
+
+
 
 socket.on('current-compare-samples-response', function(samples) {
 
@@ -644,6 +698,17 @@ socket.on('current-compare-samples-response', function(samples) {
               $(this).addClass("checkSelected");
             };
           });
+
+          const allRows = $('#samplePageDataTable tbody>tr');
+          const allSelected = allRows.length > 0 && allRows.filter('.checkSelected').length === allRows.length;
+
+          const selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child');
+
+          if (allSelected) {
+            selectAllToggle.addClass('checkSelected');
+          } else {
+            selectAllToggle.removeClass('checkSelected');
+          }
 
           if ($('.leaflet-popup').length > 0) {
             var markerTable = $('.leaflet-popup .table');

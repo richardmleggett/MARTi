@@ -10,7 +10,7 @@ var argv = require('minimist')(process.argv.slice(2));
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.22.0";
+const martiGuiVersion = "0.22.1";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -59,7 +59,7 @@ if (argv.options) {
   } else if (fsExtra.existsSync(homedir + "/.marti_engine_options.txt")) {
     engineOptionsPath = homedir + "/.marti_engine_options.txt";
   } else {
-    console.log("Warning: Could not find marti_engine_options.txt");
+    console.log("No marti_engine_options.txt file found or specified.");
   }
 
 engineOptionsObject = {processes:[]};
@@ -166,12 +166,16 @@ serverOptions["Key"] = argv.key || serverOptions["Key"];
 serverOptions["Certificate"] = argv.cert || serverOptions["Certificate"];
 
 
-  if(serverOptions["Port"] && checkIfValidPortnumber(serverOptions["Port"])) {
-      var selectedPort = serverOptions["Port"];
-  } else {
+  if (!serverOptions["Port"]) {
     var selectedPort = 3000;
-    console.log("No or invalid entry for port. Set to default (3000)");
-  }
+    console.log("No port provided. Set to default (3000).");
+} else if (!checkIfValidPortnumber(serverOptions["Port"])) {
+    var selectedPort = 3000;
+    console.log("Invalid port entry. Set to default (3000).");
+} else {
+    var selectedPort = serverOptions["Port"];
+    console.log("Port set to " + selectedPort);
+}
 
   //Check for port flag and override server options if valid port provided.
   // const portFlag = argv.p;
@@ -394,19 +398,54 @@ function metaDataUpdateId(meta) {
 
 }
 
+
+observer.on('alerts-file-added', data => {
+  updateAlertsData(data);
+});
+
+function updateAlertsData(data) {
+
+  var sampleId = data.id;
+  var runId = data.runId;
+
+  if (!alertsDict[runId]) {
+    alertsDict[runId] = {};
+  }
+
+  alertsDict[runId][sampleId] = data;
+
+  for (const [uuid, entryData] of Object.entries(clientData)) {
+    if (sampleId == entryData.selectedDashboardSample.name && runId == entryData.selectedDashboardSample.runId) {
+      io.to(uuid).emit('alerts-update-available');
+      console.log(`[${new Date().toLocaleString()}][${uuid}] Alerts update notification sent`);
+    };
+  };
+
+}
+
+
 function handleSampleUrl(clientId,uuid) {
 
-  for (var [run, samples] of Object.entries(sampleMetaDict)) {
-    for (var [sample, data] of Object.entries(samples)) {
-      if (data["sample"].hasOwnProperty("uuid")) {
-        if (data.sample.uuid == uuid) {
-          clientData[clientId]["selectedDashboardSample"]["name"] = sample;
-          clientData[clientId]["selectedDashboardSample"]["runId"] = run;
-          io.to(clientId).emit('current-dashboard-sample-url-switch', clientData[clientId].selectedDashboardSample);
+
+  let sampleFound = false;
+
+  for (const [run, samples] of Object.entries(sampleMetaDict)) {
+    for (const [sample, data] of Object.entries(samples)) {
+        if (data["sample"]?.uuid === uuid) {  
+            clientData[clientId].selectedDashboardSample.name = sample;
+            clientData[clientId].selectedDashboardSample.runId = run;
+
+            sampleFound = true; 
+            return;
         }
-      }
     }
+}
+
+  if (!sampleFound) {
+      io.to(clientId).emit('sample-not-found-url-switch', { status: "error", message: "Sample not found", sampleId: uuid });
   }
+
+
 }
 
 observer.on('meta-file-added', meta => {
@@ -674,6 +713,7 @@ var sampleNamesDict = {};
 var sampleTreeDict = {};
 var sampleAccumulationDict = {};
 var sampleAmrDict = {};
+var alertsDict = {};
 
 var clientData = {};
 
@@ -750,15 +790,15 @@ function sendHeartbeat(){
 
 var clientCount;
 
+
+
+
+
 io.on('connect', function(socket){
 
   clientCount = socket.client.conn.server.clientsCount;
   console.log(`[${new Date().toLocaleString()}] Connection added - users connected: ${clientCount}`);
-  var guiVersionAndClientCount = {
-    clientCount: clientCount,
-    guiVersion: martiGuiVersion
-  }
-  io.sockets.emit('current-client-count', guiVersionAndClientCount);
+
 
   socket.on('hb_pong', function(data){
   });
@@ -788,9 +828,10 @@ io.on('connect', function(socket){
     }
 
       socket.join(id);
-      // io.to(id).emit('register-response', id);
 
-      handleSampleUrl(id,data.clientSample);
+      if (data.clientSample) {
+        handleSampleUrl(id, data.clientSample);
+      }
 
 
       io.to(id).emit('register-response', {
@@ -804,6 +845,12 @@ io.on('connect', function(socket){
 
   });
 
+  socket.on('client-version-request', request => {
+  var id = request.clientId;
+  clientCount = socket.client.conn.server.clientsCount;
+  let guiVersionAndClientCount = {clientCount, martiGuiVersion};
+  io.to(id).emit('current-client-count', guiVersionAndClientCount);
+  });
 
   socket.on('meta-request', request => {
     var id = request.clientId;
@@ -813,11 +860,27 @@ io.on('connect', function(socket){
         samplesToSend = sampleMetaDict;
     } else {
         var project;
+
+      if (clientData[id] && clientData[id]["project"] !== undefined) {
         if (clientData[id]["project"] === "") {
-            project = defaultProject;
-        } else {
-            project = clientData[id]["project"];
-        }
+              project = defaultProject;
+          } else {
+              project = clientData[id]["project"];
+          }
+      } else {
+          console.error(`[${new Date().toLocaleString()}][${id}] Warning: clientData[${id}] is undefined. Retrying in 100ms...`);
+          setTimeout(() => {
+              io.to(id).emit('meta-update-available', { runId: id, sampleId: "" });
+          }, 100);
+
+          return;
+      }
+
+        // if (clientData[id]["project"] === "") {
+        //     project = defaultProject;
+        // } else {
+        //     project = clientData[id]["project"];
+        // }
 
         // Check if the project exists in the projectsDatabase
         if (projectsDatabase.hasOwnProperty(project)) {
@@ -1040,11 +1103,42 @@ io.on('connect', function(socket){
 
   socket.on('dashboard-meta-request', request => {
     var id = request.clientId;
+
+    if (!clientData[id] || !clientData[id].selectedDashboardSample || 
+      !clientData[id].selectedDashboardSample.name || 
+      !clientData[id].selectedDashboardSample.runId) {
+      console.log(`[${new Date().toLocaleString()}][${id}] No selected dashboard sample, request ignored.`);
+      return;
+  }
+
     var selectedDashboardSampleName = clientData[id].selectedDashboardSample.name;
     var selectedDashboardSampleRunId = clientData[id].selectedDashboardSample.runId;
     io.to(id).emit('dashboard-meta-response', sampleMetaDict[selectedDashboardSampleRunId][selectedDashboardSampleName]);
     console.log(`[${new Date().toLocaleString()}][${id}] Dashboard meta data sent`);
     });
+
+  socket.on('dashboard-alerts-request', request => {
+    var id = request.clientId;
+
+    if (!clientData[id] || !clientData[id].selectedDashboardSample || 
+      !clientData[id].selectedDashboardSample.name || 
+      !clientData[id].selectedDashboardSample.runId) {
+      console.log(`[${new Date().toLocaleString()}][${id}] No selected dashboard sample, request ignored.`);
+      return;
+  }
+
+    var selectedDashboardSampleName = clientData[id].selectedDashboardSample.name;
+    var selectedDashboardSampleRunId = clientData[id].selectedDashboardSample.runId;
+
+    // Check if alerts exist for the selected sample
+    var alerts = alertsDict[selectedDashboardSampleRunId]?.[selectedDashboardSampleName].content.alerts || [];
+
+    // Send response to the dashboard
+    io.to(id).emit('dashboard-alerts-response', { alerts: alerts });
+
+    console.log(`[${new Date().toLocaleString()}][${id}] Dashboard alerts data sent`);
+    }
+  );
 
 
 socket.on('compare-tree-request', request => {
@@ -1158,7 +1252,8 @@ socket.on('compare-tree-request', request => {
 
 
         socket.on('disconnect', () => {
-          clientCount = socket.client.conn.server.clientsCount;
+          clientCount = socket.client.conn.server.clientsCount; 
+          let guiVersionAndClientCount = {clientCount, martiGuiVersion};
           console.log(`[${new Date().toLocaleString()}] Connection removed - users connected: ${clientCount}`);
           io.sockets.emit('current-client-count', guiVersionAndClientCount);
         });
