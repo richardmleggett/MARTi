@@ -9,6 +9,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import uk.ac.earlham.marti.core.MARTiAlert;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
+import uk.ac.earlham.marti.core.MARTiLog;
 
 /**
  * Job scheduler job.
@@ -26,9 +27,13 @@ public class SimpleJobSchedulerJob {
     private boolean dontRunCommand = false;
     private boolean completed = false;
     private String identifier = "UNKNOWN";
-
-    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, String[] c, String l, boolean d) {
+    private MARTiLog schedulerLog;
+    private long lastStatusReport = System.nanoTime();
+    private long processStartTime = System.nanoTime();
+    
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, MARTiLog log, String id, String[] c, String l, boolean d) {
         options = o;
+        schedulerLog = log;
         identifier = id;
         jobId = -1;
         commands = c;
@@ -37,8 +42,9 @@ public class SimpleJobSchedulerJob {
     }
 
     
-    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, int i, String[] c, String l, boolean d) {
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, MARTiLog log, String id, int i, String[] c, String l, boolean d) {
         options = o;
+        schedulerLog = log;
         identifier = id;
         jobId = i;
         commands = c;
@@ -46,8 +52,9 @@ public class SimpleJobSchedulerJob {
         dontRunCommand = d;
     }
     
-    public SimpleJobSchedulerJob(MARTiEngineOptions o, String id, int i, String[] c, String l, String e, boolean d) {
+    public SimpleJobSchedulerJob(MARTiEngineOptions o, MARTiLog log, String id, int i, String[] c, String l, String e, boolean d) {
         options = o;
+        schedulerLog = log;
         identifier = id;
         jobId = i;
         commands = c;
@@ -60,7 +67,7 @@ public class SimpleJobSchedulerJob {
         jobId = i;
     }
 
-    public void run() {
+    public void run() {        
         // Check completed already?
         // If not, check if we've got dontrunblast selected
         if (options.continueFromPrevious()) {
@@ -70,9 +77,12 @@ public class SimpleJobSchedulerJob {
                 return;
             }            
         }
+
+        // Record start time
+        processStartTime = System.nanoTime();
         
         if (dontRunCommand) {
-            String newCommands[] = {"sleep", "2"};
+            String newCommands[] = {"sleep", "10"};
             String logText = "[ Running ";
             for (int i=0; i<commands.length; i++) {
                 logText += commands[i] + " ";
@@ -102,22 +112,34 @@ public class SimpleJobSchedulerJob {
     }
     
     public boolean hasFinished() {
-        boolean rc = false;
-        
+        boolean processFinished = false;
+                
         if (dontRunCommand) {
-            rc = true;
+            processFinished = true;
         } else {
-            rc = process.isAlive() ? false:true;   
+            processFinished = process.isAlive() ? false:true;   
         }
 
+        if (!processFinished) {
+            long timeNow = System.nanoTime();
+            long timeSinceReport = (timeNow - lastStatusReport) / 1000000000; // convert to secs
+            if (timeSinceReport >= 300) {
+                long timeSinceStart = (timeNow - processStartTime) / 1000000000; // convert to secs
+                long timeMins = timeSinceStart / 60;
+                schedulerLog.println("Job "+jobId+" still running after "+timeSinceStart+"s ("+timeMins+"m)");
+                lastStatusReport = timeNow;
+            }
+        }
+        
         // Only first time we notice this has finished do we record the completion.
-        if ((rc == true) && (completed == false)) {
+        if ((processFinished == true) && (completed == false)) {
             if (getExitValue() == 0) {
                 completed = true;
                 options.getProgressReport().recordCompleted(identifier);
+                options.getLog().println("hasFinished "+identifier);
             } else {
-                System.out.println("ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue());
-                System.out.println("Results are unpredictable...");
+                options.getLog().printlnLogAndScreen("ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue());
+                options.getLog().printlnLogAndScreen("Results are unpredictable...");
                 options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "ERROR: getExitValue for job "+jobId+" ("+identifier+") is "+getExitValue() + " - results are unpredictable"));
             }
             
@@ -125,7 +147,7 @@ public class SimpleJobSchedulerJob {
             // What do we do if getExitValue doesn't return 0?
         }
         
-        return rc;
+        return processFinished;
     }
     
     public int getExitValue() {

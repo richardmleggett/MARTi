@@ -88,7 +88,7 @@ public class Kraken2Classifier {
             
             // Check if job completed
             if (js.checkJobCompleted(thisId)) {
-                // Check if Centrifuge completed ok
+                // Check if Kraken completed ok
                 if (checkKraken2Completed(f, js.getExitValue(thisId))) {                        
                     
                     options.getLog().println("Running parse on " + f.getClassificationFile());

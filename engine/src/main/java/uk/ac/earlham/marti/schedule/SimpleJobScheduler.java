@@ -86,7 +86,7 @@ public class SimpleJobScheduler implements JobScheduler {
             dontRunIt = true;
         }
                 
-        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, uniqueIdentifier, jobId, commands, logFilename, dontRunIt);
+        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, schedulerLog, uniqueIdentifier, jobId, commands, logFilename, dontRunIt);
         pendingJobs.add(j);
         allJobs.put(jobId, j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
@@ -99,7 +99,7 @@ public class SimpleJobScheduler implements JobScheduler {
             dontRunIt = true;
         }
         
-        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, identifier, jobId, commands, logFilename, errorFilename, dontRunIt);
+        SimpleJobSchedulerJob j = new SimpleJobSchedulerJob(options, schedulerLog, identifier, jobId, commands, logFilename, errorFilename, dontRunIt);
         pendingJobs.add(j);
         schedulerLog.println("Submitted job\t"+jobId+"\t"+j.getCommand());
         return jobId++;
@@ -126,6 +126,8 @@ public class SimpleJobScheduler implements JobScheduler {
                     exitValues[j.getId()] = j.getExitValue();
                     //finishedJobs.add(j);
                 }
+            } else {
+                // Write to log every 5 minutes saying how long this job has been running.
             }
         }
         
