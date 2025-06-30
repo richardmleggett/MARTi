@@ -11,7 +11,7 @@ import uk.ac.earlham.marti.core.MARTiLog;
  * @author leggettr
  */
 public interface JobScheduler {
-    public void manageQueue();
+    public void manageQueue(boolean abortWhenPendingJobsCompleted);
     public void setDontRunCommand();
     public void setMaxJobs(int m);
     public int getRunningJobCount();

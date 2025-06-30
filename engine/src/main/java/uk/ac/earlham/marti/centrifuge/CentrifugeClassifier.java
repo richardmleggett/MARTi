@@ -12,6 +12,7 @@ import uk.ac.earlham.lcaparse.LCAFileParser;
 import uk.ac.earlham.marti.amr.AMRAnalysisTask;
 import uk.ac.earlham.marti.blast.BlastDependencies;
 import uk.ac.earlham.marti.classify.ReadClassifierItem;
+import uk.ac.earlham.marti.core.MARTiAlert;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 import uk.ac.earlham.marti.core.SampleMetaData;
@@ -71,8 +72,8 @@ public class CentrifugeClassifier {
         }
     }
     
-    private boolean checkCentrifugeCompleted(CentrifugeClassifierItem f, int exitValue) {
-        if(exitValue != 0) {
+    private boolean checkCentrifugeCompletedSuccessfully(CentrifugeClassifierItem f, int exitValue) {
+        if (exitValue != 0) {
             return false;
         }       
         //TODO: make this robust.
@@ -93,8 +94,7 @@ public class CentrifugeClassifier {
             // Check if job completed
             if (js.checkJobCompleted(thisId)) {
                 // Check if Centrifuge completed ok
-                if (checkCentrifugeCompleted(f, js.getExitValue(thisId))) {                        
-                    
+                if (checkCentrifugeCompletedSuccessfully(f, js.getExitValue(thisId))) {                        
                     options.getLog().println("Running parse on " + f.getClassificationFile());
                     long startTime = System.nanoTime();
                     long timeDiff;
@@ -128,8 +128,15 @@ public class CentrifugeClassifier {
                     filesProcessed++;
                     pendingFiles.remove(thisId);
                     options.getProgressReport().incrementCentrifugeChunksParsedCount();
-                    md.writeSampleJSON(false);
-                                  
+                    md.writeSampleJSON(false);                                  
+                } else {
+                    options.getLog().printlnLogAndScreen("Centrifuge failed on " + f.getQueryFile());
+                    options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Centrifuge failed on "+f.getQueryFile()));
+                    options.getLog().printlnLogAndScreen("Exiting prematurely after Centrifuge failure.");
+                    filesProcessed++;
+                    pendingFiles.remove(thisId);                    
+                    options.getProgressReport().incrementCentrifugeChunksParsedCount();
+                    options.getProgressReport().setAbortWhenCurrentJobsComplete();
                 }
             }
         }        

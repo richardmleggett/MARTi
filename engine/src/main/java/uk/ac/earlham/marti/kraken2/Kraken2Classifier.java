@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import uk.ac.earlham.marti.core.MARTiAlert;
 import uk.ac.earlham.marti.core.MARTiEngineOptions;
 import uk.ac.earlham.marti.core.MARTiLog;
 import uk.ac.earlham.marti.core.SampleMetaData;
@@ -68,7 +69,7 @@ public class Kraken2Classifier {
     }
     
     private boolean checkKraken2Completed(Kraken2ClassifierItem f, int exitValue) {
-        if(exitValue != 0) {
+        if (exitValue != 0) {
             return false;
         }       
         //TODO: make this robust.
@@ -124,8 +125,15 @@ public class Kraken2Classifier {
                     filesProcessed++;
                     pendingFiles.remove(thisId);
                     options.getProgressReport().incrementKraken2ChunksParsedCount();
-                    md.writeSampleJSON(false);
-                                  
+                    md.writeSampleJSON(false);                                  
+                } else {
+                    options.getLog().printlnLogAndScreen("Kraken2 failed on " + f.getQueryFile());
+                    options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Kraken2 failed on "+f.getQueryFile()));
+                    options.getLog().printlnLogAndScreen("Exiting prematurely after Kraken2 failure.");
+                    filesProcessed++;
+                    pendingFiles.remove(thisId);                    
+                    options.getProgressReport().incrementKraken2ChunksParsedCount();
+                    options.getProgressReport().setAbortWhenCurrentJobsComplete();
                 }
             }
         }        

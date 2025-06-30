@@ -17,7 +17,7 @@ import uk.ac.earlham.marti.schedule.*;
  * @author Richard M. Leggett
  */
 public class MARTiEngine {
-    public final static String VERSION_STRING = "v0.9.25";
+    public final static String VERSION_STRING = "v0.9.26";
     public final static long SERIAL_VERSION = 3L;
     public final static boolean SHOW_NOTES = false;
         
@@ -110,7 +110,7 @@ public class MARTiEngine {
             int jobid = ss.submitJob("test", "test", commands, "testlog.txt", true);
             //ssj.run();
             while(true) {
-                ss.manageQueue();
+                ss.manageQueue(options.getProgressReport().checkIfAbortWhenCurrentJobsComplete());
                 if (ss.checkJobCompleted(jobid)) {
                     System.out.println("Job "+jobid+" COMPLETED");
                     break;

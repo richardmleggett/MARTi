@@ -156,7 +156,7 @@ public class SlurmScheduler implements JobScheduler {
         return pendingJobs.size();
     }
     
-    public synchronized void manageQueue() {
+    public synchronized void manageQueue(boolean abortWhenPendingJobsCompleted) {
         // Check state of jobs, but only every minute or two
         long timeNow = System.nanoTime();
         long timeDiff = (timeNow - lastSlurmQuery) / 1000000; // ms
@@ -197,15 +197,17 @@ public class SlurmScheduler implements JobScheduler {
         }
         
         // Now can we move jobs from pending to running?
-        boolean foundJobToRun = true;
-        while ((runningJobs.size() < maxJobs) &&
-               (pendingJobs.size() > 0))
-        {      
-            SlurmSchedulerJob ssj = pendingJobs.removeFirst();
-            schedulerLog.println("Running job\t" + ssj.getId() + "\t" +ssj.getCommand());            
-            ssj.run();
-            runningJobs.put(ssj.getId(), ssj);
-            schedulerLog.println("SLURM id for job "+ssj.getId()+" is "+ssj.getSubmittedJobId());
+        if (!abortWhenPendingJobsCompleted) {
+            boolean foundJobToRun = true;
+            while ((runningJobs.size() < maxJobs) &&
+                   (pendingJobs.size() > 0))
+            {      
+                SlurmSchedulerJob ssj = pendingJobs.removeFirst();
+                schedulerLog.println("Running job\t" + ssj.getId() + "\t" +ssj.getCommand());            
+                ssj.run();
+                runningJobs.put(ssj.getId(), ssj);
+                schedulerLog.println("SLURM id for job "+ssj.getId()+" is "+ssj.getSubmittedJobId());
+            }
         }
     }
     

@@ -192,6 +192,12 @@ public class ReadProcessor {
     private boolean checkForEnd() {
         boolean fEnd = true;
         
+        // Check if abortWhenCurrentJobsComplete is set
+        if (options.getProgressReport().checkIfAbortWhenCurrentJobsComplete()) {
+            return true;
+        }
+
+        
         // Used to end if scheduler has failed jobs. Now we try to continue...
         if (options.getJobScheduler().getFailedJobCount() > 0) {
             //options.getLog().printlnLogAndScreen("ERROR: failed jobs, so exiting early.");
@@ -218,7 +224,7 @@ public class ReadProcessor {
                 fEnd = true;
             }
         }
-        
+                
         if (!progressReport.chunksComplete()) {
             options.getLog().println(MARTiLog.LOGLEVEL_PROGRESSREPORT, "ProgressReport not complete - " + progressReport.getProgressString());
             fEnd = false;
@@ -313,7 +319,7 @@ public class ReadProcessor {
         while (checkForEnd() == false) {
             // Manage the job scheduler queue
             if (options.getJobScheduler() != null) {
-                options.getJobScheduler().manageQueue();
+                options.getJobScheduler().manageQueue(options.getProgressReport().checkIfAbortWhenCurrentJobsComplete());
                 
                 // Also check for Megan initiation
                 this.checkForMeganInitation();

@@ -112,7 +112,7 @@ public class SimpleJobScheduler implements JobScheduler {
         return jobId++;
     }
     
-    public synchronized void manageQueue() {
+    public synchronized void manageQueue(boolean abortWhenPendingJobsCompleted) {
         // Check for any finished jobs
         for (int i=0; i<runningJobs.size(); i++) {
             SimpleJobSchedulerJob j = runningJobs.get(i);
@@ -132,58 +132,60 @@ public class SimpleJobScheduler implements JobScheduler {
         }
         
         // Now can we move jobs from pending to running?
-        boolean foundJobToRun = true;
-        while ((runningJobs.size() < maxJobs) &&
-               (pendingJobs.size() > 0) &&
-               (foundJobToRun))
-        {                        
-            // Find next job to run
-            int index = -1;
-            for (int i=0; i<pendingJobs.size(); i++) {
-                SimpleJobSchedulerJob job = pendingJobs.get(i);
-                if (job.getNumberOfDependencies() == 0) {
-                    // No dependencies, so can use this
-                    index = i;
-                } else {
-                    // Check if job has met all dependencies
-                    boolean metDependencies = true;
-                    for (int j=0; j<job.getNumberOfDependencies(); j++) {
-                        if (checkJobCompleted(job.getDependency(j)) == false) {
-                            metDependencies = false;
-                            schedulerLog.println("Job "+job.getId() + " dependency not yet met.");
-                            break;
-                        } else {
-                            schedulerLog.println("Job "+job.getId() + " dependency has been met.");
+        if (!abortWhenPendingJobsCompleted) {
+            boolean foundJobToRun = true;
+            while ((runningJobs.size() < maxJobs) &&
+                   (pendingJobs.size() > 0) &&
+                   (foundJobToRun))
+            {                        
+                // Find next job to run
+                int index = -1;
+                for (int i=0; i<pendingJobs.size(); i++) {
+                    SimpleJobSchedulerJob job = pendingJobs.get(i);
+                    if (job.getNumberOfDependencies() == 0) {
+                        // No dependencies, so can use this
+                        index = i;
+                    } else {
+                        // Check if job has met all dependencies
+                        boolean metDependencies = true;
+                        for (int j=0; j<job.getNumberOfDependencies(); j++) {
+                            if (checkJobCompleted(job.getDependency(j)) == false) {
+                                metDependencies = false;
+                                schedulerLog.println("Job "+job.getId() + " dependency not yet met.");
+                                break;
+                            } else {
+                                schedulerLog.println("Job "+job.getId() + " dependency has been met.");
+                            }
+                        }
+
+                        if (metDependencies) {
+                            index = i;
                         }
                     }
-                    
-                    if (metDependencies) {
-                        index = i;
+
+                    if (index != -1) {
+                        break;
                     }
                 }
-                
+
                 if (index != -1) {
-                    break;
+                    SimpleJobSchedulerJob j = pendingJobs.remove(index);
+                    schedulerLog.println("Running job\t" + j.getId() + "\t" +j.getCommand());
+                    //schedulerLog.println("Logging "+j.getLog());
+                    runningJobs.add(j);
+                    j.run();
+                } else {
+                    foundJobToRun = false;
                 }
-            }
-            
-            if (index != -1) {
-                SimpleJobSchedulerJob j = pendingJobs.remove(index);
-                schedulerLog.println("Running job\t" + j.getId() + "\t" +j.getCommand());
+
+                //SimpleJobSchedulerJob j = pendingJobs.remove();
+                //schedulerLog.println("Running job\t" + j.getId() + "\t" +j.getCommand());
                 //schedulerLog.println("Logging "+j.getLog());
-                runningJobs.add(j);
-                j.run();
-            } else {
-                foundJobToRun = false;
+                //runningJobs.add(j);
+                //j.run();
             }
-            
-            //SimpleJobSchedulerJob j = pendingJobs.remove();
-            //schedulerLog.println("Running job\t" + j.getId() + "\t" +j.getCommand());
-            //schedulerLog.println("Logging "+j.getLog());
-            //runningJobs.add(j);
-            //j.run();
         }
-        
+
         long timeDiff = (System.nanoTime() - lastLoadReport) / 1000000;
         if (timeDiff > 10000) {
             this.printLoad();

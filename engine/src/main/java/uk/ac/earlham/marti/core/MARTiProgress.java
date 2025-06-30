@@ -35,6 +35,7 @@ public class MARTiProgress {
     private int metamapsCount = 0;
     private int analysisSubmitted = 0;
     private int analysisCompleted = 0;
+    private boolean abortWhenCurrentJobsComplete = false;
     private Hashtable<String, Boolean> rawSequenceFiles = new Hashtable<String, Boolean>();    
     private Hashtable<String, GregorianCalendar> completedIdentifiers = new Hashtable<String, GregorianCalendar>();
     private Hashtable<String, GregorianCalendar> startedIdentifiers = new Hashtable<String, GregorianCalendar>();
@@ -265,4 +266,12 @@ public class MARTiProgress {
         }
         return completed;
     }
+    
+    public synchronized void setAbortWhenCurrentJobsComplete() {
+        abortWhenCurrentJobsComplete = true;
+    }
+    
+    public synchronized boolean checkIfAbortWhenCurrentJobsComplete() {
+        return abortWhenCurrentJobsComplete;
+    }    
 }
