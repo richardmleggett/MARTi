@@ -124,6 +124,8 @@ public class SlurmSchedulerJob {
             if (options.getProgressReport().checkCompleted(identifier)) {
                 options.getLog().printlnLogAndScreen("Job "+identifier+" already completed, so not rerunning.");
                 dontRunCommand = true;
+            } else {           
+                options.getLog().println("Job "+identifier+" not completed, so will be submitting.");
             }            
         }
         

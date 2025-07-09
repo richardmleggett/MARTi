@@ -75,7 +75,9 @@ public class SimpleJobSchedulerJob {
                 options.getLog().printlnLogAndScreen("Job "+identifier+" already completed, so not rerunning.");
                 dontRunCommand = true;
                 return;
-            }            
+            } else {           
+                options.getLog().println("Job "+identifier+" not completed, so will be submitting.");
+            }
         }
 
         // Record start time

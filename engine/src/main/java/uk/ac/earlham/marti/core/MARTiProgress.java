@@ -5,8 +5,10 @@
 package uk.ac.earlham.marti.core;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +17,6 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Class to keep track of overall progress from read filtering to parsing alignments.
@@ -36,9 +37,12 @@ public class MARTiProgress {
     private int analysisSubmitted = 0;
     private int analysisCompleted = 0;
     private boolean abortWhenCurrentJobsComplete = false;
+    private boolean writtenHeaders = false;
+    private boolean continuingFromPrevious = false;
     private Hashtable<String, Boolean> rawSequenceFiles = new Hashtable<String, Boolean>();    
     private Hashtable<String, GregorianCalendar> completedIdentifiers = new Hashtable<String, GregorianCalendar>();
     private Hashtable<String, GregorianCalendar> startedIdentifiers = new Hashtable<String, GregorianCalendar>();
+    private String progressFilename = null;
         
     public MARTiProgress(MARTiEngineOptions o) {
         options = o;
@@ -59,7 +63,6 @@ public class MARTiProgress {
             options.getLog().printlnLogAndScreen("Warning: not seen file  being marked as completed - "+filename);            
         }
         rawSequenceFiles.put(filename, true);        
-        writeProgressFile();
     }
     
     public synchronized void incrementChunkCount() {
@@ -160,10 +163,25 @@ public class MARTiProgress {
     }
     
     public synchronized void writeProgressFile() {
+        if (progressFilename == null) {
+            progressFilename = options.getSampleDirectory() + File.separator + "progress.info";
+        }
+
         try {
-            options.getLog().println("Writing progress file");
-            PrintWriter pw = new PrintWriter(options.getSampleDirectory() + File.separator + "progress.info");
-            options.writeOptionsToFile(pw);            
+            if (continuingFromPrevious) {
+                writtenHeaders = true;
+            } else {
+                options.getLog().println("Creating new progress file");
+                PrintWriter pw = new PrintWriter(progressFilename);
+                options.writeOptionsToFile(pw);
+                pw.println("Identifiers:");
+                pw.close();
+                writtenHeaders = true;
+            }
+            
+            //options.getLog().println("Writing progress file");
+            //PrintWriter pw = new PrintWriter(progressFilename);
+            //options.writeOptionsToFile(pw);            
             
             
             //pw.println("RawReads");
@@ -174,23 +192,23 @@ public class MARTiProgress {
             //}
 
             // Convert Hashtable to List of Map Entries
-            List<Map.Entry<String, GregorianCalendar>> entryList = new ArrayList<>(completedIdentifiers.entrySet());
+            //List<Map.Entry<String, GregorianCalendar>> entryList = new ArrayList<>(completedIdentifiers.entrySet());
 
             // Sort the List based on the values (GregorianCalendars)
-            Collections.sort(entryList, new Comparator<Map.Entry<String, GregorianCalendar>>() {
-                @Override
-                public int compare(Map.Entry<String, GregorianCalendar> o1, Map.Entry<String, GregorianCalendar> o2) {
-                    return o1.getValue().compareTo(o2.getValue());
-                }
-            });
+            //Collections.sort(entryList, new Comparator<Map.Entry<String, GregorianCalendar>>() {
+            //    @Override
+            //    public int compare(Map.Entry<String, GregorianCalendar> o1, Map.Entry<String, GregorianCalendar> o2) {
+            //        return o1.getValue().compareTo(o2.getValue());
+            //    }
+            //});
 
             // Iterate through the sorted List and print the contents
-            pw.println("Identifiers:"+completedIdentifiers.size());
-            for (Map.Entry<String, GregorianCalendar> entry : entryList) {
-                pw.println(entry.getKey() + "\t" + options.getLog().calendarToString(entry.getValue()));
-            }
+            //pw.println("Identifiers:"+completedIdentifiers.size());
+            //for (Map.Entry<String, GregorianCalendar> entry : entryList) {
+            //    pw.println(entry.getKey() + "\t" + options.getLog().calendarToString(entry.getValue()));
+            //}
             
-            pw.close();
+            //pw.close();
         } catch (Exception e) {
             System.out.println("writeProgressFile Exception:");
             e.printStackTrace();
@@ -200,8 +218,10 @@ public class MARTiProgress {
     
     public synchronized void readProgressFile() {
         try {
-            File progressFile = new File(options.getSampleDirectory() + File.separator + "progress.info");
-            //File progressFile = new File("/Users/leggettr/Desktop/progress.info");
+            if (progressFilename == null) {
+                progressFilename = options.getSampleDirectory() + File.separator + "progress.info";
+            }
+            File progressFile = new File(progressFilename);
             if (progressFile.exists()) {
                 options.getLog().printlnLogAndScreen("Existing progress file found. Will attempt to continue from last saved position.");
                 options.addAlert(new MARTiAlert(MARTiAlert.TYPE_NEUTRAL, "Existing progress file found - will attempt to continue from last saved position."));
@@ -209,14 +229,14 @@ public class MARTiProgress {
                 String line = br.readLine();
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("Identifiers:")) {    
-                        int idCount = Integer.parseInt(line.substring(12));
+                        //int idCount = Integer.parseInt(line.substring(12));
                         while ((line = br.readLine()) != null) {
                             String[] tokens = line.split("\t");
                             if (tokens.length == 2) {
                                 String id = tokens[0];
                                 String timeString = tokens[1];
-                                System.out.println("    Completed "+id);
-                                recordCompleted(id);
+                                options.getLog().printlnLogAndScreen("    Completed "+id);
+                                recordCompleted(id, false);
                             } else {
                                 options.getLog().printlnLogAndScreen("Unrecognised string in progress.info: ["+line+"]");
                             }
@@ -224,8 +244,11 @@ public class MARTiProgress {
                     }
                 }
                 br.close();
+                options.getLog().printlnLogAndScreen("Finished reading progress file");
+                continuingFromPrevious = true;
             } else {
                 options.getLog().println("No existing progress file. Starting from scratch.");
+                continuingFromPrevious = false;
             }
         } catch (Exception e) {
             System.out.println("readProgressFile Exception:");
@@ -233,6 +256,25 @@ public class MARTiProgress {
             System.exit(1);
         }
         //System.exit(0);
+    }
+    
+    public synchronized void writeIdentifier(String identifier) {
+        try {
+            if (!continuingFromPrevious) {
+                if (!writtenHeaders) {
+                    this.writeProgressFile();
+                }
+            }
+            
+            System.out.println("Appending identifier "+identifier);
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(progressFilename, true)));
+            pw.println(identifier + "\t" + options.getLog().calendarToString(new GregorianCalendar()));
+            pw.close();
+        } catch (Exception e) {
+            System.out.println("writeIdentifier Exception:");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
     
     public synchronized void recordStarted(String identifier) {
@@ -245,18 +287,22 @@ public class MARTiProgress {
         }            
     }
     
+    
     public synchronized void recordCompleted(String identifier) {
-        String timeString = options.getLog().getTime();
-                
+        recordCompleted(identifier, true);
+    }                
+    
+    public synchronized void recordCompleted(String identifier, boolean updateFile) {                
         if (completedIdentifiers.containsKey(identifier)) {
             if (!options.continueFromPrevious()) {
                 options.getLog().printlnLogAndScreen("Error: identifier "+identifier+" already found in recordCompleted. Please report this to the authors.");
             }
         } else {
             completedIdentifiers.put(identifier, new GregorianCalendar());
+            if (updateFile) {
+                writeIdentifier(identifier);
+            }
         }            
-        
-        writeProgressFile();
     }
     
     public synchronized boolean checkCompleted(String identifier) {
