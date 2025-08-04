@@ -8,6 +8,33 @@ const https = require('https');
 
 var argv = require('minimist')(process.argv.slice(2));
 
+const aliases = {
+  marti: 'marti',
+  taxonomy: 'taxonomy',
+  minknow: 'minknow',
+  port: 'port',
+  p: 'port',
+  https: 'https',
+  key: 'key',
+  cert: 'cert',
+  options: 'options',
+  help: 'help',
+  h: 'help',
+  version: 'version',
+  v: 'version'
+};
+
+// Fix incorrectly parsed single-dash long flags like -marti
+process.argv.slice(2).forEach((arg, i, args) => {
+  if (arg.startsWith('-') && !arg.startsWith('--')) {
+    const key = arg.slice(1);
+    if (aliases[key] && argv[aliases[key]] === undefined) {
+      const value = args[i + 1] && !args[i + 1].startsWith('-') ? args[i + 1] : true;
+      argv[aliases[key]] = value;
+    }
+  }
+});
+
 const restrictedMode = argv.r || false;
 
 const martiGuiVersion = "0.22.1";

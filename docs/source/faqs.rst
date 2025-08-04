@@ -23,3 +23,14 @@ Why do AMR hits on the heatmap sum to over 100% when grouped by "Drug class"?
 -----------------------------------------------------------------------------
 
 When grouping by "Drug class" on the AMR heatmap, it's possible for the total AMR hits to exceed 100% for a sample. This is because individual AMR genes can be associated with multiple drug classes. As a result, a single gene may contribute to more than one category, leading to overlapping counts.
+
+Why are the "Other" and "Higher Taxa" categories for?
+------------------------------------------------------------------
+
+In the donut and stacked bar plots within the MARTi GUI, two categories, *Other* and *Higher Taxa*, are used to help simplify the visualisations:
+
+- *Other*: This node groups together taxa that are not among the top *N* most abundant at the selected taxonomic level. It is used to reduce visual clutter by summarising the long tail of low-abundance taxa. If you increase the number of top taxa shown in the plot options, the size of the "Other" node will decrease, as more taxa are displayed individually.
+
+- *Higher Taxa*: This node contains reads that could not be confidently assigned to the selected taxonomic level, but were classified at a broader level (e.g. family or order). For example, if you are viewing data at genus level, any reads assigned to family level, or above, will be grouped under "Higher Taxa".
+
+These categories ensure that all reads are accounted for, even if they are not fully resolved to the selected taxonomic rank.
