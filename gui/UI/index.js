@@ -37,7 +37,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.22.1";
+const martiGuiVersion = "0.23.0";
 
 if (argv.h || argv.help) {
   console.log(`

@@ -132,6 +132,7 @@ resizeOptionsFullscreen();
 initialiseDashboardDonut();
 initialiseDashboardTree();
 initialiseDashboardTreeMap();
+initialiseDashboardSankey()
 
 initialiseReadsDonut();
 initialiseAmrDonut();
@@ -315,6 +316,59 @@ d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
 
     save_as_raster_with_style('treeMapSvg','/css/dashboardTreeMap.css',outputFilename,2,'jpg',true);
   });
+
+
+// --- Sankey exports ---
+d3.select('#exportSankeySVG').on('click', function () {
+  var date = getDate() + "_" + getTime();
+  var levelSelected = (taxonomicRankSelectedText || "all_levels")
+                        .toLowerCase().replace(" ", "_");
+  var outputFilename = currentDashboardSampleName + "_" + levelSelected +
+                       "_sankey_lca_" + lcaAbundanceDashboard + "_" + date;
+
+  var $svg = $("#sankeySvg");
+  var w = $svg.width();               // fix width so export matches what you see
+  $svg.attr('width', w);
+
+  save_as_svg_with_style('sankeySvg', '/css/dashboardSankey.css',
+                         outputFilename, true /* inline fonts/width fix */);
+});
+
+d3.select('#exportSankeyPNG').on('click', function () {
+  var date = getDate() + "_" + getTime();
+  var levelSelected = (taxonomicRankSelectedText || "all_levels")
+                        .toLowerCase().replace(" ", "_");
+  var outputFilename = currentDashboardSampleName + "_" + levelSelected +
+                       "_sankey_lca_" + lcaAbundanceDashboard + "_" + date;
+
+  var $svg = $("#sankeySvg");
+  var w = $svg.width();
+  $svg.attr('width', w);
+
+  save_as_raster_with_style('sankeySvg', '/css/dashboardSankey.css',
+                            outputFilename, 2 /* scale */,
+                            'png', true /* width fix */);
+});
+
+d3.select('#exportSankeyJPG').on('click', function () {
+  var date = getDate() + "_" + getTime();
+  var levelSelected = (taxonomicRankSelectedText || "all_levels")
+                        .toLowerCase().replace(" ", "_");
+  var outputFilename = currentDashboardSampleName + "_" + levelSelected +
+                       "_sankey_lca_" + lcaAbundanceDashboard + "_" + date;
+
+  var $svg = $("#sankeySvg");
+  var w = $svg.width();
+  $svg.attr('width', w);
+
+  save_as_raster_with_style('sankeySvg', '/css/dashboardSankey.css',
+                            outputFilename, 2 /* scale */,
+                            'jpg', true /* width fix */);
+});
+
+
+
+
 
   d3.select('#exportAccumulationSVG').on('click', function(){
     dashboardAccumulationExport();
@@ -563,6 +617,7 @@ socket.on('dashboard-tree-response', function(data) {
   newTreeData = true;
   plotLevelSelectorChanged = true;
   treeUpdate(root);
+  updateSankeyFromActiveTree();
   treeMapUpdate(treeMapData);
   globUpdate(globDonutData);
   newTreeData = false;
@@ -1142,35 +1197,75 @@ function resizeOptionsFullscreen() {
   $('#plotLevelSelectorMenu a.rank:contains(' + plotLevelSelectedDashboardText + ')').addClass("active");
   replacePlotLevelText();
 
-  $('#plotLevelSelectorMenu').on( 'click', 'a.rank', function () {
-          if ( $(this).hasClass('active') ) {
+  // $('#plotLevelSelectorMenu').on( 'click', 'a.rank', function () {
+  //         if ( $(this).hasClass('active') ) {
 
-          }
-          else {
-            $('#plotLevelSelectorMenu a.rank').removeClass('active');
-            plotLevelSelectedDashboardText = this.textContent;
-            plotLevelSelectedDashboardId = $(this).data('id');
-            $('#plotLevelSelectorDashboard').text(plotLevelSelectedDashboardText);
-            $(this).addClass('active');
-            plotLevelSelectedDashboardTreeName = plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId]["treeName"];
-            // if (plotLevelSelectedDashboardId == "read"){
-            //   treeData = data.treeData.tree;
-            //   globDonutData = data.treeData2.tree;
-            // } else {
-            //   treeData = data.treeData.treeYield;
-            //   globDonutData = data.treeData2.treeYield;
-            // }
-            switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
-            replacePlotLevelText();
-            plotLevelSelectorChanged = true;
-            taxonomicRankChanged = true;
-            globUpdate(globDonutData);
-            treeUpdate(root);
-            treeMapUpdate(treeMapData);
-            plotLevelSelectorChanged = false;
-            taxonomicRankChanged = false;
-          }
-    });
+  //         }
+  //         else {
+  //           $('#plotLevelSelectorMenu a.rank').removeClass('active');
+  //           plotLevelSelectedDashboardText = this.textContent;
+  //           plotLevelSelectedDashboardId = $(this).data('id');
+  //           $('#plotLevelSelectorDashboard').text(plotLevelSelectedDashboardText);
+  //           $(this).addClass('active');
+  //           plotLevelSelectedDashboardTreeName = plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId]["treeName"];
+  //           // if (plotLevelSelectedDashboardId == "read"){
+  //           //   treeData = data.treeData.tree;
+  //           //   globDonutData = data.treeData2.tree;
+  //           // } else {
+  //           //   treeData = data.treeData.treeYield;
+  //           //   globDonutData = data.treeData2.treeYield;
+  //           // }
+  //           switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
+  //           replacePlotLevelText();
+  //           plotLevelSelectorChanged = true;
+  //           taxonomicRankChanged = true;
+  //           globUpdate(globDonutData);
+  //           treeUpdate(root);
+  //           sankeyResetTopNOnNextBuild = true;
+  //           updateSankeyFromActiveTree();
+  //           treeMapUpdate(treeMapData);
+  //           plotLevelSelectorChanged = false;
+  //           taxonomicRankChanged = false;
+  //         }
+  //   });
+
+  $('#plotLevelSelectorMenu')
+  .off('click.plotlevel')
+  .on('click.plotlevel', 'a.rank', function () {
+    if ($(this).hasClass('active')) return;
+
+    $('#plotLevelSelectorMenu a.rank').removeClass('active');
+    $(this).addClass('active');
+
+    plotLevelSelectedDashboardText = this.textContent;
+    plotLevelSelectedDashboardId   = $(this).data('id');
+    $('#plotLevelSelectorDashboard').text(plotLevelSelectedDashboardText);
+
+    // set the tree name for this plot level ("tree" or "treeYield")
+    plotLevelSelectedDashboardTreeName =
+      plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].treeName;
+
+    // keep other charts in sync
+    switchDataAbundanceLevel(plotLevelSelectedDashboardTreeName);
+    replacePlotLevelText();
+    plotLevelSelectorChanged = true;
+    taxonomicRankChanged     = true;
+
+
+
+    // then update the others
+    globUpdate(globDonutData);
+    treeUpdate(root);
+    treeMapUpdate(treeMapData);
+
+    sankeyResetTopNOnNextBuild = true;
+    updateSankeyFromActiveTree();
+
+    plotLevelSelectorChanged = false;
+    taxonomicRankChanged     = false;
+  });
+
+
 
     $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedDashboardText);
     taxonomicRankSelectedText = taxonomicRankSelectedDashboardText;
@@ -1210,6 +1305,28 @@ $('#taxonomicLevelSelectorMenu').on( 'click', 'a.rank', function () {
               treeMapUpdate(treeMapData);
             }
             taxonomicRankChanged = false;
+
+
+
+            // After taxonomicRankSelected is set…
+            if (sankeyVisibleCols && sankeyVisibleCols.hasOwnProperty(taxonomicRankSelected)) {
+              if (!sankeyVisibleCols[taxonomicRankSelected]) {
+                sankeyVisibleCols[taxonomicRankSelected] = true;
+                // reflect in UI so the checkbox shows as checked
+                d3.selectAll(".sankey-col-toggle")
+                  .filter(function(){ return +this.value === taxonomicRankSelected; })
+                  .property("checked", true);
+              }
+            }
+
+            sankeyResetTopNOnNextBuild = true;
+            // Now refresh the Sankey too
+            if (typeof updateSankeyFromActiveTree === "function") {
+              updateSankeyFromActiveTree();
+            }
+
+
+
             globUpdate(globDonutData);
             socket.emit('dashboard-accumulationChart-request',{
               clientId: uuid,
@@ -1229,6 +1346,7 @@ $('#minimumAbundanceButtonDashboard').on( 'click', 'button', function () {
         else {
             $('#minimumAbundanceButtonDashboard>button').removeClass('active');
             $(this).addClass('active');
+            sankeyResetTopNOnNextBuild = true;
             lcaAbundanceDashboardUnformatted = this.textContent;
             lcaAbundanceDashboard = lcaFormat(this.textContent.slice(0, -1));
             socket.emit('dashboard-tree-request',{

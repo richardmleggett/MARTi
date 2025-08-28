@@ -25,6 +25,7 @@ new ResizeSensor($('#taxaTableAndDonutRow'), function(){
         currentTreeDivWidth = $('#dendrogram').width();
         treeUpdate(root);
         treeMapUpdate(treeMapData);
+        sankeyUpdate(sankeyDataCurrent, false);
       }
   }
 

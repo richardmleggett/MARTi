@@ -28,6 +28,7 @@
 
   <!-- D3 library -->
   <script src="/js/d3.v3.min.js" type="text/javascript"></script>
+  <script src="/js/d3.sankey.js"></script>
 
   <!-- Bootstrap core JavaScript-->
   <script src="/vendor/jquery/jquery.min.js"></script>
@@ -76,6 +77,9 @@
 
 <script src="/js/dashboardTreeMap.js" type="text/javascript"></script>
 <link href="/css/dashboardTreeMap.css" rel="stylesheet">
+
+<script src="/js/dashboardSankey.js" type="text/javascript"></script>
+<link href="/css/dashboardSankey.css" rel="stylesheet">
 
 <script src="/js/dashboardAmrDonut.js" type="text/javascript"></script>
 <link href="/css/dashboardAmrDonut.css" rel="stylesheet">
@@ -685,7 +689,16 @@ dashboardColorIndex = colourPalettes[selectedPalette].length;
    treeUpdate(root);
    treeMapUpdate(treeMapData);
    globUpdate(globDonutData);
-   plotRarefactionCompare(rareData);
+
+   sankeyRefreshPalette();
+  
+
+   if (typeof plotRarefactionCompare === "function" &&
+    typeof rareData !== "undefined" &&
+    rareData != null) {
+      plotRarefactionCompare(rareData);
+    }
+
    if(dashboardChartVisibility["dashboardAmrTable"] == true){
      updateAmrTable(dashboardAmrReponseData);
 
@@ -703,7 +716,11 @@ dashboardColorIndex = colourPalettes[selectedPalette].length;
 
  } else if (currentPage == "Compare") {
    updateComparePlots(compareTreeDataGlobal);
-   plotRarefactionCompare(rareData);
+   if (typeof plotRarefactionCompare === "function" &&
+    typeof rareData !== "undefined" &&
+    rareData != null) {
+      plotRarefactionCompare(rareData);
+    }
  }
 
 });

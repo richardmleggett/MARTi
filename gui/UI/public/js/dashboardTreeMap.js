@@ -378,7 +378,8 @@ cell.select("tspan")
               toolTipValueFormat(plotLevelSelectedDashboardId,d.count) + "<br/>Summed " + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix.toLowerCase() + " count: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.summedValue))
               .style("color", "black")
               .style("left", (tooltipPos(d3.event.pageX)) + "px")
-              .style("top", (d3.event.pageY - 35) + "px");
+              .style("top",  tooltipPosY(d3.event.pageY) + "px");
+              // .style("top", (d3.event.pageY - 35) + "px");
           })
               .on("mouseout", function(d) {
                   toolTipDiv.transition()
