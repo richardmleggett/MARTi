@@ -12,7 +12,7 @@ var sankeyVisibleCols;
 
 
 var sankeySvg, sankeyG;
-var sankeyMargin = { top: 18, right: 20, bottom: 18, left: 20 };
+var sankeyMargin = { top: 50, right: 20, bottom: 18, left: 20 };
 var sankeyHeight = 440; // overall SVG height; width is responsive
 var sankeyColor = d3.scale.ordinal().range(colourPalettes && colourPalettes[selectedPalette] ? colourPalettes[selectedPalette] : d3.scale.category20().range());
 
