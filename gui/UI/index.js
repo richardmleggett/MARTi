@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 const https = require('https');
+const path = require('path');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -37,7 +38,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.23.0";
+const martiGuiVersion = "0.23.1";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -243,41 +244,79 @@ function getSubDirectories(path) {
   });
 }
 
-function scanMinKNOWRunDirectory() {
-  var minKNOWSampleNames = [];
-  if(serverOptions["MinKNOWRunDirectory"] != "") {
+// function scanMinKNOWRunDirectory() {
+//   var minKNOWSampleNames = [];
+//   if(serverOptions["MinKNOWRunDirectory"] != "") {
+//     try {
+//       const MinKNOWRunDirectory = serverOptions["MinKNOWRunDirectory"];
+//       var list = getSubDirectories(MinKNOWRunDirectory);
+//       list.forEach(function(dir) {
+//         var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);
+//         if(newList.includes("fastq_pass") || newList.includes("pass")) {
+//           minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir);
+//         }
+//         else if(newList.length == 1) {
+//           const sampleDir = newList[0];
+//           newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir);
+//           if(newList.length == 1) {
+//             const uid_dir = newList[0];
+//             newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
+//             if(newList.includes("fastq_pass")) {
+//               minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
+//             }
+//           }
+//         }
+//       });
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   }
+//   serverOptions["minKNOWSampleNames"] = minKNOWSampleNames;
+// }
+
+function scanMinKNOWRunDirectory () {
+  const results = new Set();
+  const root = serverOptions["MinKNOWRunDirectory"];
+  if (!root) {
+    serverOptions["minKNOWSampleNames"] = [];
+    return;
+  }
+
+  function safeSubdirs(dir) {
+    try { return getSubDirectories(dir); } catch { return []; }
+  }
+
+  function isRunDir(dir) {
+    const kids = safeSubdirs(dir);
+    return kids.includes("fastq_pass") || kids.includes("pass");
+  }
+
+  function walk(dir, depth = 0) {
+    if (depth > 4) return;
     try {
-      const MinKNOWRunDirectory = serverOptions["MinKNOWRunDirectory"];
-      var list = getSubDirectories(MinKNOWRunDirectory);
-      list.forEach(function(dir) {
-        var newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir);
-        if(newList.includes("fastq_pass") || newList.includes("pass")) {
-          minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir);
-        }
-        else if(newList.length == 1) {
-          const sampleDir = newList[0];
-          newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir);
-          if(newList.length == 1) {
-            const uid_dir = newList[0];
-            newList = getSubDirectories(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
-            if(newList.includes("fastq_pass")) {
-              minKNOWSampleNames.push(MinKNOWRunDirectory + "/" + dir + "/" + sampleDir + "/" + uid_dir);
-            }
-          }
-        }
-      });
-    } catch (err) {
-      console.error(err);
+      if (isRunDir(dir)) {
+        results.add(dir);
+        return;
+      }
+      const kids = safeSubdirs(dir);
+      for (const sub of kids) {
+        walk(dir + "/" + sub, depth + 1);
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
-  serverOptions["minKNOWSampleNames"] = minKNOWSampleNames;
+
+  walk(root, 0);
+  serverOptions["minKNOWSampleNames"] = Array.from(results);
 }
 
 function makeConfigFileString(form_object) {
   var configFileString = "";
   configFileString += "RawDataDir:" + form_object["rawDataDir"] + "\n";
   configFileString += "SampleName:" + form_object["martiName"] + "\n";
-  configFileString += "SampleDir:" + form_object["outputDir"] + "/" + form_object["martiName"] + "\n";
+  // configFileString += "SampleDir:" + form_object["outputDir"] + "/" + form_object["martiName"] + "\n";
+  configFileString += "SampleDir:" + path.join(form_object["outputDir"], form_object["martiName"]) + "\n";
   if(form_object.hasOwnProperty('processBarcodeCheck') && form_object["processBarcodeCheck"] == "on") {
     if(Array.isArray(form_object["barcodeCheck"])) {
       configFileString += "ProcessBarcodes:";
@@ -777,23 +816,27 @@ app.get('/sample/:sample', function (req, res) {
 app.post('/new',(req, res) => {
   if(numAnalyses < serverOptions["MaxSimultaneousAnalyses"] ) {
     // check output dir exists, create if not
-    const outputDir = req.body["outputDir"] + "/" + req.body["martiName"];
+    // const outputDir = req.body["outputDir"] + "/" + req.body["martiName"];
+    const outputDir = path.join(req.body["outputDir"], req.body["martiName"]);
     if (!fsExtra.existsSync(outputDir)) {
       fsExtra.mkdirSync(outputDir);
     }
 
     // write the config file
     const configFileString = makeConfigFileString(req.body);
-    fsExtra.writeFile(outputDir + "/config.txt", configFileString, err => {
+    // fsExtra.writeFile(outputDir + "/config.txt", configFileString, err => {
+    fsExtra.writeFile(path.join(outputDir, "config.txt"), configFileString, err => {
       if (err) {
         console.error(err)
       }
     })
 
     // start MARTi
-    var logStream = fsExtra.createWriteStream(outputDir + "/output.txt", {flags: 'a'});
+    // var logStream = fsExtra.createWriteStream(outputDir + "/output.txt", {flags: 'a'});
+    var logStream = fsExtra.createWriteStream(path.join(outputDir, "output.txt"), {flags: 'a'});
     var spawn = require('child_process').spawn,
-      marti_process = spawn('marti', ['-config', outputDir + '/config.txt']);
+      // marti_process = spawn('marti', ['-config', outputDir + '/config.txt']);
+      marti_process = spawn('marti', ['-config', path.join(outputDir, 'config.txt')]);
       numAnalyses += 1;
       marti_process.stdout.pipe(logStream);
       marti_process.stderr.pipe(logStream);

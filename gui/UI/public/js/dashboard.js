@@ -414,6 +414,7 @@ $("#taxaTableAndDonutRow").hide();
 $("#donutRow").hide();
 $("#taxaTreeRow").hide();
 $("#treeMapRow").hide();
+$("#sankeyPlotRow").hide();
 
 
 $('input.toggle-vis').on('click', function (e) {
@@ -603,6 +604,7 @@ socket.on('dashboard-tree-response', function(data) {
     $("#taxaTableAndDonutRow").show();
     $("#donutRow").show();
     $("#taxaTreeRow").show();
+    $("#sankeyPlotRow").show();
     $("#treeMapRow").show();
     $("#awaitingAnalysisCard").hide();
   }
