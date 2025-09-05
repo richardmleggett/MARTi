@@ -35,7 +35,7 @@ In the donut and stacked bar plots within the MARTi GUI, two categories, *Other*
 
 These categories ensure that all reads are accounted for, even if they are not fully resolved to the selected taxonomic rank.
 
-Can I use TaxaFilter for Kraken2
---------------------------------
+Can I use TaxaFilter for Kraken2?
+---------------------------------
 
 For query-time exclusion, this is determined by the capabilities of the underlying tools rather than by MARTi. BLAST and Centrifuge both have options to filter taxa, but Kraken2 currently does not. Kraken2 exclusion must be achieved by omitting taxa when building the database or by post-classification filtering. 
