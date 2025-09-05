@@ -25,7 +25,8 @@ public class CentrifugeProcess {
     private String jobQueue = null;
     private int minHitLen = 100;
     private int primaryAssignments = 1;
-
+    private String taxaFilter = "";
+    private String processOptions = "";
     
     public CentrifugeProcess(MARTiEngineOptions o) {
         options = o;
@@ -61,6 +62,14 @@ public class CentrifugeProcess {
                                 classifyThis = true;
                             } else if (tokens[0].compareToIgnoreCase("MinHitLen") == 0) {
                                 minHitLen = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("options") == 0) {
+                                processOptions = tokens[1];
+                            } else if (tokens[0].compareToIgnoreCase("TaxaFilter") == 0) {
+                                if (tokens[1].charAt(0) != '"') {
+                                    taxaFilter = tokens[1];
+                                } else {
+                                    taxaFilter = '"' + tokens[1] + '"';
+                                }
                             } else {
                                 keepReading = false;
                             }
@@ -142,5 +151,12 @@ public class CentrifugeProcess {
     public int getNumPrimaryAssignments() {
         return primaryAssignments;
     }
-   
+
+    public String getProcessOptions() {
+        return processOptions;
+    }   
+
+    public String getTaxaFilter() {
+        return taxaFilter;
+    }
 }

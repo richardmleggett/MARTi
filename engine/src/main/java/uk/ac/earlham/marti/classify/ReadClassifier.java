@@ -49,7 +49,7 @@ public class ReadClassifier {
     
     public synchronized void addFile(String blastProcessName, int i, String queryFilename, String blastFilename, String logFilename, String classifyPrefix) {
         boolean ignoreThis = false;
-        
+                
         if (options.runBlastCommand() == false) {
             File f = new File(blastFilename);
             if (!f.exists()) {
@@ -349,7 +349,10 @@ public class ReadClassifier {
                     options.getLog().println("Error: Failed BLAST "+f.getBlastFile());
                     options.addAlertOnlyOnce(new MARTiAlert(MARTiAlert.TYPE_ERROR, "Failed BLAST "+f.getBlastFile() + " exit value "+ js.getExitValue(thisId)));                            
                     js.markJobAsFailed(thisId);
-                    js.resubmitJobIfPossible(thisId);
+                    options.getProgressReport().setAbortWhenCurrentJobsComplete();
+                    //Not going to try to resubmit. Will exit.
+                    //js.resubmitJobIfPossible(thisId);
+                    System.exit(137);
                 }
             } else {    
                 options.getLog().println(MARTiLog.LOGLEVEL_NOTCOMPLETED, "Not completed " + f.blastProcessName + " - " + f.blastFile + " - " + f.getJobId());
@@ -362,6 +365,8 @@ public class ReadClassifier {
                     filesProcessed++;
                     files.remove(thisId);
                     options.getProgressReport().incrementChunksParsedCount();                    
+                    options.getProgressReport().setAbortWhenCurrentJobsComplete();
+                    System.exit(138);
                 }
             }
         }        

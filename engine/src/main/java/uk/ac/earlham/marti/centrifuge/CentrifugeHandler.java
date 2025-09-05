@@ -65,7 +65,7 @@ public class CentrifugeHandler {
             String minHitLen = Integer.toString(cp.getMinHitLen());
             String numThreads = Integer.toString(cp.getNumThreads());
             String primaryAssignments = Integer.toString(cp.getNumPrimaryAssignments());
-            
+            String taxfilter = cp.getTaxaFilter();            
             String classificationFilePath = getCentrifugeFilePathPrefixFromFastqFilePath(inputPathname, cp) + "_classification.txt";
             String reportFilePath = getCentrifugeFilePathPrefixFromFastqFilePath(inputPathname, cp) + "_report.txt";
             String commandFilePath = getCentrifugeFilePathPrefixFromFastqFilePath(inputPathname, cp) + ".sh";
@@ -83,8 +83,15 @@ public class CentrifugeHandler {
                 String command = "";
                 JobScheduler jobScheduler = options.getJobScheduler();
                 String identifier = "centrifuge_"+inputPathname;
+                String processOptions = cp.getProcessOptions();
                 
-                command =   "centrifuge" + 
+                command =   "centrifuge"; 
+
+                if (processOptions.length() > 0) {
+                    command = command + " " + processOptions;
+                }                
+                
+                command =   command + 
                             " -x " + database + 
                             " -U " + inputPathname + 
                             " -S " + classificationFilePath + 
@@ -93,6 +100,10 @@ public class CentrifugeHandler {
                             " -p " + numThreads + 
                             " -k " + primaryAssignments;
                 
+                if (taxfilter.length() > 1) {
+                    command = command + " --exclude-taxids " + taxfilter;
+                }
+                                
                 pw.write(command);
                 pw.close();
                 
@@ -100,16 +111,27 @@ public class CentrifugeHandler {
                 if (jobScheduler == null) {
                     System.out.println("Shouldn't get to a null job scheduler!");                  
                 } else {
-                    ArrayList<String> commands = new ArrayList<String>( 
-                            Arrays.asList( "centrifuge", 
-                            " -x ", database,
-                            " -U ", inputPathname,
-                            " -S ", classificationFilePath, 
-                            " --report-file ", reportFilePath, 
-                            " --min-hitlen ", minHitLen,
-                            " -p ", numThreads,
-                            " -k ", primaryAssignments));
+                    ArrayList<String> commands = new ArrayList<String>();
                     
+                    commands.add("centrifuge");
+                    
+                    if (processOptions.length() > 0) {
+                        commands.addAll(new ArrayList<String>(Arrays.asList(processOptions.split(" "))));
+                    }
+                    
+                    commands.add("-x"); commands.add(database);
+                    commands.add("-U"); commands.add(inputPathname);
+                    commands.add("-S"); commands.add(classificationFilePath); 
+                    commands.add("--report-file"); commands.add(reportFilePath); 
+                    commands.add("--min-hitlen"); commands.add(minHitLen);
+                    commands.add("-p"); commands.add(numThreads);
+                    commands.add("-k"); commands.add(primaryAssignments);
+
+                    if (taxfilter.length() > 1) {
+                        commands.add("--exclude-taxids");
+                        commands.add(taxfilter);
+                    }
+                                                            
                     boolean runIt = options.runBlastCommand();
                     
                     String[] commandString = commands.toArray(new String[commands.size()]);

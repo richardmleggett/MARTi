@@ -136,7 +136,7 @@ public class BlastHandler {
                               " --max-target-seqs " + bp.getMaxTargetSeqs() +
                               " --threads " + Integer.toString(bp.getNumThreads()) + 
                               " --out " + outputBlast + 
-                              " --outfmt " + defaultFormatString;
+                              " --outfmt " + '"' + defaultFormatString + '"';
                     
                     if (processOptions.length() > 0) {
                         command = command + " " + processOptions;

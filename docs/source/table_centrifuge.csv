@@ -6,3 +6,5 @@ CentrifugeThreads 	4	Number of threads to use when running Centrifuge. Note: for
 Memory	16G	For SLURM scheduler, the memory to use per Centrifuge job. Passed with the SLURM --mem parameter.
 Queue	ei-medium	The job submission queue to use. Can be left out and the default queue (see above) will be used. Currently only required for SLURM and equates to the partition name.
 MinHitLen	500	This value is passed to the Centrifuge option --min-hitlen for this process.
+TaxaFilter	544,550	Passes through to Centrifuge's exclude-taxids option which is described as "a comma-separated list of taxonomic IDs that will be excluded in classification procedure. The descendants from these IDs will also be excluded."
+Options	 --reorder	Any additional options to pass to Centrifuge (multiple options can be separated with spaces)
