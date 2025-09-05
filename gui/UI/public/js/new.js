@@ -281,7 +281,7 @@ function initialiseNewPage() {
 
 };
 
-var martiOutputBasePath = "/path/to/marti/dir/sample";
+// var martiOutputBasePath = "/path/to/marti/dir/sample";
 
 
 function updateRawDataDirOptions(options) {
@@ -325,9 +325,14 @@ function updateMartiNameField() {
 }
 
 function updateOutputPathField() {
-    var martiName = $("input[name='martiName']").val();
-    martiOutputBasePath = $('#outputDir option:selected').text();
-    var path = martiOutputBasePath + "/" + martiName;
+    // var martiName = $("input[name='martiName']").val();
+    // martiOutputBasePath = $('#outputDir option:selected').text();
+    // var path = martiOutputBasePath + "/" + martiName;
+
+    var martiName = $("input[name='martiName']").val() || "";
+    var base = $('#outputDir option:selected').text() || "";
+    var path = base.replace(/\/+$/,'') + (martiName ? '/' + martiName.replace(/^\/+/,'') : '');
+
     $("input[name='outputPath']").val(path);
 }
 

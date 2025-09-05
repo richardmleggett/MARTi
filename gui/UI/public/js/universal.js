@@ -214,6 +214,24 @@ function tooltipPos(x){
   return position;
 };
 
+function tooltipPosY(y){
+  var height   = toolTipDiv[0][0].clientHeight;
+  var top      = y - 0; // your current offset
+  var winTop   = window.pageYOffset || document.documentElement.scrollTop || 0;
+  var winH     = window.innerHeight || document.documentElement.clientHeight || 0;
+
+  // if it would overflow the bottom, flip it above the cursor
+  if (top + height > winTop + winH) {
+    top = y - height - 12;
+  }
+  // clamp to top of viewport
+  if (top < winTop) {
+    top = winTop + 4;
+  }
+  return top;
+}
+
+
 function isEmpty(obj) {
     for(var key in obj) {
         if(obj.hasOwnProperty(key))

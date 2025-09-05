@@ -341,7 +341,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item dropdown-nonhref" id="taxaCsvExport" >Export to CSV</a>
-            <a class="dropdown-item dropdown-nonhref" id="taxaCopyExport" >Copy to clipboard</a>
+            <!-- <a class="dropdown-item dropdown-nonhref" id="taxaCopyExport" >Copy to clipboard</a> -->
           </div>
         </div>
       </div>
@@ -724,6 +724,103 @@
 
   </div>
 </div>
+
+
+<!-- Sankey Plot Row -->
+<div class="row" id="sankeyPlotRow">
+
+  <div class="col-12 mb-4">
+    <div class="card shadow" id="sankeyPlotCard">
+
+      <!-- Card Header -->
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Sankey</h6>
+
+        <div class="dropdown no-arrow ml-auto mr-1">
+          <a class="dropdown-toggle" href="#" role="button" id="sankeyDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" id="sankeyDropdownMenu" aria-labelledby="sankeyDropdownMenuLink">
+            <div class="dropdown-header">Options:</div>
+
+            <form class="dropdown-form">
+              <div>
+                <label> Root node:</label>
+                <label><input type="radio" name="dashboardSankeyRoot" value="show">  Show</label>
+                <label><input type="radio" name="dashboardSankeyRoot" value="hide" checked>  Hide</label>
+              </div>
+
+              <div>
+                <label> Unclassified node:</label>
+                <label><input type="radio" name="dashboardSankeyUnclassified" value="show" checked> Show</label>
+                <label><input type="radio" name="dashboardSankeyUnclassified" value="hide"> Hide</label>
+              </div>
+              
+
+              <label>Show labels in columns:</label>
+              <div class="d-flex flex-wrap sankey-label-grid" id="sankeyLabelToggles">
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="0"> R</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="1" checked> D</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="2" checked> K</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="3" checked> P</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="4" checked> C</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="5" checked> O</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="6" checked> F</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="7" checked> G</label>
+                <label class="mr-3 mb-1"><input class="sankey-label-col" type="checkbox" value="8" checked> S</label>
+              </div>
+
+              <label class="d-block mb-1">Show columns:</label>
+              <div class="d-flex flex-wrap sankey-col-grid" id="sankeyColumnToggles">
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="1" checked> D</label>
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="2" checked> K</label>
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="3" checked> P</label>
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="4"> C</label> <!-- default hidden -->
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="5"> O</label> <!-- default hidden -->
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="6" checked> F</label>
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="7" checked> G</label>
+                <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="8" checked> S</label>
+              </div>
+              
+            </form>
+            
+            <div class="dropdown-divider"></div>
+
+            <a class="dropdown-item" id="exportSankeySVG" href="#">Export as SVG</a>
+            <a class="dropdown-item" id="exportSankeyPNG" href="#">Export as PNG</a>
+            <a class="dropdown-item" id="exportSankeyJPG" href="#">Export as JPG</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body-custom">
+
+        <form>
+          <div id="dashboardSankeyTopNBox" class="form-group row ml-4 mt-2">
+            <div class="col-form-label col-auto">
+              <label id="dashboardSankeyTopNText" for="dashboardSankeyTopN">
+                Showing top <a class="dashboard-sankey-top-n-text font-weight-bold">25</a>
+                of <a class="dashboard-sankey-total-n-text">0</a> leaves
+              </label>
+            </div>
+            <div class="col-sm-3 my-auto d-flex">
+              <input type="range" class="form-control-range" name="dashboardSankeyTopN" min="1" max="200" value="25">
+            </div>
+          </div>
+        </form>
+        
+      
+        <div id="sankeyPlotContainer" class="d-flex justify-content-center align-items-center">
+          <!-- Sankey plot will be injected here via JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
 
 
 <!-- Rarefaction Row -->
