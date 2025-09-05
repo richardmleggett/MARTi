@@ -24,7 +24,7 @@ Why do AMR hits on the heatmap sum to over 100% when grouped by "Drug class"?
 
 When grouping by "Drug class" on the AMR heatmap, it's possible for the total AMR hits to exceed 100% for a sample. This is because individual AMR genes can be associated with multiple drug classes. As a result, a single gene may contribute to more than one category, leading to overlapping counts.
 
-Why are the "Other" and "Higher Taxa" categories for?
+What are the "Other" and "Higher Taxa" categories for?
 ------------------------------------------------------------------
 
 In the donut and stacked bar plots within the MARTi GUI, two categories, *Other* and *Higher Taxa*, are used to help simplify the visualisations:
@@ -34,3 +34,8 @@ In the donut and stacked bar plots within the MARTi GUI, two categories, *Other*
 - *Higher Taxa*: This node contains reads that could not be confidently assigned to the selected taxonomic level, but were classified at a broader level (e.g. family or order). For example, if you are viewing data at genus level, any reads assigned to family level, or above, will be grouped under "Higher Taxa".
 
 These categories ensure that all reads are accounted for, even if they are not fully resolved to the selected taxonomic rank.
+
+Can I use TaxaFilter for Kraken2
+--------------------------------
+
+For query-time exclusion, this is determined by the capabilities of the underlying tools rather than by MARTi. BLAST and Centrifuge both have options to filter taxa, but Kraken2 currently does not. Kraken2 exclusion must be achieved by omitting taxa when building the database or by post-classification filtering. 
