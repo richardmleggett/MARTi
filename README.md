@@ -1,5 +1,4 @@
-# MARTi
-Metagenomic Analysis in Real Time
+# MARTi: Metagenomic Analysis in Real Time
 
 If you are viewing a mirror of this repository, please go to the main repository at: https://github.com/richardmleggett/MARTi
 
