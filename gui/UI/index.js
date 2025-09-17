@@ -1031,7 +1031,7 @@ io.on('connect', function(socket){
     const options = {
       hostname: 'grassroots.tools',
       port: 443,
-      path: '/beta/grassroots/private_backend',
+      path: '/grassroots/private_backend',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
