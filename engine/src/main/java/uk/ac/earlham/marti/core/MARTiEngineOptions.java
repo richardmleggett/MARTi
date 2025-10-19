@@ -139,7 +139,8 @@ public class MARTiEngineOptions implements Serializable {
     private long startTime = System.nanoTime();
     private double walkoutMaxE = 0.001;
     private double walkoutMinID = 80.0;
-    private int walkoutMinLength = 100;   
+    private int walkoutMinAlignmentLength = 100;  
+    private int walkoutMinDistance = 50;
     private boolean runningCARD = false;
     private boolean autodeleteBlastFiles = false;
     private boolean autodeleteFastaChunks = false;
@@ -1082,6 +1083,12 @@ public class MARTiEngineOptions implements Serializable {
                                 schedulerFileTimeout = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("SchedulerResubmissionAttemplts") == 0) {
                                 schedulerResubmissionAttempts = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("WalkoutMinID") == 0) {
+                                walkoutMinID = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("WalkoutMinLength") == 0) {
+                                walkoutMinAlignmentLength = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("WalkoutMinDistance") == 0) {
+                                walkoutMinDistance = Integer.parseInt(tokens[1]);                                
                             } else if (!tokens[0].startsWith("#")) {                                
                                 System.out.println("ERROR: Unknown token "+tokens[0]);
                                 System.exit(1);
@@ -1359,9 +1366,13 @@ public class MARTiEngineOptions implements Serializable {
         return walkoutMinID;
     }
     
-    public int getWalkoutMinLength() {
-        return walkoutMinLength;
+    public int getWalkoutMinAlignmentLength() {
+        return walkoutMinAlignmentLength;
     } 
+        
+    public int getWalkoutMinDistance() {
+        return walkoutMinDistance;
+    }
     
     public boolean runningCARD() {
         return runningCARD;
@@ -1627,7 +1638,8 @@ public class MARTiEngineOptions implements Serializable {
             pw.println("initDir=" + initDir);
             pw.println("walkoutMaxE=" + walkoutMaxE);
             pw.println("walkoutMinID=" + walkoutMinID);
-            pw.println("walkoutMinLength=" + walkoutMinLength);   
+            pw.println("walkoutMinLength=" + walkoutMinAlignmentLength);   
+            pw.println("walkoutMinDistance=" + walkoutMinDistance);   
             pw.println("runningCARD=" + runningCARD);
             pw.println("autodeleteBlastFiles=" + autodeleteBlastFiles);
             pw.println("autodeleteFastaChunks=" + autodeleteFastaChunks);

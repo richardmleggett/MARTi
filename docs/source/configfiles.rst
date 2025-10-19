@@ -76,6 +76,14 @@ You can run multiple Kraken2 processes. Each begins with the keywork Kraken2Proc
    :file: table_kraken2.csv
    :delim: tab
 
+AMR Walkout
+-----------
+
+.. csv-table::
+   :header: "Keyword", "Example", "Meaning"
+   :file: table_walkout.csv
+   :delim: tab
+
 Metadata
 ---------------
 

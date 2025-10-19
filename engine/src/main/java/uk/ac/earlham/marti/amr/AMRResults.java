@@ -32,7 +32,8 @@ public class AMRResults {
     private MARTiEngineOptions options;
     private WalkOutResults wor = null;
     private CARDOntology cardOntology = null;
-    private int readCountWithAMRHits = 0;
+    private int readCountWithAMRHitsAndWalkout = 0;
+    private int readCountWithAMRHitsOnly = 0;
     private int barcode = 0;
     
     /**
@@ -72,8 +73,10 @@ public class AMRResults {
         woc.load(aat.getCARDBlastFilename(), aat.getNtBlastFilename());
         options.getLog().println("Chunks loaded, processing hits");
         woc.processHits(wor);
-        readCountWithAMRHits += woc.getReadCountWithAMRHits();
-        options.getLog().println("Read count with AMR hits "+readCountWithAMRHits);
+        readCountWithAMRHitsAndWalkout += woc.getReadCountWithAMRHitsAndWalkout();
+        readCountWithAMRHitsOnly += woc.getReadCountWithAMRHitsOnly();
+        options.getLog().println("Read count with AMR hits and walkout "+readCountWithAMRHitsAndWalkout);
+        options.getLog().println("Read count with AMR hits only "+readCountWithAMRHitsOnly);
         
         writeJSON(aat.getProcessedChunkNumber());
         
@@ -94,7 +97,8 @@ public class AMRResults {
         
         options.getLog().println("Writing JSON for chunk "+cn);
         
-        for (int c=1; c<=wor.getMaxChunkNumber(); c++) {
+        //System.out.println("18Oct: maxChunkNumber "+wor.getMaxChunkNumber());
+        for (int c=0; c<=wor.getMaxChunkNumber(); c++) {
            chunkTimes.add(Integer.toString(c), wor.getChunkTime(c));
         }
         
@@ -111,10 +115,14 @@ public class AMRResults {
             JsonObjectBuilder accuracyBuilder = Json.createObjectBuilder();
             JsonObjectBuilder countBuilder = Json.createObjectBuilder();
             
+            //System.out.println("18Oct: Got gene "+gene.getName());
+            
             int cumulativeCount = 0;
-            for (int c=1; c<=wor.getMaxChunkNumber(); c++) {
+                        
+            for (int c=0; c<=wor.getMaxChunkNumber(); c++) {
                 int count = gene.getOverallCountForChunk(c);
                 cumulativeCount += count;
+                //System.out.println("18Oct: Gene "+gene.getName()+" chunk "+c+" count "+count);
                 if (count > 0) {
                     // Count
                     countBuilder.add(Integer.toString(c), cumulativeCount);
@@ -189,7 +197,8 @@ public class AMRResults {
         JsonObjectBuilder amrBuilder = Json.createObjectBuilder();
         amrBuilder.add("currentChunk", cn);
         amrBuilder.add("chunkTime", chunkTimes);
-        amrBuilder.add("readsWithAMRHits", readCountWithAMRHits);
+        amrBuilder.add("readsWithAMRHitsAndWalkout", readCountWithAMRHitsAndWalkout);
+        amrBuilder.add("readsWithAMRHitsOnly", readCountWithAMRHitsOnly);
         amrBuilder.add("geneList", arrayBuilder);
 
         // Build meta data

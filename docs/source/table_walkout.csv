@@ -1,0 +1,3 @@
+WalkoutMinDistance	50	Minimum distance from AMR hit that host hit must extend
+WalkoutMinID	80	Minimum percentage identity for an AMR hit
+WalkoutMinLength	100	Minimum length for an AMR hit alignment

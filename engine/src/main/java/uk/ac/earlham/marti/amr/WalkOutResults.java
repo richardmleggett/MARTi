@@ -50,6 +50,7 @@ public class WalkOutResults {
         countPerChunk.put(processedChunkNumber, chunkCount);
         if (processedChunkNumber > maxChunkNumber) {
             maxChunkNumber = processedChunkNumber;
+            //System.out.println("18Oct: updated maxChunkNumber to "+maxChunkNumber);
         }
 
         // cardHit should be of form ARO:3003923|oqxB at this point
@@ -60,10 +61,12 @@ public class WalkOutResults {
             gene = amrGenes.get(cardHit);
         } else {
             gene = new AMRGene(cardHit, cardOntology);
+            //System.out.println("18Oct: Creating new AMRGene "+gene.getName());
             amrGenes.put(cardHit, gene);
         }
         
         // Now add this hit
+        //System.out.println("18Oct: Adding hit for Gene "+gene.getName()+" originalChunk "+originalChunkNumber+" processedChunk "+processedChunkNumber);
         gene.addHit(originalChunkNumber, processedChunkNumber, lcaHitTaxonID, isIndependent, identity, isPlasmid);
         
         if (lcaHit != null) {

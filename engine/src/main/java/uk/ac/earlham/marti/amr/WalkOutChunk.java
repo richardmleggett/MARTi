@@ -37,7 +37,8 @@ public class WalkOutChunk {
     private String bacteriaFilename = null;
     int originalChunkNumber = 0;
     int processedChunkNumber = 0;
-    int readsWithAMRHits = 0;
+    int nReadsWithAMRHitsOnly = 0;
+    int nReadsWithAMRHitsAndWalkout = 0;
 
     public WalkOutChunk(MARTiEngineOptions o, Taxonomy t, int c, int p) {
         options = o;
@@ -83,7 +84,10 @@ public class WalkOutChunk {
                             reads.put(bh.getQueryId(), wor);
                         }
                         wor.addCardHit(bh);
-                    }
+                        //System.out.println("18Oct: Added CARD hit for "+bh.getQueryName()+" "+bh.getTargetName());
+                    } //else {
+                        //System.out.println("18Oct: Not valid hit "+bh.getQueryName()+" "+bh.getTargetName()+" " +bh.getQueryId()+" " +bh.getLength());
+                    //}
                 }
             }            
             cardReader.close();
@@ -202,7 +206,8 @@ public class WalkOutChunk {
         String filePrefix = cardFile.getName().substring(0, cardFile.getName().lastIndexOf('.'));
         String walkoutFilename = options.getAMRDirectory() + File.separator + filePrefix + "_walkout.txt";
         String amrFilename = options.getAMRDirectory() + File.separator + filePrefix + "_amr.txt";
-        Hashtable<String, Integer> readsWithAMR = new Hashtable<String, Integer>();
+        Hashtable<String, Integer> readsWithAMRAndWalkout = new Hashtable<String, Integer>();
+        Hashtable<String, Integer> readsWithAMROnly = new Hashtable<String, Integer>();
 
         try {
             PrintWriter pwWalkout = new PrintWriter(new FileWriter(walkoutFilename));
@@ -229,8 +234,8 @@ public class WalkOutChunk {
                     boolean isPlasmid = walkoutRead.getIsPlasmid();
 
                     for (int i=0; i<walkoutRead.getNumberOfGenes(); i++) {
-                        int overlap = walkoutRead.getCardHit(i).getDistance();
-                        boolean isIndependent = overlap >= walkoutRead.getMinOverlap() ? true:false;
+                        int walkoutDistance = walkoutRead.getCardHit(i).getDistance();
+                        boolean isIndependent = walkoutDistance >= options.getWalkoutMinDistance() ? true:false;
                         String cardHit = walkoutRead.getCardHit(i).getTargetName();
                         double identity = walkoutRead.getCardHit(i).getIdentity();
 
@@ -240,18 +245,18 @@ public class WalkOutChunk {
                             options.getLog().println("Warning: couldn't get ARO from "+cardHit);
                         }
                         
-                        results.addWalkoutHit(cardHit, lcaShort, lcaTaxonID, originalChunkNumber, processedChunkNumber, isIndependent, overlap, identity, isPlasmid);
+                        results.addWalkoutHit(cardHit, lcaShort, lcaTaxonID, originalChunkNumber, processedChunkNumber, isIndependent, walkoutDistance, identity, isPlasmid);
                         writeAMRFileHit(pwAmr, walkoutRead, i);
-                        writeWalkoutFileHit(pwWalkout, walkoutRead, queryId, lcaShort, i, overlap, isIndependent);
+                        writeWalkoutFileHit(pwWalkout, walkoutRead, queryId, lcaShort, i, walkoutDistance, isIndependent);
                         
                         int count = 0;
-                        if (readsWithAMR.containsKey(queryId)) {
-                            count = readsWithAMR.get(queryId);
+                        if (readsWithAMRAndWalkout.containsKey(queryId)) {
+                            count = readsWithAMRAndWalkout.get(queryId);
                         } else {
-                            readsWithAMRHits++;
+                            nReadsWithAMRHitsAndWalkout++;
                         }
                         count++;
-                        readsWithAMR.put(queryId, count);                        
+                        readsWithAMRAndWalkout.put(queryId, count);                        
                     }
                 } else {
                     options.getLog().println("Warning: Got CARD hits, but not bacterial hits for "+queryId + " ("+walkoutRead.getNumberOfGenes()+")");
@@ -265,7 +270,17 @@ public class WalkOutChunk {
                         }
 
                         double identity = walkoutRead.getCardHit(i).getIdentity();
+                        //System.out.println("18Oct: Adding no walkout hit for "+cardHit);
                         results.addWalkoutHit(cardHit, "no_hit", -2l, originalChunkNumber, processedChunkNumber, false, 0, identity, false);
+
+                        int count = 0;
+                        if (readsWithAMROnly.containsKey(queryId)) {
+                            count = readsWithAMROnly.get(queryId);
+                        } else {
+                            nReadsWithAMRHitsOnly++;
+                        }
+                        count++;
+                        readsWithAMROnly.put(queryId, count);                        
                     }
                 }
             }
@@ -282,8 +297,12 @@ public class WalkOutChunk {
             System.exit(1);
         }
     }
+
+    public int getReadCountWithAMRHitsOnly() {
+        return nReadsWithAMRHitsOnly;
+    }
     
-    public int getReadCountWithAMRHits() {
-        return readsWithAMRHits;
+    public int getReadCountWithAMRHitsAndWalkout() {
+        return nReadsWithAMRHitsAndWalkout;
     }
 }

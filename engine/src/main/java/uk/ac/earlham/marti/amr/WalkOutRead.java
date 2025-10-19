@@ -38,17 +38,20 @@ public class WalkOutRead {
 
         bacterialHitSet = new BlastHitSet(queryName, options.getReadClassifier().getLCAParseOptions());
     }
-    
+
     public void addCardHit(BlastHit ba) {
-        if ((ba.getPercentIdentity() >= options.getWalkoutMinID()) && (ba.getLength() >= options.getWalkoutMinLength())) {        
+        if ((ba.getPercentIdentity() >= options.getWalkoutMinID()) && (ba.getLength() >= options.getWalkoutMinAlignmentLength())) {        
             int overlap = cl.getOverlap(ba.getQueryStart(), ba.getQueryEnd());
+            // Check it doesn't overlap other CARD hits for this read too much
             if (overlap < (ba.getLength() / 10)) {
                 cl.add(ba.getQueryStart(), ba.getQueryEnd());
                 cardAlignments.add(ba); 
             }        
-        }
+        } //else {
+          //  System.out.println("18Oct: cardHit ID "+ba.getPercentIdentity()+" or length "+options.getWalkoutMinAlignmentLength()+ " insufficient");
+        //}
     }
-    
+        
     public void addBacteriaHit(BlastHit ba) {       
         boolean independent = false;
         for (int i=0; i<cardAlignments.size(); i++) {
@@ -156,7 +159,7 @@ public class WalkOutRead {
         return longestDistance;
     }
 
-    public int getMinOverlap() {
+    public int getMinWalkoutDistance() {
         return minOverlap;
     }
     

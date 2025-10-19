@@ -56,6 +56,7 @@ public class AMRGene {
             chunk = chunks.get(processedChunkNumber);
         } else {
             chunk = new AMRGeneChunk();
+            //System.out.println("18Oct: Adding new AMRGeneChunk for "+geneName+ " originalChunk "+originalChunkNumber+" processedChunk "+processedChunkNumber+" lcHitTaxonID "+lcaHitTaxonID);
             chunks.put(processedChunkNumber, chunk);
         }
     
@@ -69,14 +70,17 @@ public class AMRGene {
         // Note there may be no species...  
         if (lcaHitTaxonID != -2l) {
             //System.out.println("addHit to chunk "+processedChunkNumber+" CardID "+cardId+" Hit "+lcaHit);
+            //System.out.println("18Oct: Calling addHit for "+geneName+ " originalChunk "+originalChunkNumber+" processedChunk "+processedChunkNumber+" lcHitTaxonID "+lcaHitTaxonID);
             chunk.addHit(lcaHitTaxonID, isIndependent, identity, isPlasmid);
         } else {
+            //System.out.println("18Oct: Calling addHit for "+geneName+ " originalChunk "+originalChunkNumber+" processedChunk "+processedChunkNumber+" lcHitTaxonID -2l");
             chunk.addHit(-2l, isIndependent, identity, isPlasmid);
         }
         
         // Keep track of mean identity
         cumulativeIdentity += identity;
         numberOfHits++;
+        //System.out.println("18Oct: Gene "+geneName+" numberOfHits="+numberOfHits);
     }
     
     public Hashtable<Long,Integer> getSpecies() {
