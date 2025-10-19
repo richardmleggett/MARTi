@@ -69,6 +69,7 @@ public class MARTiResults {
     */
     public int addChunk(int bc, LCAFileParser pfp) {
         int fileCount = 0;
+        int returnedChunkNumber = 0;
         
         options.getLog().println("MARTiResults received file for barcode "+bc);
         //MARTiResultsSample sample;
@@ -94,7 +95,8 @@ public class MARTiResults {
         
         if (chunkCount.containsKey(bc)) {
             fileCount = chunkCount.get(bc);
-        }        
+        }      
+        returnedChunkNumber = fileCount;
         fileCount++;        
         chunkCount.put(bc, fileCount);
 
@@ -107,7 +109,7 @@ public class MARTiResults {
         }
         l.add(pfp.getLastParsedFilename());
         
-        return fileCount;
+        return returnedChunkNumber;
     }
         
     /**

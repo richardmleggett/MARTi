@@ -215,7 +215,7 @@ public class WalkOutChunk {
             writeWalkoutHeader(pwWalkout);
             writeAMRHeader(pwAmr);
 
-            options.getLog().println("Walkout processing chunk "+originalChunkNumber);
+            options.getLog().println("Walkout processing chunk "+originalChunkNumber+" ("+processedChunkNumber+")");
             for (HashMap.Entry<String, WalkOutRead> entry : reads.entrySet())
             {
                 String queryId = entry.getKey();
