@@ -19,7 +19,7 @@ MARTi runs on Linux and on macOS. At the moment, Windows is not supported.
 Papers
 ------
 
-A preprint of the MARTi paper can be `found at bioRxiv <https://www.biorxiv.org/content/10.1101/2025.02.14.638261v1>`_. If you use MARTi, please cite this in any relevant publications.
+The MARTi paper can be `found at Genome Research <https://genome.cshlp.org/content/early/2025/10/13/gr.280550.125>`_. If you use MARTi, please cite this in any relevant publications.
 
 Talks and posters
 -----------------
