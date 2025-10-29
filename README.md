@@ -4,7 +4,7 @@ If you are viewing a mirror of this repository, please go to the main repository
 
 Please see the documentation page at https://marti.readthedocs.io/en/latest/
 
-A preprint of the MARTi paper is available at bioRxiv: https://www.biorxiv.org/content/10.1101/2025.02.14.638261v1
+The MARTi paper is available at Genome Research: https://genome.cshlp.org/content/early/2025/10/13/gr.280550.125
 
 Try MARTi out before you install at http://marti.cyverseuk.org
 
