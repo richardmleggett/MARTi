@@ -8,4 +8,6 @@ The MARTi paper is available at Genome Research: https://genome.cshlp.org/conten
 
 Try MARTi out before you install at http://marti.cyverseuk.org
 
+Find us on Bluesky: https://bsky.app/profile/martisoftware.bsky.social
+
 MARTi is open source and supplied under an MIT license.
