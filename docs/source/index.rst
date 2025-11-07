@@ -29,4 +29,4 @@ Talks and posters
 Follow us
 ---------
 
-You can follow MARTi updates on Bluesky `@martisoftware.bsky.social <https://bsky.app/profile/martisoftware.bsky.social>`_ or Twitter`@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
+You can follow MARTi updates on Bluesky `@martisoftware.bsky.social <https://bsky.app/profile/martisoftware.bsky.social>`_ or Twitter `@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
