@@ -1535,7 +1535,7 @@ public class MARTiEngineOptions implements Serializable {
             BufferedReader br = new BufferedReader(isr);
             String version = br.readLine().split(":")[1];     
             return version.strip();          
-        } catch(IOException e) {
+        } catch(Exception e) {
             return "Unknown";
         }
     }
@@ -1548,22 +1548,28 @@ public class MARTiEngineOptions implements Serializable {
             BufferedReader br = new BufferedReader(isr);
             String version = br.readLine().split(" ")[2];     
             return version;          
-        } catch(IOException e) {
+        } catch(Exception e) {
             return "Unknown";
         }
     }
     
     public String getKraken2Version() {
+        String version = "";
         try {
             Process process = new ProcessBuilder("kraken2","--version").start();
             InputStream is = process.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
-            String version = br.readLine().split(" ")[2];     
-            return version;          
-        } catch(IOException e) {
-            return "Unknown";
+            version = br.readLine();
+            String versionSubStrings[] = version.split(" ");
+            if (versionSubStrings.length == 3) {
+                version = versionSubStrings[2];     
+            }          
+        } catch(Exception e) {
+            version = "Unknown";
         }    
+        this.getLog().println("Kraken2 version string "+version);
+        return version;
     }
     
     public boolean limitToSpecies() {

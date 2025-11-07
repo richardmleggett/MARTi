@@ -29,7 +29,4 @@ Talks and posters
 Follow us
 ---------
 
-You can follow MARTi updates on twitter `@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
-
-Or if you would like to be on a MARTi mailing list to receive information about updates, please email richard.leggett@earlham.ac.uk.
-
+You can follow MARTi updates on Bluesky `@martisoftware.bsky.social <https://bsky.app/profile/martisoftware.bsky.social>`_ or Twitter`@MARTiSoftware <https://twitter.com/MARTiSoftware>`_.
