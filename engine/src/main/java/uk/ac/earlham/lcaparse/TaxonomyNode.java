@@ -62,6 +62,12 @@ public class TaxonomyNode<T> {
     public static final short RANK_MORPH = 43;
     public static final short RANK_SUBSECTION = 44;
     public static final short RANK_PATHOGROUP = 45;    
+
+    public static final short RANK_DOMAIN =46;
+    public static final short RANK_REALM = 47;
+    public static final short RANK_CELLULARROOT = 48;  
+    public static final short RANK_ACELLULARROOT = 49;
+
     
     // This value needs to be something that it is impossible to get a barcode ID for
     public static final int LCA_BARCODE = 100000;
@@ -329,6 +335,11 @@ public class TaxonomyNode<T> {
             case "morph": rank = RANK_MORPH; break;
             case "subsection": rank = RANK_SUBSECTION; break;
             case "pathogroup": rank = RANK_PATHOGROUP; break;
+
+            case "domain": rank = RANK_DOMAIN; break;
+            case "realm": rank = RANK_REALM; break;
+            case "cellular root": rank = RANK_CELLULARROOT; break;  
+            case "acellular root": rank = RANK_ACELLULARROOT; break;
             
             default:
                 taxonomy.warnRank(s);
@@ -398,6 +409,11 @@ public class TaxonomyNode<T> {
             case RANK_MORPH: r="morph"; break;
             case RANK_SUBSECTION: r="subsection"; break;
             case RANK_PATHOGROUP: r="pathogroup"; break;
+            
+            case RANK_DOMAIN: r="domain"; break;
+            case RANK_REALM: r="realm"; break;
+            case RANK_CELLULARROOT: r="cellular root"; break;  
+            case RANK_ACELLULARROOT: r="acellular root"; break;
         }
         
         return r;

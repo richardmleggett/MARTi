@@ -1046,4 +1046,26 @@ public class Taxonomy {
         }               
         return tnd;
     }
+    
+    private void fillTaxonomyTableNode(int barcode, TaxonomyNode n, TaxonomyTable table, boolean useLCA) {                
+        if (useLCA) {
+            System.out.println("Attempt to use outputTaxonomyTableNode with useLCA set to TRUE. Code not written yet!");
+            System.exit(1);
+        }
+        
+        // Add node to table if assigned is > 0
+        if (n != null) {
+            if (n.getAssigned(barcode) > 0) {
+                table.addTaxon(n.getId(), n.getAssigned(barcode));
+            }
+        }
+        
+        // Now iterate over children
+            
+        
+    }
+    
+    public void fillTaxonomyTable(int barcode, TaxonomyTable table) {
+        TaxonomyNode n = this.getNodeFromTaxonId(1L);
+    }
 }

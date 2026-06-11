@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import uk.ac.earlham.ml.MARTiMLAnalysis;
 
 /**
  * Main read processor class.
@@ -391,6 +392,10 @@ public class ReadProcessor {
         // Remvoe any intermediate files
         FileCleaner fc = new FileCleaner(options);
         fc.removeIntermediateFiles();        
+
+        // Run ML analysis
+        //MARTiMLAnalysis mla = new MARTiMLAnalysis(options);
+        //mla.runMLAnalysis();
         
         //writeProgress();
         System.out.println("");

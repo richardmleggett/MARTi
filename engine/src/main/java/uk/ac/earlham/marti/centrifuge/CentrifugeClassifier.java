@@ -109,21 +109,27 @@ public class CentrifugeClassifier {
                     int fastaChunkNumber = getChunkNumber(f.getClassificationFile());
                     int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, f);
                     
-                    options.getResults().writeTree(barcode, 0);
-                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0);
-                    options.getResults().writeAccumulationJson(barcode, 0);                                
-
-                    options.getResults().writeTree(barcode, 0.1);
-                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0.1);
-                    options.getResults().writeAccumulationJson(barcode, 0.1);                                
-
-                    options.getResults().writeTree(barcode, 1);
-                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 1);
-                    options.getResults().writeAccumulationJson(barcode, 1);                                
-
-                    options.getResults().writeTree(barcode, 2);
-                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 2);
-                    options.getResults().writeAccumulationJson(barcode, 2);     
+                    for (double s : new double[] {0, 0.05, 0.1, 1, 2}) {
+                        options.getResults().writeTree(barcode, s);
+                        options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), s);
+                        options.getResults().writeAccumulationJson(barcode, s);                                
+                    }                    
+                    
+//                    options.getResults().writeTree(barcode, 0);
+//                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0);
+//                    options.getResults().writeAccumulationJson(barcode, 0);                                
+//
+//                    options.getResults().writeTree(barcode, 0.1);
+//                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0.1);
+//                    options.getResults().writeAccumulationJson(barcode, 0.1);                                
+//
+//                    options.getResults().writeTree(barcode, 1);
+//                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 1);
+//                    options.getResults().writeAccumulationJson(barcode, 1);                                
+//
+//                    options.getResults().writeTree(barcode, 2);
+//                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 2);
+//                    options.getResults().writeAccumulationJson(barcode, 2);     
                     
                     filesProcessed++;
                     pendingFiles.remove(thisId);

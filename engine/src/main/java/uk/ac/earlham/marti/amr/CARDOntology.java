@@ -36,7 +36,8 @@ public class CARDOntology {
 
             if (fields[0].equals("Accession")) {
                 while ((line = br.readLine()) != null) {
-                    fields = line.split(",|\t");
+                    //fields = line.split(",|\t");
+                    fields = line.split("\t");
 
                     if (fields.length >= 3) {
                         String accession = fields[0];
@@ -139,7 +140,8 @@ public class CARDOntology {
 
                 if (fields[0].equals("ARO Accession")) {
                     while ((line = br.readLine()) != null) {
-                        fields = line.split(",|\t");
+                        fields = line.split("\t");
+                        //fields = line.split(",|\t");
                         
                         if (fields.length >= 11) {                            
                             String accession = fields[0];
@@ -157,6 +159,9 @@ public class CARDOntology {
                                 
                                 if (fields.length > 12) {
                                    System.out.println("Warning: More than 11 fields in aro_index.tsv. Will try to continue anyway...");
+                                   System.out.println(line);
+                                   System.out.println(fields[12]);
+                                   
                                 }
                             }
                             

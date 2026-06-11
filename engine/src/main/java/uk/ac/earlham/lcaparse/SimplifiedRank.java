@@ -55,6 +55,10 @@ public class SimplifiedRank {
         ranks.put("superclass", (short)3);
         ranks.put("superfamily", (short)5);
         ranks.put("superkingdom", (short)1);
+        ranks.put("domain", (short)1);
+        ranks.put("realm", (short)2);
+        ranks.put("cellular root", (short)0);        
+        ranks.put("acellular root", (short)1);        
         ranks.put("superorder", (short)4);
         ranks.put("superphylum", (short)2);
         ranks.put("tribe", (short)6);

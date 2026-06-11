@@ -122,7 +122,7 @@ public class MARTiEngineOptions implements Serializable {
     private String accessionMapFile = "0";
     private int lcaMaxHits = 100;
     private double lcaScorePercent = 90;
-    private int lcaMinIdentity = 60;
+    private int lcaMinIdentity = 70;
     private int lcaMinQueryCoverage = 0;
     private int lcaMinCombinedScore = 0;
     private int lcaMinLength = 150;
@@ -169,6 +169,10 @@ public class MARTiEngineOptions implements Serializable {
     private boolean continueFromPreviousPlace = true;
     private MARTiAlertsList alertsList = new MARTiAlertsList(this);
     private long lastWriteTime = 0L;
+    private String AIModel = null;
+    private String AIAPIKey = null;
+    private int queryAIEvery = 0;
+    private int lastAIQuery = 0;
     
     public MARTiEngineOptions() {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -1088,7 +1092,13 @@ public class MARTiEngineOptions implements Serializable {
                             } else if (tokens[0].compareToIgnoreCase("WalkoutMinLength") == 0) {
                                 walkoutMinAlignmentLength = Integer.parseInt(tokens[1]);
                             } else if (tokens[0].compareToIgnoreCase("WalkoutMinDistance") == 0) {
-                                walkoutMinDistance = Integer.parseInt(tokens[1]);                                
+                                walkoutMinDistance = Integer.parseInt(tokens[1]);
+                            } else if (tokens[0].compareToIgnoreCase("AIModel") == 0) {
+                                AIModel = tokens[1];
+                            } else if (tokens[0].compareToIgnoreCase("AIAPIKey") == 0) {
+                                AIAPIKey = tokens[1];
+                            } else if (tokens[0].compareToIgnoreCase("AIQueryInterval") == 0) {
+                                queryAIEvery = Integer.parseInt(tokens[1]);
                             } else if (!tokens[0].startsWith("#")) {                                
                                 System.out.println("ERROR: Unknown token "+tokens[0]);
                                 System.exit(1);
@@ -1661,6 +1671,9 @@ public class MARTiEngineOptions implements Serializable {
             pw.println("classifyingProcessName=" + classifyingProcessName);
             pw.println("compressBlastFiles=" + compressBlastFiles);
             pw.println("limitToSpecies=" + limitToSpecies);            
+            pw.println("AIModel=" + AIModel);            
+            pw.println("AIAPIKey=" + AIAPIKey);            
+            pw.println("queryAIEvery=" + queryAIEvery);            
         }
     }
     

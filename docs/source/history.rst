@@ -1,8 +1,46 @@
 Change history
 ==============
 
-Version 0.9.23 (TBC)
---------------------
+Version 0.9.33 (11 June 2026)
+-----------------------------
+
+* Added new NCBI ranks for domain, realm, cellular root, acellular root.
+* Writes tree at 0.05% abundance in addition to 0, 0.1, 1, 2.
+* Corrected bug on parsing CARD accessions.
+* Early support for AI integration (inaccessible to the user at this point).
+
+Version 0.9.31 (7 Nov 2025)
+---------------------------
+
+* Fixed bug with obtaining Kraken version.
+
+Version 0.9.30 (19 Oct 2025)
+----------------------------
+
+* Fixed bug with amr.json generation.
+
+Version 0.9.29 (5 Seo 2025)
+----------------------------
+
+* Added TaxaFilter and Options to Centrifuge.
+
+Version 0.9.27 (9 Jul 2025)
+----------------------------
+
+* Changes/bug fixes to continuation code.
+
+Version 0.9.26 (30 Jun 2025)
+----------------------------
+
+* Now aborts when Kraken2 or Centrifuge jobs fail.
+
+Version 0.9.25 (25 Jun 2025)
+----------------------------
+
+* Removed repeated alerts.
+
+Version 0.9.23 (19 Feb 2025)
+----------------------------
 
 * Added alerts.json file generation to back-end.
 
