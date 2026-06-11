@@ -3,6 +3,7 @@ const EventEmitter = require('events').EventEmitter;
 const fsExtra = require('fs-extra');
 const path = require('path');
 const sep = path.sep;
+const flatSampleNameCache = new Map();
 
 /**
  * Safely read and parse a JSON file that may still be growing on disk.
@@ -27,6 +28,103 @@ async function safeJsonRead (filePath, retries = 5, delay = 500) {
   }
 }
 
+function hasMartiSegment (filePath) {
+  return filePath.split(sep).includes('marti');
+}
+
+function getMartiLayoutInfo (filePath) {
+  const split = filePath.split(sep);
+  const martiIndex = split.lastIndexOf('marti');
+  const runName = split[martiIndex - 1];
+  const sampleName = split[martiIndex + 1];
+  const baseDir = split.slice(0, martiIndex - 1).join(sep);
+  return { runName, sampleName, baseDir };
+}
+
+async function getFlatLayoutInfo (filePath) {
+  const runDir = path.dirname(filePath);
+  const runName = path.basename(runDir);
+  let sampleName = flatSampleNameCache.get(runName) || runName;
+
+  if (!flatSampleNameCache.has(runName)) {
+    try {
+      const sampleJson = await safeJsonRead(path.join(runDir, 'sample.json'));
+      if (sampleJson && sampleJson.sample && sampleJson.sample.id) {
+        sampleName = sampleJson.sample.id;
+        flatSampleNameCache.set(runName, sampleName);
+      }
+    } catch (err) {
+      // Ignore missing/invalid sample.json and fall back to run name
+    }
+  }
+
+  const baseDir = path.dirname(runDir);
+  return { runName, sampleName, baseDir };
+}
+
+async function getRunSampleInfo (filePath) {
+  if (hasMartiSegment(filePath)) {
+    return getMartiLayoutInfo(filePath);
+  }
+  return await getFlatLayoutInfo(filePath);
+}
+
+async function emitAssociatedFiles (sampleJsonPath, isUpdate) {
+  const sampleDir = path.dirname(sampleJsonPath);
+  let files = [];
+
+  try {
+    files = await fsExtra.readdir(sampleDir);
+  } catch (err) {
+    return;
+  }
+
+  const { sampleName, runName } = await getRunSampleInfo(sampleJsonPath);
+  const eventPrefix = isUpdate ? 'updated' : 'added';
+
+  for (const name of files) {
+    const fullPath = path.join(sampleDir, name);
+
+    if (name.startsWith('tree_ms') && name.endsWith('.json')) {
+      try {
+        const treeData = await safeJsonRead(fullPath);
+        const lca = 'lca_' + name.split('tree_ms')[1].split('.json')[0];
+        this.emit(`tree-file-${eventPrefix}`, { id: sampleName, runName, lca, content: treeData });
+      } catch (err) {
+        console.error(`[TREE ${eventPrefix.toUpperCase()} ERROR] ${fullPath}:`, err.message);
+      }
+    } else if (name.startsWith('accumulation_ms') && name.endsWith('.json')) {
+      try {
+        const raw = await safeJsonRead(fullPath);
+        const lca = 'lca_' + name.split('accumulation_ms')[1].split('.json')[0];
+        this.emit(`accumulation-file-${eventPrefix}`, {
+          id: sampleName,
+          runName,
+          lca,
+          content: raw.accumulation
+        });
+      } catch (err) {
+        console.error(`[ACCUMULATION ${eventPrefix.toUpperCase()} ERROR] ${fullPath}:`, err.message);
+      }
+    } else if (name === 'amr.json') {
+      try {
+        const fileContent = await safeJsonRead(fullPath);
+        const amrData = fileContent.hasOwnProperty('amr') ? fileContent.amr : fileContent;
+        this.emit(`amr-file-${eventPrefix}`, { id: sampleName, runName, content: amrData });
+      } catch (err) {
+        console.error(`[AMR ${eventPrefix.toUpperCase()} ERROR] ${fullPath}:`, err.message);
+      }
+    } else if (name === 'metadata.json') {
+      try {
+        const fileContent = await safeJsonRead(fullPath);
+        this.emit('metadata-file-added', { id: sampleName, runId: runName, content: fileContent });
+      } catch (err) {
+        console.error(`[METADATA ${eventPrefix.toUpperCase()} ERROR] ${fullPath}:`, err.message);
+      }
+    }
+  }
+}
+
 class Observer extends EventEmitter {
   constructor () {
     super();
@@ -38,9 +136,7 @@ class Observer extends EventEmitter {
   async processJsonFile (filePath, eventType, eventName) {
     try {
       const fileContent = await safeJsonRead(filePath);
-      const split = filePath.split(sep);
-      const sampleName = split[split.length - 2];
-      const runName = split[split.length - 4];
+      const { sampleName, runName } = await getRunSampleInfo(filePath);
 
       this.emit(eventName, {
         id: sampleName,
@@ -61,14 +157,44 @@ class Observer extends EventEmitter {
 
       let filesToWatch;
       let idFilesToWatch;
+      let alertsFilesToWatch;
 
-      if (fsExtra.existsSync(folder + 'marti')) {
+      const hasTopLevelMarti = fsExtra.existsSync(folder + 'marti');
+      const hasSampleJsonHere = fsExtra.existsSync(path.join(folder, 'sample.json'));
+      let hasChildSampleJson = false;
+
+      try {
+        const entries = fsExtra.readdirSync(folder, { withFileTypes: true });
+        hasChildSampleJson = entries.some(entry =>
+          entry.isDirectory() && fsExtra.existsSync(path.join(folder, entry.name, 'sample.json'))
+        );
+      } catch (err) {
+        hasChildSampleJson = false;
+      }
+
+      if (hasTopLevelMarti) {
         console.log(`[${new Date().toLocaleString()}] WARNING: An individual run directory has been specified.`);
-        filesToWatch   = folder + 'marti/**/*.json';
+        filesToWatch   = folder + 'marti/**/sample.json';
         idFilesToWatch = folder + 'ids.json';
-      } else {
-        filesToWatch   = folder + '*/marti/**/*.json';
+        alertsFilesToWatch = folder + 'marti/**/alerts.json';
+      } else if (hasSampleJsonHere) {
+        filesToWatch   = folder + 'sample.json';
+        idFilesToWatch = folder + 'ids.json';
+        alertsFilesToWatch = folder + 'alerts.json';
+      } else if (hasChildSampleJson) {
+        filesToWatch   = [
+          folder + '*/sample.json',
+          folder + '*/marti/**/sample.json'
+        ];
         idFilesToWatch = folder + '*/ids.json';
+        alertsFilesToWatch = [
+          folder + '*/alerts.json',
+          folder + '*/marti/**/alerts.json'
+        ];
+      } else {
+        filesToWatch   = folder + '*/marti/**/sample.json';
+        idFilesToWatch = folder + '*/ids.json';
+        alertsFilesToWatch = folder + '*/marti/**/alerts.json';
       }
 
       console.log(`[${new Date().toLocaleString()}] Monitoring MARTi run directories in: ${folder}`);
@@ -86,54 +212,39 @@ class Observer extends EventEmitter {
         try {
           if (filePath.endsWith('sample.json')) {
             const fileContent = await safeJsonRead(filePath);
-            const split       = filePath.split(sep);
-            const dir         = split.slice(0, -4).join('/');
-            const sampleName  = split[split.length - 2];
-            const runId       = split[split.length - 4];
+            let dir;
+            let sampleName;
+            let runId;
+
+            if (hasMartiSegment(filePath)) {
+              const split = filePath.split(sep);
+              dir = split.slice(0, -4).join(sep);
+              sampleName = split[split.length - 2];
+              runId = split[split.length - 4];
+            } else {
+              const runDir = path.dirname(filePath);
+              dir = path.dirname(runDir);
+              runId = path.basename(runDir);
+              sampleName = (fileContent.sample && fileContent.sample.id) ? fileContent.sample.id : runId;
+              flatSampleNameCache.set(runId, sampleName);
+            }
 
             fileContent.sample.dir      = dir;
             fileContent.sample.pathName = sampleName;
             fileContent.sample.pathRun  = runId;
 
             this.emit('meta-file-added', { id: sampleName, runId, content: fileContent });
+            await emitAssociatedFiles.call(this, filePath, false);
           } else if (filePath.includes('tree_ms')) {
-            const treeData   = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const lca        = 'lca_' + filePath.split('tree_ms')[1].split('.json')[0];
-
-            this.emit('tree-file-added', { id: sampleName, runName, lca, content: treeData });
+            // no-op (tree files are emitted when sample.json changes)
           } else if (filePath.includes('accumulation_')) {
-            const raw        = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const lca        = 'lca_' + filePath.split('accumulation_ms')[1].split('.json')[0];
-
-            this.emit('accumulation-file-added', {
-              id: sampleName,
-              runName,
-              lca,
-              content: raw.accumulation
-            });
+            // no-op (accumulation files are emitted when sample.json changes)
           } else if (filePath.endsWith('amr.json')) {
-            let fileContent = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const amrData    = fileContent.hasOwnProperty('amr') ? fileContent.amr : fileContent;
-
-            this.emit('amr-file-added', { id: sampleName, runName, content: amrData });
+            // no-op (amr files are emitted when sample.json changes)
           } else if (filePath.endsWith('metadata.json')) {
-            const fileContent = await safeJsonRead(filePath);
-            const split       = filePath.split(sep);
-            const sampleName  = split[split.length - 2];
-            const runName     = split[split.length - 4];
-
-            this.emit('metadata-file-added', { id: sampleName, runId: runName, content: fileContent });
+            // no-op (metadata files are emitted when sample.json changes)
           } else if (filePath.endsWith('alerts.json')) {
-            await this.processJsonFile(filePath, 'added', 'alerts-file-added');
+            // alerts handled by dedicated watcher below
           }
 
           console.log(`[${new Date().toLocaleString()}] ${filePath} has been ADDED.`);
@@ -147,54 +258,39 @@ class Observer extends EventEmitter {
         try {
           if (filePath.endsWith('sample.json')) {
             const fileContent = await safeJsonRead(filePath);
-            const split       = filePath.split(sep);
-            const dir         = split.slice(0, -4).join('/');
-            const sampleName  = split[split.length - 2];
-            const runId       = split[split.length - 4];
+            let dir;
+            let sampleName;
+            let runId;
+
+            if (hasMartiSegment(filePath)) {
+              const split = filePath.split(sep);
+              dir = split.slice(0, -4).join(sep);
+              sampleName = split[split.length - 2];
+              runId = split[split.length - 4];
+            } else {
+              const runDir = path.dirname(filePath);
+              dir = path.dirname(runDir);
+              runId = path.basename(runDir);
+              sampleName = (fileContent.sample && fileContent.sample.id) ? fileContent.sample.id : runId;
+              flatSampleNameCache.set(runId, sampleName);
+            }
 
             fileContent.sample.dir      = dir;
             fileContent.sample.pathName = sampleName;
             fileContent.sample.pathRun  = runId;
 
             this.emit('meta-file-updated', { id: sampleName, runId, content: fileContent });
+            await emitAssociatedFiles.call(this, filePath, true);
           } else if (filePath.includes('tree_ms')) {
-            const treeData   = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const lca        = 'lca_' + filePath.split('tree_ms')[1].split('.json')[0];
-
-            this.emit('tree-file-updated', { id: sampleName, runName, lca, content: treeData });
+            // no-op (tree files are emitted when sample.json changes)
           } else if (filePath.includes('accumulation_')) {
-            const raw        = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const lca        = 'lca_' + filePath.split('accumulation_ms')[1].split('.json')[0];
-
-            this.emit('accumulation-file-updated', {
-              id: sampleName,
-              runName,
-              lca,
-              content: raw.accumulation
-            });
+            // no-op (accumulation files are emitted when sample.json changes)
           } else if (filePath.endsWith('amr.json')) {
-            let fileContent = await safeJsonRead(filePath);
-            const split      = filePath.split(sep);
-            const sampleName = split[split.length - 2];
-            const runName    = split[split.length - 4];
-            const amrData    = fileContent.hasOwnProperty('amr') ? fileContent.amr : fileContent;
-
-            this.emit('amr-file-updated', { id: sampleName, runName, content: amrData });
+            // no-op (amr files are emitted when sample.json changes)
           } else if (filePath.endsWith('metadata.json')) {
-            const fileContent = await safeJsonRead(filePath);
-            const split       = filePath.split(sep);
-            const sampleName  = split[split.length - 2];
-            const runName     = split[split.length - 4];
-
-            this.emit('metadata-file-added', { id: sampleName, runId: runName, content: fileContent });
+            // no-op (metadata files are emitted when sample.json changes)
           } else if (filePath.endsWith('alerts.json')) {
-            await this.processJsonFile(filePath, 'changed', 'alerts-file-added');
+            // alerts handled by dedicated watcher below
           }
 
           console.log(`[${new Date().toLocaleString()}] ${filePath} has been CHANGED.`);
@@ -207,9 +303,7 @@ class Observer extends EventEmitter {
       watcher.on('unlink', async filePath => {
         if (!filePath.endsWith('sample.json')) return;
 
-        const split      = filePath.split(sep);
-        const sampleName = split[split.length - 2];
-        const runName    = split[split.length - 4];
+        const { sampleName, runName } = await getRunSampleInfo(filePath);
 
         if (fsExtra.existsSync(filePath)) {
           console.log(`[${new Date().toLocaleString()}] ${filePath} still exists. Network delay.`);
@@ -260,6 +354,29 @@ class Observer extends EventEmitter {
 
         console.log(`[${new Date().toLocaleString()}] ${filePath} has been REMOVED.`);
         this.emit('id-file-removed', { runId });
+      });
+
+      // ----- alerts.json watcher (only if sample.json exists) -------------------------
+      const alertsWatcher = chokidar.watch(alertsFilesToWatch, {
+        persistent       : true,
+        usePolling       : true,
+        atomic           : true,
+        awaitWriteFinish : { stabilityThreshold: 1000, pollInterval: 5000 }
+      });
+
+      const shouldProcessAlert = filePath => {
+        const sampleJsonPath = path.join(path.dirname(filePath), 'sample.json');
+        return fsExtra.existsSync(sampleJsonPath);
+      };
+
+      alertsWatcher.on('add', async filePath => {
+        if (!shouldProcessAlert(filePath)) return;
+        await this.processJsonFile(filePath, 'added', 'alerts-file-added');
+      });
+
+      alertsWatcher.on('change', async filePath => {
+        if (!shouldProcessAlert(filePath)) return;
+        await this.processJsonFile(filePath, 'changed', 'alerts-file-added');
       });
     } catch (err) {
       console.error(`[WATCH ERROR]`, err.message);

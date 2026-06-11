@@ -512,8 +512,8 @@ if(compareAmrHmRead == "percent"){
             toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
             "<h5 class='mb-0'>" + d.name + "</h5>" +
             // "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
-            "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.taxaReadCount) +
-            "<br/>Read %: " + Math.round((d.proportion*10000))/100)
+            "<hr class='toolTipLine'/>Hit count: " + thousandsSeparators(d.taxaReadCount) +
+            "<br/>AMR hit %: " + Math.round((d.proportion*10000))/100)
                .style("left", (tooltipPos(d3.event.pageX)) + "px")
                .style("top", (d3.event.pageY - 35) + "px");
 

@@ -38,7 +38,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.23.1";
+const martiGuiVersion = "0.23.2";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -800,7 +800,11 @@ app.get('/:runId/:sampleId/:lca/csv', function (req, res) {
   var name = req.params.sampleId;
   var lca = req.params.lca;
   var dir = sampleMetaDict[run][name].sample.dir;
-  const file = dir + '/'+ run + '/marti/' + name + '/assignments_ms' + lca + '.csv';
+  let file = path.join(dir, run, 'marti', name, 'assignments_ms' + lca + '.csv');
+  if (!fsExtra.existsSync(file)) {
+    // Flat layout fallback (no marti/sample subdirectories)
+    file = path.join(dir, run, 'assignments_ms' + lca + '.csv');
+  }
   res.download(file);
 })
 

@@ -374,6 +374,13 @@ function addSampleMarkerToMap(data){
 var selectedCompareMetaDataArray = [];
 var sampleMetaDataArray = [];
 
+function formatDateForDisplay(dateString) {
+  if (!dateString) return "";
+  let formatted = dateString.replace('T', ' ').replace(/[Zz]$/, '');
+  formatted = formatted.replace(/\.\d+$/, '');
+  return formatted;
+}
+
 function updateSampleTable(data){
 
 dataSampleList = [];
@@ -383,7 +390,6 @@ sampleMetaDataArray = [];
 samplePageDataTable.clear();
 markers.clearLayers();
 existingMarkers = [];
-
   for (const [runId, samples] of Object.entries(data)) {
     var dirRunId = runId;
     for (const [sample, value] of Object.entries(samples)) {
@@ -407,7 +413,7 @@ existingMarkers = [];
 
      sampleListCurrent.push(sampleData.id);
 
-       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,sampleData.sequencingDate.replace('T',' '),sampleData.analysisDate.replace('T',' '),null,dirRunId,dirSampleId,keywords]);
+       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,formatDateForDisplay(sampleData.sequencingDate),formatDateForDisplay(sampleData.analysisDate),null,dirRunId,dirSampleId,keywords]);
 
      };
  };
@@ -750,8 +756,8 @@ function prepareSampleInfoModal(data){
   }
 
   $("#sampleDataRunName").text(data.runId);
-  $("#sampleDataSequencingDate").text(data.sequencingDate.replace('T',' '));
-  $("#sampleDataAnalysisDate").text(data.analysisDate.replace('T',' '));
+  $("#sampleDataSequencingDate").text(formatDateForDisplay(data.sequencingDate));
+  $("#sampleDataAnalysisDate").text(formatDateForDisplay(data.analysisDate));
 
   $("#sampleDataYieldGb").text(data.yieldGb);
   $("#sampleDataBasecalledReads").text(thousandsSeparators(data.readsPassBasecall));
