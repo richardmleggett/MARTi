@@ -618,6 +618,13 @@ observer.on('tree-file-added', tree => {
 });
 
 observer.on('tree-file-updated', tree => {
+  if (!sampleTreeDict[tree.runName]) {
+    sampleTreeDict[tree.runName] = {};
+  }
+  if (!sampleTreeDict[tree.runName][tree.id]) {
+    sampleTreeDict[tree.runName][tree.id] = {};
+  }
+
   sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
 
   for (const [id, data] of Object.entries(clientData)) {
@@ -667,7 +674,14 @@ observer.on('accumulation-file-updated', data => {
   var runId = data.runName;
   var lca = data.lca;
 
-sampleAccumulationDict[runId][id][lca]=accumulationData;
+  if (!sampleAccumulationDict[runId]) {
+    sampleAccumulationDict[runId] = {};
+  }
+  if (!sampleAccumulationDict[runId][id]) {
+    sampleAccumulationDict[runId][id] = {};
+  }
+
+  sampleAccumulationDict[runId][id][lca]=accumulationData;
 
   for (const [uuid, entryData] of Object.entries(clientData)) {
     if ((id == entryData.selectedDashboardSample.name && runId == entryData.selectedDashboardSample.runId) || entryData.selectedCompareSamples.filter(e => e.name == id && e.runId == runId).length > 0) {
