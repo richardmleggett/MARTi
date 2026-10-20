@@ -50,6 +50,8 @@ public class BlastHitSet implements LCAHitSet {
             } else if (bh.getAlignmentScore() == bestBitScore) {
                 if (bh.getEValue() < bestEValue) {
                     updateBest = true;
+                } else if (bh.getIdentity() > bestIdentity) {
+                    updateBest = true;
                 }
             }
                         
