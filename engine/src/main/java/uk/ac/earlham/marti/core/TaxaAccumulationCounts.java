@@ -14,6 +14,7 @@ public class TaxaAccumulationCounts {
     private int chunkNumberByOrderCompleted = 0;
     private int nReadsAnalysed = 0;
     private int minsSinceStart = 0;
+    private DiversitySnapshot diversity = null;
     
     public TaxaAccumulationCounts(int fcn, int cnboc, int nReads, int mins) {
         fastaChunkNumber = fcn;
@@ -40,5 +41,13 @@ public class TaxaAccumulationCounts {
     
     public int getMinsSinceStart() {
         return minsSinceStart;
+    }
+
+    public void setDiversity(DiversitySnapshot d) {
+        diversity = d;
+    }
+
+    public DiversitySnapshot getDiversity() {
+        return diversity;
     }
 }

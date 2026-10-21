@@ -50,6 +50,8 @@ public class MARTiResults {
     private Hashtable<Integer, ArrayList<String>> fileOrder = new Hashtable<Integer, ArrayList<String>>();
     private Hashtable<Integer, TaxaAccumulation> taxaAccumulation = new Hashtable<Integer, TaxaAccumulation>();
     private SimplifiedRank mr = new SimplifiedRank();
+    // Diversity calculated in writeTree, waiting to be attached to the matching accumulation point
+    private Hashtable<String, DiversitySnapshot> pendingDiversity = new Hashtable<String, DiversitySnapshot>();
     
     /**
     * Class constructor.
@@ -273,34 +275,21 @@ public class MARTiResults {
             System.out.println("Error: couldn't find file order for barcode "+bc);
         }
 
-        // Create tree object
-        JsonObjectBuilder treeBuilder = Json.createObjectBuilder();
-        
-        // Adjust for min support
-        long startTime = System.nanoTime();
-        // minSuppport of 100 is special case to output the non-LCA counts
-        if (minSupport < 100) {
-            if (useFilteredReads) {
-                taxonomy.adjustForMinSupport(bc, minSupport, true, analysedReadCount);
-            } else {
-                taxonomy.adjustForMinSupport(bc, minSupport, true);
-            }            
-        }
-        long timeDiff = (System.nanoTime() - startTime) / 1000000;
-        options.getLog().println("Timing: Min support refactoring for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
-
-        
         TaxonomyNode n = taxonomy.getNodeFromTaxonId(1L);
-
-        // minSuppport of 100 is special case to output the non-LCA counts
-        if (minSupport == 100) {
-            outputNode(bc, n, treeBuilder, pwAssignments, false);
-        } else {
-            outputNode(bc, n, treeBuilder, pwAssignments, true);
-        }
-                     
+        JsonObjectBuilder treeBuilder = Json.createObjectBuilder();
         JsonObjectBuilder treeYieldBuilder = Json.createObjectBuilder();
-        // Adjust for min support
+        DiversitySnapshot diversity = (minSupport < 100) ? new DiversitySnapshot() : null;
+        long startTime;
+        long timeDiff;
+
+        // IMPORTANT: the yield-based tree is built first and the read-count tree last, so that
+        // writeTree leaves the taxonomy holding the read-count min support adjustment.
+        // storeAccumulationData, which is called straight after writeTree, reads the taxa
+        // accumulation counts from whatever adjustment the taxonomy currently holds.
+        // Each adjustForMinSupport call starts again from the unadjusted counts, so the
+        // order doesn't affect the trees themselves.
+
+        // Yield-based tree: adjust for min support by base yield
         startTime = System.nanoTime();
         // minSuppport of 100 is special case to output the non-LCA counts
         if (minSupport < 100) {
@@ -311,13 +300,54 @@ public class MARTiResults {
             }            
         }
         timeDiff = (System.nanoTime() - startTime) / 1000000;
-        options.getLog().println("Timing: Min support refactoring for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+        options.getLog().println("Timing: Min support refactoring (yield) for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
 
         // minSuppport of 100 is special case to output the non-LCA counts
         if (minSupport == 100) {
             outputNode(bc, n, treeYieldBuilder, null, false);
         } else {
             outputNode(bc, n, treeYieldBuilder, null, true);
+        }
+
+        // Diversity from base yields, while the taxonomy holds the yield-based min support adjustment
+        if (diversity != null) {
+            startTime = System.nanoTime();
+            for (int rank=1; rank<=DiversitySnapshot.MAX_RANK; rank++) {
+                diversity.setYieldStats(rank, new DiversityStats(DiversityStats.leafAbundances(taxonomy, bc, rank, true), false));
+            }
+            timeDiff = (System.nanoTime() - startTime) / 1000000;
+            options.getLog().println("Timing: Yield diversity for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+        }
+
+        // Read-count tree: adjust for min support by read count (must be the last adjustment, see above)
+        startTime = System.nanoTime();
+        // minSuppport of 100 is special case to output the non-LCA counts
+        if (minSupport < 100) {
+            if (useFilteredReads) {
+                taxonomy.adjustForMinSupport(bc, minSupport, true, analysedReadCount);
+            } else {
+                taxonomy.adjustForMinSupport(bc, minSupport, true);
+            }            
+        }
+        timeDiff = (System.nanoTime() - startTime) / 1000000;
+        options.getLog().println("Timing: Min support refactoring (reads) for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+
+        // minSuppport of 100 is special case to output the non-LCA counts
+        if (minSupport == 100) {
+            outputNode(bc, n, treeBuilder, pwAssignments, false);
+        } else {
+            outputNode(bc, n, treeBuilder, pwAssignments, true);
+        }
+
+        // Diversity from read counts, while the taxonomy holds the read-count min support adjustment
+        if (diversity != null) {
+            startTime = System.nanoTime();
+            for (int rank=1; rank<=DiversitySnapshot.MAX_RANK; rank++) {
+                diversity.setReadStats(rank, new DiversityStats(DiversityStats.leafAbundances(taxonomy, bc, rank, false), minSupport == 0));
+            }
+            timeDiff = (System.nanoTime() - startTime) / 1000000;
+            options.getLog().println("Timing: Read diversity for barcode "+bc+" minSupport "+minSupport+" completed in "+timeDiff+" ms");
+            pendingDiversity.put(diversityKey(bc, minSupport), diversity);
         }
         
         
@@ -386,8 +416,14 @@ public class MARTiResults {
         return results;
     }    
     
+    private String diversityKey(int bc, double minSupport) {
+        return bc + "_" + minSupport;
+    }
+
     public void storeAccumulationData(int bc, int fastaChunkNumber, int chunkNumberByOrderCompleted, int nReadsAnalysed, int minsSinceStart, double minSupport) {
         TaxaAccumulation ta;
+        // Diversity written by the writeTree call that immediately precedes this one (null if none)
+        DiversitySnapshot diversity = pendingDiversity.remove(diversityKey(bc, minSupport));
 
         if (taxaAccumulation.containsKey(bc)) {
             ta = taxaAccumulation.get(bc);
@@ -396,7 +432,7 @@ public class MARTiResults {
             taxaAccumulation.put(bc, ta);
         }
         
-        ta.storeAccumulation(fastaChunkNumber, chunkNumberByOrderCompleted, nReadsAnalysed, minsSinceStart, minSupport);
+        ta.storeAccumulation(fastaChunkNumber, chunkNumberByOrderCompleted, nReadsAnalysed, minsSinceStart, minSupport, diversity);
     }
     
     public void writeAccumulationJson(int bc, double minSupport) {

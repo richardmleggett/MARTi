@@ -123,8 +123,10 @@ public class TaxaAccumulation {
     
     /**
      * Record accumulation data for the chunk that has just been processed.
-     * Must be called after the tree has been adjusted for minSupport (writeTree
-     * does this), as it reads the LCA summed counts from the current tree.
+     * Must be called straight after writeTree for the same barcode and minSupport,
+     * as it reads the LCA summed counts from the current tree. writeTree leaves the
+     * taxonomy holding the read-count min support adjustment, so the counts here
+     * match the "tree" (read count) tree written to tree_ms<minSupport>.json.
      * For each simplified rank 1..10 it counts the leaf taxa, storing the raw
      * counts in a new TaxaAccumulationCounts entry, updating the first-seen chunk
      * for any newly observed taxa, and saving the current leaf sets, which act as
@@ -136,6 +138,17 @@ public class TaxaAccumulation {
      * @param minSupport the LCA min support percentage this data relates to
      */
     public void storeAccumulation(int fastaChunkNumber, int chunkNumberByOrderCompleted, int nReadsAnalysed, int mins, double minSupport) {
+        storeAccumulation(fastaChunkNumber, chunkNumberByOrderCompleted, nReadsAnalysed, mins, minSupport, null);
+    }
+
+    /**
+     * As above, also attaching per-chunk diversity statistics (may be null).
+     * The diversity is calculated by MARTiResults.writeTree from the tree as it
+     * stands at this chunk (the threshold applied independently at each chunk,
+     * like rawReads), not restricted to the final taxa set used for "reads".
+     * @param diversity diversity for every rank at this chunk, for reads and bases
+     */
+    public void storeAccumulation(int fastaChunkNumber, int chunkNumberByOrderCompleted, int nReadsAnalysed, int mins, double minSupport, DiversitySnapshot diversity) {
         // Go through all nodes, counting assigned to each of the 9 levels.
         // Then go through leaf nodes and count each leaf node to any levels higher.
         Taxonomy taxonomy = options.getReadClassifier().getTaxonomy();
@@ -153,6 +166,7 @@ public class TaxaAccumulation {
                
         TaxaAccumulationCounts counts = new TaxaAccumulationCounts(fastaChunkNumber, chunkNumberByOrderCompleted, nReadsAnalysed, mins);
         
+        counts.setDiversity(diversity);
         taxaCounts.add(counts);
 
         currentChunkIndex = taxaCounts.size() - 1;
@@ -219,7 +233,8 @@ public class TaxaAccumulation {
      * Write the accumulation data for one min support value as JSON.
      * For each rank, writes "reads" and "time" arrays of [x, taxa count] pairs
      * using the consistent counts from getConsistentCounts, plus "rawReads" and
-     * "rawTime" arrays containing the original per-chunk counts.
+     * "rawTime" arrays containing the original per-chunk counts, and (when available)
+     * a "diversity" array of per-chunk diversity statistics for reads and bases.
      * The file is written to the LCA parse directory with the chunk count in its
      * name, then copied to accumulation_ms<minSupport>.json in the MARTi JSON
      * directory for the GUI. Logs an error if no data exists for minSupport.
@@ -276,6 +291,35 @@ public class TaxaAccumulation {
                 rankBuilder.add("time", timeArrayBuilder);
                 rankBuilder.add("rawReads", rawReadsArrayBuilder);
                 rankBuilder.add("rawTime", rawTimeArrayBuilder);
+
+                // Per-chunk diversity: one entry per accumulation point that has diversity data.
+                // Like rawReads, each point reflects the tree at that chunk.
+                JsonArrayBuilder diversityArrayBuilder = Json.createArrayBuilder();
+                boolean hasDiversity = false;
+                for (int chunk=0; chunk<taxaCounts.size(); chunk++) {
+                    TaxaAccumulationCounts tac = taxaCounts.get(chunk);
+                    DiversitySnapshot ds = tac.getDiversity();
+                    if (ds != null) {
+                        JsonObjectBuilder pointBuilder = Json.createObjectBuilder();
+                        pointBuilder.add("readsAnalysed", tac.getReadsAnalysedCount());
+                        pointBuilder.add("mins", tac.getMinsSinceStart());
+                        if (ds.getReadStats(rank) != null) {
+                            JsonObjectBuilder readStatsBuilder = Json.createObjectBuilder();
+                            ds.getReadStats(rank).addToJson(readStatsBuilder);
+                            pointBuilder.add("reads", readStatsBuilder);
+                        }
+                        if (ds.getYieldStats(rank) != null) {
+                            JsonObjectBuilder yieldStatsBuilder = Json.createObjectBuilder();
+                            ds.getYieldStats(rank).addToJson(yieldStatsBuilder);
+                            pointBuilder.add("bases", yieldStatsBuilder);
+                        }
+                        diversityArrayBuilder.add(pointBuilder);
+                        hasDiversity = true;
+                    }
+                }
+                if (hasDiversity) {
+                    rankBuilder.add("diversity", diversityArrayBuilder);
+                }
                 accumulationBuilder.add(simplifiedRank.getSimplifiedRankString(rank), rankBuilder);
             }        
 
