@@ -1,5 +1,7 @@
 function initialiseDashboardPage() {
 
+socket.emit('abundance-options-request', { clientId: uuid, page: 'dashboard' });
+
     taxonomyDataTable = $('#selectedColumn').DataTable({
       "language": {
         "emptyTable": "No assignments at selected level."
@@ -479,6 +481,22 @@ function prepareSampleNameInput(data){
     $("#dashboardSampleNameInput").attr('placeholder', data.id);
   }
 }
+
+socket.on('abundance-options-response', function(data) {
+  if (data.page !== 'dashboard' || currentPage !== 'Dashboard') return;
+  var previous = lcaAbundanceDashboard;
+  lcaAbundanceDashboard = updateMinimumAbundanceButtons(
+    '#minimumAbundanceButtonDashboard', data.lcas, lcaAbundanceDashboardUnformatted
+  );
+  if (!lcaAbundanceDashboard) return;
+  lcaAbundanceDashboardUnformatted = $('#minimumAbundanceButtonDashboard>button.active').text();
+  if (previous !== lcaAbundanceDashboard) {
+    socket.emit('dashboard-tree-request', { clientId: uuid, lca: 'lca_' + lcaAbundanceDashboard });
+    socket.emit('dashboard-accumulationChart-request', {
+      clientId: uuid, rank: taxonomicRankSelectedTextLowerCase, lca: 'lca_' + lcaAbundanceDashboard
+    });
+  }
+});
 
 var taxonomicRankSelected = 10;
 var taxonomicRankSelectedDashboardText = "All Levels";

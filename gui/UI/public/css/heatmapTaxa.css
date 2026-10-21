@@ -1,5 +1,108 @@
+#heatmapTaxaCard .compareHmTaxaLayout {
+  display: flex;
+  align-items: flex-start;
+}
+
+@media (max-width: 575px) {
+  #heatmapTaxaCard .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+.compareHmTaxaSettings {
+  flex: 0 0 20rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+  padding: 1rem;
+  font-size: 0.85rem;
+  border-right: 1px solid #e3e6f0;
+  position: sticky;
+  top: 5rem;
+}
+
+.compareHmTaxaSettings[hidden] {
+  display: none;
+}
+
+.compareHmTaxaSettingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.compareHmTaxaSettingsHeader h6,
+.compareHmTaxaSettingsSection {
+  font-size: 0.85rem;
+}
+
+.compareHmTaxaSettingsSection {
+  border-top: 1px solid #e3e6f0;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  font-weight: 700;
+  color: #4e73df;
+}
+
+.compareHmTaxaSettingsSection:first-child {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.compareHmTaxaSettings .form-check {
+  margin-bottom: 0.5rem;
+}
+
+.compareHeatmapTaxaCard {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (max-width: 1199px) {
+  #heatmapTaxaCard .compareHmTaxaLayout {
+    flex-direction: column;
+  }
+
+  .compareHmTaxaSettings {
+    box-sizing: border-box;
+    position: static;
+    width: 100%;
+    flex-basis: auto;
+    max-height: calc(100vh - 7rem);
+    border-right: 0;
+    border-bottom: 1px solid #e3e6f0;
+  }
+
+  .compareHeatmapTaxaCard {
+    width: 100%;
+  }
+}
+
+#compareHeatmapTaxaPlot {
+  min-height: 240px;
+}
+
+#compareHmTaxaEmptyState {
+  min-height: 240px;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #6c757d;
+  text-align: center;
+}
+
 #compareHeatmapTaxaPlot svg {
   overflow: visible;
+}
+
+.compareHmTaxaSelectedOnly {
+  white-space: normal;
+}
+
+.compareHmTaxaTrafficLightThresholds {
+  white-space: normal;
 }
 
 #compareHeatmapTaxaPlot .axis path,

@@ -8,10 +8,6 @@
 
 
     <div id="minimumAbundanceButtonCompare" class="btn-group btn-group-sm abundance-button mr-md-3" role="group" aria-label="LCA minimum abundance cutoff">
-      <button type="button" class="btn btn-primary">0%</button>
-      <button type="button" class="btn btn-primary active">0.1%</button>
-      <button type="button" class="btn btn-primary">1%</button>
-      <button type="button" class="btn btn-primary">2%</button>
     </div>
 
     <div class="my-auto d-none d-md-block">
@@ -521,32 +517,72 @@
                 <div class="card-header d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Taxa heatmap</h6>
 
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuHeatmapTaxa" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuHeatmapTaxa">
-                      <div class="dropdown-header">Options:</div>
+                  <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareHmTaxaSettingsButton" aria-controls="compareHmTaxaSettings" aria-expanded="false">
+                      <i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings
+                    </button>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareHmTaxaExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareHmTaxaExportButton">
+                        <a class="dropdown-item" id="exportCompareHmTaxaSVG" href="#">Export as SVG</a>
+                        <a class="dropdown-item" id="exportCompareHmTaxaPNG" href="#">Export as PNG</a>
+                        <a class="dropdown-item" id="exportCompareHmTaxaJPG" href="#">Export as JPG</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                      <form class="dropdown-form">
+                <div class="card-body-custom">
+                  <div class="compareHmTaxaLayout">
+                    <aside id="compareHmTaxaSettings" class="compareHmTaxaSettings" aria-labelledby="compareHmTaxaSettingsTitle" hidden>
+                      <div class="compareHmTaxaSettingsHeader">
+                        <h6 id="compareHmTaxaSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Heatmap settings</h6>
+                        <button type="button" class="close" id="compareHmTaxaSettingsClose" aria-label="Close heatmap settings"><span aria-hidden="true">&times;</span></button>
+                      </div>
 
+                      <form id="compareHmTaxaSettingsForm">
+                        <h6 class="compareHmTaxaSettingsSection">Taxa</h6>
                         <div class="form-group">
+                          <label for="compareHmTaxaSelection">Taxa to show</label>
+                          <select class="form-control form-control-sm" id="compareHmTaxaSelection">
+                            <option value="top">Top taxa per sample</option>
+                            <option value="custom">Custom taxon IDs</option>
+                          </select>
+                          <small id="compareHmTaxaPresetStatus" class="form-text text-danger" role="status"></small>
+                        </div>
+
+                        <div class="compareHmTaxaSelectedOnly" style="display:none">
+                          <div class="form-group">
+                            <label for="compareHmTaxaIds">NCBI taxon IDs</label>
+                            <textarea class="form-control form-control-sm" id="compareHmTaxaIds" rows="3" placeholder="562, 1639, 28901"></textarea>
+                            <small class="form-text text-muted">Comma, space, or newline separated. Listed order is kept; absent taxa show zero. The rank selector above does not change these rows.</small>
+                          </div>
+                          <div class="form-group">
+                            <label for="compareHmTaxaDenominator">Percent denominator taxon ID</label>
+                            <input class="form-control form-control-sm" id="compareHmTaxaDenominator" type="text" inputmode="numeric" value="1">
+                            <small class="form-text text-muted">1 = all reads; 2 = Bacteria; 4751 = Fungi.</small>
+                          </div>
+                          <div class="form-group">
+                            <label for="compareHmTaxaMinimumPercent">Minimum abundance (% of sample root)</label>
+                            <input class="form-control form-control-sm" id="compareHmTaxaMinimumPercent" type="number" min="0" max="100" step="0.001" value="0">
+                            <small class="form-text text-muted">Values below this cutoff appear as zero.</small>
+                          </div>
+                        </div>
+
+                        <div class="form-group compareHmTaxaTopOnly">
                           <label for="compareHmTaxaTopN">Show top <a id="compareHmTaxaTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
                           <input type="range" class="form-control-range" id="compareHmTaxaTopN" min="1" max="50" value="10">
                         </div>
 
-                        <div>
-                          <label> Unclassified node:</label>
-                          <label><input type="radio" name="compareHmTaxaUnclassified" value="show" checked>  Show</label>
-                          <label><input type="radio" name="compareHmTaxaUnclassified" value="hide" >  Hide</label>
+                        <div class="form-check compareHmTaxaTopOnly">
+                          <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaUnclassified" checked> Show unclassified</label>
                         </div>
 
-                        <div>
-                          <label>Higher taxa node:</label>
-                          <label><input type="radio" name="compareHmTaxaHigherTaxaNode" value="show" checked> Show</label>
-                          <label><input type="radio" name="compareHmTaxaHigherTaxaNode" value="hide"> Hide</label>
+                        <div class="form-check compareHmTaxaTopOnly">
+                          <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaHigherTaxaNode" checked> Show higher taxa</label>
                         </div>
 
+                      <h6 class="compareHmTaxaSettingsSection">Colours</h6>
                       <div class="form-group row">
                         <div class="col-sm-5">
                           <label class="">Colour palette:</label>
@@ -561,51 +597,53 @@
                           <div class="">
                               <label><input type="radio" name="compareHmTaxaColour" value="magma"> Magma</label>
                           </div>
+                          <div class="">
+                              <label><input type="radio" name="compareHmTaxaColour" value="trafficLights"> Traffic lights</label>
+                          </div>
                         </div>
                       </div>
 
-                      <div>
-                        <label> Grey zero:</label>
-                        <label><input type="radio" name="compareHmTaxaGrey" value="off" checked>  Off</label>
-                        <label><input type="radio" name="compareHmTaxaGrey" value="on" >  On</label>
+                      <div class="form-group compareHmTaxaTrafficLightThresholds" style="display:none">
+                        <label>Traffic lights colour thresholds <span id="compareHmTaxaColourUnits">(%)</span></label>
+                        <div class="d-flex">
+                          <input class="form-control form-control-sm mr-1" type="number" step="any" min="0" id="compareHmTaxaColourLow" placeholder="Low" aria-label="Low colour threshold">
+                          <input class="form-control form-control-sm mr-1" type="number" step="any" min="0" id="compareHmTaxaColourMid" placeholder="Middle" aria-label="Middle colour threshold">
+                          <input class="form-control form-control-sm" type="number" step="any" min="0" id="compareHmTaxaColourHigh" placeholder="High" aria-label="High colour threshold">
+                        </div>
+                        <small class="form-text text-muted">Leave all blank for automatic thresholds from nonzero cells, or enter all three. Switching between percentages and counts resets them.</small>
+                        <small id="compareHmTaxaColourRangeStatus" class="form-text text-danger" role="status"></small>
                       </div>
 
-                      <div>
-                        <label> Value:</label>
-                        <label><input type="radio" name="compareHmTaxaRead" value="percent" checked>  Percent</label>
-                        <label><input type="radio" name="compareHmTaxaRead" value="count" >  Count</label>
+                      <div class="form-check">
+                        <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaGrey"> Grey zero values</label>
+                      </div>
+
+                      <h6 class="compareHmTaxaSettingsSection">Display</h6>
+                      <div class="form-check">
+                        <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaRead" checked> Show percentages (otherwise counts)</label>
+                      </div>
+
+                      <div class="form-check">
+                        <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaShowValues"> Show cell values</label>
                       </div>
 
                       <div class="form-group">
                         <label for="compareHmTaxaMaxRectWidth">Max cell width: <a id="compareHmTaxaMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
-                        <input type="range" class="form-control-range" name="compareHmTaxaMaxRectWidth" min="24" max="160" value="80">
+                        <input type="range" class="form-control-range" id="compareHmTaxaMaxRectWidth" name="compareHmTaxaMaxRectWidth" min="24" max="160" value="80">
                       </div>
 
-                    </form>
+                      </form>
+                    </aside>
 
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="exportCompareHmTaxaSVG" href="#">Export as SVG</a>
-                    <a class="dropdown-item" id="exportCompareHmTaxaPNG" href="#">Export as PNG</a>
-                    <a class="dropdown-item" id="exportCompareHmTaxaJPG" href="#">Export as JPG</a>
-
+                    <div class="compareHeatmapTaxaCard">
+                      <div id="compareHmTaxaSelectionStatus" class="small text-muted px-3 pt-2" role="status" aria-live="polite"></div>
+                      <div id="compareHeatmapTaxaLegend" class="text-center"></div>
+                      <div id="compareHeatmapTaxaPlot">
+                        <div id="compareHmTaxaEmptyState" role="status" aria-live="polite" style="display: none;"></div>
+                      </div>
                     </div>
                   </div>
-
                 </div>
-
-                <div class="card-body-custom">
-
-
-                <div class="compareHeatmapTaxaCard">
-                  <div id='compareHeatmapTaxaLegend' class="text-center">
-
-                </div>
-                  <div id='compareHeatmapTaxaPlot'>
-
-                </div>
-
-                </div>
-              </div>
 
             </div>
           </div>

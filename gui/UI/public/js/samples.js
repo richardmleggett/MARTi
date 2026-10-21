@@ -1,6 +1,82 @@
+var sampleTaxonFilterId = "";
+var sampleTaxonFilterMatches = null;
+var sampleTaxonFilterRequestSerial = 0;
+var sampleTaxonFilterTimer;
+var sampleTaxonFilterRegistered = false;
+
+function sampleTaxonFilterKey(runId, name) {
+  return JSON.stringify([runId, name]);
+}
+
+function refreshSampleMapMarkers() {
+  if (!markers || !samplePageDataTable) return;
+  markers.clearLayers();
+  existingMarkers = [];
+  markerCoords = [];
+
+  var visibleSamples = new Set();
+  samplePageDataTable.rows({ search: 'applied' }).data().each(function(rowData) {
+    visibleSamples.add(sampleTaxonFilterKey(rowData[11], rowData[12]));
+  });
+  for (const sampleMetaData of sampleMetaDataArray) {
+    if (visibleSamples.has(sampleTaxonFilterKey(sampleMetaData.pathRun, sampleMetaData.pathName)) &&
+        sampleMetaData.metadatafile && sampleMetaData.metadatafile.location) {
+      addSampleMarkerToMap(sampleMetaData);
+    }
+  }
+  $('#sampleMapCard').toggle(existingMarkers.length > 0);
+}
+
+function requestSampleTaxonFilter() {
+  var serial = ++sampleTaxonFilterRequestSerial;
+  var status = $('#sampleTaxonFilterStatus');
+  if (!sampleTaxonFilterId) {
+    sampleTaxonFilterMatches = null;
+    status.text('');
+    samplePageDataTable.draw(false);
+    refreshSampleMapMarkers();
+    return;
+  }
+  sampleTaxonFilterMatches = new Set();
+  samplePageDataTable.draw(false);
+  refreshSampleMapMarkers();
+  if (!/^\d+$/.test(sampleTaxonFilterId)) {
+    status.text('Enter a numeric NCBI taxon ID.');
+    return;
+  }
+  status.text('Finding samples with reads assigned to this taxon or its descendants…');
+  var samples = samplePageDataTable.rows().data().toArray().map(function(row) {
+    return { runId: row[11], name: row[12] };
+  });
+  socket.emit('sample-taxon-filter-request', { taxonId: sampleTaxonFilterId, samples: samples }, function(response) {
+    if (serial !== sampleTaxonFilterRequestSerial || currentPage !== 'Samples') return;
+    var matches = response && Array.isArray(response.matches) ? response.matches : [];
+    sampleTaxonFilterMatches = new Set(matches.map(function(sample) {
+      return sampleTaxonFilterKey(sample.runId, sample.name);
+    }));
+    samplePageDataTable.draw(false);
+    refreshSampleMapMarkers();
+    status.text(matches.length === 1 ? '1 matching sample.' : matches.length + ' matching samples.');
+  });
+}
+
 function initialiseSamplePage() {
 mapUpdated = false;
 $('#sampleMapCard').hide();
+sampleTaxonFilterId = '';
+sampleTaxonFilterMatches = null;
+++sampleTaxonFilterRequestSerial;
+clearTimeout(sampleTaxonFilterTimer);
+
+if (!sampleTaxonFilterRegistered) {
+  $.fn.dataTable.ext.search.push(function(settings, searchData, dataIndex) {
+    if (settings.nTable.id !== 'samplePageDataTable' || !sampleTaxonFilterId) return true;
+    var row = settings.aoData[dataIndex]._aData;
+    return sampleTaxonFilterMatches !== null &&
+      sampleTaxonFilterMatches.has(sampleTaxonFilterKey(row[11], row[12]));
+  });
+  sampleTaxonFilterRegistered = true;
+}
 
 if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
 
@@ -89,6 +165,13 @@ $('.compareSamplesInput').on('click', function() {
 
 sampleListCurrent = [];
 
+$("#sampleTaxonIdFilter").on('input', function() {
+  sampleTaxonFilterId = this.value.trim();
+  ++sampleTaxonFilterRequestSerial;
+  clearTimeout(sampleTaxonFilterTimer);
+  sampleTaxonFilterTimer = setTimeout(requestSampleTaxonFilter, 200);
+});
+
 $("#sampleTableSearchBox").keyup(function() {
 samplePageDataTable.search(this.value).draw();
 
@@ -98,37 +181,7 @@ var selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child'
     selectAllToggle.removeClass('checkSelected');
   };
 
-  // Clear all existing markers from the cluster group
-    markers.clearLayers();
-    existingMarkers = [];
-    markerCoords = [];
-
-    var currentSamples = [];
-
-    // Loop through the current table rows and add markers back to the cluster group
-    $('#samplePageDataTable tbody tr').each(function() {
-
-        var rowData = samplePageDataTable.row( $(this) ).data();
-
-        if (rowData != null) {
-          var rowName = rowData[12];
-          var rowRun = rowData[11];
-          currentSamples.push({pathName:rowName,pathRun:rowRun});
-        }
-
-    });
-
-    for (const sampleMetaData of sampleMetaDataArray) {
-      for (const sample of currentSamples) {
-        if (sampleMetaData.pathName == sample.pathName && sampleMetaData.pathRun == sample.pathRun) {
-          if (sampleMetaData.hasOwnProperty("metadatafile")){
-            if (sampleMetaData.metadatafile.hasOwnProperty("location")){
-              addSampleMarkerToMap(sampleMetaData);
-            }
-          }
-        }
-      }
-    }
+  refreshSampleMapMarkers();
 
 });
 
@@ -419,6 +472,7 @@ existingMarkers = [];
  };
 
 samplePageDataTable.draw(false);
+if (sampleTaxonFilterId) requestSampleTaxonFilter();
 
 
   $('#samplePageDataTable tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
@@ -515,18 +569,12 @@ $('#samplePageDataTable tbody>tr').children(':last-child').on('click', function(
 // }
 
 function emitSelectedCompareSamples() {
-  var prevSearchValue = $("#sampleTableSearchBox").val();
-  $("#sampleTableSearchBox").val("");
-  samplePageDataTable.search("").draw();
-
   var selectedSamplesData = [];
-  $('#samplePageDataTable tbody tr.checkSelected').each(function() {
-    var rowData = samplePageDataTable.row( $(this) ).data();
-    var selectedRowData = {
-      name: rowData[12],
-      runId: rowData[11]
-    };
-    selectedSamplesData.push(selectedRowData);
+  samplePageDataTable.rows().every(function() {
+    if ($(this.node()).hasClass('checkSelected')) {
+      var rowData = this.data();
+      selectedSamplesData.push({ name: rowData[12], runId: rowData[11] });
+    }
   });
 
   if(isEmpty(selectedSamplesData)) {
@@ -534,10 +582,6 @@ function emitSelectedCompareSamples() {
   } else {
     comparePageUnlocked = true;
   };
-
-  $("#sampleTableSearchBox").val(prevSearchValue);
-  samplePageDataTable.search(prevSearchValue).draw();
-
 
   socket.emit('selected-compare-samples', {
     clientId: uuid,
@@ -589,6 +633,10 @@ socket.on('meta-update-available', request => {
       clientId: uuid
     });
   };
+});
+
+socket.on('sample-taxon-filter-data-updated', function() {
+  if (currentPage === 'Samples' && sampleTaxonFilterId) requestSampleTaxonFilter();
 });
 
 // socket.on('metadata-file-update-available', request => {

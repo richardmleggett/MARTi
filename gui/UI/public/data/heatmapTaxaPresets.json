@@ -1,0 +1,335 @@
+[
+  {
+    "id": "bacterial_species",
+    "name": "Food industry – Bacterial species",
+    "rank": "species",
+    "denominatorTaxonId": "2",
+    "minimumRootPercent": 0.005,
+    "taxa": [
+      {
+        "id": "1396",
+        "name": "Bacillus cereus"
+      },
+      {
+        "id": "2756",
+        "name": "Brochothrix thermosphacta"
+      },
+      {
+        "id": "195",
+        "name": "Campylobacter coli"
+      },
+      {
+        "id": "197",
+        "name": "Campylobacter jejuni"
+      },
+      {
+        "id": "1491",
+        "name": "Clostridium botulinum"
+      },
+      {
+        "id": "1502",
+        "name": "Clostridium perfringens"
+      },
+      {
+        "id": "562",
+        "name": "Escherichia coli"
+      },
+      {
+        "id": "1639",
+        "name": "Listeria monocytogenes"
+      },
+      {
+        "id": "28901",
+        "name": "Salmonella enterica"
+      },
+      {
+        "id": "1280",
+        "name": "Staphylococcus aureus"
+      }
+    ]
+  },
+  {
+    "id": "bacterial_genera",
+    "name": "Food industry – Bacterial genera",
+    "rank": "genus",
+    "denominatorTaxonId": "2",
+    "minimumRootPercent": 0.005,
+    "taxa": [
+      {
+        "id": "1386",
+        "name": "Bacillus"
+      },
+      {
+        "id": "2755",
+        "name": "Brochothrix"
+      },
+      {
+        "id": "194",
+        "name": "Campylobacter"
+      },
+      {
+        "id": "2747",
+        "name": "Carnobacterium"
+      },
+      {
+        "id": "1485",
+        "name": "Clostridium"
+      },
+      {
+        "id": "547",
+        "name": "Enterobacter"
+      },
+      {
+        "id": "561",
+        "name": "Escherichia"
+      },
+      {
+        "id": "570",
+        "name": "Klebsiella"
+      },
+      {
+        "id": "1578",
+        "name": "Lactobacillus"
+      },
+      {
+        "id": "1243",
+        "name": "Leuconostoc"
+      },
+      {
+        "id": "1637",
+        "name": "Listeria"
+      },
+      {
+        "id": "286",
+        "name": "Pseudomonas"
+      },
+      {
+        "id": "590",
+        "name": "Salmonella"
+      },
+      {
+        "id": "613",
+        "name": "Serratia"
+      },
+      {
+        "id": "620",
+        "name": "Shigella"
+      },
+      {
+        "id": "1279",
+        "name": "Staphylococcus"
+      },
+      {
+        "id": "662",
+        "name": "Vibrio"
+      },
+      {
+        "id": "46255",
+        "name": "Weissella"
+      }
+    ]
+  },
+  {
+    "id": "fungi_genera",
+    "name": "Food industry – Fungal genera",
+    "rank": "genus",
+    "denominatorTaxonId": "4751",
+    "minimumRootPercent": 0.005,
+    "taxa": [
+      {
+        "id": "4829",
+        "name": "Absidia"
+      },
+      {
+        "id": "5598",
+        "name": "Alternaria"
+      },
+      {
+        "id": "5052",
+        "name": "Aspergillus"
+      },
+      {
+        "id": "5091",
+        "name": "Byssochlamys"
+      },
+      {
+        "id": "5498",
+        "name": "Cladosporium"
+      },
+      {
+        "id": "5074",
+        "name": "Eupenicillium"
+      },
+      {
+        "id": "28569",
+        "name": "Eurotium"
+      },
+      {
+        "id": "5506",
+        "name": "Fusarium"
+      },
+      {
+        "id": "4830",
+        "name": "Mucor"
+      },
+      {
+        "id": "5140",
+        "name": "Neurospora"
+      },
+      {
+        "id": "5080",
+        "name": "Paecilomyces"
+      },
+      {
+        "id": "5073",
+        "name": "Penicillium"
+      },
+      {
+        "id": "4842",
+        "name": "Rhizopus"
+      },
+      {
+        "id": "5094",
+        "name": "Talaromyces"
+      },
+      {
+        "id": "4828",
+        "name": "Thamnidium"
+      },
+      {
+        "id": "148959",
+        "name": "Wallemia"
+      },
+      {
+        "id": "89490",
+        "name": "Xeromyces"
+      }
+    ]
+  },
+  {
+    "id": "yeast_genera",
+    "name": "Food industry – Yeast genera",
+    "rank": "genus",
+    "denominatorTaxonId": "4751",
+    "minimumRootPercent": 0.005,
+    "taxa": [
+      {
+        "id": "13366",
+        "name": "Brettanomyces"
+      },
+      {
+        "id": "5475",
+        "name": "Candida"
+      },
+      {
+        "id": "36910",
+        "name": "Clavispora"
+      },
+      {
+        "id": "5206",
+        "name": "Cryptococcus"
+      },
+      {
+        "id": "4958",
+        "name": "Debaryomyces"
+      },
+      {
+        "id": "43987",
+        "name": "Geotrichum"
+      },
+      {
+        "id": "4939",
+        "name": "Hansenula"
+      },
+      {
+        "id": "4908",
+        "name": "Issatchenkia"
+      },
+      {
+        "id": "4910",
+        "name": "Kluyveromyces"
+      },
+      {
+        "id": "1851509",
+        "name": "Naganishia"
+      },
+      {
+        "id": "4919",
+        "name": "Pichia"
+      },
+      {
+        "id": "5533",
+        "name": "Rhodotorula"
+      },
+      {
+        "id": "4930",
+        "name": "Saccharomyces"
+      },
+      {
+        "id": "4948",
+        "name": "Torulaspora"
+      },
+      {
+        "id": "5552",
+        "name": "Trichosporon"
+      },
+      {
+        "id": "599959",
+        "name": "Wickerhamomyces"
+      },
+      {
+        "id": "4951",
+        "name": "Yarrowia"
+      },
+      {
+        "id": "4955",
+        "name": "Zygosaccharomyces"
+      }
+    ]
+  },
+  {
+    "id": "plant_animal_genera",
+    "name": "Food industry – Plant and animal genera",
+    "rank": "genus",
+    "denominatorTaxonId": "1",
+    "minimumRootPercent": 0.005,
+    "taxa": [
+      {
+        "id": "4678",
+        "name": "Allium"
+      },
+      {
+        "id": "3705",
+        "name": "Brassica"
+      },
+      {
+        "id": "9030",
+        "name": "Gallus"
+      },
+      {
+        "id": "9605",
+        "name": "Homo"
+      },
+      {
+        "id": "4235",
+        "name": "Lactuca"
+      },
+      {
+        "id": "9102",
+        "name": "Meleagris"
+      },
+      {
+        "id": "4107",
+        "name": "Solanum"
+      },
+      {
+        "id": "9822",
+        "name": "Sus"
+      },
+      {
+        "id": "4564",
+        "name": "Triticum"
+      }
+    ]
+  }
+]
