@@ -6,6 +6,8 @@ const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 const https = require('https');
 const path = require('path');
+const { sampleHasTaxon } = require('./services/taxonFilter');
+const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -38,7 +40,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.23.2";
+const martiGuiVersion = "0.23.3";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -614,6 +616,8 @@ observer.on('tree-file-added', tree => {
     sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
   }
 
+  io.sockets.emit('sample-taxon-filter-data-updated');
+
 
 });
 
@@ -626,6 +630,8 @@ observer.on('tree-file-updated', tree => {
   }
 
   sampleTreeDict[tree.runName][tree.id][tree.lca]=tree.content;
+
+  io.sockets.emit('sample-taxon-filter-data-updated');
 
   for (const [id, data] of Object.entries(clientData)) {
     if ((tree.id == data.selectedDashboardSample.name && tree.runName == data.selectedDashboardSample.runId) || (data.selectedCompareSamples.filter(e => e.name == tree.id && e.runId == tree.runName).length > 0)) {
@@ -758,6 +764,18 @@ if (serverOptions["MARTiSampleDirectory"].length > 0) {
           var projectRuns = [];
           var projectDirectories = [];
           var projectSamples = [];
+          var projectHeatmapTaxaPresets = null;
+          var projectHeatmapTaxaPresetsError = null;
+
+          if (Object.prototype.hasOwnProperty.call(selectors, 'heatmapTaxaPresets')) {
+            try {
+              projectHeatmapTaxaPresets = normalizeHeatmapTaxaPresets(selectors.heatmapTaxaPresets);
+            } catch (error) {
+              projectHeatmapTaxaPresets = [];
+              projectHeatmapTaxaPresetsError = error.message;
+              console.error(`Invalid heatmap presets for project ${project}: ${error.message}`);
+            }
+          }
 
           for (const [selector, values] of Object.entries(selectors)) {
             if (selector === "directories") {
@@ -771,7 +789,9 @@ if (serverOptions["MARTiSampleDirectory"].length > 0) {
           projectsDatabase[project] = {
             "directories": projectDirectories,
             "runs": projectRuns,
-            "samples": projectSamples
+            "samples": projectSamples,
+            "heatmapTaxaPresets": projectHeatmapTaxaPresets,
+            "heatmapTaxaPresetsError": projectHeatmapTaxaPresetsError
           };
         }
       }
@@ -792,6 +812,22 @@ var sampleMetadataDict = {};
 var sampleNamesDict = {};
 var sampleTreeDict = {};
 var sampleAccumulationDict = {};
+
+function availableLcasForSample(sample) {
+  if (!sample || !sample.runId || !sample.name) return [];
+  var trees = sampleTreeDict[sample.runId] && sampleTreeDict[sample.runId][sample.name];
+  var accumulation = sampleAccumulationDict[sample.runId] && sampleAccumulationDict[sample.runId][sample.name];
+  if (!trees || !accumulation) return [];
+  return Object.keys(trees).filter(lca => Object.prototype.hasOwnProperty.call(accumulation, lca));
+}
+
+function commonAvailableLcas(samples) {
+  if (!samples || samples.length === 0) return [];
+  return samples.slice(1).reduce((common, sample) => {
+    var available = new Set(availableLcasForSample(sample));
+    return common.filter(lca => available.has(lca));
+  }, availableLcasForSample(samples[0])).sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)));
+}
 var sampleAmrDict = {};
 var alertsDict = {};
 
@@ -1005,6 +1041,45 @@ io.on('connect', function(socket){
     console.log(`[${new Date().toLocaleString()}][${id}] Metadata sent`);
 });
 
+  socket.on('heatmap-taxa-presets-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const client = request && clientData[request.clientId];
+    if (!client) {
+      callback({ presets: null });
+      return;
+    }
+    const project = client.project || defaultProject;
+    const config = project && Object.prototype.hasOwnProperty.call(projectsDatabase, project) ?
+      projectsDatabase[project] : null;
+    callback({
+      presets: config ? config.heatmapTaxaPresets : null,
+      error: config ? config.heatmapTaxaPresetsError : null
+    });
+  });
+
+  socket.on('sample-taxon-filter-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const taxonId = String(request && request.taxonId || '').trim();
+    const samples = request && Array.isArray(request.samples) ? request.samples : [];
+    if (!/^\d+$/.test(taxonId)) {
+      callback({ matches: [] });
+      return;
+    }
+
+    const matches = [];
+    for (const sample of samples) {
+      if (!sample || typeof sample.runId !== 'string' || typeof sample.name !== 'string') continue;
+      const trees = sampleTreeDict[sample.runId] && sampleTreeDict[sample.runId][sample.name];
+      if (!trees) continue;
+      const lca = Object.keys(trees).filter(key => /^lca_\d+(\.\d+)?$/.test(key))
+        .sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)))[0];
+      if (lca && sampleHasTaxon(trees[lca].tree, taxonId)) {
+        matches.push({ runId: sample.runId, name: sample.name });
+      }
+    }
+    callback({ matches });
+  });
+
 
   socket.on('update-sample-name-request', request => {
     var newId = request.newId;
@@ -1105,6 +1180,10 @@ io.on('connect', function(socket){
           runId: runId
         };
         io.to(id).emit('current-dashboard-sample-response', clientData[id].selectedDashboardSample);
+        io.to(id).emit('abundance-options-response', {
+          page: 'dashboard',
+          lcas: commonAvailableLcas([clientData[id].selectedDashboardSample])
+        });
   });
 
   socket.on('selected-compare-samples', samples => {
@@ -1112,6 +1191,10 @@ io.on('connect', function(socket){
       var samples = samples.data;
       clientData[id].selectedCompareSamples = samples;
       io.to(id).emit('current-compare-samples-response', clientData[id].selectedCompareSamples);
+      io.to(id).emit('abundance-options-response', {
+        page: 'compare',
+        lcas: commonAvailableLcas(clientData[id].selectedCompareSamples)
+      });
       var sampleNames = [];
       for (const sample of samples) {
         sampleNames.push(sample.name);
@@ -1126,6 +1209,18 @@ io.on('connect', function(socket){
   socket.on('current-compare-samples-request', request => {
       var id = request.clientId;
       io.to(id).emit('current-compare-samples-response', clientData[id].selectedCompareSamples);
+  });
+
+  socket.on('abundance-options-request', request => {
+    var id = request.clientId;
+    if (!clientData[id]) return;
+    var samples = request.page === 'compare'
+      ? clientData[id].selectedCompareSamples
+      : [clientData[id].selectedDashboardSample];
+    io.to(id).emit('abundance-options-response', {
+      page: request.page,
+      lcas: commonAvailableLcas(samples)
+    });
   });
 
 
@@ -1176,7 +1271,8 @@ io.on('connect', function(socket){
     var selectedDashboardRun = clientData[id].selectedDashboardSample.runId;
 
     if (sampleTreeDict.hasOwnProperty(selectedDashboardRun)) {
-          if (sampleTreeDict[selectedDashboardRun].hasOwnProperty(selectedDashboardSample)) {
+          if (sampleTreeDict[selectedDashboardRun].hasOwnProperty(selectedDashboardSample) &&
+              sampleTreeDict[selectedDashboardRun][selectedDashboardSample].hasOwnProperty(lca)) {
             io.to(id).emit('dashboard-tree-response', {
               id: selectedDashboardSample,
               run: selectedDashboardRun,
@@ -1236,7 +1332,8 @@ socket.on('compare-tree-request', request => {
   compareTreeData = [];
   for (var sample of selectedCompareSamples){
     if (sampleTreeDict.hasOwnProperty(sample.runId)) {
-      if (sampleTreeDict[sample.runId].hasOwnProperty(sample.name)) {
+      if (sampleTreeDict[sample.runId].hasOwnProperty(sample.name) &&
+          sampleTreeDict[sample.runId][sample.name].hasOwnProperty(lca)) {
         compareTreeData.push({
           id: sample.name,
           runId: sample.runId,
@@ -1259,7 +1356,9 @@ socket.on('compare-tree-request', request => {
 
     for (var sample of selectedCompareSamples){
       if (sampleAccumulationDict.hasOwnProperty(sample.runId)) {
-        if (sampleAccumulationDict[sample.runId].hasOwnProperty(sample.name)) {
+        if (sampleAccumulationDict[sample.runId].hasOwnProperty(sample.name) &&
+            sampleAccumulationDict[sample.runId][sample.name].hasOwnProperty(lca) &&
+            sampleAccumulationDict[sample.runId][sample.name][lca].hasOwnProperty(rank)) {
           compareAccumulationData.push({
             id: sample.name,
             runId: sample.runId,

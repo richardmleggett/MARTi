@@ -60,13 +60,36 @@ function capitaliseFirstLetter(string) {
 
 
 function lcaFormat(lca){
-  var output;
-    if (lca.length == 3) {
-      output = lca;
-    } else {
-      output = lca + ".0";
-    }
-    return output;
+  var value = Number(lca);
+  if (!Number.isFinite(value)) {
+    return lca;
+  }
+  return Number.isInteger(value) ? value.toFixed(1) : String(value);
+}
+
+function updateMinimumAbundanceButtons(selector, availableLcas, selectedLabel) {
+  var cutoffs = availableLcas.map(function(lca) {
+    return lca.replace(/^lca_/, "");
+  }).sort(function(a, b) {
+    return Number(a) - Number(b);
+  });
+
+  var selectedCutoff = lcaFormat((selectedLabel || "").replace(/%$/, ""));
+  if (cutoffs.indexOf(selectedCutoff) === -1) {
+    selectedCutoff = cutoffs.indexOf("0.1") !== -1 ? "0.1" : cutoffs[0];
+  }
+
+  var container = $(selector).empty();
+  cutoffs.forEach(function(cutoff) {
+    var label = (cutoff === "0.0" ? "0" : cutoff.replace(/\.0$/, "")) + "%";
+    $("<button>", {
+      type: "button",
+      class: "btn btn-primary" + (cutoff === selectedCutoff ? " active" : ""),
+      text: label
+    }).appendTo(container);
+  });
+
+  return selectedCutoff;
 }
 
 

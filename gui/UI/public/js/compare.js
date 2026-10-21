@@ -5,6 +5,8 @@ var plotLevelSelectedCompareTreeName = "tree";
 
 function initialiseComparePage() {
 
+  socket.emit('abundance-options-request', { clientId: uuid, page: 'compare' });
+
 
   $('#taxonomicLevelSelectorCompare').text(taxonomicRankSelectedCompareText);
   taxonomicRankSelectedText = taxonomicRankSelectedCompareText;
@@ -269,7 +271,7 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   d3.select('#exportCompareHmTaxaSVG').on('click', function(){
 
     var date = getDate() + "_" + getTime();
-    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var levelSelected = heatmapTaxaExportLabel();
     var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     var exportSVG = $("#compareHmTaxa");
     var exportSVGWidth = exportSVG.width();
@@ -282,7 +284,7 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   d3.select('#exportCompareHmTaxaPNG').on('click', function(){
 
     var date = getDate() + "_" + getTime();
-    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var levelSelected = heatmapTaxaExportLabel();
     var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     var exportSVG = $("#compareHmTaxa");
     var exportSVGWidth = exportSVG.width();
@@ -294,7 +296,7 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   d3.select('#exportCompareHmTaxaJPG').on('click', function(){
 
     var date = getDate() + "_" + getTime();
-    var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
+    var levelSelected = heatmapTaxaExportLabel();
     var outputFilename = "compare_taxa_heatmap_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     var exportSVG = $("#compareHmTaxa");
     var exportSVGWidth = exportSVG.width();
@@ -352,8 +354,8 @@ compareDonutUnclassified = this.value;
 updateComparePlots(compareTreeDataGlobal);
 });
 
-d3.selectAll("input[name='compareHmTaxaUnclassified']").on("change", function() {
-compareHmTaxaUnclassified = this.value;
+$('#compareHmTaxaUnclassified').on('change', function() {
+compareHmTaxaUnclassified = this.checked ? 'show' : 'hide';
 updateComparePlots(compareTreeDataGlobal);
 });
 
@@ -366,8 +368,8 @@ d3.selectAll("input[name='compareDonutHigherTaxaNode']").on("change", function()
   updateComparePlots(compareTreeDataGlobal);
 });
 
-d3.selectAll("input[name='compareHmTaxaHigherTaxaNode']").on("change", function() {
-  compareHmTaxaHigherTaxaNode = this.value;
+$('#compareHmTaxaHigherTaxaNode').on('change', function() {
+  compareHmTaxaHigherTaxaNode = this.checked ? 'show' : 'hide';
   updateComparePlots(compareTreeDataGlobal);
 });
 
@@ -808,6 +810,7 @@ return result;
   };
 
 }
+
 // else if (sampleOrdertype == "Sequencing date asc"){
 //   selectedCompareMetaDataArray.sort(function(x, y){
 //    return d3.ascending(x.sequencingDate, y.sequencingDate);
@@ -941,7 +944,7 @@ plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 
 plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 
-plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
+renderCompareHeatmapTaxa(compareSampleData);
 
 
 
@@ -1905,3 +1908,19 @@ function generateCompareAmrCsv(data) {
   });
   return csvString;
 };
+
+socket.on('abundance-options-response', function(data) {
+  if (data.page !== 'compare' || currentPage !== 'Compare') return;
+  var previous = lcaAbundanceCompare;
+  lcaAbundanceCompare = updateMinimumAbundanceButtons(
+    '#minimumAbundanceButtonCompare', data.lcas, lcaAbundanceCompareUnformatted
+  );
+  if (!lcaAbundanceCompare) return;
+  lcaAbundanceCompareUnformatted = $('#minimumAbundanceButtonCompare>button.active').text();
+  if (previous !== lcaAbundanceCompare) {
+    socket.emit('compare-tree-request', { clientId: uuid, lca: 'lca_' + lcaAbundanceCompare });
+    socket.emit('compare-accumulation-request', {
+      clientId: uuid, rank: taxonomicRankSelectedTextLowerCase, lca: 'lca_' + lcaAbundanceCompare
+    });
+  }
+});
