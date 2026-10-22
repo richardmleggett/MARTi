@@ -32,24 +32,7 @@
   margin-bottom: 1rem;
 }
 
-.compareHmTaxaSettingsHeader h6,
-.compareHmTaxaSettingsSection {
-  font-size: 0.85rem;
-}
-
-.compareHmTaxaSettingsSection {
-  border-top: 1px solid #e3e6f0;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  font-weight: 700;
-  color: #4e73df;
-}
-
-.compareHmTaxaSettingsSection:first-child {
-  border-top: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
+.compareHmTaxaSettingsHeader h6 { font-size: 0.85rem; }
 
 .compareHmTaxaSettings .form-check {
   margin-bottom: 0.5rem;

@@ -8,6 +8,7 @@ const https = require('https');
 const path = require('path');
 const { sampleHasTaxon } = require('./services/taxonFilter');
 const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
+const { calculateOrdination, calculateDendrogram } = require('./services/ordination');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -40,7 +41,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "0.23.3";
+const martiGuiVersion = "1.0.0";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -1346,6 +1347,59 @@ socket.on('compare-tree-request', request => {
   console.log(`[${new Date().toLocaleString()}][${id}] Compare tree data sent at lca: ${lca}`);
   });
 
+  socket.on('compare-ordination-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const client = request && clientData[request.clientId];
+    if (!client || !Array.isArray(client.selectedCompareSamples)) {
+      callback({ error: 'Selected samples are unavailable.' });
+      return;
+    }
+    const lca = request.lca;
+    if (typeof lca !== 'string' || !/^lca_\d+(\.\d+)?$/.test(lca)) {
+      callback({ error: 'Choose a valid LCA cutoff.' });
+      return;
+    }
+    const samples = client.selectedCompareSamples.map(sample => {
+      const runTrees = sampleTreeDict[sample.runId];
+      const sampleTrees = runTrees && runTrees[sample.name];
+      const selectedTree = sampleTrees && sampleTrees[lca];
+      return {
+        name: sample.name, runId: sample.runId,
+        tree: selectedTree && selectedTree.tree
+      };
+    });
+    try {
+      callback({ data: calculateOrdination(samples, request) });
+    } catch (error) {
+      callback({ error: error.message });
+    }
+  });
+
+  socket.on('compare-dendrogram-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const client = request && clientData[request.clientId];
+    if (!client || !Array.isArray(client.selectedCompareSamples)) {
+      callback({ error: 'Selected samples are unavailable.' });
+      return;
+    }
+    const lca = request.lca;
+    if (typeof lca !== 'string' || !/^lca_\d+(\.\d+)?$/.test(lca)) {
+      callback({ error: 'Choose a valid LCA cutoff.' });
+      return;
+    }
+    const samples = client.selectedCompareSamples.map(sample => {
+      const runTrees = sampleTreeDict[sample.runId];
+      const sampleTrees = runTrees && runTrees[sample.name];
+      const selectedTree = sampleTrees && sampleTrees[lca];
+      return { name: sample.name, runId: sample.runId, tree: selectedTree && selectedTree.tree };
+    });
+    try {
+      callback({ data: calculateDendrogram(samples, request) });
+    } catch (error) {
+      callback({ error: error.message });
+    }
+  });
+
   socket.on('compare-accumulation-request', request => {
     var id = request.clientId;
     var rank = request.rank;
@@ -1391,10 +1445,8 @@ socket.on('compare-tree-request', request => {
             };
           };
         };
-      if (compareAmrData.length != 0) {
       io.to(id).emit('compare-amr-response', compareAmrData);
       console.log(`[${new Date().toLocaleString()}][${id}] Compare amr data sent`);
-      };
       });
 
     socket.on('dashboard-accumulationChart-request', request => {
@@ -1402,22 +1454,19 @@ socket.on('compare-tree-request', request => {
       var rank = request.rank;
       var lca = request.lca;
 
-
       var selectedDashboardSample = clientData[id].selectedDashboardSample.name;
       var selectedDashboardRun = clientData[id].selectedDashboardSample.runId;
-
-      if (sampleAccumulationDict.hasOwnProperty(selectedDashboardRun)) {
-            if (sampleAccumulationDict[selectedDashboardRun].hasOwnProperty(selectedDashboardSample)) {
-              if (sampleAccumulationDict[selectedDashboardRun][selectedDashboardSample].hasOwnProperty(lca)) {
-                io.to(id).emit('dashboard-accumulationChart-response', [{
-                  id: selectedDashboardSample,
-                  runId: selectedDashboardRun,
-                  data: sampleAccumulationDict[selectedDashboardRun][selectedDashboardSample][lca][rank]
-                }]);
-                console.log(`[${new Date().toLocaleString()}][${id}] Dashboard accumulation data sent`);
-              }
-            }
-          };
+      var accumulation = sampleAccumulationDict[selectedDashboardRun] &&
+        sampleAccumulationDict[selectedDashboardRun][selectedDashboardSample] &&
+        sampleAccumulationDict[selectedDashboardRun][selectedDashboardSample][lca];
+      var rankData = accumulation && accumulation[rank];
+      var response = rankData ? [{
+        id: selectedDashboardSample,
+        runId: selectedDashboardRun,
+        data: rankData
+      }] : [];
+      io.to(id).emit('dashboard-accumulationChart-response', response, { rank: rank, lca: lca });
+      console.log(`[${new Date().toLocaleString()}][${id}] Dashboard accumulation data sent`);
 
       });
 

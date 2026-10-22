@@ -48,8 +48,8 @@ function initialiseCompareStackedBar() {
     d3.select("#compareStackedBarTopNNum").text(compareStackedBarTopN);
 
 
-    d3.selectAll("input[name='stackedBar']").on("change", function() {
-        compareStackedBarYAxis = this.value;
+    d3.select("#compareStackedBarRead").on("change", function() {
+        compareStackedBarYAxis = this.checked ? "percent" : "read";
         plotStackedBar(stackedBarCompareData, taxaTotalCounts["stackedBar"]);
     });
 
@@ -395,7 +395,7 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarLegendEnter.append("text")
         .attr("x", 24)
         .attr("y", 9)
-        .style("font-size", "1.1em")
+        .style("font-size", "1em")
         .attr("dy", ".356em");
 
     stackedBarLegend.select("g rect")

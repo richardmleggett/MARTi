@@ -64,6 +64,8 @@ function initialiseComparePage() {
               taxonomicRankChangedCompare = true;
               updateComparePlots(compareTreeDataGlobal,true);
               taxonomicRankChangedCompare = false;
+              requestCompareOrdination();
+              requestCompareDendrogram();
               socket.emit('compare-accumulation-request',{
                 clientId: uuid,
                 rank:taxonomicRankSelectedTextLowerCase,
@@ -101,6 +103,7 @@ function initialiseComparePage() {
             updateComparePlots(compareTreeDataGlobal,true);
             plotLevelSelectorChanged = false;
             newCompareTreeData = false;
+            if (compareAccumulationDataAvailable) plotRarefactionCompare(rareData);
           }
     });
 
@@ -132,7 +135,12 @@ function initialiseComparePage() {
   initialiseCompareMultiDonut();
 
   initialiseHeatmapTaxa();
+  initialiseCompareViews();
+  initialiseCompareOrdination();
+  initialiseCompareDendrogram();
+  initialiseCompareDiversity();
   initialiseCompareTree();
+  initialiseComparePlotPanels();
 
 
 
@@ -165,11 +173,12 @@ function initialiseComparePage() {
   sortableCompareNames = new Sortable(compareSampleNameList, {
       animation: 150,
       ghostClass: 'compareSampleGhostClass',
+      handle: '.compareSampleDragHandle',
       onUpdate: function () {
           manualSortCompareNames = [];
-        $('#compareSampleNameList li').each(function() {
-          var runId = $(this).data().run;
-          var name = $(this).data().id;
+        $('#compareSampleNameList tr').each(function() {
+          var runId = this.getAttribute('data-run');
+          var name = this.getAttribute('data-id');
           manualSortCompareNames.push({
             name: name,
             runId: runId
@@ -180,6 +189,7 @@ function initialiseComparePage() {
         sampleOrdertype = "Manual";
         $('#sampleOrderCompareMenu a.rank:contains(' + sampleOrdertype + ')').addClass("active");
         $('#sampleOrderCompareButton').text(sampleOrdertype);
+        updateCompareSampleSummary();
         newCompareTreeData = true;
         updateComparePlots(compareTreeDataGlobal,true);
         newCompareTreeData = false;
@@ -344,13 +354,13 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
   });
 
 
-  d3.selectAll("input[name='compareStackedBarUnclassified']").on("change", function() {
-  compareStackedBarUnclassified = this.value;
+  $('#compareStackedBarUnclassified').on('change', function() {
+  compareStackedBarUnclassified = this.checked ? 'show' : 'hide';
   updateComparePlots(compareTreeDataGlobal);
 });
 
-d3.selectAll("input[name='compareDonutUnclassified']").on("change", function() {
-compareDonutUnclassified = this.value;
+$('#compareDonutUnclassified').on('change', function() {
+compareDonutUnclassified = this.checked ? 'show' : 'hide';
 updateComparePlots(compareTreeDataGlobal);
 });
 
@@ -363,8 +373,8 @@ updateComparePlots(compareTreeDataGlobal);
   compareDonutUnclassified = "show",
   compareHmTaxaUnclassified = "show";
 
-d3.selectAll("input[name='compareDonutHigherTaxaNode']").on("change", function() {
-  compareDonutHigherTaxaNode = this.value;
+$('#compareDonutHigherTaxaNode').on('change', function() {
+  compareDonutHigherTaxaNode = this.checked ? 'show' : 'hide';
   updateComparePlots(compareTreeDataGlobal);
 });
 
@@ -373,8 +383,8 @@ $('#compareHmTaxaHigherTaxaNode').on('change', function() {
   updateComparePlots(compareTreeDataGlobal);
 });
 
-d3.selectAll("input[name='compareStackedBarHigherTaxaNode']").on("change", function() {
-  compareStackedBarHigherTaxaNode = this.value;
+$('#compareStackedBarHigherTaxaNode').on('change', function() {
+  compareStackedBarHigherTaxaNode = this.checked ? 'show' : 'hide';
   updateComparePlots(compareTreeDataGlobal);
 });
 
@@ -424,14 +434,12 @@ saveAs(csvData, outputFilename+'.'+defaultExportOptions.extension);
 });
 
 
-$('#compareTaxaTreeCard div.card-header:not(dropdown)').on('click', function() {
+$('#compareTaxaTreeCard > .card-header').on('click', function(event) {
+  if ($(event.target).closest('.comparePlotHeaderActions').length) return;
 
   var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
   if (ctIsExpanded == "false") {
   ctCard = true;
-  // $('#dropdownMenuCompareTaxaTree').removeClass('disabled');
-  // buildCompareTree(compareTreeDataGlobal);
-  // plotCompareTree(newCompareTree);
   taxonomicRankChangedCompare = true;
 
     setTimeout(function () {
@@ -447,28 +455,81 @@ $('#compareTaxaTreeCard div.card-header:not(dropdown)').on('click', function() {
   ctCard = false;
 
 
-  // $('#dropdownMenuCompareTaxaTree').addClass('disabled');
   }
 
-
+  $('#collapseTree').collapse('toggle');
 
   });
 
-
-  $('#dropdownMenuCompareTaxaTree').on('click',function() {
-    var ctIsExpanded = $('#compareTaxaTreeCard div.card-header').attr("aria-expanded");
-    if (ctIsExpanded == "false") {
-      $('#dropdownMenuCompareTaxaTree').addClass('disabled');
-    } else {
-    $('#dropdownMenuCompareTaxaTree').removeClass('disabled');
-    }
+$('#compareTaxaTreeCard > .card-header').on('keydown', function(event) {
+  if (event.target !== this || (event.key !== 'Enter' && event.key !== ' ')) return;
+  event.preventDefault();
+  $(this).trigger('click');
 });
+
 
 ctCard = false;
 
 
 
 };
+
+function initialiseComparePlotPanels() {
+  var panels = ['compareStackedBar', 'compareTree', 'compareDonut', 'compareAmrHm'];
+
+  panels.forEach(function(prefix) {
+    var panel = $('#' + prefix + 'Settings');
+    var button = $('#' + prefix + 'SettingsButton');
+
+    function setOpen(open, returnFocus) {
+      panel.prop('hidden', !open);
+      button.attr('aria-expanded', String(open)).toggleClass('active', open);
+      if (open) {
+        $('#' + prefix + 'SettingsTitle').trigger('focus');
+      } else if (returnFocus) {
+        button.trigger('focus');
+      }
+      if (prefix === 'compareAmrHm' && typeof orderedAmrHmData !== 'undefined' && orderedAmrHmData) {
+        window.requestAnimationFrame(function() {
+          plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
+        });
+      }
+    }
+
+    $('#' + prefix + 'SettingsForm').on('submit.comparePlotPanels', function(event) {
+      event.preventDefault();
+    });
+    button.on('click.comparePlotPanels', function() {
+      setOpen(panel.prop('hidden'), false);
+    });
+    $('#' + prefix + 'SettingsClose').on('click.comparePlotPanels', function() {
+      setOpen(false, true);
+    });
+    panel.on('keydown.comparePlotPanels', function(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false, true);
+      }
+    });
+  });
+
+  $('#stackedBarCard, #compareTaxaTreeCard, #compareDonutCard, #compareAmrHmCard')
+    .find('.dropdown-menu a[href="#"]').on('click.comparePlotPanels', function(event) {
+      event.preventDefault();
+    });
+
+  // The tree header is also its collapse control; keep its actions independent.
+  $('#compareTreeSettingsButton, #compareTreeExportButton').prop('disabled', true);
+  $('#collapseTree').on('shown.bs.collapse.comparePlotPanels', function() {
+    $('#compareTaxaTreeCard > .card-header').attr('aria-expanded', 'true').removeClass('collapsed');
+    $('#compareTreeSettingsButton, #compareTreeExportButton').prop('disabled', false);
+  }).on('hidden.bs.collapse.comparePlotPanels', function() {
+    $('#compareTaxaTreeCard > .card-header').attr('aria-expanded', 'false').addClass('collapsed');
+    $('#compareTreeSettings').prop('hidden', true);
+    $('#compareTreeSettingsButton').attr('aria-expanded', 'false').removeClass('active');
+    $('#compareTreeSettingsButton, #compareTreeExportButton').prop('disabled', true);
+  });
+}
 
 var compareStackedBarUnclassified,
 compareDonutUnclassified,
@@ -885,9 +946,10 @@ else if (sampleOrdertype == "Yield asc"){
 }
 
 
-d3.select("#compareSampleNameList").selectAll("li").sort(function(a, b){
+d3.select("#compareSampleNameList").selectAll("tr").sort(function(a, b){
   return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
 })
+updateCompareSampleSummary();
 
 
 for (const sample of sortCompareNameArray){
@@ -945,6 +1007,7 @@ plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 
 renderCompareHeatmapTaxa(compareSampleData);
+updateCompareDiversityTable(compareSampleData);
 
 
 
@@ -1094,31 +1157,46 @@ function makeAssignmentExportData(compareSampleData) {
       }
 };
 
+function compareSampleBarcodeLabel(barcode) {
+  if (barcode === null || barcode === undefined || barcode === '') return '—';
+  return Number(barcode) === 0 ? 'None' : 'BC' + barcode;
+}
+
 function updateCompareSampleNameList(names) {
+  var compareSampleList = d3.select('#compareSampleNameList').selectAll('tr')
+    .data(names, function(d) { return JSON.stringify([String(d.pathRun), String(d.pathName)]); });
 
-  var compareSampleList = d3.select("#compareSampleNameList").selectAll("li")
-      .data(names);
+  var newRows = compareSampleList.enter().append('tr');
+  newRows.append('td').append('span')
+    .attr('class', 'compareSampleDragHandle')
+    .attr('role', 'img')
+    .attr('aria-label', 'Drag to reorder sample')
+    .attr('title', 'Drag to reorder sample')
+    .html('<i class="fas fa-grip-vertical" aria-hidden="true"></i>');
+  newRows.append('td').append('button')
+    .attr('type', 'button')
+    .attr('class', 'btn btn-link btn-sm compareSampleNameButton');
+  newRows.append('td').append('span').attr('class', 'compareSampleRun');
+  newRows.append('td').attr('class', 'compareSampleBarcode');
+  newRows.append('td').append('input')
+    .attr('type', 'text')
+    .attr('class', 'form-control form-control-sm compareSampleGroupInput')
+    .attr('list', 'compareGroupSuggestions')
+    .attr('placeholder', 'Ungrouped');
 
-      compareSampleList.enter()
-          .append("li")
-          .attr("data-id", function(d) {
-            return d.id;})
-          .attr("data-run", function(d) {
-              return d.runId;})
-          .attr("data-pathname", function(d) {
-              return d.pathName;})
-          .attr("data-pathrun", function(d) {
-              return d.pathRun;})
-          // .text(function(d) {return d.id + " - " + d.runId;});
-          .html(function(d) {return "<a>" + d.id + "</a>" + "<a class='compareSampleNameListRun'> - " + d.runId + "</a>";});
-
-      compareSampleList.exit()
-          .remove();
-
-
-      compareSampleList.on("click", function(d) {
-              var sampleName = $(this).data().pathname;
-              var runId = $(this).data().pathrun;
+  compareSampleList.exit().remove();
+  compareSampleList = d3.select('#compareSampleNameList').selectAll('tr');
+  compareSampleList
+    .attr('data-id', function(d) { return d.id; })
+    .attr('data-run', function(d) { return d.runId; })
+    .attr('data-pathname', function(d) { return d.pathName; })
+    .attr('data-pathrun', function(d) { return d.pathRun; });
+  compareSampleList.select('.compareSampleNameButton')
+    .text(function(d) { return d.id; })
+    .attr('title', function(d) { return d.id; })
+    .on('click', function(d) {
+              var sampleName = d.pathName;
+              var runId = d.pathRun;
 
               socket.emit('selected-dashboard-sample',{
                 clientId: uuid,
@@ -1134,9 +1212,17 @@ function updateCompareSampleNameList(names) {
               });
 
             });
-
-
-
+  compareSampleList.select('.compareSampleRun')
+    .text(function(d) { return d.runId; })
+    .attr('title', function(d) { return d.runId; });
+  compareSampleList.select('.compareSampleBarcode')
+    .text(function(d) { return compareSampleBarcodeLabel(d.barcode); });
+  compareSampleList.select('.compareSampleGroupInput')
+    .attr('aria-label', function(d) { return 'Group for ' + d.id + ' in run ' + d.runId; })
+    .each(function(d) {
+      if (document.activeElement !== this) this.value = compareSampleGroupValue(d.pathRun, d.pathName);
+    });
+  updateCompareSampleSummary();
 };
 
 var newCompareTreeData = false;
@@ -1163,6 +1249,8 @@ socket.on('compare-tree-response', function(treeData) {
   newCompareTreeData = true;
   plotLevelSelectorChanged = true;
   updateComparePlots(compareTreeDataGlobal,true);
+  requestCompareOrdination();
+  requestCompareDendrogram();
   newCompareTreeData = false;
   plotLevelSelectorChanged = false;
 } else {
@@ -1183,7 +1271,7 @@ socket.on('tree-update-available', request => {
 socket.on('compare-accumulation-response', function(data) {
 
   if (!compareAccumulationDataAvailable) {
-    $("#accumulationChartRow").show();
+    $("#accumulationChartRow").css('display', 'flex');
     initialiseCompareAccumulation();
     compareAccumulationDataAvailable = true;
   }
@@ -1218,8 +1306,18 @@ socket.on('amr-update-available', request => {
 
 socket.on('compare-amr-response', function(amrData) {
   rawAmrData = amrData;
+  var hasAmrHits = Array.isArray(amrData) && amrData.some(function(sample) {
+    return sample && sample.data && Array.isArray(sample.data.geneList) && sample.data.geneList.length > 0;
+  });
+  if (!hasAmrHits) {
+    $('#compareAmrEmpty .card-body').text('None of the selected samples have AMR results.');
+    $('#compareAmrEmpty').prop('hidden', false);
+    $('#compareAmrHmRow').hide();
+    return;
+  }
+  $('#compareAmrEmpty').prop('hidden', true);
+  $('#compareAmrHmRow').show();
   if (!compareAmrDataAvailable) {
-    $("#compareAmrHmRow").show();
     initialiseAmrHm();
     compareAmrDataAvailable = true;
   }

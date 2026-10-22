@@ -158,6 +158,30 @@ table.dataTable tfoot th,table.dataTable tfoot td {
     text-decoration: underline;
 }
 
+.martiViewNav {
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.martiViewNav .nav-link {
+  border: 1px solid #d1d3e2;
+  background: #fff;
+  color: #5a5c69;
+  cursor: pointer;
+}
+
+.martiViewNav .nav-link:hover {
+  background: #eaecf4;
+  color: #303030;
+}
+
+.martiViewNav .nav-link.active,
+.martiViewNav .nav-link.active:hover {
+  border-color: #303030;
+  background: #303030;
+  color: #fff;
+}
+
 
 .tooltip-content-wrapper {
   max-width:400px;

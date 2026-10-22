@@ -103,12 +103,12 @@ sankeyResetTopNOnNextBuild = false;
 
 
   d3.selectAll("input[name='dashboardSankeyRoot']").on("change", function () {
-    dashboardSankeyRoot = this.value; // "show" | "hide"
+    dashboardSankeyRoot = this.checked ? 'show' : 'hide';
     updateSankeyFromActiveTree();            // rebuild using the new option
   });
 
   d3.selectAll("input[name='dashboardSankeyUnclassified']").on("change", function () {
-    sankeyShowUnclassified = this.value;
+    sankeyShowUnclassified = this.checked ? 'show' : 'hide';
     updateSankeyFromActiveTree();
   });
   

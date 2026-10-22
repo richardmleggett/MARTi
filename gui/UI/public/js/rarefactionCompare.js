@@ -1,488 +1,297 @@
+/* Accumulation and historical alpha diversity, shared by Compare and Dashboard. */
+var rareMetric = 'taxa';
+var accumulationData = [];
+var rareMargin = { top: 25, right: 40, bottom: 55, left: 85 };
+var rareWidth = 835, rareHeight = 420;
+var rarefactionCompareSVG;
+var rc_x = d3.scale.linear().range([0, rareWidth]);
+var rc_y = d3.scale.linear().range([rareHeight, 0]);
+var rc_xAxis = d3.svg.axis().scale(rc_x).ticks(8).orient('bottom');
+var rc_yAxis = d3.svg.axis().scale(rc_y).orient('left');
+
 function initialiseCompareAccumulation() {
+  $('#compareRarefactionPlot').empty();
+  rarefactionCompareSVG = d3.select('#compareRarefactionPlot').append('svg')
+    .attr('viewBox', '0 0 ' + (rareWidth + rareMargin.left + rareMargin.right) + ' ' + (rareHeight + rareMargin.top + rareMargin.bottom))
+    .append('g').attr('transform', 'translate(' + rareMargin.left + ',' + rareMargin.top + ')');
+  rarefactionCompareSVG.append('g').attr('class', 'x axis');
+  rarefactionCompareSVG.append('g').attr('class', 'y axis');
+  rarefactionCompareSVG.append('text').attr('id', 'yAxisLabelAccumulation')
+    .attr('text-anchor', 'middle').attr('transform', 'translate(-60,' + rareHeight / 2 + ')rotate(-90)');
+  rarefactionCompareSVG.append('text').attr('id', 'xAxisLabelAccumulation')
+    .attr('text-anchor', 'middle').attr('transform', 'translate(' + rareWidth / 2 + ',' + (rareHeight + 43) + ')');
 
-  rarefactionCompareSVG = d3.select("#compareRarefactionPlot").append("svg")
-      .attr("viewBox", function() {
-        var width = rareWidth + 180;
-        var height = rareHeight + 80;
-        var x = 0;
-        var y = 0;
-          return x + " " + y + " " + width + " " + height;
-      })
-    .append("g")
-      .attr("transform", "translate(" + rareMargin.left + "," + rareMargin.top + ")");
-
-
-      rarefactionCompareSVG.append("g")
-          .attr("class", "x axis");
-
-      rarefactionCompareSVG.append("g")
-          .attr("class", "y axis");
-
-      rarefactionCompareSVG.append("text")
-          .attr("id", "yAxisLabelAccumulation")
-          .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-          .attr("transform", "translate("+ (-40) +","+(rareHeight/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-          .text("Taxa");
-
-      rarefactionCompareSVG.append("text")
-          .attr("id", "xAxisLabelAccumulation")
-          .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-          .attr("transform", "translate("+ (rareWidth/2) +","+(rareHeight+45)+")")
-          .text("Reads");
-
-
-
-
-      d3.selectAll("input[name='rareLine']").on("change", function(){
-        plotRarefactionCompare(rareData);
-      });
-
-
-      d3.selectAll("input[name='rareXAxisMax']").on("change", function(){
-        rareXAxisMaxChanged = true;
-        rareXAxisMaxUserVal = rareXAxisMaxNum;
-        plotRarefactionCompare(rareData);
-      });
-
-      d3.selectAll("input[name='rareXAxisMax']").on("input", function(){
-        rareXAxisMaxNum = parseInt(d3.select(this).property("value"));
-        d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
-      });
-
-        d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
-
-        rareXAxisMaxChanged = false;
-
-        d3.select('#downloadAccumulationData').on('click', function(){
-        var csvToExport = convertAccumulationDataToCSV(accumulationData);
-        var date = getDate() + "_" + getTime();
-        var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
-        var outputFilename = "compare_accumulation_data_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
-        export_as_csv(csvToExport,outputFilename);
-        });
-
-};
-
-
-var rareXAxisMaxNum = 100000;
-var rareXAxisMaxUserVal = 0;
-
-var rareXAxisMaxChanged = false;
-
-var rareMargin = {top: 20, right: 80, bottom: 50, left: 60},
-    rareWidth = 960 - rareMargin.left - rareMargin.right,
-    rareHeight = 500 - rareMargin.top - rareMargin.bottom;
-
-var parseDate = d3.time.format("%Y%m%d").parse;
-
-var rc_x = d3.scale.linear()
-    .range([0, rareWidth]);
-
-var rc_y = d3.scale.linear()
-    .range([rareHeight, 0]);
-
-
-  var rarefactionLineColour = dashboardPlotColorPalette;
-
-var rc_xAxis = d3.svg.axis()
-    .scale(rc_x)
-    .ticks(8)
-    .orient("bottom");
-
-var yAxisTicks;
-
-var rc_yAxis = d3.svg.axis()
-    .scale(rc_y)
-    .orient("left")
-    .tickFormat(d3.format("d"));
-
-
-
-    var accumulationData;
-
-    function convertAccumulationDataToCSV(data) {
-      var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_");
-      var dataArray = [];
-      var header = [];
-      var maxRow = 0;
-      for (var sample of data) {
-        header.push(sample.name + " read count");
-        header.push(sample.name + " " + levelSelected + " count");
-        var valLength = sample.values.length;
-        if (valLength > maxRow){
-          maxRow = valLength;
-        }
-      }
-      dataArray.push(header);
-
-      for (var i = 0; i < maxRow; i++) {
-        var rowData = [];
-        for (var sample of data) {
-          if (sample.values[i] !== undefined) {
-          rowData.push(sample.values[i].readCount);
-          rowData.push(sample.values[i].taxaCount);
-        } else {
-          rowData.push("");
-          rowData.push("");
-        }
-      }
-        dataArray.push(rowData);
-    }
-
-      var csvString = '';
-      dataArray.forEach(function(infoArray, index) {
-        dataString = infoArray.join(',');
-        csvString += index < dataArray.length-1 ? dataString + '\n' : dataString;
-      });
-      return csvString;
-    };
-
-
-
-function plotRarefactionCompare(data) {
-
-data.sort(function(a, b){
-  return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
-})
-
-  var compareAccumulationLine;
-  var rareXAxis;
-  var xAxisLabel;
-
-  rarefactionLineColour = dashboardPlotColorPalette;
-
-  var selectedLca;
-
-  if(currentPage=="Dashboard") {
-    selectedLca = lcaAbundanceDashboard;
-  } else if (currentPage=="Compare") {
-    selectedLca = lcaAbundanceCompare;
-  }
-
-  if (selectedLca == "0.0") {
-    $("#accumulationPlotWarning").hide();
-  } else {
-    $("#accumulationPlotWarning").show();
-  }
-
-  if ($("input[name='rareLine'][value='monotone']").is(':checked')) {
-    compareAccumulationLine = d3.svg.line()
-        .interpolate("monotone")
-        .y(function(d) { return rc_y(d.taxaCount); })
-        .x(function(d) { return rc_x(d.readCount); });
-    }
-    else {
-      compareAccumulationLine = d3.svg.line()
-          .y(function(d) { return rc_y(d.taxaCount); })
-          .x(function(d) { return rc_x(d.readCount); });
-    };
-
-    rareXAxis = "reads";
-    xAxisLabel = "Reads analysed";
-
-    var yAxisLabel = taxonomicRankSelectedText;
-    $("#yAxisLabelAccumulation").text(yAxisLabel+" count");
-
-    $("#xAxisLabelAccumulation").text(xAxisLabel);
-
-    var idList = [];
-    var multilineData = [];
-
-
-    for (const sample of data) {
-      var sampleIdPlot;
-      for (const sampleMetaData of sampleMetaDataArray) {
-        if (sampleMetaData.pathName == sample.id && sampleMetaData.pathRun == sample.runId) {
-          sampleIdPlot = sampleMetaData.id;
-          idList.push(sampleIdPlot);
-          var line = {
-              name: sampleIdPlot,
-              values: sample.data[rareXAxis].map(function(c) {
-                return {readCount: c[0], taxaCount: c[1]};
-              })
-          };
-          line.values.unshift({readCount: 0, taxaCount: 0});
-          multilineData.push(line);
-
-          break;
-        }
-      };
-
-    };
-
-
-      rarefactionLineColour.domain(idList);
-
-
-var readCountMax = d3.max(multilineData, function(c) { return d3.max(c.values, function(v) { return v.readCount; }); });
-
-d3.selectAll("input[name='rareXAxisMax']").property("max", parseInt(readCountMax));
-
-
-if(!rareXAxisMaxChanged){
-  rareXAxisMaxNum = readCountMax;
-  d3.selectAll("input[name='rareXAxisMax']").property("value",rareXAxisMaxNum);
-  d3.selectAll("#rareXAxisMaxNum").text(rareXAxisMaxNum);
-};
-
-
-for (var line of multilineData) {
-  var indexOfMax = findWithAttr(line.values,"readCount",rareXAxisMaxNum);
-  if (indexOfMax != -1) {
-    line.values.length = indexOfMax + 1;
-  } else {
-    for (var [i,chunk] of line.values.entries()) {
-      if (chunk.readCount < rareXAxisMaxNum){
-        indexOfMax = i;
-      } else {
-        break;
-      }
-    }
-    line.values.length = indexOfMax + 1;
-  }
+  $('#rareMetric').val(rareMetric);
+  if (!$('#rareMetric').val()) { rareMetric = 'taxa'; $('#rareMetric').val(rareMetric); }
+  $('#rareMetric,#rareTaxaSeries,#rareXAxis,#rareLine,#rareXAxisMax').off('.diversityPlot')
+    .on('change.diversityPlot input.diversityPlot', function () {
+      if (this.id === 'rareMetric') rareMetric = this.value;
+      if (typeof rareData !== 'undefined' && rareData) plotRarefactionCompare(rareData);
+    });
+  $('#diversityPlotSettingsButton').off('.diversityPlot').on('click.diversityPlot', function () {
+    var opening = $('#diversityPlotSettings').prop('hidden');
+    $('#diversityPlotSettings').prop('hidden', !opening);
+    $(this).attr('aria-expanded', String(opening));
+    if (opening) $('#diversityPlotSettingsTitle').trigger('focus');
+  });
+  $('#diversityPlotSettingsClose').off('.diversityPlot').on('click.diversityPlot', function () {
+    $('#diversityPlotSettings').prop('hidden', true);
+    $('#diversityPlotSettingsButton').attr('aria-expanded', 'false').trigger('focus');
+  });
+  $('#downloadAccumulationData').off('.diversityPlot').on('click.diversityPlot', function (event) {
+    event.preventDefault();
+    var page = currentPage === 'Dashboard' ? 'dashboard' : 'compare';
+    export_as_csv(convertAccumulationDataToCSV(accumulationData),
+      page + '_diversity_' + rareMetric + '_' + getDate() + '_' + getTime());
+  });
 }
 
-accumulationData = multilineData;
+function updateAccumulationMetricOptions(data, selectedLca, unit) {
+  var hasDiversity = data.length > 0 && data.every(function (sample) { return martiHasChunkDiversity(sample.data); });
+  var chao1Ok = hasDiversity && Number(selectedLca) === 0 && unit === 'reads';
+  $('#rareMetric option').each(function () {
+    this.disabled = this.value !== 'taxa' && (!hasDiversity || (this.value === 'chao1' && !chao1Ok));
+  });
+  if ($('#rareMetric option:selected').prop('disabled')) $('#rareMetric').val('taxa');
+  rareMetric = $('#rareMetric').val() || 'taxa';
+  $('#rareMetricNote').prop('hidden', hasDiversity);
+  var hasRaw = data.length > 0 && data.every(function (sample) {
+    return sample.data && Array.isArray(sample.data.rawReads) && Array.isArray(sample.data.rawTime);
+  });
+  $('#rareTaxaSeries option[value="rawReads"]').prop('disabled', !hasRaw);
+  if (!hasRaw && $('#rareTaxaSeries').val() === 'rawReads') $('#rareTaxaSeries').val('reads');
+  $('#rareTaxaSeriesGroup').prop('hidden', rareMetric !== 'taxa' || !hasRaw);
+  return hasRaw;
+}
 
+function formatAccumulationValue(value) {
+  return Number(value).toFixed(MARTI_DIVERSITY_METRICS[rareMetric].decimals);
+}
 
+function accumulationSampleName(sample) {
+  var meta = sampleMetaDataArray.find(function (entry) {
+    return entry.pathName === sample.id && entry.pathRun === sample.runId;
+  });
+  return meta ? meta.id : sample.id;
+}
 
-var rarefactionCompareLegend = d3.select("#compareRarefactionPlotLegend").selectAll(".rarefactionCompareLegend")
-    .data(idList);
+// Find the closest place on a rendered path near the cursor's x position. Using
+// the SVG path keeps hover accurate for straight, step, and smooth lines.
+function accumulationPathPointNear(path, mouseX, mouseY) {
+  var length = path.getTotalLength();
+  function firstAtOrAfter(x) {
+    var low = 0, high = length;
+    for (var i = 0; i < 18; i++) {
+      var middle = (low + high) / 2;
+      if (path.getPointAtLength(middle).x < x) low = middle;
+      else high = middle;
+    }
+    return path.getPointAtLength(high);
+  }
+  // The half-pixel window also captures the vertical stroke of a step curve.
+  var a = firstAtOrAfter(mouseX - 0.5);
+  var b = firstAtOrAfter(mouseX + 0.5);
+  var dx = b.x - a.x, dy = b.y - a.y;
+  var denominator = dx * dx + dy * dy;
+  var t = denominator ? Math.max(0, Math.min(1,
+    ((mouseX - a.x) * dx + (mouseY - a.y) * dy) / denominator)) : 0;
+  return { x: a.x + t * dx, y: a.y + t * dy };
+}
 
-var rarefactionCompareLegendEnter = rarefactionCompareLegend.enter().append("svg")
-    .attr("class", "rarefactionCompareLegend")
-    .attr("height", 20)
-    .append("g");
+function plotRarefactionCompare(data) {
+  if (!Array.isArray(data) || !rarefactionCompareSVG || !$('#compareRarefactionPlot').length) return;
+  var selectedLca = currentPage === 'Dashboard' ? lcaAbundanceDashboard : lcaAbundanceCompare;
+  var unit = (currentPage === 'Dashboard' ? plotLevelSelectedDashboardId : plotLevelSelectedCompareId) === 'base'
+    ? 'bases' : 'reads';
+  var hasRaw = updateAccumulationMetricOptions(data, selectedLca, unit);
+  var xMode = $('#rareXAxis').val() || 'reads';
+  var raw = rareMetric === 'taxa' && $('#rareTaxaSeries').val() === 'rawReads' && hasRaw;
+  $('#rareUnitNote').text(rareMetric === 'taxa'
+    ? 'Taxa accumulation counts taxa as reads are analysed; the read/basepair setting does not change this curve.'
+    : unit === 'bases'
+      ? 'DNA yield weighted: N is the sum of classified basepairs assigned to included taxa at each point, not the number of reads or organisms.'
+      : 'Read weighted: N is the sum of classified reads assigned to included taxa at each point, not the number of organisms.');
+  var key = raw ? (xMode === 'time' ? 'rawTime' : 'rawReads') : xMode;
+  var maxText = $('#rareXAxisMax').val();
+  var requestedMax = maxText === '' ? null : Number(maxText);
+  if (requestedMax !== null && (!isFinite(requestedMax) || requestedMax <= 0)) requestedMax = null;
+  var ordered = data.slice().sort(function (a, b) {
+    if (currentPage === 'Dashboard' || !Array.isArray(sortCompareNameArray)) return 0;
+    var aName = accumulationSampleName(a), bName = accumulationSampleName(b);
+    var ai = sortCompareNameArray.findIndex(function (s) { return s.name === aName && s.runId === a.runId; });
+    var bi = sortCompareNameArray.findIndex(function (s) { return s.name === bName && s.runId === b.runId; });
+    return ai - bi;
+  });
+  accumulationData = ordered.map(function (sample) {
+    var points = rareMetric === 'taxa' ? (sample.data && sample.data[key]) || []
+      : martiChunkDiversitySeries(sample.data, rareMetric, unit, xMode);
+    var values = points.filter(function (point) {
+      return Array.isArray(point) && isFinite(point[0]) && isFinite(point[1]) &&
+        (requestedMax === null || point[0] <= requestedMax);
+    }).map(function (point) { return { x: Number(point[0]), y: Number(point[1]) }; });
+    return { name: accumulationSampleName(sample), values: values };
+  }).filter(function (sample) { return sample.values.length; });
+  var mayDecrease = rareMetric === 'taxa' && Number(selectedLca) !== 0 && (raw || !hasRaw);
+  $('#accumulationPlotWarning').toggle(mayDecrease);
+  $('#accumulationPlotWarning a').text(raw
+    ? 'Per-chunk taxa counts can decrease when assignments change between chunks.'
+    : 'Older accumulation data can decrease when the minimum abundance cutoff is above 0%.');
+  $('#no-data-accumulation').toggleClass('d-none', accumulationData.length > 0);
+  $('#no-data-accumulation h3').text('Data Not Available');
+  $('#no-data-accumulation h4').text(rareMetric === 'taxa'
+    ? 'No accumulation points available for this selection.'
+    : 'No historical diversity points available for this selection.');
+  var plotTitle = rareMetric === 'taxa' ? 'Taxa accumulation' : MARTI_DIVERSITY_METRICS[rareMetric].label +
+    (unit === 'bases' ? ' (DNA yield weighted)' : ' (read weighted)');
+  $('#rarefactionCardTitleCompare').text(plotTitle + ' — ' + taxonomicRankSelectedText);
+  $('#rarefactionCardTitleDashboard').text(plotTitle);
+  $('#xAxisLabelAccumulation').text(xMode === 'time' ? 'Elapsed time (minutes)' : 'Reads analysed');
+  $('#yAxisLabelAccumulation').text(rareMetric === 'taxa' ? taxonomicRankSelectedText + ' count'
+    : MARTI_DIVERSITY_METRICS[rareMetric].label + (unit === 'bases' ? ' (bp weighted)' : ' (read weighted)'));
 
-rarefactionCompareLegendEnter.append("rect")
-    .attr("width", 20)
-    .attr("height", 20)
-    .style("fill", "black");
-
-rarefactionCompareLegendEnter.append("text")
-    .attr("x", 24)
-    .attr("y", 9)
-    .style("font-size", "1.1em")
-    .attr("dy", ".356em");
-
-
-rarefactionCompareLegend.select("g rect")
-  .style("fill", function(d) {return rarefactionLineColour(d); });
-
-rarefactionCompareLegend.select("g text")
-  .style("text-anchor", "start")
-  .text(function(d) { return d; });
-
-rarefactionCompareLegend
-  .attr("width",function(d) { return this.firstChild.getBBox().width; });
-
-
-rarefactionCompareLegend.exit().remove();
-
-
-rc_x.domain([
-  d3.min(multilineData, function(c) { return d3.min(c.values, function(v) { return v.readCount; }); }),
-  rareXAxisMaxNum
-]);
-
-rc_y.domain([
-  d3.min(multilineData, function(c) { return d3.min(c.values, function(v) { return v.taxaCount; }); }),
-  d3.max(multilineData, function(c) { return d3.max(c.values, function(v) { return v.taxaCount; }); })
-]);
-
-rarefactionCompareSVG.select("g.axis.x")
-    .attr("transform", "translate(0," + rareHeight + ")")
-    .call(rc_xAxis);
-
-
-rarefactionCompareSVG.select("g.axis.y")
-    .call(rc_yAxis);
-
-var yAxisWidth = rarefactionCompareSVG.select("g.axis.y").node().getBBox().width;
-
-rarefactionCompareSVG.select("#yAxisLabelAccumulation")
-  .attr("transform", "translate("+ (-yAxisWidth-10) +","+(rareHeight/2)+")rotate(-90)")
-
-
-var sampleLine = rarefactionCompareSVG.selectAll(".sampleLine")
-    .data(multilineData);
-
-var sampleLineEnter = sampleLine.enter().append("g")
-    .attr("class", "sampleLine");
-
-    sampleLineEnter.append("path")
-        .attr("class", "line");
-
-    sampleLine.select("path.line")
-        .attr("d", function(d) { return compareAccumulationLine(d.values); })
-        .style("stroke", function(d) { return rarefactionLineColour(d.name); });
-
-    sampleLine.exit().remove();
-
-
-d3.select(".mouse-over-effects").remove();
-
-var mouseG = rarefactionCompareSVG.append("g")
-  .attr("class", "mouse-over-effects");
-
-mouseG.append("path")
-  .attr("class", "mouse-line")
-  .style("stroke", "black")
-  .style("stroke-width", "1px")
-  .style("visibility", "hidden");
-
-  // mouseG.append('svg:rect')
-  //   .attr('width', rareWidth)
-  //   .attr('height', rareHeight)
-  //   .attr('fill', 'none')
-  //   .attr('pointer-events', 'all');
-
-
-var lines = document.getElementsByClassName('line');
-
-  mouseG.selectAll('.mouse-per-line').remove();
-
-var mousePerLine = mouseG.selectAll('.mouse-per-line')
-  .data(multilineData);
-
-
-var mousePerLineEnter =
-  mousePerLine.enter()
-  .append("g")
-  .attr("class", "mouse-per-line");
-
-
-mousePerLineEnter.append("circle")
-  .attr("r", 7)
-  .style("stroke", function(d) { return rarefactionLineColour(d.name); })
-  .style("fill", "none")
-  .style("stroke-width", "1px")
-  // .style("opacity", "0");
-  .style("visibility", "hidden");
-
-
-
-mousePerLineEnter.append("text")
-  .attr("transform", "translate(10,14)")
-  .style("font-size", "1.3em");
-
-  mousePerLine.exit().remove();
-
-  mouseG.append('svg:rect')
-    .attr('width', rareWidth)
-    .attr('height', rareHeight)
-    .attr('fill', 'none')
-    .attr('pointer-events', 'all');
-
-mouseG.select('rect')
-  .on('mouseout', function() {
-    d3.select(".mouse-line")
-      .style("visibility", "hidden");
-    // d3.selectAll(".mouse-per-line")
-    //   .style("visibility", "hidden");
-    d3.selectAll(".mouse-per-line circle")
-      // .style("opacity", "0");
-      .style("visibility", "hidden");
-    d3.selectAll(".mouse-per-line text")
-      .style("visibility", "hidden");
+  var all = [].concat.apply([], accumulationData.map(function (sample) { return sample.values; }));
+  var xMax = requestedMax || d3.max(all, function (point) { return point.x; }) || 1;
+  var yMin = Math.min(0, d3.min(all, function (point) { return point.y; }) || 0);
+  var yMax = d3.max(all, function (point) { return point.y; }) || 1;
+  if (yMax <= yMin) yMax = yMin + 1;
+  rc_x.domain([0, xMax]); rc_y.domain([yMin, yMax]);
+  rc_yAxis.tickFormat(d3.format(rareMetric === 'taxa' ? 'd' : yMax >= 20 ? '.1f' : '.2f'));
+  rarefactionCompareSVG.select('.x.axis').attr('transform', 'translate(0,' + rareHeight + ')').call(rc_xAxis);
+  rarefactionCompareSVG.select('.y.axis').call(rc_yAxis);
+  var line = d3.svg.line().interpolate($('#rareLine').val() || 'linear')
+    .x(function (point) { return rc_x(point.x); }).y(function (point) { return rc_y(point.y); });
+  var palette = dashboardPlotColorPalette;
+  palette.domain(accumulationData.map(function (sample) { return sample.name; }));
+  var lines = rarefactionCompareSVG.selectAll('.sampleLine').data(accumulationData, function (sample) { return sample.name; });
+  lines.enter().append('path').attr('class', 'sampleLine line').style('fill', 'none').style('stroke-width', '2px');
+  lines.attr('d', function (sample) {
+    // Add a visual origin for taxa curves. Keep saved points unchanged for
+    // hover values and CSV export; diversity indices are undefined at zero reads.
+    var values = rareMetric === 'taxa' && sample.values[0].x > 0
+      ? [{ x: 0, y: 0 }].concat(sample.values) : sample.values;
+    return line(values);
   })
-  .on('mouseover', function() {
-    d3.select(".mouse-line")
-      .style("visibility", "visible");
-    // d3.selectAll(".mouse-per-line")
-    //   .style("visibility", "visible");
-    d3.selectAll(".mouse-per-line circle")
-      // .style("opacity", "1");
-      .style("visibility", "visible");
-    d3.selectAll(".mouse-per-line text")
-      .style("visibility", "visible");
-  })
-  .on('mousemove', function() {
-    var mouse = d3.mouse(this);
-
-
- var largestX = {readCount: 0, taxaCount: 0};
-
-
-    d3.selectAll(".mouse-per-line")
-      .attr("transform", function(d, i) {
-
-
-        var xMouse = rc_x.invert(mouse[0]);
-
-            var bisect = d3.bisector(function(d) { return d.readCount; }).right;
-
-            var iBisect = bisect(d.values, xMouse);
-
-            var d0 = d.values[iBisect - 1];
-            var d1 = d.values[iBisect];
-            if (d0 === undefined) {
-              d0 = {readCount: 0, taxaCount: 0};
-            }
-            if (d1 === undefined) {
-              d1 = d0;
-            }
-            var dx = xMouse - d0.readCount > d1.readCount - xMouse ? d1 : d0;
-            if (dx.readCount > largestX.readCount) {
-              largestX = dx;
-            }
-
-
-          d3.select(this).select('text')
-            .text(dx.taxaCount + " (" + thousandsSeparators(dx.readCount) + " reads)");
-
-
-        return "translate(" + rc_x(dx.readCount) + "," + rc_y(dx.taxaCount) +")";
+    .style('stroke', function (sample) { return palette(sample.name); });
+  lines.exit().remove();
+  var legends = d3.select('#compareRarefactionPlotLegend').selectAll('.rarefactionCompareLegend')
+    .data(accumulationData, function (sample) { return sample.name; });
+  var enter = legends.enter().append('svg').attr('class', 'rarefactionCompareLegend').attr('height', 20).append('g');
+  enter.append('rect').attr('width', 16).attr('height', 12).attr('y', 4);
+  enter.append('text').attr('x', 21).attr('y', 14).style('font-size', '13px');
+  legends.select('rect').style('fill', function (sample) { return palette(sample.name); });
+  legends.select('text').text(function (sample) { return sample.name; });
+  legends.attr('width', function (sample) { return 25 + sample.name.length * 8; });
+  legends.exit().remove();
+  rarefactionCompareSVG.selectAll('.mouse-over-effects').remove();
+  $('#accumulationHoverTooltip').remove();
+  if (!accumulationData.length) return;
+  var tooltip = $('<div id="accumulationHoverTooltip" class="accumulationHoverTooltip" role="tooltip"></div>')
+    .prop('hidden', true).appendTo('#compareRarefactionPlot');
+  function highlight(names) {
+    var selected = names && names.length ? names : null;
+    lines.style('opacity', function (sample) { return !selected || selected.indexOf(sample.name) !== -1 ? 1 : 0.15; })
+      .style('stroke-width', function (sample) { return selected && selected.indexOf(sample.name) !== -1 ? '4px' : '2.5px'; });
+    legends.style('opacity', function (sample) { return !selected || selected.indexOf(sample.name) !== -1 ? 1 : 0.3; })
+      .select('text').style('font-weight', function (sample) {
+        return selected && selected.indexOf(sample.name) !== -1 ? 'bold' : 'normal';
       });
-
-
-      d3.select(".mouse-line")
-        .attr("d", function() {
-          var d = "M" + rc_x(largestX.readCount) + "," + rareHeight;
-          d += " " + rc_x(largestX.readCount) + "," + 0;
-          return d;
-        });
-
-  });
-
-  rarefactionCompareLegend.on("mouseover", function(d, i) {
-
-      sampleLine.filter(function(x) {
-          if (x.name == d) {
-          } else {
-            d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
-          };
+  }
+  legends.on('mouseenter', function (sample) {
+    tooltip.prop('hidden', true); highlight([sample.name]);
+  }).on('mouseleave', function () { highlight(null); });
+  var hover = rarefactionCompareSVG.append('g').attr('class', 'mouse-over-effects');
+  var guide = hover.append('line').style('stroke', '#858796').style('stroke-dasharray', '3,3')
+    .style('pointer-events', 'none').style('visibility', 'hidden');
+  hover.append('rect').attr('width', rareWidth).attr('height', rareHeight).style('fill', 'none')
+    .style('pointer-events', 'all').on('mouseout', function () {
+      guide.style('visibility', 'hidden');
+      hover.selectAll('.hoverPoint').remove();
+      tooltip.prop('hidden', true);
+      highlight(null);
+    }).on('mousemove', function () {
+      var mouse = d3.mouse(this);
+      var svg = $('#compareRarefactionPlot svg')[0];
+      var scale = (rareWidth + rareMargin.left + rareMargin.right) / svg.getBoundingClientRect().width;
+      var candidates = [];
+      lines.each(function (sample) {
+        var point = accumulationPathPointNear(this, mouse[0], mouse[1]);
+        if (rareMetric === 'taxa' && point.x < rc_x(sample.values[0].x) - 5 * scale) return;
+        var distance = Math.hypot(point.x - mouse[0], point.y - mouse[1]);
+        candidates.push({ sample: sample, point: point, distance: distance });
       });
-
-      rarefactionCompareLegend.filter(function(x) {
-          if (x == d) {
-              d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
-          } else {
-            d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
-          };
+      candidates.sort(function (a, b) { return a.distance - b.distance; });
+      var matches = candidates.length && candidates[0].distance <= 24 * scale
+        ? candidates.filter(function (candidate) {
+            return candidate.distance <= Math.min(24 * scale, candidates[0].distance + 4 * scale);
+          }).slice(0, 3) : [];
+      if (!matches.length) {
+        guide.style('visibility', 'hidden');
+        hover.selectAll('.hoverPoint').remove();
+        tooltip.prop('hidden', true);
+        highlight(null);
+        return;
+      }
+      // The path determines which line is under the cursor. Report only a
+      // recorded point from that line, never a value interpolated by the SVG.
+      matches.forEach(function (match) {
+        match.observed = match.sample.values.reduce(function (best, point) {
+          if (!best) return point;
+          var pointDx = Math.abs(rc_x(point.x) - match.point.x);
+          var bestDx = Math.abs(rc_x(best.x) - match.point.x);
+          if (pointDx < bestDx) return point;
+          if (pointDx === bestDx && Math.abs(rc_y(point.y) - mouse[1]) < Math.abs(rc_y(best.y) - mouse[1])) return point;
+          return best;
+        }, null);
       });
-
-  });
-
-  rarefactionCompareLegend.on("mouseout", function(d, i) {
-
-
-    sampleLine.filter(function(x) {
-        if (x.name == d) {
-        } else {
-          d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
-        };
+      var names = matches.map(function (match) { return match.sample.name; });
+      highlight(names);
+      guide.attr('x1', rc_x(matches[0].observed.x)).attr('x2', rc_x(matches[0].observed.x))
+        .attr('y1', 0).attr('y2', rareHeight).style('visibility', 'visible');
+      var marks = hover.selectAll('.hoverPoint').data(matches, function (match) { return match.sample.name; });
+      marks.enter().append('circle').attr('class', 'hoverPoint').attr('r', 6)
+        .style('fill', 'white').style('stroke-width', '2px').style('pointer-events', 'none');
+      marks.attr('cx', function (match) { return rc_x(match.observed.x); })
+        .attr('cy', function (match) { return rc_y(match.observed.y); })
+        .style('stroke', function (match) { return palette(match.sample.name); });
+      marks.exit().remove();
+      tooltip.empty();
+      matches.forEach(function (match) {
+        var x = match.observed.x, y = match.observed.y;
+        var row = $('<div class="accumulationHoverRow"></div>').appendTo(tooltip);
+        $('<span class="accumulationHoverSwatch"></span>').css('background-color', palette(match.sample.name)).appendTo(row);
+        var details = $('<div class="accumulationHoverDetails"></div>').appendTo(row);
+        $('<strong></strong>').text(match.sample.name).appendTo(details);
+        $('<span></span>').text(formatAccumulationValue(y) + ' (' +
+          (xMode === 'time' ? x.toFixed(1) + ' min' : thousandsSeparators(Math.round(x)) + ' reads') + ')').appendTo(details);
+      });
+      var plotBox = document.getElementById('compareRarefactionPlot').getBoundingClientRect();
+      var left = d3.event.clientX - plotBox.left + 14;
+      var top = d3.event.clientY - plotBox.top + 14;
+      tooltip.prop('hidden', false);
+      tooltip.css({ left: Math.max(8, Math.min(left, plotBox.width - tooltip.outerWidth() - 8)) + 'px',
+        top: Math.max(8, Math.min(top, plotBox.height - tooltip.outerHeight() - 8)) + 'px' });
     });
+}
 
-    rarefactionCompareLegend.filter(function(x) {
-        if (x == d) {
-            d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
-        } else {
-          d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
-        };
+function convertAccumulationDataToCSV(data) {
+  var xLabel = $('#rareXAxis').val() === 'time' ? 'elapsed minutes' : 'reads analysed';
+  var unit = (currentPage === 'Dashboard' ? plotLevelSelectedDashboardId : plotLevelSelectedCompareId) === 'base'
+    ? 'bases' : 'reads';
+  var metric = rareMetric === 'taxa' ? 'taxa count' : MARTI_DIVERSITY_METRICS[rareMetric].label +
+    (unit === 'bases' ? ' (DNA yield weighted; N in bp)' : ' (read weighted; N in reads)');
+  var rows = [];
+  var header = [];
+  data.forEach(function (sample) { header.push(sample.name + ' ' + xLabel, sample.name + ' ' + metric); });
+  rows.push(header);
+  var length = Math.max.apply(null, [0].concat(data.map(function (sample) { return sample.values.length; })));
+  for (var i = 0; i < length; i++) {
+    var row = [];
+    data.forEach(function (sample) {
+      var value = sample.values[i]; row.push(value ? value.x : '', value ? value.y : '');
     });
-
-  });
-
-
-    };
+    rows.push(row);
+  }
+  return rows.map(function (row) {
+    return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(',');
+  }).join('\n');
+}
