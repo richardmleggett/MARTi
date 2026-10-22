@@ -275,21 +275,26 @@ public class ReadClassifier {
                                 summaryFiles.add(summaryFilename);
 
                                 int fastaChunkNumber = getChunkNumber(f.getBlastFile());
-                                int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
+                                // Serialize taxonomy updates and all six reporting thresholds as one
+                                // transaction across barcodes. Classification still runs in parallel.
+                                synchronized (options.getResults()) {
+                                    int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
 
-                                // Register assignment with main list
-                                pfp.registerTaxonomyData(barcode);
+                                    // Register assignment with main list
+                                    pfp.registerTaxonomyData(barcode);
                                 
-                                // Write files for min support 0, 0.1, 1 and 2
-                                startTime = System.nanoTime();
+                                    // Write files for min support 0, 0.1, 1 and 2
+                                    startTime = System.nanoTime();
                                 
-                                for (double s : new double[] {0, 0.005, 0.05, 0.1, 1, 2}) {
-                                    options.getLog().println("Writing classifications for minSupport "+s);
-                                    options.getResults().writeTree(barcode, s);
-                                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), s);
-                                    options.getResults().writeAccumulationJson(barcode, s);                                
+                                    for (double s : new double[] {0, 0.005, 0.05, 0.1, 1, 2}) {
+                                        options.getLog().println("Writing classifications for minSupport "+s);
+                                        options.getResults().writeTree(barcode, s);
+                                        options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), s);
+                                        options.getResults().writeAccumulationJson(barcode, s);                                
+                                    }
+                                
                                 }
-                                
+
 //                                options.getResults().writeTree(barcode, 0);
 //                                options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0);
 //                                options.getResults().writeAccumulationJson(barcode, 0);                                

@@ -102,19 +102,24 @@ public class CentrifugeClassifier {
                     SampleMetaData md = options.getSampleMetaData(barcode);
                     options.getLog().println("Got sample metadata");
                     
-                    options.getLog().println("Registering chunks");
-                    //TODO: Remove this hack.
-                    md.registerChunkAnalysed(f.getQueryFile().replaceAll("fastq", "fasta"));
+                    // Serialize metadata registration, taxonomy counting and reporting
+                    // across barcodes to keep each chunk's output internally consistent.
+                    synchronized (options.getResults()) {
+                        options.getLog().println("Registering chunks");
+                        //TODO: Remove this hack.
+                        md.registerChunkAnalysed(f.getQueryFile().replaceAll("fastq", "fasta"));
                     
-                    int fastaChunkNumber = getChunkNumber(f.getClassificationFile());
-                    int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, f);
+                        int fastaChunkNumber = getChunkNumber(f.getClassificationFile());
+                        int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, f);
                     
-                    for (double s : new double[] {0, 0.005, 0.05, 0.1, 1, 2}) {
-                        options.getResults().writeTree(barcode, s);
-                        options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), s);
-                        options.getResults().writeAccumulationJson(barcode, s);                                
-                    }                    
+                        for (double s : new double[] {0, 0.005, 0.05, 0.1, 1, 2}) {
+                            options.getResults().writeTree(barcode, s);
+                            options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), s);
+                            options.getResults().writeAccumulationJson(barcode, s);                                
+                        }                    
                     
+                    }
+
 //                    options.getResults().writeTree(barcode, 0);
 //                    options.getResults().storeAccumulationData(barcode, fastaChunkNumber, chunkNumberByOrderCompleted, md.getReadsAnalysed(), md.getLastChunkAnalysedTime(), 0);
 //                    options.getResults().writeAccumulationJson(barcode, 0);                                
