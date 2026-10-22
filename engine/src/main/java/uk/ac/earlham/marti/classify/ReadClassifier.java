@@ -277,8 +277,9 @@ public class ReadClassifier {
                                 int fastaChunkNumber = getChunkNumber(f.getBlastFile());
                                 // Serialize taxonomy updates and all six reporting thresholds as one
                                 // transaction across barcodes. Classification still runs in parallel.
+                                int chunkNumberByOrderCompleted;
                                 synchronized (options.getResults()) {
-                                    int chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
+                                    chunkNumberByOrderCompleted = options.getResults().addChunk(barcode, pfp);
 
                                     // Register assignment with main list
                                     pfp.registerTaxonomyData(barcode);
