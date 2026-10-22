@@ -102,15 +102,15 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
 
     d3.selectAll("#compareAmrHmMaxRectWidthNum").text(amrHmMaxRectWidth);
 
-    d3.selectAll("input[name='compareAmrHmGrey']").on("change", function(){
-      compareAmrHmGrey = this.value;
+    d3.select("#compareAmrHmGrey").on("change", function(){
+      compareAmrHmGrey = this.checked ? "on" : "off";
       plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
     });
 
 
 
-    d3.selectAll("input[name='compareAmrHmRead']").on("change", function(){
-      compareAmrHmRead = this.value;
+    d3.select("#compareAmrHmRead").on("change", function(){
+      compareAmrHmRead = this.checked ? "percent" : "count";
       plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
     });
 

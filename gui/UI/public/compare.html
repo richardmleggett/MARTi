@@ -1,4 +1,4 @@
-<div class="fixed-options-bar shadow align-items-center d-flex">
+<div id="compareTaxonomyOptionsBar" class="fixed-options-bar shadow align-items-center d-flex">
 
   <a id="downloadCompareAssignments" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4 mr-auto invisible"><i class="fas fa-download fa-sm text-white-50"></i> Assignments</a>
 
@@ -53,140 +53,66 @@
 
   </div>
 
-
-<!-- Compare info panel -->
-<div class="row mt-5">
-
-  <div class="col-12 mb-4">
-
-    <div class="card shadow">
-
-      <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Samples</h6>
-      </div>
-
-          <div class="card-body">
-
-
-
-      <div class="row">
-
-
-
-            <div class="col-md-4 mb-md-0 mb-3">
-
-              <div class="d-flex justify-content-center align-items-center">
-
-                <a class="text-primary">Order:</a>
-                <a class="mr-2"></a>
-
-                <div class="dropdown">
-                  <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns" href="#" role="button" id="sampleOrderCompareButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ID asc
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="sampleOrderCompareButton" id="sampleOrderCompareMenu">
-                    <a class="dropdown-item dropdown-nonhref rank">ID asc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Run asc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Run desc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Yield desc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Reads analysed asc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Reads analysed desc</a>
-                    <a class="dropdown-item dropdown-nonhref rank">Manual</a>
-                  </div>
-                </div>
-            </div>
-
-              <div class="d-flex h-100 flex-column align-items-center justify-content-center">
-                <p class="card-text text-primary">Drag samples <i class="fas fa-grip-vertical"></i> to order manually.</p>
-                <p class="card-text text-primary">Click on sample name to visit its Dashboard.</p>
-              </div>
-            </div>
-
-            <div class="col-md-8">
-              <!-- <h5 class="text-center">Samples</h5> -->
-
-              <div class="d-flex h-100 flex-column justify-content-center ml-3">
-                <ol id="compareSampleNameList" class="h5 text-primary">
-                </ol>
-              </div>
-
-           </div>
-
-          <!-- <h3 class="text-primary" id="compareSampleNames">test</h3> -->
-
-
-        <!-- <div class="col-md-4 text-center mb-3">
-          <h5 class="">Reads Sequenced</h5>
-          <h2 class="text-primary" id="dashboardInfoCardReadsSequenced"></h2>
-        </div>
-
-        <div class="col-md-4 text-center mb-3">
-          <h5 class="">Reads Classified</h5>
-          <h2 class="text-primary" id="dashboardInfoCardReadsClassified"></h2>
-        </div> -->
-
-
-      </div>
-
-      <!-- <hr> -->
-
-      <!-- <div class="py-3">
-      </div> -->
-
-
-
-        <!-- <div class="d-flex justify-content-center align-items-center">
-
-              <div class="dropdown">
-                <a class="btn btn-primary btn-sm dropdown-toggle d-sm-inline-block shadow-sm topbar-btns taxonomicLevelSelector" href="#" role="button" id="taxonomicLevelSelectorCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                </a>
-
-                <div class="dropdown-menu" aria-labelledby="taxonomicLevelSelectorCompare" style="min-width: 5rem;" id="taxonomicLevelSelectorCompareMenu">
-                  <a class="dropdown-item rank" href="#">All Levels</a>
-                  <a class="dropdown-item rank" href="#">Domain</a>
-                  <a class="dropdown-item rank" href="#">Phylum</a>
-                  <a class="dropdown-item rank" href="#">Class</a>
-                  <a class="dropdown-item rank" href="#">Order</a>
-                  <a class="dropdown-item rank" href="#">Family</a>
-                  <a class="dropdown-item rank" href="#">Genus</a>
-                  <a class="dropdown-item rank" href="#">Species</a>
-                  <div class="dropdown-divider"></div>
-                  <div class="dropdown-header">Options:</div>
-                  <a class="dropdown-item radio-dropdown" style="padding:0.25rem 0.8rem;" href="#">
-                  <table>
-                  <tr>
-                    <td colspan="2">Include ancestors:</td>
-                  </tr>
-                  <tr>
-                    <td><label><input type="radio" name="includeAncestorNodes" value="off" checked> No</label></td>
-                    <td><label><input type="radio" name="includeAncestorNodes" value="on"> Yes</label></td>
-                  </tr>
-                </table>
-                </a>
-                </div>
-              </div>
-
-
-              <div class="px-2"></div>
-
-            <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-        </div> -->
-
-
-
-      </div>
-
+<div id="compareSamplesSummary" class="compareSamplesSummary card shadow mt-5 mb-3" aria-label="Compared samples">
+  <div class="card-body py-2 px-3 d-flex align-items-center">
+    <div class="compareSamplesSummaryText d-flex align-items-center mr-3">
+      <span id="compareSamplesCount" class="font-weight-bold text-primary flex-shrink-0">Samples</span>
+      <span id="compareSamplesNames" class="compareSamplesNames text-muted ml-2"></span>
+      <span id="compareSamplesOrder" class="text-muted ml-2 flex-shrink-0"></span>
     </div>
-
+    <button type="button" id="compareSamplesToggle" class="btn btn-sm btn-outline-primary ml-auto flex-shrink-0" aria-controls="compareSamplesDetails" aria-expanded="false">Show samples</button>
   </div>
-
+</div>
+<div id="compareSamplesDetails" hidden>
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="card shadow" id="compareSamplesCard">
+      <div class="card-header d-flex align-items-center justify-content-between flex-wrap">
+        <h6 class="m-0 font-weight-bold text-primary">Samples</h6>
+        <div class="d-flex align-items-center">
+          <span class="small text-muted mr-2">Order</span>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="sampleOrderCompareButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID asc</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sampleOrderCompareButton" id="sampleOrderCompareMenu">
+              <a class="dropdown-item dropdown-nonhref rank">ID asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Run asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Run desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Yield desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Reads analysed asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Reads analysed desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Manual</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-3 pb-0">
+        <p class="small text-muted mb-2">Drag a handle to set a manual order. Select a sample name to open its Dashboard.</p>
+        <p class="small text-muted mb-3">Groups are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
+        <div class="table-responsive compareSamplesTableWrap">
+          <table class="table table-sm table-hover mb-0 compareSamplesTable" aria-label="Selected comparison samples and groups">
+            <thead><tr><th scope="col" class="compareSampleHandleColumn">Order</th><th scope="col" class="compareSampleNameColumn">Sample</th><th scope="col">Run</th><th scope="col" class="compareSampleBarcodeColumn">Barcode</th><th scope="col" class="compareSampleGroupColumn">Group</th></tr></thead>
+            <tbody id="compareSampleNameList"></tbody>
+          </table>
+        </div>
+        <datalist id="compareGroupSuggestions"></datalist>
+        <p id="compareGroupsStatus" class="small text-danger mt-2 mb-2" role="status"></p>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
+<div class="nav nav-pills martiViewNav mt-3" role="tablist" aria-label="Compare views">
+  <button type="button" class="nav-link active" id="comparePlotsTab" role="tab" aria-controls="comparePlotsView" aria-selected="true">Taxonomy</button>
+  <button type="button" class="nav-link" id="compareDiversityTab" role="tab" aria-controls="compareDiversityView" aria-selected="false">Diversity</button>
+  <button type="button" class="nav-link" id="compareOrdinationTab" role="tab" aria-controls="compareOrdinationView" aria-selected="false">Sample relationships</button>
+  <button type="button" class="nav-link" id="compareAmrTab" role="tab" aria-controls="compareAmrView" aria-selected="false">AMR</button>
+</div>
+<div id="comparePlotsView" class="compareView" role="tabpanel" aria-labelledby="comparePlotsTab">
 
-          <!-- Stacked bar Row -->
+<!-- Stacked bar Row -->
           <div class="row">
 
 
@@ -205,47 +131,34 @@
                     <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
                   </div> -->
 
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Options:</div>
-                      <form class="dropdown-form">
-
-                      <div class="form-group">
-                        <label for="compareStackedBarTopN">Show top <a id="compareStackedBarTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
-                        <input type="range" class="form-control-range" id="compareStackedBarTopN" min="1" max="50" value="10">
-                      </div>
-
-                      <div>
-                        <label>Y-axis:</label>
-                        <label><input type="radio" name="stackedBar" value="read"> Count</label>
-                        <label><input type="radio" name="stackedBar" value="percent" checked> Percent</label>
-                      </div>
-                      <div>
-                        <label> Unclassified node:</label>
-                        <label><input type="radio" name="compareStackedBarUnclassified" value="show" checked>  Show</label>
-                        <label><input type="radio" name="compareStackedBarUnclassified" value="hide" >  Hide</label>
-                      </div>
-
-                      <div>
-                        <label>Higher taxa node:</label>
-                        <label><input type="radio" name="compareStackedBarHigherTaxaNode" value="show" checked> Show</label>
-                        <label><input type="radio" name="compareStackedBarHigherTaxaNode" value="hide"> Hide</label>
-                      </div>
-
-                    </form>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="exportTaxaStackedBarSVG" href="#">Export as SVG</a>
-                    <a class="dropdown-item" id="exportTaxaStackedBarPNG" href="#">Export as PNG</a>
-                    <a class="dropdown-item" id="exportTaxaStackedBarJPG" href="#">Export as JPG</a>
-                    </div>
-                  </div>
+                  <div class="d-flex align-items-center comparePlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareStackedBarSettingsButton" aria-controls="compareStackedBarSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareStackedBarExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareStackedBarExportButton"><a class="dropdown-item" id="exportTaxaStackedBarSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportTaxaStackedBarPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportTaxaStackedBarJPG" href="#">Export as JPG</a></div>
+          </div>
+        </div>
 
                 </div>
 
-                <div class="card-body-custom text-center">
+                <div class="card-body-custom"><div class="comparePlotLayout"><aside id="compareStackedBarSettings" class="comparePlotSettings" aria-labelledby="compareStackedBarSettingsTitle" hidden>
+        <div class="comparePlotSettingsHeader">
+          <h6 id="compareStackedBarSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Stacked bar settings</h6>
+          <button type="button" class="close" id="compareStackedBarSettingsClose" aria-label="Close stacked bar settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="compareStackedBarSettingsForm">
+          <h6 class="compareSettingsSection">Taxa</h6>
+          <div class="form-group">
+            <label for="compareStackedBarTopN">Show top <span id="compareStackedBarTopNNum" class="font-weight-bold">N</span> taxa per sample</label>
+            <input type="range" class="form-control-range" id="compareStackedBarTopN" min="1" max="50" value="10">
+          </div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareStackedBarUnclassified" checked> Show unclassified</label></div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareStackedBarHigherTaxaNode" checked> Show higher taxa</label></div>
+
+          <h6 class="compareSettingsSection">Display</h6>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareStackedBarRead" checked> Show percentages (otherwise counts)</label></div>
+        </form>
+      </aside><div class="comparePlotContent text-center">
 
                 <div class="stackedBarCard">
                   <div id='stackedBarLegend'>
@@ -258,254 +171,11 @@
                 </div>
 
                 </div>
-              </div>
+              </div></div></div>
 
             </div>
           </div>
           </div>
-
-          <!-- Donut Row -->
-          <div class="row">
-
-
-            <div class="col-12 mb-4">
-
-              <!-- stackedBar card -->
-              <div class="card shadow" id="compareDonutCard">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Donut</h6>
-
-                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareDonutFullScreen);">
-                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
-                  </div>
-
-                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
-                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
-                  </div> -->
-
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuDonutCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuDonutCompare">
-                      <div class="dropdown-header">Options:</div>
-                      <!-- <a class="dropdown-item"> -->
-                      <form class="dropdown-form">
-                      <div class="form-group">
-                        <label for="compareDonutTopN">Show top <a id="compareDonutTopNNum" class="font-weight-bold">N</a> taxa per sample</label>
-                        <input type="range" class="form-control-range" id="compareDonutTopN" min="1" max="50" value="10">
-                      </div>
-
-
-                      <div class="form-group">
-                        <label>Donut radius:</label>
-                        <input type="range" class="form-control-range" name="donutRadius" min="50" max="200" value="125">
-                      </div>
-
-                      <!-- <div class="">
-                        <label>Donut area:</label>
-                        <label><input type="radio" name="donutArea" value="read" > Count</label>
-                        <label><input type="radio" name="donutArea" value="equal" checked> Equal</label>
-                      </div> -->
-
-                      <div class="">
-                        <label>Count label:</label>
-                        <label><input type="radio" name="showDonutReadCount" value="on" > On</label>
-                        <label><input type="radio" name="showDonutReadCount" value="off" checked> Off</label>
-                      </div>
-
-                      <div>
-                        <label> Sample name:</label>
-                        <label><input type="radio" name="compareDonutSampleName" value="show" checked>  Show</label>
-                        <label><input type="radio" name="compareDonutSampleName" value="hide" >  Hide</label>
-                      </div>
-
-                      <div>
-                        <label> Unclassified node:</label>
-                        <label><input type="radio" name="compareDonutUnclassified" value="show" checked>  Show</label>
-                        <label><input type="radio" name="compareDonutUnclassified" value="hide" >  Hide</label>
-                      </div>
-
-                      <div>
-                        <label>Higher taxa node:</label>
-                        <label><input type="radio" name="compareDonutHigherTaxaNode" value="show" checked> Show</label>
-                        <label><input type="radio" name="compareDonutHigherTaxaNode" value="hide"> Hide</label>
-                      </div>
-
-                    </form>
-                      <!-- </a> -->
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" id="exportCompareDonutSVG" href="#">Export as SVG</a>
-                      <a class="dropdown-item" id="exportCompareDonutPNG" href="#">Export as PNG</a>
-                      <a class="dropdown-item" id="exportCompareDonutJPG" href="#">Export as JPG</a>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="card-body-custom text-center">
-
-                <div class="compareDonutCard">
-                  <div id='compareDonutPlotLegend'>
-
-                </div>
-                  <div id='compareDonutPlot'>
-                  <!-- <div id='chart'>
-
-                  </div> -->
-                </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-          </div>
-
-
-          <!-- Content Row -->
-<div class="row" id="compareTaxaTreeRow">
-
-
-  <div class="col-12 mb-4">
-
-    <!-- Taxonomic tree -->
-    <div class="card shadow" id="compareTaxaTreeCard">
-      <div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseTree" aria-expanded="false" data-toggle="collapse" role="button"">
-        <h6 class="m-0 font-weight-bold text-primary">Tree</h6>
-
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle disabled" href="#" role="button" id="dropdownMenuCompareTaxaTree" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuCompareTaxaTree">
-            <form class="dropdown-form">
-            <div class="dropdown-header px-0">Options:</div>
-
-            <div class="row columns-2">
-              <div class="col-md-6">
-                <form class="dropdown-form">
-
-                  <div>
-                    <label> Value:</label>
-                    <label><input type="radio" name="compareTreeRead" value="percent" checked>  Percent</label>
-                    <label><input type="radio" name="compareTreeRead" value="count" >  Count</label>
-                  </div>
-
-                  <div>
-                    <label>Value scale:</label>
-                    <label><input type="radio" name="compareTreeValueScale" value="linear" checked>  Linear</label>
-                    <label><input type="radio" name="compareTreeValueScale" value="sqrt" > Sqrt</label>
-                    <label><input type="radio" name="compareTreeValueScale" value="log10" > Log10</label>
-                    <label><input type="radio" name="compareTreeValueScale" value="ln">  Ln</label>
-                  </div>
-
-                  <div>
-                    <label>Tree type:</label>
-                    <label><input type="radio" name="compareTreeType" value="tree" checked>  Tree</label>
-                    <label><input type="radio" name="compareTreeType" value="cluster" >  Cluster</label>
-                  </div>
-
-                <div class="form-group">
-                  <label for="compareTreeNodeWidth">Node width: <a id="compareTreeNodeWidthNum" class="font-weight-bold">N</a> px</label>
-                  <input type="range" class="form-control-range" name="compareTreeNodeWidth" min="24" max="160" value="46">
-                </div>
-
-                <div class="form-group">
-                  <label for="compareTreeNodeWidth">Node height: <a id="compareTreeNodeHeightNum" class="font-weight-bold">N</a> px</label>
-                  <input type="range" class="form-control-range" name="compareTreeNodeHeight" min="20" max="160" value="34">
-                </div>
-
-                <div class="form-group">
-                  <label for="compareTreeNodeWidth">Horizontal node position: <a id="compareTreeHorizontalPathNum" class="font-weight-bold">N</a> px</label>
-                  <input type="range" class="form-control-range" name="compareTreeHorizontalPath" min="0" max="160" value="60">
-                </div>
-
-                <div class="form-group">
-                  <label for="compareTreeTopN">Show top <a id="compareTreeTopNNum" class="font-weight-bold">N</a> leaves per sample</label>
-                  <input type="range" class="form-control-range" name="compareTreeTopN" min="1" max="30" value="10">
-                </div>
-
-
-              </form>
-              </div>
-              <div class="col-md-6">
-                <form class="dropdown-form">
-
-                  <div class="form-group">
-                    <label for="compareTreeNodeWidth">Horizontal separation: <a id="compareTreeHorizontalSeparationNum" class="font-weight-bold">N</a> px</label>
-                    <input type="range" class="form-control-range" name="compareTreeHorizontalSeparation" min="10" max="200" step="1" value="80">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="compareTreeNodeWidth">Vertical separation: <a id="compareTreeVerticalSeparationNum" class="font-weight-bold">N</a> px</label>
-                    <input type="range" class="form-control-range" name="compareTreeVerticalSeparation" min="10" max="200" step="1" value="60">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="compareTreeNodeWidth">Sibling node separation: <a id="compareTreeSiblingSeparationNum" class="font-weight-bold">N</a></label>
-                    <input type="range" class="form-control-range" name="compareTreeSiblingSeparation" min="0" max="4" step="0.1" value="1">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="compareTreeNodeWidth">Cousin node separation: <a id="compareTreeCousinSeparationNum" class="font-weight-bold">N</a></label>
-                    <input type="range" class="form-control-range" name="compareTreeCousinSeparation" min="0" max="4" step="0.1" value="2">
-                  </div>
-
-                </form>
-
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" id="exportCompareTreeSVG" href="#">Export as SVG</a>
-                <a class="dropdown-item" id="exportCompareTreePNG" href="#">Export as PNG</a>
-                <a class="dropdown-item" id="exportCompareTreeJPG" href="#">Export as JPG</a>
-              </div>
-            </div>
-
-
-
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-body-custom collapse" id="collapseTree"">
-
-
-        <!-- <div id="awaitingAnalysisCard" class="card shadow mb-4"> -->
-
-          <div id="generatingTreeNotice" class="card-body text-center text-primary">
-
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-            <h3 class="card-text text-dark mt-4">Generating tree...</h3>
-            <!-- <p class="card-text mt-3 mb-0 text-gray-700">Plots will appear after the first chunk of reads has been analysed.</p> -->
-
-          </div>
-        <!-- </div> -->
-
-    <!-- <form>
-      <div class="form-group row ml-4 mt-3">
-        <div class="col-form-label col-auto">
-        <label for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves.</label>
-        </div>
-        <div class="col-sm-3 my-auto d-flex">
-        <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
-        </div>
-        <div class="col-sm-5 my-auto d-flex">
-        </div>
-      </div>
-    </form> -->
-
-
-<div class="compareTreeCard pt-5">
-  <div id='compareTreePlot'>
-  </div>
-</div>
-
-      </div>
-    </div>
-
-  </div>
-</div>
 
           <!-- Heatmap Taxa row -->
           <div class="row" id="heatmapTaxaRow">
@@ -541,7 +211,7 @@
                       </div>
 
                       <form id="compareHmTaxaSettingsForm">
-                        <h6 class="compareHmTaxaSettingsSection">Taxa</h6>
+                        <h6 class="compareSettingsSection">Taxa</h6>
                         <div class="form-group">
                           <label for="compareHmTaxaSelection">Taxa to show</label>
                           <select class="form-control form-control-sm" id="compareHmTaxaSelection">
@@ -582,25 +252,13 @@
                           <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaHigherTaxaNode" checked> Show higher taxa</label>
                         </div>
 
-                      <h6 class="compareHmTaxaSettingsSection">Colours</h6>
-                      <div class="form-group row">
-                        <div class="col-sm-5">
-                          <label class="">Colour palette:</label>
-                        </div>
-                        <div class="col-auto">
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="blue" checked> Blue</label>
-                          </div>
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="viridis"> Viridis</label>
-                          </div>
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="magma"> Magma</label>
-                          </div>
-                          <div class="">
-                              <label><input type="radio" name="compareHmTaxaColour" value="trafficLights"> Traffic lights</label>
-                          </div>
-                        </div>
+                      <h6 class="compareSettingsSection">Colours</h6>
+                      <div class="form-group">
+                        <div class="font-weight-bold mb-1">Colour palette</div>
+                        <label class="d-block"><input type="radio" name="compareHmTaxaColour" value="blue" checked> Blue</label>
+                        <label class="d-block"><input type="radio" name="compareHmTaxaColour" value="viridis"> Viridis</label>
+                        <label class="d-block"><input type="radio" name="compareHmTaxaColour" value="magma"> Magma</label>
+                        <label class="d-block"><input type="radio" name="compareHmTaxaColour" value="trafficLights"> Traffic lights</label>
                       </div>
 
                       <div class="form-group compareHmTaxaTrafficLightThresholds" style="display:none">
@@ -618,7 +276,7 @@
                         <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaGrey"> Grey zero values</label>
                       </div>
 
-                      <h6 class="compareHmTaxaSettingsSection">Display</h6>
+                      <h6 class="compareSettingsSection">Display</h6>
                       <div class="form-check">
                         <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaRead" checked> Show percentages (otherwise counts)</label>
                       </div>
@@ -651,6 +309,232 @@
 
 
 
+<!-- Content Row -->
+<div class="row" id="compareTaxaTreeRow">
+
+
+  <div class="col-12 mb-4">
+
+    <!-- Taxonomic tree -->
+    <div class="card shadow" id="compareTaxaTreeCard">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" aria-controls="collapseTree" aria-expanded="false" role="button" tabindex="0">
+        <h6 class="m-0 font-weight-bold text-primary">Tree</h6>
+
+        <div class="d-flex align-items-center comparePlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareTreeSettingsButton" aria-controls="compareTreeSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareTreeExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareTreeExportButton"><a class="dropdown-item" id="exportCompareTreeSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportCompareTreePNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportCompareTreeJPG" href="#">Export as JPG</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body-custom collapse" id="collapseTree"><div class="comparePlotLayout"><aside id="compareTreeSettings" class="comparePlotSettings" aria-labelledby="compareTreeSettingsTitle" hidden>
+        <div class="comparePlotSettingsHeader">
+          <h6 id="compareTreeSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Tree settings</h6>
+          <button type="button" class="close" id="compareTreeSettingsClose" aria-label="Close tree settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="compareTreeSettingsForm">
+          <h6 class="compareSettingsSection">Taxa</h6>
+          <div class="form-group"><label for="compareTreeTopN">Show top <span id="compareTreeTopNNum" class="font-weight-bold">N</span> leaves per sample</label><input type="range" class="form-control-range" id="compareTreeTopN" name="compareTreeTopN" min="1" max="30" value="10"></div>
+
+          <h6 class="compareSettingsSection">Display</h6>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareTreeRead" checked> Show percentages (otherwise counts)</label></div>
+          <div class="form-group mt-2"><div class="font-weight-bold mb-1">Value scale</div>
+            <label class="mr-2"><input type="radio" name="compareTreeValueScale" value="linear" checked> Linear</label>
+            <label class="mr-2"><input type="radio" name="compareTreeValueScale" value="sqrt"> Sqrt</label>
+            <label class="mr-2"><input type="radio" name="compareTreeValueScale" value="log10"> Log10</label>
+            <label><input type="radio" name="compareTreeValueScale" value="ln"> Ln</label>
+          </div>
+          <div class="form-group"><div class="font-weight-bold mb-1">Tree type</div>
+            <label class="mr-2"><input type="radio" name="compareTreeType" value="tree" checked> Tree</label>
+            <label><input type="radio" name="compareTreeType" value="cluster"> Cluster</label>
+          </div>
+
+          <h6 class="compareSettingsSection">Layout</h6>
+          <div class="form-group"><label for="compareTreeNodeWidth">Node width: <span id="compareTreeNodeWidthNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareTreeNodeWidth" name="compareTreeNodeWidth" min="24" max="160" value="46"></div>
+          <div class="form-group"><label for="compareTreeNodeHeight">Node height: <span id="compareTreeNodeHeightNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareTreeNodeHeight" name="compareTreeNodeHeight" min="20" max="160" value="34"></div>
+          <div class="form-group"><label for="compareTreeHorizontalPath">Horizontal node position: <span id="compareTreeHorizontalPathNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareTreeHorizontalPath" name="compareTreeHorizontalPath" min="0" max="160" value="60"></div>
+          <div class="form-group"><label for="compareTreeHorizontalSeparation">Horizontal separation: <span id="compareTreeHorizontalSeparationNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareTreeHorizontalSeparation" name="compareTreeHorizontalSeparation" min="10" max="200" step="1" value="80"></div>
+          <div class="form-group"><label for="compareTreeVerticalSeparation">Vertical separation: <span id="compareTreeVerticalSeparationNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareTreeVerticalSeparation" name="compareTreeVerticalSeparation" min="10" max="200" step="1" value="60"></div>
+          <div class="form-group"><label for="compareTreeSiblingSeparation">Sibling node separation: <span id="compareTreeSiblingSeparationNum" class="font-weight-bold">N</span></label><input type="range" class="form-control-range" id="compareTreeSiblingSeparation" name="compareTreeSiblingSeparation" min="0" max="4" step="0.1" value="1"></div>
+          <div class="form-group mb-0"><label for="compareTreeCousinSeparation">Cousin node separation: <span id="compareTreeCousinSeparationNum" class="font-weight-bold">N</span></label><input type="range" class="form-control-range" id="compareTreeCousinSeparation" name="compareTreeCousinSeparation" min="0" max="4" step="0.1" value="2"></div>
+        </form>
+      </aside><div class="comparePlotContent">
+
+
+        <!-- <div id="awaitingAnalysisCard" class="card shadow mb-4"> -->
+
+          <div id="generatingTreeNotice" class="card-body text-center text-primary">
+
+            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <h3 class="card-text text-dark mt-4">Generating tree...</h3>
+            <!-- <p class="card-text mt-3 mb-0 text-gray-700">Plots will appear after the first chunk of reads has been analysed.</p> -->
+
+          </div>
+        <!-- </div> -->
+
+    <!-- <form>
+      <div class="form-group row ml-4 mt-3">
+        <div class="col-form-label col-auto">
+        <label for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves.</label>
+        </div>
+        <div class="col-sm-3 my-auto d-flex">
+        <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
+        </div>
+        <div class="col-sm-5 my-auto d-flex">
+        </div>
+      </div>
+    </form> -->
+
+
+<div class="compareTreeCard pt-5">
+  <div id='compareTreePlot'>
+  </div>
+</div>
+
+      </div></div></div>
+    </div>
+
+  </div>
+</div>
+
+          <!-- Donut Row -->
+          <div class="row">
+
+
+            <div class="col-12 mb-4">
+
+              <!-- stackedBar card -->
+              <div class="card shadow" id="compareDonutCard">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Donut</h6>
+
+                  <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareDonutFullScreen);">
+                    <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
+                  </div>
+
+                  <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
+                    <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
+                  </div> -->
+
+                  <div class="d-flex align-items-center comparePlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareDonutSettingsButton" aria-controls="compareDonutSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareDonutExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareDonutExportButton"><a class="dropdown-item" id="exportCompareDonutSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportCompareDonutPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportCompareDonutJPG" href="#">Export as JPG</a></div>
+          </div>
+        </div>
+
+                </div>
+
+                <div class="card-body-custom"><div class="comparePlotLayout"><aside id="compareDonutSettings" class="comparePlotSettings" aria-labelledby="compareDonutSettingsTitle" hidden>
+        <div class="comparePlotSettingsHeader">
+          <h6 id="compareDonutSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Donut settings</h6>
+          <button type="button" class="close" id="compareDonutSettingsClose" aria-label="Close donut settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="compareDonutSettingsForm">
+          <h6 class="compareSettingsSection">Taxa</h6>
+          <div class="form-group"><label for="compareDonutTopN">Show top <span id="compareDonutTopNNum" class="font-weight-bold">N</span> taxa per sample</label><input type="range" class="form-control-range" id="compareDonutTopN" min="1" max="50" value="10"></div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareDonutUnclassified" checked> Show unclassified</label></div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareDonutHigherTaxaNode" checked> Show higher taxa</label></div>
+
+          <h6 class="compareSettingsSection">Display</h6>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareDonutSampleName" checked> Show sample labels</label></div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="showDonutReadCount"> Show count labels</label></div>
+          <div class="form-group mt-2"><label for="compareDonutSampleLabelSize">Sample label size: <span id="compareDonutSampleLabelSizeNum" class="font-weight-bold">12</span> px</label><input type="range" class="form-control-range" id="compareDonutSampleLabelSize" min="8" max="24" value="12"></div>
+          <div class="form-group mt-2 mb-0"><label for="donutRadius">Donut radius: <span id="donutRadiusNum" class="font-weight-bold">70</span> px</label><input type="range" class="form-control-range" id="donutRadius" name="donutRadius" min="50" max="200" value="70"></div>
+        </form>
+      </aside><div class="comparePlotContent text-center">
+
+                <div class="compareDonutCard">
+                  <div id='compareDonutPlotLegend'>
+
+                </div>
+                  <div id='compareDonutPlot'>
+                  <!-- <div id='chart'>
+
+                  </div> -->
+                </div>
+
+                </div>
+              </div></div></div>
+
+            </div>
+          </div>
+          </div>
+
+
+</div>
+
+<div id="compareAmrView" class="compareView" role="tabpanel" aria-labelledby="compareAmrTab" hidden>
+  <div id="compareAmrEmpty" class="card shadow mb-4"><div class="card-body text-muted">Loading AMR results…</div></div>
+
+          <!-- Heatmap Amr row -->
+<div class="row" id="compareAmrHmRow">
+
+
+  <div class="col-12 mb-4">
+
+    <div class="card shadow" id="compareAmrHmCard">
+      <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">AMR heatmap</h6>
+
+        <div class="d-flex align-items-center comparePlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareAmrHmSettingsButton" aria-controls="compareAmrHmSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareAmrHmExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareAmrHmExportButton"><a class="dropdown-item" id="exportCompareAmrHmCSV" href="#">Export as CSV</a><a class="dropdown-item" id="exportCompareAmrHmSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportCompareAmrHmPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportCompareAmrHmJPG" href="#">Export as JPG</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-body-custom"><div class="comparePlotLayout"><aside id="compareAmrHmSettings" class="comparePlotSettings" aria-labelledby="compareAmrHmSettingsTitle" hidden>
+        <div class="comparePlotSettingsHeader">
+          <h6 id="compareAmrHmSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">AMR heatmap settings</h6>
+          <button type="button" class="close" id="compareAmrHmSettingsClose" aria-label="Close amr heatmap settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="compareAmrHmSettingsForm">
+          <h6 class="compareSettingsSection">Data</h6>
+          <div class="form-group"><label for="compareAmrHmPlotBy">Plot hits by</label><select class="form-control form-control-sm" id="compareAmrHmPlotBy">
+            <option data-value="cardId" selected>Gene</option><option data-value="drugClass">Drug class</option><option data-value="resMech">Resistance mechanism</option>
+          </select></div>
+          <div class="form-group"><label for="compareAmrHmTopN">Show top <span id="compareAmrHmTopNNum" class="font-weight-bold">N</span> per sample</label><input type="range" class="form-control-range" id="compareAmrHmTopN" min="1" max="100" value="10"></div>
+
+          <h6 class="compareSettingsSection">Colours</h6>
+          <div class="form-group"><div class="font-weight-bold mb-1">Colour palette</div>
+            <label class="d-block"><input type="radio" name="compareAmrHmColour" value="blue" checked> Blue</label>
+            <label class="d-block"><input type="radio" name="compareAmrHmColour" value="viridis"> Viridis</label>
+            <label class="d-block"><input type="radio" name="compareAmrHmColour" value="magma"> Magma</label>
+          </div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmGrey"> Grey zero values</label></div>
+
+          <h6 class="compareSettingsSection">Display</h6>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmRead" checked> Show percentages (otherwise counts)</label></div>
+          <div class="form-group mt-2 mb-0"><label for="compareAmrHmMaxRectWidth">Max cell width: <span id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareAmrHmMaxRectWidth" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80"></div>
+        </form>
+      </aside><div class="comparePlotContent text-center">
+
+
+      <div class="compareAmrHmCard">
+        <div id='compareAmrHmLegend' class="text-center">
+
+      </div>
+        <div id='compareAmrHmPlot'>
+
+      </div>
+
+      </div>
+    </div></div></div>
+
+  </div>
+</div>
+</div>
+
+</div>
+
+<div id="compareDiversityView" class="compareView" role="tabpanel" aria-labelledby="compareDiversityTab" hidden>
 <!-- Rarefaction Row -->
 <div class="row" id="accumulationChartRow">
 
@@ -661,54 +545,42 @@
     <div class="card shadow" id="compareRarefactionCard">
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary" id="rarefactionCardTitleCompare">Taxa accumulation</h6>
-
-        <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareRarefactionFullScreen);">
-          <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
-        </div>
-
-        <div id="fullScreenCloseIcon" class="fullScreenIcon" onclick="closeFullscreen();">
-          <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
-        </div> -->
-
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRarefactionCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuRarefactionCompare">
-            <div class="dropdown-header">Options:</div>
-            <form class="dropdown-form">
-
-              <!-- <div>
-                <label>X-axis:</label>
-                <label><input type="radio" name="rareXAxis" value="reads" checked> Reads</label>
-                <label><input type="radio" name="rareXAxis" value="time"> Time</label>
-              </div> -->
-
-            <div>
-              <label>Curve:</label>
-              <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
-              <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="diversityPlotSettingsButton" aria-controls="diversityPlotSettings" aria-expanded="false">Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" id="downloadAccumulationData" href="#">Displayed data as CSV</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
+              <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
+              <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
             </div>
-
-            <div class="form-group">
-              <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
-              <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
-            </div>
-
-          </form>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
-
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
-          <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
-          <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
-
           </div>
         </div>
-
       </div>
-
+      <div class="diversityPlotLayout">
+      <aside id="diversityPlotSettings" class="diversityPlotSettings" aria-labelledby="diversityPlotSettingsTitle" hidden>
+        <div class="diversityPlotSettingsHeader">
+          <h6 id="diversityPlotSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Diversity plot settings</h6>
+          <button type="button" class="close" id="diversityPlotSettingsClose" aria-label="Close diversity settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <h6 class="compareSettingsSection">Curve</h6>
+        <div class="form-group"><label for="rareMetric">Measure</label><select id="rareMetric" class="form-control form-control-sm">
+          <option value="taxa">Taxa accumulation</option><option value="shannon">Shannon (H')</option>
+          <option value="pielou">Pielou evenness (J')</option>
+          <option value="invSimpson">Inverse Simpson (1/D)</option>
+        </select><small id="rareMetricNote" class="form-text text-muted" hidden>Diversity curves require results from the updated MARTi engine.</small><small id="rareUnitNote" class="form-text text-muted"></small></div>
+        <div class="form-group" id="rareTaxaSeriesGroup"><label for="rareTaxaSeries">Accumulation definition</label><select id="rareTaxaSeries" class="form-control form-control-sm">
+          <option value="reads">Final taxa set (nondecreasing)</option>
+          <option value="rawReads">Per-chunk taxa count</option>
+        </select><small id="rareTaxaSeriesNote" class="form-text text-muted">The first curve is nondecreasing. The per-chunk count can fall when a cutoff changes assignments.</small></div>
+        <h6 class="compareSettingsSection">Axes and line</h6>
+        <div class="form-group"><label for="rareXAxis">X axis</label><select id="rareXAxis" class="form-control form-control-sm"><option value="reads">Reads analysed</option><option value="time">Elapsed time (minutes)</option></select></div>
+        <div class="form-group"><label for="rareLine">Line style</label><select id="rareLine" class="form-control form-control-sm"><option value="linear">Straight</option><option value="step-after">Step</option><option value="monotone">Smooth</option></select></div>
+        <div class="form-group mb-0"><label for="rareXAxisMax">X-axis maximum</label><input id="rareXAxisMax" class="form-control form-control-sm" type="number" min="0" step="any" placeholder="Automatic"><small class="form-text text-muted">Leave blank to show the full range.</small></div>
+      </aside>
+      <div class="diversityPlotContent">
       <div class="card-body-custom text-center">
 
         <div id="accumulationPlotWarning" class="row">
@@ -736,106 +608,191 @@
 
       </div>
     </div>
-
-  </div>
-</div>
-</div>
-
-<!-- Heatmap Amr row -->
-<div class="row" id="compareAmrHmRow">
-
-
-  <div class="col-12 mb-4">
-
-    <div class="card shadow" id="compareAmrHmCard">
-      <div class="card-header d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">AMR heatmap</h6>
-
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuCompareAmrHm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuCompareAmrHm">
-            <div class="dropdown-header">Options:</div>
-
-            <form class="dropdown-form">
-
-              <div class="form-group">
-                <label for="compareAmrHmPlotBy">Plot hits by</label>
-                <select class="form-control" id="compareAmrHmPlotBy">
-                  <option data-value="cardId" selected>Gene</option>
-                  <option data-value="drugClass">Drug class</option>
-                  <option data-value="resMech">Resistance mechanism</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="compareAmrHmTopN">Show top <a id="compareAmrHmTopNNum" class="font-weight-bold">N</a> per sample</label>
-                <input type="range" class="form-control-range" id="compareAmrHmTopN" min="1" max="100" value="10">
-              </div>
-
-            <div class="form-group row">
-              <div class="col-sm-5">
-                <label class="">Colour palette:</label>
-              </div>
-              <div class="col-auto">
-                <div class="">
-                    <label><input type="radio" name="compareAmrHmColour" value="blue" checked> Blue</label>
-                </div>
-                <div class="">
-                    <label><input type="radio" name="compareAmrHmColour" value="viridis"> Viridis</label>
-                </div>
-                <div class="">
-                    <label><input type="radio" name="compareAmrHmColour" value="magma"> Magma</label>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label> Grey zero:</label>
-              <label><input type="radio" name="compareAmrHmGrey" value="off" checked>  Off</label>
-              <label><input type="radio" name="compareAmrHmGrey" value="on" >  On</label>
-            </div>
-
-            <div>
-              <label> Value:</label>
-              <label><input type="radio" name="compareAmrHmRead" value="percent" checked>  Percent</label>
-              <label><input type="radio" name="compareAmrHmRead" value="count" >  Count</label>
-            </div>
-
-            <div class="form-group">
-              <label for="compareAmrHmMaxRectWidth">Max cell width: <a id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
-              <input type="range" class="form-control-range" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80">
-            </div>
-
-          </form>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="exportCompareAmrHmCSV" href="#">Export as CSV</a>
-
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="exportCompareAmrHmSVG" href="#">Export as SVG</a>
-          <a class="dropdown-item" id="exportCompareAmrHmPNG" href="#">Export as PNG</a>
-          <a class="dropdown-item" id="exportCompareAmrHmJPG" href="#">Export as JPG</a>
-
-          </div>
-        </div>
-
-      </div>
-
-      <div class="card-body-custom">
-
-
-      <div class="compareAmrHmCard">
-        <div id='compareAmrHmLegend' class="text-center">
-
-      </div>
-        <div id='compareAmrHmPlot'>
-
-      </div>
-
-      </div>
+    </div>
     </div>
 
   </div>
 </div>
+</div>
+
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareDiversityPlotCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary" id="compareDiversityPlotCardTitle">Diversity across samples</h6>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="#" id="compareDiversityPlotExportSvg">Export as SVG</a>
+              <a class="dropdown-item" href="#" id="compareDiversityPlotExportPng">Export as PNG</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-end mb-3">
+            <div class="form-group mb-2 mr-3">
+              <label for="compareDiversityPlotMetric" class="small mb-1">Plot measure</label>
+              <select id="compareDiversityPlotMetric" class="form-control form-control-sm">
+                <option value="richness">Taxa (S)</option>
+                <option value="shannon">Shannon (H′)</option>
+                <option value="invSimpson">Inverse Simpson</option>
+                <option value="pielou">Pielou (J′)</option>
+                <option value="rarefied">Rarefied richness (reads)</option>
+              </select>
+            </div>
+            <div class="form-group mb-2 mr-3">
+              <label for="compareDiversityPlotOrder" class="small mb-1">Plot order</label>
+              <select id="compareDiversityPlotOrder" class="form-control form-control-sm">
+                <option value="sample">Samples card order</option>
+                <option value="descending">Highest to lowest</option>
+                <option value="ascending">Lowest to highest</option>
+              </select>
+            </div>
+          </div>
+          <div id="compareDiversityPlot" aria-label="Sample diversity comparison"></div>
+          <p class="small text-muted mt-2 mb-0" id="compareDiversityPlotNote"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareDiversityCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary" id="compareDiversityCardTitle">Diversity metrics</h6>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="#" id="compareDiversityCopyExport">Copy table</a>
+              <a class="dropdown-item" href="#" id="compareDiversityCsvExport">Export CSV</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive"><table class="table table-sm table-hover" id="compareDiversityTable" width="100%"></table></div>
+          <small class="text-muted" id="compareDiversityNote"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="compareOrdinationView" class="compareView" role="tabpanel" aria-labelledby="compareOrdinationTab" hidden>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareOrdinationCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Sample ordination (PCoA)</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareOrdinationSettingsButton" aria-controls="compareOrdinationSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareOrdinationExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareOrdinationExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareOrdinationSVG">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareOrdinationPNG">Export as PNG</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="exportCompareOrdinationCoordinates">Coordinates as CSV</a>
+                <a class="dropdown-item" href="#" id="exportCompareOrdinationDistances">Distances as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareOrdinationSettings" class="compareOrdinationSettings" aria-labelledby="compareOrdinationSettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareOrdinationSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Ordination settings</h6>
+              <button type="button" class="close" id="compareOrdinationSettingsClose" aria-label="Close ordination settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Analysis</h6>
+            <div class="form-group">
+              <label for="compareOrdinationMethod">Distance method</label>
+              <select id="compareOrdinationMethod" class="form-control form-control-sm">
+                <option value="brayCurtis">Bray–Curtis (relative abundances)</option>
+                <option value="aitchison">Aitchison (CLR log ratios)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="compareOrdinationPrevalence">Taxon present in at least this many samples</label>
+              <input id="compareOrdinationPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <div class="form-group" id="compareOrdinationPseudocountGroup" hidden>
+              <label for="compareOrdinationPseudocount">CLR pseudocount (reads)</label>
+              <input id="compareOrdinationPseudocount" class="form-control form-control-sm" type="number" min="0" step="any" value="0.5">
+              <small class="form-text text-muted">Added to each retained taxon count before taking log ratios. Zero requires every count to be positive.</small>
+            </div>
+            <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-check mb-3">
+              <label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareOrdinationShowLabels"> Show sample labels</label>
+            </div>
+            <div class="form-group">
+              <label for="compareOrdinationColourBy">Colour samples by</label>
+              <select id="compareOrdinationColourBy" class="form-control form-control-sm">
+                <option value="run">Run</option>
+                <option value="site">Site (sample metadata)</option>
+                <option value="manual">Assigned group</option>
+                <option value="none">One colour</option>
+              </select>
+            </div>
+            <small class="form-text text-muted">Assign groups in the Samples card above. Groups change point colours, not coordinates.</small>
+            <p class="small text-muted mt-3 mb-0">Uses read counts at the taxonomic rank and LCA cutoff above. Counts are normalized within the retained taxa for Bray–Curtis.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <div id="compareOrdinationStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite">Calculating ordination…</div>
+            <div id="compareOrdinationPlot" aria-label="PCoA plot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareDendrogramCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Sample clustering (UPGMA)</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareDendrogramSettingsButton" aria-controls="compareDendrogramSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareDendrogramExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareDendrogramExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareDendrogramSVG">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareDendrogramPNG">Export as PNG</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareDendrogramSettings" class="compareOrdinationSettings" aria-labelledby="compareDendrogramSettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareDendrogramSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Dendrogram settings</h6>
+              <button type="button" class="close" id="compareDendrogramSettingsClose" aria-label="Close dendrogram settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Analysis</h6>
+            <div class="form-group">
+              <label for="compareDendrogramMethod">Distance method</label>
+              <select id="compareDendrogramMethod" class="form-control form-control-sm">
+                <option value="brayCurtis">Bray–Curtis (relative abundances)</option>
+                <option value="aitchison">Aitchison (CLR log ratios)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="compareDendrogramPrevalence">Taxon present in at least this many samples</label>
+              <input id="compareDendrogramPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <div class="form-group" id="compareDendrogramPseudocountGroup" hidden>
+              <label for="compareDendrogramPseudocount">CLR pseudocount (reads)</label>
+              <input id="compareDendrogramPseudocount" class="form-control form-control-sm" type="number" min="0" step="any" value="0.5">
+              <small class="form-text text-muted">Added to each retained taxon count before taking log ratios. Zero requires every count to be positive.</small>
+            </div>
+            <p class="small text-muted mb-0">Uses read counts at the taxonomic rank and LCA cutoff above. Bray–Curtis uses relative abundances.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <div id="compareDendrogramStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite">Calculating clustering…</div>
+            <div id="compareDendrogramPlot" aria-label="UPGMA dendrogram"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

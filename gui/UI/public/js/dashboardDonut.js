@@ -52,12 +52,12 @@ key = function(d) {
       d3.selectAll(".dashboard-taxa-donut-top-n").text(dashboardTaxaDonutTopN);
 
       d3.selectAll("input[name='dashboardTaxaDonutUnclassified']").on("change", function() {
-        dashboardTaxaDonutUnclassified = this.value;
+        dashboardTaxaDonutUnclassified = this.checked ? 'show' : 'hide';
         globUpdate(globDonutData);
       });
 
       d3.selectAll("input[name='dashboardTaxaDonutHigherTaxaNode']").on("change", function() {
-        dashboardTaxaDonutHigherTaxaNode = this.value;
+        dashboardTaxaDonutHigherTaxaNode = this.checked ? 'show' : 'hide';
         globUpdate(globDonutData);
       });
 

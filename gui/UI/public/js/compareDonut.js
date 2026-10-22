@@ -1,33 +1,50 @@
-var readCountOpacity,radiusSelected,compareDonutSampleName,compareDonutArea,compareDonutColor;
+var readCountOpacity,radiusSelected,compareDonutSampleName,compareDonutSampleLabelSize,compareDonutArea,compareDonutColor;
 
 function initialiseCompareMultiDonut() {
 
 compareDonutSampleName = "show";
+  compareDonutSampleLabelSize = +d3.select("#compareDonutSampleLabelSize").property("value");
+  d3.select("#compareDonutSampleLabelSizeNum").text(compareDonutSampleLabelSize);
   compareDonutTopN = 10;
   compareDonutArea = "equal";
 
-radiusSelected = d3.select("input[name='donutRadius']").property("value");
+radiusSelected = +d3.select("#donutRadius").property("value");
+d3.select("#donutRadiusNum").text(radiusSelected);
 
 d3.selectAll("input[name='donutArea']").on("change", function(){
   compareDonutArea = d3.select(this).property("value");
   plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 });
 
-d3.selectAll("input[name='donutRadius']").on("change", function(){
-  radiusSelected = d3.select(this).property("value");
+d3.select("#donutRadius").on("input", function(){
+  radiusSelected = +this.value;
+  d3.select("#donutRadiusNum").text(radiusSelected);
+});
+
+d3.select("#donutRadius").on("change", function(){
+  radiusSelected = +this.value;
   plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 });
 
-readCountOpacity = d3.selectAll("input[name='showDonutReadCount']:checked").property("value");
-radiusSelected = d3.select("input[name='donutRadius']").property("value");
+readCountOpacity = d3.select("#showDonutReadCount").property("checked") ? "on" : "off";
 
-d3.selectAll("input[name='showDonutReadCount']").on("change", function(){
-  readCountOpacity = d3.select(this).property("value");
+d3.select("#showDonutReadCount").on("change", function(){
+  readCountOpacity = this.checked ? "on" : "off";
   plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 });
 
-d3.selectAll("input[name='compareDonutSampleName']").on("change", function() {
-  compareDonutSampleName = d3.select(this).property("value");
+d3.select("#compareDonutSampleName").on("change", function() {
+  compareDonutSampleName = this.checked ? "show" : "hide";
+  plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
+});
+
+d3.select("#compareDonutSampleLabelSize").on("input", function() {
+  compareDonutSampleLabelSize = +this.value;
+  d3.select("#compareDonutSampleLabelSizeNum").text(compareDonutSampleLabelSize);
+});
+
+d3.select("#compareDonutSampleLabelSize").on("change", function() {
+  compareDonutSampleLabelSize = +this.value;
   plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 });
 
@@ -173,7 +190,7 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
   donutCompareLegendEnter.append("text")
       .attr("x", 24)
       .attr("y", 9)
-      .style("font-size", "1.1em")
+      .style("font-size", "1em")
       .attr("dy", ".356em");
 
 
@@ -236,6 +253,7 @@ var donutCompareSVG = d3.select("#compareDonutPlot").selectAll(".pie")
                       .text(function(d) {return d.sample; })
                       .attr("y", -7 - r)
                       .attr("x", 0)
+                      .style("font-size", compareDonutSampleLabelSize + "px")
                       .style("text-anchor", "middle")
                       .style("opacity", function(d) {return (compareDonutSampleName == "show") ? 1 : 0;})
                       .call(wrap, r*2);
@@ -286,8 +304,10 @@ for(x in data) {
 
 var textLineHeight;
 
+var sampleLabelLineHeight = compareDonutSampleLabelSize * 1.1;
+
 if (compareDonutSampleName == "show") {
-  textLineHeight = (maxLinesWrapped+1)*17;
+  textLineHeight = (maxLinesWrapped+1)*sampleLabelLineHeight;
 } else {
   textLineHeight = 0;
 }
@@ -297,9 +317,9 @@ if (compareDonutSampleName == "show") {
           .select("g")
             .attr("transform", "translate(" + r + "," + (r + textLineHeight + 10) + ")")
           .select("text.donutName")
-              .attr("y", -(numberLines*17) - r +8)
+              .attr("y", -(numberLines*sampleLabelLineHeight) - r +8)
               .selectAll("tspan")
-                .attr("y", -(numberLines*17) - r +8);
+                .attr("y", -(numberLines*sampleLabelLineHeight) - r +8);
 };
 
 

@@ -1,3 +1,244 @@
+#comparePlotsView[hidden],
+#compareAmrView[hidden],
+#compareDiversityView[hidden],
+#compareOrdinationView[hidden],
+#compareTaxonomyOptionsBar[hidden],
+#compareSamplesDetails[hidden],
+#compareAmrEmpty[hidden],
+#diversityPlotSettings[hidden],
+#dashboardDiversityRow[hidden],
+#rareMetricNote[hidden],
+#rareTaxaSeriesGroup[hidden],
+#compareOrdinationSettings[hidden],
+#compareOrdinationPseudocountGroup[hidden] {
+  display: none;
+}
+
+.compareSamplesSummaryText {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.compareSamplesNames {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.compareSamplesSummary .card-body { min-width: 0; }
+#compareTaxonomyOptionsBar[hidden] { display: none !important; }
+
+@media (max-width: 575px) {
+  .compareSamplesSummary .card-body { flex-wrap: wrap; gap: 0.5rem; }
+  .compareSamplesSummaryText { width: 100%; }
+}
+
+.comparePlotSettings[hidden] { display: none; }
+.comparePlotLayout { display: flex; align-items: flex-start; }
+.comparePlotSettings {
+  flex: 0 0 20rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border-right: 1px solid #e3e6f0;
+  position: sticky;
+  top: 5rem;
+  font-size: 0.85rem;
+}
+.comparePlotSettingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.comparePlotSettingsHeader h6 { font-size: 0.85rem; }
+.comparePlotSettings label { margin-bottom: 0.25rem; }
+.comparePlotSettings .form-check { margin-bottom: 0.5rem; }
+.comparePlotContent { flex: 1 1 auto; min-width: 0; }
+.comparePlotHeaderActions { cursor: auto; }
+
+.compareSettingsSection {
+  border-top: 1px solid #e3e6f0;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  color: #4e73df;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.compareSettingsSection:first-child,
+.diversityPlotSettingsHeader + .compareSettingsSection,
+.compareOrdinationSettingsHeader + .compareSettingsSection {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+@media (max-width: 1199px) {
+  .comparePlotLayout { flex-direction: column; }
+  .comparePlotSettings {
+    position: static;
+    flex-basis: auto;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #e3e6f0;
+  }
+  .comparePlotContent { width: 100%; }
+}
+
+.diversityPlotLayout { display: flex; align-items: flex-start; }
+.diversityPlotSettings {
+  flex: 0 0 20rem; max-height: calc(100vh - 7rem); overflow-y: auto;
+  padding: 1rem; border-right: 1px solid #e3e6f0; position: sticky;
+  top: 5rem; font-size: 0.85rem;
+}
+.diversityPlotSettingsHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.diversityPlotSettingsHeader h6 { font-size: 0.85rem; }
+.diversityPlotContent { flex: 1 1 auto; min-width: 0; overflow-x: auto; }
+.diversityPlotContent svg { font-family: Arial, Helvetica, sans-serif; }
+
+#compareDiversityPlot {
+  position: relative;
+  min-height: 150px;
+  max-height: 640px;
+  overflow: auto;
+}
+
+#compareDiversityPlot svg {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  max-width: 1200px;
+  height: auto;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.compareDiversityTooltip {
+  position: fixed;
+  z-index: 1100;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: 0.5rem 0.65rem;
+  color: #3a3b45;
+  background: #fff;
+  border: 1px solid #d1d3e2;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.compareDiversityTooltip[hidden] { display: none; }
+
+@media (max-width: 1199px) {
+  .diversityPlotLayout { flex-direction: column; }
+  .diversityPlotSettings { position: static; flex-basis: auto; width: 100%; border-right: 0; border-bottom: 1px solid #e3e6f0; }
+  .diversityPlotContent { width: 100%; }
+}
+
+.compareOrdinationLayout {
+  display: flex;
+  align-items: flex-start;
+}
+
+.compareOrdinationSettings {
+  flex: 0 0 20rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border-right: 1px solid #e3e6f0;
+  position: sticky;
+  top: 5rem;
+  font-size: 0.85rem;
+}
+
+.compareOrdinationSettingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.compareOrdinationSettingsHeader h6 {
+  font-size: 0.85rem;
+}
+
+.compareOrdinationContent {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+#compareOrdinationPlot {
+  min-height: 420px;
+  overflow-x: auto;
+  text-align: center;
+}
+
+#compareOrdinationPlot svg {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#compareDendrogramPlot {
+  min-height: 180px;
+  max-height: 720px;
+  overflow: auto;
+}
+
+#compareDendrogramPlot svg {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.compareDendrogramPoint:hover,
+.compareDendrogramPoint:focus {
+  stroke-width: 2;
+}
+
+.compareOrdinationPoint:hover,
+.compareOrdinationPoint:focus {
+  stroke-width: 2;
+}
+
+@media (max-width: 1199px) {
+  .compareOrdinationLayout {
+    flex-direction: column;
+  }
+
+  .compareOrdinationSettings {
+    box-sizing: border-box;
+    position: static;
+    flex-basis: auto;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #e3e6f0;
+  }
+
+  .compareOrdinationContent {
+    width: 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  #compareDiversityPlotCard .card-header,
+  #compareDiversityCard .card-header,
+  #compareOrdinationCard .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  #compareDendrogramCard .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
 #stackedBarPlot>svg {
   max-height: 500px;
 }
@@ -16,45 +257,70 @@
 
 
 
-#compareSampleNameList {
-  padding: 0;
+.compareSamplesTableWrap {
   max-height: 510px;
-  overflow: scroll;
-  list-style-position: inside;
- }
-
-#compareSampleNameList>li {
-  padding: .50rem 1.25rem;
-  cursor: pointer;
-  border: 1px solid rgba(0,0,0,.125);
- }
-
-#compareSampleNameList::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 7px;
+  overflow: auto;
 }
 
-#compareSampleNameList::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, .5);
-  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+.compareSamplesTable {
+  table-layout: fixed;
+  min-width: 50rem;
 }
 
+.compareSampleHandleColumn {
+  width: 4rem;
+}
 
- #compareSampleNameList>li:before {
-   color:#858796;
-   font-family: "Font Awesome 5 Free";
-   content: "\f58e";
-   font-weight: 800;
-   margin-right: 10px;
-   font-size: 1rem;
- }
+.compareSampleNameColumn {
+  width: 15rem;
+}
 
-.compareSampleNameListRun {
-  font-size: 1rem;
-  /* color: 303030; */
-  color: #858796 !important;
+.compareSampleBarcodeColumn {
+  width: 6rem;
+}
 
+.compareSampleGroupColumn {
+  width: 13rem;
+}
+
+#compareSampleNameList td {
+  vertical-align: middle;
+}
+
+.compareSampleDragHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: #858796;
+  cursor: grab;
+}
+
+.compareSampleDragHandle:active {
+  cursor: grabbing;
+}
+
+.compareSampleNameButton {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  padding-left: 0;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compareSampleRun {
+  display: block;
+  overflow: hidden;
+  color: #858796;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compareSampleGroupInput {
+  width: 100%;
 }
 
  .compareSampleGhostClass {
@@ -67,14 +333,6 @@
  #sampleOrderCompareMenu {
    min-width: 8.5rem;
  }
-
-.dropdown-menu[aria-labelledby="dropdownMenuCompareTaxaTree"] {
-  cursor:default;
-}
-
-.dropdown-menu[aria-labelledby="dropdownMenuCompareAmrHm"] {
-  min-width:16rem;
-}
 
 #compareTreePlot {
   overflow-x: scroll;

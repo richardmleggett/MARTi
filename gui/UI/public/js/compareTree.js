@@ -47,8 +47,8 @@ function initialiseCompareTree() {
     plotCompareTree(newCompareTree);
   });
 
-  d3.selectAll("input[name='compareTreeRead']").on("change", function(){
-    compareTreeRead = this.value;
+  d3.select("#compareTreeRead").on("change", function(){
+    compareTreeRead = this.checked ? "percent" : "count";
     plotCompareTree(newCompareTree);
   });
 

@@ -130,3 +130,93 @@ thead > tr > th.widerColumn{
       width: 30rem !important;
   }
 }
+.dashboardTabViews {
+  position: relative;
+}
+
+.dashboardViewInactive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dashboardPlotLayout {
+  display: flex;
+  align-items: flex-start;
+}
+
+.dashboardPlotSettings[hidden] {
+  display: none;
+}
+
+.dashboardPlotSettings {
+  flex: 0 0 20rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border-right: 1px solid #e3e6f0;
+  position: sticky;
+  top: 5rem;
+  font-size: 0.85rem;
+}
+
+.dashboardPlotSettingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.dashboardPlotSettingsHeader h6,
+.dashboardSettingsSection {
+  font-size: 0.85rem;
+}
+
+.dashboardSettingsSection {
+  color: #4e73df;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.dashboardSettingsForm > div {
+  margin-bottom: 0.75rem;
+}
+
+.dashboardSettingsForm label {
+  margin-bottom: 0.25rem;
+}
+
+.dashboardPlotContent {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (max-width: 1199px) {
+  .dashboardPlotLayout {
+    flex-direction: column;
+  }
+
+  .dashboardPlotSettings {
+    position: static;
+    width: 100%;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid #e3e6f0;
+  }
+
+  .dashboardPlotContent {
+    width: 100%;
+  }
+}
+
+.dashboardView[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+#dashboardTaxonomyOptionsBar[hidden] {
+  display: none !important;
+}

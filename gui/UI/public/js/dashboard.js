@@ -1,4 +1,6 @@
 function initialiseDashboardPage() {
+initialiseDashboardDiversity();
+initialiseDashboardViews();
 
 socket.emit('abundance-options-request', { clientId: uuid, page: 'dashboard' });
 
@@ -798,6 +800,7 @@ function globUpdate(data) {
 if (plotLevelSelectorChanged) {
   plotLevelDataManipulation(plotLevelSelectedDashboardId,data);
 }
+updateDashboardDiversity();
 
 
   dashboardTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
@@ -1132,71 +1135,68 @@ d3.select(thisNode).select("rect")
 
 
 
-var dashboardChartVisibility = {};
+function redrawDashboardPanel(panelId) {
+  if (panelId === 'dashboardTreeSettings' && root) treeUpdate(root);
+  if (panelId === 'dashboardTreeMapSettings' && treeMapData) treeMapUpdate(treeMapData);
+  if (panelId === 'dashboardSankeySettings' && treeDataBoth) updateSankeyFromActiveTree();
+  if (panelId === 'dashboardDonutSettings' && globDonutData) globUpdate(globDonutData);
+  if (typeof dashboardAmrReponseData !== 'undefined' && dashboardAmrReponseData &&
+      Array.isArray(dashboardAmrReponseData.geneList) && dashboardAmrReponseData.geneList.length) {
+    if (panelId === 'dashboardAmrDonutSettings') plotAmrDonut(dashboardAmrReponseData);
+    if (panelId === 'dashboardAmrHitsDonutSettings') plotAmrHitsDonut(dashboardAmrReponseData);
+  }
+}
 
-
-function initialisePlotVisibility(chart,visible) {
-
-        if (visible) {
-          $("#"+chart+"Row").show();
-          $("#"+chart+"Add").hide();
-        } else {
-          $("#"+chart+"Row").hide();
-          $("#"+chart+"Add").show();
-        };
-
-        hideAddChartsRow();
-
-        $("#"+chart+"Close").click(function() {
-           dashboardChartVisibility[chart] = false;
-           $("#"+chart+"Row").hide();
-           $("#"+chart+"Add").show();
-           hideAddChartsRow();
-        });
-
-        $("#"+chart+"Add").click(function() {
-           dashboardChartVisibility[chart] = true;
-
-           if (dashboardAmrPlots.includes(chart)) {
-             socket.emit('dashboard-dashboardAmrTable-request',{
-               clientId: uuid
-             });
-           } else if (chart == "accumulationChart") {
-             socket.emit('dashboard-accumulationChart-request',{
-               clientId: uuid,
-               rank:taxonomicRankSelectedTextLowerCase,
-               lca: "lca_"+lcaAbundanceDashboard
-             });
-           }
-           else {
-             socket.emit('dashboard-' + chart + '-request',{
-               clientId: uuid
-             });
-           }
-           $("#"+chart+"Row").show();
-           $("#"+chart+"Add").hide();
-           $("#addChartOptions, #addChartPlusSign").toggle();
-           hideAddChartsRow();
-       });
-
-};
-
-
-
-function hideAddChartsRow() {
-  var hideAddCharts = true;
-  for (const bool of Object.values(dashboardChartVisibility)) {
-    if (!bool) {
-      hideAddCharts = false;
-      break;
+function setDashboardView(view) {
+  if (['Taxonomy', 'Diversity', 'Amr'].indexOf(view) === -1) return;
+  if (typeof toolTipDiv !== 'undefined') toolTipDiv.interrupt().style('opacity', 0);
+  ['Taxonomy', 'Diversity', 'Amr'].forEach(function(name) {
+    var selected = name === view;
+    $('#dashboard' + name + 'View').toggleClass('dashboardViewInactive', !selected)
+      .attr('aria-hidden', String(!selected));
+    $('#dashboard' + name + 'Tab').toggleClass('active', selected)
+      .attr('aria-selected', String(selected));
+  });
+  $('#dashboardTaxonomyOptionsBar').prop('hidden', view === 'Amr');
+  $('#dashboardSummaryRow').toggleClass('mt-5', view !== 'Amr').toggleClass('mt-3', view === 'Amr');
+  requestAnimationFrame(function() {
+    if (currentPage !== 'Dashboard') return;
+    if (view === 'Taxonomy' && root) {
+      treeUpdate(root);
+      if (treeMapData) treeMapUpdate(treeMapData);
+      updateSankeyFromActiveTree();
+    } else if (view === 'Diversity' && dashboardAccumulationDataAvailable) {
+      plotRarefactionCompare(rareData);
+    } else if (view === 'Amr' && typeof dashboardAmrTable !== 'undefined') {
+      dashboardAmrTable.columns.adjust();
     }
-  };
-  if (hideAddCharts) {
-    $(".row > div > #addChart").hide();
-  } else {
-    $(".row > div > #addChart").show();
-  };
-};
+  });
+}
+
+function initialiseDashboardViews() {
+  ['Taxonomy', 'Diversity', 'Amr'].forEach(function(name) {
+    $('#dashboard' + name + 'Tab').off('.dashboardView').on('click.dashboardView', function() {
+      setDashboardView(name);
+    });
+  });
+  $('.dashboardSettingsButton').off('.dashboardSettings').on('click.dashboardSettings', function() {
+    var panelId = this.getAttribute('aria-controls');
+    var panel = $('#' + panelId);
+    var open = panel.prop('hidden');
+    panel.prop('hidden', !open);
+    $(this).attr('aria-expanded', String(open));
+    if (open) $('#' + panelId + 'Title').trigger('focus');
+    requestAnimationFrame(function() { redrawDashboardPanel(panelId); });
+  });
+  $('.dashboardSettingsClose').off('.dashboardSettings').on('click.dashboardSettings', function() {
+    var panel = $(this).closest('.dashboardPlotSettings');
+    var panelId = panel.attr('id');
+    panel.prop('hidden', true);
+    var button = $('.dashboardSettingsButton[aria-controls="' + panelId + '"]');
+    button.attr('aria-expanded', 'false').trigger('focus');
+    requestAnimationFrame(function() { redrawDashboardPanel(panelId); });
+  });
+}
 
 function resizeOptionsFullscreen() {
 
@@ -1277,6 +1277,7 @@ function resizeOptionsFullscreen() {
     globUpdate(globDonutData);
     treeUpdate(root);
     treeMapUpdate(treeMapData);
+    if (dashboardAccumulationDataAvailable && typeof rareData !== 'undefined') plotRarefactionCompare(rareData);
 
     sankeyResetTopNOnNextBuild = true;
     updateSankeyFromActiveTree();
@@ -1290,7 +1291,6 @@ function resizeOptionsFullscreen() {
     $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedDashboardText);
     taxonomicRankSelectedText = taxonomicRankSelectedDashboardText;
 
-  $('#rarefactionCardTitleDashboard').text("Taxa accumulation - " + taxonomicRankSelectedText);
 
       taxonomicRankSelectedTextLowerCase = taxonomicRankSelectedText.toLowerCase().replace(" ", "");
 
@@ -1310,7 +1310,6 @@ $('#taxonomicLevelSelectorMenu').on( 'click', 'a.rank', function () {
 
 
             $('#taxonomicLevelSelectorDashboard').text(taxonomicRankSelectedText);
-            $('#rarefactionCardTitleDashboard').text("Taxa accumulation - " + taxonomicRankSelectedText);
             $(this).addClass('active');
             taxonomicRankSelected = taxonomicLevelDict[taxonomicRankSelectedDashboardText];
             taxonomicRankChanged = true;
@@ -1388,33 +1387,10 @@ $("#minimumAbundanceButtonDashboard>button").filter(function() {
     return $(this).text() == lcaAbundanceDashboardUnformatted;
 }).addClass("active");
 
-dashboardChartVisibility = {};
-
-$(".row > div > #addChart").hide();
-$("#addChartOptions").hide();
-
 $("#accumulationChartRow").hide();
 $("#dashboardAmrTableRow").hide();
 $("#dashboardAmrDonutRow").hide();
 $("#dashboardAmrHitsDonutRow").hide();
-
-$("#accumulationChartAdd").hide();
-$("#dashboardAmrTableAdd").hide();
-$("#dashboardAmrDonutAdd").hide();
-$("#dashboardAmrHitsDonutAdd").hide();
-
-$('#addChartPlusSign').on("click touchstart", function(e){
-   $("#addChartOptions, #addChartPlusSign").toggle();
-});
-
-
-
-$(document).mouseup(function (e) {
-     if ($(e.target).closest("#addChartOptions").length === 0) {
-        $("#addChartOptions").hide();
-        $("#addChartPlusSign").show();
-     }
- });
 
 
 fullScreenIconStart();
@@ -1438,32 +1414,23 @@ socket.on('tree-update-available', request => {
   };
 });
 
-socket.on('dashboard-accumulationChart-response', function(data) {
-
-  if (!sampleMetaDataArray.length == 0){
-    if (!dashboardChartVisibility.hasOwnProperty("accumulationChart")) {
-      dashboardChartVisibility["accumulationChart"] = true;
-      initialisePlotVisibility("accumulationChart",true);
-    };
+socket.on('dashboard-accumulationChart-response', function(data, selection) {
+  if (currentPage === 'Dashboard' && Array.isArray(data) &&
+      (!selection || (selection.rank === taxonomicRankSelectedTextLowerCase &&
+        selection.lca === 'lca_' + lcaAbundanceDashboard))) {
+    $("#accumulationChartRow").css('display', 'flex');
     if (!dashboardAccumulationDataAvailable) {
       initialiseCompareAccumulation();
       dashboardAccumulationDataAvailable = true;
     }
     rareData = data;
-    $('#no-data-accumulation').addClass('d-none');
     plotRarefactionCompare(rareData);
   }
 
 });
 
 socket.on('accumulation-update-available', request => {
-
-  if (!dashboardChartVisibility.hasOwnProperty("accumulationChart")) {
-    dashboardChartVisibility["accumulationChart"] = true;
-    initialisePlotVisibility("accumulationChart",true);
-  };
-
-  if(currentPage=="Dashboard" && dashboardChartVisibility["accumulationChart"] == true) {
+  if (currentPage == "Dashboard") {
     socket.emit('dashboard-accumulationChart-request',{
       clientId: uuid,
       rank:taxonomicRankSelectedTextLowerCase,
@@ -1475,56 +1442,29 @@ socket.on('accumulation-update-available', request => {
 
 
 socket.on('dashboard-dashboardAmrTable-response', function(data) {
+    if (currentPage !== 'Dashboard') return;
     dashboardAmrReponseData = data;
-
-    if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrTable")) {
-      dashboardChartVisibility["dashboardAmrTable"] = true;
-      initialisePlotVisibility("dashboardAmrTable",true);
-    }
+    var hasAmrResults = Array.isArray(data.geneList) && data.geneList.length > 0;
+    $('#dashboardAmrEmpty').toggle(!hasAmrResults);
+    $('#dashboardAmrTableRow').toggle(hasAmrResults);
 
     updateAmrTable(dashboardAmrReponseData);
 
-    if (dashboardAmrReponseData["geneList"].length > 0){
-      if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrDonut")) {
-        dashboardChartVisibility["dashboardAmrDonut"] = true;
-        initialisePlotVisibility("dashboardAmrDonut",true);
-      }
-
+    if (hasAmrResults){
+      $('#dashboardAmrDonutRow').toggle(!centrifugeClassification);
+      $('#dashboardAmrHitsDonutRow').show();
       plotAmrDonut(dashboardAmrReponseData);
-
-      if (!dashboardChartVisibility.hasOwnProperty("dashboardAmrHitsDonut")) {
-        dashboardChartVisibility["dashboardAmrHitsDonut"] = true;
-        initialisePlotVisibility("dashboardAmrHitsDonut",true);
-      }
-
       plotAmrHitsDonut(dashboardAmrReponseData);
+    } else {
+      $('#dashboardAmrDonutRow, #dashboardAmrHitsDonutRow').hide();
     }
 
   });
 
-  const dashboardAmrPlots = ["dashboardAmrTable","dashboardAmrDonut","dashboardAmrHitsDonut"];
-
-
   socket.on('amr-update-available', request => {
-
-
-    for (const plot of dashboardAmrPlots){
-      if (!dashboardChartVisibility.hasOwnProperty(plot)) {
-        dashboardChartVisibility[plot] = true;
-        initialisePlotVisibility(plot,true);
-      }
+    if (currentPage === 'Dashboard') {
+      socket.emit('dashboard-dashboardAmrTable-request', { clientId: uuid });
     }
-
-    for (const plot of dashboardAmrPlots){
-      if(currentPage=="Dashboard" && dashboardChartVisibility[plot] == true) {
-        socket.emit('dashboard-dashboardAmrTable-request',{
-          clientId: uuid
-        });
-        break;
-      }
-    }
-
-
   });
 
 

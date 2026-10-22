@@ -54,21 +54,21 @@ function initialiseDashboardTreeMap() {
       // });
 
       d3.selectAll("input[name='dashboardTreeMapUnclassified']").on("change", function() {
-        dashboardTreeMapUnclassified = this.value;
+        dashboardTreeMapUnclassified = this.checked ? 'show' : 'hide';
         taxonomicRankChanged = true;
         treeMapUpdate(treeMapData);
         taxonomicRankChanged = false;
       });
 
       d3.selectAll("input[name='dashboardTreeMapRoot']").on("change", function() {
-        dashboardTreeMapRoot = this.value;
+        dashboardTreeMapRoot = this.checked ? 'show' : 'hide';
         taxonomicRankChanged = true;
         treeMapUpdate(treeMapData);
         taxonomicRankChanged = false;
       });
 
       d3.selectAll("input[name='dashboardTreeMapHigherTaxaNode']").on("change", function() {
-        dashboardTreeMapHigherTaxaNode = this.value;
+        dashboardTreeMapHigherTaxaNode = this.checked ? 'show' : 'hide';
         taxonomicRankChanged = true;
         treeMapUpdate(treeMapData);
         taxonomicRankChanged = false;
@@ -105,7 +105,7 @@ function initialiseDashboardTreeMap() {
       });
 
       d3.selectAll("input[name='dashboardTreeMapGroupTitle']").on("change", function() {
-        dashboardTreeMapGroupTitle = this.value;
+        dashboardTreeMapGroupTitle = this.checked ? 'show' : 'hide';
         treeMapUpdate(treeMapData);
       });
 

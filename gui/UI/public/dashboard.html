@@ -1,5 +1,5 @@
 
-<div data-html2canvas-ignore="true" class="fixed-options-bar shadow align-items-center d-flex">
+<div id="dashboardTaxonomyOptionsBar" data-html2canvas-ignore="true" class="fixed-options-bar shadow align-items-center d-flex">
 
   <!-- <a id="reportGenerator" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4"><i class="fas fa-download fa-sm text-white-50"></i> Report</a> -->
   <a id="downloadClassifications" href="#" class="btn btn-sm btn-primary shadow-sm topbar-btns ml-4 mr-auto"><i class="fas fa-download fa-sm text-white-50"></i> Assignments</a>
@@ -71,7 +71,7 @@
   </div>
 
 
-  <div class="mt-5 row">
+  <div class="mt-5 row" id="dashboardSummaryRow">
 
 
                           <div class="col-xl-3 col-md-6 mb-4">
@@ -314,6 +314,13 @@
 </div>
 
 
+<div class="nav nav-pills martiViewNav" role="tablist" aria-label="Dashboard views">
+  <button type="button" class="nav-link active" id="dashboardTaxonomyTab" role="tab" aria-controls="dashboardTaxonomyView" aria-selected="true">Taxonomy</button>
+  <button type="button" class="nav-link" id="dashboardDiversityTab" role="tab" aria-controls="dashboardDiversityView" aria-selected="false">Diversity</button>
+  <button type="button" class="nav-link" id="dashboardAmrTab" role="tab" aria-controls="dashboardAmrView" aria-selected="false">AMR</button>
+</div>
+<div class="dashboardTabViews">
+<div id="dashboardTaxonomyView" class="dashboardView" role="tabpanel" aria-labelledby="dashboardTaxonomyTab">
 <!-- Content Row -->
 
 <div class="row" id="taxaTableAndDonutRow">
@@ -331,15 +338,7 @@
         <!-- <i class="fa fa-search searchIcon"></i> -->
         </div>
 
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item dropdown-nonhref" id="taxaCsvExport" >Export to CSV</a>
-            <!-- <a class="dropdown-item dropdown-nonhref" id="taxaCopyExport" >Copy to clipboard</a> -->
-          </div>
-        </div>
+        <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><button type="button" class="dropdown-item" id="taxaCsvExport">Export to CSV</button></div></div>
       </div>
       <!-- Card Body -->
       <div class="card-body">
@@ -385,15 +384,15 @@
           <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
         </div> -->
 
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="donutDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="donutDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-
-            <form class="dropdown-form">
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardDonutSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportTaxaDonutSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportTaxaDonutPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportTaxaDonutJPG" href="#">Export as JPG</a></div></div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardDonutSettings" class="dashboardPlotSettings" aria-labelledby="dashboardDonutSettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardDonutSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Donut settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
             <!-- <div>
               <label>Legend:</label>
               <label><input type="radio" name="donutLegend" value="off" checked>  Off</label>
@@ -407,54 +406,29 @@
 
             <div class="form-group">
               <label for="dashboardTaxaDonutTopN">Show top <a class="dashboard-taxa-donut-top-n font-weight-bold">N</a> taxa</label>
-              <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="30" value="10">
+              <input type="range" class="form-control-range" id="dashboardTaxaDonutTopN" name="dashboardTaxaDonutTopN" min="1" max="30" value="10">
             </div>
 
-            <div>
-              <label> Unclassified node:</label>
-              <label><input type="radio" name="dashboardTaxaDonutUnclassified" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTaxaDonutUnclassified" value="hide" >  Hide</label>
-            </div>
-            <div>
-              <label> Higher taxa node:</label>
-              <label><input type="radio" name="dashboardTaxaDonutHigherTaxaNode" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTaxaDonutHigherTaxaNode" value="hide">  Hide</label>
-            </div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTaxaDonutUnclassified" checked> Show unclassified</label></div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTaxaDonutHigherTaxaNode" checked> Show higher taxa</label></div>
 
             </form>
-
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" id="exportTaxaDonutSVG" href="#">Export as SVG</a>
-            <a class="dropdown-item" id="exportTaxaDonutPNG" href="#">Export as PNG</a>
-            <a class="dropdown-item" id="exportTaxaDonutJPG" href="#">Export as JPG</a>
-          </div>
-
-        </div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
+          </aside>
+          <div class="dashboardPlotContent">
 
 
         <div class="row" id="dashboardTaxaDonutRow">
-          <div class="col-md-5 col-lg-4 overflow-auto mt-4" id="dashboardTaxaDonutLegend">
+          <div class="col-md-5 col-lg-5 overflow-auto mt-4" id="dashboardTaxaDonutLegend">
           </div>
-          <div class="col-md-7 col-lg-5 donut-card align-items-center justify-content-center d-flex d-md-block" id="dashboardTaxaDonutPlot">
+          <div class="col-md-7 col-lg-7 donut-card align-items-center justify-content-center d-flex d-md-block" id="dashboardTaxaDonutPlot">
           </div>
-          <div class="col-lg-3 pt-4 pr-4" id="dashboardTaxaDonutOptions">
-            <form>
 
-              <div class="form-group">
-                <label for="dashboardTaxaDonutTopN">Show top <a class="dashboard-taxa-donut-top-n font-weight-bold">N</a> taxa</label>
-                <input type="range" class="form-control-range" name="dashboardTaxaDonutTopN" min="1" max="30" value="10">
-              </div>
-
-
-            </form>
-          </div>
         </div>
 
 
 
+      </div>
+        </div>
       </div>
     </div>
   </div>
@@ -481,13 +455,14 @@
           <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
         </div> -->
 
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="treeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="treeDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-            <form class="dropdown-form">
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardTreeSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportTaxaTreeSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportTaxaTreePNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportTaxaTreeJPG" href="#">Export as JPG</a></div></div>
+        </div>
+      </div>
+      <div class="card-body-custom">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardTreeSettings" class="dashboardPlotSettings" aria-labelledby="dashboardTreeSettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardTreeSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Tree settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
 
             <div>
               <label>Tree links:</label>
@@ -524,7 +499,7 @@
 
             <div class="form-group">
               <label for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves</label>
-              <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
+              <input type="range" class="form-control-range" id="dashboardTaxaTreeTopN" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
             </div>
 
             <!-- <div class="form-group">
@@ -548,32 +523,13 @@
             </div> -->
 
           </form>
-
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" id="exportTaxaTreeSVG" href="#">Export as SVG</a>
-            <a class="dropdown-item" id="exportTaxaTreePNG" href="#">Export as PNG</a>
-            <a class="dropdown-item" id="exportTaxaTreeJPG" href="#">Export as JPG</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body-custom">
+          </aside>
+          <div class="dashboardPlotContent">
 
 <!-- <div class="row"> -->
 
   <!-- <div class="col-4 pl-5 pt-4 position-absolute z-index-1"> -->
-    <form>
-      <div class="form-group row ml-4 mt-3">
-        <div class="col-form-label col-auto">
-        <label id="dashboardTaxaTreeTopNText" for="dashboardTaxaTreeTopN">Showing top <a class="dashboard-taxa-tree-top-n-text font-weight-bold">N</a> of <a class="dashboard-taxa-tree-total-n-text">N</a> leaves</label>
-        </div>
-        <div class="col-sm-3 my-auto d-flex">
-        <input type="range" class="form-control-range" name="dashboardTaxaTreeTopN" min="1" max="200" value="25">
-        </div>
-        <!-- <div class="col-sm-5 my-auto d-flex">
-        <a class="dashboard-taxa-tree-read-perc">N</a>% of analysed reads represented.
-        </div> -->
-      </div>
-    </form>
+
   <!-- </div> -->
 
   <!-- <div class="col-9">
@@ -585,6 +541,8 @@
   </div>
 </div>
 
+      </div>
+        </div>
       </div>
     </div>
 
@@ -601,13 +559,14 @@
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary">Treemap</h6>
 
-        <div class="dropdown no-arrow">
-          <a class="dropdown-toggle" href="#" role="button" id="treeMapDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="treeMapDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-            <form class="dropdown-form">
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardTreeMapSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportTreeMapSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportTreeMapPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportTreeMapJPG" href="#">Export as JPG</a></div></div>
+        </div>
+      </div>
+      <div class="card-body-custom">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardTreeMapSettings" class="dashboardPlotSettings" aria-labelledby="dashboardTreeMapSettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardTreeMapSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Treemap settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
 
             <div>
               <label>Shape:</label>
@@ -624,21 +583,9 @@
               <label><input type="radio" name="dashboardTreeMapPadding" value="off" checked>  Off</label>
               <label><input type="radio" name="dashboardTreeMapPadding" value="on" >  On</label>
             </div> -->
-            <div>
-              <label> Unclassified node:</label>
-              <label><input type="radio" name="dashboardTreeMapUnclassified" value="show" >  Show</label>
-              <label><input type="radio" name="dashboardTreeMapUnclassified" value="hide" checked>  Hide</label>
-            </div>
-            <div>
-              <label> Root node:</label>
-              <label><input type="radio" name="dashboardTreeMapRoot" value="show" >  Show</label>
-              <label><input type="radio" name="dashboardTreeMapRoot" value="hide" checked>  Hide</label>
-            </div>
-            <div>
-              <label> Higher taxa node:</label>
-              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTreeMapHigherTaxaNode" value="hide">  Hide</label>
-            </div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTreeMapUnclassified"> Show unclassified</label></div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTreeMapRoot"> Show root node</label></div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTreeMapHigherTaxaNode" checked> Show higher taxa</label></div>
             <!-- <div>
               <label> Reveal higher taxa:</label>
               <label><input type="radio" name="dashboardTreeMapRevealHigherTaxa" value="show" >  Show</label>
@@ -662,11 +609,7 @@
               </select>
             </div>
 
-            <div>
-              <label> Group label:</label>
-              <label><input type="radio" name="dashboardTreeMapGroupTitle" value="show" checked>  Show</label>
-              <label><input type="radio" name="dashboardTreeMapGroupTitle" value="hide" >  Hide</label>
-            </div>
+            <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardTreeMapGroupTitle" checked> Show group labels</label></div>
 
             <div class="form-group">
               <label for="dashboardTreeMapShowDomain">Show only:</label>
@@ -680,33 +623,27 @@
               </select>
             </div>
 
-          </form>
 
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" id="exportTreeMapSVG" href="#">Export as SVG</a>
-            <a class="dropdown-item" id="exportTreeMapPNG" href="#">Export as PNG</a>
-            <a class="dropdown-item" id="exportTreeMapJPG" href="#">Export as JPG</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body-custom">
 
-  <!-- <div class="row"> -->
-
-    <!-- <div class="col-4 pl-5 pt-4 position-absolute z-index-1"> -->
-      <form>
-        <div class="form-group row ml-4 mt-3">
-          <div class="col-form-label col-auto" >
+        <div class="form-group">
+          <div class="col-form-label" >
             <label id="dashboardTreeMapTopNText" for="dashboardTreeMapTopN">Showing top <a class="dashboard-treemap-top-n-text font-weight-bold">N</a> of <a class="dashboard-treemap-total-n-text">N</a> nodes
               <!-- <br>
             <a class="dashboard-treemap-read-perc">N</a>% of analysed reads represented. -->
           </label>
           </div>
-          <div class="col-sm-3 my-auto d-flex">
-            <input type="range" class="form-control-range" name="dashboardTreeMapTopN" min="1" max="200" value="25">
+          <div class="mt-2">
+            <input type="range" class="form-control-range" id="dashboardTreeMapTopN" name="dashboardTreeMapTopN" min="1" max="200" value="25">
           </div>
         </div>
       </form>
+          </aside>
+          <div class="dashboardPlotContent">
+
+  <!-- <div class="row"> -->
+
+    <!-- <div class="col-4 pl-5 pt-4 position-absolute z-index-1"> -->
+
     <!-- </div> -->
   <!-- </div> -->
 
@@ -715,6 +652,8 @@
   </div>
 </div>
 
+      </div>
+        </div>
       </div>
     </div>
 
@@ -732,26 +671,20 @@
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary">Sankey</h6>
 
-        <div class="dropdown no-arrow ml-auto mr-1">
-          <a class="dropdown-toggle" href="#" role="button" id="sankeyDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" id="sankeyDropdownMenu" aria-labelledby="sankeyDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardSankeySettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportSankeySVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportSankeyPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportSankeyJPG" href="#">Export as JPG</a></div></div>
+        </div>
+      </div>
 
-            <form class="dropdown-form">
-              <div>
-                <label> Root node:</label>
-                <label><input type="radio" name="dashboardSankeyRoot" value="show">  Show</label>
-                <label><input type="radio" name="dashboardSankeyRoot" value="hide" checked>  Hide</label>
-              </div>
+      <!-- Card Body -->
+      <div class="card-body-custom">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardSankeySettings" class="dashboardPlotSettings" aria-labelledby="dashboardSankeySettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardSankeySettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Sankey settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
+              <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardSankeyRoot"> Show root node</label></div>
 
-              <div>
-                <label> Unclassified node:</label>
-                <label><input type="radio" name="dashboardSankeyUnclassified" value="show" checked> Show</label>
-                <label><input type="radio" name="dashboardSankeyUnclassified" value="hide"> Hide</label>
-              </div>
-              
+              <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="dashboardSankeyUnclassified" checked> Show unclassified</label></div>
+
 
               <label>Show labels in columns:</label>
               <div class="d-flex flex-wrap sankey-label-grid" id="sankeyLabelToggles">
@@ -777,40 +710,31 @@
                 <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="7" checked> G</label>
                 <label class="mr-3 mb-1"><input class="sankey-col-toggle" type="checkbox" value="8" checked> S</label>
               </div>
-              
-            </form>
-            
-            <div class="dropdown-divider"></div>
 
-            <a class="dropdown-item" id="exportSankeySVG" href="#">Export as SVG</a>
-            <a class="dropdown-item" id="exportSankeyPNG" href="#">Export as PNG</a>
-            <a class="dropdown-item" id="exportSankeyJPG" href="#">Export as JPG</a>
-          </div>
-        </div>
-      </div>
 
-      <!-- Card Body -->
-      <div class="card-body-custom">
 
-        <form>
-          <div id="dashboardSankeyTopNBox" class="form-group row ml-4 mt-2">
-            <div class="col-form-label col-auto">
+          <div id="dashboardSankeyTopNBox" class="form-group">
+            <div class="col-form-label">
               <label id="dashboardSankeyTopNText" for="dashboardSankeyTopN">
                 Showing top <a class="dashboard-sankey-top-n-text font-weight-bold">25</a>
                 of <a class="dashboard-sankey-total-n-text">0</a> leaves
               </label>
             </div>
-            <div class="col-sm-3 my-auto d-flex">
-              <input type="range" class="form-control-range" name="dashboardSankeyTopN" min="1" max="200" value="25">
+            <div class="mt-2">
+              <input type="range" class="form-control-range" id="dashboardSankeyTopN" name="dashboardSankeyTopN" min="1" max="200" value="25">
             </div>
           </div>
         </form>
-        
-      
+          </aside>
+          <div class="dashboardPlotContent">
+
+
+
+
         <div id="sankeyPlotContainer" class="d-flex justify-content-center align-items-center">
           <!-- Sankey plot will be injected here via JS -->
         </div>
-      </div>
+      </div></div></div>
 
     </div>
   </div>
@@ -819,6 +743,8 @@
 
 
 
+</div>
+<div id="dashboardDiversityView" class="dashboardView dashboardViewInactive" role="tabpanel" aria-labelledby="dashboardDiversityTab" aria-hidden="true">
 <!-- Rarefaction Row -->
 <div class="row" id="accumulationChartRow">
 
@@ -828,7 +754,7 @@
     <!-- rarefaction card -->
     <div class="card shadow" id="compareRarefactionCard">
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
-        <h6 id="rarefactionCardTitleDashboard" class="m-0 font-weight-bold text-primary">Taxa accumulation - All levels</h6>
+        <h6 class="m-0 font-weight-bold text-primary" id="dashboardDiversityCardTitle">Sample diversity — All Levels</h6>
 
         <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(compareRarefactionFullScreen);">
           <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
@@ -838,46 +764,54 @@
           <i class="fas fa-compress fa-sm fa-fw text-gray-600"></i>
         </div> -->
 
-        <div class="dropdown no-arrow mr-1 ml-auto">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRarefactionCompare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuRarefactionCompare">
-            <div class="dropdown-header">Options:</div>
-            <form class="dropdown-form">
-
-              <!-- <div>
-                <label>X-axis:</label>
-                <label><input type="radio" name="rareXAxis" value="reads" checked> Reads</label>
-                <label><input type="radio" name="rareXAxis" value="time"> Time</label>
-              </div> -->
-
-            <div>
-              <label>Curve:</label>
-              <label><input type="radio" name="rareLine" value="linear" checked> Linear</label>
-              <label><input type="radio" name="rareLine" value="monotone"> Monotone</label>
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="diversityPlotSettingsButton" aria-controls="diversityPlotSettings" aria-expanded="false">Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" id="dashboardDiversityExport" href="#">Current diversity as CSV</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" id="downloadAccumulationData" href="#">Displayed data as CSV</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
+              <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
+              <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
             </div>
-
-            <div class="form-group">
-              <label for="rareXAxisMax">X-axis max: <a id="rareXAxisMaxNum" class="font-weight-bold">N</a></label>
-              <input type="range" class="form-control-range" name="rareXAxisMax" step="1000" min="1000" max="10000" value="10000">
-            </div>
-
-          </form>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="downloadAccumulationData" href="#">Export CSV</a>
-
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" id="exportAccumulationSVG" href="#">Export as SVG</a>
-          <a class="dropdown-item" id="exportAccumulationPNG" href="#">Export as PNG</a>
-          <a class="dropdown-item" id="exportAccumulationJPG" href="#">Export as JPG</a>
           </div>
         </div>
 
-        <i id="accumulationChartClose" class="fas fa-fw fa-times text-gray-600 pointer"></i>
-
       </div>
 
+      <div class="diversityPlotLayout">
+      <aside id="diversityPlotSettings" class="diversityPlotSettings" aria-labelledby="diversityPlotSettingsTitle" hidden>
+        <div class="diversityPlotSettingsHeader">
+          <h6 id="diversityPlotSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Diversity plot settings</h6>
+          <button type="button" class="close" id="diversityPlotSettingsClose" aria-label="Close diversity settings"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="form-group"><label for="rareMetric">Measure</label><select id="rareMetric" class="form-control form-control-sm">
+          <option value="taxa">Taxa accumulation</option><option value="shannon">Shannon (H')</option>
+          <option value="pielou">Pielou evenness (J')</option>
+          <option value="invSimpson">Inverse Simpson (1/D)</option>
+        </select><small id="rareMetricNote" class="form-text text-muted" hidden>Diversity curves require results from the updated MARTi engine.</small><small id="rareUnitNote" class="form-text text-muted"></small></div>
+        <div class="form-group" id="rareTaxaSeriesGroup"><label for="rareTaxaSeries">Accumulation definition</label><select id="rareTaxaSeries" class="form-control form-control-sm">
+          <option value="reads">Final taxa set (nondecreasing)</option>
+          <option value="rawReads">Per-chunk taxa count</option>
+        </select><small id="rareTaxaSeriesNote" class="form-text text-muted">The first curve is nondecreasing. The per-chunk count can fall when a cutoff changes assignments.</small></div>
+        <div class="form-group"><label for="rareXAxis">X axis</label><select id="rareXAxis" class="form-control form-control-sm"><option value="reads">Reads analysed</option><option value="time">Elapsed time (minutes)</option></select></div>
+        <div class="form-group"><label for="rareLine">Line style</label><select id="rareLine" class="form-control form-control-sm"><option value="linear">Straight</option><option value="step-after">Step</option><option value="monotone">Smooth</option></select></div>
+        <div class="form-group mb-0"><label for="rareXAxisMax">X-axis maximum</label><input id="rareXAxisMax" class="form-control form-control-sm" type="number" min="0" step="any" placeholder="Automatic"><small class="form-text text-muted">Leave blank to show the full range.</small></div>
+      </aside>
+      <div class="diversityPlotContent">
+      <section class="px-4 pt-3 pb-2 border-bottom" id="dashboardDiversityRow" hidden aria-labelledby="dashboardDiversityTitle">
+        <div class="d-flex align-items-center mb-3">
+          <h6 class="font-weight-bold mb-0" id="dashboardDiversityTitle">Diversity metrics</h6>
+          <button type="button" class="btn btn-link btn-sm p-0 text-muted ml-2" id="dashboardDiversityInfo" aria-label="About diversity metrics">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="d-flex flex-wrap" id="dashboardDiversityMetrics"></div>
+      </section>
+      <h6 id="rarefactionCardTitleDashboard" class="font-weight-bold text-left px-4 pt-3 mb-0">Taxa accumulation</h6>
       <div class="card-body-custom text-center">
 
         <div id="accumulationPlotWarning" class="row">
@@ -890,8 +824,8 @@
           <div class="mb-2">
             <i class="fas fa-exclamation-circle fa-5x"></i>
           </div>
-          <h3 class="font-weight-bold ">Data Not Available</h3>
-          <h4 class="font-weight-bold ">Please run accumulation analysis to see this plot</h4>
+          <h3 class="font-weight-bold">Loading accumulation data…</h3>
+          <h4 class="font-weight-bold">Waiting for the selected sample.</h4>
       </div>
 
 
@@ -904,6 +838,8 @@
       </div>
 
       </div>
+      </div>
+    </div>
     </div>
 
   </div>
@@ -911,6 +847,9 @@
 </div>
 <!-- End of Rarefaction Row -->
 
+</div>
+<div id="dashboardAmrView" class="dashboardView dashboardViewInactive" role="tabpanel" aria-labelledby="dashboardAmrTab" aria-hidden="true">
+<div id="dashboardAmrEmpty" class="card shadow mb-4"><div class="card-body text-muted">No AMR results available for this sample.</div></div>
 <!-- AMR table Row -->
 
 <div class="row" id="dashboardAmrTableRow">
@@ -927,29 +866,9 @@
         <!-- <i class="fa fa-search searchIcon"></i> -->
         </div>
 
-        <div class="dropdown no-arrow  mr-1">
-          <a class="dropdown-toggle" href="#" role="button" id="amrDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="amrDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-            <form class="dropdown-form">
-            <!-- <div class="form-group">
-              <label>Chunk:</label>
-              <div class="d-flex">
-              <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
-              <span class="range-slider-value">1</span>
-              </div>
-            </div> -->
-          </form>
-          <a class="dropdown-item pointer" id="amrCsvExport" >Export to CSV</a>
-          <a class="dropdown-item pointer" id="amrCopyExport" >Copy to clipboard</a>
-          <!-- <div class="dropdown-divider"></div>
-          <a class="dropdown-item dropdown-nonhref" id="dashboardAmrTableClose">Remove plot</a> -->
-          </div>
-        </div>
+        <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><button type="button" class="dropdown-item" id="amrCsvExport">Export to CSV</button><button type="button" class="dropdown-item" id="amrCopyExport">Copy to clipboard</button></div></div>
 
-        <i id="dashboardAmrTableClose" class="fas fa-fw fa-times text-gray-600 pointer"></i>
+
 
       </div>
       <!-- Card Body -->
@@ -1027,43 +946,15 @@
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary">Putative Host Taxa Analysis</h6>
 
-        <div class="dropdown no-arrow ml-auto mr-1">
-          <a class="dropdown-toggle" href="#" role="button" id="amrDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="amrDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-          <!-- <a class="dropdown-item pointer" id="amrCsvExport" >Export to CSV</a>
-          <a class="dropdown-item pointer" id="amrCopyExport" >Copy to clipboard</a> -->
-          <!-- <div class="dropdown-divider"></div> -->
-          <a class="dropdown-item" id="exportAmrDonutSVG" href="#">Export as SVG</a>
-          <a class="dropdown-item" id="exportAmrDonutPNG" href="#">Export as PNG</a>
-          <a class="dropdown-item" id="exportAmrDonutJPG" href="#">Export as JPG</a>
-          </div>
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardAmrDonutSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportAmrDonutSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportAmrDonutPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportAmrDonutJPG" href="#">Export as JPG</a></div></div>
         </div>
-
-        <i id="dashboardAmrDonutClose" class="fas fa-fw fa-times text-gray-600 pointer"></i>
-
       </div>
-      <!-- Card Body -->
       <div class="card-body">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardAmrDonutSettings" class="dashboardPlotSettings" aria-labelledby="dashboardAmrDonutSettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardAmrDonutSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Putative host taxa settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
 
-        <div class="d-flex form-group">
-          <a class="mr-1">Chunk</a>
-          <!-- <a class="" id="dashboard-amr-chunk-value">1/1</a> -->
-          <a class="dashboard-amr-chunk-value">1/1</a>
-          <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
-          <a class="ml-5 text-nowrap dashboard-amr-chunk-time">1 Jan 2020</a>
-          <!-- <span class="range-slider-value">1</span> -->
-        </div>
-
-        <div class="row">
-          <div class="col-md-5 col-lg-4 overflow-auto mt-4" id="dashboardAmrDonutLegend">
-          </div>
-          <div class="col-md-7 col-lg-5 justify-content-center d-flex d-md-block" id="dashboardAmrDonutPlot">
-          </div>
-          <div class="col-lg-3 pt-4 pr-4" id="dashboardAmrDonutOptions">
-            <form>
 
               <div class="form-group">
                 <label for="dashboardAmrDonutPlotBy">Plot taxa by</label>
@@ -1097,7 +988,26 @@
               </div>
 
             </form>
+          </aside>
+          <div class="dashboardPlotContent">
+
+        <div class="d-flex form-group">
+          <a class="mr-1">Chunk</a>
+          <!-- <a class="" id="dashboard-amr-chunk-value">1/1</a> -->
+          <a class="dashboard-amr-chunk-value">1/1</a>
+          <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
+          <a class="ml-5 text-nowrap dashboard-amr-chunk-time">1 Jan 2020</a>
+          <!-- <span class="range-slider-value">1</span> -->
+        </div>
+
+        <div class="row">
+          <div class="col-md-5 col-lg-5 overflow-auto mt-4" id="dashboardAmrDonutLegend">
           </div>
+          <div class="col-md-7 col-lg-7 justify-content-center d-flex d-md-block" id="dashboardAmrDonutPlot">
+          </div>
+
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -1115,41 +1025,19 @@
       <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary">AMR hits</h6>
 
-        <div class="dropdown no-arrow ml-auto mr-1">
-          <a class="dropdown-toggle" href="#" role="button" id="dashboardAmrHitsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-600"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dashboardAmrHitsDropdownMenuLink">
-            <div class="dropdown-header">Options:</div>
-          <!-- <a class="dropdown-item pointer" id="dashboardAmrHitsCsvExport" >Export to CSV</a>
-          <a class="dropdown-item pointer" id="dashboardAmrHitsCopyExport" >Copy to clipboard</a> -->
-          <!-- <div class="dropdown-divider"></div> -->
-          <a class="dropdown-item" id="exportDashboardAmrHitsDonutSVG" href="#">Export as SVG</a>
-          <a class="dropdown-item" id="exportDashboardAmrHitsDonutPNG" href="#">Export as PNG</a>
-          <a class="dropdown-item" id="exportDashboardAmrHitsDonutJPG" href="#">Export as JPG</a>
-          </div>
+        <div class="d-flex align-items-center dashboardPlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 dashboardSettingsButton" aria-controls="dashboardAmrHitsDonutSettings" aria-expanded="false"><i class="fas fa-sliders-h mr-1" aria-hidden="true"></i> Settings</button>
+          <div class="dropdown"><button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="exportDashboardAmrHitsDonutSVG" href="#">Export as SVG</a><a class="dropdown-item" id="exportDashboardAmrHitsDonutPNG" href="#">Export as PNG</a><a class="dropdown-item" id="exportDashboardAmrHitsDonutJPG" href="#">Export as JPG</a></div></div>
         </div>
 
-        <i id="dashboardAmrHitsDonutClose" class="fas fa-fw fa-times text-gray-600 pointer"></i>
+
 
       </div>
       <!-- Card Body -->
       <div class="card-body">
+        <div class="dashboardPlotLayout">
+          <aside id="dashboardAmrHitsDonutSettings" class="dashboardPlotSettings" aria-labelledby="dashboardAmrHitsDonutSettingsTitle" hidden><div class="dashboardPlotSettingsHeader"><h6 id="dashboardAmrHitsDonutSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">AMR hits settings</h6><button type="button" class="close dashboardSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div><div class="dashboardSettingsSection">Display</div><form class="dashboardSettingsForm">
 
-        <div class="d-flex form-group">
-          <a class="mr-1">Chunk</a>
-          <a class="dashboard-amr-chunk-value">1/1</a>
-          <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
-          <a class="ml-5 text-nowrap dashboard-amr-chunk-time">1 Jan 2020</a>
-        </div>
-
-        <div class="row">
-          <div class="col-md-5 col-lg-4 overflow-auto mt-4" id="dashboardAmrHitsDonutLegend">
-          </div>
-          <div class="col-md-7 col-lg-5 justify-content-center d-flex d-md-block" id="dashboardAmrHitsDonutPlot">
-          </div>
-          <div class="col-lg-3 pt-4 pr-4" id="dashboardAmrHitsDonutOptions">
-            <form>
 
               <div class="form-group">
                 <label for="dashboardAmrHitsDonutPlotBy">Plot hits by</label>
@@ -1170,7 +1058,24 @@
               </div>
 
             </form>
+          </aside>
+          <div class="dashboardPlotContent">
+
+        <div class="d-flex form-group">
+          <a class="mr-1">Chunk</a>
+          <a class="dashboard-amr-chunk-value">1/1</a>
+          <input type="range" class="form-control-range" name="dashboardAmrTableChunk" min="1" max="10" value="10">
+          <a class="ml-5 text-nowrap dashboard-amr-chunk-time">1 Jan 2020</a>
+        </div>
+
+        <div class="row">
+          <div class="col-md-5 col-lg-5 overflow-auto mt-4" id="dashboardAmrHitsDonutLegend">
           </div>
+          <div class="col-md-7 col-lg-7 justify-content-center d-flex d-md-block" id="dashboardAmrHitsDonutPlot">
+          </div>
+
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -1180,71 +1085,8 @@
 
 
 
-<!-- Add charts -->
-<div class="row">
-
-<div class="col-12 mb-4">
-
-  <div id="addChart" class="card ">
-
-    <div id="addChartPlusSign" class="card-body text-center pointer">
-      <div class="mb-2">
-        <i class="fas fa-plus fa-5x"></i>
-      </div>
-      <h4 class="font-weight-bold ">Click to add chart</h4>
-    </div>
-
-    <div id="addChartOptions" class="text-center text-primary m-2 row">
-
-      <div id="accumulationChartAdd" class="col-xl-3 col-md-6">
-        <div class="card add-chart-card pointer h-100">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">Accumulation</h5>
-            <p class="card-text">Taxa accumulation plot.</p>
-            <!-- <i class="fas fa-toggle-off fa-3x pointer"></i> -->
-            <i class="fas fa-plus fa-3x"></i>
-          </div>
-        </div>
-      </div>
-
-      <div id="dashboardAmrTableAdd" class="col-xl-3 col-md-6">
-        <div class="card add-chart-card pointer h-100">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">AMR Table</h5>
-            <p class="card-text">Antimicrobial resistance analysis table.</p>
-            <i class="fas fa-plus fa-3x"></i>
-          </div>
-        </div>
-      </div>
-
-      <div id="dashboardAmrDonutAdd" class="col-xl-3 col-md-6">
-        <div class="card add-chart-card pointer h-100">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">Putative Host Analysis</h5>
-            <p class="card-text">Donut plot of taxa identified via AMR walkout analysis.</p>
-            <i class="fas fa-plus fa-3x"></i>
-          </div>
-        </div>
-      </div>
-
-      <div id="dashboardAmrHitsDonutAdd" class="col-xl-3 col-md-6">
-        <div class="card add-chart-card pointer h-100">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">AMR Hits</h5>
-            <p class="card-text">Donut plot of AMR hits.</p>
-            <i class="fas fa-plus fa-3x"></i>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
 </div>
-
 </div>
-
 <!-- Sample Info Modal -->
 <div class="modal" id="amrInfoModal" tabindex="-1" role="dialog">
 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
