@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { calculateOrdination, calculateDendrogram, taxonCountsAtRank } = require('./ordination');
+const { calculateOrdination, calculateDendrogram, calculateDistanceMatrix, taxonCountsAtRank } = require('./ordination');
 
 function sample(name, a, b) {
   return { name, runId: 'run', tree: {
@@ -28,6 +28,17 @@ test('Bray–Curtis uses relative abundances and produces ordination coordinates
   assert.equal(result.featureCount, 2);
   assert.equal(result.points.length, 3);
   assert.ok(result.points.every(point => Number.isFinite(point.x) && Number.isFinite(point.y)));
+});
+
+test('distance heatmap uses the same pairwise distances and accepts identical profiles', () => {
+  const options = { rank: 7, method: 'brayCurtis', minimumPrevalence: 1 };
+  const matrix = calculateDistanceMatrix(samples, options);
+  const ordination = calculateOrdination(samples, options);
+  assert.deepEqual(matrix.distances, ordination.distances);
+  assert.deepEqual(matrix.samples.map(item => item.name), ['a', 'b', 'c']);
+  assert.equal(matrix.distances[0][1], matrix.distances[1][0]);
+  const identical = calculateDistanceMatrix([sample('a', 5, 5), sample('b', 10, 10)], options);
+  assert.deepEqual(identical.distances, [[0, 0], [0, 0]]);
 });
 
 test('CLR/Aitchison requires a pseudocount for zeros and uses log ratios', () => {

@@ -108,7 +108,121 @@
   <button type="button" class="nav-link active" id="comparePlotsTab" role="tab" aria-controls="comparePlotsView" aria-selected="true">Taxonomy</button>
   <button type="button" class="nav-link" id="compareDiversityTab" role="tab" aria-controls="compareDiversityView" aria-selected="false">Diversity</button>
   <button type="button" class="nav-link" id="compareOrdinationTab" role="tab" aria-controls="compareOrdinationView" aria-selected="false">Sample relationships</button>
+  <button type="button" class="nav-link" id="compareTaxonRelationshipsTab" role="tab" aria-controls="compareTaxonRelationshipsView" aria-selected="false">Taxon relationships</button>
   <button type="button" class="nav-link" id="compareAmrTab" role="tab" aria-controls="compareAmrView" aria-selected="false">AMR</button>
+</div>
+
+<div id="compareTaxonRelationshipsView" class="compareView" role="tabpanel" aria-labelledby="compareTaxonRelationshipsTab" hidden>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareTaxonCorrelationCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Taxon correlations across samples</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareTaxonCorrelationSettingsButton" aria-controls="compareTaxonCorrelationSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareTaxonCorrelationExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareTaxonCorrelationExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareTaxonCorrelationSVG">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareTaxonCorrelationPNG">Export as PNG</a>
+                <a class="dropdown-item" href="#" id="exportCompareTaxonCorrelationCSV">Export matrix as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareTaxonCorrelationSettings" class="compareOrdinationSettings" aria-labelledby="compareTaxonCorrelationSettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareTaxonCorrelationSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Correlation settings</h6>
+              <button type="button" class="close" id="compareTaxonCorrelationSettingsClose" aria-label="Close correlation settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Analysis</h6>
+            <div class="form-group">
+              <label for="compareTaxonCorrelationMethod">Correlation method</label>
+              <select id="compareTaxonCorrelationMethod" class="form-control form-control-sm">
+                <option value="pearson">Pearson</option>
+                <option value="spearman">Spearman</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="compareTaxonCorrelationTopN">Show most abundant taxa</label>
+              <input id="compareTaxonCorrelationTopN" class="form-control form-control-sm" type="number" min="2" max="30" step="1" value="15">
+            </div>
+            <div class="form-group">
+              <label for="compareTaxonCorrelationPrevalence">Taxon present in at least this many samples</label>
+              <input id="compareTaxonCorrelationPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-check mb-3">
+              <label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareTaxonCorrelationShowValues"> Show correlation values</label>
+            </div>
+            <p class="small text-muted mb-0">Uses each taxon’s share of reads assigned at the selected rank and LCA cutoff. Correlations are exploratory and can reflect compositional effects.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <div id="compareTaxonCorrelationStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
+            <div id="compareTaxonCorrelationPlot" aria-label="Taxon correlation matrix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareCooccurrenceCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Taxon co-occurrence across samples</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareCooccurrenceSettingsButton" aria-controls="compareCooccurrenceSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareCooccurrenceExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareCooccurrenceExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareCooccurrenceSVG">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareCooccurrencePNG">Export as PNG</a>
+                <a class="dropdown-item" href="#" id="exportCompareCooccurrenceCSV">Export links as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareCooccurrenceSettings" class="compareOrdinationSettings" aria-labelledby="compareCooccurrenceSettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareCooccurrenceSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Co-occurrence settings</h6>
+              <button type="button" class="close" id="compareCooccurrenceSettingsClose" aria-label="Close co-occurrence settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Taxa</h6>
+            <div class="form-group">
+              <label for="compareCooccurrenceTopN">Show most prevalent taxa</label>
+              <input id="compareCooccurrenceTopN" class="form-control form-control-sm" type="number" min="2" max="20" step="1" value="12">
+            </div>
+            <div class="form-group">
+              <label for="compareCooccurrencePresenceReads">Minimum reads for presence in a sample</label>
+              <input id="compareCooccurrencePresenceReads" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <div class="form-group">
+              <label for="compareCooccurrencePrevalence">Taxon present in at least this many samples</label>
+              <input id="compareCooccurrencePrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <h6 class="compareSettingsSection">Links</h6>
+            <div class="form-group">
+              <label for="compareCooccurrenceShared">Taxa share at least this many samples</label>
+              <input id="compareCooccurrenceShared" class="form-control form-control-sm" type="number" min="1" step="1" value="2">
+            </div>
+            <div class="form-group">
+              <label for="compareCooccurrenceJaccard">Minimum Jaccard overlap</label>
+              <input id="compareCooccurrenceJaccard" class="form-control form-control-sm" type="number" min="0" max="1" step="0.05" value="0.5">
+            </div>
+            <div class="form-group">
+              <label for="compareCooccurrenceMaxLinks">Maximum links shown</label>
+              <input id="compareCooccurrenceMaxLinks" class="form-control form-control-sm" type="number" min="1" max="100" step="1" value="30">
+            </div>
+            <p class="small text-muted mb-0">A link joins taxa found in the same samples. Jaccard overlap is the number of samples containing both divided by the number containing either. Co-occurrence does not establish a biological interaction.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <div id="compareCooccurrenceStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
+            <div id="compareCooccurrencePlot" aria-label="Taxon co-occurrence network"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="comparePlotsView" class="compareView" role="tabpanel" aria-labelledby="comparePlotsTab">
 
@@ -790,6 +904,60 @@
           <div class="compareOrdinationContent">
             <div id="compareDendrogramStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite">Calculating clustering…</div>
             <div id="compareDendrogramPlot" aria-label="UPGMA dendrogram"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareDistanceMatrixCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Sample distances</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareDistanceMatrixSettingsButton" aria-controls="compareDistanceMatrixSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareDistanceMatrixExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareDistanceMatrixExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareDistanceMatrixSVG">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareDistanceMatrixPNG">Export as PNG</a>
+                <a class="dropdown-item" href="#" id="exportCompareDistanceMatrixCSV">Export matrix as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareDistanceMatrixSettings" class="compareOrdinationSettings" aria-labelledby="compareDistanceMatrixSettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareDistanceMatrixSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Distance heatmap settings</h6>
+              <button type="button" class="close" id="compareDistanceMatrixSettingsClose" aria-label="Close distance heatmap settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Analysis</h6>
+            <div class="form-group">
+              <label for="compareDistanceMatrixMethod">Distance method</label>
+              <select id="compareDistanceMatrixMethod" class="form-control form-control-sm">
+                <option value="brayCurtis">Bray–Curtis (relative abundances)</option>
+                <option value="aitchison">Aitchison (CLR log ratios)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="compareDistanceMatrixPrevalence">Taxon present in at least this many samples</label>
+              <input id="compareDistanceMatrixPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+            </div>
+            <div class="form-group" id="compareDistanceMatrixPseudocountGroup" hidden>
+              <label for="compareDistanceMatrixPseudocount">CLR pseudocount (reads)</label>
+              <input id="compareDistanceMatrixPseudocount" class="form-control form-control-sm" type="number" min="0" step="any" value="0.5">
+              <small class="form-text text-muted">Added to each retained taxon count before taking log ratios. Zero requires every count to be positive.</small>
+            </div>
+            <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-check mb-3">
+              <label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareDistanceMatrixShowValues"> Show distance values</label>
+            </div>
+            <p class="small text-muted mb-0">Samples follow the order in the Samples card. Darker cells mean more similar taxon profiles. The diagonal is zero.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <div id="compareDistanceMatrixStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite">Calculating distances…</div>
+            <div id="compareDistanceMatrixPlot" aria-label="Sample distance heatmap"></div>
           </div>
         </div>
       </div>

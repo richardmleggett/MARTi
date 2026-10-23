@@ -2,6 +2,7 @@
 #compareAmrView[hidden],
 #compareDiversityView[hidden],
 #compareOrdinationView[hidden],
+#compareTaxonRelationshipsView[hidden],
 #compareTaxonomyOptionsBar[hidden],
 #compareSamplesDetails[hidden],
 #compareAmrEmpty[hidden],
@@ -10,6 +11,10 @@
 #rareMetricNote[hidden],
 #rareTaxaSeriesGroup[hidden],
 #compareOrdinationSettings[hidden],
+#compareDistanceMatrixSettings[hidden],
+#compareDistanceMatrixPseudocountGroup[hidden],
+#compareTaxonCorrelationSettings[hidden],
+#compareCooccurrenceSettings[hidden],
 #compareOrdinationPseudocountGroup[hidden] {
   display: none;
 }
@@ -196,6 +201,53 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#compareDistanceMatrixPlot {
+  min-height: 180px;
+  max-height: 760px;
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+#compareDistanceMatrixPlot svg {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#compareTaxonCorrelationPlot {
+  min-height: 180px;
+  max-height: 760px;
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+#compareTaxonCorrelationPlot svg {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#compareCooccurrencePlot {
+  min-height: 520px;
+  max-height: 740px;
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+#compareCooccurrencePlot svg {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.compareCooccurrenceNode:hover,
+.compareCooccurrenceNode:focus {
+  stroke-width: 2.5;
+}
+
 .compareDendrogramPoint:hover,
 .compareDendrogramPoint:focus {
   stroke-width: 2;
@@ -237,6 +289,11 @@
     flex-wrap: wrap;
     gap: 0.5rem;
   }
+
+  #compareDistanceMatrixCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
+
+  #compareTaxonCorrelationCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
+  #compareCooccurrenceCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
 }
 
 #stackedBarPlot>svg {

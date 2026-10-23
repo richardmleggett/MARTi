@@ -99,6 +99,10 @@ table.dataTable tfoot th,table.dataTable tfoot td {
   padding-left: 12px;
 }
 
+#wrapper {
+  background-color: #303030;
+}
+
 #accordionSidebar {
   background-color: #303030;
 }

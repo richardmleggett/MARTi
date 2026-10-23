@@ -165,6 +165,21 @@ function calculateOrdination(samples, options) {
   };
 }
 
+function calculateDistanceMatrix(samples, options) {
+  const { method, rank, minimumPrevalence, pseudocount, taxa, included, distances } =
+    calculateSampleDistances(samples, options, 2);
+  return {
+    method, rank, minimumPrevalence,
+    pseudocount: method === 'aitchison' ? pseudocount : null,
+    featureCount: taxa.length, sampleCount: included.length,
+    excludedCount: samples.length - included.length,
+    samples: included.map(sample => ({
+      name: sample.name, runId: sample.runId, coveragePercent: sample.coveragePercent
+    })),
+    distances
+  };
+}
+
 function calculateDendrogram(samples, options) {
   const { method, rank, minimumPrevalence, pseudocount, taxa, included, distances } =
     calculateSampleDistances(samples, options, 2);
@@ -214,4 +229,4 @@ function calculateDendrogram(samples, options) {
   };
 }
 
-module.exports = { calculateOrdination, calculateDendrogram, taxonCountsAtRank, symmetricEigen };
+module.exports = { calculateOrdination, calculateDendrogram, calculateDistanceMatrix, taxonCountsAtRank, symmetricEigen };

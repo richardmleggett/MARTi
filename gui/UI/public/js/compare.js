@@ -66,6 +66,9 @@ function initialiseComparePage() {
               taxonomicRankChangedCompare = false;
               requestCompareOrdination();
               requestCompareDendrogram();
+              requestCompareDistanceMatrix();
+              renderCompareTaxonCorrelation();
+              renderCompareCooccurrence();
               socket.emit('compare-accumulation-request',{
                 clientId: uuid,
                 rank:taxonomicRankSelectedTextLowerCase,
@@ -128,6 +131,7 @@ function initialiseComparePage() {
               newCompareTreeData = false;
               plotRarefactionCompare(rareData);
               reorderAmrHm();
+              renderCompareDistanceMatrix();
           }
   });
 
@@ -138,6 +142,9 @@ function initialiseComparePage() {
   initialiseCompareViews();
   initialiseCompareOrdination();
   initialiseCompareDendrogram();
+  initialiseCompareDistanceMatrix();
+  initialiseCompareTaxonCorrelation();
+  initialiseCompareCooccurrence();
   initialiseCompareDiversity();
   initialiseCompareTree();
   initialiseComparePlotPanels();
@@ -195,6 +202,7 @@ function initialiseComparePage() {
         newCompareTreeData = false;
         plotRarefactionCompare(rareData);
         reorderAmrHm();
+        renderCompareDistanceMatrix();
       }
 
   });
@@ -1251,6 +1259,9 @@ socket.on('compare-tree-response', function(treeData) {
   updateComparePlots(compareTreeDataGlobal,true);
   requestCompareOrdination();
   requestCompareDendrogram();
+  requestCompareDistanceMatrix();
+  renderCompareTaxonCorrelation();
+  renderCompareCooccurrence();
   newCompareTreeData = false;
   plotLevelSelectorChanged = false;
 } else {

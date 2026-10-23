@@ -8,7 +8,7 @@ const https = require('https');
 const path = require('path');
 const { sampleHasTaxon } = require('./services/taxonFilter');
 const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
-const { calculateOrdination, calculateDendrogram } = require('./services/ordination');
+const { calculateOrdination, calculateDendrogram, calculateDistanceMatrix } = require('./services/ordination');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -41,7 +41,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "1.0.0";
+const martiGuiVersion = "1.0.1";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -1395,6 +1395,31 @@ socket.on('compare-tree-request', request => {
     });
     try {
       callback({ data: calculateDendrogram(samples, request) });
+    } catch (error) {
+      callback({ error: error.message });
+    }
+  });
+
+  socket.on('compare-distance-matrix-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const client = request && clientData[request.clientId];
+    if (!client || !Array.isArray(client.selectedCompareSamples)) {
+      callback({ error: 'Selected samples are unavailable.' });
+      return;
+    }
+    const lca = request.lca;
+    if (typeof lca !== 'string' || !/^lca_\d+(\.\d+)?$/.test(lca)) {
+      callback({ error: 'Choose a valid LCA cutoff.' });
+      return;
+    }
+    const samples = client.selectedCompareSamples.map(sample => {
+      const runTrees = sampleTreeDict[sample.runId];
+      const sampleTrees = runTrees && runTrees[sample.name];
+      const selectedTree = sampleTrees && sampleTrees[lca];
+      return { name: sample.name, runId: sample.runId, tree: selectedTree && selectedTree.tree };
+    });
+    try {
+      callback({ data: calculateDistanceMatrix(samples, request) });
     } catch (error) {
       callback({ error: error.message });
     }

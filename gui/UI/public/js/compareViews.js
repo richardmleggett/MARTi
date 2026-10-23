@@ -73,10 +73,13 @@ function updateCompareSampleSummary() {
 }
 
 function setCompareView(view) {
-  if (['Plots', 'Diversity', 'Ordination', 'Amr'].indexOf(view) === -1) return;
+  if (['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].indexOf(view) === -1) return;
   if (typeof compareOrdinationHideTooltip === 'function') compareOrdinationHideTooltip();
   if (typeof compareDiversityHideTooltip === 'function') compareDiversityHideTooltip();
-  ['Plots', 'Diversity', 'Ordination', 'Amr'].forEach(function (name) {
+  if (typeof compareTaxonCorrelationHideTooltip === 'function') compareTaxonCorrelationHideTooltip();
+  if (typeof compareCooccurrenceHideTooltip === 'function') compareCooccurrenceHideTooltip();
+  if (typeof compareDistanceMatrixHideTooltip === 'function') compareDistanceMatrixHideTooltip();
+  ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     var selected = name === view;
     $('#compare' + name + 'View').prop('hidden', !selected);
     $('#compare' + name + 'Tab').toggleClass('active', selected).attr('aria-selected', String(selected));
@@ -94,12 +97,16 @@ function setCompareView(view) {
   } else if (view === 'Ordination') {
     requestCompareOrdination();
     requestCompareDendrogram();
+    requestCompareDistanceMatrix();
+  } else if (view === 'TaxonRelationships') {
+    renderCompareTaxonCorrelation();
+    renderCompareCooccurrence();
   }
 }
 
 function initialiseCompareViews() {
   compareSampleGroupsLoad();
-  ['Plots', 'Diversity', 'Ordination', 'Amr'].forEach(function (name) {
+  ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     $('#compare' + name + 'Tab').off('.compareView').on('click.compareView', function () {
       setCompareView(name);
     });

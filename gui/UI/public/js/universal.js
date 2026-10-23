@@ -195,6 +195,8 @@ $(document).ready(function() {
 toolTipDiv = d3.select("body").append("div")
     .attr("class", "toolTip")
     .style("opacity", 0)
+    .style("top", "0px")
+    .style("left", "0px")
     .style("color", "black");
 
 
