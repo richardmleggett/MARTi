@@ -323,111 +323,56 @@ if (compareDonutSampleName == "show") {
 };
 
 
-donutCompareLegend.on("mouseover", function(d, i) {
+var allSlices = d3.select("#compareDonutPlot").selectAll("svg.pie path.arc");
+var legendGroups = donutCompareLegend.select("g");
 
-    donutSlices.filter(function(x) {
-        if (x.data.ncbiID == d.ncbiID) {
-        } else {
-          d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
-        };
-    });
+function highlightTaxon(ncbiID) {
+  allSlices.interrupt().style("stroke", null).style("stroke-width", null);
+  allSlices.filter(function(d) { return d.data.ncbiID == ncbiID; })
+    .style("opacity", 1)
+    .style("stroke", "#1f1f1f")
+    .style("stroke-width", "1.5px");
+  allSlices.filter(function(d) { return d.data.ncbiID != ncbiID; })
+    .transition().duration(opacityTransitionTime).style("opacity", 0.3);
 
-    donutCompareLegend.filter(function(x) {
-        if (x == d) {
-            d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
-        } else {
-          d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
-        };
-    });
+  legendGroups.interrupt();
+  legendGroups.filter(function(d) { return d.ncbiID == ncbiID; }).style("opacity", 1);
+  legendGroups.filter(function(d) { return d.ncbiID != ncbiID; })
+    .transition().duration(opacityTransitionTime).style("opacity", 0.3);
+  donutCompareLegend.select("g text")
+    .style("font-weight", function(d) { return d.ncbiID == ncbiID ? "bold" : "normal"; });
+}
 
-});
+function clearHighlight() {
+  allSlices.interrupt().style("stroke", null).style("stroke-width", null)
+    .transition().duration(opacityTransitionTime).style("opacity", 1);
+  legendGroups.interrupt().transition().duration(opacityTransitionTime).style("opacity", 1);
+  donutCompareLegend.select("g text").style("font-weight", "normal");
+}
 
-donutCompareLegend.on("mouseout", function(d, i) {
+donutCompareLegend.on("mouseover", function(d) { highlightTaxon(d.ncbiID); })
+  .on("mouseout", clearHighlight);
 
-
-  donutSlices.filter(function(x) {
-      if (x.data.ncbiID == d.ncbiID) {
-      } else {
-        d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
-      };
+allSlices.on("mouseover", function(d) {
+    highlightTaxon(d.data.ncbiID);
+    showTooltip(d);
+  })
+  .on("mousemove", showTooltip)
+  .on("mouseout", function() {
+    clearHighlight();
+    toolTipDiv.interrupt().style("opacity", 0);
   });
 
-  donutCompareLegend.filter(function(x) {
-      if (x == d) {
-          d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
-      } else {
-        d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
-      };
-  });
-
-
-});
-
-
-donutSlices.on("mouseover", function(d, i) {
-
-
-  donutCompareLegend.filter(function(x) {
-      if (d.data.ncbiID == x.ncbiID) {
-          d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
-      } else {
-        d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
-      };
-  });
-
-
-  donutSlices.filter(function(x) {
-      if (d.data.ncbiID == x.data.ncbiID) {
-      } else {
-        d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
-      };
-  });
-
-
-});
-
-donutSlices.on("mousemove", function(d, i) {
-
-  toolTipDiv.transition()
-     .duration(0)
-     .style("opacity", .95);
-
-
-
-  toolTipDiv.html("<small class='text-gray-800'>" + d.data.sample + "</small>" +
+function showTooltip(d) {
+  toolTipDiv.interrupt().style("opacity", .95)
+    .html("<small class='text-gray-800'>" + d.data.sample + "</small>" +
   "<h5 class='mb-0'>" + d.data.name + "</h5>" +
   "<small class='text-gray-800'>" + d.data.ncbiRank + "</small>" +
   "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId,d.data.taxaReadCount) +
   "<br/>" + plotLevelSelectedCompareTooltipPrefix + " %: " + Math.round(((d.data.taxaReadCount/d.data.totalReadCount)*10000))/100)
      .style("left", (tooltipPos(d3.event.pageX)) + "px")
      .style("top", (d3.event.pageY - 35) + "px");
-
-});
-
-donutSlices.on("mouseout", function(d, i) {
-
-donutCompareLegend.filter(function(x) {
-    if (d.data.ncbiID == x.ncbiID) {
-        d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
-    } else {
-      d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
-    };
-});
-
-
-donutSlices.filter(function(x) {
-    if (d.data.ncbiID == x.data.ncbiID) {
-    } else {
-      d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
-    };
-});
-
-  toolTipDiv.transition()
-      .duration(50)
-      .style("opacity", 0);
-
-
-});
+}
 
 
 

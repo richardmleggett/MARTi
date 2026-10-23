@@ -3,6 +3,17 @@ var plotLevelSelectedCompareId = "read";
 var plotLevelSelectedCompareTooltipPrefix;
 var plotLevelSelectedCompareTreeName = "tree";
 
+function refreshCompareSampleOrder() {
+  updateCompareSampleSummary();
+  if (typeof compareTreeDataGlobal === 'undefined' || !Array.isArray(compareTreeDataGlobal)) return;
+  newCompareTreeData = true;
+  updateComparePlots(compareTreeDataGlobal, true);
+  newCompareTreeData = false;
+  if (typeof rareData !== 'undefined' && rareData) plotRarefactionCompare(rareData);
+  reorderAmrHm();
+  renderCompareDistanceMatrix();
+}
+
 function initialiseComparePage() {
 
   socket.emit('abundance-options-request', { clientId: uuid, page: 'compare' });
@@ -112,7 +123,8 @@ function initialiseComparePage() {
 
 
 
-  sampleOrdertype = "ID asc";
+  compareSampleOrderLoad();
+  sampleOrdertype = manualSortCompareSamplePaths.length ? "Manual" : "ID asc";
 
   $('#sampleOrderCompareButton').text(sampleOrdertype);
   $('#sampleOrderCompareMenu a.rank:contains(' + sampleOrdertype + ')').addClass("active");
@@ -126,12 +138,7 @@ function initialiseComparePage() {
               $(this).addClass('active');
               sampleOrdertype = this.textContent;
               $('#sampleOrderCompareButton').text(sampleOrdertype);
-              newCompareTreeData = true;
-              updateComparePlots(compareTreeDataGlobal,true);
-              newCompareTreeData = false;
-              plotRarefactionCompare(rareData);
-              reorderAmrHm();
-              renderCompareDistanceMatrix();
+              refreshCompareSampleOrder();
           }
   });
 
@@ -175,34 +182,22 @@ function initialiseComparePage() {
     clientId: uuid
   });
 
-  manualSortCompareNames = [];
-
   sortableCompareNames = new Sortable(compareSampleNameList, {
       animation: 150,
       ghostClass: 'compareSampleGhostClass',
       handle: '.compareSampleDragHandle',
       onUpdate: function () {
-          manualSortCompareNames = [];
+        var visibleOrder = [];
         $('#compareSampleNameList tr').each(function() {
-          var runId = this.getAttribute('data-run');
-          var name = this.getAttribute('data-id');
-          manualSortCompareNames.push({
-            name: name,
-            runId: runId
-          });
+          visibleOrder.push([this.getAttribute('data-pathrun'), this.getAttribute('data-pathname')]);
         });
+        compareSampleOrderSave(visibleOrder);
 
         $('#sampleOrderCompareMenu a.rank').removeClass('active');
         sampleOrdertype = "Manual";
         $('#sampleOrderCompareMenu a.rank:contains(' + sampleOrdertype + ')').addClass("active");
         $('#sampleOrderCompareButton').text(sampleOrdertype);
-        updateCompareSampleSummary();
-        newCompareTreeData = true;
-        updateComparePlots(compareTreeDataGlobal,true);
-        newCompareTreeData = false;
-        plotRarefactionCompare(rareData);
-        reorderAmrHm();
-        renderCompareDistanceMatrix();
+        refreshCompareSampleOrder();
       }
 
   });
@@ -406,42 +401,6 @@ compareStackedBarHigherTaxaNode = "show";
       updateCompareSampleNameList(selectedCompareMetaDataArray);
   });
 
-var defaultExportOptions = {
-  columns:{
-    "name": {
-          "header": "Name"
-      },
-      "ncbiId": {
-          "header": "NCBI ID"
-      },
-      "ncbiRank": {
-          "header": "NCBI Rank"
-      },
-      "readCount": {
-          "header": "Read count"
-      },
-      "summedCount": {
-          "header": "Summed count"
-      }
-    },
-    delimiter: ",",
-    delimiterName: "comma",
-    extension: "csv",
-    type: "text/csv;charset=utf-8;"
-};
-
-d3.select('#downloadCompareAssignments').on('click', function(){
-var csvToExport = convertDataForExport(compareTaxaData,plotLevelSelectedCompareTooltipPrefix,sortCompareNameArray,defaultExportOptions);
-var date = getDate() + "_" + getTime();
-var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
-var outputFilename = "compare_taxa_assignments_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
-// export_as_csv(csvToExport,outputFilename);
-var csvData = new Blob([csvToExport], { type: defaultExportOptions.type});
-saveAs(csvData, outputFilename+'.'+defaultExportOptions.extension);
-
-});
-
-
 $('#compareTaxaTreeCard > .card-header').on('click', function(event) {
   if ($(event.target).closest('.comparePlotHeaderActions').length) return;
 
@@ -549,7 +508,6 @@ compareStackedBarHigherTaxaNode;
 var taxonomicRankChangedCompare = false;
 
 var sortableCompareNames;
-var manualSortCompareNames = [];
 
 var sampleOrdertype;
 
@@ -569,7 +527,7 @@ var taxonomicRankSelectedCompareText = "Genus";
 var compareAccumulationDataAvailable = false;
 var compareAmrDataAvailable = false;
 
-var opacityTransitionTime = 450;
+var opacityTransitionTime = 150;
 
 
 
@@ -822,8 +780,12 @@ hmTaxaData = [];
 
 sortCompareNameArray = [];
 
-if (sampleOrdertype == "Manual" && manualSortCompareNames.length !== 0) {
-  sortCompareNameArray = manualSortCompareNames;
+if (sampleOrdertype == "Manual" && manualSortCompareSamplePaths.length !== 0) {
+  var manuallyOrderedSamples = compareSampleOrderSort(selectedCompareMetaDataArray);
+  selectedCompareMetaDataArray.splice(0, selectedCompareMetaDataArray.length, ...manuallyOrderedSamples);
+  sortCompareNameArray = selectedCompareMetaDataArray.map(function(sample) {
+    return { name: sample.id, runId: sample.runId, pathRun: sample.pathRun, pathName: sample.pathName };
+  });
 } else if (sampleOrdertype == "ID asc"){
 selectedCompareMetaDataArray.sort(function(x, y){
  return d3.ascending(x.id, y.id);
@@ -955,7 +917,14 @@ else if (sampleOrdertype == "Yield asc"){
 
 
 d3.select("#compareSampleNameList").selectAll("tr").sort(function(a, b){
-  return sortCompareNameArray.findIndex(e => e.name == a.id && e.runId == a.runId) - sortCompareNameArray.findIndex(e => e.name == b.id && e.runId == b.runId);
+  function position(sample) {
+    return sortCompareNameArray.findIndex(function(entry) {
+      return entry.pathRun === undefined
+        ? entry.name == sample.id && entry.runId == sample.runId
+        : entry.pathRun == sample.pathRun && entry.pathName == sample.pathName;
+    });
+  }
+  return position(a) - position(b);
 })
 updateCompareSampleSummary();
 
@@ -1044,126 +1013,41 @@ if (treeplot){
 
 
 function makeAssignmentExportData(compareSampleData) {
-  var assignmentExportData = {"n/a":{name: "Other", ncbiRank: "n/a"}};
+  try {
+    var result = buildSampleAssignmentExport(
+      exportCardObject.selectedSamples, compareSampleData, exportCardObject);
+    if (result.missingSamples.length) {
+      var missing = result.missingSamples.map(function(sample) {
+        return sample.sampleId + ' (' + sample.runId + '/' + sample.directory + ')';
+      });
+      $('#sampleExportStatus').addClass('text-danger')
+        .text('No tree at ' + exportCardObject.lca + '% for: ' + missing.join(', ') + '. Export cancelled.');
+      return;
+    }
+    if (!result.rowCount) {
+      $('#sampleExportStatus').addClass('text-danger')
+        .text('No taxa matched these export settings.');
+      return;
+    }
 
-      if(isEmpty(compareSampleData)) {
-
-      } else {
-
-        for (var sample of compareSampleData) {
-
-          var id;
-          var runId;
-
-        for (var sampleData of selectedCompareMetaDataArray) {
-          if (sample.id == sampleData.pathName && sample.runId == sampleData.pathRun) {
-            id = sampleData.id;
-            runId = sampleData.runId;
-          }
-        };
-
-          var unclassifiedNode;
-
-          //TempSettings
-          var plotLevelSelectedCompareTreeName = "tree";
-          var plotLevelSelectedCompareId = "read";
-          var exportTaxRankSelected = exportCardObject.rankNum;
-          var exportLca = exportCardObject.lca;
-
-          var data = sample["tree"][plotLevelSelectedCompareTreeName];
-          plotLevelDataManipulation(plotLevelSelectedCompareId,data);
-
-          var sampleLeaves = [];
-          var sampleTaxaAtRank = [];
-
-          function taxaAtRankB(d) {
-            if (d.rank < exportTaxRankSelected) {
-              if(exportTaxRankSelected == 10){
-                sampleTaxaAtRank.push(d);
-              };
-              if (d.name == "unclassified") {
-                unclassifiedNode = d;
-                unclassifiedNode.chartValue = unclassifiedNode.value;
-              };
-              if (d.children) {
-                d.children.forEach(function(c){
-                    taxaAtRankB(c);
-                  });
-              } else {
-                sampleLeaves.push(d.ncbiID);
-              };
-            } else if (d.rank == exportTaxRankSelected) {
-              sampleLeaves.push(d.ncbiID);
-              sampleTaxaAtRank.push(d);
-            };
-
-          };
-          taxaAtRankB(data);
-
-            var thisSampleTree = sampleTaxaAtRank;
-
-            thisSampleTree.forEach(function(d) {
-              if (!d.hasOwnProperty("meanIdentity")){
-                d.meanIdentity = "-";
-                d.meanMaxIdentity = "-";
-              }
-              if (sampleLeaves.includes(d.ncbiID)){
-                d.chartValue = d.summedValue;
-              } else {
-                d.chartValue = d.value;
-              };
-            });
-
-            var thisSampleTreeSorted = thisSampleTree.sort(function(a, b) {
-                return b.chartValue - a.chartValue
-            })
-
-            var unclassifiedIndex = findWithAttr(thisSampleTreeSorted, "name", "unclassified");
-            if (unclassifiedIndex == -1) {
-                thisSampleTreeSorted.push(unclassifiedNode);
-            }
-
-              for (const [i,taxa] of thisSampleTreeSorted.entries()) {
-
-                if (!assignmentExportData.hasOwnProperty(taxa.ncbiID)){
-                  assignmentExportData[taxa.ncbiID] = {
-                    name: taxa.name,
-                    values: {},
-                    ncbiRank: taxa.ncbiRank
-                  };
-                };
-
-                assignToObject(assignmentExportData, [taxa.ncbiID, 'values', runId, id, 'count'], taxa.value);
-                assignToObject(assignmentExportData, [taxa.ncbiID, 'values', runId, id, 'summedCount'], taxa.summedValue);
-                assignToObject(assignmentExportData, [taxa.ncbiID, 'values', runId, id, 'chartValue'], taxa.chartValue);
-                assignToObject(assignmentExportData, [taxa.ncbiID, 'values', runId, id, 'meanIdentity'], taxa.meanIdentity);
-                assignToObject(assignmentExportData, [taxa.ncbiID, 'values', runId, id, 'meanMaxIdentity'], taxa.meanMaxIdentity);
-
-              };
-
-        }
-
-        var exportPrefix = plotLevelSelectorDashboardObject[plotLevelSelectedCompareId].prefix;
-        var orderArray = [];
-        selectedCompareMetaDataArray.sort(function(x, y){
-         return d3.ascending(x.id, y.id);
-        })
-          for (const sample of selectedCompareMetaDataArray) {
-            orderArray.push({
-              name: sample.id,
-              runId: sample.runId
-            });
-          };
-
-        var stringToExport = convertDataForExport(assignmentExportData,exportPrefix,orderArray,exportCardObject);
-        var date = getDate() + "_" + getTime();
-        var levelSelected = exportCardObject.rankName.toLowerCase().replace(" ", "_")
-        var outputFilename = "marti_assignments_lca_" + exportLca + "_" + levelSelected + "_" + date;
-        // export_as_csv(stringToExport,outputFilename);
-        var exportBlob = new Blob([stringToExport], { type: exportCardObject.type});
-        saveAs(exportBlob, outputFilename+'.'+exportCardObject.extension);
-      }
-};
+    var date = getDate() + '_' + getTime();
+    var levelSelected = exportCardObject.rankName.toLowerCase().replace(/\s+/g, '_');
+    var outputFilename = 'marti_assignments_lca_' + exportCardObject.lca + '_' + levelSelected + '_' + date;
+    var contentType = exportCardObject.extension === 'csv' ? 'text/csv;charset=utf-8;'
+      : 'text/plain;charset=utf-8;';
+    saveAs(new Blob([result.text], { type: contentType }),
+      outputFilename + '.' + exportCardObject.extension);
+    $('#sampleExportStatus').removeClass('text-danger')
+      .text('Exported ' + result.rowCount + ' taxon rows.');
+  } catch (error) {
+    console.error('Assignment export failed:', error);
+    $('#sampleExportStatus').addClass('text-danger')
+      .text('The export could not be prepared. Check the browser console for details.');
+  } finally {
+    exportRequestPending = false;
+    $('#sampleExportButton').prop('disabled', false);
+  }
+}
 
 function compareSampleBarcodeLabel(barcode) {
   if (barcode === null || barcode === undefined || barcode === '') return '—';
@@ -1171,6 +1055,9 @@ function compareSampleBarcodeLabel(barcode) {
 }
 
 function updateCompareSampleNameList(names) {
+  if (sampleOrdertype === 'Manual' && manualSortCompareSamplePaths.length) {
+    names = compareSampleOrderSort(names);
+  }
   var compareSampleList = d3.select('#compareSampleNameList').selectAll('tr')
     .data(names, function(d) { return JSON.stringify([String(d.pathRun), String(d.pathName)]); });
 
@@ -1235,7 +1122,7 @@ function updateCompareSampleNameList(names) {
 
 var newCompareTreeData = false;
 
-socket.on('compare-tree-response', function(treeData) {
+socket.on('compare-tree-response', function(treeData, requestInfo) {
   if(currentPage=="Compare") {
 
   compareTreeDataGlobal = treeData;
@@ -1264,7 +1151,8 @@ socket.on('compare-tree-response', function(treeData) {
   renderCompareCooccurrence();
   newCompareTreeData = false;
   plotLevelSelectorChanged = false;
-} else {
+} else if (currentPage === 'Samples' && exportRequestPending &&
+    requestInfo && requestInfo.lca === 'lca_' + exportCardObject.lca) {
   makeAssignmentExportData(treeData);
 }
 });
@@ -1826,110 +1714,6 @@ function topNCompareAmrHm(sample,run,data,threshold){
   // formattedAmrData.push(sampleDataArray);
 
 }
-
-function convertDataForExport(data,prefix,orderArray,options) {
-  var dataArray = [];
-  var abundanceLevel = prefix;
-  var header = [];
-  var excludedKeys = ["readCount","summedCount","meanIdentity","meanMaxIdentity"];
-
-  for (const [key, value] of Object.entries(options.columns)) {
-    if (!excludedKeys.includes(key)){
-      header.push(value.header);
-    }
-  }
-
-  if (options.columns.hasOwnProperty("readCount")){
-    for (var sample of orderArray) {
-      var sampleNameRunCount = sample.name + " (" + sample.runId + ") " + abundanceLevel + " count";
-      header.push(sampleNameRunCount);
-    };
-  }
-
-  if (options.columns.hasOwnProperty("summedCount")){
-    for (var sample of orderArray) {
-      var sampleNameRunSummed = sample.name + " (" + sample.runId + ") Summed " + abundanceLevel.toUpperCase().toLowerCase() + " count";
-      header.push(sampleNameRunSummed);
-    };
-  }
-
-  if (options.columns.hasOwnProperty("meanIdentity")){
-    for (var sample of orderArray) {
-      var sampleHeader = sample.name + " (" + sample.runId + ") Mean identity";
-      header.push(sampleHeader);
-    };
-  }
-
-  if (options.columns.hasOwnProperty("meanMaxIdentity")){
-    for (var sample of orderArray) {
-      var sampleHeader = sample.name + " (" + sample.runId + ") Mean max identity";
-      header.push(sampleHeader);
-    };
-  }
-
-
-  dataArray.push(header);
-
-  for (const [key, value] of Object.entries(data)) {
-    if (key !== "n/a") {
-      var keyRow = [];
-      if (options.columns.hasOwnProperty("name")){
-        keyRow.push(value.name);
-      }
-      if (options.columns.hasOwnProperty("ncbiId")){
-        keyRow.push(key);
-      }
-      if (options.columns.hasOwnProperty("ncbiRank")){
-        keyRow.push(value.ncbiRank);
-      }
-      for (var sample of orderArray) {
-          if (options.columns.hasOwnProperty("readCount")){
-            if (checkNested(value.values, sample.runId, sample.name)) {
-              keyRow.push((value["values"][sample.runId][sample.name]['count']).toString());
-            } else {
-              keyRow.push('0');
-            };
-          }
-      };
-      for (var sample of orderArray) {
-          if (options.columns.hasOwnProperty("summedCount")){
-            if (checkNested(value.values, sample.runId, sample.name)) {
-              keyRow.push((value["values"][sample.runId][sample.name]['summedCount']).toString());
-            } else {
-              keyRow.push('0');
-            };
-          }
-      };
-      for (var sample of orderArray) {
-          if (options.columns.hasOwnProperty("meanIdentity")){
-            if (checkNested(value.values, sample.runId, sample.name)) {
-              keyRow.push((value["values"][sample.runId][sample.name]['meanIdentity']).toString());
-            } else {
-              keyRow.push('-');
-            };
-          }
-      };
-      for (var sample of orderArray) {
-          if (options.columns.hasOwnProperty("meanMaxIdentity")){
-            if (checkNested(value.values, sample.runId, sample.name)) {
-              keyRow.push((value["values"][sample.runId][sample.name]['meanMaxIdentity']).toString());
-            } else {
-              keyRow.push('-');
-            };
-          }
-      };
-      dataArray.push(keyRow);
-    };
-  };
-
-  var exportString = '';
-  var finalDelimiter = options.delimiter === '\\t' ? '\t' : options.delimiter;
-  dataArray.forEach(function(infoArray, index) {
-    dataString = infoArray.join(finalDelimiter);
-    exportString += index < dataArray.length-1 ? dataString + '\n' : dataString;
-  });
-  return exportString;
-};
 
 function generateCompareAmrCsv(data) {
   var dataArray = [];

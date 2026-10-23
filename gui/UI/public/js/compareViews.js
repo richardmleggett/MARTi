@@ -4,6 +4,70 @@ function compareViewActive(view) {
 
 // Keep the existing PCoA storage key so previously assigned groups still load.
 var compareSampleGroups = {};
+var manualSortCompareSamplePaths = [];
+
+function compareSampleOrderKey(runId, sampleName) {
+  return JSON.stringify([String(runId), String(sampleName)]);
+}
+
+function compareSampleOrderStorageKey() {
+  return 'martiCompareSampleOrder:' + (clientProject || 'default');
+}
+
+function compareSampleOrderLoad() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(compareSampleOrderStorageKey()) || '[]');
+    var seen = new Set();
+    manualSortCompareSamplePaths = Array.isArray(saved) ? saved.filter(function(sample) {
+      if (!Array.isArray(sample) || sample.length !== 2) return false;
+      if (typeof sample[0] !== 'string' || typeof sample[1] !== 'string') return false;
+      var key = compareSampleOrderKey(sample[0], sample[1]);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }) : [];
+  } catch (_) {
+    manualSortCompareSamplePaths = [];
+  }
+}
+
+function compareSampleOrderSort(samples) {
+  var positions = new Map(manualSortCompareSamplePaths.map(function(sample, index) {
+    return [compareSampleOrderKey(sample[0], sample[1]), index];
+  }));
+  return samples.slice().sort(function(a, b) {
+    var aPosition = positions.get(compareSampleOrderKey(a.pathRun, a.pathName));
+    var bPosition = positions.get(compareSampleOrderKey(b.pathRun, b.pathName));
+    if (aPosition !== undefined && bPosition !== undefined) return aPosition - bPosition;
+    if (aPosition !== undefined) return -1;
+    if (bPosition !== undefined) return 1;
+    return String(a.id).localeCompare(String(b.id)) ||
+      String(a.pathRun).localeCompare(String(b.pathRun)) ||
+      String(a.pathName).localeCompare(String(b.pathName));
+  });
+}
+
+function compareSampleOrderSave(visibleSamples) {
+  var seen = new Set();
+  var ordered = visibleSamples.filter(function(sample) {
+    if (!Array.isArray(sample) || sample.length !== 2) return false;
+    var key = compareSampleOrderKey(sample[0], sample[1]);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  var next = 0;
+  var retained = manualSortCompareSamplePaths.map(function(sample) {
+    return seen.has(compareSampleOrderKey(sample[0], sample[1])) ? ordered[next++] : sample;
+  });
+  manualSortCompareSamplePaths = retained.concat(ordered.slice(next));
+  try {
+    localStorage.setItem(compareSampleOrderStorageKey(), JSON.stringify(manualSortCompareSamplePaths));
+    $('#compareOrderStatus').text('');
+  } catch (_) {
+    $('#compareOrderStatus').text('Manual order could not be saved in this browser.');
+  }
+}
 
 function compareSampleGroupKey(runId, sampleName) {
   return JSON.stringify([String(runId), String(sampleName)]);
@@ -126,6 +190,12 @@ function initialiseCompareViews() {
     updateCompareSampleGroupInputs();
     if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
     if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+  });
+  $(window).off('storage.compareOrder').on('storage.compareOrder', function(event) {
+    if (event.originalEvent.key !== compareSampleOrderStorageKey()) return;
+    compareSampleOrderLoad();
+    if (currentPage === 'Compare' && sampleOrdertype === 'Manual' &&
+        typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
   });
   updateCompareGroupSuggestions();
   updateCompareSampleSummary();

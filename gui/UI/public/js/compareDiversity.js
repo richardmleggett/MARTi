@@ -252,12 +252,13 @@ function renderCompareDiversityPlot() {
     });
   groups.filter(function (point) { return point.value != null && isFinite(point.value); })
     .append('circle').attr('cx', function (point) { return x(point.value); }).attr('cy', 0).attr('r', 6)
+    .attr('class', 'compareDiversityPoint')
     .attr('tabindex', 0).attr('role', 'img')
     .attr('aria-label', function (point) {
       return point.record.metadata.id + ', run ' + point.record.metadata.runId + ', ' + detail.label +
         ' ' + compareDiversityNumber(point.value, detail.decimals);
     })
-    .style('fill', '#4e73df').style('stroke', '#284fad').style('stroke-width', 1);
+    .attr('fill', '#4e73df').attr('stroke', '#284fad').attr('stroke-width', 1);
   groups.append('text').attr('x', function (point) {
     return point.value == null || !isFinite(point.value) ? left + 11 : x(point.value) + 11;
   }).attr('y', 4)

@@ -121,16 +121,6 @@ function returnTopTaxa(data) {
       };
 
 
-          if (!dashboardTaxaData.hasOwnProperty(taxa.ncbiID)){
-            dashboardTaxaData[taxa.ncbiID] = {
-              name: taxa.name,
-              summedCount: taxa.summedValue,
-              count: taxa.value,
-              ncbiRank: taxa.ncbiRank
-            };
-          };
-
-
     };
 
 
@@ -263,166 +253,74 @@ function donutUpdate(data) {
 
 
 
-        slice.on("mousemove", function(d) {
+        var allSlices = donutSVG.select(".slices").selectAll("path.slice");
+        var hoverDuration = 150;
+        allSlices.interrupt("donutSlice")
+            .style("opacity", 1).style("stroke", "white").style("stroke-width", "0.5px");
+        dashboardTaxaDonutLegend.interrupt("donutSlice").style("opacity", 1);
+        dashboardTaxaDonutLegend.select("g text")
+            .classed("hoverDonutPlotTextHighlight", false);
 
-            toolTipDiv.style("opacity", .95)
+        function taxonKey(d) {
+            return d.ncbiID == "n/a" ? "label:" + d.label : "id:" + d.ncbiID;
+        }
+
+        function highlightTaxon(selectedKey) {
+            allSlices.interrupt("donutSlice")
+                .style("stroke", "white").style("stroke-width", "0.5px");
+            allSlices.filter(function(d) { return taxonKey(d.data) == selectedKey; })
+                .style("opacity", 1)
+                .style("stroke", "#1f1f1f").style("stroke-width", "1.5px");
+            allSlices.filter(function(d) { return taxonKey(d.data) != selectedKey; })
+                .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
+
+            dashboardTaxaDonutLegend.interrupt("donutSlice");
+            dashboardTaxaDonutLegend.filter(function(d) { return taxonKey(d) == selectedKey; })
+                .style("opacity", 1);
+            dashboardTaxaDonutLegend.filter(function(d) { return taxonKey(d) != selectedKey; })
+                .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
+            dashboardTaxaDonutLegend.select("g text")
+                .classed("hoverDonutPlotTextHighlight", function(d) {
+                    return taxonKey(d) == selectedKey;
+                });
+            dashboardTaxaDonutLegend.filter(function(d) { return taxonKey(d) == selectedKey; })
+                .attr("width", function() { return this.firstChild.getBBox().width + 10; });
+        }
+
+        function clearTaxonHighlight() {
+            allSlices.interrupt("donutSlice")
+                .style("stroke", "white").style("stroke-width", "0.5px")
+                .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+            dashboardTaxaDonutLegend.interrupt("donutSlice")
+                .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+            dashboardTaxaDonutLegend.select("g text")
+                .classed("hoverDonutPlotTextHighlight", false);
+        }
+
+        function showTaxonTooltip(d) {
+            toolTipDiv.interrupt().style("opacity", .95)
                 .html("<h5 class='mb-0'>" + d.data.label + "</h5><small class='text-gray-800'>" + d.data.ncbiRank +
-                "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s: " + toolTipValueFormat(plotLevelSelectedDashboardId,d.value) +
-                // "<br/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + " %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
+                "</em></small><hr class='toolTipLine'/>" + plotLevelSelectorDashboardObject[plotLevelSelectedDashboardId].prefix + "s: " + toolTipValueFormat(plotLevelSelectedDashboardId, d.value) +
                 "<br/>Donut %: " + Math.round(((d.value / dataSum) * 10000)) / 100 +
-                "<br/>% of analysed: " + Math.round(d.data.percOfRootTotal * 100)/100)
-
-                .style("left", (tooltipPos(d3.event.pageX)) + "px")
+                "<br/>% of analysed: " + Math.round(d.data.percOfRootTotal * 100) / 100)
+                .style("left", tooltipPos(d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 35) + "px");
-        });
+        }
 
-        slice.on("mouseover", function(d, i) {
-
-            slice.filter(function(x) {
-                if (d.data.ncbiID != x.data.ncbiID) {
-                    d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                };
+        allSlices
+            .on("mouseover", function(d) {
+                highlightTaxon(taxonKey(d.data));
+                showTaxonTooltip(d);
+            })
+            .on("mousemove", showTaxonTooltip)
+            .on("mouseout", function() {
+                clearTaxonHighlight();
+                toolTipDiv.interrupt().style("opacity", 0);
             });
 
-
-            dashboardTaxaDonutLegend.filter(function(x) {
-                var tempID = x.ncbiID;
-                var match = "ncbiID";
-                if (tempID == "n/a"){
-                  tempID = x.label;
-                  match = "label";
-                };
-                if (d["data"][match] == tempID) {
-                  d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
-                  d3.select(this).attr("width",function(d) { var getWidth = this.firstChild.getBBox().width + 10; if (getWidth != 10) { return getWidth;} else {return "200"} });
-                } else{
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                };
-            });
-
-            // d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-            //   var tempID = taxonomyDataTable.row(this).data()[4];
-            //   var match = "ncbiID";
-            //   if (tempID == "n/a"){
-            //     tempID = x.label;
-            //     match = "label";
-            //   };
-            //     if (tempID == d["data"][match]) {
-            //         d3.select(this).classed("donut-table-hover", true);
-            //     };
-            // });
-
-
-        });
-
-        slice.on("mouseout", function(d, i) {
-
-            slice.filter(function(x) {
-              if (d.data.ncbiID != x.data.ncbiID) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-              };
-            });
-
-
-            dashboardTaxaDonutLegend.filter(function(x) {
-              var tempID = x.ncbiID;
-              var match = "ncbiID";
-              if (tempID == "n/a"){
-                tempID = x.label;
-                match = "label";
-              };
-                if (d["data"][match] == tempID) {
-                  d3.select(this).select("rect").classed("goldFill", false);
-                  d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
-                } else {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-                };
-            });
-
-
-            // d3.selectAll("#selectedColumn tbody tr").filter(function(x) {
-            //   var tempID = taxonomyDataTable.row(this).data()[4];
-            //   var match = "ncbiID";
-            //   if (tempID == "n/a"){
-            //     tempID = x.label;
-            //     match = "label";
-            //   };
-            //     if (tempID == d["data"][match]) {
-            //         d3.select(this).classed("donut-table-hover", false);
-            //     };
-            // });
-
-
-
-            toolTipDiv.style("opacity", 0);
-
-
-
-        });
-
-        dashboardTaxaDonutLegend.on("mouseover", function(d, i) {
-
-        slice.filter(function(x) {
-          var tempID = x.data.ncbiID;
-          var match = "ncbiID";
-          if (tempID == "n/a"){
-            tempID = x.data.label;
-            match = "label";
-          };
-            if (tempID != d[match]) {
-                d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-
-        dashboardTaxaDonutLegend.filter(function(x) {
-            var tempID = x.ncbiID;
-            var match = "ncbiID";
-            if (tempID == "n/a"){
-              tempID = x.label;
-              match = "label";
-            };
-            if (d[match] == tempID) {
-              d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
-              d3.select(this).attr("width",function(d) { var getWidth = this.firstChild.getBBox().width + 10; if (getWidth != 10) { return getWidth;} else {return "200"} });
-            } else{
-              d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-        });
-
-        dashboardTaxaDonutLegend.on("mouseout", function(d, i) {
-
-        slice.filter(function(x) {
-          var tempID = x.data.ncbiID;
-          var match = "ncbiID";
-          if (tempID == "n/a"){
-            tempID = x.data.label;
-            match = "label";
-          };
-            if (tempID != d[match]) {
-                d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-
-
-        dashboardTaxaDonutLegend.filter(function(x) {
-          var tempID = x.ncbiID;
-          var match = "ncbiID";
-          if (tempID == "n/a"){
-            tempID = x.label;
-            match = "label";
-          };
-            if (d[match] == tempID) {
-              d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
-            } else {
-              d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-        });
+        dashboardTaxaDonutLegend
+            .on("mouseover", function(d) { highlightTaxon(taxonKey(d)); })
+            .on("mouseout", clearTaxonHighlight);
 
 
 updateTaxTableColors();

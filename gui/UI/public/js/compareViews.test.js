@@ -47,3 +47,35 @@ test('Samples group edits recolour PCoA and UPGMA without recalculating either a
   assert.equal(dendrogramRenders, 2);
   assert.equal(JSON.parse(saved.get(key))['["run-2","path-b"]'], undefined);
 });
+
+test('manual sample order is saved per project and survives renamed or temporarily deselected samples', () => {
+  const saved = new Map();
+  const context = vm.createContext({
+    clientProject: 'project-a',
+    localStorage: {
+      getItem: key => saved.get(key) || null,
+      setItem: (key, value) => saved.set(key, value)
+    },
+    $: () => ({ text() { return this; } })
+  });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  const key = 'martiCompareSampleOrder:project-a';
+
+  vm.runInContext('compareSampleOrderSave([["run", "path-a"], ["run", "path-b"], ["run", "path-c"]])', context);
+  assert.deepEqual(JSON.parse(saved.get(key)), [['run', 'path-a'], ['run', 'path-b'], ['run', 'path-c']]);
+  vm.runInContext('compareSampleOrderSave([["run", "path-c"], ["run", "path-a"]])', context);
+  assert.deepEqual(JSON.parse(saved.get(key)), [['run', 'path-c'], ['run', 'path-b'], ['run', 'path-a']]);
+
+  vm.runInContext('manualSortCompareSamplePaths = []; compareSampleOrderLoad()', context);
+  const sorted = vm.runInContext(`compareSampleOrderSort([
+    { id: 'Renamed A', pathRun: 'run', pathName: 'path-a' },
+    { id: 'New D', pathRun: 'run', pathName: 'path-d' },
+    { id: 'B', pathRun: 'run', pathName: 'path-b' },
+    { id: 'C', pathRun: 'run', pathName: 'path-c' }
+  ]).map(sample => sample.pathName)`, context);
+  assert.deepEqual(Array.from(sorted), ['path-c', 'path-b', 'path-a', 'path-d']);
+
+  context.clientProject = 'project-b';
+  vm.runInContext('compareSampleOrderLoad()', context);
+  assert.equal(vm.runInContext('manualSortCompareSamplePaths.length', context), 0);
+});

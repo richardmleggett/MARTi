@@ -76,11 +76,6 @@ var amrPie = d3.layout.pie()
         return d.value;
     });
 
-var key = function(d) {
-    return d.data.label;
-    };
-
-
   // var amrDonutColor = dashboardPlotColorPalette;
   var amrDonutColor;
 
@@ -111,6 +106,8 @@ if (Array.isArray(data)){
     };
 
     taxaSeparateCounts.push({
+      taxonKey: taxa.ncbiID == null ? 'name:' + taxa.name : 'id:' + taxa.ncbiID,
+      ncbiID: taxa.ncbiID,
       taxaName: taxa.name,
       count: speciesCountAtChunk
     });
@@ -138,6 +135,7 @@ if (Array.isArray(data)){
     };
 
     taxaSeparateCounts.push({
+      taxonKey: 'name:' + taxa,
       taxaName: taxa,
       count: speciesCountAtChunk
     });
@@ -145,6 +143,40 @@ if (Array.isArray(data)){
 
 }
   return taxaSeparateCounts;
+}
+
+function consolidateAmrHostCounts(counts, topN) {
+  var byTaxon = new Map();
+  counts.forEach(function(taxon) {
+    var current = byTaxon.get(taxon.taxonKey);
+    if (current) {
+      current.value += Number(taxon.count) || 0;
+    } else {
+      byTaxon.set(taxon.taxonKey, {
+        taxonKey: taxon.taxonKey,
+        ncbiID: taxon.ncbiID,
+        name: taxon.taxaName,
+        value: Number(taxon.count) || 0
+      });
+    }
+  });
+
+  var taxa = Array.from(byTaxon.values()).sort(function(a, b) { return b.value - a.value; });
+  var nameCounts = new Map();
+  taxa.forEach(function(taxon) {
+    nameCounts.set(taxon.name, (nameCounts.get(taxon.name) || 0) + 1);
+  });
+  var limit = Math.max(0, Number(topN) || 0);
+  var plotted = taxa.slice(0, limit).map(function(taxon) {
+    var label = taxon.name || (taxon.ncbiID == null ? 'Unknown taxon' : 'NCBI ' + taxon.ncbiID);
+    if ((nameCounts.get(taxon.name) > 1 || label === 'Other') && taxon.ncbiID != null) {
+      label += ' (NCBI ' + taxon.ncbiID + ')';
+    }
+    return { taxonKey: taxon.taxonKey, label: label, value: taxon.value };
+  });
+  var otherCount = taxa.slice(limit).reduce(function(sum, taxon) { return sum + taxon.value; }, 0);
+  if (otherCount > 0) plotted.push({ taxonKey: 'other', label: 'Other', value: otherCount });
+  return plotted.sort(function(a, b) { return b.value - a.value; });
 }
 
     function topTaxaAmrByOther(data,plotBy) {
@@ -200,59 +232,7 @@ if (Array.isArray(data)){
         }
 
 
-        var taxaConsolidatedCounts = d3.nest()
-            .key(function(d) {
-                return d.taxaName;
-            })
-            .rollup(function(v) {
-                return d3.sum(v, function(d) {
-                    return d.count;
-                });
-            })
-            .entries(countsArray)
-            .map(function(g) {
-                return {
-                    taxaName: g.key,
-                    count: g.values
-                }
-            })
-            .sort(function(a, b) {
-                return b.count - a.count
-            });
-
-
-        var thresholdSelected = dashboardAmrDonutTopN;
-
-        for (const [i,taxa] of taxaConsolidatedCounts.entries()) {
-          if(i < thresholdSelected) {
-            taxa.threshold = taxa.taxaName;
-          } else {
-            taxa.threshold = "Other";
-          };
-        };
-
-
-        var topTaxaArray = d3.nest()
-            .key(function(d) {
-                return d.threshold;
-            })
-            .rollup(function(v) {
-                return d3.sum(v, function(d) {
-                    return d.count;
-                });
-            })
-            .entries(taxaConsolidatedCounts)
-            .map(function(g) {
-                return {
-                    label: g.key,
-                    value: g.values
-                }
-            })
-            .sort(function(a, b) {
-                return b.value - a.value
-            });
-
-        return topTaxaArray;
+        return consolidateAmrHostCounts(countsArray, dashboardAmrDonutTopN);
       };
 
 
@@ -264,59 +244,7 @@ if (Array.isArray(data)){
         };
 
 
-        var taxaConsolidatedCounts = d3.nest()
-            .key(function(d) {
-                return d.taxaName;
-            })
-            .rollup(function(v) {
-                return d3.sum(v, function(d) {
-                    return d.count;
-                });
-            })
-            .entries(taxaSeparateCounts)
-            .map(function(g) {
-                return {
-                    taxaName: g.key,
-                    count: g.values
-                }
-            })
-            .sort(function(a, b) {
-                return b.count - a.count
-            });
-
-
-        var thresholdSelected = dashboardAmrDonutTopN;
-
-        for (const [i,taxa] of taxaConsolidatedCounts.entries()) {
-          if(i < thresholdSelected) {
-            taxa.threshold = taxa.taxaName;
-          } else {
-            taxa.threshold = "Other";
-          };
-        };
-
-
-        var topTaxaArray = d3.nest()
-            .key(function(d) {
-                return d.threshold;
-            })
-            .rollup(function(v) {
-                return d3.sum(v, function(d) {
-                    return d.count;
-                });
-            })
-            .entries(taxaConsolidatedCounts)
-            .map(function(g) {
-                return {
-                    label: g.key,
-                    value: g.values
-                }
-            })
-            .sort(function(a, b) {
-                return b.value - a.value
-            });
-
-        return topTaxaArray;
+        return consolidateAmrHostCounts(taxaSeparateCounts, dashboardAmrDonutTopN);
 };
 
 var dropdownListSelected = "All genes";
@@ -483,9 +411,9 @@ switch(dashboardAmrDonutPlotBy) {
 
 var legendItems = [];
 
-for (taxa of plotData) {
+for (var taxa of plotData) {
   if (taxa.value != 0) {
-    legendItems.push(taxa.label);
+    legendItems.push({taxonKey: taxa.taxonKey, label: taxa.label});
   };
 };
 
@@ -500,7 +428,7 @@ for (taxa of plotData) {
 
 
   var slice = amrDonutSVG.select(".slices").selectAll("path.slice")
-      .data(amrPie(plotData), key);
+      .data(amrPie(plotData), function(d) { return d.data.taxonKey; });
 
       slice.enter()
           .insert("path")
@@ -529,7 +457,7 @@ for (taxa of plotData) {
 
 
       var dashboardAmrDonutLegend = d3.select("#dashboardAmrDonutLegend").selectAll(".amrDonutLegend")
-          .data(legendItems);
+          .data(legendItems, function(d) { return d.taxonKey; });
 
           var dashboardAmrDonutLegendEnter = dashboardAmrDonutLegend.enter().append("svg")
               .attr("class", "amrDonutLegend d-md-block")
@@ -554,7 +482,7 @@ for (taxa of plotData) {
 
           dashboardAmrDonutLegend.select("g text")
             .style("text-anchor", "start")
-            .text(function(d) { return d; });
+            .text(function(d) { return d.label; });
 
           dashboardAmrDonutLegend
             .attr("width",function(d) { return this.firstChild.getBBox().width + 10; });
@@ -562,96 +490,64 @@ for (taxa of plotData) {
           dashboardAmrDonutLegend.exit().remove();
 
 
-          slice.on("mousemove", function(d) {
+          var allSlices = amrDonutSVG.select(".slices").selectAll("path.slice");
+          var hoverDuration = 150;
+          allSlices.interrupt("donutSlice")
+            .style("opacity", 1).style("stroke", "white").style("stroke-width", "0.5px");
+          dashboardAmrDonutLegend.interrupt("donutSlice").style("opacity", 1);
+          dashboardAmrDonutLegend.select("g text")
+            .classed("hoverDonutPlotTextHighlight", false);
 
-            toolTipDiv.style("opacity", .95)
-                .html("<h5 class='mb-0'>" + d.data.label + "</h5>" +
+          function highlightHost(taxonKey) {
+            allSlices.interrupt("donutSlice")
+              .style("stroke", "white").style("stroke-width", "0.5px");
+            allSlices.filter(function(d) { return d.data.taxonKey === taxonKey; })
+              .style("opacity", 1)
+              .style("stroke", "#1f1f1f").style("stroke-width", "1.5px");
+            allSlices.filter(function(d) { return d.data.taxonKey !== taxonKey; })
+              .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
+
+            dashboardAmrDonutLegend.interrupt("donutSlice");
+            dashboardAmrDonutLegend.filter(function(d) { return d.taxonKey === taxonKey; })
+              .style("opacity", 1);
+            dashboardAmrDonutLegend.filter(function(d) { return d.taxonKey !== taxonKey; })
+              .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
+            dashboardAmrDonutLegend.select("g text")
+              .classed("hoverDonutPlotTextHighlight", function(d) { return d.taxonKey === taxonKey; });
+          }
+
+          function clearHostHighlight() {
+            allSlices.interrupt("donutSlice")
+              .style("stroke", "white").style("stroke-width", "0.5px")
+              .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+            dashboardAmrDonutLegend.interrupt("donutSlice")
+              .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+            dashboardAmrDonutLegend.select("g text")
+              .classed("hoverDonutPlotTextHighlight", false);
+          }
+
+          function showHostTooltip(d) {
+            toolTipDiv.interrupt().style("opacity", .95)
+              .html("<h5 class='mb-0'>" + d.data.label + "</h5>" +
                 "<hr class='toolTipLine'/>Read count: " + thousandsSeparators(d.value) +
                 "<br/>Read %: " + Math.round(((d.value / dataSum) * 10000)) / 100)
-                .style("left", (tooltipPos(d3.event.pageX)) + "px")
-                .style("top", (d3.event.pageY - 35) + "px");
+              .style("left", tooltipPos(d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY - 35) + "px");
+          }
 
-          });
-
-          slice.on("mouseover", function(d, i) {
-
-              slice.filter(function(x) {
-                  if (d.data.label != x.data.label) {
-                      d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                  };
-              });
-
-
-              dashboardAmrDonutLegend.filter(function(x) {
-                  if (d.data.label == x) {
-                    d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
-                  } else {
-                    d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                  };
-              });
-
-          });
-
-          slice.on("mouseout", function(d, i) {
-
-              slice.filter(function(x) {
-                  if (d.data.label != x.data.label) {
-                      d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
-                  };
-              });
-
-
-              dashboardAmrDonutLegend.filter(function(x) {
-                  if (d.data.label == x) {
-                    d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
-                  } else {
-                    d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
-                  };
-              });
-
-
-              toolTipDiv.style("opacity", 0);
-
-          });
-
-          dashboardAmrDonutLegend.on("mouseover", function(d, i) {
-
-          slice.filter(function(x) {
-            if (x.data.label != d) {
-                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
-            };
-          });
-
-          dashboardAmrDonutLegend.filter(function(x) {
-              if (d == x) {
-                d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
-              } else {
-                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "0.2");
-              };
-          });
-
-
-          });
-
-          dashboardAmrDonutLegend.on("mouseout", function(d, i) {
-
-          slice.filter(function(x) {
-            if (x.data.label != d) {
-                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
-            };
-          });
-
-
-          dashboardAmrDonutLegend.filter(function(x) {
-              if (d == x) {
-                d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
-              } else {
-                d3.select(this).transition().duration(donutOpacityTransitionTime).style("opacity", "1");
-              };
-          });
-
-
-          });
+          allSlices
+            .on("mouseover", function(d) {
+              highlightHost(d.data.taxonKey);
+              showHostTooltip(d);
+            })
+            .on("mousemove", showHostTooltip)
+            .on("mouseout", function() {
+              clearHostHighlight();
+              toolTipDiv.interrupt().style("opacity", 0);
+            });
+          dashboardAmrDonutLegend
+            .on("mouseover", function(d) { highlightHost(d.taxonKey); })
+            .on("mouseout", clearHostHighlight);
 
           if (centrifugeClassification) {
             $("#dashboardAmrDonutRow").hide();
