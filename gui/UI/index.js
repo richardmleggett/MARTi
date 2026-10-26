@@ -41,7 +41,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "1.0.1";
+const martiGuiVersion = "1.0.2";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -1343,7 +1343,7 @@ socket.on('compare-tree-request', request => {
         };
       };
     };
-  io.to(id).emit('compare-tree-response', compareTreeData);
+  io.to(id).emit('compare-tree-response', compareTreeData, { lca: lca });
   console.log(`[${new Date().toLocaleString()}][${id}] Compare tree data sent at lca: ${lca}`);
   });
 

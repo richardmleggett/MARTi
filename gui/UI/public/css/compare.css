@@ -258,6 +258,12 @@
   stroke-width: 2;
 }
 
+.compareDiversityPoint:hover,
+.compareDiversityPoint:focus {
+  stroke: #000;
+  stroke-width: 2;
+}
+
 @media (max-width: 1199px) {
   .compareOrdinationLayout {
     flex-direction: column;

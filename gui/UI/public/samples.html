@@ -38,99 +38,87 @@
 
 <!-- Export card-->
 <div class="card shadow mb-4" id="sampleExportCard">
-<div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseSampleExport" aria-expanded="false" data-toggle="collapse" role="button"">
+<div class="card-header d-flex flex-row align-items-center justify-content-between collapsed pointer" href="#collapseSampleExport" aria-expanded="false" data-toggle="collapse" role="button">
 <h6 class="m-0 font-weight-bold text-primary">Export data</h6>
 
 </div>
 
-  <div class="card-body-custom p-4 collapse" id="collapseSampleExport"">
-
-
-    <div class="form-group row">
-      <div class="col-sm-3 col-form-label">
-        <label for="exportLcaCutoff">LCA minimum abundance cutoff:</label>
-        <!-- <i class="fas fa-info-circle" data-tooltip="LCA minimum abundance cutoff."></i> -->
+  <div class="card-body-custom p-4 collapse" id="collapseSampleExport">
+    <section class="border-bottom pb-3 mb-3" aria-labelledby="exportTaxaHeading">
+      <h6 class="font-weight-bold text-primary mb-3" id="exportTaxaHeading">Taxa to export</h6>
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <label class="d-block font-weight-bold mb-2" for="exportTaxRank">Taxonomic rank</label>
+          <select class="form-control w-auto" id="exportTaxRank" name="exportTaxRank"></select>
+        </div>
+        <fieldset class="col-lg-6 mb-3">
+          <legend class="col-form-label font-weight-bold pt-0 mb-2">LCA minimum abundance cutoff</legend>
+          <div class="d-flex flex-wrap">
+            <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.0" checked> 0%</label>
+            <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.1"> 0.1%</label>
+            <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="1.0"> 1%</label>
+            <label class="mb-1"><input type="radio" name="exportLcaCutoffToggle" value="2.0"> 2%</label>
+          </div>
+        </fieldset>
       </div>
+      <fieldset class="mb-3" id="exportRankScopeRow">
+        <legend class="col-form-label font-weight-bold pt-0 mb-2">Ranks to include</legend>
+        <div class="d-flex flex-wrap">
+          <label class="mr-4 mb-1"><input type="radio" name="exportRankScope" value="through_rank" checked> Selected rank and higher levels</label>
+          <label class="mb-1"><input type="radio" name="exportRankScope" value="rank_only"> Selected rank only</label>
+        </div>
+        <p class="small text-muted mb-0">Summed counts include descendants, so summed counts from different rank rows overlap.</p>
+      </fieldset>
+      <label class="mb-0"><input type="checkbox" id="exportIncludeUnclassified" checked> Include unclassified</label>
+    </section>
 
-      <div class="col-auto col-form-label" name="exportLcaCutoff">
-        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="0.0" >  0%</label>
-        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="0.1" checked>  0.1%</label>
-        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="1.0" >  1%</label>
-        <label class="pr-3"><input type="radio" name="exportLcaCutoffToggle" value="2.0" >  2%</label>
+    <section class="border-bottom pb-3 mb-3" aria-labelledby="exportColumnsHeading">
+      <h6 class="font-weight-bold text-primary mb-2" id="exportColumnsHeading">Columns</h6>
+      <p class="small text-muted mb-3">Every row includes Sample ID, Run ID and barcode. Choose the taxon fields to add.</p>
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <div class="font-weight-bold mb-2">Taxon details</div>
+          <div class="row">
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="name" data-header="Name" checked> Name</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="ncbiId" data-header="NCBI ID" checked> NCBI ID</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="ncbiRank" data-header="NCBI Rank" checked> Rank</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="rankNumber" data-header="Rank number" checked> Rank number</label></div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="font-weight-bold mb-2">Counts and sequence identity</div>
+          <div class="row">
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="readCount" data-header="Read count" checked> Direct read count</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="summedCount" data-header="Summed count" checked> Summed read count</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="meanIdentity" data-header="Mean identity"> Mean identity</label></div>
+            <div class="col-sm-6 mb-2"><label class="mb-0"><input class="export-col" type="checkbox" data-value="meanMaxIdentity" data-header="Mean max identity"> Mean max identity</label></div>
+          </div>
+        </div>
       </div>
-    </div>
+      <fieldset>
+        <legend class="col-form-label font-weight-bold pt-0 mb-2">Lineage columns</legend>
+        <div class="d-flex flex-wrap">
+          <label class="mr-4 mb-1"><input type="checkbox" id="exportLineageIds" checked> Include lineage IDs</label>
+          <label class="mb-1"><input type="checkbox" id="exportLineageNames" checked> Include lineage names</label>
+        </div>
+      </fieldset>
+    </section>
 
+    <section class="mb-3" aria-labelledby="exportFormatHeading">
+      <h6 class="font-weight-bold text-primary mb-3" id="exportFormatHeading">File format</h6>
+      <fieldset>
+        <legend class="col-form-label font-weight-bold pt-0 mb-2">Field separator</legend>
+        <div class="d-flex flex-wrap">
+          <label class="mr-4 mb-1"><input type="radio" name="exportDelimiterToggle" data-delimiter="," data-extension="csv" value="comma" checked> Comma (CSV)</label>
+          <label class="mr-4 mb-1"><input type="radio" name="exportDelimiterToggle" data-delimiter="\t" data-extension="tsv" value="tab"> Tab (TSV)</label>
+          <label class="mr-4 mb-1"><input type="radio" name="exportDelimiterToggle" data-delimiter=":" data-extension="txt" value="colon"> Colon</label>
+          <label class="mb-1"><input type="radio" name="exportDelimiterToggle" data-delimiter=";" data-extension="txt" value="semicolon"> Semicolon</label>
+        </div>
+      </fieldset>
+    </section>
 
-
-    <div class="form-group row">
-      <div class="col-sm-3 col-form-label">
-        <label for="exportTaxRank">Taxonomic rank:</label>
-        <!-- <i class="fas fa-info-circle" data-tooltip="Specifies the taxonomic rank to export."></i> -->
-      </div>
-
-      <div class="col-auto">
-        <select class="form-control" name="exportTaxRank">
-
-        </select>
-      </div>
-    </div>
-
-
-  <div class="form-group row">
-
-    <div class="col-sm-3 col-form-label">
-      <label for="exportColumns">Columns:</label>
-      <!-- <i class="fas fa-info-circle" data-tooltip="Select columns to export."></i> -->
-    </div>
-
-    <div class="col-auto col-form-label">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="name" data-header="Name" checked>
-      <label class="form-check-label" for="exportColCheckbox1">Name</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="ncbiId" data-header="NCBI ID" checked>
-      <label class="form-check-label" for="exportColCheckbox2">NCBI ID</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="ncbiRank" data-header="NCBI Rank" checked>
-      <label class="form-check-label" for="exportColCheckbox3">Rank</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="readCount" data-header="Read count" checked>
-      <label class="form-check-label" for="exportColCheckbox4">Read count</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="summedCount" data-header="Summed count" checked>
-      <label class="form-check-label" for="exportColCheckbox5">Summed read count</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="meanIdentity" data-header="Mean identity">
-      <label class="form-check-label" for="exportColCheckbox5">Mean identity</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input toggle-vis export-col" type="checkbox" data-value="meanMaxIdentity" data-header="Mean max identity">
-      <label class="form-check-label" for="exportColCheckbox5">Mean max identity</label>
-    </div>
-  </div>
-  </div>
-
-  <div class="form-group row">
-    <div class="col-sm-3 col-form-label">
-      <label for="exportDelimiter">Field separator:</label>
-      <!-- <i class="fas fa-info-circle" data-tooltip="LCA minimum abundance cutoff."></i> -->
-    </div>
-
-    <div class="col-auto col-form-label" name="exportDelimiter">
-      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter="," data-extension="csv" value="comma" >  Comma</label>
-      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter="\t" data-extension="tsv" value="tab" >  Tab</label>
-      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=":" data-extension="txt" value="colon" >  Colon</label>
-      <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=";" data-extension="txt" value="semicolon" checked>  Semicolon</label>
-      <!-- <label class="pr-3"><input type="radio" name="exportDelimiterToggle" data-delimiter=" " data-extension="txt" value="space" >  Space</label> -->
-    </div>
-  </div>
-
-  <input class="btn btn-primary mb-1" id="sampleExportButton" type="button" value="Export">
+    <input class="btn btn-primary" id="sampleExportButton" type="button" value="Export selected samples">
+    <div id="sampleExportStatus" class="small mt-2" role="status" aria-live="polite"></div>
 
   </div>
 </div>

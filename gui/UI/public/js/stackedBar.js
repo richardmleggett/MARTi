@@ -1,6 +1,7 @@
 var stackedSvg,
     layer1,
-    layer2;
+    layer2,
+    stackedBarHighlightLayer;
 
 function initialiseCompareStackedBar() {
 
@@ -29,6 +30,10 @@ function initialiseCompareStackedBar() {
         .attr("transform", "translate(" + (-50) + "," + (heightStacked / 2) + ")rotate(-90)")
         .style("text-anchor", "middle")
         .text("Classified reads");
+
+    stackedBarHighlightLayer = stackedSvg.append("g")
+        .attr("class", "stackedBarHighlightMarks")
+        .style("pointer-events", "none");
 
     percentClicked = true;
 
@@ -265,6 +270,7 @@ var stackedBarNcbiIDs = [];
 
 
 function plotStackedBar(data, taxaTotalCounts) {
+    stackedBarHighlightLayer.selectAll("*").remove();
     d3.select("#compareStackedBarYAxisTitle")
         .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
 
@@ -363,7 +369,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     sample.exit().remove();
 
-    var rectangles = sample.selectAll("rect")
+    sample.selectAll("rect")
         .data(function(d) {
             return d;
         })
@@ -417,116 +423,83 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarLegend.exit().remove();
 
 
-    stackedBarLegend.on("mouseover", function(d, i) {
+    var allRectangles = stackedSvg.selectAll("g.taxa rect");
+    var legendGroups = stackedBarLegend.select("g");
 
-        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
+    function highlightTaxon(ncbiID) {
+        allRectangles.interrupt().style("stroke", null).style("stroke-width", null);
+        allRectangles.filter(function(d) { return d.ncbiID == ncbiID; })
+            .style("opacity", 1)
+            .style("stroke", "#1f1f1f")
+            .style("stroke-width", "1.5px");
+        allRectangles.filter(function(d) { return d.ncbiID != ncbiID; })
+            .transition().duration(opacityTransitionTime).style("opacity", 0.3);
 
+        var svg = stackedSvg.node().ownerSVGElement;
+        var pixelsPerUnit = svg.viewBox.baseVal.height
+            ? svg.getBoundingClientRect().height / svg.viewBox.baseVal.height : 1;
+        var thinSegments = [];
+        allRectangles.filter(function(d) { return d.ncbiID == ncbiID; })
+            .each(function(d) {
+                var segmentHeight = Math.abs(yScale(d.y0) - yScale(d.y0 + d.y)) * pixelsPerUnit;
+                if (d.y > 0 && segmentHeight < 3) thinSegments.push(d);
+            });
+        var markers = stackedBarHighlightLayer.selectAll("g.stackedBarThinMarker")
+            .data(thinSegments, function(d) { return d.x; });
+        var markerEnter = markers.enter().append("g").attr("class", "stackedBarThinMarker");
+        markerEnter.append("line").attr("class", "markerHalo")
+            .attr("stroke", "white").attr("stroke-width", 4)
+            .attr("vector-effect", "non-scaling-stroke");
+        markerEnter.append("line").attr("class", "markerCentre")
+            .attr("stroke", "#1f1f1f").attr("stroke-width", 2)
+            .attr("vector-effect", "non-scaling-stroke");
+        markers.exit().remove();
+        stackedBarHighlightLayer.selectAll("g.stackedBarThinMarker")
+            .attr("transform", function(d) {
+                return "translate(" + xScale(d.x) + "," + yScale(d.y0 + d.y / 2) + ")";
+            })
+            .selectAll("line")
+            .attr("x1", 0).attr("x2", xScale.rangeBand())
+            .attr("y1", 0).attr("y2", 0);
 
-            if (x.ncbiID == d.ncbiID) {} else {
-                d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-        d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (x.ncbiID == d.ncbiID) {
-                d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
-            } else {
-                d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-
-    });
-
-    stackedBarLegend.on("mouseout", function(d, i) {
-
-        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-
-            if (x.ncbiID == d.ncbiID) {
-
-            } else {
-                d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-        d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (x.ncbiID == d.ncbiID) {
-                d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
-            } else {
-                d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-    });
-
-    rectangles
-        .on("mouseover", mouseoverFunc)
-        .on("mousemove", mousemoveFunc)
-        .on("mouseout", mouseoutFunc);
-
-
-
-
-    function mouseoverFunc(d) {
-
-        d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (d.ncbiID == x.ncbiID) {
-                d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "bold");
-            } else {
-                d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-
-        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-            if (d.ncbiID == x.ncbiID) {} else {
-                d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "0.2");
-            };
-        });
-
-
+        legendGroups.interrupt();
+        legendGroups.filter(function(d) { return d.ncbiID == ncbiID; }).style("opacity", 1);
+        legendGroups.filter(function(d) { return d.ncbiID != ncbiID; })
+            .transition().duration(opacityTransitionTime).style("opacity", 0.3);
+        stackedBarLegend.select("g text")
+            .style("font-weight", function(d) { return d.ncbiID == ncbiID ? "bold" : "normal"; });
     }
 
-    function mousemoveFunc(d) {
+    function clearHighlight() {
+        stackedBarHighlightLayer.selectAll("*").remove();
+        allRectangles.interrupt().style("stroke", null).style("stroke-width", null)
+            .transition().duration(opacityTransitionTime).style("opacity", 1);
+        legendGroups.interrupt().transition().duration(opacityTransitionTime).style("opacity", 1);
+        stackedBarLegend.select("g text").style("font-weight", "normal");
+    }
 
+    stackedBarLegend.on("mouseover", function(d) { highlightTaxon(d.ncbiID); })
+        .on("mouseout", clearHighlight);
 
-        toolTipDiv.transition()
-            .duration(0)
-            .style("opacity", .95);
+    allRectangles.on("mouseover", function(d) {
+            highlightTaxon(d.ncbiID);
+            showTooltip(d);
+        })
+        .on("mousemove", showTooltip)
+        .on("mouseout", function() {
+            clearHighlight();
+            toolTipDiv.interrupt().style("opacity", 0);
+        });
 
-        toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
+    function showTooltip(d) {
+        toolTipDiv.interrupt().style("opacity", .95)
+            .html("<small class='text-gray-800'>" + d.sample + "</small>" +
                 "<h5 class='mb-0'>" + d.component + "</h5>" +
                 "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
                 "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId, d.readCount) +
                 "<br/>" + plotLevelSelectedCompareTooltipPrefix + " %: " + Math.round(((d.readCount / d.totalReadCount) * 10000)) / 100)
             .style("left", (tooltipPos(d3.event.pageX)) + "px")
             .style("top", (d3.event.pageY - 35) + "px");
-
-
-    }
-
-    function mouseoutFunc(d) {
-
-        d3.selectAll(".stackedBarLegend").filter(function(x) {
-            if (d.ncbiID == x.ncbiID) {
-                d3.select(this).select("g text").transition().duration(opacityTransitionTime).style("font-weight", "normal");
-            } else {
-                d3.select(this).select("g").transition().duration(opacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-
-        stackedSvg.selectAll("g.taxa rect").filter(function(x) {
-            if (d.ncbiID == x.ncbiID) {} else {
-                d3.select(this).transition().duration(opacityTransitionTime).style("opacity", "1");
-            };
-        });
-
-
-        toolTipDiv.transition()
-            .duration(50)
-            .style("opacity", 0);
-
     }
 
 

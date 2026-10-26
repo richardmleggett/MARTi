@@ -172,99 +172,63 @@ function plotReadsDonut(data) {
           dashboardReadsDonutLegend.exit().remove();
 
 
-          dashboardReadsDonutLegend.on("mouseover", function(d, i) {
+          var allSlices = readsDonutSVG.select(".slices").selectAll("path.slice");
+          var hoverDuration = 150;
+          allSlices.interrupt("donutSlice")
+              .style("opacity", 1).style("stroke", "white").style("stroke-width", "0.5px");
+          dashboardReadsDonutLegend.interrupt("donutSlice").style("opacity", 1);
+          dashboardReadsDonutLegend.select("g text.readClass")
+              .classed("hoverDonutPlotTextHighlight", false);
 
-          // slice.filter(function(x) {
-          //     if (x.data.label == d.label) {
-          //         d3.select(this).classed("hoverRect", true);
-          //     };
-          // });
+          function highlightReadClass(label) {
+              allSlices.interrupt("donutSlice")
+                  .style("stroke", "white").style("stroke-width", "0.5px");
+              allSlices.filter(function(d) { return d.data.label == label; })
+                  .style("opacity", 1)
+                  .style("stroke", "#1f1f1f").style("stroke-width", "1.5px");
+              allSlices.filter(function(d) { return d.data.label != label; })
+                  .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
 
-          slice.filter(function(x) {
-              if (x.data.label != d.label) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-              };
-          });
+              dashboardReadsDonutLegend.interrupt("donutSlice");
+              dashboardReadsDonutLegend.filter(function(d) { return d.label == label; })
+                  .style("opacity", 1);
+              dashboardReadsDonutLegend.filter(function(d) { return d.label != label; })
+                  .transition("donutSlice").duration(hoverDuration).style("opacity", 0.3);
+              dashboardReadsDonutLegend.select("g text.readClass")
+                  .classed("hoverDonutPlotTextHighlight", function(d) { return d.label == label; });
+          }
 
-          dashboardReadsDonutLegend.filter(function(x) {
-              if (x.label != d.label) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-              };
-          });
+          function clearReadClassHighlight() {
+              allSlices.interrupt("donutSlice")
+                  .style("stroke", "white").style("stroke-width", "0.5px")
+                  .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+              dashboardReadsDonutLegend.interrupt("donutSlice")
+                  .transition("donutSlice").duration(hoverDuration).style("opacity", 1);
+              dashboardReadsDonutLegend.select("g text.readClass")
+                  .classed("hoverDonutPlotTextHighlight", false);
+          }
 
-            // d3.select(this).select("g rect").classed("hoverRect", true);
-            d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", true);
+          function showReadClassTooltip(d) {
+              toolTipDiv.interrupt().style("opacity", .95)
+                  .html("<h5 class='mb-0'>" + d.data.label + "</h5>Reads: " +
+                      thousandsSeparators(d.data.value) +
+                      "<br/>Donut %: " + (dataSum ? Math.round(d.data.value / dataSum * 10000) / 100 : 0))
+                  .style("left", tooltipPos(d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 35) + "px");
+          }
 
-          });
-
-          dashboardReadsDonutLegend.on("mouseout", function(d, i) {
-
-          // slice.filter(function(x) {
-          //     if (x.data.label == d.label) {
-          //         d3.select(this).classed("hoverRect", false);
-          //     };
-          // });
-
-          slice.filter(function(x) {
-              if (x.data.label != d.label) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-              };
-          });
-
-
-          dashboardReadsDonutLegend.filter(function(x) {
-              if (x.label != d.label) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-              };
-          });
-            // d3.select(this).select("g rect").classed("hoverRect", false);
-            d3.select(this).select("g text").classed("hoverDonutPlotTextHighlight", false);
-
-          });
-
-          slice.on("mouseover", function(d) {
-
-            dashboardReadsDonutLegend.filter(function(x) {
-                if (d.data.label == x.label) {
-                    // d3.select(this).select("rect").classed("hoverRect", true);
-                    // d3.select(this).select("text").style("font-weight", "bold");
-                    d3.select(this).select("text").classed("hoverDonutPlotTextHighlight", true);
-                } else {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                };
-            });
-
-            slice.filter(function(x) {
-                if (x.data.label != d.data.label) {
-                    d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "0.2");
-                };
-            });
-              // d3.select(this).classed("hoverRect", true);
-
-          });
-
-
-
-          slice.on("mouseout", function(d, i) {
-
-            dashboardReadsDonutLegend.filter(function(x) {
-                if (d.data.label == x.label) {
-                    // d3.select(this).select("rect").classed("hoverRect", false);
-                    // d3.select(this).select("text").style("font-weight", "normal");
-                    d3.select(this).select("text").classed("hoverDonutPlotTextHighlight", false);
-                } else {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-                };
-            });
-
-          // d3.select(this).classed("hoverRect", false);
-
-          slice.filter(function(x) {
-              if (x.data.label != d.data.label) {
-                  d3.select(this).transition("donutSlice").duration(donutOpacityTransitionTime).style("opacity", "1");
-              };
-          });
-
-          });
+          dashboardReadsDonutLegend
+              .on("mouseover", function(d) { highlightReadClass(d.label); })
+              .on("mouseout", clearReadClassHighlight);
+          allSlices
+              .on("mouseover", function(d) {
+                  highlightReadClass(d.data.label);
+                  showReadClassTooltip(d);
+              })
+              .on("mousemove", showReadClassTooltip)
+              .on("mouseout", function() {
+                  clearReadClassHighlight();
+                  toolTipDiv.interrupt().style("opacity", 0);
+              });
 
 };

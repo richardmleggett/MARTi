@@ -61,6 +61,7 @@ function requestSampleTaxonFilter() {
 }
 
 function initialiseSamplePage() {
+exportRequestPending = false;
 mapUpdated = false;
 $('#sampleMapCard').hide();
 sampleTaxonFilterId = '';
@@ -306,6 +307,7 @@ function initialiseSampleMap(){
 
 
 var exportCardObject = {};
+var exportRequestPending = false;
 
 function initialiseExportCard(){
 
@@ -325,16 +327,29 @@ function initialiseExportCard(){
   taxRankOptions.exit()
       .remove();
 
-      $('#sampleExportButton').on("click touchstart", function() {
+      function updateExportRankScope() {
+        $('#exportRankScopeRow').toggle($('select[name="exportTaxRank"]').val() !== 'All levels');
+      }
+      $('select[name="exportTaxRank"]').on('change', updateExportRankScope);
+      updateExportRankScope();
+
+      $('#sampleExportButton').on("click", function() {
 
         if (selectedCompareMetaDataArray.length == 0){
             $('#exportModal').modal('show');
-        } else {
+        } else if (!exportRequestPending) {
           exportCardObject = {};
 
           exportCardObject.lca = $('input[type="radio"][name="exportLcaCutoffToggle"]:checked').val();
           exportCardObject.rankName = $('select[name="exportTaxRank"] option:selected').text();
           exportCardObject.rankNum = getValueCaseInsensitive(taxonomicLevelDict, exportCardObject.rankName);
+          exportCardObject.rankScope = $('input[name="exportRankScope"]:checked').val();
+          exportCardObject.includeUnclassified = $('#exportIncludeUnclassified').prop('checked');
+          exportCardObject.lineageIds = $('#exportLineageIds').prop('checked');
+          exportCardObject.lineageNames = $('#exportLineageNames').prop('checked');
+          exportCardObject.selectedSamples = selectedCompareMetaDataArray.map(function(sample) {
+            return { id: sample.id, pathRun: sample.pathRun, pathName: sample.pathName, barcode: sample.barcode };
+          });
           exportCardObject.columns = {};
           $("input:checkbox.export-col:checked").each(function() {
             exportCardObject.columns[$(this).data("value")] = {
@@ -345,6 +360,9 @@ function initialiseExportCard(){
           exportCardObject.delimiter = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("delimiter");
           exportCardObject.extension = $('input[type="radio"][name="exportDelimiterToggle"]:checked').data("extension");
 
+          exportRequestPending = true;
+          $('#sampleExportButton').prop('disabled', true);
+          $('#sampleExportStatus').removeClass('text-danger').text('Preparing export…');
           requestExportData(exportCardObject.lca);
         }
       });
