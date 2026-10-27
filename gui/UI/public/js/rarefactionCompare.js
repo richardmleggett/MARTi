@@ -129,7 +129,9 @@ function plotRarefactionCompare(data) {
       return Array.isArray(point) && isFinite(point[0]) && isFinite(point[1]) &&
         (requestedMax === null || point[0] <= requestedMax);
     }).map(function (point) { return { x: Number(point[0]), y: Number(point[1]) }; });
-    return { name: accumulationSampleName(sample), values: values };
+    var name = accumulationSampleName(sample);
+    return { name: name, displayName: currentPage === 'Compare'
+      ? compareSampleDisplayNameById(sample.runId, name) : name, values: values };
   }).filter(function (sample) { return sample.values.length; });
   var mayDecrease = rareMetric === 'taxa' && Number(selectedLca) !== 0 && (raw || !hasRaw);
   $('#accumulationPlotWarning').toggle(mayDecrease);
@@ -179,8 +181,8 @@ function plotRarefactionCompare(data) {
   enter.append('rect').attr('width', 16).attr('height', 12).attr('y', 4);
   enter.append('text').attr('x', 21).attr('y', 14).style('font-size', '13px');
   legends.select('rect').style('fill', function (sample) { return palette(sample.name); });
-  legends.select('text').text(function (sample) { return sample.name; });
-  legends.attr('width', function (sample) { return 25 + sample.name.length * 8; });
+  legends.select('text').text(function (sample) { return sample.displayName; });
+  legends.attr('width', function (sample) { return 25 + sample.displayName.length * 8; });
   legends.exit().remove();
   rarefactionCompareSVG.selectAll('.mouse-over-effects').remove();
   $('#accumulationHoverTooltip').remove();
@@ -260,7 +262,7 @@ function plotRarefactionCompare(data) {
         var row = $('<div class="accumulationHoverRow"></div>').appendTo(tooltip);
         $('<span class="accumulationHoverSwatch"></span>').css('background-color', palette(match.sample.name)).appendTo(row);
         var details = $('<div class="accumulationHoverDetails"></div>').appendTo(row);
-        $('<strong></strong>').text(match.sample.name).appendTo(details);
+        $('<strong></strong>').text(match.sample.displayName).appendTo(details);
         $('<span></span>').text(formatAccumulationValue(y) + ' (' +
           (xMode === 'time' ? x.toFixed(1) + ' min' : thousandsSeparators(Math.round(x)) + ' reads') + ')').appendTo(details);
       });
@@ -281,7 +283,7 @@ function convertAccumulationDataToCSV(data) {
     (unit === 'bases' ? ' (DNA yield weighted; N in bp)' : ' (read weighted; N in reads)');
   var rows = [];
   var header = [];
-  data.forEach(function (sample) { header.push(sample.name + ' ' + xLabel, sample.name + ' ' + metric); });
+  data.forEach(function (sample) { header.push(sample.displayName + ' ' + xLabel, sample.displayName + ' ' + metric); });
   rows.push(header);
   var length = Math.max.apply(null, [0].concat(data.map(function (sample) { return sample.values.length; })));
   for (var i = 0; i < length; i++) {

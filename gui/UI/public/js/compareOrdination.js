@@ -17,7 +17,7 @@ function compareOrdinationMetadata(sample) {
 
 function compareOrdinationDisplayName(sample) {
   var metadata = compareOrdinationMetadata(sample);
-  return metadata && metadata.id || sample.name;
+  return metadata ? compareSampleDisplayName(metadata.pathRun, metadata.pathName, metadata.id) : sample.name;
 }
 
 function compareOrdinationGroup(sample) {

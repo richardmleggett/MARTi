@@ -332,7 +332,7 @@ data.forEach(function(d) {
       plotMaxValue = plotValue;
     };
 
-    return {name: name, taxaReadCount: readCount, totalAmrReadCount: d["totalAmrReadCount"], sample: d.sample, index: d.index, proportion: prop, plotValue: plotValue};
+    return {name: name, taxaReadCount: readCount, totalAmrReadCount: d["totalAmrReadCount"], sample: d.sample, runId: d.runId, index: d.index, proportion: prop, plotValue: plotValue};
   });
 
   var otherIndex = d["taxa"].findIndex(e => e.name == "Other");
@@ -509,7 +509,7 @@ if(compareAmrHmRead == "percent"){
                .duration(0)
                .style("opacity", .95);
 
-            toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
+            toolTipDiv.html("<small class='text-gray-800'>" + compareSampleDisplayNameHtml(d.runId, d.sample) + "</small>" +
             "<h5 class='mb-0'>" + d.name + "</h5>" +
             // "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
             "<hr class='toolTipLine'/>Hit count: " + thousandsSeparators(d.taxaReadCount) +

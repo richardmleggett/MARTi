@@ -8,10 +8,11 @@
 // (and DiversityStats.leafAbundances) does, so S matches the taxa accumulation curve:
 // a taxon is a node at or above the target rank with no counted descendants at or above
 // that rank. A lineage that stops above the rank (e.g. a genus with no species-level reads
-// when rank = species) therefore counts as one taxon, its abundance being its summed value.
+// when rank = species) therefore counts as one taxon, weighted by summedValue for reads
+// or summedYield for bases.
 // Rank-0 ("no rank"/clade) nodes and "unclassified" are never counted.
 // rank 10 ("All Levels") gives every terminal taxon.
-function martiCountsAtRank(tree, rank) {
+function martiCountsAtRank(tree, rank, useYield) {
   var counts = [];
   (function explore(n) {
     var marked = 0;
@@ -21,7 +22,8 @@ function martiCountsAtRank(tree, rank) {
       if (c.summedValue > 0 && c.rank <= rank) marked += explore(c);
     });
     if (marked === 0 && n.rank !== 0 && n.rank <= rank && n.summedValue > 0) {
-      counts.push(n.summedValue);
+      var abundance = useYield ? n.summedYield : n.summedValue;
+      if (abundance > 0) counts.push(abundance);
       marked++;
     }
     return marked;
@@ -90,7 +92,7 @@ function martiDiversity(counts, opts) {
 // rank: numeric rank 1-10 (10 = All Levels, i.e. all terminal taxa).
 function martiTreeDiversity(tree, rank, opts) {
   if (!tree || !(rank >= 1 && rank <= 10)) return null;
-  var counts = martiCountsAtRank(tree, rank);
+  var counts = martiCountsAtRank(tree, rank, opts && opts.useYield);
   var d = martiDiversity(counts, opts);
   d.counts = counts;
   return d;

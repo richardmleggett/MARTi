@@ -78,6 +78,8 @@
               <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Run asc</a>
               <a class="dropdown-item dropdown-nonhref rank">Run desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Barcode asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Barcode desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
               <a class="dropdown-item dropdown-nonhref rank">Yield desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Reads analysed asc</a>
@@ -88,16 +90,17 @@
         </div>
       </div>
       <div class="card-body pt-3 pb-0">
-        <p class="small text-muted mb-2">Drag a handle to set a manual order. Manual order is saved in this browser for this project. Select a sample name to open its Dashboard.</p>
+        <p class="small text-muted mb-2">Drag a handle to set a manual order. Enter a sample name to use it in Compare plots; leave it blank to use the shared name. Names and order are saved in this browser for this project. Use the arrow button to open a sample's Dashboard.</p>
         <p class="small text-muted mb-3">Groups are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
         <div class="table-responsive compareSamplesTableWrap">
           <table class="table table-sm table-hover mb-0 compareSamplesTable" aria-label="Selected comparison samples and groups">
-            <thead><tr><th scope="col" class="compareSampleHandleColumn">Order</th><th scope="col" class="compareSampleNameColumn">Sample</th><th scope="col">Run</th><th scope="col" class="compareSampleBarcodeColumn">Barcode</th><th scope="col" class="compareSampleGroupColumn">Group</th></tr></thead>
+            <thead><tr><th scope="col" class="compareSampleHandleColumn">Order</th><th scope="col" class="compareSampleNameColumn">Sample</th><th scope="col" class="compareSampleRunColumn">Run</th><th scope="col" class="compareSampleBarcodeColumn">Barcode</th><th scope="col" class="compareSampleGroupColumn">Group</th></tr></thead>
             <tbody id="compareSampleNameList"></tbody>
           </table>
         </div>
         <datalist id="compareGroupSuggestions"></datalist>
         <p id="compareOrderStatus" class="small text-danger mt-2 mb-0" role="status"></p>
+        <p id="compareNamesStatus" class="small text-danger mt-2 mb-0" role="status"></p>
         <p id="compareGroupsStatus" class="small text-danger mt-2 mb-2" role="status"></p>
       </div>
     </div>

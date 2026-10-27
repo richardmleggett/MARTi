@@ -37,7 +37,7 @@ function updateDashboardDiversity() {
   $('#dashboardDiversityCardTitle').text('Sample diversity — ' + taxonomicRankSelectedDashboardText);
   var tree = treeDataBoth2 && treeDataBoth2[unit === 'bases' ? 'treeYield' : 'tree'];
   dashboardDiversityResult = martiTreeDiversity(tree, taxonomicRankSelected,
-    { chao1Valid: false });
+    { chao1Valid: false, useYield: unit === 'bases' });
   if (!dashboardDiversityResult) {
     $('#dashboardDiversityRow').prop('hidden', true);
     $('#dashboardDiversityExport').hide();

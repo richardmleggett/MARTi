@@ -81,6 +81,22 @@ if (!sampleTaxonFilterRegistered) {
 
 if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
 
+  function compareSampleTableBarcodes(a, b, descending) {
+    var first = a === null || a === '' || !Number.isFinite(Number(a)) ? null : Number(a);
+    var second = b === null || b === '' || !Number.isFinite(Number(b)) ? null : Number(b);
+    if (first === null && second !== null) return 1;
+    if (second === null && first !== null) return -1;
+    if (first === null || first === second) return 0;
+    return (first < second ? -1 : 1) * (descending ? -1 : 1);
+  }
+
+  $.fn.dataTable.ext.type.order['marti-barcode-asc'] = function(a, b) {
+    return compareSampleTableBarcodes(a, b, false);
+  };
+  $.fn.dataTable.ext.type.order['marti-barcode-desc'] = function(a, b) {
+    return compareSampleTableBarcodes(a, b, true);
+  };
+
   samplePageDataTable = $('#samplePageDataTable').DataTable({
     "language": {
       "emptyTable": "No samples found.<br><br>\
@@ -97,7 +113,12 @@ if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
   },
   null,
   null,
-  null,
+  {
+    type: 'marti-barcode',
+    render: function(data, type) {
+      return type === 'sort' || type === 'type' ? data : formatBarcodeLabel(data);
+    }
+  },
   null,
   null,
   null,
@@ -484,7 +505,7 @@ existingMarkers = [];
 
      sampleListCurrent.push(sampleData.id);
 
-       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,formatDateForDisplay(sampleData.sequencingDate),formatDateForDisplay(sampleData.analysisDate),null,dirRunId,dirSampleId,keywords]);
+       samplePageDataTable.row.add([null,sampleData.id,sampleData.runId,sampleData.barcode == null ? null : sampleData.barcode,sampleData.yieldGb.toFixed(3),thousandsSeparators(sampleData.readsPassBasecall),thousandsSeparators(sampleData.readsAnalysed),sampleData.analysis.pipeline,sampleData.martiStatus,formatDateForDisplay(sampleData.analysisDate),null,dirRunId,dirSampleId,keywords]);
 
      };
  };

@@ -163,7 +163,8 @@ function compareDiversityShowTooltip(point, clientX, clientY) {
   var result = metric === 'rarefied' ? point.record.readResult : point.record.result;
   var nLabel = metric === 'rarefied' || compareDiversityUnit() === 'reads'
     ? 'Reads in included taxa (N)' : 'Bases in included taxa (N, bp)';
-  $('<strong></strong>').text(point.record.metadata.id).appendTo(tooltip);
+  $('<strong></strong>').text(compareSampleDisplayName(point.record.metadata.pathRun,
+    point.record.metadata.pathName, point.record.metadata.id)).appendTo(tooltip);
   $('<div></div>').text('Run: ' + point.record.metadata.runId).appendTo(tooltip);
   $('<div></div>').text(detail.label + ': ' + compareDiversityNumber(point.value, detail.decimals)).appendTo(tooltip);
   $('<div></div>').text(nLabel + ': ' + thousandsSeparators(result.N)).appendTo(tooltip);
@@ -236,7 +237,11 @@ function renderCompareDiversityPlot() {
         : unit === 'bases' ? ' (DNA yield weighted)' : ' (read weighted)'));
 
   var names = {};
-  rows.forEach(function (point) { names[point.record.metadata.id] = (names[point.record.metadata.id] || 0) + 1; });
+  rows.forEach(function (point) {
+    var name = compareSampleDisplayName(point.record.metadata.pathRun,
+      point.record.metadata.pathName, point.record.metadata.id);
+    names[name] = (names[name] || 0) + 1;
+  });
   var groups = svg.selectAll('.diversitySample').data(rows).enter().append('g').attr('class', 'diversitySample')
     .attr('transform', function (point, index) { return 'translate(0,' + (top + (index + 0.5) * rowHeight) + ')'; });
   groups.append('rect').attr('x', 0).attr('y', -rowHeight / 2).attr('width', width).attr('height', rowHeight)
@@ -246,7 +251,9 @@ function renderCompareDiversityPlot() {
   groups.append('text').attr('x', left - 12).attr('y', 4).attr('text-anchor', 'end')
     .style('fill', '#3a3b45').style('font-size', '12px')
     .text(function (point) {
-      var label = point.record.metadata.id + (names[point.record.metadata.id] > 1
+      var name = compareSampleDisplayName(point.record.metadata.pathRun,
+        point.record.metadata.pathName, point.record.metadata.id);
+      var label = name + (names[name] > 1
         ? ' · ' + point.record.metadata.runId : '');
       return label.length > 34 ? label.slice(0, 31) + '…' : label;
     });
@@ -255,7 +262,8 @@ function renderCompareDiversityPlot() {
     .attr('class', 'compareDiversityPoint')
     .attr('tabindex', 0).attr('role', 'img')
     .attr('aria-label', function (point) {
-      return point.record.metadata.id + ', run ' + point.record.metadata.runId + ', ' + detail.label +
+      return compareSampleDisplayName(point.record.metadata.pathRun,
+        point.record.metadata.pathName, point.record.metadata.id) + ', run ' + point.record.metadata.runId + ', ' + detail.label +
         ' ' + compareDiversityNumber(point.value, detail.decimals);
     })
     .attr('fill', '#4e73df').attr('stroke', '#284fad').attr('stroke-width', 1);
@@ -317,7 +325,8 @@ function updateCompareDiversityTable(samples) {
       return entry.pathName === sample.id && entry.pathRun === sample.runId;
     });
     var tree = sample.tree && sample.tree[unit === 'bases' ? 'treeYield' : 'tree'];
-    var result = martiTreeDiversity(tree, taxonomicRankSelectedCompare, { chao1Valid: false });
+    var result = martiTreeDiversity(tree, taxonomicRankSelectedCompare,
+      { chao1Valid: false, useYield: unit === 'bases' });
     var readResult = unit === 'reads' ? result : martiTreeDiversity(
       sample.tree && sample.tree.tree, taxonomicRankSelectedCompare, { chao1Valid: false });
     if (metadata && result) records.push({ metadata: metadata, result: result, readResult: readResult });
@@ -330,7 +339,8 @@ function updateCompareDiversityTable(samples) {
   if (depth <= 0 && $('#compareDiversityPlotMetric').val() === 'rarefied') $('#compareDiversityPlotMetric').val('richness');
   compareDiversityRows = compareDiversityRecords.map(function (record) {
     var d = record.result;
-    return [record.metadata.id, record.metadata.runId, compareDiversityTableCell(d.N, 0),
+    return [compareSampleDisplayName(record.metadata.pathRun, record.metadata.pathName,
+      record.metadata.id), record.metadata.runId, compareDiversityTableCell(d.N, 0),
       compareDiversityTableCell(d.S, 0),
       compareDiversityTableCell(depth > 0 ? martiRarefiedRichness(record.readResult.counts, depth) : null, 2),
       compareDiversityTableCell(d.shannon, 3), compareDiversityTableCell(d.pielou, 3),

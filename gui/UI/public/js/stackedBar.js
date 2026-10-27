@@ -317,7 +317,7 @@ function plotStackedBar(data, taxaTotalCounts) {
             .call(xAxis)
             .selectAll("text")
             .text(function(d) {
-                return data[d].sample;
+                return compareSampleDisplayNameById(data[d].runId, data[d].sample);
             })
             .attr("dy", "1em")
             .attr("dx", "0em")
@@ -493,7 +493,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     function showTooltip(d) {
         toolTipDiv.interrupt().style("opacity", .95)
-            .html("<small class='text-gray-800'>" + d.sample + "</small>" +
+            .html("<small class='text-gray-800'>" + compareSampleDisplayNameHtml(d.runId, d.sample) + "</small>" +
                 "<h5 class='mb-0'>" + d.component + "</h5>" +
                 "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
                 "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId, d.readCount) +
@@ -526,7 +526,7 @@ function stackedBarTextShrink(d, data) {
     var maxChars = 28,
         halfMaxChars = maxChars / 2;
 
-    var text = data[d].sample,
+    var text = compareSampleDisplayNameById(data[d].runId, data[d].sample),
         numChars = text.length,
         middleString = "...",
         finalText;

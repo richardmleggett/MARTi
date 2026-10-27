@@ -31,6 +31,14 @@ function thousandsSeparators(num) {
   return num_parts.join(".");
 };
 
+function formatBarcodeLabel(barcode) {
+  if (barcode === null || barcode === undefined || barcode === '') return '—';
+  var number = Number(barcode);
+  if (number === 0) return 'None';
+  if (Number.isInteger(number) && number > 0) return 'BC' + String(number).padStart(2, '0');
+  return 'BC' + barcode;
+}
+
 function getValueCaseInsensitive(obj, inputKey) {
     const normalizedInputKey = inputKey.toLowerCase(); // Normalize the input key
     const matchingKey = Object.keys(obj).find(key => key.toLowerCase() === normalizedInputKey);

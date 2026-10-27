@@ -14,6 +14,12 @@ function refreshCompareSampleOrder() {
   renderCompareDistanceMatrix();
 }
 
+function refreshCompareSampleLabels() {
+  refreshCompareSampleOrder();
+  if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
+  if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+}
+
 function initialiseComparePage() {
 
   socket.emit('abundance-options-request', { clientId: uuid, page: 'compare' });
@@ -788,7 +794,8 @@ if (sampleOrdertype == "Manual" && manualSortCompareSamplePaths.length !== 0) {
   });
 } else if (sampleOrdertype == "ID asc"){
 selectedCompareMetaDataArray.sort(function(x, y){
- return d3.ascending(x.id, y.id);
+ return d3.ascending(compareSampleDisplayName(x.pathRun, x.pathName, x.id),
+   compareSampleDisplayName(y.pathRun, y.pathName, y.id));
 })
   for (const sample of selectedCompareMetaDataArray) {
     sortCompareNameArray.push({
@@ -800,7 +807,8 @@ selectedCompareMetaDataArray.sort(function(x, y){
 
 
 selectedCompareMetaDataArray.sort(function(x, y){
- return d3.descending(x.id, y.id);
+ return d3.descending(compareSampleDisplayName(x.pathRun, x.pathName, x.id),
+   compareSampleDisplayName(y.pathRun, y.pathName, y.id));
 })
   for (const sample of selectedCompareMetaDataArray) {
     sortCompareNameArray.push({
@@ -839,6 +847,15 @@ return result;
       runId: sample.runId
     });
   };
+
+} else if (sampleOrdertype == "Barcode asc" || sampleOrdertype == "Barcode desc") {
+  var barcodeDescending = sampleOrdertype == "Barcode desc";
+  selectedCompareMetaDataArray.sort(function(a, b) {
+    return compareSampleBarcodeCompare(a, b, barcodeDescending);
+  });
+  sortCompareNameArray = selectedCompareMetaDataArray.map(function(sample) {
+    return { name: sample.id, runId: sample.runId, pathRun: sample.pathRun, pathName: sample.pathName };
+  });
 
 }
 
@@ -905,7 +922,8 @@ else if (sampleOrdertype == "Yield asc"){
     };
 } else {
   selectedCompareMetaDataArray.sort(function(x, y){
-   return d3.ascending(x.id, y.id);
+   return d3.ascending(compareSampleDisplayName(x.pathRun, x.pathName, x.id),
+     compareSampleDisplayName(y.pathRun, y.pathName, y.id));
   })
     for (const sample of selectedCompareMetaDataArray) {
       sortCompareNameArray.push({
@@ -1049,11 +1067,6 @@ function makeAssignmentExportData(compareSampleData) {
   }
 }
 
-function compareSampleBarcodeLabel(barcode) {
-  if (barcode === null || barcode === undefined || barcode === '') return '—';
-  return Number(barcode) === 0 ? 'None' : 'BC' + barcode;
-}
-
 function updateCompareSampleNameList(names) {
   if (sampleOrdertype === 'Manual' && manualSortCompareSamplePaths.length) {
     names = compareSampleOrderSort(names);
@@ -1068,9 +1081,17 @@ function updateCompareSampleNameList(names) {
     .attr('aria-label', 'Drag to reorder sample')
     .attr('title', 'Drag to reorder sample')
     .html('<i class="fas fa-grip-vertical" aria-hidden="true"></i>');
-  newRows.append('td').append('button')
+  var nameCells = newRows.append('td').append('div').attr('class', 'compareSampleNameCell');
+  nameCells.append('input')
+    .attr('type', 'text')
+    .attr('class', 'form-control form-control-sm compareSampleAliasInput')
+    .attr('autocomplete', 'off');
+  nameCells.append('button')
     .attr('type', 'button')
-    .attr('class', 'btn btn-link btn-sm compareSampleNameButton');
+    .attr('class', 'btn btn-link btn-sm compareSampleNameButton')
+    .attr('title', 'Open Dashboard')
+    .attr('aria-label', 'Open sample Dashboard')
+    .html('<i class="fas fa-external-link-alt" aria-hidden="true"></i>');
   newRows.append('td').append('span').attr('class', 'compareSampleRun');
   newRows.append('td').attr('class', 'compareSampleBarcode');
   newRows.append('td').append('input')
@@ -1086,9 +1107,17 @@ function updateCompareSampleNameList(names) {
     .attr('data-run', function(d) { return d.runId; })
     .attr('data-pathname', function(d) { return d.pathName; })
     .attr('data-pathrun', function(d) { return d.pathRun; });
+  compareSampleList.select('.compareSampleAliasInput')
+    .attr('placeholder', function(d) { return d.id; })
+    .attr('title', function(d) { return 'Shared name: ' + d.id; })
+    .attr('aria-label', function(d) { return 'Browser name for ' + d.id + ' in run ' + d.runId; })
+    .each(function(d) {
+      if (document.activeElement !== this) {
+        this.value = compareSampleNames[compareSampleOrderKey(d.pathRun, d.pathName)] || '';
+      }
+    });
   compareSampleList.select('.compareSampleNameButton')
-    .text(function(d) { return d.id; })
-    .attr('title', function(d) { return d.id; })
+    .attr('aria-label', function(d) { return 'Open Dashboard for ' + d.id; })
     .on('click', function(d) {
               var sampleName = d.pathName;
               var runId = d.pathRun;
@@ -1111,7 +1140,7 @@ function updateCompareSampleNameList(names) {
     .text(function(d) { return d.runId; })
     .attr('title', function(d) { return d.runId; });
   compareSampleList.select('.compareSampleBarcode')
-    .text(function(d) { return compareSampleBarcodeLabel(d.barcode); });
+    .text(function(d) { return formatBarcodeLabel(d.barcode); });
   compareSampleList.select('.compareSampleGroupInput')
     .attr('aria-label', function(d) { return 'Group for ' + d.id + ' in run ' + d.runId; })
     .each(function(d) {

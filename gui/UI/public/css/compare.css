@@ -326,7 +326,7 @@
 }
 
 .compareSamplesTable {
-  table-layout: fixed;
+  table-layout: auto;
   min-width: 50rem;
 }
 
@@ -335,7 +335,7 @@
 }
 
 .compareSampleNameColumn {
-  width: 15rem;
+  width: 40%;
 }
 
 .compareSampleBarcodeColumn {
@@ -344,6 +344,20 @@
 
 .compareSampleGroupColumn {
   width: 13rem;
+}
+
+@media (max-width: 1199px) {
+  .compareSamplesTable {
+    table-layout: fixed;
+  }
+
+  .compareSampleNameColumn {
+    width: auto;
+  }
+
+  .compareSampleRunColumn {
+    width: 9rem;
+  }
 }
 
 #compareSampleNameList td {
@@ -364,14 +378,19 @@
   cursor: grabbing;
 }
 
+.compareSampleNameCell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.compareSampleAliasInput {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .compareSampleNameButton {
-  display: block;
-  max-width: 100%;
-  overflow: hidden;
-  padding-left: 0;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .compareSampleRun {

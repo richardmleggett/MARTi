@@ -79,3 +79,53 @@ test('manual sample order is saved per project and survives renamed or temporari
   vm.runInContext('compareSampleOrderLoad()', context);
   assert.equal(vm.runInContext('manualSortCompareSamplePaths.length', context), 0);
 });
+
+test('browser sample names override shared names per project without changing sample identifiers', () => {
+  const saved = new Map();
+  const context = vm.createContext({
+    clientProject: 'project-a',
+    selectedCompareMetaDataArray: [
+      { id: 'Shared name', runId: 'run-1', pathRun: 'run-1', pathName: 'original-id' }
+    ],
+    localStorage: {
+      getItem: key => saved.get(key) || null,
+      setItem: (key, value) => saved.set(key, value)
+    },
+    $: () => ({ text() { return this; } })
+  });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  vm.runInContext('compareSampleNamesLoad()', context);
+  assert.equal(vm.runInContext('compareSampleDisplayNameById("run-1", "Shared name")', context), 'Shared name');
+
+  vm.runInContext('setCompareSampleName("run-1", "original-id", "  My <sample>  ")', context);
+  assert.equal(vm.runInContext('compareSampleDisplayNameById("run-1", "Shared name")', context), 'My <sample>');
+  assert.equal(vm.runInContext('compareSampleDisplayNameHtml("run-1", "Shared name")', context), 'My &lt;sample&gt;');
+  assert.equal(context.selectedCompareMetaDataArray[0].id, 'Shared name');
+  assert.equal(JSON.parse(saved.get('martiCompareSampleNames:project-a'))['["run-1","original-id"]'], 'My <sample>');
+
+  context.clientProject = 'project-b';
+  vm.runInContext('compareSampleNamesLoad()', context);
+  assert.equal(vm.runInContext('compareSampleDisplayNameById("run-1", "Shared name")', context), 'Shared name');
+  context.clientProject = 'project-a';
+  vm.runInContext('compareSampleNamesLoad(); setCompareSampleName("run-1", "original-id", "")', context);
+  assert.equal(vm.runInContext('compareSampleDisplayNameById("run-1", "Shared name")', context), 'Shared name');
+});
+
+test('barcode order is numeric, with missing values last in both directions', () => {
+  const context = vm.createContext({ clientProject: 'project-a' });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  const samples = [
+    { id: 'Missing', pathRun: 'run', pathName: 'missing', barcode: null },
+    { id: 'Ten', pathRun: 'run', pathName: 'ten', barcode: 10 },
+    { id: 'Two', pathRun: 'run', pathName: 'two', barcode: '2' },
+    { id: 'None', pathRun: 'run', pathName: 'none', barcode: 0 },
+    { id: 'Unknown', pathRun: 'run', pathName: 'unknown', barcode: '' }
+  ];
+  context.samples = samples;
+  assert.deepEqual(Array.from(vm.runInContext(
+    'samples.slice().sort((a, b) => compareSampleBarcodeCompare(a, b, false)).map(sample => sample.id)', context
+  )), ['None', 'Two', 'Ten', 'Missing', 'Unknown']);
+  assert.deepEqual(Array.from(vm.runInContext(
+    'samples.slice().sort((a, b) => compareSampleBarcodeCompare(a, b, true)).map(sample => sample.id)', context
+  )), ['Ten', 'Two', 'None', 'Missing', 'Unknown']);
+});

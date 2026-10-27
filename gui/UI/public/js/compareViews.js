@@ -4,7 +4,53 @@ function compareViewActive(view) {
 
 // Keep the existing PCoA storage key so previously assigned groups still load.
 var compareSampleGroups = {};
+var compareSampleNames = {};
 var manualSortCompareSamplePaths = [];
+
+function compareSampleNamesStorageKey() {
+  return 'martiCompareSampleNames:' + (clientProject || 'default');
+}
+
+function compareSampleNamesLoad() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(compareSampleNamesStorageKey()) || '{}');
+    compareSampleNames = saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  } catch (_) {
+    compareSampleNames = {};
+  }
+}
+
+function compareSampleDisplayName(runId, pathName, sharedName) {
+  var name = compareSampleNames[compareSampleOrderKey(runId, pathName)];
+  return typeof name === 'string' && name.trim() ? name.trim() : sharedName;
+}
+
+function compareSampleDisplayNameById(runId, id) {
+  var samples = typeof selectedCompareMetaDataArray === 'undefined' ? [] : selectedCompareMetaDataArray || [];
+  var sample = samples.find(function(entry) {
+    return String(entry.runId) === String(runId) && (entry.id === id || entry.pathName === id);
+  });
+  return sample ? compareSampleDisplayName(sample.pathRun, sample.pathName, sample.id) : id;
+}
+
+function compareSampleDisplayNameHtml(runId, id) {
+  return String(compareSampleDisplayNameById(runId, id)).replace(/[&<>"']/g, function(character) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+  });
+}
+
+function setCompareSampleName(runId, pathName, name) {
+  var key = compareSampleOrderKey(runId, pathName);
+  var value = String(name || '').trim();
+  if (value) compareSampleNames[key] = value;
+  else delete compareSampleNames[key];
+  try {
+    localStorage.setItem(compareSampleNamesStorageKey(), JSON.stringify(compareSampleNames));
+    $('#compareNamesStatus').text('');
+  } catch (_) {
+    $('#compareNamesStatus').text('Sample names could not be saved in this browser.');
+  }
+}
 
 function compareSampleOrderKey(runId, sampleName) {
   return JSON.stringify([String(runId), String(sampleName)]);
@@ -41,10 +87,29 @@ function compareSampleOrderSort(samples) {
     if (aPosition !== undefined && bPosition !== undefined) return aPosition - bPosition;
     if (aPosition !== undefined) return -1;
     if (bPosition !== undefined) return 1;
-    return String(a.id).localeCompare(String(b.id)) ||
+    return String(compareSampleDisplayName(a.pathRun, a.pathName, a.id)).localeCompare(
+      String(compareSampleDisplayName(b.pathRun, b.pathName, b.id))) ||
       String(a.pathRun).localeCompare(String(b.pathRun)) ||
       String(a.pathName).localeCompare(String(b.pathName));
   });
+}
+
+function compareSampleBarcodeCompare(a, b, descending) {
+  function value(sample) {
+    if (sample.barcode === null || sample.barcode === undefined || sample.barcode === '') return null;
+    var barcode = Number(sample.barcode);
+    return Number.isInteger(barcode) && barcode >= 0 ? barcode : null;
+  }
+  var aBarcode = value(a), bBarcode = value(b);
+  if (aBarcode === null && bBarcode !== null) return 1;
+  if (bBarcode === null && aBarcode !== null) return -1;
+  if (aBarcode !== null && bBarcode !== null && aBarcode !== bBarcode) {
+    return descending ? bBarcode - aBarcode : aBarcode - bBarcode;
+  }
+  return String(compareSampleDisplayName(a.pathRun, a.pathName, a.id)).localeCompare(
+    String(compareSampleDisplayName(b.pathRun, b.pathName, b.id))) ||
+    String(a.pathRun).localeCompare(String(b.pathRun)) ||
+    String(a.pathName).localeCompare(String(b.pathName));
 }
 
 function compareSampleOrderSave(visibleSamples) {
@@ -127,7 +192,8 @@ function setCompareSampleGroup(runId, sampleName, group) {
 function updateCompareSampleSummary() {
   var names = [];
   $('#compareSampleNameList tr').each(function () {
-    var name = $(this).attr('data-id');
+    var name = compareSampleDisplayName(this.getAttribute('data-pathrun'),
+      this.getAttribute('data-pathname'), $(this).attr('data-id'));
     var run = $(this).attr('data-run');
     names.push(run ? name + ' (' + run + ')' : name);
   });
@@ -170,6 +236,7 @@ function setCompareView(view) {
 
 function initialiseCompareViews() {
   compareSampleGroupsLoad();
+  compareSampleNamesLoad();
   ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     $('#compare' + name + 'Tab').off('.compareView').on('click.compareView', function () {
       setCompareView(name);
@@ -184,6 +251,12 @@ function initialiseCompareViews() {
     var row = this.closest('tr');
     setCompareSampleGroup(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'), this.value);
   });
+  $('#compareSampleNameList').off('change.compareNames').on('change.compareNames', '.compareSampleAliasInput', function() {
+    var row = this.closest('tr');
+    setCompareSampleName(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'), this.value);
+    this.value = this.value.trim();
+    if (typeof refreshCompareSampleLabels === 'function') refreshCompareSampleLabels();
+  });
   $(window).off('storage.compareGroups').on('storage.compareGroups', function(event) {
     if (event.originalEvent.key !== compareSampleGroupsStorageKey()) return;
     compareSampleGroupsLoad();
@@ -196,6 +269,12 @@ function initialiseCompareViews() {
     compareSampleOrderLoad();
     if (currentPage === 'Compare' && sampleOrdertype === 'Manual' &&
         typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
+  });
+  $(window).off('storage.compareNames').on('storage.compareNames', function(event) {
+    if (event.originalEvent.key !== compareSampleNamesStorageKey()) return;
+    compareSampleNamesLoad();
+    if (typeof updateCompareSampleNameList === 'function') updateCompareSampleNameList(selectedCompareMetaDataArray);
+    if (typeof refreshCompareSampleLabels === 'function') refreshCompareSampleLabels();
   });
   updateCompareGroupSuggestions();
   updateCompareSampleSummary();

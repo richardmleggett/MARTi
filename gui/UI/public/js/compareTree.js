@@ -517,7 +517,7 @@ d3.select("#compareTreePlot>svg>g").transition().duration(durationCompareTree).a
 
         for (var sample of sortCompareNameArray) {
           var sampleValueRow;
-          var sampleName = sample.name;
+          var sampleName = compareSampleDisplayNameHtml(sample.runId, sample.name);
           var sampleRun = sample.name + "_" + sample.runId;
           var indexOfSampleValue = d.values.findIndex(e => e.sampleId == sample.name && e.runId == sample.runId);
           // var readCount = thousandsSeparators(d["values"][indexOfSampleValue]["readCount"]);

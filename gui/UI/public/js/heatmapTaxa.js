@@ -447,7 +447,7 @@ data.forEach(function(d) {
       plotMinPositiveValue = plotValue;
     }
 
-    return {name: name, taxaReadCount: readCount, totalReadCount: d["totalReadCount"], sample: d.sample, ncbiRank: rank, index: d.index, proportion: prop, plotValue: plotValue, denominatorTaxonId: d.denominatorTaxonId};
+    return {name: name, taxaReadCount: readCount, totalReadCount: d["totalReadCount"], sample: d.sample, runId: d.runId, ncbiRank: rank, index: d.index, proportion: prop, plotValue: plotValue, denominatorTaxonId: d.denominatorTaxonId};
   });
 
   var otherIndex = d["taxa"].findIndex(e => e.name == "Other");
@@ -680,7 +680,7 @@ if (hmTaxaColourPalette === 'trafficLights') {
                .duration(0)
                .style("opacity", .95);
 
-            toolTipDiv.html("<small class='text-gray-800'>" + d.sample + "</small>" +
+            toolTipDiv.html("<small class='text-gray-800'>" + compareSampleDisplayNameHtml(d.runId, d.sample) + "</small>" +
             "<h5 class='mb-0'>" + d.name + "</h5>" +
             "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
             "<hr class='toolTipLine'/>" + plotLevelSelectedCompareTooltipPrefix + "s: " + toolTipValueFormat(plotLevelSelectedCompareId,d.taxaReadCount) +

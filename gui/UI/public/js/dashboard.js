@@ -537,15 +537,7 @@ socket.on('dashboard-meta-response', function(data) {
 
   prepareSampleNameInput(dashboardSampleData);
 
-  let displaybc;
-  if (dashboardSampleData.hasOwnProperty("barcode")){
-    if (dashboardSampleData.barcode == 0){
-      displaybc = "None";
-    } else {
-      displaybc = "BC" + dashboardSampleData.barcode;
-    }
-  }
-  $("#dashboardInfoCardBarcode").text(displaybc);
+  $("#dashboardInfoCardBarcode").text(formatBarcodeLabel(dashboardSampleData.barcode));
 
   $("#dashboardInfoCardEngineVersion").text(martiVersion);
   $("#dashboardInfoCardPipeline").text(dashboardSampleData.analysis.pipeline);

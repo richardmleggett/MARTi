@@ -28,9 +28,9 @@ test('rank counts include a lineage stopping above species and exclude unclassif
 
 test('read and basepair trees give different N and weighted diversity', () => {
   const baseTree = {
-    name: 'root', rank: 0, summedValue: 20000, children: [
-      { name: 'species A', rank: 8, summedValue: 10000 },
-      { name: 'species B', rank: 8, summedValue: 10000 }
+    name: 'root', rank: 0, summedValue: 11, summedYield: 20000, children: [
+      { name: 'species A', rank: 8, summedValue: 1, summedYield: 10000 },
+      { name: 'species B', rank: 8, summedValue: 10, summedYield: 10000 }
     ]
   };
   const readTree = {
@@ -40,7 +40,7 @@ test('read and basepair trees give different N and weighted diversity', () => {
     ]
   };
   const reads = martiTreeDiversity(readTree, 8, { chao1Valid: false });
-  const bases = martiTreeDiversity(baseTree, 8, { chao1Valid: false });
+  const bases = martiTreeDiversity(baseTree, 8, { chao1Valid: false, useYield: true });
   assert.equal(reads.N, 11);
   assert.equal(bases.N, 20000);
   assert.ok(bases.shannon > reads.shannon);
