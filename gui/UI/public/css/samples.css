@@ -4,6 +4,39 @@
   white-space: nowrap;
 }
 
+.sampleTaxonFilter {
+  position: relative;
+  width: min(22rem, 100%);
+}
+
+.sampleTaxonSuggestions {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  max-height: min(22rem, 50vh);
+  overflow-y: auto;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+}
+
+.sampleTaxonSuggestions .list-group-item {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  text-align: left;
+  white-space: normal;
+}
+
+.sampleTaxonSuggestions .list-group-item small {
+  font-size: 0.72rem;
+  line-height: 1.15;
+}
+
+.sampleTaxonSuggestions .active small {
+  color: inherit !important;
+}
+
 #samplePageDataTable>tbody>tr[role="row"]>td:nth-child(2):hover {
   text-decoration: underline;
 }

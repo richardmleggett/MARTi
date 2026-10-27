@@ -156,8 +156,9 @@
                   <i class="fa fa-search fa-sm searchIcon"></i>
                 <input class="form-control form-control-sm searchBox" type="text" placeholder="Search sample details..." aria-label="Search sample details" id="sampleTableSearchBox">
                 </div>
-                <div class="col-xs-2 ml-2">
-                  <input class="form-control form-control-sm" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Taxon ID (includes descendants)" aria-label="Filter samples by NCBI taxon ID, including descendants" id="sampleTaxonIdFilter">
+                <div class="col-xs-2 ml-2 sampleTaxonFilter">
+                  <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="Taxon name or NCBI ID" aria-label="Filter samples by taxon name or NCBI ID, including descendants" role="combobox" aria-autocomplete="list" aria-controls="sampleTaxonSuggestions" aria-expanded="false" id="sampleTaxonIdFilter">
+                  <div id="sampleTaxonSuggestions" class="list-group sampleTaxonSuggestions" role="listbox" hidden></div>
                 </div>
               </div>
               <div class="card-body">

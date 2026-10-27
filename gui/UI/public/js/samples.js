@@ -1,11 +1,78 @@
 var sampleTaxonFilterId = "";
+var sampleTaxonFilterQuery = "";
 var sampleTaxonFilterMatches = null;
 var sampleTaxonFilterRequestSerial = 0;
+var sampleTaxonSuggestionRequestSerial = 0;
 var sampleTaxonFilterTimer;
+var sampleTaxonSuggestionTimer;
 var sampleTaxonFilterRegistered = false;
+var sampleTaxonSuggestions = [];
+var sampleTaxonSuggestionActive = -1;
 
 function sampleTaxonFilterKey(runId, name) {
   return JSON.stringify([runId, name]);
+}
+
+function sampleTaxonFilterSamples() {
+  return samplePageDataTable.rows().data().toArray().map(function(row) {
+    return { runId: row[11], name: row[12] };
+  });
+}
+
+function hideSampleTaxonSuggestions() {
+  $('#sampleTaxonSuggestions').prop('hidden', true).empty();
+  $('#sampleTaxonIdFilter').attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+  sampleTaxonSuggestionActive = -1;
+}
+
+function chooseSampleTaxonSuggestion(taxon) {
+  sampleTaxonFilterId = String(taxon.id);
+  sampleTaxonFilterQuery = taxon.name;
+  ++sampleTaxonSuggestionRequestSerial;
+  clearTimeout(sampleTaxonSuggestionTimer);
+  $('#sampleTaxonIdFilter').val(taxon.name + ' (' + taxon.id + ')');
+  hideSampleTaxonSuggestions();
+  requestSampleTaxonFilter();
+}
+
+function renderSampleTaxonSuggestions() {
+  var list = $('#sampleTaxonSuggestions').empty();
+  sampleTaxonSuggestionActive = -1;
+  sampleTaxonSuggestions.forEach(function(taxon, index) {
+    var option = $('<button type="button" class="list-group-item list-group-item-action"></button>')
+      .attr('id', 'sampleTaxonOption' + index)
+      .attr('role', 'option')
+      .attr('aria-selected', 'false')
+      .on('mousedown', function(event) { event.preventDefault(); })
+      .on('click', function() { chooseSampleTaxonSuggestion(taxon); });
+    $('<span></span>').text(taxon.name).appendTo(option);
+    $('<small class="d-block text-muted"></small>')
+      .text((taxon.rank ? taxon.rank + ' · ' : '') + 'NCBI ID ' + taxon.id)
+      .appendTo(option);
+    option.appendTo(list);
+  });
+  var open = sampleTaxonSuggestions.length > 0;
+  list.prop('hidden', !open);
+  $('#sampleTaxonIdFilter').attr('aria-expanded', String(open));
+}
+
+function requestSampleTaxonSuggestions() {
+  var query = sampleTaxonFilterQuery;
+  var serial = ++sampleTaxonSuggestionRequestSerial;
+  if (sampleTaxonFilterId || query.length < 2) return;
+  socket.emit('sample-taxon-suggestions-request', {
+    clientId: uuid,
+    query: query,
+    samples: sampleTaxonFilterSamples()
+  }, function(response) {
+    if (serial !== sampleTaxonSuggestionRequestSerial || currentPage !== 'Samples' ||
+        sampleTaxonFilterId || query !== sampleTaxonFilterQuery) return;
+    sampleTaxonSuggestions = response && Array.isArray(response.suggestions) ? response.suggestions : [];
+    renderSampleTaxonSuggestions();
+    $('#sampleTaxonFilterStatus').text(sampleTaxonSuggestions.length
+      ? 'Choose a taxon to include it and its descendants.'
+      : 'No matching taxa with assigned reads in the loaded samples.');
+  });
 }
 
 function refreshSampleMapMarkers() {
@@ -45,10 +112,10 @@ function requestSampleTaxonFilter() {
     return;
   }
   status.text('Finding samples with reads assigned to this taxon or its descendants…');
-  var samples = samplePageDataTable.rows().data().toArray().map(function(row) {
-    return { runId: row[11], name: row[12] };
-  });
-  socket.emit('sample-taxon-filter-request', { taxonId: sampleTaxonFilterId, samples: samples }, function(response) {
+  socket.emit('sample-taxon-filter-request', {
+    clientId: uuid,
+    taxonId: sampleTaxonFilterId, samples: sampleTaxonFilterSamples()
+  }, function(response) {
     if (serial !== sampleTaxonFilterRequestSerial || currentPage !== 'Samples') return;
     var matches = response && Array.isArray(response.matches) ? response.matches : [];
     sampleTaxonFilterMatches = new Set(matches.map(function(sample) {
@@ -65,9 +132,14 @@ exportRequestPending = false;
 mapUpdated = false;
 $('#sampleMapCard').hide();
 sampleTaxonFilterId = '';
+sampleTaxonFilterQuery = '';
 sampleTaxonFilterMatches = null;
 ++sampleTaxonFilterRequestSerial;
+++sampleTaxonSuggestionRequestSerial;
 clearTimeout(sampleTaxonFilterTimer);
+clearTimeout(sampleTaxonSuggestionTimer);
+sampleTaxonSuggestions = [];
+hideSampleTaxonSuggestions();
 
 if (!sampleTaxonFilterRegistered) {
   $.fn.dataTable.ext.search.push(function(settings, searchData, dataIndex) {
@@ -188,10 +260,58 @@ $('.compareSamplesInput').on('click', function() {
 sampleListCurrent = [];
 
 $("#sampleTaxonIdFilter").on('input', function() {
-  sampleTaxonFilterId = this.value.trim();
+  sampleTaxonFilterQuery = this.value.trim();
+  sampleTaxonFilterId = /^\d+$/.test(sampleTaxonFilterQuery) ? sampleTaxonFilterQuery : '';
   ++sampleTaxonFilterRequestSerial;
+  ++sampleTaxonSuggestionRequestSerial;
   clearTimeout(sampleTaxonFilterTimer);
-  sampleTaxonFilterTimer = setTimeout(requestSampleTaxonFilter, 200);
+  clearTimeout(sampleTaxonSuggestionTimer);
+  sampleTaxonSuggestions = [];
+  hideSampleTaxonSuggestions();
+  if (sampleTaxonFilterId) {
+    sampleTaxonFilterTimer = setTimeout(requestSampleTaxonFilter, 200);
+  } else {
+    sampleTaxonFilterMatches = null;
+    samplePageDataTable.draw(false);
+    refreshSampleMapMarkers();
+    $('#sampleTaxonFilterStatus').text(sampleTaxonFilterQuery
+      ? sampleTaxonFilterQuery.length < 2 ? 'Type at least two characters of a taxon name.' : 'Searching taxon names…'
+      : '');
+    if (sampleTaxonFilterQuery.length >= 2) {
+      sampleTaxonSuggestionTimer = setTimeout(requestSampleTaxonSuggestions, 200);
+    }
+  }
+});
+
+$('#sampleTaxonIdFilter').on('keydown', function(event) {
+  if (event.key === 'Escape') {
+    hideSampleTaxonSuggestions();
+    return;
+  }
+  if (!sampleTaxonSuggestions.length || $('#sampleTaxonSuggestions').prop('hidden')) return;
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault();
+    var step = event.key === 'ArrowDown' ? 1 : -1;
+    sampleTaxonSuggestionActive = sampleTaxonSuggestionActive < 0
+      ? (step > 0 ? 0 : sampleTaxonSuggestions.length - 1)
+      : (sampleTaxonSuggestionActive + step + sampleTaxonSuggestions.length) % sampleTaxonSuggestions.length;
+    $('#sampleTaxonSuggestions [role="option"]').removeClass('active').attr('aria-selected', 'false');
+    $('#sampleTaxonOption' + sampleTaxonSuggestionActive).addClass('active').attr('aria-selected', 'true');
+    this.setAttribute('aria-activedescendant', 'sampleTaxonOption' + sampleTaxonSuggestionActive);
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    chooseSampleTaxonSuggestion(sampleTaxonSuggestions[sampleTaxonSuggestionActive < 0 ? 0 : sampleTaxonSuggestionActive]);
+  }
+});
+
+$('#sampleTaxonIdFilter').on('focus', function() {
+  if (sampleTaxonFilterId || sampleTaxonFilterQuery.length < 2) return;
+  if (sampleTaxonSuggestions.length) renderSampleTaxonSuggestions();
+  else requestSampleTaxonSuggestions();
+});
+
+$(document).off('click.sampleTaxonSuggestions').on('click.sampleTaxonSuggestions', function(event) {
+  if (!$(event.target).closest('.sampleTaxonFilter').length) hideSampleTaxonSuggestions();
 });
 
 $("#sampleTableSearchBox").keyup(function() {
@@ -512,6 +632,7 @@ existingMarkers = [];
 
 samplePageDataTable.draw(false);
 if (sampleTaxonFilterId) requestSampleTaxonFilter();
+else if (sampleTaxonFilterQuery.length >= 2) requestSampleTaxonSuggestions();
 
 
   $('#samplePageDataTable tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
@@ -675,7 +796,9 @@ socket.on('meta-update-available', request => {
 });
 
 socket.on('sample-taxon-filter-data-updated', function() {
-  if (currentPage === 'Samples' && sampleTaxonFilterId) requestSampleTaxonFilter();
+  if (currentPage !== 'Samples') return;
+  if (sampleTaxonFilterId) requestSampleTaxonFilter();
+  else if (sampleTaxonFilterQuery.length >= 2) requestSampleTaxonSuggestions();
 });
 
 // socket.on('metadata-file-update-available', request => {

@@ -6,7 +6,7 @@ const fsExtra = require('fs-extra');
 const homedir = require('os').homedir();
 const https = require('https');
 const path = require('path');
-const { sampleHasTaxon } = require('./services/taxonFilter');
+const { sampleHasTaxon, suggestTaxa } = require('./services/taxonFilter');
 const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
 const { calculateOrdination, calculateDendrogram, calculateDistanceMatrix } = require('./services/ordination');
 
@@ -1058,6 +1058,38 @@ io.on('connect', function(socket){
     });
   });
 
+  function sampleFilterTrees(samples, clientId) {
+    const client = clientData[clientId];
+    if (!client) return [];
+    const project = client.project || defaultProject;
+    const config = projectsEnabled ? projectsDatabase[project] : null;
+    if (projectsEnabled && !config) return [];
+    const roots = [];
+    for (const sample of samples) {
+      if (!sample || typeof sample.runId !== 'string' || typeof sample.name !== 'string') continue;
+      const metadata = sampleMetaDict[sample.runId] && sampleMetaDict[sample.runId][sample.name];
+      if (!metadata) continue;
+      if (config && !config.runs.includes(sample.runId) && !config.samples.includes(sample.name) &&
+          !config.directories.includes(metadata.sample.dir)) continue;
+      const trees = sampleTreeDict[sample.runId] && sampleTreeDict[sample.runId][sample.name];
+      if (!trees) continue;
+      const lca = Object.keys(trees).filter(key => /^lca_\d+(\.\d+)?$/.test(key))
+        .sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)))[0];
+      if (lca && trees[lca] && trees[lca].tree) {
+        roots.push({ runId: sample.runId, name: sample.name, tree: trees[lca].tree });
+      }
+    }
+    return roots;
+  }
+
+  socket.on('sample-taxon-suggestions-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const query = String(request && request.query || '').trim().slice(0, 100);
+    const samples = request && Array.isArray(request.samples) ? request.samples : [];
+    callback({ suggestions: suggestTaxa(sampleFilterTrees(samples, request && request.clientId)
+      .map(sample => sample.tree), query) });
+  });
+
   socket.on('sample-taxon-filter-request', (request, callback) => {
     if (typeof callback !== 'function') return;
     const taxonId = String(request && request.taxonId || '').trim();
@@ -1068,13 +1100,8 @@ io.on('connect', function(socket){
     }
 
     const matches = [];
-    for (const sample of samples) {
-      if (!sample || typeof sample.runId !== 'string' || typeof sample.name !== 'string') continue;
-      const trees = sampleTreeDict[sample.runId] && sampleTreeDict[sample.runId][sample.name];
-      if (!trees) continue;
-      const lca = Object.keys(trees).filter(key => /^lca_\d+(\.\d+)?$/.test(key))
-        .sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)))[0];
-      if (lca && sampleHasTaxon(trees[lca].tree, taxonId)) {
+    for (const sample of sampleFilterTrees(samples, request && request.clientId)) {
+      if (sampleHasTaxon(sample.tree, taxonId)) {
         matches.push({ runId: sample.runId, name: sample.name });
       }
     }
