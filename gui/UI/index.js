@@ -829,6 +829,15 @@ function commonAvailableLcas(samples) {
     return common.filter(lca => available.has(lca));
   }, availableLcasForSample(samples[0])).sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)));
 }
+function commonAvailableTreeLcas(samples) {
+  if (!samples || samples.length === 0) return [];
+  var firstTrees = sampleTreeDict[samples[0].runId] &&
+    sampleTreeDict[samples[0].runId][samples[0].name];
+  return samples.slice(1).reduce((common, sample) => {
+    var trees = sampleTreeDict[sample.runId] && sampleTreeDict[sample.runId][sample.name];
+    return common.filter(lca => trees && Object.prototype.hasOwnProperty.call(trees, lca));
+  }, Object.keys(firstTrees || {}));
+}
 var sampleAmrDict = {};
 var alertsDict = {};
 
@@ -1249,6 +1258,13 @@ io.on('connect', function(socket){
       page: request.page,
       lcas: commonAvailableLcas(samples)
     });
+  });
+
+  socket.on('export-cutoff-options-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    var client = request && clientData[request.clientId];
+    var samples = client && client.selectedCompareSamples;
+    callback({ lcas: commonAvailableTreeLcas(samples), sampleCount: samples ? samples.length : 0 });
   });
 
 

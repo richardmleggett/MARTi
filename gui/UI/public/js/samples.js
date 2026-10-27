@@ -259,7 +259,7 @@ $('.compareSamplesInput').on('click', function() {
 
 sampleListCurrent = [];
 
-$("#sampleTaxonIdFilter").on('input', function() {
+$("#sampleTaxonIdFilter").off('.sampleTaxonFilter').on('input.sampleTaxonFilter', function() {
   sampleTaxonFilterQuery = this.value.trim();
   sampleTaxonFilterId = /^\d+$/.test(sampleTaxonFilterQuery) ? sampleTaxonFilterQuery : '';
   ++sampleTaxonFilterRequestSerial;
@@ -283,7 +283,7 @@ $("#sampleTaxonIdFilter").on('input', function() {
   }
 });
 
-$('#sampleTaxonIdFilter').on('keydown', function(event) {
+$('#sampleTaxonIdFilter').on('keydown.sampleTaxonFilter', function(event) {
   if (event.key === 'Escape') {
     hideSampleTaxonSuggestions();
     return;
@@ -295,16 +295,25 @@ $('#sampleTaxonIdFilter').on('keydown', function(event) {
     sampleTaxonSuggestionActive = sampleTaxonSuggestionActive < 0
       ? (step > 0 ? 0 : sampleTaxonSuggestions.length - 1)
       : (sampleTaxonSuggestionActive + step + sampleTaxonSuggestions.length) % sampleTaxonSuggestions.length;
+    var list = document.getElementById('sampleTaxonSuggestions');
+    var option = document.getElementById('sampleTaxonOption' + sampleTaxonSuggestionActive);
     $('#sampleTaxonSuggestions [role="option"]').removeClass('active').attr('aria-selected', 'false');
-    $('#sampleTaxonOption' + sampleTaxonSuggestionActive).addClass('active').attr('aria-selected', 'true');
+    $(option).addClass('active').attr('aria-selected', 'true');
     this.setAttribute('aria-activedescendant', 'sampleTaxonOption' + sampleTaxonSuggestionActive);
+    var listBounds = list.getBoundingClientRect();
+    var optionBounds = option.getBoundingClientRect();
+    if (optionBounds.bottom > listBounds.bottom) {
+      list.scrollTop += optionBounds.bottom - listBounds.bottom;
+    } else if (optionBounds.top < listBounds.top) {
+      list.scrollTop -= listBounds.top - optionBounds.top;
+    }
   } else if (event.key === 'Enter') {
     event.preventDefault();
     chooseSampleTaxonSuggestion(sampleTaxonSuggestions[sampleTaxonSuggestionActive < 0 ? 0 : sampleTaxonSuggestionActive]);
   }
 });
 
-$('#sampleTaxonIdFilter').on('focus', function() {
+$('#sampleTaxonIdFilter').on('focus.sampleTaxonFilter', function() {
   if (sampleTaxonFilterId || sampleTaxonFilterQuery.length < 2) return;
   if (sampleTaxonSuggestions.length) renderSampleTaxonSuggestions();
   else requestSampleTaxonSuggestions();
@@ -449,9 +458,42 @@ function initialiseSampleMap(){
 
 var exportCardObject = {};
 var exportRequestPending = false;
+var exportCutoffRequestSerial = 0;
+
+function refreshExportCutoffOptions() {
+  var serial = ++exportCutoffRequestSerial;
+  socket.emit('export-cutoff-options-request', { clientId: uuid }, function(response) {
+    if (serial !== exportCutoffRequestSerial || currentPage !== 'Samples') return;
+    var available = response && Array.isArray(response.lcas) ? response.lcas : [];
+    var sampleCount = response ? response.sampleCount : 0;
+    var choices = $('input[name="exportLcaCutoffToggle"]');
+    choices.each(function() {
+      var disabled = !available.includes('lca_' + this.value);
+      this.disabled = disabled;
+      $(this).closest('label').toggleClass('text-muted', disabled);
+    });
+    if (!choices.filter(':checked:not(:disabled)').length) {
+      var fallback = choices.filter('[value="0.0"]:not(:disabled)');
+      if (!fallback.length) fallback = choices.filter(':not(:disabled)').first();
+      choices.prop('checked', false);
+      fallback.prop('checked', true);
+    }
+    var enabledCount = choices.filter(':not(:disabled)').length;
+    $('#exportLcaCutoffStatus').text(!sampleCount
+      ? 'Select samples to see available cutoffs.'
+      : !enabledCount
+        ? 'No LCA cutoff has a taxonomy file for every selected sample.'
+        : enabledCount === choices.length
+          ? 'All cutoffs are available for the selected samples.'
+          : 'Greyed out cutoffs are missing a taxonomy file for at least one selected sample.');
+    $('#sampleExportButton').prop('disabled', exportRequestPending ||
+      (sampleCount > 0 && !enabledCount));
+  });
+}
 
 function initialiseExportCard(){
 
+  refreshExportCutoffOptions();
 
   var taxRankArray = ["All levels","Domain","Phylum","Class","Order","Family","Genus","Species"];
   // var defaultMaxJobs = 4;
@@ -797,6 +839,7 @@ socket.on('meta-update-available', request => {
 
 socket.on('sample-taxon-filter-data-updated', function() {
   if (currentPage !== 'Samples') return;
+  refreshExportCutoffOptions();
   if (sampleTaxonFilterId) requestSampleTaxonFilter();
   else if (sampleTaxonFilterQuery.length >= 2) requestSampleTaxonSuggestions();
 });
@@ -945,6 +988,8 @@ socket.on('current-compare-samples-response', function(samples) {
   } else {
     $('#sampleMap div.leaflet-popup-content-wrapper table tr:nth-child(5)').removeClass("checkSelected");
   }
+
+  if (currentPage === 'Samples') refreshExportCutoffOptions();
 
 });
 

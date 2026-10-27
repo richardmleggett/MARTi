@@ -55,10 +55,13 @@
           <legend class="col-form-label font-weight-bold pt-0 mb-2">LCA minimum abundance cutoff</legend>
           <div class="d-flex flex-wrap">
             <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.0" checked> 0%</label>
+            <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.005"> 0.005%</label>
+            <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.05"> 0.05%</label>
             <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="0.1"> 0.1%</label>
             <label class="mr-4 mb-1"><input type="radio" name="exportLcaCutoffToggle" value="1.0"> 1%</label>
             <label class="mb-1"><input type="radio" name="exportLcaCutoffToggle" value="2.0"> 2%</label>
           </div>
+          <small id="exportLcaCutoffStatus" class="form-text text-muted" role="status" aria-live="polite"></small>
         </fieldset>
       </div>
       <fieldset class="mb-3" id="exportRankScopeRow">
