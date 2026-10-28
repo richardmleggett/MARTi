@@ -848,6 +848,15 @@ return result;
     });
   };
 
+} else if (sampleOrdertype == "Group asc" || sampleOrdertype == "Group desc") {
+  var groupDescending = sampleOrdertype == "Group desc";
+  selectedCompareMetaDataArray.sort(function(a, b) {
+    return compareSampleGroupCompare(a, b, groupDescending);
+  });
+  sortCompareNameArray = selectedCompareMetaDataArray.map(function(sample) {
+    return { name: sample.id, runId: sample.runId, pathRun: sample.pathRun, pathName: sample.pathName };
+  });
+
 } else if (sampleOrdertype == "Barcode asc" || sampleOrdertype == "Barcode desc") {
   var barcodeDescending = sampleOrdertype == "Barcode desc";
   selectedCompareMetaDataArray.sort(function(a, b) {
@@ -1147,6 +1156,7 @@ function updateCompareSampleNameList(names) {
       if (document.activeElement !== this) this.value = compareSampleGroupValue(d.pathRun, d.pathName);
     });
   updateCompareSampleSummary();
+  updateCompareMetadataGroupingOptions();
 };
 
 var newCompareTreeData = false;

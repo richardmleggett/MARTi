@@ -178,6 +178,10 @@ function setCompareSampleGroup(runId, sampleName, group) {
   var value = String(group || '').trim();
   if (value) compareSampleGroups[key] = value;
   else delete compareSampleGroups[key];
+  saveCompareSampleGroups();
+}
+
+function saveCompareSampleGroups() {
   try {
     localStorage.setItem(compareSampleGroupsStorageKey(), JSON.stringify(compareSampleGroups));
     $('#compareGroupsStatus').text('');
@@ -187,6 +191,60 @@ function setCompareSampleGroup(runId, sampleName, group) {
   updateCompareGroupSuggestions();
   if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
   if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+}
+
+function compareSampleMetadataGroup(sample, field) {
+  var metadata = sample.metadatafile || {};
+  function text(value) { return typeof value === 'string' ? value.trim() : ''; }
+  if (field === 'location') {
+    return text(metadata.locationName) || text(metadata.location) || text(metadata.sampleLocation);
+  }
+  if (field !== 'date') return '';
+  var value = text(metadata.sampleDate);
+  var iso = value.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|[T ])/);
+  var dayFirst = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
+  if (!iso && !dayFirst) return value;
+  var year = Number(iso ? iso[1] : dayFirst[3]);
+  if (year < 100) year += 2000;
+  var month = Number(iso ? iso[2] : dayFirst[2]);
+  var day = Number(iso ? iso[3] : dayFirst[1]);
+  var parsed = new Date(Date.UTC(year, month - 1, day));
+  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return value;
+  return String(year).padStart(4, '0') + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+}
+
+function updateCompareMetadataGroupingOptions() {
+  var samples = selectedCompareMetaDataArray || [];
+  ['location', 'date'].forEach(function(field) {
+    var available = samples.some(function(sample) { return Boolean(compareSampleMetadataGroup(sample, field)); });
+    $('#compareMetadataGroups option[value="' + field + '"]').prop('disabled', !available);
+  });
+}
+
+function setCompareSampleGroupsFromMetadata(field) {
+  if (field !== 'location' && field !== 'date') return;
+  var samples = selectedCompareMetaDataArray || [];
+  if (!samples.some(function(sample) { return Boolean(compareSampleMetadataGroup(sample, field)); })) return;
+  samples.forEach(function(sample) {
+    var key = compareSampleGroupKey(sample.pathRun, sample.pathName);
+    var group = compareSampleMetadataGroup(sample, field);
+    if (group) compareSampleGroups[key] = group;
+    else delete compareSampleGroups[key];
+  });
+  $('#compareOrdinationColourBy').val('manual');
+  saveCompareSampleGroups();
+  updateCompareSampleGroupInputs();
+}
+
+function compareSampleGroupCompare(a, b, descending) {
+  var first = compareSampleGroupValue(a.pathRun, a.pathName);
+  var second = compareSampleGroupValue(b.pathRun, b.pathName);
+  if (!first && second) return 1;
+  if (first && !second) return -1;
+  if (first !== second) return first.localeCompare(second) * (descending ? -1 : 1);
+  return String(compareSampleDisplayName(a.pathRun, a.pathName, a.id)).localeCompare(
+    String(compareSampleDisplayName(b.pathRun, b.pathName, b.id))) ||
+    String(a.pathRun).localeCompare(String(b.pathRun)) || String(a.pathName).localeCompare(String(b.pathName));
 }
 
 function updateCompareSampleSummary() {
@@ -237,6 +295,18 @@ function setCompareView(view) {
 function initialiseCompareViews() {
   compareSampleGroupsLoad();
   compareSampleNamesLoad();
+  $('#compareMetadataGroups').off('.compareGroups').on('change.compareGroups', function() {
+    if (!this.value) return;
+    setCompareSampleGroupsFromMetadata(this.value);
+    this.value = '';
+    sampleOrdertype = 'Group asc';
+    $('#sampleOrderCompareButton').text(sampleOrdertype);
+    $('#sampleOrderCompareMenu a.rank').removeClass('active').filter(function() {
+      return this.textContent === sampleOrdertype;
+    }).addClass('active');
+    refreshCompareSampleOrder();
+  });
+  updateCompareMetadataGroupingOptions();
   ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     $('#compare' + name + 'Tab').off('.compareView').on('click.compareView', function () {
       setCompareView(name);
@@ -250,6 +320,7 @@ function initialiseCompareViews() {
   $('#compareSampleNameList').off('input.compareGroups').on('input.compareGroups', '.compareSampleGroupInput', function() {
     var row = this.closest('tr');
     setCompareSampleGroup(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'), this.value);
+    if (sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') refreshCompareSampleOrder();
   });
   $('#compareSampleNameList').off('change.compareNames').on('change.compareNames', '.compareSampleAliasInput', function() {
     var row = this.closest('tr');

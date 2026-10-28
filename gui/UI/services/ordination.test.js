@@ -85,3 +85,28 @@ test('rejects unusable sample or taxon selections', () => {
     rank: 7, method: 'aitchison', minimumPrevalence: 2, pseudocount: 0.5
   }), /at least two retained taxa/);
 });
+
+
+test('sample relationships support 160 samples across all analyses and enforce the boundary consistently', () => {
+  const options = { rank: 7, method: 'brayCurtis', minimumPrevalence: 1 };
+  const largeSelection = Array.from({ length: 160 }, (_, index) =>
+    sample('sample-' + index, index + 1, 161 - index));
+  const ordination = calculateOrdination(largeSelection, options);
+  assert.equal(ordination.sampleCount, 160);
+  assert.equal(ordination.points.length, 160);
+  assert.ok(ordination.points.every(point => Number.isFinite(point.x) && Number.isFinite(point.y)));
+  const dendrogram = calculateDendrogram(largeSelection, options);
+  assert.equal(dendrogram.sampleCount, 160);
+  function leafCount(node) {
+    return node.children ? node.children.reduce((total, child) => total + leafCount(child), 0) : 1;
+  }
+  assert.equal(leafCount(dendrogram.tree), 160);
+  const matrix = calculateDistanceMatrix(largeSelection, options);
+  assert.equal(matrix.sampleCount, 160);
+  assert.equal(matrix.distances.length, 160);
+  assert.ok(matrix.distances.every(row => row.length === 160));
+  const tooMany = largeSelection.concat(sample('sample-161', 50, 50));
+  for (const calculate of [calculateOrdination, calculateDendrogram, calculateDistanceMatrix]) {
+    assert.throws(() => calculate(tooMany, options), /no more than 160 samples/);
+  }
+});

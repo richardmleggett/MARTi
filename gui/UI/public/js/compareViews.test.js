@@ -129,3 +129,76 @@ test('barcode order is numeric, with missing values last in both directions', ()
     'samples.slice().sort((a, b) => compareSampleBarcodeCompare(a, b, true)).map(sample => sample.id)', context
   )), ['Ten', 'Two', 'None', 'Missing', 'Unknown']);
 });
+
+test('metadata groups use site names or coordinates and normalize collection dates', () => {
+  const context = vm.createContext({});
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  context.sample = { metadatafile: { locationName: ' Thetford Forest ', location: '52.4, 0.7', sampleDate: '14/04/25' } };
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "location")', context), 'Thetford Forest');
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "date")', context), '2025-04-14');
+  context.sample.metadatafile.sampleDate = '2025-04-14';
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "date")', context), '2025-04-14');
+  context.sample.metadatafile.sampleDate = '16/01/2025';
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "date")', context), '2025-01-16');
+  delete context.sample.metadatafile.locationName;
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "location")', context), '52.4, 0.7');
+  delete context.sample.metadatafile.location;
+  context.sample.metadatafile.sampleLocation = '52.5, 0.8';
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "location")', context), '52.5, 0.8');
+  context.sample = {};
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "location")', context), '');
+  assert.equal(vm.runInContext('compareSampleMetadataGroup(sample, "date")', context), '');
+});
+
+test('metadata grouping updates only selected samples, saves once and preserves identifiers and metadata', () => {
+  const saved = new Map();
+  let writes = 0;
+  let renders = 0;
+  const element = {
+    text() { return this; }, empty() { return this; }, val() { return this; },
+    appendTo() { return this; }, each() { return this; }
+  };
+  const samples = [
+    { id: 'Shared name', pathRun: 'run-1', pathName: 'a', metadatafile: { locationName: 'Foxley Wood', sampleDate: '25/07/24' } },
+    { id: 'Shared name', pathRun: 'run-2', pathName: 'b', metadatafile: { locationName: 'Foxley Wood', sampleDate: '2025-04-14' } },
+    { id: 'Control', pathRun: 'run-2', pathName: 'c' }
+  ];
+  const before = JSON.stringify(samples);
+  const context = vm.createContext({
+    clientProject: 'metadata-test', selectedCompareMetaDataArray: samples,
+    localStorage: { getItem: () => null, setItem: (key, value) => { writes++; saved.set(key, value); } },
+    $: () => element,
+    renderCompareOrdination: () => { renders++; },
+    requestCompareOrdination: () => { throw new Error('Must not recalculate PCoA'); }
+  });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  vm.runInContext(`compareSampleGroups = { '["run-2","c"]': 'Old control', '["other","d"]': 'Keep me' };
+    setCompareSampleGroupsFromMetadata('location')`, context);
+  const key = 'martiCompareOrdinationGroups:metadata-test';
+  assert.deepEqual(JSON.parse(saved.get(key)), {
+    '["run-1","a"]': 'Foxley Wood', '["run-2","b"]': 'Foxley Wood', '["other","d"]': 'Keep me'
+  });
+  assert.equal(writes, 1);
+  assert.equal(renders, 1);
+  vm.runInContext(`setCompareSampleGroupsFromMetadata('date')`, context);
+  assert.equal(JSON.parse(saved.get(key))['["run-1","a"]'], '2024-07-25');
+  assert.equal(JSON.parse(saved.get(key))['["run-2","b"]'], '2025-04-14');
+  assert.equal(JSON.stringify(samples), before);
+  // Switching projects cannot carry these assignments into the other project.
+  context.clientProject = 'other-project';
+  vm.runInContext('compareSampleGroupsLoad()', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-1", "a")', context), '');
+});
+
+test('group ordering is chronological for dates and keeps ungrouped samples last in both directions', () => {
+  const context = vm.createContext({});
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  context.samples = [
+    { id: 'Control', pathRun: 'run', pathName: 'control' },
+    { id: 'April', pathRun: 'run', pathName: 'april' },
+    { id: 'January', pathRun: 'run', pathName: 'january' }
+  ];
+  vm.runInContext(`compareSampleGroups = { '["run","april"]': '2025-04-14', '["run","january"]': '2025-01-16' }`, context);
+  assert.deepEqual(Array.from(vm.runInContext('samples.slice().sort((a, b) => compareSampleGroupCompare(a, b, false)).map(s => s.id)', context)), ['January', 'April', 'Control']);
+  assert.deepEqual(Array.from(vm.runInContext('samples.slice().sort((a, b) => compareSampleGroupCompare(a, b, true)).map(s => s.id)', context)), ['April', 'January', 'Control']);
+});

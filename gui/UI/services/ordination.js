@@ -84,7 +84,7 @@ function calculateSampleDistances(samples, options, minimumSamples) {
   })).filter(sample => sample.counts.size > 0);
   if (withCounts.length < minimumSamples) throw new Error('Select at least ' +
     (minimumSamples === 2 ? 'two' : 'three') + ' samples with taxa at this rank and LCA cutoff.');
-  if (withCounts.length > 80) throw new Error('Select no more than 80 samples for this analysis.');
+  if (withCounts.length > 160) throw new Error('Select no more than 160 samples for this analysis.');
 
   const prevalence = new Map();
   withCounts.forEach(sample => sample.counts.forEach((_, id) =>

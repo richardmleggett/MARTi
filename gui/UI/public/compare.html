@@ -78,6 +78,8 @@
               <a class="dropdown-item dropdown-nonhref rank">ID desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Run asc</a>
               <a class="dropdown-item dropdown-nonhref rank">Run desc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Group asc</a>
+              <a class="dropdown-item dropdown-nonhref rank">Group desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Barcode asc</a>
               <a class="dropdown-item dropdown-nonhref rank">Barcode desc</a>
               <a class="dropdown-item dropdown-nonhref rank">Yield asc</a>
@@ -91,7 +93,16 @@
       </div>
       <div class="card-body pt-3 pb-0">
         <p class="small text-muted mb-2">Drag a handle to set a manual order. Enter a sample name to use it in Compare plots; leave it blank to use the shared name. Names and order are saved in this browser for this project. Use the arrow button to open a sample's Dashboard.</p>
-        <p class="small text-muted mb-3">Groups are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
+        <p class="small text-muted mb-2">Groups are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
+        <div class="d-flex align-items-center flex-wrap mb-3">
+          <label for="compareMetadataGroups" class="small mb-0 mr-2">Set groups from metadata</label>
+          <select id="compareMetadataGroups" class="custom-select custom-select-sm w-auto" aria-describedby="compareMetadataGroupsHelp">
+            <option value="">Choose a field…</option>
+            <option value="location" disabled>Location</option>
+            <option value="date" disabled>Sampling date</option>
+          </select>
+          <small id="compareMetadataGroupsHelp" class="text-muted ml-2">Replaces groups for the samples in this table. Samples without that field become ungrouped.</small>
+        </div>
         <div class="table-responsive compareSamplesTableWrap">
           <table class="table table-sm table-hover mb-0 compareSamplesTable" aria-label="Selected comparison samples and groups">
             <thead><tr><th scope="col" class="compareSampleHandleColumn">Order</th><th scope="col" class="compareSampleNameColumn">Sample</th><th scope="col" class="compareSampleRunColumn">Run</th><th scope="col" class="compareSampleBarcodeColumn">Barcode</th><th scope="col" class="compareSampleGroupColumn">Group</th></tr></thead>
