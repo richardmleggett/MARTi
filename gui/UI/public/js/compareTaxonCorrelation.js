@@ -1,7 +1,15 @@
-/* global $, currentPage, compareTreeDataGlobal, taxonomicRankSelectedCompare, taxonomicLevelDictRev, lcaAbundanceCompare, compareOrdinationSvgElement, toolTipDiv, tooltipPos, tooltipPosY, saveAs, getDate, getTime */
-
+/* Shared correlation calculations and abundance-matrix card. */
 var compareTaxonCorrelationResult = null;
 var compareTaxonCorrelationTimer = null;
+var compareTaxonCorrelationPrepared = null;
+
+function getCompareTaxonCorrelationPrepared() {
+  if (!compareTaxonCorrelationPrepared || compareTaxonCorrelationPrepared.entries !== compareTreeDataGlobal || compareTaxonCorrelationPrepared.rank !== taxonomicRankSelectedCompare) {
+    compareTaxonCorrelationPrepared = { entries: compareTreeDataGlobal, rank: taxonomicRankSelectedCompare,
+      prepared: prepareCompareTaxonCorrelationEntries(compareTreeDataGlobal, taxonomicRankSelectedCompare) };
+  }
+  return compareTaxonCorrelationPrepared;
+}
 
 function compareTaxonCorrelationCounts(tree, rank) {
   var counts = new Map();
@@ -38,6 +46,7 @@ function compareTaxonCorrelationRanks(values) {
 }
 
 function compareTaxonCorrelationPearson(a, b) {
+  if (!a.length || a.length !== b.length || a.every(function(value) { return value === a[0]; }) || b.every(function(value) { return value === b[0]; })) return null;
   var meanA = a.reduce(function (sum, value) { return sum + value; }, 0) / a.length;
   var meanB = b.reduce(function (sum, value) { return sum + value; }, 0) / b.length;
   var cross = 0, squareA = 0, squareB = 0;
@@ -51,49 +60,113 @@ function compareTaxonCorrelationPearson(a, b) {
   return Math.max(-1, Math.min(1, cross / Math.sqrt(squareA * squareB)));
 }
 
-function calculateCompareTaxonCorrelation(entries, options) {
-  var rank = Number(options.rank), topN = Number(options.topN);
-  var minimumPrevalence = Number(options.minimumPrevalence);
-  if (!Number.isInteger(rank) || rank < 1 || rank > 9) throw new Error('Choose a single taxonomic rank.');
-  if (!Number.isInteger(topN) || topN < 2 || topN > 30) throw new Error('Show between 2 and 30 taxa.');
-  if (!Number.isInteger(minimumPrevalence) || minimumPrevalence < 1) throw new Error('Minimum prevalence must be a positive whole number.');
-  if (options.method !== 'pearson' && options.method !== 'spearman') throw new Error('Choose Pearson or Spearman correlation.');
-  var samples = (entries || []).map(function (entry) {
+function prepareCompareTaxonCorrelationEntries(entries, rank) {
+  return (entries || []).map(function(entry, index) {
+    if (entry && entry.correlationCounts) return entry;
     var data = compareTaxonCorrelationCounts(entry && entry.tree && entry.tree.tree, rank);
-    var total = Array.from(data.counts.values()).reduce(function (sum, value) { return sum + value; }, 0);
-    return { counts: data.counts, names: data.names, total: total };
-  }).filter(function (sample) { return sample.total > 0; });
+    return { name: entry && (entry.id || entry.name) || 'Sample ' + (index + 1),
+      runId: entry && entry.runId || '', correlationCounts: Array.from(data.counts, function(item) {
+        return [item[0], item[1], data.names.get(item[0])];
+      }) };
+  });
+}
+
+function calculateCompareTaxonCorrelation(entries, options, onProgress) {
+  var rank = Number(options.rank), topN = Number(options.topN);
+  var selection = options.selection || 'abundance';
+  var minimumPrevalence = Number(options.minimumPrevalence);
+  var minimumReads = options.minimumReads === undefined ? 1 : Number(options.minimumReads);
+  var pairCount = Number(options.pairCount), direction = options.direction || 'both';
+  if (!Number.isInteger(rank) || rank < 1 || rank > 9) throw new Error('Choose a single taxonomic rank.');
+  if (selection !== 'abundance' && selection !== 'pairs') throw new Error('Choose an exploration mode.');
+  if (selection === 'abundance' && (!Number.isInteger(topN) || topN < 2 || topN > 30)) throw new Error('Show between 2 and 30 taxa.');
+  if (selection === 'pairs' && (!Number.isInteger(pairCount) || pairCount < 1 || pairCount > 50)) throw new Error('Show between 1 and 50 pairs per direction.');
+  if (!['both', 'positive', 'negative'].includes(direction)) throw new Error('Choose a correlation direction.');
+  if (!Number.isInteger(minimumPrevalence) || minimumPrevalence < 1) throw new Error('Minimum prevalence must be a positive whole number.');
+  if (!Number.isInteger(minimumReads) || minimumReads < 1) throw new Error('Minimum reads must be a positive whole number.');
+  if (options.method !== 'pearson' && options.method !== 'spearman') throw new Error('Choose Pearson or Spearman correlation.');
+  var prepared = prepareCompareTaxonCorrelationEntries(entries, rank);
+  var samples = prepared.map(function(entry) {
+    var counts = new Map(entry.correlationCounts.map(function(item) { return [item[0], item[1]]; }));
+    return { name: entry.name, runId: entry.runId, counts: counts,
+      total: Array.from(counts.values()).reduce(function(sum, value) { return sum + value; }, 0) };
+  }).filter(function(sample) { return sample.total > 0; });
   if (samples.length < 3) throw new Error('Select at least three samples with taxa at this rank and LCA cutoff.');
   var prevalence = new Map(), names = new Map();
-  samples.forEach(function (sample) {
-    sample.counts.forEach(function (_, id) {
-      prevalence.set(id, (prevalence.get(id) || 0) + 1);
-      if (!names.has(id)) names.set(id, sample.names.get(id));
+  prepared.forEach(function(entry) {
+    entry.correlationCounts.forEach(function(item) {
+      if (item[1] >= minimumReads) prevalence.set(item[0], (prevalence.get(item[0]) || 0) + 1);
+      if (!names.has(item[0])) names.set(item[0], item[2]);
     });
   });
-  var taxa = Array.from(prevalence.keys()).filter(function (id) {
+  var taxa = Array.from(prevalence.keys()).filter(function(id) {
     return prevalence.get(id) >= minimumPrevalence;
-  }).map(function (id) {
-    var values = samples.map(function (sample) { return (sample.counts.get(id) || 0) / sample.total; });
-    return { id: id, name: names.get(id), values: values,
-      mean: values.reduce(function (sum, value) { return sum + value; }, 0) / samples.length };
-  }).sort(function (a, b) { return b.mean - a.mean || a.id.localeCompare(b.id, undefined, { numeric: true }); }).slice(0, topN);
+  }).map(function(id) {
+    var counts = samples.map(function(sample) { return sample.counts.get(id) || 0; });
+    var values = samples.map(function(sample, index) { return counts[index] / sample.total; });
+    return { id: id, name: names.get(id), values: values, counts: counts, prevalence: prevalence.get(id),
+      mean: values.reduce(function(sum, value) { return sum + value; }, 0) / samples.length };
+  }).sort(function(a, b) { return b.mean - a.mean || a.id.localeCompare(b.id, undefined, { numeric: true }); });
+  if (selection === 'abundance') taxa = taxa.slice(0, topN);
   var constantCount = 0;
-  taxa = taxa.filter(function (taxon) {
+  taxa = taxa.filter(function(taxon) {
     var variable = compareTaxonCorrelationPearson(taxon.values, taxon.values) !== null;
     if (!variable) constantCount++;
     return variable;
   });
-  if (taxa.length < 2) throw new Error('Fewer than two of the selected taxa vary across samples. Try a different rank or prevalence.');
-  var vectors = taxa.map(function (taxon) {
+  if (taxa.length < 2) throw new Error('Fewer than two eligible taxa vary across samples. Try a different rank or evidence filters.');
+  var vectors = taxa.map(function(taxon) {
     return options.method === 'spearman' ? compareTaxonCorrelationRanks(taxon.values) : taxon.values;
   });
-  var matrix = vectors.map(function (values, i) {
-    return vectors.map(function (other, j) { return i === j ? 1 : compareTaxonCorrelationPearson(values, other); });
+  var result = { taxa: taxa, sampleCount: samples.length, samples: samples.map(function(sample) {
+    return { name: sample.name, runId: sample.runId };
+  }), excludedCount: (entries || []).length - samples.length, constantCount: constantCount,
+    rank: rank, method: options.method, minimumPrevalence: minimumPrevalence, minimumReads: minimumReads,
+    selection: selection, candidateCount: taxa.length };
+  if (selection === 'abundance') {
+    result.matrix = vectors.map(function(values, i) {
+      return vectors.map(function(other, j) { return i === j ? 1 : compareTaxonCorrelationPearson(values, other); });
+    });
+    return result;
+  }
+  // Center and normalize once, then compute each pair with a dot product.
+  vectors = vectors.map(function(values) {
+    var mean = values.reduce(function(sum, value) { return sum + value; }, 0) / values.length;
+    var centered = values.map(function(value) { return value - mean; });
+    var norm = Math.sqrt(centered.reduce(function(sum, value) { return sum + value * value; }, 0));
+    return centered.map(function(value) { return value / norm; });
   });
-  return { taxa: taxa, matrix: matrix, sampleCount: samples.length,
-    excludedCount: (entries || []).length - samples.length, constantCount: constantCount,
-    rank: rank, method: options.method, minimumPrevalence: minimumPrevalence };
+  var positive = [], negative = [], tested = 0, lastProgress = 0;
+  var total = taxa.length * (taxa.length - 1) / 2;
+  function keep(list, pair) {
+    if (list.length === pairCount && Math.abs(pair.correlation) <= Math.abs(list[list.length - 1].correlation)) return;
+    var index = list.findIndex(function(other) { return Math.abs(pair.correlation) > Math.abs(other.correlation); });
+    if (index < 0) list.push(pair); else list.splice(index, 0, pair);
+    if (list.length > pairCount) list.pop();
+  }
+  for (var i = 0; i < vectors.length; i++) {
+    for (var j = i + 1; j < vectors.length; j++) {
+      var correlation = 0;
+      for (var k = 0; k < samples.length; k++) correlation += vectors[i][k] * vectors[j][k];
+      correlation = Math.max(-1, Math.min(1, correlation));
+      tested++;
+      if (correlation > 0 && direction !== 'negative') keep(positive, { a: taxa[i], b: taxa[j], correlation: correlation });
+      if (correlation < 0 && direction !== 'positive') keep(negative, { a: taxa[i], b: taxa[j], correlation: correlation });
+    }
+    if (onProgress && Date.now() - lastProgress > 150) {
+      onProgress({ tested: tested, total: total }); lastProgress = Date.now();
+    }
+  }
+  result.pairs = positive.concat(negative);
+  result.pairs.forEach(function(pair) {
+    pair.sharedSupport = pair.a.counts.filter(function(count, index) {
+      return count >= minimumReads && pair.b.counts[index] >= minimumReads;
+    }).length;
+  });
+  result.direction = direction;
+  result.pairsTested = tested;
+  result.taxa = Array.from(new Map(result.pairs.flatMap(function(pair) { return [[pair.a.id, pair.a], [pair.b.id, pair.b]]; })).values());
+  return result;
 }
 
 function compareTaxonCorrelationActive() {
@@ -102,31 +175,57 @@ function compareTaxonCorrelationActive() {
 
 function initialiseCompareTaxonCorrelation() {
   compareTaxonCorrelationResult = null;
-  $('#compareTaxonCorrelationSettingsButton').off('.taxonCorrelation').on('click.taxonCorrelation', function () {
+  $('#compareTaxonCorrelationSettingsButton').off('.taxonCorrelation').on('click.taxonCorrelation', function() {
     var opening = $('#compareTaxonCorrelationSettings').prop('hidden');
     $('#compareTaxonCorrelationSettings').prop('hidden', !opening);
     $(this).attr('aria-expanded', String(opening));
     if (opening) $('#compareTaxonCorrelationSettingsTitle').trigger('focus');
-    requestAnimationFrame(renderCompareTaxonCorrelation);
+    requestAnimationFrame(renderCompareTaxonCorrelationMatrix);
   });
-  $('#compareTaxonCorrelationSettingsClose').off('.taxonCorrelation').on('click.taxonCorrelation', function () {
+  $('#compareTaxonCorrelationSettingsClose').off('.taxonCorrelation').on('click.taxonCorrelation', function() {
     $('#compareTaxonCorrelationSettings').prop('hidden', true);
     $('#compareTaxonCorrelationSettingsButton').attr('aria-expanded', 'false').trigger('focus');
-    requestAnimationFrame(renderCompareTaxonCorrelation);
+    requestAnimationFrame(renderCompareTaxonCorrelationMatrix);
   });
-  $('#compareTaxonCorrelationMethod, #compareTaxonCorrelationShowValues').off('.taxonCorrelation')
-    .on('change.taxonCorrelation', renderCompareTaxonCorrelation);
-  $('#compareTaxonCorrelationTopN, #compareTaxonCorrelationPrevalence').off('.taxonCorrelation')
-    .on('input.taxonCorrelation change.taxonCorrelation', function () {
+  $('#compareTaxonCorrelationMethod, #compareTaxonCorrelationShowValues').off('.taxonCorrelation').on('change.taxonCorrelation', renderCompareTaxonCorrelationMatrix);
+  $('#compareTaxonCorrelationTopN, #compareTaxonCorrelationPrevalence, #compareTaxonCorrelationMinimumReads').off('.taxonCorrelation')
+    .on('input.taxonCorrelation change.taxonCorrelation', function() {
       clearTimeout(compareTaxonCorrelationTimer);
-      compareTaxonCorrelationTimer = setTimeout(renderCompareTaxonCorrelation, 250);
+      compareTaxonCorrelationTimer = setTimeout(renderCompareTaxonCorrelationMatrix, 250);
     });
-  $('#exportCompareTaxonCorrelationSVG').off('.taxonCorrelation').on('click.taxonCorrelation', function (event) { event.preventDefault(); compareTaxonCorrelationExportSvg(); });
-  $('#exportCompareTaxonCorrelationPNG').off('.taxonCorrelation').on('click.taxonCorrelation', function (event) { event.preventDefault(); compareTaxonCorrelationExportPng(); });
-  $('#exportCompareTaxonCorrelationCSV').off('.taxonCorrelation').on('click.taxonCorrelation', function (event) { event.preventDefault(); compareTaxonCorrelationExportCsv(); });
-  $(window).off('resize.compareTaxonCorrelation').on('resize.compareTaxonCorrelation', function () {
+  $('#exportCompareTaxonCorrelationSVG').off('.taxonCorrelation').on('click.taxonCorrelation', function(event) { event.preventDefault(); compareTaxonCorrelationExportSvg(); });
+  $('#exportCompareTaxonCorrelationPNG').off('.taxonCorrelation').on('click.taxonCorrelation', function(event) { event.preventDefault(); compareTaxonCorrelationExportPng(); });
+  $('#exportCompareTaxonCorrelationCSV').off('.taxonCorrelation').on('click.taxonCorrelation', function(event) { event.preventDefault(); compareTaxonCorrelationExportCsv(); });
+  $(window).off('resize.compareTaxonCorrelation').on('resize.compareTaxonCorrelation', function() {
     if (compareTaxonCorrelationActive()) renderCompareTaxonCorrelation();
   });
+  initialiseCompareTaxonDiscovery();
+}
+
+function renderCompareTaxonCorrelation() {
+  renderCompareTaxonCorrelationMatrix();
+  renderCompareTaxonDiscovery();
+}
+
+function renderCompareTaxonCorrelationMatrix() {
+  if (!compareTaxonCorrelationActive()) return;
+  compareTaxonCorrelationHideTooltip();
+  var holder = document.getElementById('compareTaxonCorrelationPlot');
+  if (!holder) return;
+  holder.textContent = '';
+  compareTaxonCorrelationResult = null;
+  if (typeof compareTreeDataGlobal === 'undefined' || !Array.isArray(compareTreeDataGlobal)) {
+    $('#compareTaxonCorrelationStatus').text('Waiting for sample data…'); return;
+  }
+  try {
+    compareTaxonCorrelationResult = calculateCompareTaxonCorrelation(getCompareTaxonCorrelationPrepared().prepared, {
+      rank: taxonomicRankSelectedCompare, method: $('#compareTaxonCorrelationMethod').val(), selection: 'abundance',
+      topN: Number($('#compareTaxonCorrelationTopN').val()),
+      minimumPrevalence: Number($('#compareTaxonCorrelationPrevalence').val()),
+      minimumReads: Number($('#compareTaxonCorrelationMinimumReads').val())
+    });
+    drawCompareTaxonCorrelationResult();
+  } catch (error) { $('#compareTaxonCorrelationStatus').text(error.message); }
 }
 
 function compareTaxonCorrelationHideTooltip() {
@@ -153,28 +252,10 @@ function compareTaxonCorrelationColour(value) {
   return 'rgb(' + start.map(function (channel, i) { return Math.round(channel + t * (end[i] - channel)); }).join(',') + ')';
 }
 
-function renderCompareTaxonCorrelation() {
-  if (!compareTaxonCorrelationActive()) return;
-  compareTaxonCorrelationHideTooltip();
+function drawCompareTaxonCorrelationResult() {
   var holder = document.getElementById('compareTaxonCorrelationPlot');
-  if (!holder) return;
+  if (!holder || !compareTaxonCorrelationResult) return;
   holder.textContent = '';
-  compareTaxonCorrelationResult = null;
-  if (typeof compareTreeDataGlobal === 'undefined' || !Array.isArray(compareTreeDataGlobal)) {
-    $('#compareTaxonCorrelationStatus').text('Waiting for sample data…');
-    return;
-  }
-  try {
-    compareTaxonCorrelationResult = calculateCompareTaxonCorrelation(compareTreeDataGlobal, {
-      rank: taxonomicRankSelectedCompare,
-      method: $('#compareTaxonCorrelationMethod').val(),
-      topN: Number($('#compareTaxonCorrelationTopN').val()),
-      minimumPrevalence: Number($('#compareTaxonCorrelationPrevalence').val())
-    });
-  } catch (error) {
-    $('#compareTaxonCorrelationStatus').text(error.message);
-    return;
-  }
   var result = compareTaxonCorrelationResult;
   var n = result.taxa.length, cell = n > 22 ? 27 : 32;
   var left = 220, top = 190, size = n * cell;
@@ -280,19 +361,33 @@ function compareTaxonCorrelationExportPng() {
   image.src = url;
 }
 
-function compareTaxonCorrelationExportCsv() {
-  var result = compareTaxonCorrelationResult;
-  if (!result) return;
-  function field(value) { return '"' + String(value).replace(/"/g, '""') + '"'; }
+function compareTaxonCorrelationCsvRows(result, lca) {
+  if (result.selection === 'pairs') {
+    var pairs = [['Taxon A ID', 'Taxon A name', 'Taxon B ID', 'Taxon B name', 'Correlation', 'Direction', 'Method', 'Samples', 'Support A', 'Support B', 'Shared support', 'Mean A (%)', 'Mean B (%)', 'Minimum reads', 'Minimum prevalence', 'Rank', 'LCA (%)', 'Pairs searched']].concat(result.pairs.map(function(pair) {
+      return [pair.a.id, pair.a.name, pair.b.id, pair.b.name, pair.correlation.toPrecision(12), pair.correlation > 0 ? 'positive' : 'negative', result.method,
+        result.sampleCount, pair.a.prevalence, pair.b.prevalence, pair.sharedSupport, pair.a.mean * 100, pair.b.mean * 100, result.minimumReads, result.minimumPrevalence, result.rank, lca, result.pairsTested];
+    }));
+    return pairs;
+  }
   var header = ['NCBI taxon ID', 'Taxon name'].concat(result.taxa.map(function (taxon) { return taxon.name + ' (' + taxon.id + ')'; }));
   var rows = [header].concat(result.taxa.map(function (taxon, i) {
     return [taxon.id, taxon.name].concat(result.matrix[i].map(function (value) { return value.toPrecision(12); }));
   }));
-  saveAs(new Blob([rows.map(function (row) { return row.map(field).join(','); }).join('\r\n') + '\r\n'],
-    { type: 'text/csv;charset=utf-8' }), compareTaxonCorrelationFilename('matrix.csv'));
+  return rows;
+}
+
+function compareTaxonCorrelationExportCsv() {
+  var result = compareTaxonCorrelationResult;
+  if (!result) return;
+  function field(value) { return '"' + String(value).replace(/"/g, '""') + '"'; }
+  var rows = compareTaxonCorrelationCsvRows(result, lcaAbundanceCompare);
+  saveAs(new Blob([rows.map(function(row) { return row.map(field).join(','); }).join('\r\n') + '\r\n'],
+    { type: 'text/csv;charset=utf-8' }), compareTaxonCorrelationFilename(result.selection === 'pairs' ? 'pairs.csv' : 'matrix.csv'));
 }
 
 if (typeof module !== 'undefined') module.exports = {
+  prepareCompareTaxonCorrelationEntries: prepareCompareTaxonCorrelationEntries,
+  compareTaxonCorrelationCsvRows: compareTaxonCorrelationCsvRows,
   compareTaxonCorrelationCounts: compareTaxonCorrelationCounts,
   compareTaxonCorrelationRanks: compareTaxonCorrelationRanks,
   compareTaxonCorrelationPearson: compareTaxonCorrelationPearson,

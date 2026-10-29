@@ -995,15 +995,16 @@ taxaTotalCounts["hmTaxa"].sort(function(a, b) {
 
 
 donutCompareTaxa = [];
-hmTaxaTaxa = [];
 
 for (var taxa of taxaTotalCounts["donut"]) {
   donutCompareTaxa.push(taxa.name);
 }
 
-for (var taxa of taxaTotalCounts["hmTaxa"]) {
-  hmTaxaTaxa.push(taxa.ncbiID);
-}
+var limitedHeatmapTaxa = HeatmapTaxaSelection.limitTopTaxaRows(
+  taxaTotalCounts["hmTaxa"], compareHmTaxaMaxRows
+);
+hmTaxaTaxa = limitedHeatmapTaxa.ids;
+hmTaxaCandidateCount = limitedHeatmapTaxa.total;
 
 
 plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);

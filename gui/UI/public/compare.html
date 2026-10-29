@@ -152,6 +152,7 @@
               <button type="button" class="close" id="compareTaxonCorrelationSettingsClose" aria-label="Close correlation settings"><span aria-hidden="true">&times;</span></button>
             </div>
             <h6 class="compareSettingsSection">Analysis</h6>
+
             <div class="form-group">
               <label for="compareTaxonCorrelationMethod">Correlation method</label>
               <select id="compareTaxonCorrelationMethod" class="form-control form-control-sm">
@@ -159,23 +160,106 @@
                 <option value="spearman">Spearman</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="compareTaxonCorrelationAbundanceOptions">
               <label for="compareTaxonCorrelationTopN">Show most abundant taxa</label>
               <input id="compareTaxonCorrelationTopN" class="form-control form-control-sm" type="number" min="2" max="30" step="1" value="15">
             </div>
+
             <div class="form-group">
-              <label for="compareTaxonCorrelationPrevalence">Taxon present in at least this many samples</label>
+              <label for="compareTaxonCorrelationPrevalence">Taxon supported in at least this many samples</label>
               <input id="compareTaxonCorrelationPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
             </div>
+            <div class="form-group">
+              <label for="compareTaxonCorrelationMinimumReads">Reads required for support in a sample</label>
+              <input id="compareTaxonCorrelationMinimumReads" class="form-control form-control-sm" type="number" min="1" step="1" value="1">
+              <small class="form-text text-muted">These filters select taxa. Correlations still use their abundances in all included samples, including zeros and lower counts.</small>
+            </div>
             <h6 class="compareSettingsSection">Display</h6>
-            <div class="form-check mb-3">
+            <div class="form-check mb-3" id="compareTaxonCorrelationMatrixOptions">
               <label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareTaxonCorrelationShowValues"> Show correlation values</label>
             </div>
+
             <p class="small text-muted mb-0">Uses each taxon’s share of reads assigned at the selected rank and LCA cutoff. Correlations are exploratory and can reflect compositional effects.</p>
           </aside>
           <div class="compareOrdinationContent">
             <div id="compareTaxonCorrelationStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
             <div id="compareTaxonCorrelationPlot" aria-label="Taxon correlation matrix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareTaxonDiscoveryCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Strongest taxon correlations</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareTaxonDiscoverySettingsButton" aria-controls="compareTaxonDiscoverySettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareTaxonDiscoveryExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareTaxonDiscoveryExportButton">
+                <a class="dropdown-item" href="#" id="exportCompareTaxonDiscoverySVG">Export scatter as SVG</a>
+                <a class="dropdown-item" href="#" id="exportCompareTaxonDiscoveryPNG">Export scatter as PNG</a>
+                <a class="dropdown-item" href="#" id="exportCompareTaxonDiscoveryCSV">Export pairs as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compareOrdinationLayout">
+          <aside id="compareTaxonDiscoverySettings" class="compareOrdinationSettings" aria-labelledby="compareTaxonDiscoverySettingsTitle" hidden>
+            <div class="compareOrdinationSettingsHeader">
+              <h6 id="compareTaxonDiscoverySettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Discovery settings</h6>
+              <button type="button" class="close" id="compareTaxonDiscoverySettingsClose" aria-label="Close discovery settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Analysis</h6>
+
+            <div class="form-group">
+              <label for="compareTaxonDiscoveryMethod">Correlation method</label>
+              <select id="compareTaxonDiscoveryMethod" class="form-control form-control-sm">
+                <option value="pearson">Pearson</option>
+                <option value="spearman">Spearman</option>
+              </select>
+            </div>
+
+            <div id="compareTaxonDiscoveryPairOptions">
+              <div class="form-group">
+                <label for="compareTaxonDiscoveryDirection">Direction</label>
+                <select id="compareTaxonDiscoveryDirection" class="form-control form-control-sm">
+                  <option value="both">Positive and negative</option>
+                  <option value="positive">Positive</option>
+                  <option value="negative">Negative</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="compareTaxonDiscoveryPairCount">Pairs per direction</label>
+                <input id="compareTaxonDiscoveryPairCount" class="form-control form-control-sm" type="number" min="1" max="50" step="1" value="10">
+              </div>
+              <p class="small text-muted">Searches all taxa passing the evidence filters, regardless of abundance. Rankings are exploratory, not significance tests.</p>
+            </div>
+            <div class="form-group">
+              <label for="compareTaxonDiscoveryPrevalence">Taxon supported in at least this many samples</label>
+              <input id="compareTaxonDiscoveryPrevalence" class="form-control form-control-sm" type="number" min="1" step="1" value="3">
+            </div>
+            <div class="form-group">
+              <label for="compareTaxonDiscoveryMinimumReads">Reads required for support in a sample</label>
+              <input id="compareTaxonDiscoveryMinimumReads" class="form-control form-control-sm" type="number" min="1" step="1" value="5">
+              <small class="form-text text-muted">These filters select taxa. Correlations still use their abundances in all included samples, including zeros and lower counts.</small>
+            </div>
+            <h6 class="compareSettingsSection">Display</h6>
+
+            <div class="form-group" id="compareTaxonDiscoveryScatterOptions">
+              <label for="compareTaxonDiscoveryScatterColour">Colour scatter by</label>
+              <select id="compareTaxonDiscoveryScatterColour" class="form-control form-control-sm">
+                <option value="date">Sampling date</option>
+                <option value="location">Location</option>
+                <option value="run">Run</option>
+              </select>
+            </div>
+            <p class="small text-muted mb-0">Uses each taxon’s share of reads assigned at the selected rank and LCA cutoff. Correlations are exploratory and can reflect compositional effects.</p>
+          </aside>
+          <div class="compareOrdinationContent">
+            <p class="small text-muted px-3 pt-3 mb-0">Discover positive and negative associations beyond the most abundant taxa. Inspect a pair to explore the samples behind it.</p>
+            <div id="compareTaxonDiscoveryStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
+            <div id="compareTaxonDiscoveryPlot" aria-label="Strongest taxon correlations"></div>
           </div>
         </div>
       </div>
@@ -373,6 +457,12 @@
                           <input type="range" class="form-control-range" id="compareHmTaxaTopN" min="1" max="50" value="10">
                         </div>
 
+                        <div class="form-group compareHmTaxaTopOnly">
+                          <label for="compareHmTaxaMaxRows">Maximum taxa rows</label>
+                          <input type="number" class="form-control form-control-sm" id="compareHmTaxaMaxRows" min="1" max="200" step="1" value="30">
+                          <small class="form-text text-muted">Limits the combined taxa from all selected samples. Rows keep the original ranking by summed sample abundance.</small>
+                        </div>
+
                         <div class="form-check compareHmTaxaTopOnly">
                           <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaUnclassified" checked> Show unclassified</label>
                         </div>
@@ -399,6 +489,16 @@
                         </div>
                         <small class="form-text text-muted">Leave all blank for automatic thresholds from nonzero cells, or enter all three. Switching between percentages and counts resets them.</small>
                         <small id="compareHmTaxaColourRangeStatus" class="form-text text-danger" role="status"></small>
+                      </div>
+
+                      <div class="form-group compareHmTaxaContinuousRange">
+                        <label>Colour scale range <span id="compareHmTaxaContinuousUnits">(%)</span></label>
+                        <div class="d-flex">
+                          <input class="form-control form-control-sm mr-1" type="number" step="any" min="0" id="compareHmTaxaScaleMin" placeholder="Minimum" aria-label="Minimum colour scale value">
+                          <input class="form-control form-control-sm" type="number" step="any" min="0" id="compareHmTaxaScaleMax" placeholder="Maximum" aria-label="Maximum colour scale value">
+                        </div>
+                        <small class="form-text text-muted">Leave both blank for automatic scaling. Values outside a custom range use its end colours; zero cells are shown in grey. Switching between percentages and counts resets the range.</small>
+                        <small id="compareHmTaxaScaleRangeStatus" class="form-text text-danger" role="status"></small>
                       </div>
 
                       <div class="form-check">
@@ -852,6 +952,14 @@
               <small class="form-text text-muted">Added to each retained taxon count before taking log ratios. Zero requires every count to be positive.</small>
             </div>
             <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-group">
+              <label for="compareOrdinationViewMode">View</label>
+              <select id="compareOrdinationViewMode" class="form-control form-control-sm">
+                <option value="2d">2D (PC1 vs PC2)</option>
+                <option value="3d">3D (PC1, PC2 and PC3)</option>
+              </select>
+              <small class="form-text text-muted">Drag the 3D plot to rotate; scroll over it to zoom. A third axis requires enough variation among the samples.</small>
+            </div>
             <div class="form-check mb-3">
               <label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareOrdinationShowLabels"> Show sample labels</label>
             </div>

@@ -71,9 +71,38 @@
     return { domain: numbers.map(function(value) { return value / factor; }), error: '' };
   }
 
+  function resolveContinuousColourRange(values, observedHigh, percentMode) {
+    var minText = String(values.min == null ? '' : values.min).trim();
+    var maxText = String(values.max == null ? '' : values.max).trim();
+    var automatic = [0, Number.isFinite(observedHigh) && observedHigh > 0 ? observedHigh : 1];
+    if (minText === '' && maxText === '') return { domain: automatic, custom: false, error: '' };
+    var minimum = Number(minText);
+    var maximum = Number(maxText);
+    if (minText === '' || maxText === '' || !Number.isFinite(minimum) ||
+        !Number.isFinite(maximum) || minimum < 0 || maximum <= minimum) {
+      return { domain: automatic, custom: false,
+        error: 'Enter both colour scale bounds with 0 ≤ minimum < maximum.' };
+    }
+    var factor = percentMode ? 100 : 1;
+    return { domain: [minimum / factor, maximum / factor], custom: true, error: '' };
+  }
+
+  function limitTopTaxaRows(taxa, maximumRows) {
+    var ranked = taxa.slice().sort(function(a, b) {
+      return b.proportionSum - a.proportionSum;
+    });
+    var limit = Math.max(1, Math.floor(Number(maximumRows) || 30));
+    return {
+      ids: ranked.slice(0, limit).map(function(taxon) { return String(taxon.ncbiID); }),
+      total: ranked.length
+    };
+  }
+
   return {
     parseTaxonIds: parseTaxonIds,
     buildSampleCells: buildSampleCells,
-    resolveColourThresholds: resolveColourThresholds
+    resolveColourThresholds: resolveColourThresholds,
+    resolveContinuousColourRange: resolveContinuousColourRange,
+    limitTopTaxaRows: limitTopTaxaRows
   };
 });

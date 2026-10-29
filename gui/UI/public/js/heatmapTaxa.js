@@ -11,6 +11,8 @@ var heatmapTaxaSvg,
 
 var compareHmTaxaPresets = [];
 var compareHmTaxaSelectionMode = 'top';
+var compareHmTaxaMaxRows = 30;
+var hmTaxaCandidateCount = 0;
 
 function heatmapTaxaExportLabel() {
   return compareHmTaxaSelectionMode === 'top' ?
@@ -39,7 +41,13 @@ function renderCompareHeatmapTaxa(compareSampleData) {
   if (!Array.isArray(compareSampleData)) return;
   var status = $('#compareHmTaxaSelectionStatus');
   if (compareHmTaxaSelectionMode === 'top') {
-    status.text('');
+    var visibleCount = Array.isArray(hmTaxaTaxa) ? hmTaxaTaxa.length : 0;
+    var hiddenCount = Math.max(0, hmTaxaCandidateCount - visibleCount);
+    status.text(hmTaxaCandidateCount
+      ? 'Showing ' + visibleCount + ' of ' + hmTaxaCandidateCount +
+        ' taxa across ' + hmTaxaData.length + ' samples.' +
+        (hiddenCount ? ' ' + hiddenCount + ' hidden by the row limit.' : '')
+      : '');
     hideHeatmapTaxaEmptyState();
     plotHeatmapTaxa(hmTaxaData, hmTaxaTaxa);
     return;
@@ -121,8 +129,19 @@ function renderCompareHeatmapTaxa(compareSampleData) {
 function initialiseHeatmapTaxa() {
 
   compareHmTaxaSelectionMode = 'top';
+  compareHmTaxaMaxRows = 30;
+  hmTaxaCandidateCount = 0;
   compareHmTaxaPresets = [];
   $('#compareHmTaxaSelection').val('top');
+  $('#compareHmTaxaMaxRows').val(compareHmTaxaMaxRows).on('change', function() {
+    var rows = Number(this.value);
+    if (!Number.isInteger(rows) || rows < 1 || rows > 200) {
+      this.value = compareHmTaxaMaxRows;
+      return;
+    }
+    compareHmTaxaMaxRows = rows;
+    updateComparePlots(compareTreeDataGlobal);
+  });
   $('.compareHmTaxaSelectedOnly').hide();
   $('.compareHmTaxaTopOnly').show();
   $('#compareHmTaxaSettingsForm').on('submit', function(event) { event.preventDefault(); });
@@ -187,13 +206,17 @@ function initialiseHeatmapTaxa() {
       compareHmTaxaRead = 'percent';
       $('#compareHmTaxaRead').prop('checked', true);
       $('#compareHmTaxaColourUnits').text('(%)');
+      $('#compareHmTaxaContinuousUnits').text('(%)');
+      $('#compareHmTaxaScaleMin, #compareHmTaxaScaleMax').val('');
       compareHmTaxaShowValues = true;
       $('#compareHmTaxaShowValues').prop('checked', true);
       compareHmTaxaGrey = 'on';
-      $('#compareHmTaxaGrey').prop('checked', true);
+      $('#compareHmTaxaGrey').prop('checked', true).prop('disabled', false)
+        .removeData('beforeCustomRange');
       hmTaxaColourPalette = 'trafficLights';
       $("input[name='compareHmTaxaColour'][value='trafficLights']").prop('checked', true);
       $('.compareHmTaxaTrafficLightThresholds').show();
+      $('.compareHmTaxaContinuousRange').hide();
       $('#compareHmTaxaColourLow, #compareHmTaxaColourMid, #compareHmTaxaColourHigh').val('');
     }
     $('.compareHmTaxaSelectedOnly').toggle(this.value !== 'top');
@@ -290,14 +313,20 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
     d3.selectAll("input[name='compareHmTaxaColour']").on("change", function(){
     hmTaxaColourPalette = this.value;
     $('.compareHmTaxaTrafficLightThresholds').toggle(this.value === 'trafficLights');
+    $('.compareHmTaxaContinuousRange').toggle(this.value !== 'trafficLights');
     if (this.value === 'trafficLights') {
       compareHmTaxaGrey = 'on';
-      $('#compareHmTaxaGrey').prop('checked', true);
+      $('#compareHmTaxaGrey').prop('checked', true).prop('disabled', false)
+        .removeData('beforeCustomRange');
     }
     plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
     });
 
     $('#compareHmTaxaColourLow, #compareHmTaxaColourMid, #compareHmTaxaColourHigh').on('input', function() {
+      plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
+    });
+
+    $('#compareHmTaxaScaleMin, #compareHmTaxaScaleMax').on('input', function() {
       plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
     });
 
@@ -324,7 +353,9 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
     $('#compareHmTaxaRead').on('change', function(){
       compareHmTaxaRead = this.checked ? 'percent' : 'count';
       $('#compareHmTaxaColourUnits').text(this.checked ? '(%)' : '(count)');
+      $('#compareHmTaxaContinuousUnits').text(this.checked ? '(%)' : '(count)');
       $('#compareHmTaxaColourLow, #compareHmTaxaColourMid, #compareHmTaxaColourHigh').val('');
+      $('#compareHmTaxaScaleMin, #compareHmTaxaScaleMax').val('');
       plotHeatmapTaxa(hmTaxaData,hmTaxaTaxa);
     });
 
@@ -466,6 +497,7 @@ data.forEach(function(d) {
 
 
 var hmTaxaDomain = [];
+var continuousCustomRange = false;
 if (hmTaxaColourPalette === 'trafficLights') {
   var thresholds = HeatmapTaxaSelection.resolveColourThresholds({
     low: $('#compareHmTaxaColourLow').val(),
@@ -476,12 +508,32 @@ if (hmTaxaColourPalette === 'trafficLights') {
   $('#compareHmTaxaColourRangeStatus').text(thresholds.error);
 } else {
   $('#compareHmTaxaColourRangeStatus').text('');
-  var colourMaxValue = plotMaxValue || 1;
+  var continuousRange = HeatmapTaxaSelection.resolveContinuousColourRange({
+    min: $('#compareHmTaxaScaleMin').val(),
+    max: $('#compareHmTaxaScaleMax').val()
+  }, plotMaxValue, compareHmTaxaRead === 'percent');
+  $('#compareHmTaxaScaleRangeStatus').text(continuousRange.error);
+  continuousCustomRange = continuousRange.custom;
   var colourPaletteLength = hmTaxaColourPalettes[hmTaxaColourPalette].length;
   for (var [i,col] of hmTaxaColourPalettes[hmTaxaColourPalette].entries()) {
-    var domainVal = (colourMaxValue/(colourPaletteLength-1))*i;
+    var domainVal = continuousRange.domain[0] +
+      (continuousRange.domain[1] - continuousRange.domain[0]) * i / (colourPaletteLength - 1);
     hmTaxaDomain.push(domainVal);
   }
+}
+
+var greyZeroCheckbox = $('#compareHmTaxaGrey');
+if (continuousCustomRange) {
+  if (!greyZeroCheckbox.prop('disabled')) {
+    greyZeroCheckbox.data('beforeCustomRange', greyZeroCheckbox.prop('checked'));
+  }
+  greyZeroCheckbox.prop('checked', true).prop('disabled', true);
+  compareHmTaxaGrey = 'on';
+} else if (greyZeroCheckbox.prop('disabled')) {
+  var previousGreyZero = greyZeroCheckbox.data('beforeCustomRange') === true;
+  greyZeroCheckbox.prop('disabled', false).prop('checked', previousGreyZero)
+    .removeData('beforeCustomRange');
+  compareHmTaxaGrey = previousGreyZero ? 'on' : 'off';
 }
 
   var hmTaxaColour = d3.scale.linear()
@@ -603,24 +655,18 @@ if (data.length <= 10){
 
 var legendXTransform = (widthHeatmapTaxa - legendWidth)/2;
 
-var legendPlotMaxVal,
-legendPlotMinVal = 0,
-legendTitle;
+var legendTitle;
 
 if(compareHmTaxaRead == "percent"){
-  legendPlotMaxVal = plotMaxValue*100;
   legendTitle = data[0] && data[0].selectedTaxaMode ?
     plotLevelSelectedCompareTooltipPrefix + "s (% of taxon " + data[0].denominatorTaxonId + ")" :
     "Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s (%)";
 } else {
-  legendPlotMaxVal = plotMaxValue;
   legendTitle = "Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s";
 }
-if (hmTaxaColourPalette === 'trafficLights') {
-  var legendFactor = compareHmTaxaRead === 'percent' ? 100 : 1;
-  legendPlotMinVal = hmTaxaDomain[0] * legendFactor;
-  legendPlotMaxVal = hmTaxaDomain[2] * legendFactor;
-}
+var legendFactor = compareHmTaxaRead === 'percent' ? 100 : 1;
+var legendPlotMinVal = hmTaxaDomain[0] * legendFactor;
+var legendPlotMaxVal = hmTaxaDomain[hmTaxaDomain.length - 1] * legendFactor;
 
 
       var legendXScale = d3.scale.linear()

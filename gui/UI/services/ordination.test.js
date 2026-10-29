@@ -30,6 +30,24 @@ test('Bray–Curtis uses relative abundances and produces ordination coordinates
   assert.ok(result.points.every(point => Number.isFinite(point.x) && Number.isFinite(point.y)));
 });
 
+test('PCoA returns a third axis when the samples span three dimensions', () => {
+  const profiles = [
+    [10, 1, 1, 1], [1, 10, 1, 1], [1, 1, 10, 1], [1, 1, 1, 10]
+  ].map((counts, index) => ({
+    name: 'sample-' + index, runId: 'run',
+    tree: { summedValue: 13, children: counts.map((count, taxon) => ({
+      ncbiID: taxon + 1, rank: 7, summedValue: count
+    })) }
+  }));
+  const result = calculateOrdination(profiles, {
+    rank: 7, method: 'aitchison', minimumPrevalence: 1, pseudocount: 0.5
+  });
+  assert.equal(result.axisPercent.length, 3);
+  assert.ok(result.axisPercent[2] > 0);
+  assert.ok(result.points.some(point => Math.abs(point.z) > 1e-8));
+  assert.ok(result.points.every(point => Number.isFinite(point.z)));
+});
+
 test('distance heatmap uses the same pairwise distances and accepts identical profiles', () => {
   const options = { rank: 7, method: 'brayCurtis', minimumPrevalence: 1 };
   const matrix = calculateDistanceMatrix(samples, options);

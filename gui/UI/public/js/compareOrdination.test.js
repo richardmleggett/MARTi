@@ -1,6 +1,16 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { compareOrdinationLegendLayout, compareOrdinationEqualAxisDomains, compareOrdinationHasAssignedGroups, compareOrdinationDefaultColour } = require('./compareOrdination');
+const { compareOrdinationLegendLayout, compareOrdinationEqualAxisDomains, compareOrdinationHasAssignedGroups, compareOrdinationDefaultColour, compareOrdinationProject3d } = require('./compareOrdination');
+
+test('3D projection rotates points without changing their coordinate scale', () => {
+  const point = { x: 0.2, y: -0.3, z: 0.4 };
+  const projected = compareOrdinationProject3d(point, 0.6, 0.4);
+  assert.ok(Math.abs(Math.hypot(projected.x, projected.y, projected.depth) -
+    Math.hypot(point.x, point.y, point.z)) < 1e-12);
+  const front = compareOrdinationProject3d(point, 0, 0);
+  assert.equal(front.x, point.x);
+  assert.equal(front.y, point.z);
+});
 
 test('PCoA legend wraps variable-length names without overlapping items', () => {
   const names = ['Short', 'MARC_Yare_171117_F1_with_control', 'Another long sample name', 'Tail'];

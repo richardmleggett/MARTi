@@ -153,14 +153,16 @@ function calculateOrdination(samples, options) {
   const points = included.map((sample, i) => ({
     name: sample.name, runId: sample.runId, coveragePercent: sample.coveragePercent,
     x: Math.sqrt(positive[0].value) * positive[0].vector[i],
-    y: positive[1] ? Math.sqrt(positive[1].value) * positive[1].vector[i] : 0
+    y: positive[1] ? Math.sqrt(positive[1].value) * positive[1].vector[i] : 0,
+    z: positive[2] ? Math.sqrt(positive[2].value) * positive[2].vector[i] : 0
   }));
   return {
     method, rank, minimumPrevalence, pseudocount: method === 'aitchison' ? pseudocount : null,
     featureCount: taxa.length, sampleCount: points.length,
     excludedCount: samples.length - points.length,
     axisPercent: [positive[0].value / positiveTotal * 100,
-      positive[1] ? positive[1].value / positiveTotal * 100 : 0],
+      positive[1] ? positive[1].value / positiveTotal * 100 : 0,
+      positive[2] ? positive[2].value / positiveTotal * 100 : 0],
     lingoesConstant, points, distances
   };
 }

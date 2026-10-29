@@ -4,6 +4,19 @@ var compareOrdinationResult = null;
 var compareOrdinationRequestSerial = 0;
 var compareOrdinationTimer = null;
 var compareOrdinationColourByUserChosen = false;
+var compareOrdinationYaw = 0.6;
+var compareOrdinationPitch = 0.4;
+var compareOrdinationZoom = 1;
+var compareOrdinationDrag = null;
+var compareOrdinationRenderFrame = null;
+
+function scheduleCompareOrdinationRender() {
+  if (compareOrdinationRenderFrame !== null) return;
+  compareOrdinationRenderFrame = requestAnimationFrame(function () {
+    compareOrdinationRenderFrame = null;
+    renderCompareOrdination();
+  });
+}
 
 function compareOrdinationActive() {
   return currentPage === 'Compare' && !$('#compareOrdinationView').prop('hidden');
@@ -49,6 +62,12 @@ function initialiseCompareOrdination() {
   compareOrdinationResult = null;
   compareOrdinationRequestSerial++;
   compareOrdinationColourByUserChosen = false;
+  compareOrdinationYaw = 0.6;
+  compareOrdinationPitch = 0.4;
+  compareOrdinationZoom = 1;
+  compareOrdinationDrag = null;
+  if (compareOrdinationRenderFrame !== null) cancelAnimationFrame(compareOrdinationRenderFrame);
+  compareOrdinationRenderFrame = null;
   compareOrdinationApplyDefaultColour();
   $('#compareOrdinationSettingsButton').off('.ordination').on('click.ordination', function () {
     var open = $('#compareOrdinationSettings').prop('hidden');
@@ -75,6 +94,38 @@ function initialiseCompareOrdination() {
     renderCompareOrdination();
   });
   $('#compareOrdinationShowLabels').off('.ordination').on('change.ordination', renderCompareOrdination);
+  $('#compareOrdinationViewMode').off('.ordination').on('change.ordination', renderCompareOrdination);
+  $('#compareOrdinationPlot').off('.ordination3d')
+    .on('pointerdown.ordination3d', function (event) {
+      if ($('#compareOrdinationViewMode').val() !== '3d' || event.button !== 0) return;
+      var pointer = event.originalEvent;
+      compareOrdinationDrag = { id: pointer.pointerId, x: pointer.clientX, y: pointer.clientY };
+      this.classList.add('dragging');
+      this.setPointerCapture(pointer.pointerId);
+      compareOrdinationHideTooltip();
+      event.preventDefault();
+    })
+    .on('pointermove.ordination3d', function (event) {
+      var pointer = event.originalEvent;
+      if (!compareOrdinationDrag || pointer.pointerId !== compareOrdinationDrag.id) return;
+      compareOrdinationYaw += (pointer.clientX - compareOrdinationDrag.x) * 0.008;
+      compareOrdinationPitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2,
+        compareOrdinationPitch + (pointer.clientY - compareOrdinationDrag.y) * 0.008));
+      compareOrdinationDrag.x = pointer.clientX;
+      compareOrdinationDrag.y = pointer.clientY;
+      scheduleCompareOrdinationRender();
+    })
+    .on('pointerup.ordination3d pointercancel.ordination3d lostpointercapture.ordination3d', function () {
+      compareOrdinationDrag = null;
+      this.classList.remove('dragging');
+    })
+    .on('wheel.ordination3d', function (event) {
+      if ($('#compareOrdinationViewMode').val() !== '3d') return;
+      event.preventDefault();
+      compareOrdinationZoom = Math.max(0.5, Math.min(2.5,
+        compareOrdinationZoom * Math.exp(-event.originalEvent.deltaY * 0.001)));
+      scheduleCompareOrdinationRender();
+    });
   $('#exportCompareOrdinationSVG').off('.ordination').on('click.ordination', function (event) { event.preventDefault(); compareOrdinationExportSvg(); });
   $('#exportCompareOrdinationPNG').off('.ordination').on('click.ordination', function (event) { event.preventDefault(); compareOrdinationExportPng(); });
   $('#exportCompareOrdinationCoordinates').off('.ordination').on('click.ordination', function (event) { event.preventDefault(); compareOrdinationExportCoordinates(); });
@@ -146,7 +197,8 @@ function compareOrdinationShowTooltip(samples, event) {
   });
   if (samples.length === 1) {
     content.append('hr').attr('class', 'toolTipLine');
-    content.append('small').text('PC1: ' + samples[0].x.toFixed(4) + ' · PC2: ' + samples[0].y.toFixed(4));
+    content.append('small').text('PC1: ' + samples[0].x.toFixed(4) + ' · PC2: ' + samples[0].y.toFixed(4) +
+      ($('#compareOrdinationViewMode').val() === '3d' ? ' · PC3: ' + samples[0].z.toFixed(4) : ''));
   }
   toolTipDiv.style('z-index', 1100).style('opacity', .95)
     .style('left', tooltipPos(event.pageX + 12) + 'px')
@@ -211,6 +263,102 @@ function compareOrdinationEqualAxisDomains(points, plotWidth, plotHeight) {
   };
 }
 
+function compareOrdinationProject3d(point, yaw, pitch) {
+  var horizontal = point.x * Math.cos(yaw) - point.y * Math.sin(yaw);
+  var depth = point.x * Math.sin(yaw) + point.y * Math.cos(yaw);
+  return {
+    x: horizontal,
+    y: point.z * Math.cos(pitch) - depth * Math.sin(pitch),
+    depth: point.z * Math.sin(pitch) + depth * Math.cos(pitch)
+  };
+}
+
+function renderCompareOrdination3d(holder, result, groups, colours, width) {
+  var plotWidth = width - 115, plotHeight = 410;
+  var left = 75, top = 45, legendTop = 515;
+  var context = document.createElement('canvas').getContext('2d');
+  if (context) context.font = '11px Arial';
+  var measureLegend = function (label) {
+    return context ? context.measureText(label).width : String(label).length * 7;
+  };
+  var legend = compareOrdinationLegendLayout(groups, width - 115, measureLegend);
+  var height = legendTop + legend.height + 20;
+  var svg = compareOrdinationSvgElement('svg', {
+    id: 'compareOrdinationSvg', xmlns: 'http://www.w3.org/2000/svg',
+    width: width, height: height, viewBox: '0 0 ' + width + ' ' + height,
+    style: 'font-family: Arial, Helvetica, sans-serif', role: 'img',
+    'aria-label': 'Rotatable 3D PCoA of selected samples'
+  }, holder);
+  compareOrdinationSvgElement('rect', { width: width, height: height, fill: '#fff' }, svg);
+  var centreX = left + plotWidth / 2, centreY = top + plotHeight / 2;
+  var radius = Math.max(0.01, Math.max.apply(null, result.points.map(function (point) {
+    return Math.hypot(point.x, point.y, point.z);
+  }))) * 1.15;
+  var scale = (Math.min(plotWidth, plotHeight) - 70) / (2 * radius) * compareOrdinationZoom;
+  var project = function (point) {
+    var rotated = compareOrdinationProject3d(point, compareOrdinationYaw, compareOrdinationPitch);
+    return { x: centreX + rotated.x * scale, y: centreY - rotated.y * scale, depth: rotated.depth };
+  };
+  var origin = project({ x: 0, y: 0, z: 0 });
+  ['x', 'y', 'z'].forEach(function (axis, index) {
+    var negative = { x: 0, y: 0, z: 0 }, positive = { x: 0, y: 0, z: 0 };
+    negative[axis] = -radius;
+    positive[axis] = radius;
+    var start = project(negative), end = project(positive);
+    var colour = ['#607d9c', '#9b7653', '#688c72'][index];
+    compareOrdinationSvgElement('line', { x1: start.x, y1: start.y, x2: origin.x, y2: origin.y,
+      stroke: colour, 'stroke-width': 1, 'stroke-dasharray': '4 4' }, svg);
+    compareOrdinationSvgElement('line', { x1: origin.x, y1: origin.y, x2: end.x, y2: end.y,
+      stroke: colour, 'stroke-width': 1.5 }, svg);
+    compareOrdinationSvgElement('text', { x: end.x + (end.x >= centreX ? 7 : -7), y: end.y - 5,
+      'text-anchor': end.x >= centreX ? 'start' : 'end', fill: colour, 'font-size': 12,
+      'font-weight': 'bold' }, svg,
+    'PC' + (index + 1) + ' (' + result.axisPercent[index].toFixed(1) + '%)');
+  });
+  compareOrdinationSvgElement('circle', { cx: origin.x, cy: origin.y, r: 2, fill: '#777' }, svg);
+  var projected = result.points.map(function (point) {
+    return { point: point, position: project(point) };
+  });
+  projected.sort(function (a, b) { return a.position.depth - b.position.depth; });
+  projected.forEach(function (entry) {
+    var point = entry.point, position = entry.position;
+    var circle = compareOrdinationSvgElement('circle', { class: 'compareOrdinationPoint',
+      cx: position.x, cy: position.y, r: 7, fill: colours[compareOrdinationGroup(point)],
+      stroke: '#333', 'stroke-width': 0.8, tabindex: 0,
+      'aria-label': compareOrdinationDisplayName(point) + ' (' + point.runId + ')' }, svg);
+    var nearby = [point].concat(projected.filter(function (other) {
+      return other.point !== point && Math.hypot(other.position.x - position.x,
+        other.position.y - position.y) <= 6;
+    }).map(function (other) { return other.point; }));
+    circle.addEventListener('mouseenter', function (event) { compareOrdinationShowTooltip(nearby, event); });
+    circle.addEventListener('mousemove', function (event) { compareOrdinationShowTooltip(nearby, event); });
+    circle.addEventListener('mouseleave', compareOrdinationHideTooltip);
+    circle.addEventListener('focus', function () {
+      var rect = circle.getBoundingClientRect();
+      compareOrdinationShowTooltip(nearby, { pageX: rect.right + window.pageXOffset, pageY: rect.top + window.pageYOffset });
+    });
+    circle.addEventListener('blur', compareOrdinationHideTooltip);
+    if ($('#compareOrdinationShowLabels').prop('checked')) {
+      compareOrdinationSvgElement('text', { x: position.x + 9, y: position.y - 8,
+        fill: '#333', 'font-size': 11 }, svg, compareOrdinationDisplayName(point));
+    }
+  });
+  compareOrdinationSvgElement('text', { x: width / 2, y: 24, 'text-anchor': 'middle',
+    fill: '#333', 'font-size': 14, 'font-weight': 'bold' }, svg,
+  (result.method === 'aitchison' ? 'Aitchison (CLR)' : 'Bray–Curtis') + ' · ' +
+    taxonomicLevelDictRev[result.rank] + ' · LCA ' + lcaAbundanceCompare + '%');
+  legend.items.forEach(function (item) {
+    var lx = 75 + item.x, ly = legendTop + item.y;
+    compareOrdinationSvgElement('circle', { cx: lx, cy: ly - 4, r: 5,
+      fill: colours[item.group], stroke: '#333', 'stroke-width': 0.8 }, svg);
+    var label = compareOrdinationSvgElement('text', { x: lx + 14, y: ly,
+      fill: '#444', 'font-size': 11 }, svg);
+    item.lines.forEach(function (line, index) {
+      compareOrdinationSvgElement('tspan', { x: lx + 14, dy: index ? 15 : 0 }, label, line);
+    });
+  });
+}
+
 function renderCompareOrdination() {
   compareOrdinationApplyDefaultColour();
   var result = compareOrdinationResult;
@@ -223,6 +371,21 @@ function renderCompareOrdination() {
   var colours = {};
   groups.forEach(function (group, i) { colours[group] = palette[i % palette.length]; });
   var width = Math.max(540, Math.min(900, Math.floor(holder.clientWidth || 700)));
+  var hasThirdAxis = Boolean(result.axisPercent[2] > 0);
+  $('#compareOrdinationViewMode option[value="3d"]').prop('disabled', !hasThirdAxis);
+  if (!hasThirdAxis && $('#compareOrdinationViewMode').val() === '3d') {
+    $('#compareOrdinationViewMode').val('2d');
+  }
+  var view3d = $('#compareOrdinationViewMode').val() === '3d';
+  holder.classList.toggle('compareOrdination3d', view3d);
+  $('#compareOrdinationStatus').text(result.sampleCount + ' samples · ' + result.featureCount +
+    ' taxa' + (result.excludedCount ? ' · ' + result.excludedCount + ' excluded' : '') +
+    (result.lingoesConstant ? ' · Lingoes correction applied to plot coordinates' : '') +
+    (view3d ? ' · Drag to rotate; scroll to zoom' : '') + '.');
+  if (view3d) {
+    renderCompareOrdination3d(holder, result, groups, colours, width);
+    return;
+  }
   var plotWidth = width - 115;
   var plotHeight = 410;
   var legendLeft = 75, legendTop = 515, legendRight = 40;
@@ -280,7 +443,6 @@ function renderCompareOrdination() {
       compareOrdinationSvgElement('tspan', { x: lx + 14, dy: index ? 15 : 0 }, label, line);
     });
   });
-  $('#compareOrdinationStatus').text(result.sampleCount + ' samples · ' + result.featureCount + ' taxa' + (result.excludedCount ? ' · ' + result.excludedCount + ' excluded' : '') + (result.lingoesConstant ? ' · Lingoes correction applied to plot coordinates' : '') + '.');
 }
 
 function compareOrdinationFilename(suffix) {
@@ -330,9 +492,9 @@ function compareOrdinationSaveCsv(rows, suffix) {
 function compareOrdinationExportCoordinates() {
   var result = compareOrdinationResult;
   if (!result) return;
-  var rows = [['Run ID', 'Sample ID', 'Sample path', 'Group', 'PC1', 'PC2', 'PC1 variance %', 'PC2 variance %', 'Retained taxa', 'Coverage %', 'Method', 'Rank', 'LCA %', 'Minimum prevalence', 'Pseudocount', 'Lingoes constant']];
+  var rows = [['Run ID', 'Sample ID', 'Sample path', 'Group', 'PC1', 'PC2', 'PC3', 'PC1 variance %', 'PC2 variance %', 'PC3 variance %', 'Retained taxa', 'Coverage %', 'Method', 'Rank', 'LCA %', 'Minimum prevalence', 'Pseudocount', 'Lingoes constant']];
   result.points.forEach(function (point) {
-    rows.push([point.runId, compareOrdinationDisplayName(point), point.name, compareOrdinationGroup(point), point.x, point.y, result.axisPercent[0], result.axisPercent[1], result.featureCount, point.coveragePercent, result.method, taxonomicLevelDictRev[result.rank], lcaAbundanceCompare, result.minimumPrevalence, result.pseudocount, result.lingoesConstant]);
+    rows.push([point.runId, compareOrdinationDisplayName(point), point.name, compareOrdinationGroup(point), point.x, point.y, point.z, result.axisPercent[0], result.axisPercent[1], result.axisPercent[2], result.featureCount, point.coveragePercent, result.method, taxonomicLevelDictRev[result.rank], lcaAbundanceCompare, result.minimumPrevalence, result.pseudocount, result.lingoesConstant]);
   });
   compareOrdinationSaveCsv(rows, 'coordinates.csv');
 }
@@ -351,5 +513,6 @@ if (typeof module !== 'undefined') module.exports = {
   compareOrdinationLegendLayout: compareOrdinationLegendLayout,
   compareOrdinationEqualAxisDomains: compareOrdinationEqualAxisDomains,
   compareOrdinationHasAssignedGroups: compareOrdinationHasAssignedGroups,
-  compareOrdinationDefaultColour: compareOrdinationDefaultColour
+  compareOrdinationDefaultColour: compareOrdinationDefaultColour,
+  compareOrdinationProject3d: compareOrdinationProject3d
 };

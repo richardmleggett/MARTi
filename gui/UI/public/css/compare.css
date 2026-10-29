@@ -14,6 +14,7 @@
 #compareDistanceMatrixSettings[hidden],
 #compareDistanceMatrixPseudocountGroup[hidden],
 #compareTaxonCorrelationSettings[hidden],
+#compareTaxonDiscoverySettings[hidden],
 #compareCooccurrenceSettings[hidden],
 #compareOrdinationPseudocountGroup[hidden] {
   display: none;
@@ -181,6 +182,15 @@
   text-align: center;
 }
 
+#compareOrdinationPlot.compareOrdination3d {
+  touch-action: none;
+  cursor: grab;
+}
+
+#compareOrdinationPlot.compareOrdination3d.dragging {
+  cursor: grabbing;
+}
+
 #compareOrdinationPlot svg {
   display: block;
   margin: 0 auto;
@@ -215,14 +225,16 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-#compareTaxonCorrelationPlot {
+#compareTaxonCorrelationPlot,
+#compareTaxonDiscoveryPlot {
   min-height: 180px;
   max-height: 760px;
   overflow: auto;
   padding: 0.75rem;
 }
 
-#compareTaxonCorrelationPlot svg {
+#compareTaxonCorrelationPlot svg,
+#compareTaxonDiscoveryPlot svg {
   display: block;
   margin: 0 auto;
   background: white;
@@ -298,7 +310,7 @@
 
   #compareDistanceMatrixCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
 
-  #compareTaxonCorrelationCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
+  #compareTaxonCorrelationCard .card-header, #compareTaxonDiscoveryCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
   #compareCooccurrenceCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
 }
 
@@ -436,3 +448,7 @@
 #ttTable td {
   text-align: right;
 }
+
+.correlationPairTable th { white-space: nowrap; }
+.correlationPairTable button[aria-pressed="true"] { background: #4e73df; color: #fff; }
+.correlationPairTable td { vertical-align: middle; }

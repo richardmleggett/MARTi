@@ -1,6 +1,39 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { parseTaxonIds, buildSampleCells, resolveColourThresholds } = require('./heatmapTaxaSelection');
+const { parseTaxonIds, buildSampleCells, resolveColourThresholds, resolveContinuousColourRange, limitTopTaxaRows } = require('./heatmapTaxaSelection');
+
+test('continuous palettes accept custom percentage and count ranges', () => {
+  assert.deepEqual(resolveContinuousColourRange({ min: '', max: '' }, 0.2, true),
+    { domain: [0, 0.2], custom: false, error: '' });
+  assert.deepEqual(resolveContinuousColourRange({ min: '0.005', max: '2' }, 0.2, true),
+    { domain: [0.00005, 0.02], custom: true, error: '' });
+  assert.deepEqual(resolveContinuousColourRange({ min: '10', max: '100' }, 200, false),
+    { domain: [10, 100], custom: true, error: '' });
+  const incomplete = resolveContinuousColourRange({ min: '1', max: '' }, 0.2, true);
+  assert.deepEqual(incomplete.domain, [0, 0.2]);
+  assert.match(incomplete.error, /both colour scale bounds/);
+  assert.match(resolveContinuousColourRange({ min: '2', max: '1' }, 0.2, true).error,
+    /minimum < maximum/);
+});
+
+test('limits combined heatmap rows in the original summed-abundance order', () => {
+  const taxa = [
+    { ncbiID: 10, name: 'A', proportionSum: 0.5 },
+    { ncbiID: 20, name: 'B', proportionSum: 0.8 },
+    { ncbiID: 30, name: 'C', proportionSum: 0.6 }
+  ];
+  assert.deepEqual(limitTopTaxaRows(taxa, 2), { ids: ['20', '30'], total: 3 });
+  assert.deepEqual(limitTopTaxaRows(taxa, 3).ids, ['20', '30', '10']);
+});
+
+test('summary rows follow the same ranking and count toward the limit', () => {
+  const taxa = [
+    { ncbiID: 10, name: 'A', proportionSum: 0.1 },
+    { ncbiID: 20, name: 'B', proportionSum: 0.4 },
+    { ncbiID: 'n/a', name: 'Other', proportionSum: 0.01 }
+  ];
+  assert.deepEqual(limitTopTaxaRows(taxa, 2).ids, ['20', '10']);
+});
 
 test('parses exact, ordered taxon IDs without duplicates', () => {
   assert.deepEqual(parseTaxonIds('562, 2\n562; 4751'), {
