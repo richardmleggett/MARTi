@@ -417,6 +417,22 @@
   width: 100%;
 }
 
+.compareSampleGroupCell {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.compareSampleGroupCell .compareSampleGroupInput {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.compareSampleGroupReset {
+  flex: 0 0 auto;
+}
+
  .compareSampleGhostClass {
    background-color: lightsteelblue;
  }

@@ -1,0 +1,1730 @@
+
+{
+    "meta": {
+        "martiVersion": "v1.0.0",
+        "fileWritten": "2026-10-28T11:00:07",
+        "blastFiles": {
+            "0": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_6.txt",
+            "1": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_0.txt",
+            "2": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_2.txt",
+            "3": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_3.txt",
+            "4": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_5.txt",
+            "5": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_4.txt",
+            "6": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P8_1D_19092017/megablast_nt/BAMBI_1D_19092017_all_Template_pass_filtered_1.txt"
+        }
+    },
+    "tree": {
+        "name": "root",
+        "rank": 0,
+        "ncbiRank": "no rank",
+        "ncbiID": 1,
+        "value": 535,
+        "summedValue": 25705,
+        "yield": 1096660,
+        "summedYield": 62289325,
+        "meanIdentity": "85.0",
+        "meanMaxIdentity": "85.3",
+        "children": [
+            {
+                "name": "cellular organisms",
+                "rank": 0,
+                "ncbiRank": "cellular root",
+                "ncbiID": 131567,
+                "value": 48,
+                "summedValue": 25052,
+                "yield": 61719,
+                "summedYield": 61111791,
+                "meanIdentity": "85.8",
+                "meanMaxIdentity": "85.8",
+                "children": [
+                    {
+                        "name": "Bacteria",
+                        "rank": 1,
+                        "ncbiRank": "domain",
+                        "ncbiID": 2,
+                        "value": 101,
+                        "summedValue": 24932,
+                        "yield": 195439,
+                        "summedYield": 60979956,
+                        "meanIdentity": "85.7",
+                        "meanMaxIdentity": "85.8",
+                        "children": [
+                            {
+                                "name": "Bacillati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 1783272,
+                                "value": 0,
+                                "summedValue": 63,
+                                "yield": 0,
+                                "summedYield": 185230,
+                                "children": [
+                                    {
+                                        "name": "Bacillota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1239,
+                                        "value": 0,
+                                        "summedValue": 19,
+                                        "yield": 0,
+                                        "summedYield": 32167,
+                                        "children": [
+                                            {
+                                                "name": "Bacilli",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 91061,
+                                                "value": 0,
+                                                "summedValue": 19,
+                                                "yield": 0,
+                                                "summedYield": 32167,
+                                                "children": [
+                                                    {
+                                                        "name": "Bacillales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 1385,
+                                                        "value": 0,
+                                                        "summedValue": 15,
+                                                        "yield": 0,
+                                                        "summedYield": 25120,
+                                                        "children": [
+                                                            {
+                                                                "name": "Staphylococcaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 90964,
+                                                                "value": 0,
+                                                                "summedValue": 15,
+                                                                "yield": 0,
+                                                                "summedYield": 25120,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Staphylococcus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1279,
+                                                                        "value": 15,
+                                                                        "summedValue": 15,
+                                                                        "yield": 25120,
+                                                                        "summedYield": 25120,
+                                                                        "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Actinomycetota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 201174,
+                                        "value": 0,
+                                        "summedValue": 44,
+                                        "yield": 0,
+                                        "summedYield": 153063,
+                                        "children": [
+                                            {
+                                                "name": "Actinomycetes",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1760,
+                                                "value": 17,
+                                                "summedValue": 44,
+                                                "yield": 37440,
+                                                "summedYield": 153063,
+                                                "children": [
+                                                    {
+                                                        "name": "Bifidobacteriales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 85004,
+                                                        "value": 0,
+                                                        "summedValue": 35,
+                                                        "yield": 0,
+                                                        "summedYield": 127880,
+                                                        "children": [
+                                                            {
+                                                                "name": "Bifidobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 31953,
+                                                                "value": 0,
+                                                                "summedValue": 35,
+                                                                "yield": 0,
+                                                                "summedYield": 127880,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Bifidobacterium",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1678,
+                                                                        "value": 0,
+                                                                        "summedValue": 35,
+                                                                        "yield": 0,
+                                                                        "summedYield": 127880,
+                                                                        "meanIdentity": "85.9",
+                                                                        "meanMaxIdentity": "86.6",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Bifidobacterium breve",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1685,
+                                                                                "value": 27,
+                                                                                "summedValue": 27,
+                                                                                "yield": 115623,
+                                                                                "summedYield": 115623,
+                                                                                "meanIdentity": "84.9",
+                                                                                "meanMaxIdentity": "85.1",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pseudomonadati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 3379134,
+                                "value": 0,
+                                "summedValue": 24779,
+                                "yield": 0,
+                                "summedYield": 60614568,
+                                "children": [
+                                    {
+                                        "name": "Pseudomonadota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1224,
+                                        "value": 0,
+                                        "summedValue": 24779,
+                                        "yield": 0,
+                                        "summedYield": 60614568,
+                                        "meanIdentity": "84.2",
+                                        "meanMaxIdentity": "84.4",
+                                        "children": [
+                                            {
+                                                "name": "Gammaproteobacteria",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1236,
+                                                "value": 59,
+                                                "summedValue": 24772,
+                                                "yield": 109326,
+                                                "summedYield": 60606334,
+                                                "meanIdentity": "85.8",
+                                                "meanMaxIdentity": "86.2",
+                                                "children": [
+                                                    {
+                                                        "name": "Enterobacterales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 91347,
+                                                        "value": 1087,
+                                                        "summedValue": 24713,
+                                                        "yield": 2086157,
+                                                        "summedYield": 60497008,
+                                                        "meanIdentity": "85.7",
+                                                        "meanMaxIdentity": "85.8",
+                                                        "children": [
+                                                            {
+                                                                "name": "Enterobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 543,
+                                                                "value": 1534,
+                                                                "summedValue": 20690,
+                                                                "yield": 3406137,
+                                                                "summedYield": 51424906,
+                                                                "meanIdentity": "85.4",
+                                                                "meanMaxIdentity": "85.6",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Citrobacter",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 544,
+                                                                        "value": 0,
+                                                                        "summedValue": 22,
+                                                                        "yield": 0,
+                                                                        "summedYield": 37450,
+                                                                        "meanIdentity": "79.3",
+                                                                        "meanMaxIdentity": "79.4",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Citrobacter freundii complex",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "species group",
+                                                                                "ncbiID": 1344959,
+                                                                                "value": 0,
+                                                                                "summedValue": 21,
+                                                                                "yield": 0,
+                                                                                "summedYield": 36733,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Citrobacter freundii",
+                                                                                        "rank": 8,
+                                                                                        "ncbiRank": "species",
+                                                                                        "ncbiID": 546,
+                                                                                        "value": 21,
+                                                                                        "summedValue": 21,
+                                                                                        "yield": 36733,
+                                                                                        "summedYield": 36733,
+                                                                                        "meanIdentity": "82.5",
+                                                                                        "meanMaxIdentity": "82.5",
+                                                                                        "children": [
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "name": "Enterobacter",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 547,
+                                                                        "value": 0,
+                                                                        "summedValue": 23,
+                                                                        "yield": 0,
+                                                                        "summedYield": 23698,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Enterobacter cloacae complex",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "species group",
+                                                                                "ncbiID": 354276,
+                                                                                "value": 0,
+                                                                                "summedValue": 23,
+                                                                                "yield": 0,
+                                                                                "summedYield": 23698,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Enterobacter kobei",
+                                                                                        "rank": 8,
+                                                                                        "ncbiRank": "species",
+                                                                                        "ncbiID": 208224,
+                                                                                        "value": 23,
+                                                                                        "summedValue": 23,
+                                                                                        "yield": 23698,
+                                                                                        "summedYield": 23698,
+                                                                                        "meanIdentity": "84.5",
+                                                                                        "meanMaxIdentity": "84.5",
+                                                                                        "children": [
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "name": "Escherichia",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 561,
+                                                                        "value": 0,
+                                                                        "summedValue": 19,
+                                                                        "yield": 0,
+                                                                        "summedYield": 57851,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Escherichia coli",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 562,
+                                                                                "value": 19,
+                                                                                "summedValue": 19,
+                                                                                "yield": 57851,
+                                                                                "summedYield": 57851,
+                                                                                "meanIdentity": "82.3",
+                                                                                "meanMaxIdentity": "82.5",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "name": "Klebsiella/Raoultella group",
+                                                                        "rank": 0,
+                                                                        "ncbiRank": "no rank",
+                                                                        "ncbiID": 2890311,
+                                                                        "value": 253,
+                                                                        "summedValue": 19093,
+                                                                        "yield": 668062,
+                                                                        "summedYield": 47900487,
+                                                                        "meanIdentity": "85.5",
+                                                                        "meanMaxIdentity": "85.7",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Klebsiella",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "genus",
+                                                                                "ncbiID": 570,
+                                                                                "value": 980,
+                                                                                "summedValue": 18840,
+                                                                                "yield": 2205218,
+                                                                                "summedYield": 47232425,
+                                                                                "meanIdentity": "85.3",
+                                                                                "meanMaxIdentity": "85.5",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Klebsiella pneumoniae complex",
+                                                                                        "rank": 7,
+                                                                                        "ncbiRank": "species group",
+                                                                                        "ncbiID": 3390273,
+                                                                                        "value": 947,
+                                                                                        "summedValue": 17860,
+                                                                                        "yield": 2160756,
+                                                                                        "summedYield": 45027207,
+                                                                                        "meanIdentity": "85.1",
+                                                                                        "meanMaxIdentity": "85.4",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "name": "Klebsiella pneumoniae",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 573,
+                                                                                                "value": 16760,
+                                                                                                "summedValue": 16774,
+                                                                                                "yield": 42363564,
+                                                                                                "summedYield": 42386009,
+                                                                                                "meanIdentity": "85.5",
+                                                                                                "meanMaxIdentity": "85.6",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Klebsiella pneumoniae subsp. pneumoniae",
+                                                                                                        "rank": 9,
+                                                                                                        "ncbiRank": "subspecies",
+                                                                                                        "ncbiID": 72407,
+                                                                                                        "value": 14,
+                                                                                                        "summedValue": 14,
+                                                                                                        "yield": 22445,
+                                                                                                        "summedYield": 22445,
+                                                                                                        "meanIdentity": "81.7",
+                                                                                                        "meanMaxIdentity": "81.7",
+                                                                                                        "children": [
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            },
+                                                                                            {
+                                                                                                "name": "Klebsiella variicola",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 244366,
+                                                                                                "value": 61,
+                                                                                                "summedValue": 76,
+                                                                                                "yield": 244346,
+                                                                                                "summedYield": 296873,
+                                                                                                "meanIdentity": "82.8",
+                                                                                                "meanMaxIdentity": "82.9",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Klebsiella variicola subsp. variicola",
+                                                                                                        "rank": 9,
+                                                                                                        "ncbiRank": "subspecies",
+                                                                                                        "ncbiID": 2590157,
+                                                                                                        "value": 15,
+                                                                                                        "summedValue": 15,
+                                                                                                        "yield": 52527,
+                                                                                                        "summedYield": 52527,
+                                                                                                        "meanIdentity": "84.3",
+                                                                                                        "meanMaxIdentity": "84.3",
+                                                                                                        "children": [
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            },
+                                                                                            {
+                                                                                                "name": "Klebsiella quasipneumoniae",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 1463165,
+                                                                                                "value": 63,
+                                                                                                "summedValue": 63,
+                                                                                                "yield": 183569,
+                                                                                                "summedYield": 183569,
+                                                                                                "meanIdentity": "82.4",
+                                                                                                "meanMaxIdentity": "82.5",
+                                                                                                "children": [
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "Morganellaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 1903414,
+                                                                "value": 0,
+                                                                "summedValue": 2945,
+                                                                "yield": 0,
+                                                                "summedYield": 7003013,
+                                                                "meanIdentity": "87.6",
+                                                                "meanMaxIdentity": "87.9",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Proteus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 583,
+                                                                        "value": 0,
+                                                                        "summedValue": 2942,
+                                                                        "yield": 0,
+                                                                        "summedYield": 7000091,
+                                                                        "meanIdentity": "85.1",
+                                                                        "meanMaxIdentity": "85.5",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Proteus mirabilis",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 584,
+                                                                                "value": 2936,
+                                                                                "summedValue": 2936,
+                                                                                "yield": 6985945,
+                                                                                "summedYield": 6985945,
+                                                                                "meanIdentity": "85.8",
+                                                                                "meanMaxIdentity": "86.0",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Eukaryota",
+                        "rank": 1,
+                        "ncbiRank": "domain",
+                        "ncbiID": 2759,
+                        "value": 0,
+                        "summedValue": 83,
+                        "yield": 0,
+                        "summedYield": 77528,
+                        "meanIdentity": "84.6",
+                        "meanMaxIdentity": "85.0",
+                        "children": [
+                            {
+                                "name": "Opisthokonta",
+                                "rank": 0,
+                                "ncbiRank": "clade",
+                                "ncbiID": 33154,
+                                "value": 0,
+                                "summedValue": 81,
+                                "yield": 0,
+                                "summedYield": 76353,
+                                "children": [
+                                    {
+                                        "name": "Metazoa",
+                                        "rank": 2,
+                                        "ncbiRank": "kingdom",
+                                        "ncbiID": 33208,
+                                        "value": 0,
+                                        "summedValue": 80,
+                                        "yield": 0,
+                                        "summedYield": 75022,
+                                        "children": [
+                                            {
+                                                "name": "Eumetazoa",
+                                                "rank": 0,
+                                                "ncbiRank": "clade",
+                                                "ncbiID": 6072,
+                                                "value": 0,
+                                                "summedValue": 80,
+                                                "yield": 0,
+                                                "summedYield": 75022,
+                                                "children": [
+                                                    {
+                                                        "name": "Bilateria",
+                                                        "rank": 0,
+                                                        "ncbiRank": "clade",
+                                                        "ncbiID": 33213,
+                                                        "value": 0,
+                                                        "summedValue": 80,
+                                                        "yield": 0,
+                                                        "summedYield": 75022,
+                                                        "children": [
+                                                            {
+                                                                "name": "Deuterostomia",
+                                                                "rank": 0,
+                                                                "ncbiRank": "clade",
+                                                                "ncbiID": 33511,
+                                                                "value": 0,
+                                                                "summedValue": 80,
+                                                                "yield": 0,
+                                                                "summedYield": 75022,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Chordata",
+                                                                        "rank": 3,
+                                                                        "ncbiRank": "phylum",
+                                                                        "ncbiID": 7711,
+                                                                        "value": 0,
+                                                                        "summedValue": 80,
+                                                                        "yield": 0,
+                                                                        "summedYield": 75022,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Craniata",
+                                                                                "rank": 3,
+                                                                                "ncbiRank": "subphylum",
+                                                                                "ncbiID": 89593,
+                                                                                "value": 0,
+                                                                                "summedValue": 80,
+                                                                                "yield": 0,
+                                                                                "summedYield": 75022,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Vertebrata",
+                                                                                        "rank": 0,
+                                                                                        "ncbiRank": "clade",
+                                                                                        "ncbiID": 7742,
+                                                                                        "value": 0,
+                                                                                        "summedValue": 80,
+                                                                                        "yield": 0,
+                                                                                        "summedYield": 75022,
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "name": "Gnathostomata",
+                                                                                                "rank": 0,
+                                                                                                "ncbiRank": "clade",
+                                                                                                "ncbiID": 7776,
+                                                                                                "value": 0,
+                                                                                                "summedValue": 80,
+                                                                                                "yield": 0,
+                                                                                                "summedYield": 75022,
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Teleostomi",
+                                                                                                        "rank": 0,
+                                                                                                        "ncbiRank": "clade",
+                                                                                                        "ncbiID": 117570,
+                                                                                                        "value": 0,
+                                                                                                        "summedValue": 80,
+                                                                                                        "yield": 0,
+                                                                                                        "summedYield": 75022,
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "name": "Euteleostomi",
+                                                                                                                "rank": 0,
+                                                                                                                "ncbiRank": "clade",
+                                                                                                                "ncbiID": 117571,
+                                                                                                                "value": 0,
+                                                                                                                "summedValue": 80,
+                                                                                                                "yield": 0,
+                                                                                                                "summedYield": 75022,
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "name": "Sarcopterygii",
+                                                                                                                        "rank": 3,
+                                                                                                                        "ncbiRank": "superclass",
+                                                                                                                        "ncbiID": 8287,
+                                                                                                                        "value": 0,
+                                                                                                                        "summedValue": 80,
+                                                                                                                        "yield": 0,
+                                                                                                                        "summedYield": 75022,
+                                                                                                                        "children": [
+                                                                                                                            {
+                                                                                                                                "name": "Dipnotetrapodomorpha",
+                                                                                                                                "rank": 0,
+                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                "ncbiID": 1338369,
+                                                                                                                                "value": 0,
+                                                                                                                                "summedValue": 80,
+                                                                                                                                "yield": 0,
+                                                                                                                                "summedYield": 75022,
+                                                                                                                                "children": [
+                                                                                                                                    {
+                                                                                                                                        "name": "Tetrapoda",
+                                                                                                                                        "rank": 0,
+                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                        "ncbiID": 32523,
+                                                                                                                                        "value": 0,
+                                                                                                                                        "summedValue": 80,
+                                                                                                                                        "yield": 0,
+                                                                                                                                        "summedYield": 75022,
+                                                                                                                                        "children": [
+                                                                                                                                            {
+                                                                                                                                                "name": "Amniota",
+                                                                                                                                                "rank": 0,
+                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                "ncbiID": 32524,
+                                                                                                                                                "value": 0,
+                                                                                                                                                "summedValue": 80,
+                                                                                                                                                "yield": 0,
+                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                "children": [
+                                                                                                                                                    {
+                                                                                                                                                        "name": "Mammalia",
+                                                                                                                                                        "rank": 4,
+                                                                                                                                                        "ncbiRank": "class",
+                                                                                                                                                        "ncbiID": 40674,
+                                                                                                                                                        "value": 0,
+                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                        "yield": 0,
+                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                        "children": [
+                                                                                                                                                            {
+                                                                                                                                                                "name": "Theria",
+                                                                                                                                                                "rank": 0,
+                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                "ncbiID": 32525,
+                                                                                                                                                                "value": 0,
+                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                "yield": 0,
+                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                "children": [
+                                                                                                                                                                    {
+                                                                                                                                                                        "name": "Eutheria",
+                                                                                                                                                                        "rank": 0,
+                                                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                                                        "ncbiID": 9347,
+                                                                                                                                                                        "value": 0,
+                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                        "children": [
+                                                                                                                                                                            {
+                                                                                                                                                                                "name": "Boreoeutheria",
+                                                                                                                                                                                "rank": 0,
+                                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                                "ncbiID": 1437010,
+                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                "children": [
+                                                                                                                                                                                    {
+                                                                                                                                                                                        "name": "Euarchontoglires",
+                                                                                                                                                                                        "rank": 4,
+                                                                                                                                                                                        "ncbiRank": "superorder",
+                                                                                                                                                                                        "ncbiID": 314146,
+                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                        "children": [
+                                                                                                                                                                                            {
+                                                                                                                                                                                                "name": "Primates",
+                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                "ncbiRank": "order",
+                                                                                                                                                                                                "ncbiID": 9443,
+                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        "name": "Haplorrhini",
+                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                        "ncbiRank": "suborder",
+                                                                                                                                                                                                        "ncbiID": 376913,
+                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                "name": "Simiiformes",
+                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                "ncbiRank": "infraorder",
+                                                                                                                                                                                                                "ncbiID": 314293,
+                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        "name": "Catarrhini",
+                                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                                        "ncbiRank": "parvorder",
+                                                                                                                                                                                                                        "ncbiID": 9526,
+                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                "name": "Hominoidea",
+                                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                                "ncbiRank": "superfamily",
+                                                                                                                                                                                                                                "ncbiID": 314295,
+                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                        "name": "Hominidae",
+                                                                                                                                                                                                                                        "rank": 6,
+                                                                                                                                                                                                                                        "ncbiRank": "family",
+                                                                                                                                                                                                                                        "ncbiID": 9604,
+                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                "name": "Homininae",
+                                                                                                                                                                                                                                                "rank": 6,
+                                                                                                                                                                                                                                                "ncbiRank": "subfamily",
+                                                                                                                                                                                                                                                "ncbiID": 207598,
+                                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                                                "meanIdentity": "84.8",
+                                                                                                                                                                                                                                                "meanMaxIdentity": "85.0",
+                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                        "name": "Homo",
+                                                                                                                                                                                                                                                        "rank": 7,
+                                                                                                                                                                                                                                                        "ncbiRank": "genus",
+                                                                                                                                                                                                                                                        "ncbiID": 9605,
+                                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                                        "summedValue": 72,
+                                                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                                                        "summedYield": 70116,
+                                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                "name": "Homo sapiens",
+                                                                                                                                                                                                                                                                "rank": 8,
+                                                                                                                                                                                                                                                                "ncbiRank": "species",
+                                                                                                                                                                                                                                                                "ncbiID": 9606,
+                                                                                                                                                                                                                                                                "value": 72,
+                                                                                                                                                                                                                                                                "summedValue": 72,
+                                                                                                                                                                                                                                                                "yield": 70116,
+                                                                                                                                                                                                                                                                "summedYield": 70116,
+                                                                                                                                                                                                                                                                "meanIdentity": "85.6",
+                                                                                                                                                                                                                                                                "meanMaxIdentity": "85.6",
+                                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                ]
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        ]
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                ]
+                                                                                                                                                                                            }
+                                                                                                                                                                                        ]
+                                                                                                                                                                                    }
+                                                                                                                                                                                ]
+                                                                                                                                                                            }
+                                                                                                                                                                        ]
+                                                                                                                                                                    }
+                                                                                                                                                                ]
+                                                                                                                                                            }
+                                                                                                                                                        ]
+                                                                                                                                                    }
+                                                                                                                                                ]
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                                                    }
+                                                                                                                                ]
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "unclassified",
+                "rank": 0,
+                "ncbiRank": "no rank",
+                "ncbiID": 0,
+                "value": 118,
+                "summedValue": 118,
+                "yield": 80874,
+                "summedYield": 80874,
+                "children": [
+                ]
+            }
+        ]
+    },
+    "treeYield": {
+        "name": "root",
+        "rank": 0,
+        "ncbiRank": "no rank",
+        "ncbiID": 1,
+        "value": 535,
+        "summedValue": 25705,
+        "yield": 1096660,
+        "summedYield": 62289325,
+        "meanIdentity": "85.0",
+        "meanMaxIdentity": "85.3",
+        "children": [
+            {
+                "name": "cellular organisms",
+                "rank": 0,
+                "ncbiRank": "cellular root",
+                "ncbiID": 131567,
+                "value": 48,
+                "summedValue": 25052,
+                "yield": 61719,
+                "summedYield": 61111791,
+                "meanIdentity": "85.8",
+                "meanMaxIdentity": "85.8",
+                "children": [
+                    {
+                        "name": "Bacteria",
+                        "rank": 1,
+                        "ncbiRank": "domain",
+                        "ncbiID": 2,
+                        "value": 97,
+                        "summedValue": 24932,
+                        "yield": 188392,
+                        "summedYield": 60979956,
+                        "meanIdentity": "85.7",
+                        "meanMaxIdentity": "85.8",
+                        "children": [
+                            {
+                                "name": "Bacillati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 1783272,
+                                "value": 0,
+                                "summedValue": 63,
+                                "yield": 0,
+                                "summedYield": 185230,
+                                "children": [
+                                    {
+                                        "name": "Bacillota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1239,
+                                        "value": 0,
+                                        "summedValue": 19,
+                                        "yield": 0,
+                                        "summedYield": 32167,
+                                        "children": [
+                                            {
+                                                "name": "Bacilli",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 91061,
+                                                "value": 19,
+                                                "summedValue": 19,
+                                                "yield": 32167,
+                                                "summedYield": 32167,
+                                                "children": [
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Actinomycetota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 201174,
+                                        "value": 0,
+                                        "summedValue": 44,
+                                        "yield": 0,
+                                        "summedYield": 153063,
+                                        "children": [
+                                            {
+                                                "name": "Actinomycetes",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1760,
+                                                "value": 17,
+                                                "summedValue": 44,
+                                                "yield": 37440,
+                                                "summedYield": 153063,
+                                                "children": [
+                                                    {
+                                                        "name": "Bifidobacteriales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 85004,
+                                                        "value": 0,
+                                                        "summedValue": 35,
+                                                        "yield": 0,
+                                                        "summedYield": 127880,
+                                                        "children": [
+                                                            {
+                                                                "name": "Bifidobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 31953,
+                                                                "value": 0,
+                                                                "summedValue": 35,
+                                                                "yield": 0,
+                                                                "summedYield": 127880,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Bifidobacterium",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 1678,
+                                                                        "value": 0,
+                                                                        "summedValue": 35,
+                                                                        "yield": 0,
+                                                                        "summedYield": 127880,
+                                                                        "meanIdentity": "85.9",
+                                                                        "meanMaxIdentity": "86.6",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Bifidobacterium breve",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 1685,
+                                                                                "value": 27,
+                                                                                "summedValue": 27,
+                                                                                "yield": 115623,
+                                                                                "summedYield": 115623,
+                                                                                "meanIdentity": "84.9",
+                                                                                "meanMaxIdentity": "85.1",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pseudomonadati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 3379134,
+                                "value": 0,
+                                "summedValue": 24779,
+                                "yield": 0,
+                                "summedYield": 60614568,
+                                "children": [
+                                    {
+                                        "name": "Pseudomonadota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1224,
+                                        "value": 0,
+                                        "summedValue": 24779,
+                                        "yield": 0,
+                                        "summedYield": 60614568,
+                                        "meanIdentity": "84.2",
+                                        "meanMaxIdentity": "84.4",
+                                        "children": [
+                                            {
+                                                "name": "Gammaproteobacteria",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1236,
+                                                "value": 59,
+                                                "summedValue": 24772,
+                                                "yield": 109326,
+                                                "summedYield": 60606334,
+                                                "meanIdentity": "85.8",
+                                                "meanMaxIdentity": "86.2",
+                                                "children": [
+                                                    {
+                                                        "name": "Enterobacterales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 91347,
+                                                        "value": 1087,
+                                                        "summedValue": 24713,
+                                                        "yield": 2086157,
+                                                        "summedYield": 60497008,
+                                                        "meanIdentity": "85.7",
+                                                        "meanMaxIdentity": "85.8",
+                                                        "children": [
+                                                            {
+                                                                "name": "Enterobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 543,
+                                                                "value": 1557,
+                                                                "summedValue": 20690,
+                                                                "yield": 3429835,
+                                                                "summedYield": 51424906,
+                                                                "meanIdentity": "85.4",
+                                                                "meanMaxIdentity": "85.6",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Citrobacter",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 544,
+                                                                        "value": 0,
+                                                                        "summedValue": 22,
+                                                                        "yield": 0,
+                                                                        "summedYield": 37450,
+                                                                        "meanIdentity": "79.3",
+                                                                        "meanMaxIdentity": "79.4",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Citrobacter freundii complex",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "species group",
+                                                                                "ncbiID": 1344959,
+                                                                                "value": 0,
+                                                                                "summedValue": 21,
+                                                                                "yield": 0,
+                                                                                "summedYield": 36733,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Citrobacter freundii",
+                                                                                        "rank": 8,
+                                                                                        "ncbiRank": "species",
+                                                                                        "ncbiID": 546,
+                                                                                        "value": 21,
+                                                                                        "summedValue": 21,
+                                                                                        "yield": 36733,
+                                                                                        "summedYield": 36733,
+                                                                                        "meanIdentity": "82.5",
+                                                                                        "meanMaxIdentity": "82.5",
+                                                                                        "children": [
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "name": "Escherichia",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 561,
+                                                                        "value": 0,
+                                                                        "summedValue": 19,
+                                                                        "yield": 0,
+                                                                        "summedYield": 57851,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Escherichia coli",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 562,
+                                                                                "value": 19,
+                                                                                "summedValue": 19,
+                                                                                "yield": 57851,
+                                                                                "summedYield": 57851,
+                                                                                "meanIdentity": "82.3",
+                                                                                "meanMaxIdentity": "82.5",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "name": "Klebsiella/Raoultella group",
+                                                                        "rank": 0,
+                                                                        "ncbiRank": "no rank",
+                                                                        "ncbiID": 2890311,
+                                                                        "value": 246,
+                                                                        "summedValue": 19093,
+                                                                        "yield": 635087,
+                                                                        "summedYield": 47900487,
+                                                                        "meanIdentity": "85.5",
+                                                                        "meanMaxIdentity": "85.7",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Klebsiella",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "genus",
+                                                                                "ncbiID": 570,
+                                                                                "value": 980,
+                                                                                "summedValue": 18840,
+                                                                                "yield": 2205218,
+                                                                                "summedYield": 47232425,
+                                                                                "meanIdentity": "85.3",
+                                                                                "meanMaxIdentity": "85.5",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Klebsiella pneumoniae complex",
+                                                                                        "rank": 7,
+                                                                                        "ncbiRank": "species group",
+                                                                                        "ncbiID": 3390273,
+                                                                                        "value": 947,
+                                                                                        "summedValue": 17860,
+                                                                                        "yield": 2160756,
+                                                                                        "summedYield": 45027207,
+                                                                                        "meanIdentity": "85.1",
+                                                                                        "meanMaxIdentity": "85.4",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "name": "Klebsiella pneumoniae",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 573,
+                                                                                                "value": 16774,
+                                                                                                "summedValue": 16774,
+                                                                                                "yield": 42386009,
+                                                                                                "summedYield": 42386009,
+                                                                                                "meanIdentity": "85.5",
+                                                                                                "meanMaxIdentity": "85.6",
+                                                                                                "children": [
+                                                                                                ]
+                                                                                            },
+                                                                                            {
+                                                                                                "name": "Klebsiella variicola",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 244366,
+                                                                                                "value": 61,
+                                                                                                "summedValue": 76,
+                                                                                                "yield": 244346,
+                                                                                                "summedYield": 296873,
+                                                                                                "meanIdentity": "82.8",
+                                                                                                "meanMaxIdentity": "82.9",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Klebsiella variicola subsp. variicola",
+                                                                                                        "rank": 9,
+                                                                                                        "ncbiRank": "subspecies",
+                                                                                                        "ncbiID": 2590157,
+                                                                                                        "value": 15,
+                                                                                                        "summedValue": 15,
+                                                                                                        "yield": 52527,
+                                                                                                        "summedYield": 52527,
+                                                                                                        "meanIdentity": "84.3",
+                                                                                                        "meanMaxIdentity": "84.3",
+                                                                                                        "children": [
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            },
+                                                                                            {
+                                                                                                "name": "Klebsiella quasipneumoniae",
+                                                                                                "rank": 8,
+                                                                                                "ncbiRank": "species",
+                                                                                                "ncbiID": 1463165,
+                                                                                                "value": 63,
+                                                                                                "summedValue": 63,
+                                                                                                "yield": 183569,
+                                                                                                "summedYield": 183569,
+                                                                                                "meanIdentity": "82.4",
+                                                                                                "meanMaxIdentity": "82.5",
+                                                                                                "children": [
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "name": "Raoultella",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "genus",
+                                                                                "ncbiID": 160674,
+                                                                                "value": 7,
+                                                                                "summedValue": 7,
+                                                                                "yield": 32975,
+                                                                                "summedYield": 32975,
+                                                                                "meanIdentity": "79.6",
+                                                                                "meanMaxIdentity": "79.6",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "name": "Morganellaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 1903414,
+                                                                "value": 0,
+                                                                "summedValue": 2945,
+                                                                "yield": 0,
+                                                                "summedYield": 7003013,
+                                                                "meanIdentity": "87.6",
+                                                                "meanMaxIdentity": "87.9",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Proteus",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 583,
+                                                                        "value": 0,
+                                                                        "summedValue": 2942,
+                                                                        "yield": 0,
+                                                                        "summedYield": 7000091,
+                                                                        "meanIdentity": "85.1",
+                                                                        "meanMaxIdentity": "85.5",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Proteus mirabilis",
+                                                                                "rank": 8,
+                                                                                "ncbiRank": "species",
+                                                                                "ncbiID": 584,
+                                                                                "value": 2936,
+                                                                                "summedValue": 2936,
+                                                                                "yield": 6985945,
+                                                                                "summedYield": 6985945,
+                                                                                "meanIdentity": "85.8",
+                                                                                "meanMaxIdentity": "86.0",
+                                                                                "children": [
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Eukaryota",
+                        "rank": 1,
+                        "ncbiRank": "domain",
+                        "ncbiID": 2759,
+                        "value": 0,
+                        "summedValue": 83,
+                        "yield": 0,
+                        "summedYield": 77528,
+                        "meanIdentity": "84.6",
+                        "meanMaxIdentity": "85.0",
+                        "children": [
+                            {
+                                "name": "Opisthokonta",
+                                "rank": 0,
+                                "ncbiRank": "clade",
+                                "ncbiID": 33154,
+                                "value": 0,
+                                "summedValue": 81,
+                                "yield": 0,
+                                "summedYield": 76353,
+                                "children": [
+                                    {
+                                        "name": "Metazoa",
+                                        "rank": 2,
+                                        "ncbiRank": "kingdom",
+                                        "ncbiID": 33208,
+                                        "value": 0,
+                                        "summedValue": 80,
+                                        "yield": 0,
+                                        "summedYield": 75022,
+                                        "children": [
+                                            {
+                                                "name": "Eumetazoa",
+                                                "rank": 0,
+                                                "ncbiRank": "clade",
+                                                "ncbiID": 6072,
+                                                "value": 0,
+                                                "summedValue": 80,
+                                                "yield": 0,
+                                                "summedYield": 75022,
+                                                "children": [
+                                                    {
+                                                        "name": "Bilateria",
+                                                        "rank": 0,
+                                                        "ncbiRank": "clade",
+                                                        "ncbiID": 33213,
+                                                        "value": 0,
+                                                        "summedValue": 80,
+                                                        "yield": 0,
+                                                        "summedYield": 75022,
+                                                        "children": [
+                                                            {
+                                                                "name": "Deuterostomia",
+                                                                "rank": 0,
+                                                                "ncbiRank": "clade",
+                                                                "ncbiID": 33511,
+                                                                "value": 0,
+                                                                "summedValue": 80,
+                                                                "yield": 0,
+                                                                "summedYield": 75022,
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Chordata",
+                                                                        "rank": 3,
+                                                                        "ncbiRank": "phylum",
+                                                                        "ncbiID": 7711,
+                                                                        "value": 0,
+                                                                        "summedValue": 80,
+                                                                        "yield": 0,
+                                                                        "summedYield": 75022,
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Craniata",
+                                                                                "rank": 3,
+                                                                                "ncbiRank": "subphylum",
+                                                                                "ncbiID": 89593,
+                                                                                "value": 0,
+                                                                                "summedValue": 80,
+                                                                                "yield": 0,
+                                                                                "summedYield": 75022,
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Vertebrata",
+                                                                                        "rank": 0,
+                                                                                        "ncbiRank": "clade",
+                                                                                        "ncbiID": 7742,
+                                                                                        "value": 0,
+                                                                                        "summedValue": 80,
+                                                                                        "yield": 0,
+                                                                                        "summedYield": 75022,
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "name": "Gnathostomata",
+                                                                                                "rank": 0,
+                                                                                                "ncbiRank": "clade",
+                                                                                                "ncbiID": 7776,
+                                                                                                "value": 0,
+                                                                                                "summedValue": 80,
+                                                                                                "yield": 0,
+                                                                                                "summedYield": 75022,
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "name": "Teleostomi",
+                                                                                                        "rank": 0,
+                                                                                                        "ncbiRank": "clade",
+                                                                                                        "ncbiID": 117570,
+                                                                                                        "value": 0,
+                                                                                                        "summedValue": 80,
+                                                                                                        "yield": 0,
+                                                                                                        "summedYield": 75022,
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "name": "Euteleostomi",
+                                                                                                                "rank": 0,
+                                                                                                                "ncbiRank": "clade",
+                                                                                                                "ncbiID": 117571,
+                                                                                                                "value": 0,
+                                                                                                                "summedValue": 80,
+                                                                                                                "yield": 0,
+                                                                                                                "summedYield": 75022,
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "name": "Sarcopterygii",
+                                                                                                                        "rank": 3,
+                                                                                                                        "ncbiRank": "superclass",
+                                                                                                                        "ncbiID": 8287,
+                                                                                                                        "value": 0,
+                                                                                                                        "summedValue": 80,
+                                                                                                                        "yield": 0,
+                                                                                                                        "summedYield": 75022,
+                                                                                                                        "children": [
+                                                                                                                            {
+                                                                                                                                "name": "Dipnotetrapodomorpha",
+                                                                                                                                "rank": 0,
+                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                "ncbiID": 1338369,
+                                                                                                                                "value": 0,
+                                                                                                                                "summedValue": 80,
+                                                                                                                                "yield": 0,
+                                                                                                                                "summedYield": 75022,
+                                                                                                                                "children": [
+                                                                                                                                    {
+                                                                                                                                        "name": "Tetrapoda",
+                                                                                                                                        "rank": 0,
+                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                        "ncbiID": 32523,
+                                                                                                                                        "value": 0,
+                                                                                                                                        "summedValue": 80,
+                                                                                                                                        "yield": 0,
+                                                                                                                                        "summedYield": 75022,
+                                                                                                                                        "children": [
+                                                                                                                                            {
+                                                                                                                                                "name": "Amniota",
+                                                                                                                                                "rank": 0,
+                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                "ncbiID": 32524,
+                                                                                                                                                "value": 0,
+                                                                                                                                                "summedValue": 80,
+                                                                                                                                                "yield": 0,
+                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                "children": [
+                                                                                                                                                    {
+                                                                                                                                                        "name": "Mammalia",
+                                                                                                                                                        "rank": 4,
+                                                                                                                                                        "ncbiRank": "class",
+                                                                                                                                                        "ncbiID": 40674,
+                                                                                                                                                        "value": 0,
+                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                        "yield": 0,
+                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                        "children": [
+                                                                                                                                                            {
+                                                                                                                                                                "name": "Theria",
+                                                                                                                                                                "rank": 0,
+                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                "ncbiID": 32525,
+                                                                                                                                                                "value": 0,
+                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                "yield": 0,
+                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                "children": [
+                                                                                                                                                                    {
+                                                                                                                                                                        "name": "Eutheria",
+                                                                                                                                                                        "rank": 0,
+                                                                                                                                                                        "ncbiRank": "clade",
+                                                                                                                                                                        "ncbiID": 9347,
+                                                                                                                                                                        "value": 0,
+                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                        "children": [
+                                                                                                                                                                            {
+                                                                                                                                                                                "name": "Boreoeutheria",
+                                                                                                                                                                                "rank": 0,
+                                                                                                                                                                                "ncbiRank": "clade",
+                                                                                                                                                                                "ncbiID": 1437010,
+                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                "children": [
+                                                                                                                                                                                    {
+                                                                                                                                                                                        "name": "Euarchontoglires",
+                                                                                                                                                                                        "rank": 4,
+                                                                                                                                                                                        "ncbiRank": "superorder",
+                                                                                                                                                                                        "ncbiID": 314146,
+                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                        "children": [
+                                                                                                                                                                                            {
+                                                                                                                                                                                                "name": "Primates",
+                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                "ncbiRank": "order",
+                                                                                                                                                                                                "ncbiID": 9443,
+                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        "name": "Haplorrhini",
+                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                        "ncbiRank": "suborder",
+                                                                                                                                                                                                        "ncbiID": 376913,
+                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                "name": "Simiiformes",
+                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                "ncbiRank": "infraorder",
+                                                                                                                                                                                                                "ncbiID": 314293,
+                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        "name": "Catarrhini",
+                                                                                                                                                                                                                        "rank": 5,
+                                                                                                                                                                                                                        "ncbiRank": "parvorder",
+                                                                                                                                                                                                                        "ncbiID": 9526,
+                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                "name": "Hominoidea",
+                                                                                                                                                                                                                                "rank": 5,
+                                                                                                                                                                                                                                "ncbiRank": "superfamily",
+                                                                                                                                                                                                                                "ncbiID": 314295,
+                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                        "name": "Hominidae",
+                                                                                                                                                                                                                                        "rank": 6,
+                                                                                                                                                                                                                                        "ncbiRank": "family",
+                                                                                                                                                                                                                                        "ncbiID": 9604,
+                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                        "summedValue": 80,
+                                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                                        "summedYield": 75022,
+                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                "name": "Homininae",
+                                                                                                                                                                                                                                                "rank": 6,
+                                                                                                                                                                                                                                                "ncbiRank": "subfamily",
+                                                                                                                                                                                                                                                "ncbiID": 207598,
+                                                                                                                                                                                                                                                "value": 0,
+                                                                                                                                                                                                                                                "summedValue": 80,
+                                                                                                                                                                                                                                                "yield": 0,
+                                                                                                                                                                                                                                                "summedYield": 75022,
+                                                                                                                                                                                                                                                "meanIdentity": "84.8",
+                                                                                                                                                                                                                                                "meanMaxIdentity": "85.0",
+                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                        "name": "Homo",
+                                                                                                                                                                                                                                                        "rank": 7,
+                                                                                                                                                                                                                                                        "ncbiRank": "genus",
+                                                                                                                                                                                                                                                        "ncbiID": 9605,
+                                                                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                                                                        "summedValue": 72,
+                                                                                                                                                                                                                                                        "yield": 0,
+                                                                                                                                                                                                                                                        "summedYield": 70116,
+                                                                                                                                                                                                                                                        "children": [
+                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                "name": "Homo sapiens",
+                                                                                                                                                                                                                                                                "rank": 8,
+                                                                                                                                                                                                                                                                "ncbiRank": "species",
+                                                                                                                                                                                                                                                                "ncbiID": 9606,
+                                                                                                                                                                                                                                                                "value": 72,
+                                                                                                                                                                                                                                                                "summedValue": 72,
+                                                                                                                                                                                                                                                                "yield": 70116,
+                                                                                                                                                                                                                                                                "summedYield": 70116,
+                                                                                                                                                                                                                                                                "meanIdentity": "85.6",
+                                                                                                                                                                                                                                                                "meanMaxIdentity": "85.6",
+                                                                                                                                                                                                                                                                "children": [
+                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                ]
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        ]
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                ]
+                                                                                                                                                                                            }
+                                                                                                                                                                                        ]
+                                                                                                                                                                                    }
+                                                                                                                                                                                ]
+                                                                                                                                                                            }
+                                                                                                                                                                        ]
+                                                                                                                                                                    }
+                                                                                                                                                                ]
+                                                                                                                                                            }
+                                                                                                                                                        ]
+                                                                                                                                                    }
+                                                                                                                                                ]
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                                                    }
+                                                                                                                                ]
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "unclassified",
+                "rank": 0,
+                "ncbiRank": "no rank",
+                "ncbiID": 0,
+                "value": 118,
+                "summedValue": 118,
+                "yield": 80874,
+                "summedYield": 80874,
+                "children": [
+                ]
+            }
+        ]
+    }
+}

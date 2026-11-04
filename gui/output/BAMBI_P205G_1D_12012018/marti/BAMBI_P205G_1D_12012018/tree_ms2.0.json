@@ -1,29 +1,32 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.15i",
-        "fileWritten": "2023-11-15T10:31:52",
+        "martiVersion": "v1.0.0",
+        "fileWritten": "2026-10-28T08:15:02",
         "blastFiles": {
-            "0": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_19.txt.gz",
-            "1": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_18.txt.gz",
-            "2": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_17.txt.gz",
-            "3": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_16.txt.gz",
-            "4": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_15.txt.gz",
-            "5": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_14.txt.gz",
-            "6": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_13.txt.gz",
-            "7": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_12.txt.gz",
-            "8": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_11.txt.gz",
-            "9": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_10.txt.gz",
-            "10": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_9.txt.gz",
-            "11": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_8.txt.gz",
-            "12": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_7.txt.gz",
-            "13": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_6.txt.gz",
-            "14": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_5.txt.gz",
-            "15": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_4.txt.gz",
-            "16": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_3.txt.gz",
-            "17": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_2.txt.gz",
-            "18": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_1.txt.gz",
-            "19": "/ei/scratch/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_0.txt.gz"
+            "0": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_1.txt",
+            "1": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_9.txt",
+            "2": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_7.txt",
+            "3": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_5.txt",
+            "4": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_3.txt",
+            "5": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_0.txt",
+            "6": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_6.txt",
+            "7": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_2.txt",
+            "8": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_4.txt",
+            "9": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_8.txt",
+            "10": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_18.txt",
+            "11": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_12.txt",
+            "12": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_10.txt",
+            "13": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_19.txt",
+            "14": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_16.txt",
+            "15": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_14.txt",
+            "16": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_11.txt",
+            "17": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_17.txt",
+            "18": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_13.txt",
+            "19": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_15.txt",
+            "20": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_21.txt",
+            "21": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_20.txt",
+            "22": "/ei/.project-scratch/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/marti_output/marc_and_bambi/1.0.0/BAMBI_P205G_1D_12012018/megablast_nt/BAMBI_P205G_1D_filtered_22.txt"
         }
     },
     "tree": {
@@ -31,124 +34,48 @@
         "rank": 0,
         "ncbiRank": "no rank",
         "ncbiID": 1,
-        "value": 2214,
-        "summedValue": 98469,
-        "yield": 2067140,
-        "summedYield": 99511304,
+        "value": 2193,
+        "summedValue": 91919,
+        "yield": 2130096,
+        "summedYield": 93422260,
+        "meanIdentity": "87.9",
+        "meanMaxIdentity": "88.2",
         "children": [
             {
                 "name": "cellular organisms",
                 "rank": 0,
-                "ncbiRank": "no rank",
+                "ncbiRank": "cellular root",
                 "ncbiID": 131567,
                 "value": 0,
-                "summedValue": 92284,
+                "summedValue": 89189,
                 "yield": 0,
-                "summedYield": 94087205,
+                "summedYield": 90932576,
+                "meanIdentity": "86.4",
+                "meanMaxIdentity": "86.5",
                 "children": [
                     {
                         "name": "Bacteria",
                         "rank": 1,
-                        "ncbiRank": "superkingdom",
+                        "ncbiRank": "domain",
                         "ncbiID": 2,
-                        "value": 2170,
-                        "summedValue": 92036,
-                        "yield": 2056191,
-                        "summedYield": 93863265,
+                        "value": 2186,
+                        "summedValue": 89147,
+                        "yield": 2060893,
+                        "summedYield": 90885325,
+                        "meanIdentity": "87.6",
+                        "meanMaxIdentity": "88.1",
                         "children": [
                             {
-                                "name": "Pseudomonadota",
-                                "rank": 3,
-                                "ncbiRank": "phylum",
-                                "ncbiID": 1224,
-                                "value": 0,
-                                "summedValue": 67881,
-                                "yield": 0,
-                                "summedYield": 69682276,
-                                "children": [
-                                    {
-                                        "name": "Gammaproteobacteria",
-                                        "rank": 4,
-                                        "ncbiRank": "class",
-                                        "ncbiID": 1236,
-                                        "value": 0,
-                                        "summedValue": 67864,
-                                        "yield": 0,
-                                        "summedYield": 69666631,
-                                        "children": [
-                                            {
-                                                "name": "Enterobacterales",
-                                                "rank": 5,
-                                                "ncbiRank": "order",
-                                                "ncbiID": 91347,
-                                                "value": 0,
-                                                "summedValue": 67819,
-                                                "yield": 0,
-                                                "summedYield": 69628958,
-                                                "children": [
-                                                    {
-                                                        "name": "Enterobacteriaceae",
-                                                        "rank": 6,
-                                                        "ncbiRank": "family",
-                                                        "ncbiID": 543,
-                                                        "value": 5188,
-                                                        "summedValue": 67272,
-                                                        "yield": 5299602,
-                                                        "summedYield": 69097350,
-                                                        "children": [
-                                                            {
-                                                                "name": "Enterobacter",
-                                                                "rank": 7,
-                                                                "ncbiRank": "genus",
-                                                                "ncbiID": 547,
-                                                                "value": 17907,
-                                                                "summedValue": 62084,
-                                                                "yield": 17753225,
-                                                                "summedYield": 63797748,
-                                                                "children": [
-                                                                    {
-                                                                        "name": "Enterobacter cloacae complex",
-                                                                        "rank": 7,
-                                                                        "ncbiRank": "species group",
-                                                                        "ncbiID": 354276,
-                                                                        "value": 41751,
-                                                                        "summedValue": 44177,
-                                                                        "yield": 43453725,
-                                                                        "summedYield": 46044523,
-                                                                        "children": [
-                                                                            {
-                                                                                "name": "Enterobacter hormaechei",
-                                                                                "rank": 8,
-                                                                                "ncbiRank": "species",
-                                                                                "ncbiID": 158836,
-                                                                                "value": 2426,
-                                                                                "summedValue": 2426,
-                                                                                "yield": 2590798,
-                                                                                "summedYield": 2590798,
-                                                                                "children": [
-                                                                                ]
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "Terrabacteria group",
-                                "rank": 0,
-                                "ncbiRank": "clade",
+                                "name": "Bacillati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
                                 "ncbiID": 1783272,
                                 "value": 0,
-                                "summedValue": 23599,
+                                "summedValue": 22911,
                                 "yield": 0,
-                                "summedYield": 23678061,
+                                "summedYield": 22948128,
+                                "meanIdentity": "88.5",
+                                "meanMaxIdentity": "88.5",
                                 "children": [
                                     {
                                         "name": "Bacillota",
@@ -156,9 +83,9 @@
                                         "ncbiRank": "phylum",
                                         "ncbiID": 1239,
                                         "value": 0,
-                                        "summedValue": 2473,
+                                        "summedValue": 2346,
                                         "yield": 0,
-                                        "summedYield": 2415350,
+                                        "summedYield": 2280038,
                                         "children": [
                                             {
                                                 "name": "Bacilli",
@@ -166,9 +93,11 @@
                                                 "ncbiRank": "class",
                                                 "ncbiID": 91061,
                                                 "value": 0,
-                                                "summedValue": 2467,
+                                                "summedValue": 2340,
                                                 "yield": 0,
-                                                "summedYield": 2407724,
+                                                "summedYield": 2272412,
+                                                "meanIdentity": "88.3",
+                                                "meanMaxIdentity": "88.8",
                                                 "children": [
                                                     {
                                                         "name": "Bacillales",
@@ -176,9 +105,11 @@
                                                         "ncbiRank": "order",
                                                         "ncbiID": 1385,
                                                         "value": 0,
-                                                        "summedValue": 2159,
+                                                        "summedValue": 2052,
                                                         "yield": 0,
-                                                        "summedYield": 2089609,
+                                                        "summedYield": 1978780,
+                                                        "meanIdentity": "88.3",
+                                                        "meanMaxIdentity": "88.4",
                                                         "children": [
                                                             {
                                                                 "name": "Staphylococcaceae",
@@ -186,19 +117,23 @@
                                                                 "ncbiRank": "family",
                                                                 "ncbiID": 90964,
                                                                 "value": 0,
-                                                                "summedValue": 2150,
+                                                                "summedValue": 2046,
                                                                 "yield": 0,
-                                                                "summedYield": 2081061,
+                                                                "summedYield": 1973850,
+                                                                "meanIdentity": "91.9",
+                                                                "meanMaxIdentity": "91.8",
                                                                 "children": [
                                                                     {
                                                                         "name": "Staphylococcus",
                                                                         "rank": 7,
                                                                         "ncbiRank": "genus",
                                                                         "ncbiID": 1279,
-                                                                        "value": 2149,
-                                                                        "summedValue": 2149,
-                                                                        "yield": 2080167,
-                                                                        "summedYield": 2080167,
+                                                                        "value": 2044,
+                                                                        "summedValue": 2044,
+                                                                        "yield": 1972177,
+                                                                        "summedYield": 1972177,
+                                                                        "meanIdentity": "88.9",
+                                                                        "meanMaxIdentity": "89.1",
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -216,9 +151,9 @@
                                         "ncbiRank": "phylum",
                                         "ncbiID": 201174,
                                         "value": 0,
-                                        "summedValue": 21004,
+                                        "summedValue": 20431,
                                         "yield": 0,
-                                        "summedYield": 21145957,
+                                        "summedYield": 20536082,
                                         "children": [
                                             {
                                                 "name": "Actinomycetes",
@@ -226,9 +161,11 @@
                                                 "ncbiRank": "class",
                                                 "ncbiID": 1760,
                                                 "value": 0,
-                                                "summedValue": 21004,
+                                                "summedValue": 20431,
                                                 "yield": 0,
-                                                "summedYield": 21145957,
+                                                "summedYield": 20536082,
+                                                "meanIdentity": "85.0",
+                                                "meanMaxIdentity": "85.1",
                                                 "children": [
                                                     {
                                                         "name": "Bifidobacteriales",
@@ -236,9 +173,9 @@
                                                         "ncbiRank": "order",
                                                         "ncbiID": 85004,
                                                         "value": 0,
-                                                        "summedValue": 20945,
+                                                        "summedValue": 20366,
                                                         "yield": 0,
-                                                        "summedYield": 21084752,
+                                                        "summedYield": 20470477,
                                                         "children": [
                                                             {
                                                                 "name": "Bifidobacteriaceae",
@@ -246,20 +183,136 @@
                                                                 "ncbiRank": "family",
                                                                 "ncbiID": 31953,
                                                                 "value": 0,
-                                                                "summedValue": 20945,
+                                                                "summedValue": 20366,
                                                                 "yield": 0,
-                                                                "summedYield": 21084752,
+                                                                "summedYield": 20470477,
+                                                                "meanIdentity": "87.0",
+                                                                "meanMaxIdentity": "87.3",
                                                                 "children": [
                                                                     {
                                                                         "name": "Bifidobacterium",
                                                                         "rank": 7,
                                                                         "ncbiRank": "genus",
                                                                         "ncbiID": 1678,
-                                                                        "value": 20445,
-                                                                        "summedValue": 20445,
-                                                                        "yield": 20629557,
-                                                                        "summedYield": 20629557,
+                                                                        "value": 20075,
+                                                                        "summedValue": 20075,
+                                                                        "yield": 20211174,
+                                                                        "summedYield": 20211174,
+                                                                        "meanIdentity": "88.0",
+                                                                        "meanMaxIdentity": "88.2",
                                                                         "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pseudomonadati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 3379134,
+                                "value": 0,
+                                "summedValue": 65787,
+                                "yield": 0,
+                                "summedYield": 67536660,
+                                "meanIdentity": "90.6",
+                                "meanMaxIdentity": "91.7",
+                                "children": [
+                                    {
+                                        "name": "Pseudomonadota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1224,
+                                        "value": 0,
+                                        "summedValue": 65785,
+                                        "yield": 0,
+                                        "summedYield": 67534892,
+                                        "meanIdentity": "87.3",
+                                        "meanMaxIdentity": "87.6",
+                                        "children": [
+                                            {
+                                                "name": "Gammaproteobacteria",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1236,
+                                                "value": 0,
+                                                "summedValue": 65764,
+                                                "yield": 0,
+                                                "summedYield": 67514323,
+                                                "meanIdentity": "88.1",
+                                                "meanMaxIdentity": "88.5",
+                                                "children": [
+                                                    {
+                                                        "name": "Enterobacterales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 91347,
+                                                        "value": 0,
+                                                        "summedValue": 65689,
+                                                        "yield": 0,
+                                                        "summedYield": 67449618,
+                                                        "meanIdentity": "87.8",
+                                                        "meanMaxIdentity": "88.0",
+                                                        "children": [
+                                                            {
+                                                                "name": "Enterobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 543,
+                                                                "value": 3411,
+                                                                "summedValue": 64842,
+                                                                "yield": 3339353,
+                                                                "summedYield": 66641081,
+                                                                "meanIdentity": "87.5",
+                                                                "meanMaxIdentity": "87.8",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Enterobacter",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 547,
+                                                                        "value": 15913,
+                                                                        "summedValue": 61431,
+                                                                        "yield": 15963292,
+                                                                        "summedYield": 63301728,
+                                                                        "meanIdentity": "87.6",
+                                                                        "meanMaxIdentity": "88.0",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Enterobacter cloacae complex",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "species group",
+                                                                                "ncbiID": 354276,
+                                                                                "value": 41406,
+                                                                                "summedValue": 45518,
+                                                                                "yield": 42998301,
+                                                                                "summedYield": 47338436,
+                                                                                "meanIdentity": "87.7",
+                                                                                "meanMaxIdentity": "88.1",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Enterobacter hormaechei",
+                                                                                        "rank": 8,
+                                                                                        "ncbiRank": "species",
+                                                                                        "ncbiID": 158836,
+                                                                                        "value": 4112,
+                                                                                        "summedValue": 4112,
+                                                                                        "yield": 4340135,
+                                                                                        "summedYield": 4340135,
+                                                                                        "meanIdentity": "86.5",
+                                                                                        "meanMaxIdentity": "86.6",
+                                                                                        "children": [
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
                                                                         ]
                                                                     }
                                                                 ]
@@ -281,10 +334,10 @@
                 "rank": 0,
                 "ncbiRank": "no rank",
                 "ncbiID": 0,
-                "value": 4219,
-                "summedValue": 4219,
-                "yield": 3580899,
-                "summedYield": 3580899,
+                "value": 579,
+                "summedValue": 579,
+                "yield": 406839,
+                "summedYield": 406839,
                 "children": [
                 ]
             }
@@ -295,124 +348,48 @@
         "rank": 0,
         "ncbiRank": "no rank",
         "ncbiID": 1,
-        "value": 2214,
-        "summedValue": 98469,
-        "yield": 2067140,
-        "summedYield": 99511304,
+        "value": 2193,
+        "summedValue": 91919,
+        "yield": 2130096,
+        "summedYield": 93422260,
+        "meanIdentity": "87.9",
+        "meanMaxIdentity": "88.2",
         "children": [
             {
                 "name": "cellular organisms",
                 "rank": 0,
-                "ncbiRank": "no rank",
+                "ncbiRank": "cellular root",
                 "ncbiID": 131567,
                 "value": 0,
-                "summedValue": 92284,
+                "summedValue": 89189,
                 "yield": 0,
-                "summedYield": 94087205,
+                "summedYield": 90932576,
+                "meanIdentity": "86.4",
+                "meanMaxIdentity": "86.5",
                 "children": [
                     {
                         "name": "Bacteria",
                         "rank": 1,
-                        "ncbiRank": "superkingdom",
+                        "ncbiRank": "domain",
                         "ncbiID": 2,
-                        "value": 2170,
-                        "summedValue": 92036,
-                        "yield": 2056191,
-                        "summedYield": 93863265,
+                        "value": 2186,
+                        "summedValue": 89147,
+                        "yield": 2060893,
+                        "summedYield": 90885325,
+                        "meanIdentity": "87.6",
+                        "meanMaxIdentity": "88.1",
                         "children": [
                             {
-                                "name": "Pseudomonadota",
-                                "rank": 3,
-                                "ncbiRank": "phylum",
-                                "ncbiID": 1224,
-                                "value": 0,
-                                "summedValue": 67881,
-                                "yield": 0,
-                                "summedYield": 69682276,
-                                "children": [
-                                    {
-                                        "name": "Gammaproteobacteria",
-                                        "rank": 4,
-                                        "ncbiRank": "class",
-                                        "ncbiID": 1236,
-                                        "value": 0,
-                                        "summedValue": 67864,
-                                        "yield": 0,
-                                        "summedYield": 69666631,
-                                        "children": [
-                                            {
-                                                "name": "Enterobacterales",
-                                                "rank": 5,
-                                                "ncbiRank": "order",
-                                                "ncbiID": 91347,
-                                                "value": 0,
-                                                "summedValue": 67819,
-                                                "yield": 0,
-                                                "summedYield": 69628958,
-                                                "children": [
-                                                    {
-                                                        "name": "Enterobacteriaceae",
-                                                        "rank": 6,
-                                                        "ncbiRank": "family",
-                                                        "ncbiID": 543,
-                                                        "value": 5188,
-                                                        "summedValue": 67272,
-                                                        "yield": 5299602,
-                                                        "summedYield": 69097350,
-                                                        "children": [
-                                                            {
-                                                                "name": "Enterobacter",
-                                                                "rank": 7,
-                                                                "ncbiRank": "genus",
-                                                                "ncbiID": 547,
-                                                                "value": 17907,
-                                                                "summedValue": 62084,
-                                                                "yield": 17753225,
-                                                                "summedYield": 63797748,
-                                                                "children": [
-                                                                    {
-                                                                        "name": "Enterobacter cloacae complex",
-                                                                        "rank": 7,
-                                                                        "ncbiRank": "species group",
-                                                                        "ncbiID": 354276,
-                                                                        "value": 41751,
-                                                                        "summedValue": 44177,
-                                                                        "yield": 43453725,
-                                                                        "summedYield": 46044523,
-                                                                        "children": [
-                                                                            {
-                                                                                "name": "Enterobacter hormaechei",
-                                                                                "rank": 8,
-                                                                                "ncbiRank": "species",
-                                                                                "ncbiID": 158836,
-                                                                                "value": 2426,
-                                                                                "summedValue": 2426,
-                                                                                "yield": 2590798,
-                                                                                "summedYield": 2590798,
-                                                                                "children": [
-                                                                                ]
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "Terrabacteria group",
-                                "rank": 0,
-                                "ncbiRank": "clade",
+                                "name": "Bacillati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
                                 "ncbiID": 1783272,
                                 "value": 0,
-                                "summedValue": 23599,
+                                "summedValue": 22911,
                                 "yield": 0,
-                                "summedYield": 23678061,
+                                "summedYield": 22948128,
+                                "meanIdentity": "88.5",
+                                "meanMaxIdentity": "88.5",
                                 "children": [
                                     {
                                         "name": "Bacillota",
@@ -420,9 +397,9 @@
                                         "ncbiRank": "phylum",
                                         "ncbiID": 1239,
                                         "value": 0,
-                                        "summedValue": 2473,
+                                        "summedValue": 2346,
                                         "yield": 0,
-                                        "summedYield": 2415350,
+                                        "summedYield": 2280038,
                                         "children": [
                                             {
                                                 "name": "Bacilli",
@@ -430,9 +407,11 @@
                                                 "ncbiRank": "class",
                                                 "ncbiID": 91061,
                                                 "value": 0,
-                                                "summedValue": 2467,
+                                                "summedValue": 2340,
                                                 "yield": 0,
-                                                "summedYield": 2407724,
+                                                "summedYield": 2272412,
+                                                "meanIdentity": "88.3",
+                                                "meanMaxIdentity": "88.8",
                                                 "children": [
                                                     {
                                                         "name": "Bacillales",
@@ -440,9 +419,11 @@
                                                         "ncbiRank": "order",
                                                         "ncbiID": 1385,
                                                         "value": 0,
-                                                        "summedValue": 2159,
+                                                        "summedValue": 2052,
                                                         "yield": 0,
-                                                        "summedYield": 2089609,
+                                                        "summedYield": 1978780,
+                                                        "meanIdentity": "88.3",
+                                                        "meanMaxIdentity": "88.4",
                                                         "children": [
                                                             {
                                                                 "name": "Staphylococcaceae",
@@ -450,19 +431,23 @@
                                                                 "ncbiRank": "family",
                                                                 "ncbiID": 90964,
                                                                 "value": 0,
-                                                                "summedValue": 2150,
+                                                                "summedValue": 2046,
                                                                 "yield": 0,
-                                                                "summedYield": 2081061,
+                                                                "summedYield": 1973850,
+                                                                "meanIdentity": "91.9",
+                                                                "meanMaxIdentity": "91.8",
                                                                 "children": [
                                                                     {
                                                                         "name": "Staphylococcus",
                                                                         "rank": 7,
                                                                         "ncbiRank": "genus",
                                                                         "ncbiID": 1279,
-                                                                        "value": 2149,
-                                                                        "summedValue": 2149,
-                                                                        "yield": 2080167,
-                                                                        "summedYield": 2080167,
+                                                                        "value": 2044,
+                                                                        "summedValue": 2044,
+                                                                        "yield": 1972177,
+                                                                        "summedYield": 1972177,
+                                                                        "meanIdentity": "88.9",
+                                                                        "meanMaxIdentity": "89.1",
                                                                         "children": [
                                                                         ]
                                                                     }
@@ -480,9 +465,9 @@
                                         "ncbiRank": "phylum",
                                         "ncbiID": 201174,
                                         "value": 0,
-                                        "summedValue": 21004,
+                                        "summedValue": 20431,
                                         "yield": 0,
-                                        "summedYield": 21145957,
+                                        "summedYield": 20536082,
                                         "children": [
                                             {
                                                 "name": "Actinomycetes",
@@ -490,9 +475,11 @@
                                                 "ncbiRank": "class",
                                                 "ncbiID": 1760,
                                                 "value": 0,
-                                                "summedValue": 21004,
+                                                "summedValue": 20431,
                                                 "yield": 0,
-                                                "summedYield": 21145957,
+                                                "summedYield": 20536082,
+                                                "meanIdentity": "85.0",
+                                                "meanMaxIdentity": "85.1",
                                                 "children": [
                                                     {
                                                         "name": "Bifidobacteriales",
@@ -500,9 +487,9 @@
                                                         "ncbiRank": "order",
                                                         "ncbiID": 85004,
                                                         "value": 0,
-                                                        "summedValue": 20945,
+                                                        "summedValue": 20366,
                                                         "yield": 0,
-                                                        "summedYield": 21084752,
+                                                        "summedYield": 20470477,
                                                         "children": [
                                                             {
                                                                 "name": "Bifidobacteriaceae",
@@ -510,20 +497,136 @@
                                                                 "ncbiRank": "family",
                                                                 "ncbiID": 31953,
                                                                 "value": 0,
-                                                                "summedValue": 20945,
+                                                                "summedValue": 20366,
                                                                 "yield": 0,
-                                                                "summedYield": 21084752,
+                                                                "summedYield": 20470477,
+                                                                "meanIdentity": "87.0",
+                                                                "meanMaxIdentity": "87.3",
                                                                 "children": [
                                                                     {
                                                                         "name": "Bifidobacterium",
                                                                         "rank": 7,
                                                                         "ncbiRank": "genus",
                                                                         "ncbiID": 1678,
-                                                                        "value": 20445,
-                                                                        "summedValue": 20445,
-                                                                        "yield": 20629557,
-                                                                        "summedYield": 20629557,
+                                                                        "value": 20075,
+                                                                        "summedValue": 20075,
+                                                                        "yield": 20211174,
+                                                                        "summedYield": 20211174,
+                                                                        "meanIdentity": "88.0",
+                                                                        "meanMaxIdentity": "88.2",
                                                                         "children": [
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pseudomonadati",
+                                "rank": 2,
+                                "ncbiRank": "kingdom",
+                                "ncbiID": 3379134,
+                                "value": 0,
+                                "summedValue": 65787,
+                                "yield": 0,
+                                "summedYield": 67536660,
+                                "meanIdentity": "90.6",
+                                "meanMaxIdentity": "91.7",
+                                "children": [
+                                    {
+                                        "name": "Pseudomonadota",
+                                        "rank": 3,
+                                        "ncbiRank": "phylum",
+                                        "ncbiID": 1224,
+                                        "value": 0,
+                                        "summedValue": 65785,
+                                        "yield": 0,
+                                        "summedYield": 67534892,
+                                        "meanIdentity": "87.3",
+                                        "meanMaxIdentity": "87.6",
+                                        "children": [
+                                            {
+                                                "name": "Gammaproteobacteria",
+                                                "rank": 4,
+                                                "ncbiRank": "class",
+                                                "ncbiID": 1236,
+                                                "value": 0,
+                                                "summedValue": 65764,
+                                                "yield": 0,
+                                                "summedYield": 67514323,
+                                                "meanIdentity": "88.1",
+                                                "meanMaxIdentity": "88.5",
+                                                "children": [
+                                                    {
+                                                        "name": "Enterobacterales",
+                                                        "rank": 5,
+                                                        "ncbiRank": "order",
+                                                        "ncbiID": 91347,
+                                                        "value": 0,
+                                                        "summedValue": 65689,
+                                                        "yield": 0,
+                                                        "summedYield": 67449618,
+                                                        "meanIdentity": "87.8",
+                                                        "meanMaxIdentity": "88.0",
+                                                        "children": [
+                                                            {
+                                                                "name": "Enterobacteriaceae",
+                                                                "rank": 6,
+                                                                "ncbiRank": "family",
+                                                                "ncbiID": 543,
+                                                                "value": 3411,
+                                                                "summedValue": 64842,
+                                                                "yield": 3339353,
+                                                                "summedYield": 66641081,
+                                                                "meanIdentity": "87.5",
+                                                                "meanMaxIdentity": "87.8",
+                                                                "children": [
+                                                                    {
+                                                                        "name": "Enterobacter",
+                                                                        "rank": 7,
+                                                                        "ncbiRank": "genus",
+                                                                        "ncbiID": 547,
+                                                                        "value": 15913,
+                                                                        "summedValue": 61431,
+                                                                        "yield": 15963292,
+                                                                        "summedYield": 63301728,
+                                                                        "meanIdentity": "87.6",
+                                                                        "meanMaxIdentity": "88.0",
+                                                                        "children": [
+                                                                            {
+                                                                                "name": "Enterobacter cloacae complex",
+                                                                                "rank": 7,
+                                                                                "ncbiRank": "species group",
+                                                                                "ncbiID": 354276,
+                                                                                "value": 41406,
+                                                                                "summedValue": 45518,
+                                                                                "yield": 42998301,
+                                                                                "summedYield": 47338436,
+                                                                                "meanIdentity": "87.7",
+                                                                                "meanMaxIdentity": "88.1",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "name": "Enterobacter hormaechei",
+                                                                                        "rank": 8,
+                                                                                        "ncbiRank": "species",
+                                                                                        "ncbiID": 158836,
+                                                                                        "value": 4112,
+                                                                                        "summedValue": 4112,
+                                                                                        "yield": 4340135,
+                                                                                        "summedYield": 4340135,
+                                                                                        "meanIdentity": "86.5",
+                                                                                        "meanMaxIdentity": "86.6",
+                                                                                        "children": [
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
                                                                         ]
                                                                     }
                                                                 ]
@@ -545,10 +648,10 @@
                 "rank": 0,
                 "ncbiRank": "no rank",
                 "ncbiID": 0,
-                "value": 4219,
-                "summedValue": 4219,
-                "yield": 3580899,
-                "summedYield": 3580899,
+                "value": 579,
+                "summedValue": 579,
+                "yield": 406839,
+                "summedYield": 406839,
                 "children": [
                 ]
             }

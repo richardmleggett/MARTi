@@ -7,7 +7,43 @@ var amrHmSvg,
   amrHmMaxRectWidth,
   compareAmrHmGrey,
   compareAmrHmRead,
-  compareAmrHmPlotBy;
+  compareAmrHmPlotBy,
+  compareAmrHmMaxRows,
+  compareAmrHmShowValues;
+
+function rankedAmrHmRows(labels, samples, references, limit) {
+  var scores = {};
+  references.forEach(function(reference) {
+    scores[reference.category] = reference.values.reduce(function(sum, value) {
+      return sum + (Number(value.proportion) || 0);
+    }, 0);
+  });
+  scores.Other = samples.reduce(function(sum, sample) {
+    return sum + (sample.Other ? (Number(sample.Other.proportion) || 0) : 0);
+  }, 0);
+  return labels.slice().sort(function(a, b) {
+    if (a === b) return 0;
+    if (a === 'Other') return 1;
+    if (b === 'Other') return -1;
+    return (scores[b] || 0) - (scores[a] || 0) || a.localeCompare(b);
+  }).slice(0, Math.max(1, Number(limit) || 30));
+}
+
+function amrHmCsv(samples, rows, percentMode, displayName) {
+  function quote(value) { return '"' + String(value).replace(/"/g, '""') + '"'; }
+  var unit = percentMode ? 'AMR hit %' : 'AMR hit count';
+  var output = [['AMR category'].concat(samples.map(function(sample) {
+    var name = displayName ? displayName(sample.runId, sample.sample) : sample.sample;
+    return name + ' (' + sample.runId + ') ' + unit;
+  }))];
+  rows.forEach(function(row) {
+    output.push([row].concat(samples.map(function(sample) {
+      var cell = (sample.taxa || []).find(function(item) { return item.name === row; });
+      return cell ? (percentMode ? cell.proportion * 100 : cell.taxaReadCount) : 0;
+    })));
+  });
+  return output.map(function(line) { return line.map(quote).join(','); }).join('\r\n');
+}
 
 
 function initialiseAmrHm() {
@@ -70,6 +106,8 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
     compareAmrHmGrey = "off";
     compareAmrHmRead = "percent";
     compareAmrHmPlotBy = "cardId";
+    compareAmrHmMaxRows = 30;
+    compareAmrHmShowValues = false;
 
     d3.select("#compareAmrHmTopN").on("change", function(){
       updateAmrPlots(rawAmrData);
@@ -81,6 +119,16 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
     });
 
     d3.select("#compareAmrHmTopNNum").text(compareAmrHmTopN);
+
+    d3.select("#compareAmrHmMaxRows").on("input", function() {
+      compareAmrHmMaxRows = parseInt(this.value, 10);
+      d3.select("#compareAmrHmMaxRowsNum").text(compareAmrHmMaxRows);
+      plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
+    });
+
+    d3.selectAll("#compareAmrHmScaleMin, #compareAmrHmScaleMax").on("input", function() {
+      plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
+    });
 
 
 
@@ -114,11 +162,18 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
       plotAmrHm(orderedAmrHmData,compareAmrHmGenes);
     });
 
+    d3.select("#compareAmrHmShowValues").on("change", function() {
+      compareAmrHmShowValues = this.checked;
+      plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
+    });
+
 
 
 
     d3.select('#exportCompareAmrHmCSV').on('click', function(){
-      var csvToExport = generateCompareAmrCsv(compareAmrData);
+      var rows = rankedAmrHmRows(compareAmrHmGenes, orderedAmrHmData,
+        compareAmrCategoryReferenceDataArray, compareAmrHmMaxRows);
+      var csvToExport = amrHmCsv(orderedAmrHmData, rows, compareAmrHmRead === 'percent', compareSampleDisplayNameById);
       var date = getDate() + "_" + getTime();
       var outputFilename = "compare_amr_" + date;
       export_as_csv(csvToExport,outputFilename);
@@ -219,6 +274,20 @@ var marginAmrHm = {top: 30, right: 80, bottom: 30, left: 60},
 
 
 function plotAmrHm(data,taxa) {
+
+if (!Array.isArray(data) || !Array.isArray(taxa) || !data.length || !taxa.length) {
+  d3.select('#compareAmrHmRowsStatus').text('No AMR heatmap data for the selected samples.');
+  if (amrHmL1) amrHmL1.selectAll('.sample').remove();
+  if (amrHmL2) amrHmL2.selectAll('.axis').selectAll('*').remove();
+  if (amrHmLegend) amrHmLegend.style('display', 'none');
+  return;
+}
+amrHmLegend.style('display', null);
+
+var totalRows = taxa.length;
+taxa = rankedAmrHmRows(taxa, data, compareAmrCategoryReferenceDataArray, compareAmrHmMaxRows);
+d3.select('#compareAmrHmRowsStatus').text(totalRows > taxa.length ?
+  'Showing ' + taxa.length + ' of ' + totalRows + ' rows.' : 'Showing ' + totalRows + ' rows.');
 
 for (var [i, sample] of data.entries()){
   sample.index = i;
@@ -328,10 +397,6 @@ data.forEach(function(d) {
     } else {
       plotValue = readCount;
     };
-    if (plotValue > plotMaxValue) {
-      plotMaxValue = plotValue;
-    };
-
     return {name: name, taxaReadCount: readCount, totalAmrReadCount: d["totalAmrReadCount"], sample: d.sample, runId: d.runId, index: d.index, proportion: prop, plotValue: plotValue};
   });
 
@@ -346,21 +411,42 @@ data.forEach(function(d) {
     };
   }
 
+  d.taxa.forEach(function(cell) {
+    plotMaxValue = Math.max(plotMaxValue, cell.plotValue);
+  });
+
 });
 
 
 
 var amrHmDomain = [];
+var colourRange = HeatmapTaxaSelection.resolveContinuousColourRange({
+  min: $('#compareAmrHmScaleMin').val(),
+  max: $('#compareAmrHmScaleMax').val()
+}, plotMaxValue, compareAmrHmRead === 'percent');
+$('#compareAmrHmScaleRangeStatus').text(colourRange.error);
+var greyZeroCheckbox = $('#compareAmrHmGrey');
+if (colourRange.custom) {
+  if (!greyZeroCheckbox.prop('disabled')) greyZeroCheckbox.data('beforeCustomRange', greyZeroCheckbox.prop('checked'));
+  greyZeroCheckbox.prop('checked', true).prop('disabled', true);
+  compareAmrHmGrey = 'on';
+} else if (greyZeroCheckbox.prop('disabled')) {
+  var previousGreyZero = greyZeroCheckbox.data('beforeCustomRange') === true;
+  greyZeroCheckbox.prop('disabled', false).prop('checked', previousGreyZero).removeData('beforeCustomRange');
+  compareAmrHmGrey = previousGreyZero ? 'on' : 'off';
+}
 var colourPaletteLength = amrHmColourPalettes[amrHmColourPalette].length;
 
 for (var [i,col] of amrHmColourPalettes[amrHmColourPalette].entries()) {
-  var domainVal = (plotMaxValue/(colourPaletteLength-1))*i;
+  var domainVal = colourRange.domain[0] +
+    (colourRange.domain[1] - colourRange.domain[0]) * i / (colourPaletteLength - 1);
   amrHmDomain.push(domainVal);
 }
 
   var amrHmColour = d3.scale.linear()
     .range(amrHmColourPalettes[amrHmColourPalette])
-    .domain(amrHmDomain);
+    .domain(amrHmDomain)
+    .clamp(true);
 
   defs.select("#amrHmLegendGradient").selectAll("stop").remove();
 
@@ -434,6 +520,21 @@ if (data.length <= 10){
 
       rectanglesAmrHm.exit().remove();
 
+      var cellValues = sample.selectAll('text.amrHmCellValue')
+        .data(function(d) { return d.taxa; });
+      cellValues.enter().append('text').attr('class', 'amrHmCellValue');
+      cellValues.attr('x', function(d) { return xScaleAmrHm(d.index) + xScaleAmrHm.rangeBand() / 2; })
+        .attr('y', function(d) { return yScaleAmrHm(d.name) + yScaleAmrHm.rangeBand() / 2; })
+        .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+        .style('font-size', '9px').style('font-weight', '600')
+        .style('fill', '#222').style('stroke', 'white').style('stroke-width', '2px')
+        .style('paint-order', 'stroke').style('pointer-events', 'none')
+        .style('display', compareAmrHmShowValues && xScaleAmrHm.rangeBand() >= 42 ? null : 'none')
+        .text(function(d) {
+          return compareAmrHmRead === 'percent' ? d3.format('.3g')(d.plotValue * 100) + '%' : thousandKilo(d.plotValue);
+        });
+      cellValues.exit().remove();
+
       var maxLegendWidth = 250;
 
       var legendWidth = maxLegendWidth;
@@ -449,17 +550,17 @@ var legendPlotMaxVal,
 legendTitle;
 
 if(compareAmrHmRead == "percent"){
-  legendPlotMaxVal = plotMaxValue*100;
-  legendTitle = "AMR hits (%)";
+  legendPlotMaxVal = colourRange.domain[1] * 100;
+  legendTitle = "Of sample AMR hits (%)";
 } else {
-  legendPlotMaxVal = plotMaxValue;
+  legendPlotMaxVal = colourRange.domain[1];
   legendTitle = "AMR hits";
 }
 
 
       var legendXScale = d3.scale.linear()
       	 .range([0, legendWidth])
-      	 .domain([0,legendPlotMaxVal]);
+         .domain([colourRange.domain[0] * (compareAmrHmRead === 'percent' ? 100 : 1),legendPlotMaxVal]);
 
       var legendXAxis = d3.svg.axis()
       	  .orient("bottom")
@@ -513,7 +614,7 @@ if(compareAmrHmRead == "percent"){
             "<h5 class='mb-0'>" + d.name + "</h5>" +
             // "<small class='text-gray-800'>" + d.ncbiRank + "</small>" +
             "<hr class='toolTipLine'/>Hit count: " + thousandsSeparators(d.taxaReadCount) +
-            "<br/>AMR hit %: " + Math.round((d.proportion*10000))/100)
+            "<br/>Of sample AMR hits: " + Math.round((d.proportion*10000))/100 + "%")
                .style("left", (tooltipPos(d3.event.pageX)) + "px")
                .style("top", (d3.event.pageY - 35) + "px");
 
@@ -531,3 +632,7 @@ if(compareAmrHmRead == "percent"){
 
 
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { rankedAmrHmRows: rankedAmrHmRows, amrHmCsv: amrHmCsv };
+}

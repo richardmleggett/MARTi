@@ -8,6 +8,7 @@ const https = require('https');
 const path = require('path');
 const { sampleHasTaxon, suggestTaxa } = require('./services/taxonFilter');
 const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
+const { normalizeProjectSampleGroups } = require('./services/projectSampleGroups');
 const { calculateOrdination, calculateDendrogram, calculateDistanceMatrix } = require('./services/ordination');
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -41,7 +42,7 @@ process.argv.slice(2).forEach((arg, i, args) => {
 
 const restrictedMode = argv.r || false;
 
-const martiGuiVersion = "1.0.5";
+const martiGuiVersion = "1.0.6";
 
 if (argv.h || argv.help) {
   console.log(`
@@ -767,6 +768,8 @@ if (serverOptions["MARTiSampleDirectory"].length > 0) {
           var projectSamples = [];
           var projectHeatmapTaxaPresets = null;
           var projectHeatmapTaxaPresetsError = null;
+          var projectSampleGroups = [];
+          var projectSampleGroupsError = null;
 
           if (Object.prototype.hasOwnProperty.call(selectors, 'heatmapTaxaPresets')) {
             try {
@@ -775,6 +778,15 @@ if (serverOptions["MARTiSampleDirectory"].length > 0) {
               projectHeatmapTaxaPresets = [];
               projectHeatmapTaxaPresetsError = error.message;
               console.error(`Invalid heatmap presets for project ${project}: ${error.message}`);
+            }
+          }
+
+          if (Object.prototype.hasOwnProperty.call(selectors, 'sampleGroups')) {
+            try {
+              projectSampleGroups = normalizeProjectSampleGroups(selectors.sampleGroups);
+            } catch (error) {
+              projectSampleGroupsError = error.message;
+              console.error(`Invalid sample groups for project ${project}: ${error.message}`);
             }
           }
 
@@ -792,7 +804,9 @@ if (serverOptions["MARTiSampleDirectory"].length > 0) {
             "runs": projectRuns,
             "samples": projectSamples,
             "heatmapTaxaPresets": projectHeatmapTaxaPresets,
-            "heatmapTaxaPresetsError": projectHeatmapTaxaPresetsError
+            "heatmapTaxaPresetsError": projectHeatmapTaxaPresetsError,
+            "sampleGroups": projectSampleGroups,
+            "sampleGroupsError": projectSampleGroupsError
           };
         }
       }
@@ -1064,6 +1078,22 @@ io.on('connect', function(socket){
     callback({
       presets: config ? config.heatmapTaxaPresets : null,
       error: config ? config.heatmapTaxaPresetsError : null
+    });
+  });
+
+  socket.on('compare-sample-groups-request', (request, callback) => {
+    if (typeof callback !== 'function') return;
+    const client = request && clientData[request.clientId];
+    if (!client) {
+      callback({ groups: [] });
+      return;
+    }
+    const project = client.project || defaultProject;
+    const config = project && Object.prototype.hasOwnProperty.call(projectsDatabase, project) ?
+      projectsDatabase[project] : null;
+    callback({
+      groups: config ? config.sampleGroups : [],
+      error: config ? config.sampleGroupsError : null
     });
   });
 

@@ -409,12 +409,21 @@ socket.on('hb_ping', function(data){
     socket.emit('hb_pong', {beat: 1});
     });
 
+var latestGuiStatus = null;
+
+function renderGuiStatus() {
+  if (!latestGuiStatus) return;
+  $("#currentClientCount").text(latestGuiStatus.clientCount);
+  $("#currentGuiVersion").text("MARTi GUI v" + latestGuiStatus.martiGuiVersion);
+}
+
+$(renderGuiStatus);
+
 socket.on('current-client-count', function(data){
   console.log("current number of user: " + data.clientCount);
-  $("#currentClientCount").text(data.clientCount);
-  let guiVersion = "MARTi GUI v" + data.martiGuiVersion;
-  $("#currentGuiVersion").text(guiVersion);
-    });
+  latestGuiStatus = data;
+  renderGuiStatus();
+});
 
 socket.on('sample-removed', function(data){
   console.log("Sample removed: " + data.runId + " " + data.sampleId);

@@ -1,17 +1,37 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.15i",
-        "fileWritten": "2023-11-15T10:31:33"
+        "martiVersion": "v1.0.0",
+        "fileWritten": "2026-10-30T01:49:30"
     },
     "amr": {
-        "currentChunk": 20,
+        "currentChunk": 22,
         "chunkTime": {
-            "1": "15 Nov 2023 10:27:37",
-            "2": "15 Nov 2023 10:27:49",
-            "3": "15 Nov 2023 10:28:00"
+            "0": "29 Oct 2026 01:01:22",
+            "1": "29 Oct 2026 01:01:39",
+            "2": "29 Oct 2026 01:01:56",
+            "3": "29 Oct 2026 01:02:12",
+            "4": "29 Oct 2026 01:02:30",
+            "5": "29 Oct 2026 01:02:46",
+            "6": "29 Oct 2026 01:03:08",
+            "7": "29 Oct 2026 01:03:28",
+            "8": "29 Oct 2026 01:03:50",
+            "9": "29 Oct 2026 01:04:12",
+            "10": "29 Oct 2026 13:16:38",
+            "11": "29 Oct 2026 13:17:00",
+            "12": "29 Oct 2026 13:17:23",
+            "13": "29 Oct 2026 13:17:47",
+            "14": "29 Oct 2026 13:18:51",
+            "15": "29 Oct 2026 13:19:28",
+            "16": "29 Oct 2026 13:19:51",
+            "17": "29 Oct 2026 13:34:55",
+            "18": "29 Oct 2026 22:15:30",
+            "19": "29 Oct 2026 22:16:06",
+            "20": "29 Oct 2026 23:30:03",
+            "21": "30 Oct 2026 01:49:07"
         },
-        "readsWithAMRHits": 1,
+        "readsWithAMRHitsAndWalkout": 1,
+        "readsWithAMRHitsOnly": 0,
         "geneList": [
             {
                 "cardId": "ARO:3000804",
@@ -22,10 +42,10 @@
                 "geneFamily": "resistance-nodulation-cell division (RND) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1
+                    "21": 1
                 },
                 "averageAccuracy": {
-                    "3": 80.39
+                    "21": 80.39
                 },
                 "species": [
                     {
@@ -33,7 +53,7 @@
                         "ncbiID": 2986281,
                         "rank": 8,
                         "chunkCounts": {
-                            "3": 1
+                            "21": 1
                         },
                         "chunkPlasmidCounts": {
                         }

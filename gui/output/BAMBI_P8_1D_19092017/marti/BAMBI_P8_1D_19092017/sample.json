@@ -1,7 +1,7 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.15i"
+        "martiVersion": "v1.0.0"
     },
     "sample": {
         "id": "BAMBI_P8_1D_19092017",
@@ -9,18 +9,22 @@
         "barcode": 0,
         "runId": "BAMBI_P8_1D_19092017",
         "sequencingDate": "2017-09-19T22:01:59Z",
-        "analysisDate": "2023-11-15T10:25:38",
+        "analysisDate": "2026-10-27T21:21:53",
         "yieldBases": 186692555,
         "yieldGb": 0.186692555,
         "readsPassBasecall": 100000,
-        "readsFailedFilter": 59254,
-        "readsPassedFilter": 40746,
-        "readsWithClassification": 39942,
-        "readsUnclassified": 804,
-        "classifiedYield": 98305394,
-        "unclassifiedYield": 567519,
-        "readsWithPoorAlignments": 20,
-        "readsAnalysed": 40746,
+        "readsFailedFilter": 74295,
+        "readsPassedFilter": 25705,
+        "readsWithClassification": 25587,
+        "readsUnclassified": 118,
+        "classifiedYield": 62208451,
+        "unclassifiedYield": 80874,
+        "readsWithPoorAlignments": 7,
+        "readsFailedLCAFilter": 0,
+        "readsFailedGoodAlignment": 7,
+        "initialReadsClassified": 25594,
+        "readsWithoutAnyHits": 111,
+        "readsAnalysed": 25705,
         "sequencingStatus": "Complete",
         "martiStatus": "Complete",
         "analysis": {
@@ -28,15 +32,15 @@
             "classification": {
                 "algorithm": "BlastLCA",
                 "blastTool": "megablast",
-                "blastVersion": " 2.10.0+",
-                "database": "/ei/public/databases/blast/ncbi/nt_20230303/nt"
+                "blastVersion": "2.10.0+",
+                "database": "/ei/public/databases/blast/ncbi/nt_20251006/nt"
             },
             "accumulation": "true",
             "amr": {
                 "algorithm": "Blast",
                 "blastTool": "blastn",
-                "blastVersion": " 2.10.0+",
-                "database": "/ei/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/data/databases/card/CARD_3.2.7/nucleotide_fasta_protein_homolog_model.fasta"
+                "blastVersion": "2.10.0+",
+                "database": "/ei/projects/5/58b53cc8-0806-49c9-8b45-1b0721a3766b/data/databases/card/CARD_4.0.0/nucleotide_fasta_protein_homolog_model.fasta"
             }
         }
     }

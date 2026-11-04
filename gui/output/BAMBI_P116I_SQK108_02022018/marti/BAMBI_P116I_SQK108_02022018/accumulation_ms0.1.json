@@ -1,628 +1,3728 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.15i",
-        "fileWritten": "2023-11-15T10:28:52"
+        "martiVersion": "v1.0.0",
+        "fileWritten": "2026-10-27T18:42:36"
     },
     "accumulation": {
         "domain": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     1
                 ],
                 [
-                    9920,
+                    5175,
                     1
                 ],
                 [
-                    14920,
+                    9175,
                     1
                 ],
                 [
-                    19920,
+                    13175,
                     1
                 ],
                 [
-                    24920,
+                    17175,
                     1
                 ],
                 [
-                    29920,
+                    21175,
                     1
                 ],
                 [
-                    34920,
+                    25175,
+                    1
+                ],
+                [
+                    29175,
+                    1
+                ],
+                [
+                    33175,
                     1
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     1
                 ],
                 [
-                    1,
+                    177,
                     1
                 ],
                 [
-                    2,
+                    177,
                     1
                 ],
                 [
-                    2,
+                    177,
                     1
                 ],
                 [
-                    2,
+                    177,
                     1
                 ],
                 [
-                    2,
+                    177,
                     1
                 ],
                 [
-                    3,
+                    177,
+                    1
+                ],
+                [
+                    178,
+                    1
+                ],
+                [
+                    178,
                     1
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    1
+                ],
+                [
+                    5175,
+                    1
+                ],
+                [
+                    9175,
+                    1
+                ],
+                [
+                    13175,
+                    1
+                ],
+                [
+                    17175,
+                    1
+                ],
+                [
+                    21175,
+                    1
+                ],
+                [
+                    25175,
+                    1
+                ],
+                [
+                    29175,
+                    1
+                ],
+                [
+                    33175,
+                    1
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    177,
+                    1
+                ],
+                [
+                    178,
+                    1
+                ],
+                [
+                    178,
+                    1
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1163,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 767403,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 5109,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 3399478,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 9064,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 6006182,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 13023,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 8622885,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16974,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 11235743,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 20930,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 13835709,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 24886,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 16443092,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 28840,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 19034465,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 32786,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    },
+                    "bases": {
+                        "N": 21664392,
+                        "S": 1,
+                        "chao1": null,
+                        "shannon": 0.0,
+                        "pielou": null,
+                        "simpson": 0.0,
+                        "invSimpson": 1.0,
+                        "simpsonEvenness": 1.0
+                    }
+                }
             ]
         },
         "kingdom": {
             "reads": [
                 [
-                    4920,
-                    1
+                    1175,
+                    2
                 ],
                 [
-                    9920,
-                    1
+                    5175,
+                    2
                 ],
                 [
-                    14920,
-                    1
+                    9175,
+                    2
                 ],
                 [
-                    19920,
-                    1
+                    13175,
+                    2
                 ],
                 [
-                    24920,
-                    1
+                    17175,
+                    2
                 ],
                 [
-                    29920,
-                    1
+                    21175,
+                    2
                 ],
                 [
-                    34920,
-                    1
+                    25175,
+                    2
+                ],
+                [
+                    29175,
+                    2
+                ],
+                [
+                    33175,
+                    2
                 ]
             ],
             "time": [
                 [
-                    1,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    1,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    2,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    2,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    2,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    2,
-                    1
+                    177,
+                    2
                 ],
                 [
-                    3,
-                    1
+                    177,
+                    2
+                ],
+                [
+                    178,
+                    2
+                ],
+                [
+                    178,
+                    2
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    2
+                ],
+                [
+                    5175,
+                    2
+                ],
+                [
+                    9175,
+                    2
+                ],
+                [
+                    13175,
+                    2
+                ],
+                [
+                    17175,
+                    2
+                ],
+                [
+                    21175,
+                    2
+                ],
+                [
+                    25175,
+                    2
+                ],
+                [
+                    29175,
+                    2
+                ],
+                [
+                    33175,
+                    2
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    177,
+                    2
+                ],
+                [
+                    178,
+                    2
+                ],
+                [
+                    178,
+                    2
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1119,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.023707263283744846,
+                        "pielou": 0.034202351172507695,
+                        "simpson": 0.00712368457410828,
+                        "invSimpson": 1.0071747955545225,
+                        "simpsonEvenness": 0.5035873977772612
+                    },
+                    "bases": {
+                        "N": 738413,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.020625280425841767,
+                        "pielou": 0.029755989787306127,
+                        "simpson": 0.006051352883214456,
+                        "invSimpson": 1.0060881946977522,
+                        "simpsonEvenness": 0.5030440973488761
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4888,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.023161401624625814,
+                        "pielou": 0.03341483926388524,
+                        "simpson": 0.006931618499896874,
+                        "invSimpson": 1.0069800012053813,
+                        "simpsonEvenness": 0.5034900006026907
+                    },
+                    "bases": {
+                        "N": 3256410,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.023033651917574834,
+                        "pielou": 0.03323053539504778,
+                        "simpson": 0.006886798976299957,
+                        "invSimpson": 1.0069345558685567,
+                        "simpsonEvenness": 0.5034672779342784
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8649,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.023108793934815876,
+                        "pielou": 0.033338942410683824,
+                        "simpson": 0.00691315567750439,
+                        "invSimpson": 1.0069612800904846,
+                        "simpsonEvenness": 0.5034806400452423
+                    },
+                    "bases": {
+                        "N": 5739264,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02294765310345128,
+                        "pielou": 0.033106465332389395,
+                        "simpson": 0.006856655290406133,
+                        "invSimpson": 1.0069039935946116,
+                        "simpsonEvenness": 0.5034519967973058
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12427,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02214601550880448,
+                        "pielou": 0.031949946750002296,
+                        "simpson": 0.006576765111987903,
+                        "invSimpson": 1.0066203053049483,
+                        "simpsonEvenness": 0.5033101526524741
+                    },
+                    "bases": {
+                        "N": 8239480,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.022251141042595686,
+                        "pielou": 0.03210161083627368,
+                        "simpson": 0.006613356124463898,
+                        "invSimpson": 1.00665738377422,
+                        "simpsonEvenness": 0.50332869188711
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16217,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.022671464964203678,
+                        "pielou": 0.03270801007354453,
+                        "simpson": 0.006760000906342434,
+                        "invSimpson": 1.006806009536981,
+                        "simpsonEvenness": 0.5034030047684905
+                    },
+                    "bases": {
+                        "N": 10753180,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02355294084604052,
+                        "pielou": 0.033979710956933765,
+                        "simpson": 0.007069293821627909,
+                        "invSimpson": 1.0071196245393965,
+                        "simpsonEvenness": 0.5035598122696983
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 20007,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.022143603721183493,
+                        "pielou": 0.03194646727596182,
+                        "simpson": 0.006575926046216596,
+                        "invSimpson": 1.006619455093377,
+                        "simpsonEvenness": 0.5033097275466885
+                    },
+                    "bases": {
+                        "N": 13245356,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.023397756281395024,
+                        "pielou": 0.0337558269550972,
+                        "simpson": 0.00701467147549284,
+                        "invSimpson": 1.0070642246909287,
+                        "simpsonEvenness": 0.5035321123454644
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23785,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02417444574342042,
+                        "pielou": 0.034876352990271954,
+                        "simpson": 0.007288776474875247,
+                        "invSimpson": 1.007342292805951,
+                        "simpsonEvenness": 0.5036711464029755
+                    },
+                    "bases": {
+                        "N": 15739172,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.025180333978333712,
+                        "pielou": 0.03632754295846991,
+                        "simpson": 0.007646420712329904,
+                        "invSimpson": 1.0077053389758706,
+                        "simpsonEvenness": 0.5038526694879353
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27546,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.024020275471634853,
+                        "pielou": 0.03465393230371441,
+                        "simpson": 0.0072342242710423665,
+                        "invSimpson": 1.0072869396265505,
+                        "simpsonEvenness": 0.5036434698132752
+                    },
+                    "bases": {
+                        "N": 18206207,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02505589587528876,
+                        "pielou": 0.036148016724309326,
+                        "simpson": 0.007602016610843032,
+                        "invSimpson": 1.007660249958269,
+                        "simpsonEvenness": 0.5038301249791345
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 31313,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.0237194747570382,
+                        "pielou": 0.034219968604469964,
+                        "simpson": 0.007127991544111811,
+                        "invSimpson": 1.0071791645684496,
+                        "simpsonEvenness": 0.5035895822842248
+                    },
+                    "bases": {
+                        "N": 20716132,
+                        "S": 2,
+                        "chao1": null,
+                        "shannon": 0.02496942458876404,
+                        "pielou": 0.03602326502806083,
+                        "simpson": 0.0075711869132766285,
+                        "invSimpson": 1.007628947097705,
+                        "simpsonEvenness": 0.5038144735488524
+                    }
+                }
             ]
         },
         "phylum": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     3
                 ],
                 [
-                    9920,
+                    5175,
                     3
                 ],
                 [
-                    14920,
+                    9175,
                     3
                 ],
                 [
-                    19920,
+                    13175,
                     3
                 ],
                 [
-                    24920,
+                    17175,
                     3
                 ],
                 [
-                    29920,
+                    21175,
                     3
                 ],
                 [
-                    34920,
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
                     3
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    3,
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
                     3
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    3
+                ],
+                [
+                    5175,
+                    3
+                ],
+                [
+                    9175,
+                    3
+                ],
+                [
+                    13175,
+                    3
+                ],
+                [
+                    17175,
+                    3
+                ],
+                [
+                    21175,
+                    3
+                ],
+                [
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
+                    3
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1119,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06166336473348319,
+                        "pielou": 0.05612841342621433,
+                        "simpson": 0.019511867882804124,
+                        "invSimpson": 1.0199001571193642,
+                        "simpsonEvenness": 0.3399667190397881
+                    },
+                    "bases": {
+                        "N": 738413,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05763395011230438,
+                        "pielou": 0.05246068217767366,
+                        "simpson": 0.018077706922863257,
+                        "invSimpson": 1.0184105270348955,
+                        "simpsonEvenness": 0.3394701756782985
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4886,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.060539652920491974,
+                        "pielou": 0.05510556685460577,
+                        "simpson": 0.01909630446048749,
+                        "invSimpson": 1.019468072704104,
+                        "simpsonEvenness": 0.33982269090136796
+                    },
+                    "bases": {
+                        "N": 3255115,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06375099406127516,
+                        "pielou": 0.0580286555310272,
+                        "simpson": 0.020357416863729716,
+                        "invSimpson": 1.0207804532123916,
+                        "simpsonEvenness": 0.3402601510707972
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8647,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.059840027511343236,
+                        "pielou": 0.054468740363253734,
+                        "simpson": 0.018827986274660535,
+                        "invSimpson": 1.0191892818091846,
+                        "simpsonEvenness": 0.33972976060306154
+                    },
+                    "bases": {
+                        "N": 5737969,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.062323490365247675,
+                        "pielou": 0.05672928567074819,
+                        "simpson": 0.01979999642567143,
+                        "invSimpson": 1.020199955471812,
+                        "simpsonEvenness": 0.3400666518239373
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12424,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05651273199498347,
+                        "pielou": 0.05144010546568348,
+                        "simpson": 0.017587537508152673,
+                        "invSimpson": 1.01790239657948,
+                        "simpsonEvenness": 0.33930079885982667
+                    },
+                    "bases": {
+                        "N": 8237674,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.059879134063011985,
+                        "pielou": 0.05450433668060074,
+                        "simpson": 0.01887656080214939,
+                        "invSimpson": 1.0192397409418559,
+                        "simpsonEvenness": 0.33974658031395194
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16213,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05541631598180502,
+                        "pielou": 0.05044210460178665,
+                        "simpson": 0.01715653394470451,
+                        "invSimpson": 1.0174560187224557,
+                        "simpsonEvenness": 0.3391520062408186
+                    },
+                    "bases": {
+                        "N": 10750865,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05934873406370526,
+                        "pielou": 0.05402154579542891,
+                        "simpson": 0.018623562194582832,
+                        "invSimpson": 1.018976981183927,
+                        "simpsonEvenness": 0.3396589937279757
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 20001,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05492669321108522,
+                        "pielou": 0.049996430749627764,
+                        "simpson": 0.016987601197411162,
+                        "invSimpson": 1.0172811667666692,
+                        "simpsonEvenness": 0.3390937222555564
+                    },
+                    "bases": {
+                        "N": 13241360,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05867007974559439,
+                        "pielou": 0.05340380801376471,
+                        "simpson": 0.018368685044190536,
+                        "invSimpson": 1.0187124073614313,
+                        "simpsonEvenness": 0.33957080245381044
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23777,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05743591442094345,
+                        "pielou": 0.05228042232312478,
+                        "simpson": 0.017877665792006003,
+                        "invSimpson": 1.0182030946342575,
+                        "simpsonEvenness": 0.3394010315447525
+                    },
+                    "bases": {
+                        "N": 15733296,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06080798437887041,
+                        "pielou": 0.0553498126737598,
+                        "simpson": 0.019133429095034238,
+                        "invSimpson": 1.0195066583596395,
+                        "simpsonEvenness": 0.3398355527865465
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27536,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.057646531300563505,
+                        "pielou": 0.052472134068744694,
+                        "simpson": 0.017961176321585004,
+                        "invSimpson": 1.0182896804978727,
+                        "simpsonEvenness": 0.3394298934992909
+                    },
+                    "bases": {
+                        "N": 18198942,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06111470167619168,
+                        "pielou": 0.055628998789266595,
+                        "simpson": 0.01925459592091394,
+                        "invSimpson": 1.0196326139697731,
+                        "simpsonEvenness": 0.33987753798992437
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 31300,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05711918772614125,
+                        "pielou": 0.051992125261395954,
+                        "simpson": 0.017769735324439262,
+                        "invSimpson": 1.0180912113620413,
+                        "simpsonEvenness": 0.3393637371206804
+                    },
+                    "bases": {
+                        "N": 20707202,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06069858947557262,
+                        "pielou": 0.055250237141585105,
+                        "simpson": 0.019097411329709657,
+                        "invSimpson": 1.0194692230913551,
+                        "simpsonEvenness": 0.33982307436378506
+                    }
+                }
             ]
         },
         "class": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     3
                 ],
                 [
-                    9920,
+                    5175,
                     3
                 ],
                 [
-                    14920,
+                    9175,
                     3
                 ],
                 [
-                    19920,
+                    13175,
                     3
                 ],
                 [
-                    24920,
+                    17175,
                     3
                 ],
                 [
-                    29920,
+                    21175,
                     3
                 ],
                 [
-                    34920,
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
                     3
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    3,
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
                     3
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    4
+                ],
+                [
+                    5175,
+                    3
+                ],
+                [
+                    9175,
+                    3
+                ],
+                [
+                    13175,
+                    3
+                ],
+                [
+                    17175,
+                    3
+                ],
+                [
+                    21175,
+                    3
+                ],
+                [
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
+                    3
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1119,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.06422888236352685,
+                        "pielou": 0.0463313450338504,
+                        "simpson": 0.01952145131496663,
+                        "invSimpson": 1.0199101258677692,
+                        "simpsonEvenness": 0.2549775314669423
+                    },
+                    "bases": {
+                        "N": 737756,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.053071046504448785,
+                        "pielou": 0.04830734832648638,
+                        "simpson": 0.016338074200195285,
+                        "invSimpson": 1.0166094404710349,
+                        "simpsonEvenness": 0.33886981349034495
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4884,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05846500618744832,
+                        "pielou": 0.05321714201679622,
+                        "simpson": 0.018297642069140974,
+                        "invSimpson": 1.0186386860755912,
+                        "simpsonEvenness": 0.33954622869186374
+                    },
+                    "bases": {
+                        "N": 3253815,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.06177081001017988,
+                        "pielou": 0.056226214331779434,
+                        "simpson": 0.01957974447095623,
+                        "invSimpson": 1.0199707669854197,
+                        "simpsonEvenness": 0.3399902556618066
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8645,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.058666343187902315,
+                        "pielou": 0.05340040685238083,
+                        "simpson": 0.018376679787291295,
+                        "invSimpson": 1.0187207041732762,
+                        "simpsonEvenness": 0.33957356805775873
+                    },
+                    "bases": {
+                        "N": 5736669,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.061193711925114205,
+                        "pielou": 0.05570091701714143,
+                        "simpson": 0.019358606896347053,
+                        "invSimpson": 1.0197407605190707,
+                        "simpsonEvenness": 0.33991358683969025
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12422,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.055683345345469565,
+                        "pielou": 0.05068516520325532,
+                        "simpson": 0.0172729287848431,
+                        "invSimpson": 1.01757652688196,
+                        "simpsonEvenness": 0.33919217562732
+                    },
+                    "bases": {
+                        "N": 8236374,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05908399146752505,
+                        "pielou": 0.05378056669942666,
+                        "simpson": 0.018568751613499912,
+                        "invSimpson": 1.0189200737637276,
+                        "simpsonEvenness": 0.3396400245879092
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16210,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05442591459638481,
+                        "pielou": 0.049540602410671604,
+                        "simpson": 0.016794402279459053,
+                        "invSimpson": 1.0170812720334335,
+                        "simpsonEvenness": 0.33902709067781117
+                    },
+                    "bases": {
+                        "N": 10747884,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05785589055701328,
+                        "pielou": 0.05266270107642271,
+                        "simpson": 0.018081585630625674,
+                        "invSimpson": 1.0184145498913353,
+                        "simpsonEvenness": 0.3394715166304451
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19997,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.053838700171728315,
+                        "pielou": 0.04900609680690816,
+                        "simpson": 0.01659598842311716,
+                        "invSimpson": 1.0168760633755252,
+                        "simpsonEvenness": 0.33895868779184174
+                    },
+                    "bases": {
+                        "N": 13237661,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.0571502123044983,
+                        "pielou": 0.052020365049606096,
+                        "simpson": 0.017822373376947365,
+                        "invSimpson": 1.018145774138864,
+                        "simpsonEvenness": 0.33938192471295464
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23773,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05653175324866704,
+                        "pielou": 0.05145741935692589,
+                        "simpson": 0.017548638367828828,
+                        "invSimpson": 1.0178620937922818,
+                        "simpsonEvenness": 0.33928736459742725
+                    },
+                    "bases": {
+                        "N": 15729597,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05954464257914572,
+                        "pielou": 0.05419986941101305,
+                        "simpson": 0.01867415009683948,
+                        "invSimpson": 1.0190295100232836,
+                        "simpsonEvenness": 0.3396765033410945
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27531,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.056678316471769255,
+                        "pielou": 0.05159082695177438,
+                        "simpson": 0.017606131077053333,
+                        "invSimpson": 1.0179216622110598,
+                        "simpsonEvenness": 0.33930722073701997
+                    },
+                    "bases": {
+                        "N": 18194563,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.0598330265878458,
+                        "pielou": 0.054462367848063756,
+                        "simpson": 0.018784712845265727,
+                        "invSimpson": 1.0191443336556,
+                        "simpsonEvenness": 0.33971477788520005
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 31294,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05609988491116952,
+                        "pielou": 0.05106431585539752,
+                        "simpson": 0.017394862542391865,
+                        "invSimpson": 1.017702800320584,
+                        "simpsonEvenness": 0.33923426677352797
+                    },
+                    "bases": {
+                        "N": 20702256,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05943107716889372,
+                        "pielou": 0.05409649771981371,
+                        "simpson": 0.01863094270298049,
+                        "invSimpson": 1.0189846445274071,
+                        "simpsonEvenness": 0.33966154817580235
+                    }
+                }
             ]
         },
         "order": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     3
                 ],
                 [
-                    9920,
+                    5175,
                     3
                 ],
                 [
-                    14920,
+                    9175,
                     3
                 ],
                 [
-                    19920,
+                    13175,
                     3
                 ],
                 [
-                    24920,
+                    17175,
                     3
                 ],
                 [
-                    29920,
+                    21175,
                     3
                 ],
                 [
-                    34920,
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
                     3
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    1,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    2,
+                    177,
                     3
                 ],
                 [
-                    3,
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
                     3
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    5
+                ],
+                [
+                    5175,
+                    3
+                ],
+                [
+                    9175,
+                    3
+                ],
+                [
+                    13175,
+                    3
+                ],
+                [
+                    17175,
+                    3
+                ],
+                [
+                    21175,
+                    3
+                ],
+                [
+                    25175,
+                    3
+                ],
+                [
+                    29175,
+                    3
+                ],
+                [
+                    33175,
+                    3
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    5
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    177,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ],
+                [
+                    178,
+                    3
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1119,
+                        "S": 5,
+                        "chao1": null,
+                        "shannon": 0.06664476015905663,
+                        "pielou": 0.04140871769216847,
+                        "simpson": 0.019529437508435388,
+                        "invSimpson": 1.0199184333069697,
+                        "simpsonEvenness": 0.20398368666139394
+                    },
+                    "bases": {
+                        "N": 737103,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.048376209787123904,
+                        "pielou": 0.0440339237837693,
+                        "simpson": 0.014602855863084074,
+                        "invSimpson": 1.0148192593716865,
+                        "simpsonEvenness": 0.3382730864572288
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4881,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.055294546802220346,
+                        "pielou": 0.05033126551793451,
+                        "simpson": 0.01709718130262794,
+                        "invSimpson": 1.0173945795834491,
+                        "simpsonEvenness": 0.33913152652781636
+                    },
+                    "bases": {
+                        "N": 3251677,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05845605407974592,
+                        "pielou": 0.053208993457204506,
+                        "simpson": 0.018298052932720688,
+                        "invSimpson": 1.018639112397998,
+                        "simpsonEvenness": 0.3395463707993327
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8641,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.056289337210162244,
+                        "pielou": 0.05123676276951534,
+                        "simpson": 0.017472806986540745,
+                        "invSimpson": 1.017783535265778,
+                        "simpsonEvenness": 0.339261178421926
+                    },
+                    "bases": {
+                        "N": 5733778,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.058649970808147545,
+                        "pielou": 0.053385504070094805,
+                        "simpson": 0.0183755818910184,
+                        "invSimpson": 1.018719564786721,
+                        "simpsonEvenness": 0.33957318826224037
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12415,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.052739722087252,
+                        "pielou": 0.04800576384521459,
+                        "simpson": 0.016170194130396776,
+                        "invSimpson": 1.0164359669059875,
+                        "simpsonEvenness": 0.3388119889686625
+                    },
+                    "bases": {
+                        "N": 8231049,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05578023929588083,
+                        "pielou": 0.050773361877742486,
+                        "simpson": 0.017305877698062355,
+                        "invSimpson": 1.0176106453730727,
+                        "simpsonEvenness": 0.3392035484576909
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16200,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05116503431195028,
+                        "pielou": 0.04657242126244522,
+                        "simpson": 0.015586137783874299,
+                        "invSimpson": 1.0158329117275804,
+                        "simpsonEvenness": 0.33861097057586015
+                    },
+                    "bases": {
+                        "N": 10740380,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.0542431976244102,
+                        "pielou": 0.049374286255409836,
+                        "simpson": 0.016716527698733663,
+                        "invSimpson": 1.0170007207175062,
+                        "simpsonEvenness": 0.33900024023916875
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19985,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05067124887634551,
+                        "pielou": 0.04612295838942074,
+                        "simpson": 0.01542049206406948,
+                        "invSimpson": 1.0156620079331093,
+                        "simpsonEvenness": 0.3385540026443698
+                    },
+                    "bases": {
+                        "N": 13228903,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.053718932404540606,
+                        "pielou": 0.04889707948712839,
+                        "simpson": 0.016528494752996892,
+                        "invSimpson": 1.0168062772178088,
+                        "simpsonEvenness": 0.3389354257392696
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23759,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05343855285425331,
+                        "pielou": 0.0486418670221129,
+                        "simpson": 0.016396330620378152,
+                        "invSimpson": 1.016669651741661,
+                        "simpsonEvenness": 0.33888988391388697
+                    },
+                    "bases": {
+                        "N": 15719596,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05626032409759041,
+                        "pielou": 0.05121035389636591,
+                        "simpson": 0.017431963678057882,
+                        "invSimpson": 1.0177412281222897,
+                        "simpsonEvenness": 0.33924707604076326
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27510,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.052860178461300915,
+                        "pielou": 0.04811540796197115,
+                        "simpson": 0.016185019003036483,
+                        "invSimpson": 1.0164512833364614,
+                        "simpsonEvenness": 0.33881709444548713
+                    },
+                    "bases": {
+                        "N": 18178594,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05546082969061633,
+                        "pielou": 0.05048262272566935,
+                        "simpson": 0.017133798560183267,
+                        "invSimpson": 1.0174324832160102,
+                        "simpsonEvenness": 0.3391441610720034
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 31273,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.052738444710962715,
+                        "pielou": 0.04800460112720892,
+                        "simpson": 0.01614450251488564,
+                        "invSimpson": 1.0164094245101578,
+                        "simpsonEvenness": 0.3388031415033859
+                    },
+                    "bases": {
+                        "N": 20686287,
+                        "S": 3,
+                        "chao1": null,
+                        "shannon": 0.05558490115170094,
+                        "pielou": 0.05059555743645346,
+                        "simpson": 0.017179960382317283,
+                        "invSimpson": 1.017480270741122,
+                        "simpsonEvenness": 0.33916009024704064
+                    }
+                }
             ]
         },
         "family": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     4
                 ],
                 [
-                    9920,
+                    5175,
                     4
                 ],
                 [
-                    14920,
+                    9175,
                     4
                 ],
                 [
-                    19920,
+                    13175,
                     4
                 ],
                 [
-                    24920,
+                    17175,
                     4
                 ],
                 [
-                    29920,
+                    21175,
                     4
                 ],
                 [
-                    34920,
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
                     4
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    3,
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
                     4
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    6
+                ],
+                [
+                    5175,
+                    4
+                ],
+                [
+                    9175,
+                    4
+                ],
+                [
+                    13175,
+                    4
+                ],
+                [
+                    17175,
+                    4
+                ],
+                [
+                    21175,
+                    4
+                ],
+                [
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
+                    4
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    6
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1118,
+                        "S": 6,
+                        "chao1": null,
+                        "shannon": 0.06378094415610547,
+                        "pielou": 0.03559682270499413,
+                        "simpson": 0.017786681430230877,
+                        "invSimpson": 1.018108776468365,
+                        "simpsonEvenness": 0.16968479607806083
+                    },
+                    "bases": {
+                        "N": 736595,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04685565393744155,
+                        "pielou": 0.03379920978657818,
+                        "simpson": 0.01325434516032109,
+                        "invSimpson": 1.0134323825955682,
+                        "simpsonEvenness": 0.25335809564889206
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4880,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.056986542449790525,
+                        "pielou": 0.0411071010948606,
+                        "simpson": 0.016705438726148825,
+                        "invSimpson": 1.0169892516282273,
+                        "simpsonEvenness": 0.2542473129070568
+                    },
+                    "bases": {
+                        "N": 3251169,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.0611307933262627,
+                        "pielou": 0.04409654618870367,
+                        "simpson": 0.018006466996411064,
+                        "invSimpson": 1.018336645192902,
+                        "simpsonEvenness": 0.2545841612982255
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8640,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05914156229255934,
+                        "pielou": 0.042661619314950536,
+                        "simpson": 0.017259328918038497,
+                        "invSimpson": 1.01756244493172,
+                        "simpsonEvenness": 0.25439061123293
+                    },
+                    "bases": {
+                        "N": 5733270,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.06208973781716144,
+                        "pielou": 0.04478827841945737,
+                        "simpson": 0.018218585474469084,
+                        "invSimpson": 1.0185566615999486,
+                        "simpsonEvenness": 0.25463916539998716
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12414,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05552499024835513,
+                        "pielou": 0.040052814038355,
+                        "simpson": 0.016023358152129075,
+                        "invSimpson": 1.0162842871168545,
+                        "simpsonEvenness": 0.2540710717792136
+                    },
+                    "bases": {
+                        "N": 8230541,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.059085901684222744,
+                        "pielou": 0.042621468673140504,
+                        "simpson": 0.017199062187552072,
+                        "invSimpson": 1.0175000465769135,
+                        "simpsonEvenness": 0.2543750116442284
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16199,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.053853096733333765,
+                        "pielou": 0.03884679779684713,
+                        "simpson": 0.015474749910159735,
+                        "invSimpson": 1.0157179817467836,
+                        "simpsonEvenness": 0.2539294954366959
+                    },
+                    "bases": {
+                        "N": 10739872,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05736939747230006,
+                        "pielou": 0.04138327261603757,
+                        "simpson": 0.016635979587066974,
+                        "invSimpson": 1.0169174173975586,
+                        "simpsonEvenness": 0.25422935434938965
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19983,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05318859505341729,
+                        "pielou": 0.038367461157708185,
+                        "simpson": 0.015234066907128696,
+                        "invSimpson": 1.015469733867908,
+                        "simpsonEvenness": 0.253867433466977
+                    },
+                    "bases": {
+                        "N": 13227729,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05659133581628825,
+                        "pielou": 0.04082201976972052,
+                        "simpson": 0.016366494469527204,
+                        "invSimpson": 1.0166388135189648,
+                        "simpsonEvenness": 0.2541597033797412
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23757,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05608509340342402,
+                        "pielou": 0.040456843060457076,
+                        "simpson": 0.01624162723652811,
+                        "invSimpson": 1.0165097728123054,
+                        "simpsonEvenness": 0.25412744320307634
+                    },
+                    "bases": {
+                        "N": 15718422,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05923324154405696,
+                        "pielou": 0.04272775191569455,
+                        "simpson": 0.01729794524846251,
+                        "invSimpson": 1.0176024311385368,
+                        "simpsonEvenness": 0.2544006077846342
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27508,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05553751122603051,
+                        "pielou": 0.040061846014554675,
+                        "simpson": 0.01605251156040033,
+                        "invSimpson": 1.0163143986330585,
+                        "simpsonEvenness": 0.2540785996582646
+                    },
+                    "bases": {
+                        "N": 18177420,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.058415911317424234,
+                        "pielou": 0.04213817278332871,
+                        "simpson": 0.017018936556500552,
+                        "invSimpson": 1.0173135955405703,
+                        "simpsonEvenness": 0.2543283988851426
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 31270,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05525571019659041,
+                        "pielou": 0.039858569540709356,
+                        "simpson": 0.01596632443691426,
+                        "invSimpson": 1.0162253841849243,
+                        "simpsonEvenness": 0.25405634604623106
+                    },
+                    "bases": {
+                        "N": 20684603,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05839924808487251,
+                        "pielou": 0.04212615280184494,
+                        "simpson": 0.01703195001995117,
+                        "invSimpson": 1.017327063702932,
+                        "simpsonEvenness": 0.254331765925733
+                    }
+                }
             ]
         },
         "genus": {
             "reads": [
                 [
-                    4920,
+                    1175,
                     4
                 ],
                 [
-                    9920,
+                    5175,
                     4
                 ],
                 [
-                    14920,
+                    9175,
                     4
                 ],
                 [
-                    19920,
+                    13175,
                     4
                 ],
                 [
-                    24920,
+                    17175,
                     4
                 ],
                 [
-                    29920,
+                    21175,
                     4
                 ],
                 [
-                    34920,
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
                     4
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    3,
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
                     4
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    6
+                ],
+                [
+                    5175,
+                    4
+                ],
+                [
+                    9175,
+                    4
+                ],
+                [
+                    13175,
+                    4
+                ],
+                [
+                    17175,
+                    4
+                ],
+                [
+                    21175,
+                    4
+                ],
+                [
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
+                    4
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    6
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 1108,
+                        "S": 6,
+                        "chao1": null,
+                        "shannon": 0.05908346692673405,
+                        "pielou": 0.032975110745299435,
+                        "simpson": 0.01616240274211833,
+                        "invSimpson": 1.0164279173586837,
+                        "simpsonEvenness": 0.16940465289311393
+                    },
+                    "bases": {
+                        "N": 729881,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04239406064883208,
+                        "pielou": 0.030580850530607998,
+                        "simpson": 0.011759931198938034,
+                        "invSimpson": 1.0118998728853459,
+                        "simpsonEvenness": 0.25297496822133647
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 4826,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05396463567405191,
+                        "pielou": 0.03892725613516717,
+                        "simpson": 0.015662158748140143,
+                        "invSimpson": 1.015911365073826,
+                        "simpsonEvenness": 0.2539778412684565
+                    },
+                    "bases": {
+                        "N": 3215108,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.058742268164851515,
+                        "pielou": 0.04237358948600046,
+                        "simpson": 0.017181542104926617,
+                        "invSimpson": 1.0174819082475566,
+                        "simpsonEvenness": 0.25437047706188914
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 8553,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.054260353634088404,
+                        "pielou": 0.039140571552390396,
+                        "simpson": 0.01558450633787234,
+                        "invSimpson": 1.0158312282143147,
+                        "simpsonEvenness": 0.2539578070535787
+                    },
+                    "bases": {
+                        "N": 5675835,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05782042759932339,
+                        "pielou": 0.0417086220798116,
+                        "simpson": 0.01675398123017624,
+                        "invSimpson": 1.0170394600235837,
+                        "simpsonEvenness": 0.2542598650058959
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 12281,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.051782941416767106,
+                        "pielou": 0.03735349639230681,
+                        "simpson": 0.014746030612673211,
+                        "invSimpson": 1.0149667304784804,
+                        "simpsonEvenness": 0.2537416826196201
+                    },
+                    "bases": {
+                        "N": 8141940,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05582769073412225,
+                        "pielou": 0.04027116628320045,
+                        "simpson": 0.016083590241149914,
+                        "invSimpson": 1.0163465006596362,
+                        "simpsonEvenness": 0.25408662516490904
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16046,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05068181657992146,
+                        "pielou": 0.03655920272154837,
+                        "simpson": 0.014388281267076808,
+                        "invSimpson": 1.014598326088872,
+                        "simpsonEvenness": 0.253649581522218
+                    },
+                    "bases": {
+                        "N": 10638166,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.0545834743929301,
+                        "pielou": 0.03937365391058499,
+                        "simpson": 0.015676072936152807,
+                        "invSimpson": 1.0159257257749623,
+                        "simpsonEvenness": 0.2539814314437406
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19800,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04977486454437066,
+                        "pielou": 0.03590497511954172,
+                        "simpson": 0.014074517906336181,
+                        "invSimpson": 1.014275437811434,
+                        "simpsonEvenness": 0.2535688594528585
+                    },
+                    "bases": {
+                        "N": 13106232,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05314479360655118,
+                        "pielou": 0.03833586509261944,
+                        "simpson": 0.015186860926357904,
+                        "invSimpson": 1.0154210583955483,
+                        "simpsonEvenness": 0.2538552645988871
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 23543,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05238082682729749,
+                        "pielou": 0.037784779550702835,
+                        "simpson": 0.014960299814360978,
+                        "invSimpson": 1.015187509510065,
+                        "simpsonEvenness": 0.2537968773775163
+                    },
+                    "bases": {
+                        "N": 15576971,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05533874561932979,
+                        "pielou": 0.03991846693701147,
+                        "simpson": 0.015943240046050966,
+                        "invSimpson": 1.01620154516981,
+                        "simpsonEvenness": 0.2540503862924525
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 27255,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05176490740270908,
+                        "pielou": 0.037340487600982394,
+                        "simpson": 0.014749186065910136,
+                        "invSimpson": 1.0149699811025954,
+                        "simpsonEvenness": 0.25374249527564885
+                    },
+                    "bases": {
+                        "N": 18012335,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05460930263625047,
+                        "pielou": 0.03939228504986157,
+                        "simpson": 0.015694614592258183,
+                        "invSimpson": 1.015944863072914,
+                        "simpsonEvenness": 0.2539862157682285
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 30983,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05142167315330259,
+                        "pielou": 0.0370928964262414,
+                        "simpson": 0.014644886032785132,
+                        "invSimpson": 1.014862546329944,
+                        "simpsonEvenness": 0.253715636582486
+                    },
+                    "bases": {
+                        "N": 20497757,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05458649593341498,
+                        "pielou": 0.039375833491321684,
+                        "simpson": 0.015705092332276238,
+                        "invSimpson": 1.0159556777241583,
+                        "simpsonEvenness": 0.2539889194310396
+                    }
+                }
             ]
         },
         "species": {
             "reads": [
                 [
-                    4920,
+                    1175,
+                    3
+                ],
+                [
+                    5175,
                     4
                 ],
                 [
-                    9920,
+                    9175,
                     4
                 ],
                 [
-                    14920,
+                    13175,
                     4
                 ],
                 [
-                    19920,
-                    5
-                ],
-                [
-                    24920,
+                    17175,
                     4
                 ],
                 [
-                    29920,
+                    21175,
                     4
                 ],
                 [
-                    34920,
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
                     4
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
+                    3
+                ],
+                [
+                    177,
                     4
                 ],
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
-                    5
-                ],
-                [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    3,
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
                     4
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    7
+                ],
+                [
+                    5175,
+                    4
+                ],
+                [
+                    9175,
+                    4
+                ],
+                [
+                    13175,
+                    4
+                ],
+                [
+                    17175,
+                    4
+                ],
+                [
+                    21175,
+                    4
+                ],
+                [
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
+                    4
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    7
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 910,
+                        "S": 7,
+                        "chao1": null,
+                        "shannon": 0.07855782948464478,
+                        "pielou": 0.04037073835232448,
+                        "simpson": 0.021830696775751557,
+                        "invSimpson": 1.0223179123529977,
+                        "simpsonEvenness": 0.14604541605042826
+                    },
+                    "bases": {
+                        "N": 598285,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05028225451925627,
+                        "pielou": 0.03627097961982385,
+                        "simpson": 0.014333852537323222,
+                        "invSimpson": 1.0145422997170206,
+                        "simpsonEvenness": 0.25363557492925515
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 3952,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.049459271384874826,
+                        "pielou": 0.03567732277647016,
+                        "simpson": 0.014100890852169479,
+                        "invSimpson": 1.0143025698282229,
+                        "simpsonEvenness": 0.2535756424570557
+                    },
+                    "bases": {
+                        "N": 2633152,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.053837901694785764,
+                        "pielou": 0.03883583689346747,
+                        "simpson": 0.015498005409512627,
+                        "invSimpson": 1.0157419746172878,
+                        "simpsonEvenness": 0.25393549365432194
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 7009,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05167130392170371,
+                        "pielou": 0.0372729669620542,
+                        "simpson": 0.014763441032473179,
+                        "invSimpson": 1.0149846662693318,
+                        "simpsonEvenness": 0.25374616656733295
+                    },
+                    "bases": {
+                        "N": 4657246,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05524038288554836,
+                        "pielou": 0.03984751322289409,
+                        "simpson": 0.015957902593117468,
+                        "invSimpson": 1.0162166869031002,
+                        "simpsonEvenness": 0.25405417172577505
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 10117,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.050402344959518335,
+                        "pielou": 0.03635760656113597,
+                        "simpson": 0.014360322665067926,
+                        "invSimpson": 1.014569546047392,
+                        "simpsonEvenness": 0.253642386511848
+                    },
+                    "bases": {
+                        "N": 6718651,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05465996793392375,
+                        "pielou": 0.039428832336710774,
+                        "simpson": 0.015748213786634047,
+                        "invSimpson": 1.0160001881705705,
+                        "simpsonEvenness": 0.2540000470426426
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 13220,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04965178782431427,
+                        "pielou": 0.035816194032704605,
+                        "simpson": 0.01415151709347906,
+                        "invSimpson": 1.0143546572712239,
+                        "simpsonEvenness": 0.25358866431780597
+                    },
+                    "bases": {
+                        "N": 8780561,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.0540359267097158,
+                        "pielou": 0.038978681746973234,
+                        "simpson": 0.015563002917561852,
+                        "invSimpson": 1.0158090390382377,
+                        "simpsonEvenness": 0.25395225975955943
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16282,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04945490898432149,
+                        "pielou": 0.03567417596964783,
+                        "simpson": 0.01405803266500516,
+                        "invSimpson": 1.0142584788260958,
+                        "simpsonEvenness": 0.25356461970652394
+                    },
+                    "bases": {
+                        "N": 10800708,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052918078097663745,
+                        "pielou": 0.038172324422437176,
+                        "simpson": 0.0151779120177723,
+                        "invSimpson": 1.015411831439392,
+                        "simpsonEvenness": 0.253852957859848
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19355,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.051319441261326156,
+                        "pielou": 0.03701915170445385,
+                        "simpson": 0.014701677537686808,
+                        "invSimpson": 1.0149210418839916,
+                        "simpsonEvenness": 0.2537302604709979
+                    },
+                    "bases": {
+                        "N": 12831218,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05444744918155324,
+                        "pielou": 0.03927553246164035,
+                        "simpson": 0.015704534030893225,
+                        "invSimpson": 1.0159551014648138,
+                        "simpsonEvenness": 0.25398877536620346
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 22371,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05095467305950166,
+                        "pielou": 0.03675602706653076,
+                        "simpson": 0.014588047118680336,
+                        "invSimpson": 1.0148040086950694,
+                        "simpsonEvenness": 0.25370100217376734
+                    },
+                    "bases": {
+                        "N": 14816739,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05395368936874011,
+                        "pielou": 0.03891936004497247,
+                        "simpson": 0.015555522499338004,
+                        "invSimpson": 1.01580132029267,
+                        "simpsonEvenness": 0.2539503300731675
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 25401,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04969249262105682,
+                        "pielou": 0.035845556336905046,
+                        "simpson": 0.014181486090776074,
+                        "invSimpson": 1.0143854937705927,
+                        "simpsonEvenness": 0.2535963734426482
+                    },
+                    "bases": {
+                        "N": 16850208,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052555829054773545,
+                        "pielou": 0.03791101697356495,
+                        "simpson": 0.015115161657589415,
+                        "invSimpson": 1.0153471361007331,
+                        "simpsonEvenness": 0.2538367840251833
+                    }
+                }
             ]
         },
         "subspecies": {
             "reads": [
                 [
-                    4920,
+                    1175,
+                    3
+                ],
+                [
+                    5175,
                     4
                 ],
                 [
-                    9920,
+                    9175,
                     4
                 ],
                 [
-                    14920,
+                    13175,
                     4
                 ],
                 [
-                    19920,
-                    5
-                ],
-                [
-                    24920,
+                    17175,
                     4
                 ],
                 [
-                    29920,
+                    21175,
                     4
                 ],
                 [
-                    34920,
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
                     4
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
+                    3
+                ],
+                [
+                    177,
                     4
                 ],
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
-                    5
-                ],
-                [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    3,
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
                     4
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    7
+                ],
+                [
+                    5175,
+                    4
+                ],
+                [
+                    9175,
+                    4
+                ],
+                [
+                    13175,
+                    4
+                ],
+                [
+                    17175,
+                    4
+                ],
+                [
+                    21175,
+                    4
+                ],
+                [
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
+                    4
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    7
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 910,
+                        "S": 7,
+                        "chao1": null,
+                        "shannon": 0.07855782948464478,
+                        "pielou": 0.04037073835232448,
+                        "simpson": 0.021830696775751557,
+                        "invSimpson": 1.0223179123529977,
+                        "simpsonEvenness": 0.14604541605042826
+                    },
+                    "bases": {
+                        "N": 598285,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05028225451925627,
+                        "pielou": 0.03627097961982385,
+                        "simpson": 0.014333852537323222,
+                        "invSimpson": 1.0145422997170206,
+                        "simpsonEvenness": 0.25363557492925515
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 3952,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.049459271384874826,
+                        "pielou": 0.03567732277647016,
+                        "simpson": 0.014100890852169479,
+                        "invSimpson": 1.0143025698282229,
+                        "simpsonEvenness": 0.2535756424570557
+                    },
+                    "bases": {
+                        "N": 2633152,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.053837901694785764,
+                        "pielou": 0.03883583689346747,
+                        "simpson": 0.015498005409512627,
+                        "invSimpson": 1.0157419746172878,
+                        "simpsonEvenness": 0.25393549365432194
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 7009,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05167130392170371,
+                        "pielou": 0.0372729669620542,
+                        "simpson": 0.014763441032473179,
+                        "invSimpson": 1.0149846662693318,
+                        "simpsonEvenness": 0.25374616656733295
+                    },
+                    "bases": {
+                        "N": 4657246,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05524038288554836,
+                        "pielou": 0.03984751322289409,
+                        "simpson": 0.015957902593117468,
+                        "invSimpson": 1.0162166869031002,
+                        "simpsonEvenness": 0.25405417172577505
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 10117,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.050402344959518335,
+                        "pielou": 0.03635760656113597,
+                        "simpson": 0.014360322665067926,
+                        "invSimpson": 1.014569546047392,
+                        "simpsonEvenness": 0.253642386511848
+                    },
+                    "bases": {
+                        "N": 6718651,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05465996793392375,
+                        "pielou": 0.039428832336710774,
+                        "simpson": 0.015748213786634047,
+                        "invSimpson": 1.0160001881705705,
+                        "simpsonEvenness": 0.2540000470426426
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 13220,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04965178782431427,
+                        "pielou": 0.035816194032704605,
+                        "simpson": 0.01415151709347906,
+                        "invSimpson": 1.0143546572712239,
+                        "simpsonEvenness": 0.25358866431780597
+                    },
+                    "bases": {
+                        "N": 8780561,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.0540359267097158,
+                        "pielou": 0.038978681746973234,
+                        "simpson": 0.015563002917561852,
+                        "invSimpson": 1.0158090390382377,
+                        "simpsonEvenness": 0.25395225975955943
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16282,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04945490898432149,
+                        "pielou": 0.03567417596964783,
+                        "simpson": 0.01405803266500516,
+                        "invSimpson": 1.0142584788260958,
+                        "simpsonEvenness": 0.25356461970652394
+                    },
+                    "bases": {
+                        "N": 10800708,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052918078097663745,
+                        "pielou": 0.038172324422437176,
+                        "simpson": 0.0151779120177723,
+                        "invSimpson": 1.015411831439392,
+                        "simpsonEvenness": 0.253852957859848
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19355,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.051319441261326156,
+                        "pielou": 0.03701915170445385,
+                        "simpson": 0.014701677537686808,
+                        "invSimpson": 1.0149210418839916,
+                        "simpsonEvenness": 0.2537302604709979
+                    },
+                    "bases": {
+                        "N": 12831218,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05444744918155324,
+                        "pielou": 0.03927553246164035,
+                        "simpson": 0.015704534030893225,
+                        "invSimpson": 1.0159551014648138,
+                        "simpsonEvenness": 0.25398877536620346
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 22371,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05095467305950166,
+                        "pielou": 0.03675602706653076,
+                        "simpson": 0.014588047118680336,
+                        "invSimpson": 1.0148040086950694,
+                        "simpsonEvenness": 0.25370100217376734
+                    },
+                    "bases": {
+                        "N": 14816739,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05395368936874011,
+                        "pielou": 0.03891936004497247,
+                        "simpson": 0.015555522499338004,
+                        "invSimpson": 1.01580132029267,
+                        "simpsonEvenness": 0.2539503300731675
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 25401,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04969249262105682,
+                        "pielou": 0.035845556336905046,
+                        "simpson": 0.014181486090776074,
+                        "invSimpson": 1.0143854937705927,
+                        "simpsonEvenness": 0.2535963734426482
+                    },
+                    "bases": {
+                        "N": 16850208,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052555829054773545,
+                        "pielou": 0.03791101697356495,
+                        "simpson": 0.015115161657589415,
+                        "invSimpson": 1.0153471361007331,
+                        "simpsonEvenness": 0.2538367840251833
+                    }
+                }
             ]
         },
         "alllevels": {
             "reads": [
                 [
-                    4920,
+                    1175,
+                    3
+                ],
+                [
+                    5175,
                     4
                 ],
                 [
-                    9920,
+                    9175,
                     4
                 ],
                 [
-                    14920,
+                    13175,
                     4
                 ],
                 [
-                    19920,
-                    5
-                ],
-                [
-                    24920,
+                    17175,
                     4
                 ],
                 [
-                    29920,
+                    21175,
                     4
                 ],
                 [
-                    34920,
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
                     4
                 ]
             ],
             "time": [
                 [
-                    1,
+                    177,
+                    3
+                ],
+                [
+                    177,
                     4
                 ],
                 [
-                    1,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
-                    5
-                ],
-                [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    2,
+                    177,
                     4
                 ],
                 [
-                    3,
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
                     4
                 ]
+            ],
+            "rawReads": [
+                [
+                    1175,
+                    7
+                ],
+                [
+                    5175,
+                    4
+                ],
+                [
+                    9175,
+                    4
+                ],
+                [
+                    13175,
+                    4
+                ],
+                [
+                    17175,
+                    4
+                ],
+                [
+                    21175,
+                    4
+                ],
+                [
+                    25175,
+                    4
+                ],
+                [
+                    29175,
+                    4
+                ],
+                [
+                    33175,
+                    4
+                ]
+            ],
+            "rawTime": [
+                [
+                    177,
+                    7
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    177,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ],
+                [
+                    178,
+                    4
+                ]
+            ],
+            "diversity": [
+                {
+                    "readsAnalysed": 1175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 910,
+                        "S": 7,
+                        "chao1": null,
+                        "shannon": 0.07855782948464478,
+                        "pielou": 0.04037073835232448,
+                        "simpson": 0.021830696775751557,
+                        "invSimpson": 1.0223179123529977,
+                        "simpsonEvenness": 0.14604541605042826
+                    },
+                    "bases": {
+                        "N": 598285,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05028225451925627,
+                        "pielou": 0.03627097961982385,
+                        "simpson": 0.014333852537323222,
+                        "invSimpson": 1.0145422997170206,
+                        "simpsonEvenness": 0.25363557492925515
+                    }
+                },
+                {
+                    "readsAnalysed": 5175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 3952,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.049459271384874826,
+                        "pielou": 0.03567732277647016,
+                        "simpson": 0.014100890852169479,
+                        "invSimpson": 1.0143025698282229,
+                        "simpsonEvenness": 0.2535756424570557
+                    },
+                    "bases": {
+                        "N": 2633152,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.053837901694785764,
+                        "pielou": 0.03883583689346747,
+                        "simpson": 0.015498005409512627,
+                        "invSimpson": 1.0157419746172878,
+                        "simpsonEvenness": 0.25393549365432194
+                    }
+                },
+                {
+                    "readsAnalysed": 9175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 7009,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05167130392170371,
+                        "pielou": 0.0372729669620542,
+                        "simpson": 0.014763441032473179,
+                        "invSimpson": 1.0149846662693318,
+                        "simpsonEvenness": 0.25374616656733295
+                    },
+                    "bases": {
+                        "N": 4657246,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05524038288554836,
+                        "pielou": 0.03984751322289409,
+                        "simpson": 0.015957902593117468,
+                        "invSimpson": 1.0162166869031002,
+                        "simpsonEvenness": 0.25405417172577505
+                    }
+                },
+                {
+                    "readsAnalysed": 13175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 10117,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.050402344959518335,
+                        "pielou": 0.03635760656113597,
+                        "simpson": 0.014360322665067926,
+                        "invSimpson": 1.014569546047392,
+                        "simpsonEvenness": 0.253642386511848
+                    },
+                    "bases": {
+                        "N": 6718651,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05465996793392375,
+                        "pielou": 0.039428832336710774,
+                        "simpson": 0.015748213786634047,
+                        "invSimpson": 1.0160001881705705,
+                        "simpsonEvenness": 0.2540000470426426
+                    }
+                },
+                {
+                    "readsAnalysed": 17175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 13220,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04965178782431427,
+                        "pielou": 0.035816194032704605,
+                        "simpson": 0.01415151709347906,
+                        "invSimpson": 1.0143546572712239,
+                        "simpsonEvenness": 0.25358866431780597
+                    },
+                    "bases": {
+                        "N": 8780561,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.0540359267097158,
+                        "pielou": 0.038978681746973234,
+                        "simpson": 0.015563002917561852,
+                        "invSimpson": 1.0158090390382377,
+                        "simpsonEvenness": 0.25395225975955943
+                    }
+                },
+                {
+                    "readsAnalysed": 21175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 16282,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04945490898432149,
+                        "pielou": 0.03567417596964783,
+                        "simpson": 0.01405803266500516,
+                        "invSimpson": 1.0142584788260958,
+                        "simpsonEvenness": 0.25356461970652394
+                    },
+                    "bases": {
+                        "N": 10800708,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052918078097663745,
+                        "pielou": 0.038172324422437176,
+                        "simpson": 0.0151779120177723,
+                        "invSimpson": 1.015411831439392,
+                        "simpsonEvenness": 0.253852957859848
+                    }
+                },
+                {
+                    "readsAnalysed": 25175,
+                    "mins": 177,
+                    "reads": {
+                        "N": 19355,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.051319441261326156,
+                        "pielou": 0.03701915170445385,
+                        "simpson": 0.014701677537686808,
+                        "invSimpson": 1.0149210418839916,
+                        "simpsonEvenness": 0.2537302604709979
+                    },
+                    "bases": {
+                        "N": 12831218,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05444744918155324,
+                        "pielou": 0.03927553246164035,
+                        "simpson": 0.015704534030893225,
+                        "invSimpson": 1.0159551014648138,
+                        "simpsonEvenness": 0.25398877536620346
+                    }
+                },
+                {
+                    "readsAnalysed": 29175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 22371,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05095467305950166,
+                        "pielou": 0.03675602706653076,
+                        "simpson": 0.014588047118680336,
+                        "invSimpson": 1.0148040086950694,
+                        "simpsonEvenness": 0.25370100217376734
+                    },
+                    "bases": {
+                        "N": 14816739,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.05395368936874011,
+                        "pielou": 0.03891936004497247,
+                        "simpson": 0.015555522499338004,
+                        "invSimpson": 1.01580132029267,
+                        "simpsonEvenness": 0.2539503300731675
+                    }
+                },
+                {
+                    "readsAnalysed": 33175,
+                    "mins": 178,
+                    "reads": {
+                        "N": 25401,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.04969249262105682,
+                        "pielou": 0.035845556336905046,
+                        "simpson": 0.014181486090776074,
+                        "invSimpson": 1.0143854937705927,
+                        "simpsonEvenness": 0.2535963734426482
+                    },
+                    "bases": {
+                        "N": 16850208,
+                        "S": 4,
+                        "chao1": null,
+                        "shannon": 0.052555829054773545,
+                        "pielou": 0.03791101697356495,
+                        "simpson": 0.015115161657589415,
+                        "invSimpson": 1.0153471361007331,
+                        "simpsonEvenness": 0.2538367840251833
+                    }
+                }
             ]
         }
     }

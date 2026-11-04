@@ -1,67 +1,72 @@
 
 {
     "meta": {
-        "martiVersion": "v0.9.15i",
-        "fileWritten": "2023-11-15T10:31:27"
+        "martiVersion": "v1.0.0",
+        "fileWritten": "2026-10-28T11:27:22"
     },
     "amr": {
-        "currentChunk": 21,
+        "currentChunk": 23,
         "chunkTime": {
-            "1": "15 Nov 2023 10:27:34",
-            "2": "15 Nov 2023 10:27:46",
-            "3": "15 Nov 2023 10:27:58",
-            "4": "15 Nov 2023 10:28:10",
-            "5": "15 Nov 2023 10:28:22",
-            "6": "15 Nov 2023 10:28:34",
-            "7": "15 Nov 2023 10:28:46",
-            "8": "15 Nov 2023 10:28:58",
-            "9": "15 Nov 2023 10:29:09",
-            "10": "15 Nov 2023 10:29:21",
-            "11": "15 Nov 2023 10:29:32",
-            "12": "15 Nov 2023 10:29:44",
-            "13": "15 Nov 2023 10:29:56",
-            "14": "15 Nov 2023 10:30:07",
-            "15": "15 Nov 2023 10:30:19",
-            "16": "15 Nov 2023 10:30:30",
-            "17": "15 Nov 2023 10:30:41",
-            "18": "15 Nov 2023 10:30:53",
-            "19": "15 Nov 2023 10:31:05",
-            "20": "15 Nov 2023 10:31:16",
-            "21": "15 Nov 2023 10:31:27"
+            "0": "27 Oct 2026 22:46:15",
+            "1": "27 Oct 2026 22:46:22",
+            "2": "27 Oct 2026 22:46:32",
+            "3": "27 Oct 2026 22:46:40",
+            "4": "27 Oct 2026 22:46:49",
+            "5": "27 Oct 2026 22:46:57",
+            "6": "27 Oct 2026 22:47:06",
+            "7": "27 Oct 2026 22:47:15",
+            "8": "27 Oct 2026 22:47:25",
+            "9": "27 Oct 2026 22:47:34",
+            "10": "28 Oct 2026 05:03:56",
+            "11": "28 Oct 2026 05:04:03",
+            "12": "28 Oct 2026 05:04:11",
+            "13": "28 Oct 2026 05:04:21",
+            "14": "28 Oct 2026 05:04:29",
+            "15": "28 Oct 2026 05:04:37",
+            "16": "28 Oct 2026 05:04:46",
+            "17": "28 Oct 2026 05:04:55",
+            "18": "28 Oct 2026 05:05:04",
+            "19": "28 Oct 2026 05:05:13",
+            "20": "28 Oct 2026 11:26:50",
+            "21": "28 Oct 2026 11:26:59",
+            "22": "28 Oct 2026 11:27:11",
+            "23": "28 Oct 2026 11:27:22"
         },
-        "readsWithAMRHits": 301,
+        "readsWithAMRHitsAndWalkout": 340,
+        "readsWithAMRHitsOnly": 1,
         "geneList": [
             {
                 "cardId": "ARO:3002597",
                 "name": "AAC(6')-Ie-APH(2'')-Ia bifunctional protein",
-                "description": "AAC(6')-Ie-APH(2'')-Ia is an aminoglycoside acetyltransferase encoded by plasmids and transposons in S. aureus",
+                "description": "AAC(6')-Ie-APH(2'')-Ia is an aminoglycoside acetyltransferase encoded by plasmids and transposons in S. aureus, E. faecalis, E. faecium and Staphylococcus warneri.",
                 "shortName": "AAC6_Ie_APH2_Ia",
                 "drugClass": "aminoglycoside antibiotic",
                 "geneFamily": "aminoglycoside bifunctional resistance protein",
                 "resistanceMechanism": "antibiotic inactivation",
                 "count": {
-                    "5": 1,
-                    "6": 2,
-                    "7": 4,
-                    "10": 5,
-                    "20": 6
+                    "7": 1,
+                    "11": 2,
+                    "14": 4,
+                    "17": 5,
+                    "21": 6
                 },
                 "averageAccuracy": {
-                    "5": 91.98,
-                    "6": 92.26,
-                    "7": 90.69,
-                    "10": 90.99,
-                    "20": 90.64
+                    "7": 88.9,
+                    "11": 90.56,
+                    "14": 89.84,
+                    "17": 90.38,
+                    "21": 90.64
                 },
                 "species": [
                     {
-                        "name": "Bacillales",
-                        "ncbiID": 1385,
-                        "rank": 5,
+                        "name": "Staphylococcus aureus",
+                        "ncbiID": 1280,
+                        "rank": 8,
                         "chunkCounts": {
-                            "5": 1
+                            "11": 1
                         },
                         "chunkPlasmidCounts": {
+                            "11": 1
                         }
                     },
                     {
@@ -69,9 +74,12 @@
                         "ncbiID": 91061,
                         "rank": 4,
                         "chunkCounts": {
-                            "7": 2
+                            "14": 2,
+                            "17": 3,
+                            "21": 4
                         },
                         "chunkPlasmidCounts": {
+                            "17": 1
                         }
                     },
                     {
@@ -79,20 +87,94 @@
                         "ncbiID": 2,
                         "rank": 1,
                         "chunkCounts": {
-                            "6": 1,
-                            "20": 2
+                            "7": 1
                         },
                         "chunkPlasmidCounts": {
-                            "6": 1,
-                            "20": 2
+                        }
+                    }
+                ]
+            },
+            {
+                "cardId": "ARO:3007678",
+                "name": "IreK",
+                "description": "E. faecalis IreK maintains cell wall integrity, possibly by regulating peptidoglycan biosynthesis and metabolism. Antibiotic-induced cell wall stress leads to activation of IreK-mediated phosphorylation signaling pathways to mitigate and repair the damage. Absence of IreK leads to cell envelope defects and increased susceptibility to a variety of cephalosporins, including ceftriaxone. Increased IreK phosphorylation in response to ceftriaxone treatment has been shown to correlate with antimicrobial resistance.",
+                "shortName": "IreK",
+                "drugClass": "cephalosporin",
+                "geneFamily": "Serine/threonine kinases",
+                "resistanceMechanism": "reduced permeability to antibiotic",
+                "count": {
+                    "0": 1,
+                    "1": 6,
+                    "2": 7,
+                    "3": 9,
+                    "4": 10,
+                    "5": 13,
+                    "6": 14,
+                    "7": 16,
+                    "8": 17,
+                    "10": 20,
+                    "12": 24,
+                    "13": 25,
+                    "16": 26,
+                    "17": 29,
+                    "18": 33,
+                    "19": 35,
+                    "20": 37,
+                    "23": 41
+                },
+                "averageAccuracy": {
+                    "0": 92.83,
+                    "1": 88.09,
+                    "2": 88.07,
+                    "3": 88.68,
+                    "4": 88.2,
+                    "5": 88.68,
+                    "6": 88.51,
+                    "7": 88.68,
+                    "8": 88.75,
+                    "10": 88.96,
+                    "12": 88.87,
+                    "13": 88.86,
+                    "16": 88.82,
+                    "17": 88.58,
+                    "18": 88.81,
+                    "19": 88.76,
+                    "20": 88.87,
+                    "23": 88.83
+                },
+                "species": [
+                    {
+                        "name": "Enterococcus faecalis",
+                        "ncbiID": 1351,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "4": 1
+                        },
+                        "chunkPlasmidCounts": {
                         }
                     },
                     {
-                        "name": "Staphylococcus pseudintermedius",
-                        "ncbiID": 283734,
-                        "rank": 8,
+                        "name": "Enterococcus",
+                        "ncbiID": 1350,
+                        "rank": 7,
                         "chunkCounts": {
-                            "10": 1
+                            "0": 1,
+                            "1": 6,
+                            "2": 7,
+                            "3": 9,
+                            "5": 12,
+                            "6": 13,
+                            "7": 15,
+                            "8": 16,
+                            "10": 19,
+                            "12": 23,
+                            "13": 24,
+                            "16": 25,
+                            "17": 28,
+                            "18": 32,
+                            "19": 34,
+                            "20": 36,
+                            "23": 40
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -108,46 +190,50 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "2": 5,
-                    "3": 8,
-                    "4": 10,
-                    "5": 13,
+                    "0": 2,
+                    "1": 9,
+                    "2": 12,
+                    "3": 13,
+                    "5": 14,
                     "6": 15,
-                    "7": 16,
-                    "8": 18,
-                    "9": 22,
+                    "7": 17,
+                    "8": 20,
+                    "9": 23,
                     "10": 24,
-                    "11": 25,
-                    "13": 27,
-                    "14": 32,
-                    "15": 34,
-                    "16": 36,
-                    "17": 43,
-                    "18": 45,
-                    "19": 47,
-                    "20": 49,
-                    "21": 50
+                    "11": 26,
+                    "13": 29,
+                    "15": 33,
+                    "16": 35,
+                    "17": 37,
+                    "18": 38,
+                    "19": 40,
+                    "20": 45,
+                    "21": 47,
+                    "22": 49,
+                    "23": 50
                 },
                 "averageAccuracy": {
-                    "2": 86.33,
-                    "3": 86.95,
-                    "4": 86.68,
-                    "5": 87.5,
-                    "6": 87.7,
-                    "7": 87.6,
-                    "8": 87.17,
-                    "9": 87.12,
-                    "10": 87.35,
-                    "11": 87.39,
-                    "13": 87.39,
-                    "14": 87.61,
-                    "15": 87.58,
-                    "16": 87.67,
-                    "17": 88.03,
-                    "18": 88.13,
-                    "19": 88.28,
-                    "20": 88.28,
-                    "21": 88.19
+                    "0": 90.4,
+                    "1": 89.98,
+                    "2": 89.62,
+                    "3": 89.75,
+                    "5": 89.33,
+                    "6": 89.18,
+                    "7": 89.06,
+                    "8": 89.35,
+                    "9": 89.13,
+                    "10": 89.02,
+                    "11": 89.09,
+                    "13": 89.21,
+                    "15": 88.93,
+                    "16": 88.84,
+                    "17": 88.85,
+                    "18": 88.84,
+                    "19": 88.57,
+                    "20": 88.32,
+                    "21": 88.2,
+                    "22": 88.12,
+                    "23": 88.19
                 },
                 "species": [
                     {
@@ -155,31 +241,34 @@
                         "ncbiID": 1307,
                         "rank": 8,
                         "chunkCounts": {
-                            "6": 1
+                            "17": 1
                         },
                         "chunkPlasmidCounts": {
                         }
                     },
                     {
-                        "name": "Terrabacteria group",
+                        "name": "Bacillati",
                         "ncbiID": 1783272,
-                        "rank": 0,
+                        "rank": 2,
                         "chunkCounts": {
-                            "2": 1,
-                            "4": 2,
-                            "9": 4,
-                            "10": 5,
-                            "11": 6,
-                            "14": 7,
-                            "15": 8,
-                            "16": 10,
-                            "17": 12,
-                            "18": 14,
-                            "19": 15,
-                            "20": 16
+                            "0": 2,
+                            "1": 3,
+                            "2": 5,
+                            "6": 6,
+                            "7": 7,
+                            "8": 8,
+                            "11": 9,
+                            "15": 10,
+                            "16": 11,
+                            "20": 12,
+                            "21": 13
                         },
                         "chunkPlasmidCounts": {
-                            "17": 1
+                            "0": 1,
+                            "11": 2,
+                            "15": 3,
+                            "16": 4,
+                            "21": 5
                         }
                     },
                     {
@@ -187,15 +276,15 @@
                         "ncbiID": 1685,
                         "rank": 8,
                         "chunkCounts": {
-                            "2": 1,
-                            "3": 2,
-                            "5": 4,
+                            "1": 1,
+                            "7": 2,
+                            "8": 3,
                             "9": 5,
-                            "13": 6,
-                            "14": 8,
-                            "17": 9,
-                            "19": 10,
-                            "20": 11
+                            "13": 7,
+                            "15": 8,
+                            "16": 9,
+                            "20": 10,
+                            "23": 11
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -205,33 +294,32 @@
                         "ncbiID": 2,
                         "rank": 1,
                         "chunkCounts": {
-                            "2": 3,
-                            "3": 5,
-                            "4": 6,
-                            "5": 7,
-                            "6": 8,
-                            "7": 9,
-                            "8": 10,
-                            "9": 11,
-                            "10": 12,
+                            "1": 5,
+                            "2": 6,
+                            "3": 7,
+                            "5": 8,
+                            "8": 9,
+                            "9": 10,
+                            "10": 11,
+                            "11": 12,
                             "13": 13,
-                            "14": 15,
-                            "15": 16,
-                            "17": 20,
-                            "21": 21
+                            "15": 15,
+                            "17": 16,
+                            "18": 17,
+                            "19": 18,
+                            "20": 21,
+                            "21": 22,
+                            "22": 24
                         },
                         "chunkPlasmidCounts": {
-                            "3": 1,
-                            "4": 2,
-                            "5": 3,
-                            "7": 4,
-                            "8": 5,
-                            "9": 6,
-                            "13": 7,
-                            "14": 8,
-                            "15": 9,
-                            "17": 10,
-                            "21": 11
+                            "1": 2,
+                            "2": 3,
+                            "5": 4,
+                            "13": 5,
+                            "17": 6,
+                            "19": 7,
+                            "21": 8,
+                            "22": 9
                         }
                     },
                     {
@@ -239,7 +327,7 @@
                         "ncbiID": -2,
                         "rank": 0,
                         "chunkCounts": {
-                            "8": 1
+                            "19": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -249,44 +337,34 @@
             {
                 "cardId": "ARO:3000250",
                 "name": "ErmC",
-                "description": "ErmC is a methyltransferase that catalyzes the methylation of A2058 of the 23S ribosomal RNA in two steps. Expression of ErmC is inducible by erythromycin. The leader peptide causes attenuation of the mRNA and stabilizes the structure preventing further translation. When erythromycin is present",
+                "description": "ErmC is a methyltransferase that catalyzes the methylation of A2058 of the 23S ribosomal RNA in two steps. Expression of ErmC is inducible by erythromycin. The leader peptide causes attenuation of the mRNA and stabilizes the structure preventing further translation. When erythromycin is present, it binds the leader peptide causing a change in conformation allowing for the expression of ErmC.",
                 "shortName": "ErmC",
                 "drugClass": "lincosamide antibiotic;macrolide antibiotic;streptogramin A antibiotic;streptogramin B antibiotic;streptogramin antibiotic",
                 "geneFamily": "Erm 23S ribosomal RNA methyltransferase",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
                     "5": 1,
-                    "7": 2,
-                    "21": 3
+                    "13": 2,
+                    "19": 3
                 },
                 "averageAccuracy": {
-                    "5": 93.63,
-                    "7": 92.41,
-                    "21": 93.41
+                    "5": 95.41,
+                    "13": 94.52,
+                    "19": 93.41
                 },
                 "species": [
-                    {
-                        "name": "Staphylococcus aureus",
-                        "ncbiID": 1280,
-                        "rank": 8,
-                        "chunkCounts": {
-                            "5": 1,
-                            "21": 2
-                        },
-                        "chunkPlasmidCounts": {
-                            "5": 1,
-                            "21": 2
-                        }
-                    },
                     {
                         "name": "Staphylococcus",
                         "ncbiID": 1279,
                         "rank": 7,
                         "chunkCounts": {
-                            "7": 1
+                            "5": 1,
+                            "13": 2,
+                            "19": 3
                         },
                         "chunkPlasmidCounts": {
-                            "7": 1
+                            "13": 1,
+                            "19": 2
                         }
                     }
                 ]
@@ -300,48 +378,52 @@
                 "geneFamily": "antibiotic-resistant isoleucyl-tRNA synthetase (ileS)",
                 "resistanceMechanism": "antibiotic target alteration",
                 "count": {
+                    "0": 1,
+                    "1": 2,
                     "2": 4,
                     "3": 8,
-                    "4": 9,
-                    "5": 13,
-                    "6": 17,
-                    "7": 19,
-                    "8": 25,
-                    "9": 26,
-                    "10": 29,
-                    "11": 34,
-                    "12": 36,
-                    "13": 39,
-                    "14": 40,
-                    "15": 43,
-                    "16": 47,
-                    "17": 48,
-                    "18": 53,
-                    "19": 54,
-                    "20": 55,
-                    "21": 56
+                    "6": 12,
+                    "7": 14,
+                    "8": 16,
+                    "9": 19,
+                    "10": 20,
+                    "11": 21,
+                    "12": 23,
+                    "13": 26,
+                    "14": 29,
+                    "15": 32,
+                    "16": 33,
+                    "17": 36,
+                    "18": 41,
+                    "19": 46,
+                    "20": 47,
+                    "21": 48,
+                    "22": 52,
+                    "23": 56
                 },
                 "averageAccuracy": {
-                    "2": 84.55,
-                    "3": 83.53,
-                    "4": 83.16,
-                    "5": 83.2,
-                    "6": 83.33,
-                    "7": 83.56,
-                    "8": 83.71,
-                    "9": 83.9,
-                    "10": 83.91,
-                    "11": 83.68,
-                    "12": 83.93,
-                    "13": 83.9,
-                    "14": 83.98,
-                    "15": 84.24,
-                    "16": 84.43,
-                    "17": 84.35,
-                    "18": 84.2,
-                    "19": 84.19,
-                    "20": 84.34,
-                    "21": 84.3
+                    "0": 80.0,
+                    "1": 80.26,
+                    "2": 85.84,
+                    "3": 84.64,
+                    "6": 85.25,
+                    "7": 85.56,
+                    "8": 85.11,
+                    "9": 85.21,
+                    "10": 85.47,
+                    "11": 85.38,
+                    "12": 85.63,
+                    "13": 85.45,
+                    "14": 85.31,
+                    "15": 85.35,
+                    "16": 85.19,
+                    "17": 85.15,
+                    "18": 84.8,
+                    "19": 84.6,
+                    "20": 84.67,
+                    "21": 84.59,
+                    "22": 84.41,
+                    "23": 84.3
                 },
                 "species": [
                     {
@@ -349,23 +431,23 @@
                         "ncbiID": 1678,
                         "rank": 7,
                         "chunkCounts": {
+                            "1": 1,
                             "2": 3,
                             "3": 4,
-                            "5": 5,
-                            "6": 6,
-                            "7": 7,
-                            "8": 9,
+                            "6": 7,
+                            "7": 8,
                             "9": 10,
                             "10": 11,
-                            "11": 12,
-                            "12": 13,
-                            "13": 14,
-                            "14": 15,
-                            "15": 17,
-                            "16": 20,
-                            "17": 21,
-                            "18": 22,
-                            "20": 23
+                            "12": 12,
+                            "13": 13,
+                            "14": 14,
+                            "15": 16,
+                            "17": 17,
+                            "18": 18,
+                            "19": 19,
+                            "20": 20,
+                            "22": 21,
+                            "23": 23
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -375,22 +457,24 @@
                         "ncbiID": 1685,
                         "rank": 8,
                         "chunkCounts": {
-                            "2": 1,
+                            "0": 1,
                             "3": 4,
-                            "4": 5,
-                            "5": 8,
-                            "6": 11,
-                            "7": 12,
-                            "8": 16,
-                            "10": 18,
-                            "11": 22,
-                            "12": 23,
-                            "13": 25,
-                            "15": 26,
-                            "16": 27,
-                            "18": 31,
-                            "19": 32,
-                            "21": 33
+                            "6": 5,
+                            "7": 6,
+                            "8": 8,
+                            "9": 9,
+                            "11": 10,
+                            "12": 11,
+                            "13": 13,
+                            "14": 15,
+                            "15": 16,
+                            "16": 17,
+                            "17": 19,
+                            "18": 23,
+                            "19": 27,
+                            "21": 28,
+                            "22": 31,
+                            "23": 33
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -406,35 +490,37 @@
                 "geneFamily": "trimethoprim resistant dihydrofolate reductase dfr",
                 "resistanceMechanism": "antibiotic target replacement",
                 "count": {
-                    "2": 1,
+                    "0": 1,
                     "3": 2,
-                    "6": 3,
-                    "7": 4,
-                    "8": 6,
-                    "11": 7,
-                    "12": 8,
-                    "14": 10,
-                    "17": 11
+                    "9": 3,
+                    "10": 5,
+                    "12": 6,
+                    "14": 7,
+                    "17": 8,
+                    "18": 9,
+                    "22": 10,
+                    "23": 11
                 },
                 "averageAccuracy": {
-                    "2": 90.87,
-                    "3": 88.14,
-                    "6": 88.72,
-                    "7": 88.59,
-                    "8": 88.86,
-                    "11": 88.84,
-                    "12": 88.45,
-                    "14": 88.52,
-                    "17": 88.02
+                    "0": 90.73,
+                    "3": 86.88,
+                    "9": 86.88,
+                    "10": 87.89,
+                    "12": 87.52,
+                    "14": 87.62,
+                    "17": 87.9,
+                    "18": 87.99,
+                    "22": 87.73,
+                    "23": 88.02
                 },
                 "species": [
                     {
-                        "name": "Enterococcus faecalis",
-                        "ncbiID": 1351,
-                        "rank": 8,
+                        "name": "Enterococcus",
+                        "ncbiID": 1350,
+                        "rank": 7,
                         "chunkCounts": {
-                            "7": 1,
-                            "8": 2
+                            "10": 1,
+                            "14": 2
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -444,14 +530,15 @@
                         "ncbiID": 2,
                         "rank": 1,
                         "chunkCounts": {
-                            "2": 1,
+                            "0": 1,
                             "3": 2,
-                            "6": 3,
-                            "8": 4,
-                            "11": 5,
-                            "12": 6,
-                            "14": 8,
-                            "17": 9
+                            "9": 3,
+                            "10": 4,
+                            "12": 5,
+                            "17": 6,
+                            "18": 7,
+                            "22": 8,
+                            "23": 9
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -461,70 +548,63 @@
             {
                 "cardId": "ARO:3000300",
                 "name": "lsaA",
-                "description": "LsaA is an ABC-F subfamily protein expressed in Enterococcus faecalis. It confers resistance to clindamycin",
+                "description": "LsaA is an ABC-F subfamily protein expressed in Enterococcus faecalis. It confers resistance to clindamycin, quinupristin-dalfopristin, and dalfopristin.",
                 "shortName": "lsaA",
                 "drugClass": "lincosamide antibiotic;pleuromutilin antibiotic;streptogramin A antibiotic;streptogramin B antibiotic;streptogramin antibiotic",
                 "geneFamily": "lsa-type ABC-F protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "3": 1,
-                    "5": 5,
-                    "6": 6,
-                    "8": 10,
-                    "10": 12,
-                    "11": 16,
-                    "12": 17,
-                    "13": 18,
-                    "14": 19,
-                    "15": 20,
-                    "16": 21,
-                    "20": 22,
-                    "21": 24
+                    "2": 1,
+                    "5": 3,
+                    "6": 4,
+                    "7": 5,
+                    "9": 7,
+                    "10": 8,
+                    "11": 10,
+                    "12": 11,
+                    "13": 13,
+                    "17": 14,
+                    "18": 18,
+                    "19": 21,
+                    "21": 23,
+                    "23": 24
                 },
                 "averageAccuracy": {
-                    "3": 89.98,
-                    "5": 88.18,
-                    "6": 87.74,
-                    "8": 87.61,
-                    "10": 87.74,
-                    "11": 88.51,
-                    "12": 88.17,
-                    "13": 88.19,
-                    "14": 88.37,
-                    "15": 88.63,
-                    "16": 88.31,
-                    "20": 88.24,
-                    "21": 88.22
+                    "2": 93.55,
+                    "5": 89.9,
+                    "6": 87.89,
+                    "7": 87.66,
+                    "9": 88.36,
+                    "10": 88.88,
+                    "11": 88.77,
+                    "12": 88.22,
+                    "13": 88.05,
+                    "17": 87.87,
+                    "18": 88.53,
+                    "19": 88.13,
+                    "21": 88.15,
+                    "23": 88.22
                 },
                 "species": [
-                    {
-                        "name": "Enterococcus faecalis",
-                        "ncbiID": 1351,
-                        "rank": 8,
-                        "chunkCounts": {
-                            "3": 1,
-                            "5": 5,
-                            "6": 6,
-                            "8": 10,
-                            "10": 11,
-                            "11": 15,
-                            "12": 16,
-                            "13": 17,
-                            "14": 18,
-                            "15": 19,
-                            "16": 20,
-                            "20": 21,
-                            "21": 23
-                        },
-                        "chunkPlasmidCounts": {
-                        }
-                    },
                     {
                         "name": "Enterococcus",
                         "ncbiID": 1350,
                         "rank": 7,
                         "chunkCounts": {
-                            "10": 1
+                            "2": 1,
+                            "5": 3,
+                            "6": 4,
+                            "7": 5,
+                            "9": 7,
+                            "10": 8,
+                            "11": 10,
+                            "12": 11,
+                            "13": 13,
+                            "17": 14,
+                            "18": 18,
+                            "19": 21,
+                            "21": 23,
+                            "23": 24
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -534,50 +614,56 @@
             {
                 "cardId": "ARO:3004480",
                 "name": "Bifidobacterium adolescentis rpoB mutants conferring resistance to rifampicin",
-                "description": "Bifidobacterium are antibiotic resistant probiotics are prescribed to upkeep the population beneficial bacteria in the gut microbiome. However",
+                "description": "Bifidobacterium are antibiotic resistant probiotics are prescribed to upkeep the population beneficial bacteria in the gut microbiome. However, horizontal gene transfer among gut microbes could create harmful antibiotic-resistant pathogenic bacteria, such as Mycobacterium tuberculosis. Lokesh et al. analyzed Bifidobacterium antitubercular drug resistance and mutations in rpoB. They found that B. animalis, B. longum and B. adolescentis showed considerable resistance to pyrazinamide, isoniazid, and streptomycin, while B. adolescentis had mutations both in the rifampicin (RIF) pocket and in regions outside the pockets, and also showed considerable resistance to RIF.",
                 "shortName": "Bado_rpoB_RIF",
                 "drugClass": "peptide antibiotic;rifamycin antibiotic",
                 "geneFamily": "rifamycin-resistant beta-subunit of RNA polymerase (rpoB)",
                 "resistanceMechanism": "antibiotic target alteration;antibiotic target replacement",
                 "count": {
-                    "2": 1,
-                    "3": 2,
-                    "4": 4,
-                    "5": 6,
-                    "6": 9,
-                    "7": 12,
-                    "8": 14,
-                    "9": 15,
-                    "10": 16,
-                    "12": 19,
-                    "13": 23,
-                    "15": 29,
-                    "16": 31,
-                    "17": 35,
-                    "18": 37,
-                    "19": 38,
-                    "20": 42,
-                    "21": 44
+                    "0": 2,
+                    "1": 4,
+                    "2": 8,
+                    "3": 11,
+                    "4": 15,
+                    "5": 17,
+                    "6": 19,
+                    "7": 20,
+                    "8": 21,
+                    "9": 23,
+                    "10": 24,
+                    "12": 27,
+                    "13": 29,
+                    "14": 33,
+                    "15": 34,
+                    "16": 36,
+                    "17": 38,
+                    "19": 40,
+                    "20": 41,
+                    "21": 42,
+                    "22": 44
                 },
                 "averageAccuracy": {
-                    "2": 81.46,
-                    "3": 80.94,
-                    "4": 81.17,
-                    "5": 82.38,
-                    "6": 82.12,
-                    "7": 81.82,
-                    "8": 81.71,
-                    "9": 81.63,
-                    "10": 81.83,
-                    "12": 81.68,
-                    "13": 81.58,
-                    "15": 81.54,
-                    "16": 81.49,
-                    "17": 81.55,
-                    "18": 81.55,
-                    "19": 81.52,
-                    "20": 81.51,
-                    "21": 81.45
+                    "0": 81.49,
+                    "1": 82.34,
+                    "2": 81.83,
+                    "3": 81.64,
+                    "4": 81.45,
+                    "5": 81.3,
+                    "6": 81.25,
+                    "7": 81.31,
+                    "8": 81.32,
+                    "9": 81.28,
+                    "10": 81.24,
+                    "12": 81.21,
+                    "13": 81.45,
+                    "14": 81.42,
+                    "15": 81.52,
+                    "16": 81.51,
+                    "17": 81.51,
+                    "19": 81.48,
+                    "20": 81.48,
+                    "21": 81.5,
+                    "22": 81.45
                 },
                 "species": [
                     {
@@ -585,12 +671,13 @@
                         "ncbiID": 1678,
                         "rank": 7,
                         "chunkCounts": {
-                            "5": 1,
-                            "9": 2,
-                            "12": 3,
-                            "13": 4,
-                            "17": 6,
-                            "20": 9
+                            "1": 2,
+                            "4": 4,
+                            "7": 5,
+                            "10": 6,
+                            "12": 7,
+                            "13": 8,
+                            "16": 9
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -600,60 +687,26 @@
                         "ncbiID": 1685,
                         "rank": 8,
                         "chunkCounts": {
-                            "2": 1,
-                            "3": 2,
-                            "4": 4,
-                            "5": 5,
-                            "6": 8,
-                            "7": 11,
-                            "8": 13,
-                            "10": 14,
-                            "12": 16,
-                            "13": 19,
-                            "15": 25,
+                            "0": 2,
+                            "2": 6,
+                            "3": 9,
+                            "4": 11,
+                            "5": 13,
+                            "6": 15,
+                            "8": 16,
+                            "9": 18,
+                            "12": 20,
+                            "13": 21,
+                            "14": 25,
+                            "15": 26,
                             "16": 27,
                             "17": 29,
-                            "18": 31,
-                            "19": 32,
-                            "20": 33,
-                            "21": 35
+                            "19": 31,
+                            "20": 32,
+                            "21": 33,
+                            "22": 35
                         },
                         "chunkPlasmidCounts": {
-                        }
-                    }
-                ]
-            },
-            {
-                "cardId": "ARO:3000621",
-                "name": "PC1 beta-lactamase (blaZ)",
-                "description": "The blaZ beta-lactamase is found in Bacillus subtilis and Staphylococcus aureus.",
-                "shortName": "PC1_blaZ",
-                "drugClass": "penam",
-                "geneFamily": "BlaZ beta-lactamase",
-                "resistanceMechanism": "antibiotic inactivation",
-                "count": {
-                    "5": 1,
-                    "14": 2,
-                    "18": 3
-                },
-                "averageAccuracy": {
-                    "5": 83.11,
-                    "14": 85.73,
-                    "18": 86.33
-                },
-                "species": [
-                    {
-                        "name": "Staphylococcus",
-                        "ncbiID": 1279,
-                        "rank": 7,
-                        "chunkCounts": {
-                            "5": 1,
-                            "14": 2,
-                            "18": 3
-                        },
-                        "chunkPlasmidCounts": {
-                            "14": 1,
-                            "18": 2
                         }
                     }
                 ]
@@ -667,10 +720,10 @@
                 "geneFamily": "trimethoprim resistant dihydrofolate reductase dfr",
                 "resistanceMechanism": "antibiotic target replacement",
                 "count": {
-                    "3": 1
+                    "23": 1
                 },
                 "averageAccuracy": {
-                    "3": 84.1
+                    "23": 84.1
                 },
                 "species": [
                     {
@@ -678,7 +731,7 @@
                         "ncbiID": 1282,
                         "rank": 8,
                         "chunkCounts": {
-                            "3": 1
+                            "23": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -694,18 +747,18 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "10": 1,
+                    "1": 1,
+                    "2": 2,
                     "11": 3,
                     "12": 4,
-                    "15": 5,
-                    "17": 6
+                    "18": 6
                 },
                 "averageAccuracy": {
-                    "10": 85.33,
-                    "11": 87.54,
-                    "12": 88.59,
-                    "15": 88.24,
-                    "17": 88.76
+                    "1": 91.37,
+                    "2": 89.11,
+                    "11": 87.85,
+                    "12": 88.83,
+                    "18": 88.76
                 },
                 "species": [
                     {
@@ -713,19 +766,28 @@
                         "ncbiID": 1239,
                         "rank": 3,
                         "chunkCounts": {
-                            "11": 1
+                            "18": 1
                         },
                         "chunkPlasmidCounts": {
                         }
                     },
                     {
-                        "name": "Terrabacteria group",
+                        "name": "Bacillati",
                         "ncbiID": 1783272,
-                        "rank": 0,
+                        "rank": 2,
                         "chunkCounts": {
-                            "10": 1,
-                            "11": 2,
-                            "17": 3
+                            "1": 1,
+                            "18": 2
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    },
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "11": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -735,10 +797,44 @@
                         "ncbiID": 1685,
                         "rank": 8,
                         "chunkCounts": {
-                            "12": 1,
-                            "15": 2
+                            "2": 1,
+                            "12": 2
                         },
                         "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
+            },
+            {
+                "cardId": "ARO:3008823",
+                "name": "PC1",
+                "description": "BlaZ family penicillin-hydrolyzing class A beta-lactamase PC1.",
+                "shortName": "PC1",
+                "drugClass": "penicillin beta-lactam",
+                "geneFamily": "BlaZ beta-lactamase",
+                "resistanceMechanism": "antibiotic inactivation",
+                "count": {
+                    "0": 1,
+                    "3": 2,
+                    "21": 3
+                },
+                "averageAccuracy": {
+                    "0": 89.97,
+                    "3": 89.17,
+                    "21": 87.24
+                },
+                "species": [
+                    {
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "0": 1,
+                            "3": 2,
+                            "21": 3
+                        },
+                        "chunkPlasmidCounts": {
+                            "0": 1
                         }
                     }
                 ]
@@ -752,28 +848,28 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "8": 1,
-                    "10": 2,
-                    "11": 3,
-                    "12": 4,
-                    "13": 5,
-                    "14": 6,
-                    "15": 7,
-                    "16": 9,
-                    "20": 10,
-                    "21": 11
+                    "2": 1,
+                    "4": 2,
+                    "6": 4,
+                    "7": 5,
+                    "9": 6,
+                    "10": 7,
+                    "12": 8,
+                    "15": 9,
+                    "16": 10,
+                    "18": 11
                 },
                 "averageAccuracy": {
-                    "8": 86.67,
-                    "10": 84.88,
-                    "11": 86.49,
-                    "12": 86.36,
-                    "13": 86.53,
-                    "14": 85.96,
-                    "15": 86.45,
-                    "16": 86.18,
-                    "20": 86.43,
-                    "21": 86.64
+                    "2": 89.43,
+                    "4": 89.06,
+                    "6": 87.14,
+                    "7": 87.47,
+                    "9": 86.74,
+                    "10": 86.73,
+                    "12": 86.64,
+                    "15": 86.24,
+                    "16": 86.34,
+                    "18": 86.64
                 },
                 "species": [
                     {
@@ -781,11 +877,9 @@
                         "ncbiID": 1239,
                         "rank": 3,
                         "chunkCounts": {
-                            "13": 1,
-                            "15": 2
+                            "2": 1
                         },
                         "chunkPlasmidCounts": {
-                            "13": 1
                         }
                     },
                     {
@@ -793,11 +887,22 @@
                         "ncbiID": 91061,
                         "rank": 4,
                         "chunkCounts": {
-                            "8": 1,
-                            "10": 2,
-                            "12": 3,
-                            "16": 5,
-                            "21": 6
+                            "6": 2,
+                            "7": 3,
+                            "12": 4,
+                            "15": 5,
+                            "16": 6
+                        },
+                        "chunkPlasmidCounts": {
+                            "7": 1
+                        }
+                    },
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "9": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -807,17 +912,7 @@
                         "ncbiID": 186826,
                         "rank": 5,
                         "chunkCounts": {
-                            "20": 1
-                        },
-                        "chunkPlasmidCounts": {
-                        }
-                    },
-                    {
-                        "name": "Bacteria",
-                        "ncbiID": 2,
-                        "rank": 1,
-                        "chunkCounts": {
-                            "14": 1
+                            "4": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -827,7 +922,17 @@
                         "ncbiID": 77133,
                         "rank": 8,
                         "chunkCounts": {
-                            "11": 1
+                            "18": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    },
+                    {
+                        "name": "Staphylococcus pseudintermedius",
+                        "ncbiID": 283734,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "10": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -843,10 +948,10 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "3": 1
+                    "23": 1
                 },
                 "averageAccuracy": {
-                    "3": 83.85
+                    "23": 83.85
                 },
                 "species": [
                     {
@@ -854,7 +959,64 @@
                         "ncbiID": 1685,
                         "rank": 8,
                         "chunkCounts": {
-                            "3": 1
+                            "23": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
+            },
+            {
+                "cardId": "ARO:3003551",
+                "name": "emeA",
+                "description": "A multidrug efflux pump from Enterococcus faecalis. There exist efflux activity of several antimicrobial agents such as DAPI, Hoechst 33342 and acriflavine. Efflux of DAPI via EmeA was strongly inhibited by reserpine.",
+                "shortName": "emeA",
+                "drugClass": "disinfecting agents and antiseptics",
+                "geneFamily": "multidrug and toxic compound extrusion (MATE) transporter",
+                "resistanceMechanism": "antibiotic efflux",
+                "count": {
+                    "0": 1,
+                    "1": 3,
+                    "3": 5,
+                    "4": 6,
+                    "7": 8,
+                    "10": 10,
+                    "12": 12,
+                    "17": 14,
+                    "18": 17,
+                    "20": 19,
+                    "21": 20
+                },
+                "averageAccuracy": {
+                    "0": 83.44,
+                    "1": 87.0,
+                    "3": 86.35,
+                    "4": 87.7,
+                    "7": 87.68,
+                    "10": 87.53,
+                    "12": 86.9,
+                    "17": 87.43,
+                    "18": 87.59,
+                    "20": 86.95,
+                    "21": 87.2
+                },
+                "species": [
+                    {
+                        "name": "Enterococcus",
+                        "ncbiID": 1350,
+                        "rank": 7,
+                        "chunkCounts": {
+                            "0": 1,
+                            "1": 3,
+                            "3": 5,
+                            "4": 6,
+                            "7": 8,
+                            "10": 10,
+                            "12": 12,
+                            "17": 14,
+                            "18": 17,
+                            "20": 19,
+                            "21": 20
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -870,10 +1032,10 @@
                 "geneFamily": "msr-type ABC-F protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "15": 1
+                    "0": 1
                 },
                 "averageAccuracy": {
-                    "15": 85.52
+                    "0": 85.52
                 },
                 "species": [
                     {
@@ -881,67 +1043,10 @@
                         "ncbiID": 1280,
                         "rank": 8,
                         "chunkCounts": {
-                            "15": 1
+                            "0": 1
                         },
                         "chunkPlasmidCounts": {
-                            "15": 1
-                        }
-                    }
-                ]
-            },
-            {
-                "cardId": "ARO:3003551",
-                "name": "emeA",
-                "description": "A multidrug efflux pump from Enterococcus faecalis. There exist efflux activity of several antimicrobial agents such as DAPI",
-                "shortName": "emeA",
-                "drugClass": "disinfecting agents and antiseptics",
-                "geneFamily": "multidrug and toxic compound extrusion (MATE) transporter",
-                "resistanceMechanism": "antibiotic efflux",
-                "count": {
-                    "1": 1,
-                    "2": 2,
-                    "4": 3,
-                    "6": 5,
-                    "9": 7,
-                    "11": 10,
-                    "12": 12,
-                    "14": 13,
-                    "17": 16,
-                    "18": 17,
-                    "20": 20
-                },
-                "averageAccuracy": {
-                    "1": 82.23,
-                    "2": 81.59,
-                    "4": 84.99,
-                    "6": 87.23,
-                    "9": 87.14,
-                    "11": 87.5,
-                    "12": 86.87,
-                    "14": 86.61,
-                    "17": 86.8,
-                    "18": 86.72,
-                    "20": 87.2
-                },
-                "species": [
-                    {
-                        "name": "Enterococcus faecalis",
-                        "ncbiID": 1351,
-                        "rank": 8,
-                        "chunkCounts": {
-                            "1": 1,
-                            "2": 2,
-                            "4": 3,
-                            "6": 5,
-                            "9": 7,
-                            "11": 10,
-                            "12": 12,
-                            "14": 13,
-                            "17": 16,
-                            "18": 17,
-                            "20": 20
-                        },
-                        "chunkPlasmidCounts": {
+                            "0": 1
                         }
                     }
                 ]
@@ -949,54 +1054,54 @@
             {
                 "cardId": "ARO:3003948",
                 "name": "efrA",
-                "description": "efrA is a part of the EfrAB efflux pump",
+                "description": "efrA is a part of the EfrAB efflux pump, and both efrA and efrB are necessary to confer drug resistance.",
                 "shortName": "efrA",
                 "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;rifamycin antibiotic",
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "2": 3,
-                    "6": 5,
-                    "8": 6,
-                    "10": 7,
-                    "13": 8,
-                    "14": 11,
-                    "15": 12,
-                    "18": 13,
-                    "19": 14,
-                    "20": 16,
-                    "21": 18
+                    "2": 1,
+                    "4": 3,
+                    "5": 4,
+                    "7": 6,
+                    "8": 7,
+                    "9": 10,
+                    "15": 11,
+                    "16": 12,
+                    "17": 14,
+                    "20": 15,
+                    "23": 17
                 },
                 "averageAccuracy": {
-                    "2": 89.23,
-                    "6": 90.83,
-                    "8": 89.19,
-                    "10": 89.05,
-                    "13": 88.51,
-                    "14": 88.36,
-                    "15": 88.16,
-                    "18": 88.36,
-                    "19": 88.23,
-                    "20": 88.47,
-                    "21": 88.28
+                    "2": 85.97,
+                    "4": 87.25,
+                    "5": 87.25,
+                    "7": 87.72,
+                    "8": 88.14,
+                    "9": 88.09,
+                    "15": 88.1,
+                    "16": 87.82,
+                    "17": 88.6,
+                    "20": 88.18,
+                    "23": 88.71
                 },
                 "species": [
                     {
-                        "name": "Enterococcus faecalis",
-                        "ncbiID": 1351,
-                        "rank": 8,
+                        "name": "Enterococcus",
+                        "ncbiID": 1350,
+                        "rank": 7,
                         "chunkCounts": {
-                            "2": 3,
-                            "6": 5,
-                            "8": 6,
-                            "10": 7,
-                            "13": 8,
-                            "14": 11,
-                            "15": 12,
-                            "18": 13,
-                            "19": 14,
-                            "20": 16,
-                            "21": 18
+                            "2": 1,
+                            "4": 3,
+                            "5": 4,
+                            "7": 6,
+                            "8": 7,
+                            "9": 10,
+                            "15": 11,
+                            "16": 12,
+                            "17": 14,
+                            "20": 15,
+                            "23": 17
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -1006,91 +1111,60 @@
             {
                 "cardId": "ARO:3003949",
                 "name": "efrB",
-                "description": "efrB is a part of the EfrAB efflux pump",
+                "description": "efrB is a part of the EfrAB efflux pump, and both efrA and efrB are necessary to confer multidrug resistance.",
                 "shortName": "efrB",
                 "drugClass": "fluoroquinolone antibiotic;macrolide antibiotic;rifamycin antibiotic",
                 "geneFamily": "ATP-binding cassette (ABC) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "3": 1,
-                    "4": 3,
-                    "6": 4,
-                    "8": 6,
-                    "12": 7,
-                    "13": 9,
-                    "14": 10,
-                    "15": 11,
-                    "18": 13,
-                    "19": 15,
-                    "20": 17
+                    "2": 1,
+                    "3": 2,
+                    "4": 4,
+                    "7": 5,
+                    "8": 7,
+                    "9": 9,
+                    "10": 10,
+                    "12": 11,
+                    "16": 12,
+                    "17": 13,
+                    "19": 14,
+                    "21": 16,
+                    "23": 17
                 },
                 "averageAccuracy": {
-                    "3": 89.24,
-                    "4": 89.01,
-                    "6": 88.76,
+                    "2": 87.45,
+                    "3": 90.67,
+                    "4": 87.66,
+                    "7": 88.33,
                     "8": 88.99,
-                    "12": 89.56,
-                    "13": 88.88,
-                    "14": 88.8,
-                    "15": 88.68,
-                    "18": 88.83,
-                    "19": 88.93,
-                    "20": 88.88
+                    "9": 88.69,
+                    "10": 88.52,
+                    "12": 88.93,
+                    "16": 88.67,
+                    "17": 88.62,
+                    "19": 88.85,
+                    "21": 88.86,
+                    "23": 88.88
                 },
                 "species": [
-                    {
-                        "name": "Enterococcus faecalis",
-                        "ncbiID": 1351,
-                        "rank": 8,
-                        "chunkCounts": {
-                            "3": 1,
-                            "4": 3,
-                            "6": 4,
-                            "8": 6,
-                            "12": 7,
-                            "13": 8,
-                            "14": 9,
-                            "15": 10,
-                            "18": 12,
-                            "19": 14,
-                            "20": 16
-                        },
-                        "chunkPlasmidCounts": {
-                        }
-                    },
                     {
                         "name": "Enterococcus",
                         "ncbiID": 1350,
                         "rank": 7,
                         "chunkCounts": {
-                            "13": 1
-                        },
-                        "chunkPlasmidCounts": {
-                        }
-                    }
-                ]
-            },
-            {
-                "cardId": "ARO:3000617",
-                "name": "mecA",
-                "description": "A foreign PBP2a acquired by lateral gene transfer that is able to perform peptidoglycan synthesis in the presence of beta-lactams.",
-                "shortName": "mecA",
-                "drugClass": "carbapenem;cephalosporin;cephamycin;monobactam;penam",
-                "geneFamily": "methicillin resistant PBP2",
-                "resistanceMechanism": "antibiotic target replacement",
-                "count": {
-                    "15": 1
-                },
-                "averageAccuracy": {
-                    "15": 90.69
-                },
-                "species": [
-                    {
-                        "name": "Staphylococcus",
-                        "ncbiID": 1279,
-                        "rank": 7,
-                        "chunkCounts": {
-                            "15": 1
+                            "2": 1,
+                            "3": 2,
+                            "4": 4,
+                            "7": 5,
+                            "8": 7,
+                            "9": 9,
+                            "10": 10,
+                            "12": 11,
+                            "16": 12,
+                            "17": 13,
+                            "19": 14,
+                            "21": 16,
+                            "23": 17
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -1106,20 +1180,21 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "10": 1
+                    "11": 1
                 },
                 "averageAccuracy": {
-                    "10": 90.03
+                    "11": 90.03
                 },
                 "species": [
                     {
-                        "name": "Staphylococcus aureus",
-                        "ncbiID": 1280,
-                        "rank": 8,
+                        "name": "Staphylococcus",
+                        "ncbiID": 1279,
+                        "rank": 7,
                         "chunkCounts": {
-                            "10": 1
+                            "11": 1
                         },
                         "chunkPlasmidCounts": {
+                            "11": 1
                         }
                     }
                 ]
@@ -1127,20 +1202,20 @@
             {
                 "cardId": "ARO:3000391",
                 "name": "norA",
-                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA",
+                "description": "NorA is a multidrug efflux pump in Staphylococcus aureus that confers resistance to fluoroquinolones and other structurally unrelated antibiotics like acriflavine. It shares 30% similarity with NorA, and is a structural homolog of Bmr of Bacillus subtilis. It is regulated by arlRS and mgrA, the latter also known as NorR.",
                 "shortName": "norA",
                 "drugClass": "disinfecting agents and antiseptics;fluoroquinolone antibiotic",
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "7": 1,
-                    "9": 2,
-                    "16": 3
+                    "6": 1,
+                    "14": 2,
+                    "15": 3
                 },
                 "averageAccuracy": {
-                    "7": 91.23,
-                    "9": 88.11,
-                    "16": 88.19
+                    "6": 88.33,
+                    "14": 89.78,
+                    "15": 88.19
                 },
                 "species": [
                     {
@@ -1148,9 +1223,9 @@
                         "ncbiID": 1282,
                         "rank": 8,
                         "chunkCounts": {
-                            "7": 1,
-                            "9": 2,
-                            "16": 3
+                            "6": 1,
+                            "14": 2,
+                            "15": 3
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -1158,82 +1233,26 @@
                 ]
             },
             {
-                "cardId": "ARO:3007123",
-                "name": "tet(O/W/O)",
-                "description": "Tet(O/W/O) is a mosaic tetracycline resistance gene and ribosomal protection protein.",
-                "shortName": "tet(O/W/O)",
-                "drugClass": "tetracycline antibiotic",
-                "geneFamily": "tetracycline-resistant ribosomal protection protein",
-                "resistanceMechanism": "antibiotic target protection",
+                "cardId": "ARO:3000617",
+                "name": "mecA",
+                "description": "A foreign PBP2a acquired by lateral gene transfer that is able to perform peptidoglycan synthesis in the presence of beta-lactams.",
+                "shortName": "mecA",
+                "drugClass": "carbapenem;cephalosporin;monobactam;penicillin beta-lactam",
+                "geneFamily": "methicillin resistant PBP2",
+                "resistanceMechanism": "antibiotic target replacement",
                 "count": {
-                    "3": 1,
-                    "4": 2,
-                    "5": 3,
-                    "7": 4,
-                    "8": 5,
-                    "9": 6,
-                    "12": 8,
-                    "14": 10,
-                    "15": 11,
-                    "16": 12,
-                    "18": 13,
-                    "21": 15
+                    "2": 1
                 },
                 "averageAccuracy": {
-                    "3": 80.49,
-                    "4": 86.33,
-                    "5": 87.85,
-                    "7": 88.67,
-                    "8": 88.92,
-                    "9": 89.59,
-                    "12": 88.57,
-                    "14": 89.06,
-                    "15": 88.9,
-                    "16": 89.31,
-                    "18": 89.8,
-                    "21": 89.57
+                    "2": 90.69
                 },
                 "species": [
                     {
-                        "name": "Terrabacteria group",
-                        "ncbiID": 1783272,
-                        "rank": 0,
-                        "chunkCounts": {
-                            "5": 1,
-                            "9": 2,
-                            "12": 3,
-                            "14": 4,
-                            "18": 5
-                        },
-                        "chunkPlasmidCounts": {
-                            "14": 1
-                        }
-                    },
-                    {
-                        "name": "Bacteria",
-                        "ncbiID": 2,
-                        "rank": 1,
-                        "chunkCounts": {
-                            "8": 1,
-                            "12": 2,
-                            "14": 3,
-                            "15": 4,
-                            "21": 5
-                        },
-                        "chunkPlasmidCounts": {
-                            "21": 1
-                        }
-                    },
-                    {
-                        "name": "Bifidobacterium breve",
-                        "ncbiID": 1685,
+                        "name": "Staphylococcus aureus",
+                        "ncbiID": 1280,
                         "rank": 8,
                         "chunkCounts": {
-                            "3": 1,
-                            "4": 2,
-                            "7": 3,
-                            "16": 4,
-                            "21": 5
+                            "2": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -1249,30 +1268,28 @@
                 "geneFamily": "tetracycline-resistant ribosomal protection protein",
                 "resistanceMechanism": "antibiotic target protection",
                 "count": {
-                    "3": 1,
-                    "4": 2,
-                    "5": 5,
-                    "10": 6,
-                    "11": 7,
-                    "14": 8,
-                    "15": 9,
-                    "16": 10,
+                    "0": 1,
+                    "2": 3,
+                    "3": 6,
+                    "7": 7,
+                    "8": 9,
+                    "13": 12,
+                    "15": 13,
                     "18": 14,
-                    "19": 15,
-                    "20": 16
+                    "21": 15,
+                    "23": 16
                 },
                 "averageAccuracy": {
-                    "3": 90.84,
-                    "4": 90.16,
-                    "5": 88.55,
-                    "10": 88.27,
-                    "11": 89.09,
-                    "14": 89.27,
-                    "15": 89.09,
-                    "16": 89.33,
-                    "18": 87.87,
-                    "19": 87.6,
-                    "20": 88.06
+                    "0": 90.52,
+                    "2": 89.89,
+                    "3": 86.82,
+                    "7": 87.99,
+                    "8": 87.26,
+                    "13": 87.31,
+                    "15": 87.28,
+                    "18": 87.76,
+                    "21": 87.87,
+                    "23": 88.06
                 },
                 "species": [
                     {
@@ -1280,33 +1297,17 @@
                         "ncbiID": 1307,
                         "rank": 8,
                         "chunkCounts": {
-                            "19": 1
+                            "8": 1
                         },
                         "chunkPlasmidCounts": {
                         }
                     },
                     {
-                        "name": "Terrabacteria group",
+                        "name": "Bacillati",
                         "ncbiID": 1783272,
-                        "rank": 0,
+                        "rank": 2,
                         "chunkCounts": {
-                            "5": 1,
-                            "10": 2,
-                            "11": 3,
-                            "15": 4
-                        },
-                        "chunkPlasmidCounts": {
-                        }
-                    },
-                    {
-                        "name": "Bifidobacterium breve",
-                        "ncbiID": 1685,
-                        "rank": 8,
-                        "chunkCounts": {
-                            "4": 1,
-                            "5": 2,
-                            "14": 3,
-                            "18": 4
+                            "18": 1
                         },
                         "chunkPlasmidCounts": {
                         }
@@ -1316,14 +1317,122 @@
                         "ncbiID": 2,
                         "rank": 1,
                         "chunkCounts": {
-                            "3": 1,
-                            "5": 2,
-                            "16": 3,
-                            "18": 6,
-                            "20": 7
+                            "2": 2,
+                            "3": 4,
+                            "7": 5,
+                            "13": 7,
+                            "15": 8,
+                            "23": 9
                         },
                         "chunkPlasmidCounts": {
-                            "5": 1
+                            "13": 1
+                        }
+                    },
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "0": 1,
+                            "8": 2,
+                            "13": 3,
+                            "21": 4
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    },
+                    {
+                        "name": "Actinobacillus pleuropneumoniae",
+                        "ncbiID": 715,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "3": 1
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    }
+                ]
+            },
+            {
+                "cardId": "ARO:3007123",
+                "name": "tet(O/W/O)",
+                "description": "Tet(O/W/O) is a mosaic tetracycline resistance gene and ribosomal protection protein.",
+                "shortName": "tet(O/W/O)",
+                "drugClass": "tetracycline antibiotic",
+                "geneFamily": "tetracycline-resistant ribosomal protection protein",
+                "resistanceMechanism": "antibiotic target protection",
+                "count": {
+                    "0": 1,
+                    "2": 2,
+                    "5": 3,
+                    "6": 4,
+                    "7": 5,
+                    "8": 6,
+                    "9": 7,
+                    "12": 8,
+                    "13": 9,
+                    "15": 10,
+                    "16": 11,
+                    "19": 13,
+                    "22": 15
+                },
+                "averageAccuracy": {
+                    "0": 90.57,
+                    "2": 88.93,
+                    "5": 90.62,
+                    "6": 91.43,
+                    "7": 89.57,
+                    "8": 90.59,
+                    "9": 90.72,
+                    "12": 89.64,
+                    "13": 89.78,
+                    "15": 90.09,
+                    "16": 89.98,
+                    "19": 90.07,
+                    "22": 89.57
+                },
+                "species": [
+                    {
+                        "name": "Bacillati",
+                        "ncbiID": 1783272,
+                        "rank": 2,
+                        "chunkCounts": {
+                            "0": 1,
+                            "13": 2,
+                            "15": 3,
+                            "16": 4
+                        },
+                        "chunkPlasmidCounts": {
+                            "0": 1
+                        }
+                    },
+                    {
+                        "name": "Bifidobacterium breve",
+                        "ncbiID": 1685,
+                        "rank": 8,
+                        "chunkCounts": {
+                            "5": 1,
+                            "6": 2,
+                            "19": 3,
+                            "22": 5
+                        },
+                        "chunkPlasmidCounts": {
+                        }
+                    },
+                    {
+                        "name": "Bacteria",
+                        "ncbiID": 2,
+                        "rank": 1,
+                        "chunkCounts": {
+                            "2": 1,
+                            "7": 2,
+                            "8": 3,
+                            "9": 4,
+                            "12": 5,
+                            "19": 6
+                        },
+                        "chunkPlasmidCounts": {
+                            "7": 1
                         }
                     }
                 ]
@@ -1337,10 +1446,10 @@
                 "geneFamily": "major facilitator superfamily (MFS) antibiotic efflux pump",
                 "resistanceMechanism": "antibiotic efflux",
                 "count": {
-                    "16": 1
+                    "6": 1
                 },
                 "averageAccuracy": {
-                    "16": 84.38
+                    "6": 84.38
                 },
                 "species": [
                     {
@@ -1348,7 +1457,7 @@
                         "ncbiID": 1280,
                         "rank": 8,
                         "chunkCounts": {
-                            "16": 1
+                            "6": 1
                         },
                         "chunkPlasmidCounts": {
                         }

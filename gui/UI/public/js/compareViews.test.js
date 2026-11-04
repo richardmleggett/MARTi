@@ -13,7 +13,8 @@ test('Samples group edits recolour PCoA and UPGMA without recalculating either a
     empty() { return this; },
     val() { return this; },
     appendTo() { return this; },
-    text() { return this; }
+    text() { return this; },
+    each() { return this; }
   };
   const context = vm.createContext({
     clientProject: 'project-a',
@@ -46,6 +47,50 @@ test('Samples group edits recolour PCoA and UPGMA without recalculating either a
   assert.equal(vm.runInContext('compareOrdinationGroup({ runId: "run-2", name: "path-b" })', context), 'Ungrouped');
   assert.equal(dendrogramRenders, 2);
   assert.equal(JSON.parse(saved.get(key))['["run-2","path-b"]'], undefined);
+});
+
+test('project groups are defaults; browser groups can replace or clear them per project', () => {
+  const saved = new Map();
+  const element = {
+    each() { return this; }, empty() { return this; }, val() { return this; },
+    appendTo() { return this; }, text() { return this; }
+  };
+  const context = vm.createContext({
+    clientProject: 'project-a', sampleOrdertype: 'ID asc',
+    localStorage: {
+      getItem: key => saved.get(key) || null,
+      setItem: (key, value) => saved.set(key, value)
+    },
+    $: () => element
+  });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'compareViews.js'), 'utf8'), context);
+  vm.runInContext(`loadCompareProjectGroups([
+    { runId: 'run-1', sampleId: 'path-a', group: 'Control' },
+    { runId: 'run-2', sampleId: 'path-b', group: 'Treatment' }
+  ])`, context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-1", "path-a")', context), 'Control');
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-2", "path-a")', context), '');
+  vm.runInContext('setCompareSampleGroup("run-1", "path-a", "Other")', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-1", "path-a")', context), 'Other');
+  vm.runInContext('setCompareSampleGroup("run-2", "path-b", "")', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-2", "path-b")', context), '');
+  assert.deepEqual(JSON.parse(saved.get('martiCompareOrdinationGroups:project-a')), {
+    '["run-1","path-a"]': 'Other', '["run-2","path-b"]': ''
+  });
+  vm.runInContext('compareSampleGroupsLoad()', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-2", "path-b")', context), '');
+  vm.runInContext('resetCompareSampleGroup("run-2", "path-b")', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-2", "path-b")', context), 'Treatment');
+  assert.equal(JSON.parse(saved.get('martiCompareOrdinationGroups:project-a'))['["run-2","path-b"]'], undefined);
+  vm.runInContext('setCompareSampleGroup("run-3", "unselected", "Personal")', context);
+  saved.set('martiCompareOrdinationGroups:project-b', JSON.stringify({ '["run-1","path-a"]': 'Different project' }));
+  vm.runInContext('resetAllCompareSampleGroups()', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-1", "path-a")', context), 'Control');
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-3", "unselected")', context), '');
+  assert.deepEqual(JSON.parse(saved.get('martiCompareOrdinationGroups:project-a')), {});
+  context.clientProject = 'project-b';
+  vm.runInContext('compareSampleGroupsLoad(); loadCompareProjectGroups([])', context);
+  assert.equal(vm.runInContext('compareSampleGroupValue("run-1", "path-a")', context), 'Different project');
 });
 
 test('manual sample order is saved per project and survives renamed or temporarily deselected samples', () => {

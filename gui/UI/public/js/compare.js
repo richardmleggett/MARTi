@@ -1104,11 +1104,18 @@ function updateCompareSampleNameList(names) {
     .html('<i class="fas fa-external-link-alt" aria-hidden="true"></i>');
   newRows.append('td').append('span').attr('class', 'compareSampleRun');
   newRows.append('td').attr('class', 'compareSampleBarcode');
-  newRows.append('td').append('input')
+  var groupCells = newRows.append('td').append('div').attr('class', 'compareSampleGroupCell');
+  groupCells.append('input')
     .attr('type', 'text')
     .attr('class', 'form-control form-control-sm compareSampleGroupInput')
     .attr('list', 'compareGroupSuggestions')
     .attr('placeholder', 'Ungrouped');
+  groupCells.append('button')
+    .attr('type', 'button')
+    .attr('class', 'btn btn-link btn-sm compareSampleGroupReset')
+    .attr('title', 'Reset to project default')
+    .attr('hidden', 'hidden')
+    .html('<i class="fas fa-undo" aria-hidden="true"></i>');
 
   compareSampleList.exit().remove();
   compareSampleList = d3.select('#compareSampleNameList').selectAll('tr');
@@ -1156,6 +1163,9 @@ function updateCompareSampleNameList(names) {
     .each(function(d) {
       if (document.activeElement !== this) this.value = compareSampleGroupValue(d.pathRun, d.pathName);
     });
+  compareSampleList.select('.compareSampleGroupReset')
+    .attr('aria-label', function(d) { return 'Reset group for ' + d.id + ' to project default'; });
+  updateCompareGroupResetControls();
   updateCompareSampleSummary();
   updateCompareMetadataGroupingOptions();
 };

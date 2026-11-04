@@ -4,6 +4,7 @@ function compareViewActive(view) {
 
 // Keep the existing PCoA storage key so previously assigned groups still load.
 var compareSampleGroups = {};
+var compareProjectGroups = {};
 var compareSampleNames = {};
 var manualSortCompareSamplePaths = [];
 
@@ -152,17 +153,40 @@ function compareSampleGroupsLoad() {
 }
 
 function compareSampleGroupValue(runId, sampleName) {
-  return String(compareSampleGroups[compareSampleGroupKey(runId, sampleName)] || '').trim();
+  var key = compareSampleGroupKey(runId, sampleName);
+  var source = Object.prototype.hasOwnProperty.call(compareSampleGroups, key) ?
+    compareSampleGroups : compareProjectGroups;
+  return String(source[key] || '').trim();
+}
+
+function compareSampleGroupHasOverride(runId, sampleName) {
+  return Object.prototype.hasOwnProperty.call(compareSampleGroups, compareSampleGroupKey(runId, sampleName));
+}
+
+function updateCompareGroupResetControls() {
+  var hasProjectDefaults = Object.keys(compareProjectGroups).length > 0;
+  $('#compareSampleNameList tr').each(function() {
+    var hasOverride = compareSampleGroupHasOverride(this.getAttribute('data-pathrun'),
+      this.getAttribute('data-pathname'));
+    $(this).find('.compareSampleGroupReset').prop('hidden', !hasProjectDefaults || !hasOverride);
+  });
+  var resetAll = $('#compareGroupsResetAll');
+  if (resetAll.length) resetAll.prop('hidden', !hasProjectDefaults)
+    .prop('disabled', !hasProjectDefaults || Object.keys(compareSampleGroups).length === 0);
 }
 
 function updateCompareGroupSuggestions() {
-  var groups = Array.from(new Set(Object.keys(compareSampleGroups).map(function(key) {
-    return String(compareSampleGroups[key] || '').trim();
+  var keys = new Set(Object.keys(compareProjectGroups).concat(Object.keys(compareSampleGroups)));
+  var groups = Array.from(new Set(Array.from(keys).map(function(key) {
+    var source = Object.prototype.hasOwnProperty.call(compareSampleGroups, key) ?
+      compareSampleGroups : compareProjectGroups;
+    return String(source[key] || '').trim();
   }).filter(Boolean))).sort();
   var suggestions = $('#compareGroupSuggestions').empty();
   groups.forEach(function(group) {
     $('<option>').val(group).appendTo(suggestions);
   });
+  updateCompareGroupResetControls();
 }
 
 function updateCompareSampleGroupInputs() {
@@ -175,10 +199,51 @@ function updateCompareSampleGroupInputs() {
 
 function setCompareSampleGroup(runId, sampleName, group) {
   var key = compareSampleGroupKey(runId, sampleName);
-  var value = String(group || '').trim();
-  if (value) compareSampleGroups[key] = value;
-  else delete compareSampleGroups[key];
+  setCompareSampleGroupOverride(key, group);
   saveCompareSampleGroups();
+}
+
+function resetCompareSampleGroup(runId, sampleName) {
+  var key = compareSampleGroupKey(runId, sampleName);
+  if (!Object.prototype.hasOwnProperty.call(compareSampleGroups, key)) return;
+  delete compareSampleGroups[key];
+  saveCompareSampleGroups();
+  updateCompareSampleGroupInputs();
+  if ((sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') &&
+      typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
+}
+
+function resetAllCompareSampleGroups() {
+  if (!Object.keys(compareSampleGroups).length) return;
+  compareSampleGroups = {};
+  saveCompareSampleGroups();
+  updateCompareSampleGroupInputs();
+  if ((sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') &&
+      typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
+}
+
+function setCompareSampleGroupOverride(key, group) {
+  var value = String(group || '').trim();
+  if (value || Object.prototype.hasOwnProperty.call(compareProjectGroups, key)) {
+    compareSampleGroups[key] = value;
+  } else {
+    delete compareSampleGroups[key];
+  }
+}
+
+function loadCompareProjectGroups(groups) {
+  compareProjectGroups = {};
+  if (Array.isArray(groups)) groups.forEach(function(entry) {
+    if (!entry || typeof entry.runId !== 'string' || typeof entry.sampleId !== 'string' ||
+        typeof entry.group !== 'string') return;
+    compareProjectGroups[compareSampleGroupKey(entry.runId, entry.sampleId)] = entry.group;
+  });
+  updateCompareSampleGroupInputs();
+  if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
+  if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
+  if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+  if ((sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') &&
+      typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
 }
 
 function saveCompareSampleGroups() {
@@ -189,6 +254,7 @@ function saveCompareSampleGroups() {
     $('#compareGroupsStatus').text('Groups could not be saved in this browser.');
   }
   updateCompareGroupSuggestions();
+  if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
   if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
   if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
 }
@@ -228,8 +294,7 @@ function setCompareSampleGroupsFromMetadata(field) {
   samples.forEach(function(sample) {
     var key = compareSampleGroupKey(sample.pathRun, sample.pathName);
     var group = compareSampleMetadataGroup(sample, field);
-    if (group) compareSampleGroups[key] = group;
-    else delete compareSampleGroups[key];
+    setCompareSampleGroupOverride(key, group);
   });
   $('#compareOrdinationColourBy').val('manual');
   saveCompareSampleGroups();
@@ -293,8 +358,18 @@ function setCompareView(view) {
 }
 
 function initialiseCompareViews() {
+  compareProjectGroups = {};
   compareSampleGroupsLoad();
   compareSampleNamesLoad();
+  if (typeof uuid === 'string' && uuid) {
+    var requestedProject = clientProject;
+    socket.emit('compare-sample-groups-request', { clientId: uuid }, function(response) {
+      if (clientProject !== requestedProject || currentPage !== 'Compare') return;
+      loadCompareProjectGroups(response && response.groups);
+      $('#compareGroupsStatus').text(response && response.error ?
+        'Project groups could not be loaded: ' + response.error : '');
+    });
+  }
   $('#compareMetadataGroups').off('.compareGroups').on('change.compareGroups', function() {
     if (!this.value) return;
     setCompareSampleGroupsFromMetadata(this.value);
@@ -305,6 +380,9 @@ function initialiseCompareViews() {
       return this.textContent === sampleOrdertype;
     }).addClass('active');
     refreshCompareSampleOrder();
+  });
+  $('#compareGroupsResetAll').off('.compareGroups').on('click.compareGroups', function() {
+    resetAllCompareSampleGroups();
   });
   updateCompareMetadataGroupingOptions();
   ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
@@ -322,6 +400,10 @@ function initialiseCompareViews() {
     setCompareSampleGroup(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'), this.value);
     if (sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') refreshCompareSampleOrder();
   });
+  $('#compareSampleNameList').off('click.compareGroupReset').on('click.compareGroupReset', '.compareSampleGroupReset', function() {
+    var row = this.closest('tr');
+    resetCompareSampleGroup(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'));
+  });
   $('#compareSampleNameList').off('change.compareNames').on('change.compareNames', '.compareSampleAliasInput', function() {
     var row = this.closest('tr');
     setCompareSampleName(row.getAttribute('data-pathrun'), row.getAttribute('data-pathname'), this.value);
@@ -332,6 +414,7 @@ function initialiseCompareViews() {
     if (event.originalEvent.key !== compareSampleGroupsStorageKey()) return;
     compareSampleGroupsLoad();
     updateCompareSampleGroupInputs();
+    if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
     if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
     if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
   });

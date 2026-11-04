@@ -93,7 +93,7 @@
       </div>
       <div class="card-body pt-3 pb-0">
         <p class="small text-muted mb-2">Drag a handle to set a manual order. Enter a sample name to use it in Compare plots; leave it blank to use the shared name. Names and order are saved in this browser for this project. Use the arrow button to open a sample's Dashboard.</p>
-        <p class="small text-muted mb-2">Groups are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
+        <p class="small text-muted mb-2">Groups may be supplied by this project. Changes you make here override them and are saved in this browser for this project. Enter the same group name for samples you want to compare together.</p>
         <div class="d-flex align-items-center flex-wrap mb-3">
           <label for="compareMetadataGroups" class="small mb-0 mr-2">Set groups from metadata</label>
           <select id="compareMetadataGroups" class="custom-select custom-select-sm w-auto" aria-describedby="compareMetadataGroupsHelp">
@@ -102,6 +102,7 @@
             <option value="date" disabled>Sampling date</option>
           </select>
           <small id="compareMetadataGroupsHelp" class="text-muted ml-2">Replaces groups for the samples in this table. Samples without that field become ungrouped.</small>
+          <button type="button" id="compareGroupsResetAll" class="btn btn-sm btn-outline-secondary ml-auto" title="Remove this browser's group changes for this project, including unselected samples" hidden disabled>Reset all groups to project defaults</button>
         </div>
         <div class="table-responsive compareSamplesTableWrap">
           <table class="table table-sm table-hover mb-0 compareSamplesTable" aria-label="Selected comparison samples and groups">
@@ -730,6 +731,7 @@
             <option data-value="cardId" selected>Gene</option><option data-value="drugClass">Drug class</option><option data-value="resMech">Resistance mechanism</option>
           </select></div>
           <div class="form-group"><label for="compareAmrHmTopN">Show top <span id="compareAmrHmTopNNum" class="font-weight-bold">N</span> per sample</label><input type="range" class="form-control-range" id="compareAmrHmTopN" min="1" max="100" value="10"></div>
+          <div class="form-group"><label for="compareAmrHmMaxRows">Maximum heatmap rows: <span id="compareAmrHmMaxRowsNum" class="font-weight-bold">30</span></label><input type="range" class="form-control-range" id="compareAmrHmMaxRows" min="5" max="100" value="30"><small class="form-text text-muted">Rows are ranked by their total share across selected samples.</small></div>
 
           <h6 class="compareSettingsSection">Colours</h6>
           <div class="form-group"><div class="font-weight-bold mb-1">Colour palette</div>
@@ -737,16 +739,20 @@
             <label class="d-block"><input type="radio" name="compareAmrHmColour" value="viridis"> Viridis</label>
             <label class="d-block"><input type="radio" name="compareAmrHmColour" value="magma"> Magma</label>
           </div>
+          <div class="form-group mb-1"><div class="font-weight-bold mb-1">Colour scale range</div><div class="d-flex align-items-center"><input class="form-control form-control-sm mr-2" type="number" id="compareAmrHmScaleMin" min="0" step="any" placeholder="Auto min" aria-label="Minimum colour scale value"><input class="form-control form-control-sm" type="number" id="compareAmrHmScaleMax" min="0" step="any" placeholder="Auto max" aria-label="Maximum colour scale value"></div><small class="form-text text-muted">Use both values in the units currently shown: AMR hit % or counts.</small><small id="compareAmrHmScaleRangeStatus" class="form-text text-danger" aria-live="polite"></small></div>
           <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmGrey"> Grey zero values</label></div>
 
           <h6 class="compareSettingsSection">Display</h6>
           <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmRead" checked> Show percentages (otherwise counts)</label></div>
+          <small class="form-text text-muted mb-2">Percentages use each sample's total AMR gene hits. A gene can contribute to more than one drug class or resistance mechanism.</small>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmShowValues"> Show cell values</label></div>
           <div class="form-group mt-2 mb-0"><label for="compareAmrHmMaxRectWidth">Max cell width: <span id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareAmrHmMaxRectWidth" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80"></div>
         </form>
       </aside><div class="comparePlotContent text-center">
 
 
       <div class="compareAmrHmCard">
+        <div id="compareAmrHmRowsStatus" class="small text-muted" aria-live="polite"></div>
         <div id='compareAmrHmLegend' class="text-center">
 
       </div>
