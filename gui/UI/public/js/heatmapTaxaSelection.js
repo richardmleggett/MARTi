@@ -98,11 +98,18 @@
     };
   }
 
+  function bubbleRadius(value, maximum, columnWidth, rowHeight) {
+    if (!(value > 0) || !(maximum > 0) || !(columnWidth > 0) || !(rowHeight > 0)) return 0;
+    var maximumRadius = Math.min(columnWidth, rowHeight) * 0.43;
+    return maximumRadius * Math.sqrt(Math.min(value, maximum) / maximum);
+  }
+
   return {
     parseTaxonIds: parseTaxonIds,
     buildSampleCells: buildSampleCells,
     resolveColourThresholds: resolveColourThresholds,
     resolveContinuousColourRange: resolveContinuousColourRange,
-    limitTopTaxaRows: limitTopTaxaRows
+    limitTopTaxaRows: limitTopTaxaRows,
+    bubbleRadius: bubbleRadius
   };
 });

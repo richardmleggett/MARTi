@@ -41,13 +41,16 @@ function initialiseCompareDiversity() {
   compareDiversityDepth = 0;
   $('#compareDiversityTooltip').remove();
   $('<div id="compareDiversityTooltip" class="compareDiversityTooltip" role="tooltip" hidden></div>').appendTo('body');
-  $('#compareDiversityPlotMetric, #compareDiversityPlotOrder').off('.diversityPlot')
+  $('#compareDiversityPlotMetric, #compareDiversityPlotOrder, #compareDiversityPlotView').off('.diversityPlot')
     .on('change.diversityPlot', renderCompareDiversityPlot);
   $('#compareDiversityPlotExportSvg').off('.diversityPlot').on('click.diversityPlot', function (event) {
     event.preventDefault(); compareDiversityExportPlot('svg');
   });
   $('#compareDiversityPlotExportPng').off('.diversityPlot').on('click.diversityPlot', function (event) {
     event.preventDefault(); compareDiversityExportPlot('png');
+  });
+  $('#compareDiversityPlotExportCsv').off('.diversityPlot').on('click.diversityPlot', function (event) {
+    event.preventDefault(); compareDiversityExportGroupCsv();
   });
   $.fn.dataTable.ext.type.order['compare-diversity-number-asc'] = function (a, b) {
     return compareDiversityNumericCompare(a, b, false);
@@ -152,6 +155,56 @@ function compareDiversitySortPlotRows(rows, order) {
     .map(function (entry) { return entry.point; });
 }
 
+function compareDiversityGroupRows(points, groupValue, displayName) {
+  var rows = [];
+  var assigned = new Map();
+  var ungroupedNames = {};
+  points.forEach(function(point) {
+    var metadata = point.record.metadata;
+    if (String(groupValue(metadata.pathRun, metadata.pathName) || '').trim()) return;
+    var display = displayName(metadata);
+    ungroupedNames[display] = (ungroupedNames[display] || 0) + 1;
+  });
+  points.forEach(function(point) {
+    var metadata = point.record.metadata;
+    var name = String(groupValue(metadata.pathRun, metadata.pathName) || '').trim();
+    if (!name) {
+      var display = displayName(metadata);
+      rows.push({ label: 'Ungrouped · ' + display + (ungroupedNames[display] > 1 ?
+        ' · ' + metadata.runId : ''), kind: 'sample', members: [point] });
+    } else {
+      if (!assigned.has(name)) {
+        var row = { label: name, kind: 'group', members: [] };
+        assigned.set(name, row);
+        rows.push(row);
+      }
+      assigned.get(name).members.push(point);
+    }
+  });
+  rows.forEach(function(row) {
+    row.validMembers = row.members.filter(function(point) {
+      return point.value != null && isFinite(point.value);
+    });
+    var values = row.validMembers.map(function(point) { return Number(point.value); });
+    row.value = values.length ? values.reduce(function(sum, value) { return sum + value; }, 0) / values.length : null;
+    row.minimum = values.length ? Math.min.apply(null, values) : null;
+    row.maximum = values.length ? Math.max.apply(null, values) : null;
+  });
+  return rows;
+}
+
+function compareDiversityGroupCsv(rows, detail, rank, cutoff, unit, depth) {
+  function quote(value) { return '"' + String(value == null ? '' : value).replace(/"/g, '""') + '"'; }
+  var output = [['Row', 'Type', 'Samples with value (n)', 'Samples total', 'Mean', 'Minimum', 'Maximum',
+    'Measure', 'Rank', 'Minimum abundance (%)', 'Unit', 'Rarefaction depth (reads)']];
+  rows.forEach(function(row) {
+    output.push([row.label, row.kind === 'group' ? 'Group' : 'Ungrouped sample', row.validMembers.length,
+      row.members.length, row.value, row.minimum, row.maximum, detail.label, rank, cutoff, unit,
+      depth || '']);
+  });
+  return output.map(function(line) { return line.map(quote).join(','); }).join('\r\n');
+}
+
 function compareDiversityHideTooltip() {
   $('#compareDiversityTooltip').prop('hidden', true);
 }
@@ -178,16 +231,54 @@ function compareDiversityShowTooltip(point, clientX, clientY) {
   });
 }
 
+function compareDiversityShowGroupTooltip(row, detail, clientX, clientY) {
+  var tooltip = $('#compareDiversityTooltip').empty();
+  var meanDecimals = Math.max(2, detail.decimals);
+  $('<strong></strong>').text(row.label).appendTo(tooltip);
+  $('<div></div>').text('Samples with a value: ' + row.validMembers.length + ' of ' + row.members.length).appendTo(tooltip);
+  $('<div></div>').text('Mean ' + detail.label + ': ' + compareDiversityNumber(row.value, meanDecimals)).appendTo(tooltip);
+  if (row.validMembers.length > 1) {
+    $('<div></div>').text('Observed range: ' + compareDiversityNumber(row.minimum, detail.decimals) +
+      '–' + compareDiversityNumber(row.maximum, detail.decimals)).appendTo(tooltip);
+  }
+  tooltip.prop('hidden', false);
+  tooltip.css({
+    left: Math.max(8, Math.min(clientX + 14, window.innerWidth - tooltip.outerWidth() - 8)) + 'px',
+    top: Math.max(8, Math.min(clientY + 14, window.innerHeight - tooltip.outerHeight() - 8)) + 'px'
+  });
+}
+
+function compareDiversityCurrentGroupRows(metric, order) {
+  var points = compareDiversityRecords.map(function(record) {
+    return { record: record, value: compareDiversityMetricValue(record, metric) };
+  });
+  var rows = compareDiversityGroupRows(points, compareSampleGroupValue, function(metadata) {
+    return compareSampleDisplayName(metadata.pathRun, metadata.pathName, metadata.id);
+  });
+  return compareDiversitySortPlotRows(rows, order);
+}
+
 function renderCompareDiversityPlot() {
   var holder = $('#compareDiversityPlot').empty();
+  if (!holder.length) return;
   compareDiversityHideTooltip();
   var metric = $('#compareDiversityPlotMetric').val() || 'richness';
   var detail = compareDiversityPlotMetrics[metric];
   if (!detail) return;
+  var hasAssignedGroups = compareDiversityRecords.some(function(record) {
+    return Boolean(compareSampleGroupValue(record.metadata.pathRun, record.metadata.pathName));
+  });
+  $('#compareDiversityPlotView option[value="groups"]').prop('disabled', !hasAssignedGroups);
+  if (!hasAssignedGroups && $('#compareDiversityPlotView').val() === 'groups') {
+    $('#compareDiversityPlotView').val('samples');
+  }
+  var grouped = $('#compareDiversityPlotView').val() === 'groups';
+  $('#compareDiversityPlotExportCsv').prop('hidden', !grouped);
   var order = $('#compareDiversityPlotOrder').val() || 'sample';
-  var rows = compareDiversitySortPlotRows(compareDiversityRecords.map(function (record) {
+  var points = compareDiversityRecords.map(function (record) {
     return { record: record, value: compareDiversityMetricValue(record, metric) };
-  }), order);
+  });
+  var rows = grouped ? compareDiversityCurrentGroupRows(metric, order) : compareDiversitySortPlotRows(points, order);
   var validRows = rows.filter(function (point) { return point.value != null && isFinite(point.value); });
   var unit = compareDiversityUnit();
   $('#compareDiversityPlotNote').text(metric === 'rarefied'
@@ -199,9 +290,11 @@ function renderCompareDiversityPlot() {
     : (unit === 'bases' ? 'DNA yield weighted. ' : 'Read weighted. ') +
       'N in the tooltip is the ' + (unit === 'bases' ? 'basepairs' : 'reads') +
       ' in included taxa at the selected rank and minimum abundance. Final values can depend on sequencing depth.');
+  $('#compareDiversityPlotNote').append(grouped ?
+    ' Each group dot is the mean of its available sample values; the line shows the observed minimum–maximum range, not a confidence interval. Individual samples remain visible. Ungrouped samples have separate rows.' : '');
   $('#compareDiversityPlotNote').append(order === 'descending' ? ' Plot ordered highest to lowest.'
     : order === 'ascending' ? ' Plot ordered lowest to highest.'
-      : ' Samples follow the order in the Samples card.');
+      : grouped ? ' Groups follow their first sample in the Samples card.' : ' Samples follow the order in the Samples card.');
   if (!rows.length) {
     $('<p class="text-muted text-center py-5 mb-0"></p>')
       .text(compareDiversityRecords.length ? 'No values available for this measure.' : 'Select samples to compare diversity.')
@@ -209,10 +302,11 @@ function renderCompareDiversityPlot() {
     return;
   }
 
-  var width = 960, left = 250, right = 80, top = 45, rowHeight = 34;
+  var width = 960, left = 250, right = 80, top = 45, rowHeight = grouped ? 42 : 34;
   var axisY = 30;
   var height = top + rows.length * rowHeight + 42;
-  var maximum = d3.max(validRows, function (point) { return point.value; }) || 0;
+  var maximum = (grouped ? d3.max(rows, function(row) { return row.maximum; }) :
+    d3.max(validRows, function(point) { return point.value; })) || 0;
   var x = d3.scale.linear().domain([0, metric === 'pielou' ? 1 : maximum > 0 ? maximum * 1.12 : 1])
     .range([left, width - right]);
   var svg = d3.select(holder[0]).append('svg').attr('id', 'compareDiversityPlotSvg')
@@ -223,7 +317,8 @@ function renderCompareDiversityPlot() {
     (metric === 'rarefied' ? 'at ' + thousandsSeparators(compareDiversityDepth) + ' reads'
       : metric === 'richness' ? 'observed richness'
         : unit === 'bases' ? 'DNA yield weighted' : 'read weighted');
-  svg.append('title').text(chartTitle);
+  if (grouped) chartTitle += ' · group mean and observed range';
+  svg.attr('aria-label', chartTitle);
   svg.append('rect').attr('width', width).attr('height', height).style('fill', '#fff');
   var axis = d3.svg.axis().scale(x).orient('top').ticks(6)
     .tickFormat(d3.format(metric === 'pielou' ? '.2f' : '.3g'));
@@ -235,6 +330,95 @@ function renderCompareDiversityPlot() {
     .text(detail.label + (metric === 'rarefied' ? ' at ' + thousandsSeparators(compareDiversityDepth) + ' reads'
       : metric === 'richness' ? ''
         : unit === 'bases' ? ' (DNA yield weighted)' : ' (read weighted)'));
+
+  if (grouped) {
+    var meanDecimals = Math.max(2, detail.decimals);
+    var groupRows = svg.selectAll('.diversityGroup').data(rows).enter().append('g')
+      .attr('class', 'diversityGroup')
+      .attr('transform', function(row, index) { return 'translate(0,' + (top + (index + 0.5) * rowHeight) + ')'; });
+    groupRows.append('rect').attr('x', 0).attr('y', -rowHeight / 2).attr('width', width).attr('height', rowHeight)
+      .style('fill', 'transparent');
+    groupRows.append('line').attr('x1', left).attr('x2', width - right).attr('y1', 0).attr('y2', 0)
+      .style('stroke', '#edf0f5');
+    groupRows.append('text').attr('x', left - 12).attr('y', 4).attr('text-anchor', 'end')
+      .style('fill', '#3a3b45').style('font-size', '12px')
+      .text(function(row) {
+        var label = row.label + (row.kind === 'group' ? ' (n=' + row.validMembers.length + ')' : '');
+        return label.length > 34 ? label.slice(0, 31) + '…' : label;
+      });
+    var rangeRows = groupRows.filter(function(row) {
+      return row.kind === 'group' && row.validMembers.length > 1 && row.minimum < row.maximum;
+    });
+    rangeRows.append('line').attr('x1', function(row) { return x(row.minimum); })
+      .attr('x2', function(row) { return x(row.maximum); }).attr('y1', 0).attr('y2', 0)
+      .style('stroke', '#3a3b45').style('stroke-width', 2);
+    [-1, 1].forEach(function(side) {
+      rangeRows.append('line').attr('x1', function(row) { return x(side < 0 ? row.minimum : row.maximum); })
+        .attr('x2', function(row) { return x(side < 0 ? row.minimum : row.maximum); })
+        .attr('y1', -5).attr('y2', 5).style('stroke', '#3a3b45').style('stroke-width', 2);
+    });
+    groupRows.each(function(row) {
+      var holder = d3.select(this);
+      holder.selectAll('circle.compareDiversityMember').data(row.validMembers).enter().append('circle')
+        .attr('class', 'compareDiversityMember')
+        .attr('cx', function(point) { return x(point.value); })
+        .attr('cy', function(point, index) { return row.kind === 'sample' ? 0 : (index % 2 ? 11 : -11); })
+        .attr('r', row.kind === 'sample' ? 6 : 4)
+        .attr('fill', row.kind === 'sample' ? '#4e73df' : '#a8baf0')
+        .attr('stroke', '#526daf').attr('stroke-width', 1)
+        .attr('tabindex', 0).attr('role', 'img')
+        .attr('aria-label', function(point) {
+          return compareSampleDisplayName(point.record.metadata.pathRun, point.record.metadata.pathName,
+            point.record.metadata.id) + ', ' + detail.label + ' ' + compareDiversityNumber(point.value, detail.decimals);
+        })
+        .on('mouseenter', function(point) {
+          d3.event.stopPropagation();
+          compareDiversityShowTooltip(point, d3.event.clientX, d3.event.clientY);
+        }).on('mousemove', function(point) {
+          d3.event.stopPropagation();
+          compareDiversityShowTooltip(point, d3.event.clientX, d3.event.clientY);
+        })
+        .on('mouseleave', compareDiversityHideTooltip)
+        .on('focus', function(point) {
+          var bounds = this.getBoundingClientRect();
+          compareDiversityShowTooltip(point, bounds.right, bounds.top);
+        }).on('blur', compareDiversityHideTooltip);
+      if (row.kind === 'group' && row.value != null) {
+        holder.append('circle').attr('class', 'compareDiversityGroupMean')
+          .attr('cx', x(row.value)).attr('cy', 0).attr('r', 7)
+          .attr('fill', '#4e73df').attr('stroke', '#1f2937').attr('stroke-width', 2)
+          .attr('tabindex', 0).attr('role', 'img')
+          .attr('aria-label', row.label + ', mean ' + detail.label + ' ' +
+            compareDiversityNumber(row.value, meanDecimals) + ', ' + row.validMembers.length + ' samples')
+          .on('mouseenter', function() {
+            d3.event.stopPropagation();
+            compareDiversityShowGroupTooltip(row, detail, d3.event.clientX, d3.event.clientY);
+          }).on('mousemove', function() {
+            d3.event.stopPropagation();
+            compareDiversityShowGroupTooltip(row, detail, d3.event.clientX, d3.event.clientY);
+          })
+          .on('mouseleave', compareDiversityHideTooltip)
+          .on('focus', function() {
+            var bounds = this.getBoundingClientRect();
+            compareDiversityShowGroupTooltip(row, detail, bounds.right, bounds.top);
+          }).on('blur', compareDiversityHideTooltip);
+      }
+    });
+    groupRows.append('text').attr('x', function(row) { return row.value == null ? left + 11 : x(row.value) + 11; })
+      .attr('y', 4).style('fill', '#5a5c69').style('font-size', '11px')
+      .text(function(row) { return compareDiversityNumber(row.value, meanDecimals); });
+    groupRows.on('mouseenter', function(row) {
+      d3.select(this).select('rect').style('fill', '#f8f9fc');
+      if (row.kind === 'group') compareDiversityShowGroupTooltip(row, detail, d3.event.clientX, d3.event.clientY);
+    }).on('mousemove', function(row) {
+      d3.select(this).select('rect').style('fill', '#f8f9fc');
+      if (row.kind === 'group') compareDiversityShowGroupTooltip(row, detail, d3.event.clientX, d3.event.clientY);
+    }).on('mouseleave', function() {
+      d3.select(this).select('rect').style('fill', 'transparent');
+      compareDiversityHideTooltip();
+    });
+    return;
+  }
 
   var names = {};
   rows.forEach(function (point) {
@@ -291,6 +475,7 @@ function compareDiversityExportPlot(format) {
   var svg = document.getElementById('compareDiversityPlotSvg');
   if (!svg) return;
   var filename = 'marti_compare_diversity_' + $('#compareDiversityPlotMetric').val() + '_' +
+    ($('#compareDiversityPlotView').val() === 'groups' ? 'groups_' : 'samples_') +
     taxonomicRankSelectedCompareText.toLowerCase().replace(/\s+/g, '_') + '_lca_' + lcaAbundanceCompare + '_' +
     ($('#compareDiversityPlotMetric').val() === 'rarefied' ? 'reads' : compareDiversityUnit()) + '_' + getDate() + '_' + getTime();
   var source = new XMLSerializer().serializeToString(svg);
@@ -314,6 +499,17 @@ function compareDiversityExportPlot(format) {
   };
   image.onerror = function () { URL.revokeObjectURL(url); };
   image.src = url;
+}
+
+function compareDiversityExportGroupCsv() {
+  if ($('#compareDiversityPlotView').val() !== 'groups') return;
+  var metric = $('#compareDiversityPlotMetric').val();
+  var rows = compareDiversityCurrentGroupRows(metric, $('#compareDiversityPlotOrder').val() || 'sample');
+  var csv = compareDiversityGroupCsv(rows, compareDiversityPlotMetrics[metric],
+    taxonomicRankSelectedCompareText, lcaAbundanceCompare,
+    metric === 'rarefied' ? 'reads' : compareDiversityUnit(),
+    metric === 'rarefied' ? compareDiversityDepth : '');
+  export_as_csv(csv, 'marti_compare_diversity_' + metric + '_groups_' + getDate() + '_' + getTime());
 }
 
 function updateCompareDiversityTable(samples) {
@@ -368,6 +564,8 @@ function renderCompareDiversityTab() {
 if (typeof module !== 'undefined') module.exports = {
   compareDiversitySortRecords: compareDiversitySortRecords,
   compareDiversitySortPlotRows: compareDiversitySortPlotRows,
+  compareDiversityGroupRows: compareDiversityGroupRows,
+  compareDiversityGroupCsv: compareDiversityGroupCsv,
   compareDiversityNumericCompare: compareDiversityNumericCompare,
   compareDiversityTableCell: compareDiversityTableCell
 };

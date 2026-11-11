@@ -109,6 +109,11 @@ var currentWidthAmrHm = $('#compareAmrHmPlot').width();
     compareAmrHmMaxRows = 30;
     compareAmrHmShowValues = false;
 
+    $('#compareAmrHmDisplay').val('cells').on('change', function() {
+      $('.compareAmrHmCellsOnly').toggle(this.value === 'cells');
+      plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
+    });
+
     d3.select("#compareAmrHmTopN").on("change", function(){
       updateAmrPlots(rawAmrData);
     });
@@ -274,11 +279,13 @@ var marginAmrHm = {top: 30, right: 80, bottom: 30, left: 60},
 
 
 function plotAmrHm(data,taxa) {
+var bubbleMode = $('#compareAmrHmDisplay').val() === 'bubbles';
 
 if (!Array.isArray(data) || !Array.isArray(taxa) || !data.length || !taxa.length) {
   d3.select('#compareAmrHmRowsStatus').text('No AMR heatmap data for the selected samples.');
   if (amrHmL1) amrHmL1.selectAll('.sample').remove();
   if (amrHmL2) amrHmL2.selectAll('.axis').selectAll('*').remove();
+  if (amrHmSvg) amrHmSvg.selectAll('.compareHeatmapHover').remove();
   if (amrHmLegend) amrHmLegend.style('display', 'none');
   return;
 }
@@ -417,6 +424,8 @@ data.forEach(function(d) {
 
 });
 
+var bubbleMaximum = plotMaxValue;
+
 
 
 var amrHmDomain = [];
@@ -515,10 +524,25 @@ if (data.length <= 10){
       .attr("width", xScaleAmrHm.rangeBand())
       .attr("height", yScaleAmrHm.rangeBand())
       .style("fill", function(d) {
-        return ((compareAmrHmGrey == "on" && d.plotValue == 0) ? "#D3D3D3" : amrHmColour(d.plotValue))
-      });
+        return bubbleMode ? '#fff' : ((compareAmrHmGrey == "on" && d.plotValue == 0) ?
+          "#D3D3D3" : amrHmColour(d.plotValue));
+      })
+      .style('stroke', bubbleMode ? '#e3e6f0' : null)
+      .style('stroke-width', bubbleMode ? '0.5px' : null);
 
       rectanglesAmrHm.exit().remove();
+
+      var bubbles = sample.selectAll('circle.amrHmBubble')
+        .data(function(d) { return bubbleMode ? d.taxa : []; });
+      bubbles.enter().append('circle').attr('class', 'amrHmBubble');
+      bubbles.attr('cx', function(d) { return xScaleAmrHm(d.index) + xScaleAmrHm.rangeBand() / 2; })
+        .attr('cy', function(d) { return yScaleAmrHm(d.name) + yScaleAmrHm.rangeBand() / 2; })
+        .attr('r', function(d) { return HeatmapTaxaSelection.bubbleRadius(d.plotValue,
+          bubbleMaximum, xScaleAmrHm.rangeBand(), yScaleAmrHm.rangeBand()); })
+        .style('fill', function(d) { return amrHmColour(d.plotValue); })
+        .style('stroke', '#5a5c69').style('stroke-width', '0.7px')
+        .style('pointer-events', 'none');
+      bubbles.exit().remove();
 
       var cellValues = sample.selectAll('text.amrHmCellValue')
         .data(function(d) { return d.taxa; });
@@ -529,7 +553,7 @@ if (data.length <= 10){
         .style('font-size', '9px').style('font-weight', '600')
         .style('fill', '#222').style('stroke', 'white').style('stroke-width', '2px')
         .style('paint-order', 'stroke').style('pointer-events', 'none')
-        .style('display', compareAmrHmShowValues && xScaleAmrHm.rangeBand() >= 42 ? null : 'none')
+        .style('display', !bubbleMode && compareAmrHmShowValues && xScaleAmrHm.rangeBand() >= 42 ? null : 'none')
         .text(function(d) {
           return compareAmrHmRead === 'percent' ? d3.format('.3g')(d.plotValue * 100) + '%' : thousandKilo(d.plotValue);
         });
@@ -588,6 +612,11 @@ if(compareAmrHmRead == "percent"){
         .selectAll("text")
           .text(function(d) { var finalText = thousandKilo(d); return finalText });
 
+      renderCompareHeatmapBubbleLegend(amrHmLegend, bubbleMode, bubbleMaximum,
+        xScaleAmrHm.rangeBand(), yScaleAmrHm.rangeBand(),
+        compareAmrHmRead === 'percent' ? formatHeatmapTaxaPercent(bubbleMaximum) + '%' :
+          d3.format('.3s')(bubbleMaximum));
+
         var amrHmLegendHeight = $("#amrHmLegend")[0].getBBox().height;
 
         amrHmLegend
@@ -603,6 +632,9 @@ if(compareAmrHmRead == "percent"){
       d3.select("#compareAmrHmPlot>svg")
         .attr("height", heightAmrHm + xAxisHeight + amrHmLegendHeight + marginAmrHm.top + marginAmrHm.bottom);
 
+          var amrHover = compareHeatmapCellHover(amrHmSvg, xScaleAmrHm,
+            yScaleAmrHm, widthAmrHm, heightAmrHm);
+          rectanglesAmrHm.on('mouseover', amrHover.show);
 
           rectanglesAmrHm.on("mousemove", function(d) {
 
@@ -622,6 +654,7 @@ if(compareAmrHmRead == "percent"){
 
           rectanglesAmrHm.on("mouseout", function(d) {
 
+            amrHover.clear();
 
             toolTipDiv.transition("AmrHmToolTip")
                 .duration(50)

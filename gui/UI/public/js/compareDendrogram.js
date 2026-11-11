@@ -1,4 +1,4 @@
-/* global $, socket, uuid, currentPage, lcaAbundanceCompare, taxonomicRankSelectedCompare, taxonomicLevelDictRev, selectedCompareMetaDataArray, compareSampleGroupValue, compareOrdinationHasAssignedGroups, compareOrdinationDisplayName, compareOrdinationLegendLayout, compareOrdinationSvgElement, colourPalettes, toolTipDiv, tooltipPos, tooltipPosY, saveAs, getDate, getTime */
+/* global $, socket, uuid, currentPage, lcaAbundanceCompare, taxonomicRankSelectedCompare, taxonomicLevelDictRev, selectedCompareMetaDataArray, compareSampleGroupValue, compareOrdinationHasAssignedGroups, compareOrdinationDisplayName, compareOrdinationLegendLayout, compareOrdinationSvgElement, compareSampleGroupRenderLegend, colourPalettes, toolTipDiv, tooltipPos, tooltipPosY, saveAs, getDate, getTime */
 
 var compareDendrogramResult = null;
 var compareDendrogramRequestSerial = 0;
@@ -153,6 +153,7 @@ function renderCompareDendrogram() {
     'font-size': 14, 'font-weight': 'bold'
   }, svg, (result.method === 'aitchison' ? 'Aitchison (CLR)' : 'Bray–Curtis') +
     ' · ' + taxonomicLevelDictRev[result.rank] + ' · LCA ' + lcaAbundanceCompare + '%');
+  var pointElements = [];
   function draw(node) {
     if (!node.children) {
       var name = compareOrdinationDisplayName(node);
@@ -187,6 +188,7 @@ function renderCompareDendrogram() {
         'aria-label': name + ', run ' + node.runId
       }, svg, label);
       compareOrdinationSvgElement('title', {}, text, name + ' · Run: ' + node.runId);
+      pointElements.push({ group: groupName(node), circle: circle, label: text });
       return;
     }
     var parentX = x(node.distance);
@@ -219,19 +221,8 @@ function renderCompareDendrogram() {
   compareOrdinationSvgElement('text', {
     x: left + plotWidth / 2, y: axisY + 40, 'text-anchor': 'middle', fill: '#444', 'font-size': 12
   }, svg, 'Cluster distance');
-  if (legend) legend.items.forEach(function (item) {
-    var lx = left + item.x, ly = legendTop + item.y;
-    compareOrdinationSvgElement('circle', {
-      cx: lx, cy: ly - 4, r: 5, fill: colours[item.group],
-      stroke: '#333', 'stroke-width': 0.8
-    }, svg);
-    var label = compareOrdinationSvgElement('text', {
-      x: lx + 14, y: ly, fill: '#444', 'font-size': 11
-    }, svg);
-    item.lines.forEach(function (line, index) {
-      compareOrdinationSvgElement('tspan', { x: lx + 14, dy: index ? 15 : 0 }, label, line);
-    });
-  });
+  if (legend) compareSampleGroupRenderLegend(svg, legend, left, legendTop, colours,
+    pointElements, compareDendrogramHideTooltip);
   $('#compareDendrogramStatus').text(result.sampleCount + ' samples · ' + result.featureCount +
     ' taxa' + (result.excludedCount ? ' · ' + result.excludedCount + ' excluded' : '') +
     (maximum === 0 ? ' · Retained profiles are identical; cluster order is arbitrary' : '') + '.');

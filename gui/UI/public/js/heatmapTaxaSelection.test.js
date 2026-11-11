@@ -1,6 +1,14 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { parseTaxonIds, buildSampleCells, resolveColourThresholds, resolveContinuousColourRange, limitTopTaxaRows } = require('./heatmapTaxaSelection');
+const { parseTaxonIds, buildSampleCells, resolveColourThresholds, resolveContinuousColourRange, limitTopTaxaRows,
+  bubbleRadius } = require('./heatmapTaxaSelection');
+
+test('bubble area is proportional to abundance and zero cells stay empty', () => {
+  assert.equal(bubbleRadius(0, 100, 30, 24), 0);
+  assert.equal(bubbleRadius(100, 100, 30, 24), 24 * 0.43);
+  assert.equal(bubbleRadius(25, 100, 30, 24), bubbleRadius(100, 100, 30, 24) / 2);
+  assert.ok(bubbleRadius(100, 100, 8, 24) < bubbleRadius(100, 100, 30, 24));
+});
 
 test('continuous palettes accept custom percentage and count ranges', () => {
   assert.deepEqual(resolveContinuousColourRange({ min: '', max: '' }, 0.2, true),

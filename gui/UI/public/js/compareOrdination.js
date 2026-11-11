@@ -98,6 +98,7 @@ function initialiseCompareOrdination() {
   $('#compareOrdinationPlot').off('.ordination3d')
     .on('pointerdown.ordination3d', function (event) {
       if ($('#compareOrdinationViewMode').val() !== '3d' || event.button !== 0) return;
+      if (event.target.closest('.compareSampleGroupLegendItem')) return;
       var pointer = event.originalEvent;
       compareOrdinationDrag = { id: pointer.pointerId, x: pointer.clientX, y: pointer.clientY };
       this.classList.add('dragging');
@@ -225,7 +226,7 @@ function compareOrdinationWrapLegendLabel(label, maxWidth, measure) {
 }
 
 function compareOrdinationLegendLayout(groups, availableWidth, measure) {
-  var labelOffset = 14, itemGap = 22, lineHeight = 15, rowGap = 10;
+  var labelOffset = 16, itemGap = 22, lineHeight = 16, rowGap = 10;
   var x = 0, y = 0, rowHeight = 0;
   var items = groups.map(function (group) {
     var lines = compareOrdinationWrapLegendLabel(group, availableWidth - labelOffset - 4, measure);
@@ -273,11 +274,47 @@ function compareOrdinationProject3d(point, yaw, pitch) {
   };
 }
 
+function compareSampleGroupRenderLegend(svg, legend, left, top, colours, pointElements, hideTooltip) {
+  var legendElements = [];
+  function highlight(group) {
+    pointElements.forEach(function (item) {
+      var matching = group && item.group === group;
+      item.circle.style.opacity = !group || matching ? '1' : '0.25';
+      item.circle.style.stroke = matching ? '#1f1f1f' : '';
+      item.circle.style.strokeWidth = matching ? '2px' : '';
+      if (item.label) item.label.style.opacity = !group || matching ? '1' : '0.25';
+    });
+    legendElements.forEach(function (item) {
+      item.element.style.opacity = !group || item.group === group ? '1' : '0.3';
+      item.label.style.fontWeight = group && item.group === group ? 'bold' : 'normal';
+    });
+  }
+  legend.items.forEach(function (item) {
+    var lx = left + item.x, ly = top + item.y;
+    var element = compareOrdinationSvgElement('g', { class: 'compareSampleGroupLegendItem', tabindex: 0, role: 'img',
+      'aria-label': item.group + ': highlight matching samples' }, svg);
+    compareOrdinationSvgElement('rect', { x: lx - 6, y: ly - 14,
+      width: item.width + 8, height: item.height + 10, fill: 'transparent' }, element);
+    compareOrdinationSvgElement('circle', { cx: lx, cy: ly - 4, r: 6,
+      fill: colours[item.group], stroke: '#333', 'stroke-width': 0.8 }, element);
+    var label = compareOrdinationSvgElement('text', { x: lx + 16, y: ly,
+      fill: '#444', 'font-size': 12 }, element);
+    item.lines.forEach(function (line, index) {
+      compareOrdinationSvgElement('tspan', { x: lx + 16, dy: index ? 16 : 0 }, label, line);
+    });
+    legendElements.push({ group: item.group, element: element, label: label });
+    element.addEventListener('mouseenter', function () { hideTooltip(); highlight(item.group); });
+    element.addEventListener('mouseleave', function () { highlight(null); });
+    element.addEventListener('focus', function () { hideTooltip(); highlight(item.group); });
+    element.addEventListener('blur', function () { highlight(null); });
+  });
+}
+
 function renderCompareOrdination3d(holder, result, groups, colours, width) {
   var plotWidth = width - 115, plotHeight = 410;
   var left = 75, top = 45, legendTop = 515;
   var context = document.createElement('canvas').getContext('2d');
-  if (context) context.font = '11px Arial';
+  if (context) context.font = '12px Arial';
   var measureLegend = function (label) {
     return context ? context.measureText(label).width : String(label).length * 7;
   };
@@ -319,6 +356,7 @@ function renderCompareOrdination3d(holder, result, groups, colours, width) {
   var projected = result.points.map(function (point) {
     return { point: point, position: project(point) };
   });
+  var pointElements = [];
   projected.sort(function (a, b) { return a.position.depth - b.position.depth; });
   projected.forEach(function (entry) {
     var point = entry.point, position = entry.position;
@@ -338,25 +376,18 @@ function renderCompareOrdination3d(holder, result, groups, colours, width) {
       compareOrdinationShowTooltip(nearby, { pageX: rect.right + window.pageXOffset, pageY: rect.top + window.pageYOffset });
     });
     circle.addEventListener('blur', compareOrdinationHideTooltip);
+    var pointLabel = null;
     if ($('#compareOrdinationShowLabels').prop('checked')) {
-      compareOrdinationSvgElement('text', { x: position.x + 9, y: position.y - 8,
+      pointLabel = compareOrdinationSvgElement('text', { x: position.x + 9, y: position.y - 8,
         fill: '#333', 'font-size': 11 }, svg, compareOrdinationDisplayName(point));
     }
+    pointElements.push({ group: compareOrdinationGroup(point), circle: circle, label: pointLabel });
   });
   compareOrdinationSvgElement('text', { x: width / 2, y: 24, 'text-anchor': 'middle',
     fill: '#333', 'font-size': 14, 'font-weight': 'bold' }, svg,
   (result.method === 'aitchison' ? 'Aitchison (CLR)' : 'Bray–Curtis') + ' · ' +
     taxonomicLevelDictRev[result.rank] + ' · LCA ' + lcaAbundanceCompare + '%');
-  legend.items.forEach(function (item) {
-    var lx = 75 + item.x, ly = legendTop + item.y;
-    compareOrdinationSvgElement('circle', { cx: lx, cy: ly - 4, r: 5,
-      fill: colours[item.group], stroke: '#333', 'stroke-width': 0.8 }, svg);
-    var label = compareOrdinationSvgElement('text', { x: lx + 14, y: ly,
-      fill: '#444', 'font-size': 11 }, svg);
-    item.lines.forEach(function (line, index) {
-      compareOrdinationSvgElement('tspan', { x: lx + 14, dy: index ? 15 : 0 }, label, line);
-    });
-  });
+  compareSampleGroupRenderLegend(svg, legend, 75, legendTop, colours, pointElements, compareOrdinationHideTooltip);
 }
 
 function renderCompareOrdination() {
@@ -390,7 +421,7 @@ function renderCompareOrdination() {
   var plotHeight = 410;
   var legendLeft = 75, legendTop = 515, legendRight = 40;
   var context = document.createElement('canvas').getContext('2d');
-  if (context) context.font = '11px Arial';
+  if (context) context.font = '12px Arial';
   var measureLegend = function (label) {
     return context ? context.measureText(label).width : String(label).length * 7;
   };
@@ -414,6 +445,7 @@ function renderCompareOrdination() {
   }
   compareOrdinationSvgElement('line', { x1: left, y1: top + plotHeight, x2: left + plotWidth, y2: top + plotHeight, stroke: '#858796' }, svg);
   compareOrdinationSvgElement('line', { x1: left, y1: top, x2: left, y2: top + plotHeight, stroke: '#858796' }, svg);
+  var pointElements = [];
   result.points.forEach(function (point) {
     var circle = compareOrdinationSvgElement('circle', { class: 'compareOrdinationPoint', cx: xscale(point.x), cy: yscale(point.y), r: 7, fill: colours[compareOrdinationGroup(point)], stroke: '#333', 'stroke-width': 0.8, tabindex: 0, 'aria-label': compareOrdinationDisplayName(point) + ' (' + point.runId + ')' }, svg);
     var nearby = [point].concat(result.points.filter(function (other) {
@@ -427,22 +459,17 @@ function renderCompareOrdination() {
       compareOrdinationShowTooltip(nearby, { pageX: rect.right + window.pageXOffset, pageY: rect.top + window.pageYOffset });
     });
     circle.addEventListener('blur', compareOrdinationHideTooltip);
+    var pointLabel = null;
     if ($('#compareOrdinationShowLabels').prop('checked')) {
-      compareOrdinationSvgElement('text', { x: xscale(point.x) + 9, y: yscale(point.y) - 8, fill: '#333', 'font-size': 11 }, svg, compareOrdinationDisplayName(point));
+      pointLabel = compareOrdinationSvgElement('text', { x: xscale(point.x) + 9, y: yscale(point.y) - 8,
+        fill: '#333', 'font-size': 11 }, svg, compareOrdinationDisplayName(point));
     }
+    pointElements.push({ group: compareOrdinationGroup(point), circle: circle, label: pointLabel });
   });
   compareOrdinationSvgElement('text', { x: left + plotWidth / 2, y: top + plotHeight + 45, 'text-anchor': 'middle', fill: '#444', 'font-size': 13 }, svg, 'PC1 (' + result.axisPercent[0].toFixed(1) + '%)');
   compareOrdinationSvgElement('text', { x: 18, y: top + plotHeight / 2, transform: 'rotate(-90 18 ' + (top + plotHeight / 2) + ')', 'text-anchor': 'middle', fill: '#444', 'font-size': 13 }, svg, 'PC2 (' + result.axisPercent[1].toFixed(1) + '%)');
   compareOrdinationSvgElement('text', { x: width / 2, y: 24, 'text-anchor': 'middle', fill: '#333', 'font-size': 14, 'font-weight': 'bold' }, svg, (result.method === 'aitchison' ? 'Aitchison (CLR)' : 'Bray–Curtis') + ' · ' + taxonomicLevelDictRev[result.rank] + ' · LCA ' + lcaAbundanceCompare + '%');
-  legend.items.forEach(function (item) {
-    var lx = legendLeft + item.x;
-    var ly = legendTop + item.y;
-    compareOrdinationSvgElement('circle', { cx: lx, cy: ly - 4, r: 5, fill: colours[item.group], stroke: '#333', 'stroke-width': 0.8 }, svg);
-    var label = compareOrdinationSvgElement('text', { x: lx + 14, y: ly, fill: '#444', 'font-size': 11 }, svg);
-    item.lines.forEach(function (line, index) {
-      compareOrdinationSvgElement('tspan', { x: lx + 14, dy: index ? 15 : 0 }, label, line);
-    });
-  });
+  compareSampleGroupRenderLegend(svg, legend, legendLeft, legendTop, colours, pointElements, compareOrdinationHideTooltip);
 }
 
 function compareOrdinationFilename(suffix) {

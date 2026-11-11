@@ -4,6 +4,7 @@ var accumulationData = [];
 var rareMargin = { top: 25, right: 40, bottom: 55, left: 85 };
 var rareWidth = 835, rareHeight = 420;
 var rarefactionCompareSVG;
+var rareColourByUserChosen = false;
 var rc_x = d3.scale.linear().range([0, rareWidth]);
 var rc_y = d3.scale.linear().range([rareHeight, 0]);
 var rc_xAxis = d3.svg.axis().scale(rc_x).ticks(8).orient('bottom');
@@ -11,6 +12,7 @@ var rc_yAxis = d3.svg.axis().scale(rc_y).orient('left');
 
 function initialiseCompareAccumulation() {
   $('#compareRarefactionPlot').empty();
+  rareColourByUserChosen = false;
   rarefactionCompareSVG = d3.select('#compareRarefactionPlot').append('svg')
     .attr('viewBox', '0 0 ' + (rareWidth + rareMargin.left + rareMargin.right) + ' ' + (rareHeight + rareMargin.top + rareMargin.bottom))
     .append('g').attr('transform', 'translate(' + rareMargin.left + ',' + rareMargin.top + ')');
@@ -23,9 +25,10 @@ function initialiseCompareAccumulation() {
 
   $('#rareMetric').val(rareMetric);
   if (!$('#rareMetric').val()) { rareMetric = 'taxa'; $('#rareMetric').val(rareMetric); }
-  $('#rareMetric,#rareTaxaSeries,#rareXAxis,#rareLine,#rareXAxisMax').off('.diversityPlot')
+  $('#rareMetric,#rareTaxaSeries,#rareColourBy,#rareXAxis,#rareLine,#rareXAxisMax').off('.diversityPlot')
     .on('change.diversityPlot input.diversityPlot', function () {
       if (this.id === 'rareMetric') rareMetric = this.value;
+      if (this.id === 'rareColourBy') rareColourByUserChosen = true;
       if (typeof rareData !== 'undefined' && rareData) plotRarefactionCompare(rareData);
     });
   $('#diversityPlotSettingsButton').off('.diversityPlot').on('click.diversityPlot', function () {
@@ -73,6 +76,24 @@ function accumulationSampleName(sample) {
     return entry.pathName === sample.id && entry.pathRun === sample.runId;
   });
   return meta ? meta.id : sample.id;
+}
+
+function accumulationGroupColours(samples, groupValue, palette) {
+  var names = Array.from(new Set(samples.map(function(sample) {
+    return groupValue(sample.runId, sample.pathName);
+  }).filter(Boolean))).sort();
+  var colours = {};
+  names.forEach(function(name, index) { colours[name] = palette[index % palette.length]; });
+  return function(sample) {
+    var name = groupValue(sample.runId, sample.pathName);
+    return name ? colours[name] : '#858796';
+  };
+}
+
+function refreshCompareAccumulationGroups() {
+  if (currentPage === 'Compare' && typeof rareData !== 'undefined' && rareData && rarefactionCompareSVG) {
+    plotRarefactionCompare(rareData);
+  }
 }
 
 // Find the closest place on a rendered path near the cursor's x position. Using
@@ -130,9 +151,18 @@ function plotRarefactionCompare(data) {
         (requestedMax === null || point[0] <= requestedMax);
     }).map(function (point) { return { x: Number(point[0]), y: Number(point[1]) }; });
     var name = accumulationSampleName(sample);
-    return { name: name, displayName: currentPage === 'Compare'
+    return { name: name, runId: sample.runId, pathName: sample.id,
+      key: JSON.stringify([String(sample.runId), String(sample.id)]),
+      displayName: currentPage === 'Compare'
       ? compareSampleDisplayNameById(sample.runId, name) : name, values: values };
   }).filter(function (sample) { return sample.values.length; });
+  var hasAssignedGroups = currentPage === 'Compare' && accumulationData.some(function(sample) {
+    return Boolean(compareSampleGroupValue(sample.runId, sample.pathName));
+  });
+  $('#rareColourBy option[value="group"]').prop('disabled', !hasAssignedGroups);
+  if (!rareColourByUserChosen) $('#rareColourBy').val(hasAssignedGroups ? 'group' : 'sample');
+  else if (!hasAssignedGroups && $('#rareColourBy').val() === 'group') $('#rareColourBy').val('sample');
+  var colourByGroup = hasAssignedGroups && $('#rareColourBy').val() === 'group';
   var mayDecrease = rareMetric === 'taxa' && Number(selectedLca) !== 0 && (raw || !hasRaw);
   $('#accumulationPlotWarning').toggle(mayDecrease);
   $('#accumulationPlotWarning a').text(raw
@@ -163,8 +193,11 @@ function plotRarefactionCompare(data) {
   var line = d3.svg.line().interpolate($('#rareLine').val() || 'linear')
     .x(function (point) { return rc_x(point.x); }).y(function (point) { return rc_y(point.y); });
   var palette = dashboardPlotColorPalette;
-  palette.domain(accumulationData.map(function (sample) { return sample.name; }));
-  var lines = rarefactionCompareSVG.selectAll('.sampleLine').data(accumulationData, function (sample) { return sample.name; });
+  palette.domain(accumulationData.map(function (sample) { return sample.key; }));
+  var groupColour = colourByGroup ? accumulationGroupColours(accumulationData,
+    compareSampleGroupValue, colourPalettes.tolColorBlindLight9.slice(0, -1)) : null;
+  function sampleColour(sample) { return colourByGroup ? groupColour(sample) : palette(sample.key); }
+  var lines = rarefactionCompareSVG.selectAll('.sampleLine').data(accumulationData, function (sample) { return sample.key; });
   lines.enter().append('path').attr('class', 'sampleLine line').style('fill', 'none').style('stroke-width', '2px');
   lines.attr('d', function (sample) {
     // Add a visual origin for taxa curves. Keep saved points unchanged for
@@ -173,14 +206,14 @@ function plotRarefactionCompare(data) {
       ? [{ x: 0, y: 0 }].concat(sample.values) : sample.values;
     return line(values);
   })
-    .style('stroke', function (sample) { return palette(sample.name); });
+    .style('stroke', sampleColour);
   lines.exit().remove();
   var legends = d3.select('#compareRarefactionPlotLegend').selectAll('.rarefactionCompareLegend')
-    .data(accumulationData, function (sample) { return sample.name; });
+    .data(accumulationData, function (sample) { return sample.key; });
   var enter = legends.enter().append('svg').attr('class', 'rarefactionCompareLegend').attr('height', 20).append('g');
   enter.append('rect').attr('width', 16).attr('height', 12).attr('y', 4);
   enter.append('text').attr('x', 21).attr('y', 14).style('font-size', '13px');
-  legends.select('rect').style('fill', function (sample) { return palette(sample.name); });
+  legends.select('rect').style('fill', sampleColour);
   legends.select('text').text(function (sample) { return sample.displayName; });
   legends.attr('width', function (sample) { return 25 + sample.displayName.length * 8; });
   legends.exit().remove();
@@ -191,15 +224,15 @@ function plotRarefactionCompare(data) {
     .prop('hidden', true).appendTo('#compareRarefactionPlot');
   function highlight(names) {
     var selected = names && names.length ? names : null;
-    lines.style('opacity', function (sample) { return !selected || selected.indexOf(sample.name) !== -1 ? 1 : 0.15; })
-      .style('stroke-width', function (sample) { return selected && selected.indexOf(sample.name) !== -1 ? '4px' : '2.5px'; });
-    legends.style('opacity', function (sample) { return !selected || selected.indexOf(sample.name) !== -1 ? 1 : 0.3; })
+    lines.style('opacity', function (sample) { return !selected || selected.indexOf(sample.key) !== -1 ? 1 : 0.15; })
+      .style('stroke-width', function (sample) { return selected && selected.indexOf(sample.key) !== -1 ? '4px' : '2.5px'; });
+    legends.style('opacity', function (sample) { return !selected || selected.indexOf(sample.key) !== -1 ? 1 : 0.3; })
       .select('text').style('font-weight', function (sample) {
-        return selected && selected.indexOf(sample.name) !== -1 ? 'bold' : 'normal';
+        return selected && selected.indexOf(sample.key) !== -1 ? 'bold' : 'normal';
       });
   }
   legends.on('mouseenter', function (sample) {
-    tooltip.prop('hidden', true); highlight([sample.name]);
+    tooltip.prop('hidden', true); highlight([sample.key]);
   }).on('mouseleave', function () { highlight(null); });
   var hover = rarefactionCompareSVG.append('g').attr('class', 'mouse-over-effects');
   var guide = hover.append('line').style('stroke', '#858796').style('stroke-dasharray', '3,3')
@@ -245,24 +278,26 @@ function plotRarefactionCompare(data) {
           return best;
         }, null);
       });
-      var names = matches.map(function (match) { return match.sample.name; });
+      var names = matches.map(function (match) { return match.sample.key; });
       highlight(names);
       guide.attr('x1', rc_x(matches[0].observed.x)).attr('x2', rc_x(matches[0].observed.x))
         .attr('y1', 0).attr('y2', rareHeight).style('visibility', 'visible');
-      var marks = hover.selectAll('.hoverPoint').data(matches, function (match) { return match.sample.name; });
+      var marks = hover.selectAll('.hoverPoint').data(matches, function (match) { return match.sample.key; });
       marks.enter().append('circle').attr('class', 'hoverPoint').attr('r', 6)
         .style('fill', 'white').style('stroke-width', '2px').style('pointer-events', 'none');
       marks.attr('cx', function (match) { return rc_x(match.observed.x); })
         .attr('cy', function (match) { return rc_y(match.observed.y); })
-        .style('stroke', function (match) { return palette(match.sample.name); });
+        .style('stroke', function (match) { return sampleColour(match.sample); });
       marks.exit().remove();
       tooltip.empty();
       matches.forEach(function (match) {
         var x = match.observed.x, y = match.observed.y;
         var row = $('<div class="accumulationHoverRow"></div>').appendTo(tooltip);
-        $('<span class="accumulationHoverSwatch"></span>').css('background-color', palette(match.sample.name)).appendTo(row);
+        $('<span class="accumulationHoverSwatch"></span>').css('background-color', sampleColour(match.sample)).appendTo(row);
         var details = $('<div class="accumulationHoverDetails"></div>').appendTo(row);
         $('<strong></strong>').text(match.sample.displayName).appendTo(details);
+        if (colourByGroup) $('<span></span>').text('Group: ' +
+          (compareSampleGroupValue(match.sample.runId, match.sample.pathName) || 'Ungrouped')).appendTo(details);
         $('<span></span>').text(formatAccumulationValue(y) + ' (' +
           (xMode === 'time' ? x.toFixed(1) + ' min' : thousandsSeparators(Math.round(x)) + ' reads') + ')').appendTo(details);
       });
@@ -297,3 +332,7 @@ function convertAccumulationDataToCSV(data) {
     return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(',');
   }).join('\n');
 }
+
+if (typeof module !== 'undefined') module.exports = {
+  accumulationGroupColours: accumulationGroupColours
+};

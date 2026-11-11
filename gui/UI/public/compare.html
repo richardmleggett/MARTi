@@ -323,6 +323,48 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow" id="compareUpSetCard">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Shared taxa (UpSet)</h6>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareUpSetSettingsButton" aria-controls="compareUpSetSettings" aria-expanded="false">Settings</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#" id="compareUpSetExportSvg">Export as SVG</a>
+                <a class="dropdown-item" href="#" id="compareUpSetExportPng">Export as PNG</a>
+                <a class="dropdown-item" href="#" id="compareUpSetExportCsv">Export taxon presence as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comparePlotLayout">
+          <aside id="compareUpSetSettings" class="comparePlotSettings" aria-labelledby="compareUpSetSettingsTitle" hidden>
+            <div class="comparePlotSettingsHeader">
+              <h6 id="compareUpSetSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">UpSet settings</h6>
+              <button type="button" class="close" id="compareUpSetSettingsClose" aria-label="Close UpSet settings"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <h6 class="compareSettingsSection">Sets</h6>
+            <div class="form-group"><label for="compareUpSetBy">Compare by</label><select id="compareUpSetBy" class="form-control form-control-sm"><option value="samples">Individual samples</option><option value="groups">Assigned groups</option></select></div>
+            <div class="form-group"><label for="compareUpSetGroupMin">Taxon present in at least this many samples per group</label><input id="compareUpSetGroupMin" class="form-control form-control-sm" type="number" min="1" step="1" value="1"><small class="form-text text-muted">1 matches the union of samples in each group. Ungrouped samples are excluded from group view.</small></div>
+            <h6 class="compareSettingsSection">Presence</h6>
+            <p class="small text-muted">Uses the taxonomic rank and LCA cutoff selected at the top of Compare. For a 0.005% threshold, choose an LCA cutoff of 0.005% or lower.</p>
+            <div class="form-group"><label for="compareUpSetReads">Minimum reads in a sample</label><input id="compareUpSetReads" class="form-control form-control-sm" type="number" min="1" step="1" value="2"></div>
+            <div class="form-group"><label for="compareUpSetPercent">Minimum root abundance (%) in a sample</label><input id="compareUpSetPercent" class="form-control form-control-sm" type="number" min="0" max="100" step="any" value="0.005"></div>
+            <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-group"><label for="compareUpSetStack">Stack bars by</label><select id="compareUpSetStack" class="form-control form-control-sm"><option value="broad">Broad taxonomic group</option><option value="none">None</option></select><small class="form-text text-muted">Includes Bacteria, Archaea, Fungi, Plants, Animals, Viruses and Other.</small></div>
+            <div class="form-group mb-0"><label for="compareUpSetTop">Show up to this many intersections</label><input id="compareUpSetTop" class="form-control form-control-sm" type="number" min="1" max="40" step="1" value="20"><small class="form-text text-muted">The CSV contains taxa from every intersection.</small></div>
+          </aside>
+          <div class="comparePlotContent">
+            <div id="compareUpSetStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
+            <div id="compareUpSetPlot" aria-label="Shared taxa UpSet plot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="comparePlotsView" class="compareView" role="tabpanel" aria-labelledby="comparePlotsTab">
 
@@ -498,25 +540,33 @@
                           <input class="form-control form-control-sm mr-1" type="number" step="any" min="0" id="compareHmTaxaScaleMin" placeholder="Minimum" aria-label="Minimum colour scale value">
                           <input class="form-control form-control-sm" type="number" step="any" min="0" id="compareHmTaxaScaleMax" placeholder="Maximum" aria-label="Maximum colour scale value">
                         </div>
-                        <small class="form-text text-muted">Leave both blank for automatic scaling. Values outside a custom range use its end colours; zero cells are shown in grey. Switching between percentages and counts resets the range.</small>
+                        <small class="form-text text-muted">Leave both blank for automatic scaling. Values outside a custom range use its end colours; in coloured cell view, zero cells are shown in grey. Switching between percentages and counts resets the range.</small>
                         <small id="compareHmTaxaScaleRangeStatus" class="form-text text-danger" role="status"></small>
                       </div>
 
-                      <div class="form-check">
+                      <div class="form-check compareHmTaxaCellsOnly">
                         <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaGrey"> Grey zero values</label>
                       </div>
 
                       <h6 class="compareSettingsSection">Display</h6>
+                      <div class="form-group">
+                        <label for="compareHmTaxaDisplay">Display as</label>
+                        <select class="form-control form-control-sm" id="compareHmTaxaDisplay">
+                          <option value="cells" selected>Coloured cells</option>
+                          <option value="bubbles">Bubbles</option>
+                        </select>
+                        <small class="form-text text-muted">Bubble area shows abundance; zero values have no bubble.</small>
+                      </div>
                       <div class="form-check">
                         <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaRead" checked> Show percentages (otherwise counts)</label>
                       </div>
 
-                      <div class="form-check">
+                      <div class="form-check compareHmTaxaCellsOnly">
                         <label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareHmTaxaShowValues"> Show cell values</label>
                       </div>
 
                       <div class="form-group">
-                        <label for="compareHmTaxaMaxRectWidth">Max cell width: <a id="compareHmTaxaMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
+                        <label for="compareHmTaxaMaxRectWidth">Max sample column width: <a id="compareHmTaxaMaxRectWidthNum" class="font-weight-bold">N</a> px</label>
                         <input type="range" class="form-control-range" id="compareHmTaxaMaxRectWidth" name="compareHmTaxaMaxRectWidth" min="24" max="160" value="80">
                       </div>
 
@@ -740,13 +790,14 @@
             <label class="d-block"><input type="radio" name="compareAmrHmColour" value="magma"> Magma</label>
           </div>
           <div class="form-group mb-1"><div class="font-weight-bold mb-1">Colour scale range</div><div class="d-flex align-items-center"><input class="form-control form-control-sm mr-2" type="number" id="compareAmrHmScaleMin" min="0" step="any" placeholder="Auto min" aria-label="Minimum colour scale value"><input class="form-control form-control-sm" type="number" id="compareAmrHmScaleMax" min="0" step="any" placeholder="Auto max" aria-label="Maximum colour scale value"></div><small class="form-text text-muted">Use both values in the units currently shown: AMR hit % or counts.</small><small id="compareAmrHmScaleRangeStatus" class="form-text text-danger" aria-live="polite"></small></div>
-          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmGrey"> Grey zero values</label></div>
+          <div class="form-check compareAmrHmCellsOnly"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmGrey"> Grey zero values</label></div>
 
           <h6 class="compareSettingsSection">Display</h6>
+          <div class="form-group"><label for="compareAmrHmDisplay">Display as</label><select class="form-control form-control-sm" id="compareAmrHmDisplay"><option value="cells" selected>Coloured cells</option><option value="bubbles">Bubbles</option></select><small class="form-text text-muted">Bubble area shows the AMR hit percentage or count; zero values have no bubble.</small></div>
           <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmRead" checked> Show percentages (otherwise counts)</label></div>
           <small class="form-text text-muted mb-2">Percentages use each sample's total AMR gene hits. A gene can contribute to more than one drug class or resistance mechanism.</small>
-          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmShowValues"> Show cell values</label></div>
-          <div class="form-group mt-2 mb-0"><label for="compareAmrHmMaxRectWidth">Max cell width: <span id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareAmrHmMaxRectWidth" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80"></div>
+          <div class="form-check compareAmrHmCellsOnly"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareAmrHmShowValues"> Show cell values</label></div>
+          <div class="form-group mt-2 mb-0"><label for="compareAmrHmMaxRectWidth">Max sample column width: <span id="compareAmrHmMaxRectWidthNum" class="font-weight-bold">N</span> px</label><input type="range" class="form-control-range" id="compareAmrHmMaxRectWidth" name="compareAmrHmMaxRectWidth" min="24" max="160" value="80"></div>
         </form>
       </aside><div class="comparePlotContent text-center">
 
@@ -810,7 +861,10 @@
           <option value="reads">Final taxa set (nondecreasing)</option>
           <option value="rawReads">Per-chunk taxa count</option>
         </select><small id="rareTaxaSeriesNote" class="form-text text-muted">The first curve is nondecreasing. The per-chunk count can fall when a cutoff changes assignments.</small></div>
-        <h6 class="compareSettingsSection">Axes and line</h6>
+        <h6 class="compareSettingsSection">Colour, axes and line</h6>
+        <div class="form-group"><label for="rareColourBy">Colour lines by</label><select id="rareColourBy" class="form-control form-control-sm">
+          <option value="sample">Individual samples</option><option value="group">Assigned groups</option>
+        </select></div>
         <div class="form-group"><label for="rareXAxis">X axis</label><select id="rareXAxis" class="form-control form-control-sm"><option value="reads">Reads analysed</option><option value="time">Elapsed time (minutes)</option></select></div>
         <div class="form-group"><label for="rareLine">Line style</label><select id="rareLine" class="form-control form-control-sm"><option value="linear">Straight</option><option value="step-after">Step</option><option value="monotone">Smooth</option></select></div>
         <div class="form-group mb-0"><label for="rareXAxisMax">X-axis maximum</label><input id="rareXAxisMax" class="form-control form-control-sm" type="number" min="0" step="any" placeholder="Automatic"><small class="form-text text-muted">Leave blank to show the full range.</small></div>
@@ -860,11 +914,19 @@
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item" href="#" id="compareDiversityPlotExportSvg">Export as SVG</a>
               <a class="dropdown-item" href="#" id="compareDiversityPlotExportPng">Export as PNG</a>
+              <a class="dropdown-item" href="#" id="compareDiversityPlotExportCsv" hidden>Export group summary as CSV</a>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="d-flex flex-wrap align-items-end mb-3">
+            <div class="form-group mb-2 mr-3">
+              <label for="compareDiversityPlotView" class="small mb-1">View</label>
+              <select id="compareDiversityPlotView" class="form-control form-control-sm">
+                <option value="samples">Individual samples</option>
+                <option value="groups">Assigned groups</option>
+              </select>
+            </div>
             <div class="form-group mb-2 mr-3">
               <label for="compareDiversityPlotMetric" class="small mb-1">Plot measure</label>
               <select id="compareDiversityPlotMetric" class="form-control form-control-sm">

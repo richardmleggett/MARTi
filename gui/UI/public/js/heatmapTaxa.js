@@ -27,6 +27,67 @@ function formatHeatmapTaxaPercent(proportion) {
   return percent < 1 ? percent.toFixed(3) : percent.toFixed(2);
 }
 
+function compareHeatmapCellHover(svg, xScale, yScale, plotWidth, plotHeight) {
+  svg.selectAll('.compareHeatmapHover').remove();
+  var overlay = svg.append('g').attr('class', 'compareHeatmapHover')
+    .style('pointer-events', 'none');
+  function outline(colour, width) {
+    return overlay.append('rect').style('fill', 'none').style('stroke', colour)
+      .style('stroke-width', width).style('display', 'none');
+  }
+  var rowGuide = outline('#243b53', '1.5px');
+  var columnGuide = outline('#243b53', '1.5px');
+  var cellOutline = outline('#1f1f1f', '2px');
+  var rowLabels = svg.select('g.y.axis').selectAll('.tick text');
+  var columnLabels = svg.select('g.x.axis').selectAll('.tick text');
+  function clear() {
+    rowGuide.style('display', 'none');
+    columnGuide.style('display', 'none');
+    cellOutline.style('display', 'none');
+    rowLabels.style('font-weight', null);
+    columnLabels.style('font-weight', null);
+  }
+  function show(d) {
+    var x = xScale(d.index), y = yScale(d.name);
+    rowGuide.attr('x', 0).attr('y', y).attr('width', plotWidth)
+      .attr('height', yScale.rangeBand()).style('display', null);
+    columnGuide.attr('x', x).attr('y', 0).attr('width', xScale.rangeBand())
+      .attr('height', plotHeight).style('display', null);
+    cellOutline.attr('x', x).attr('y', y).attr('width', xScale.rangeBand())
+      .attr('height', yScale.rangeBand()).style('display', null);
+    rowLabels.style('font-weight', function(value) { return value === d.name ? 'bold' : null; });
+    columnLabels.style('font-weight', function(value) { return value === d.index ? 'bold' : null; });
+  }
+  return { show: show, clear: clear };
+}
+
+function renderCompareHeatmapBubbleLegend(legend, show, maximum, columnWidth, rowHeight, maximumLabel) {
+  legend.selectAll('.compareBubbleSizeLegend').remove();
+  if (!show) return;
+  var sizeLegend = legend.append('g').attr('class', 'compareBubbleSizeLegend')
+    .attr('transform', 'translate(0,52)');
+  sizeLegend.append('text').attr('x', 0).attr('y', 0)
+    .style('font-size', '11px').style('fill', '#3a3b45')
+    .text('Bubble area represents the plotted value');
+  if (!(maximum > 0)) {
+    sizeLegend.append('text').attr('x', 0).attr('y', 23)
+      .style('font-size', '11px').style('fill', '#6c757d')
+      .text('No nonzero values');
+    return;
+  }
+  var maximumRadius = HeatmapTaxaSelection.bubbleRadius(maximum, maximum, columnWidth, rowHeight);
+  [
+    { x: 12, radius: maximumRadius / 2, label: '¼ max' },
+    { x: 110, radius: maximumRadius, label: maximumLabel }
+  ].forEach(function(entry) {
+    sizeLegend.append('circle').attr('cx', entry.x).attr('cy', 22)
+      .attr('r', entry.radius).style('fill', '#d9e5ef')
+      .style('stroke', '#38536b').style('stroke-width', '0.7px');
+    sizeLegend.append('text').attr('x', entry.x + 15).attr('y', 26)
+      .style('font-size', '11px').style('fill', '#3a3b45').text(entry.label);
+  });
+}
+
 function showHeatmapTaxaEmptyState(message) {
   $('#compareHeatmapTaxaPlot > svg').hide();
   $('#compareHmTaxaEmptyState').text(message).css('display', 'flex');
@@ -310,6 +371,11 @@ var currentWidthHmTaxa = $('#compareHeatmapTaxaPlot').width();
 
     hmTaxaColourPalette = "blue";
 
+    $('#compareHmTaxaDisplay').val('cells').on('change', function() {
+      $('.compareHmTaxaCellsOnly').toggle(this.value === 'cells');
+      plotHeatmapTaxa(hmTaxaData, hmTaxaTaxa);
+    });
+
     d3.selectAll("input[name='compareHmTaxaColour']").on("change", function(){
     hmTaxaColourPalette = this.value;
     $('.compareHmTaxaTrafficLightThresholds').toggle(this.value === 'trafficLights');
@@ -386,6 +452,7 @@ var marginHeatmapTaxa = {top: 30, right: 80, bottom: 30, left: 60},
 
 function plotHeatmapTaxa(data,taxa) {
 if (!Array.isArray(data) || !Array.isArray(taxa)) return;
+var bubbleMode = $('#compareHmTaxaDisplay').val() === 'bubbles';
 
 for (var [i, sample] of data.entries()){
   sample.index = i;
@@ -493,6 +560,10 @@ data.forEach(function(d) {
   }
 
 });
+
+var bubbleMaximum = d3.max(data, function(sample) {
+  return d3.max(sample.taxa, function(cell) { return cell.plotValue; });
+}) || 0;
 
 
 
@@ -612,12 +683,26 @@ if (data.length <= 10){
       .attr("width", xScaleHmTaxa.rangeBand())
       .attr("height", yScaleHmTaxa.rangeBand())
       .style("fill", function(d) {
-        return ((compareHmTaxaGrey == "on" && d.plotValue == 0) ?
+        return bubbleMode ? '#fff' : ((compareHmTaxaGrey == "on" && d.plotValue == 0) ?
           (hmTaxaColourPalette === 'trafficLights' ? '#eeeeee' : '#D3D3D3') :
           hmTaxaColour(d.plotValue))
-      });
+      })
+      .style('stroke', bubbleMode ? '#e3e6f0' : null)
+      .style('stroke-width', bubbleMode ? '0.5px' : null);
 
       rectanglesHmTaxa.exit().remove();
+
+      var bubbles = sample.selectAll('circle.hmTaxaBubble')
+        .data(function(d) { return bubbleMode ? d.taxa : []; });
+      bubbles.enter().append('circle').attr('class', 'hmTaxaBubble');
+      bubbles.attr('cx', function(d) { return xScaleHmTaxa(d.index) + xScaleHmTaxa.rangeBand() / 2; })
+        .attr('cy', function(d) { return yScaleHmTaxa(d.name) + yScaleHmTaxa.rangeBand() / 2; })
+        .attr('r', function(d) { return HeatmapTaxaSelection.bubbleRadius(d.plotValue,
+          bubbleMaximum, xScaleHmTaxa.rangeBand(), yScaleHmTaxa.rangeBand()); })
+        .style('fill', function(d) { return hmTaxaColour(d.plotValue); })
+        .style('stroke', '#5a5c69').style('stroke-width', '0.7px')
+        .style('pointer-events', 'none');
+      bubbles.exit().remove();
 
       var cellValues = sample.selectAll("text.hmTaxaCellValue")
         .data(function(d) { return d.taxa; });
@@ -634,7 +719,7 @@ if (data.length <= 10){
         .style("stroke-width", "2px")
         .style("paint-order", "stroke")
         .style("pointer-events", "none")
-        .style("display", compareHmTaxaShowValues && xScaleHmTaxa.rangeBand() >= 42 ? null : "none")
+        .style("display", !bubbleMode && compareHmTaxaShowValues && xScaleHmTaxa.rangeBand() >= 42 ? null : "none")
         .text(function(d) {
           if (d.plotValue === 0) return "0";
           if (compareHmTaxaRead === "percent") {
@@ -704,6 +789,11 @@ var legendPlotMaxVal = hmTaxaDomain[hmTaxaDomain.length - 1] * legendFactor;
             return compareHmTaxaRead === 'percent' ? d3.format('.3g')(d) : thousandKilo(d);
           });
 
+        renderCompareHeatmapBubbleLegend(hmTaxaLegend, bubbleMode, bubbleMaximum,
+          xScaleHmTaxa.rangeBand(), yScaleHmTaxa.rangeBand(),
+          compareHmTaxaRead === 'percent' ? formatHeatmapTaxaPercent(bubbleMaximum) + '%' :
+            d3.format('.3s')(bubbleMaximum));
+
         var hmTaxaLegendHeight = $("#hmTaxaLegend")[0].getBBox().height;
 
         hmTaxaLegend
@@ -719,6 +809,9 @@ var legendPlotMaxVal = hmTaxaDomain[hmTaxaDomain.length - 1] * legendFactor;
       d3.select("#compareHeatmapTaxaPlot>svg")
         .attr("height", heightHeatmapTaxa + xAxisHeight + hmTaxaLegendHeight + marginHeatmapTaxa.top + marginHeatmapTaxa.bottom);
 
+          var taxaHover = compareHeatmapCellHover(heatmapTaxaSvg, xScaleHmTaxa,
+            yScaleHmTaxa, widthHeatmapTaxa, heightHeatmapTaxa);
+          rectanglesHmTaxa.on('mouseover', taxaHover.show);
 
           rectanglesHmTaxa.on("mousemove", function(d) {
 
@@ -739,6 +832,8 @@ var legendPlotMaxVal = hmTaxaDomain[hmTaxaDomain.length - 1] * legendFactor;
           });
 
           rectanglesHmTaxa.on("mouseout", function(d) {
+
+            taxaHover.clear();
 
 
             toolTipDiv.transition("HmTaxaToolTip")

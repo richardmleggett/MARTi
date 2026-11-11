@@ -235,6 +235,7 @@ function compareTaxonCorrelationHideTooltip() {
 function compareTaxonCorrelationShowTooltip(a, b, value, count, event) {
   toolTipDiv.interrupt().html('');
   var content = toolTipDiv.append('div').style('text-align', 'left')
+    .style('font-size', '0.82rem').style('line-height', '1.25')
     .style('max-width', 'min(380px, calc(100vw - 32px))').style('white-space', 'normal')
     .style('overflow-wrap', 'anywhere');
   content.append('div').style('font-weight', 'bold').text(a.name + ' × ' + b.name);
@@ -276,33 +277,28 @@ function drawCompareTaxonCorrelationResult() {
   names.forEach(function (name) { counts[name] = (counts[name] || 0) + 1; });
   function label(taxon) { return counts[taxon.name] > 1 ? taxon.name + ' (' + taxon.id + ')' : taxon.name; }
   function shorten(value, length) { return value.length > length ? value.slice(0, length - 1) + '…' : value; }
+  var rowLabels = [], columnLabels = [];
   result.taxa.forEach(function (taxon, i) {
     var y = top + i * cell + cell * 0.68;
     var row = compareOrdinationSvgElement('text', { x: left - 9, y: y, 'text-anchor': 'end',
       fill: '#3a3b45', 'font-size': 11 }, svg, shorten(label(taxon), 29));
     compareOrdinationSvgElement('title', {}, row, label(taxon));
+    rowLabels.push(row);
     var x = left + i * cell + cell * 0.5;
     var column = compareOrdinationSvgElement('text', { x: x, y: top - 9,
       transform: 'rotate(-55 ' + x + ' ' + (top - 9) + ')',
       'text-anchor': 'start', fill: '#3a3b45', 'font-size': 11 }, svg, shorten(label(taxon), 24));
     compareOrdinationSvgElement('title', {}, column, label(taxon));
+    columnLabels.push(column);
   });
   result.matrix.forEach(function (row, i) {
     row.forEach(function (value, j) {
       var x = left + j * cell, y = top + i * cell;
-      var rect = compareOrdinationSvgElement('rect', { x: x, y: y, width: cell, height: cell,
+      compareOrdinationSvgElement('rect', { x: x, y: y, width: cell, height: cell,
         fill: compareTaxonCorrelationColour(value), stroke: '#fff', 'stroke-width': 1,
-        tabindex: 0, role: 'img', 'aria-label': label(result.taxa[i]) + ' and ' +
+        tabindex: 0, role: 'img', 'data-row': i, 'data-column': j,
+        'aria-label': label(result.taxa[i]) + ' and ' +
           label(result.taxa[j]) + ': ' + value.toFixed(3) }, svg);
-      var show = function (event) { compareTaxonCorrelationShowTooltip(result.taxa[i], result.taxa[j], value, result.sampleCount, event); };
-      rect.addEventListener('mouseenter', show);
-      rect.addEventListener('mousemove', show);
-      rect.addEventListener('mouseleave', compareTaxonCorrelationHideTooltip);
-      rect.addEventListener('focus', function () {
-        var bounds = rect.getBoundingClientRect();
-        show({ pageX: bounds.right + window.pageXOffset, pageY: bounds.top + window.pageYOffset });
-      });
-      rect.addEventListener('blur', compareTaxonCorrelationHideTooltip);
       if ($('#compareTaxonCorrelationShowValues').prop('checked')) {
         compareOrdinationSvgElement('text', { x: x + cell / 2, y: y + cell * 0.65,
           'text-anchor': 'middle', 'pointer-events': 'none',
@@ -310,6 +306,12 @@ function drawCompareTaxonCorrelationResult() {
       }
     });
   });
+  compareMatrixCellHover(svg, { left: left, top: top, cell: cell, n: n,
+    rowLabels: rowLabels, columnLabels: columnLabels,
+    showTooltip: function (i, j, event) {
+      compareTaxonCorrelationShowTooltip(result.taxa[i], result.taxa[j],
+        result.matrix[i][j], result.sampleCount, event);
+    }, hideTooltip: compareTaxonCorrelationHideTooltip });
   var legendY = top + size + 30, legendX = left;
   for (var step = 0; step < 40; step++) {
     compareOrdinationSvgElement('rect', { x: legendX + step * 5, y: legendY, width: 5, height: 12,

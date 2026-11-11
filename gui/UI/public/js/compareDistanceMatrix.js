@@ -131,6 +131,62 @@ function compareDistanceMatrixColour(distance, maximum) {
   }).join(',') + ')';
 }
 
+function compareMatrixCellHover(svg, options) {
+  function outline(stroke, strokeWidth) {
+    return compareOrdinationSvgElement('rect', { fill: 'none', stroke: stroke,
+      'stroke-width': strokeWidth, 'pointer-events': 'none', visibility: 'hidden' }, svg);
+  }
+  var rowGuide = outline('#243b53', 1.5);
+  var columnGuide = outline('#243b53', 1.5);
+  var cellOutline = outline('#1f1f1f', 2);
+  var activeRow = -1, activeColumn = -1;
+  function clear() {
+    if (activeRow < 0) return;
+    if (activeRow >= 0) options.rowLabels[activeRow].style.fontWeight = '';
+    if (activeColumn >= 0) options.columnLabels[activeColumn].style.fontWeight = '';
+    activeRow = activeColumn = -1;
+    [rowGuide, columnGuide, cellOutline].forEach(function (element) {
+      element.setAttribute('visibility', 'hidden');
+    });
+    options.hideTooltip();
+  }
+  function show(event) {
+    var target = event.target;
+    if (!target || !target.hasAttribute('data-row')) { clear(); return; }
+    var row = Number(target.getAttribute('data-row'));
+    var column = Number(target.getAttribute('data-column'));
+    if (row !== activeRow || column !== activeColumn) {
+      if (activeRow >= 0) options.rowLabels[activeRow].style.fontWeight = '';
+      if (activeColumn >= 0) options.columnLabels[activeColumn].style.fontWeight = '';
+      activeRow = row;
+      activeColumn = column;
+      options.rowLabels[row].style.fontWeight = 'bold';
+      options.columnLabels[column].style.fontWeight = 'bold';
+      [[rowGuide, options.left, options.top + row * options.cell, options.n * options.cell, options.cell],
+        [columnGuide, options.left + column * options.cell, options.top, options.cell, options.n * options.cell],
+        [cellOutline, options.left + column * options.cell, options.top + row * options.cell,
+          options.cell, options.cell]].forEach(function (entry) {
+        entry[0].setAttribute('x', entry[1]);
+        entry[0].setAttribute('y', entry[2]);
+        entry[0].setAttribute('width', entry[3]);
+        entry[0].setAttribute('height', entry[4]);
+        entry[0].setAttribute('visibility', 'visible');
+      });
+    }
+    options.showTooltip(row, column, event);
+  }
+  svg.addEventListener('mouseover', show);
+  svg.addEventListener('mousemove', show);
+  svg.addEventListener('mouseleave', clear);
+  svg.addEventListener('focusin', function (event) {
+    if (!event.target.hasAttribute('data-row')) return;
+    var bounds = event.target.getBoundingClientRect();
+    show({ target: event.target, pageX: bounds.right + window.pageXOffset,
+      pageY: bounds.top + window.pageYOffset });
+  });
+  svg.addEventListener('focusout', clear);
+}
+
 function renderCompareDistanceMatrix() {
   var result = compareDistanceMatrixResult;
   var holder = document.getElementById('compareDistanceMatrixPlot');
@@ -171,17 +227,20 @@ function renderCompareDistanceMatrix() {
     return counts[names[i]] > 1 ? names[i] + ' (' + sample.runId + ')' : names[i];
   }
   function shorten(value, length) { return value.length > length ? value.slice(0, length - 1) + '…' : value; }
+  var rowLabels = [], columnLabels = [];
   result.samples.forEach(function (sample, i) {
     var name = label(sample, i);
     var row = compareOrdinationSvgElement('text', { x: left - 8,
       y: top + i * cell + cell * 0.68, 'text-anchor': 'end',
       fill: '#3a3b45', 'font-size': n > 40 ? 9 : 11 }, svg, shorten(name, 28));
     compareOrdinationSvgElement('title', {}, row, name);
+    rowLabels.push(row);
     var x = left + i * cell + cell * 0.5;
     var column = compareOrdinationSvgElement('text', { x: x, y: top - 8,
       transform: 'rotate(-60 ' + x + ' ' + (top - 8) + ')',
       'text-anchor': 'start', fill: '#3a3b45', 'font-size': n > 40 ? 9 : 11 }, svg, shorten(name, 24));
     compareOrdinationSvgElement('title', {}, column, name);
+    columnLabels.push(column);
   });
   var showValues = $('#compareDistanceMatrixShowValues').prop('checked') && cell >= 25;
   result.distances.forEach(function (row, i) {
@@ -200,22 +259,12 @@ function renderCompareDistanceMatrix() {
         'font-size': cell >= 34 ? 10 : 8 }, svg, distance.toFixed(result.method === 'aitchison' ? 1 : 2));
     });
   });
-  function tooltipForCell(event) {
-    var target = event.target;
-    if (!target || !target.hasAttribute('data-row')) return;
-    var i = Number(target.getAttribute('data-row'));
-    var j = Number(target.getAttribute('data-column'));
-    compareDistanceMatrixShowTooltip(result.samples[i], result.samples[j],
-      result.distances[i][j], result.method, event);
-  }
-  svg.addEventListener('mousemove', tooltipForCell);
-  svg.addEventListener('mouseleave', compareDistanceMatrixHideTooltip);
-  svg.addEventListener('focusin', function (event) {
-    var bounds = event.target.getBoundingClientRect();
-    tooltipForCell({ target: event.target, pageX: bounds.right + window.pageXOffset,
-      pageY: bounds.top + window.pageYOffset });
-  });
-  svg.addEventListener('focusout', compareDistanceMatrixHideTooltip);
+  compareMatrixCellHover(svg, { left: left, top: top, cell: cell, n: n,
+    rowLabels: rowLabels, columnLabels: columnLabels,
+    showTooltip: function (i, j, event) {
+      compareDistanceMatrixShowTooltip(result.samples[i], result.samples[j],
+        result.distances[i][j], result.method, event);
+    }, hideTooltip: compareDistanceMatrixHideTooltip });
   var legendX = left + size / 2 - 100, legendY = top + size + 28;
   for (var step = 0; step < 40; step++) {
     compareOrdinationSvgElement('rect', { x: legendX + 5 * step, y: legendY,

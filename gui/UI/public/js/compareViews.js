@@ -242,6 +242,9 @@ function loadCompareProjectGroups(groups) {
   if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
   if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
   if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+  if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
+  if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
+  if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
   if ((sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') &&
       typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
 }
@@ -257,6 +260,9 @@ function saveCompareSampleGroups() {
   if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
   if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
   if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+  if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
+  if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
+  if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
 }
 
 function compareSampleMetadataGroup(sample, field) {
@@ -331,6 +337,7 @@ function setCompareView(view) {
   if (typeof compareDiversityHideTooltip === 'function') compareDiversityHideTooltip();
   if (typeof compareTaxonCorrelationHideTooltip === 'function') compareTaxonCorrelationHideTooltip();
   if (typeof compareCooccurrenceHideTooltip === 'function') compareCooccurrenceHideTooltip();
+  if (typeof compareUpSetHideTooltip === 'function') compareUpSetHideTooltip();
   if (typeof compareDistanceMatrixHideTooltip === 'function') compareDistanceMatrixHideTooltip();
   ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     var selected = name === view;
@@ -354,6 +361,7 @@ function setCompareView(view) {
   } else if (view === 'TaxonRelationships') {
     renderCompareTaxonCorrelation();
     renderCompareCooccurrence();
+    renderCompareUpSet();
   }
 }
 
@@ -417,6 +425,9 @@ function initialiseCompareViews() {
     if (typeof compareOrdinationApplyDefaultColour === 'function') compareOrdinationApplyDefaultColour();
     if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
     if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+    if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
+    if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
+    if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
   });
   $(window).off('storage.compareOrder').on('storage.compareOrder', function(event) {
     if (event.originalEvent.key !== compareSampleOrderStorageKey()) return;

@@ -18,6 +18,8 @@ function refreshCompareSampleLabels() {
   refreshCompareSampleOrder();
   if (typeof renderCompareOrdination === 'function') renderCompareOrdination();
   if (typeof renderCompareDendrogram === 'function') renderCompareDendrogram();
+  if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
+  if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
 }
 
 function initialiseComparePage() {
@@ -86,6 +88,7 @@ function initialiseComparePage() {
               requestCompareDistanceMatrix();
               renderCompareTaxonCorrelation();
               renderCompareCooccurrence();
+              renderCompareUpSet();
               socket.emit('compare-accumulation-request',{
                 clientId: uuid,
                 rank:taxonomicRankSelectedTextLowerCase,
@@ -158,6 +161,7 @@ function initialiseComparePage() {
   initialiseCompareDistanceMatrix();
   initialiseCompareTaxonCorrelation();
   initialiseCompareCooccurrence();
+  initialiseCompareUpSet();
   initialiseCompareDiversity();
   initialiseCompareTree();
   initialiseComparePlotPanels();
@@ -1199,6 +1203,7 @@ socket.on('compare-tree-response', function(treeData, requestInfo) {
   requestCompareDistanceMatrix();
   renderCompareTaxonCorrelation();
   renderCompareCooccurrence();
+  renderCompareUpSet();
   newCompareTreeData = false;
   plotLevelSelectorChanged = false;
 } else if (currentPage === 'Samples' && exportRequestPending &&

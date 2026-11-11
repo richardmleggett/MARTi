@@ -2,7 +2,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   compareDiversitySortRecords, compareDiversitySortPlotRows,
-  compareDiversityNumericCompare, compareDiversityTableCell
+  compareDiversityNumericCompare, compareDiversityTableCell,
+  compareDiversityGroupRows, compareDiversityGroupCsv
 } = require('./compareDiversity');
 
 test('diversity records follow the Samples card even when display names match', () => {
@@ -18,6 +19,35 @@ test('diversity records follow the Samples card even when display names match', 
   ];
   assert.deepEqual(compareDiversitySortRecords(records, displayed).map(record => record.metadata.pathName),
     ['sample-b', 'sample-c', 'sample-a']);
+});
+
+test('group view averages sample metrics, shows observed range, and leaves ungrouped samples separate', () => {
+  const points = [
+    { record: { metadata: { pathRun: 'r1', pathName: 'a', runId: 'r1', id: 'A' } }, value: 4 },
+    { record: { metadata: { pathRun: 'r1', pathName: 'b', runId: 'r1', id: 'B' } }, value: 8 },
+    { record: { metadata: { pathRun: 'r2', pathName: 'c', runId: 'r2', id: 'C' } }, value: 15 },
+    { record: { metadata: { pathRun: 'r2', pathName: 'd', runId: 'r2', id: 'D' } }, value: null },
+    { record: { metadata: { pathRun: 'r2', pathName: 'e', runId: 'r2', id: 'E' } }, value: 20 }
+  ];
+  const group = (run, sample) => ({ a: 'River', b: 'River', c: '', d: 'River', e: 'NEC' })[sample];
+  const rows = compareDiversityGroupRows(points, group, metadata => metadata.id);
+  assert.deepEqual(rows.map(row => row.label), ['River', 'Ungrouped · C', 'NEC']);
+  assert.deepEqual([rows[0].value, rows[0].minimum, rows[0].maximum], [6, 4, 8]);
+  assert.equal(rows[0].members.length, 3);
+  assert.equal(rows[0].validMembers.length, 2);
+  assert.deepEqual([rows[1].value, rows[1].minimum, rows[1].maximum], [15, 15, 15]);
+  assert.deepEqual(compareDiversitySortPlotRows(rows, 'descending').map(row => row.label),
+    ['NEC', 'Ungrouped · C', 'River']);
+});
+
+test('group summary CSV uses displayed group order and quotes names', () => {
+  const rows = compareDiversityGroupRows([
+    { record: { metadata: { pathRun: 'r', pathName: 'a', runId: 'r', id: 'A' } }, value: 2 },
+    { record: { metadata: { pathRun: 'r', pathName: 'b', runId: 'r', id: 'B' } }, value: 4 }
+  ], () => 'River, "one"', metadata => metadata.id);
+  const csv = compareDiversityGroupCsv(rows, { label: 'Taxa (S)' }, 'Species', 0.005, 'reads', '');
+  assert.match(csv, /"River, ""one""","Group","2","2","3","2","4"/);
+  assert.match(csv, /"Species","0.005","reads"/);
 });
 
 test('plot order follows metric values while keeping missing values last and ties in sample order', () => {

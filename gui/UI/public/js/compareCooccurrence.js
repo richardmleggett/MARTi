@@ -108,6 +108,7 @@ function compareCooccurrenceHideTooltip() {
 function compareCooccurrenceTooltip(lines, event) {
   toolTipDiv.interrupt().html('');
   var content = toolTipDiv.append('div').style('text-align', 'left')
+    .style('font-size', '0.82rem').style('line-height', '1.25')
     .style('max-width', 'min(380px, calc(100vw - 32px))')
     .style('white-space', 'normal').style('overflow-wrap', 'anywhere');
   lines.forEach(function (line, index) {
