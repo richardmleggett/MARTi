@@ -1,0 +1,2 @@
+Audience: a food safety or quality team reviewing a sample from a food manufacturing environment or product (e.g. swab, drain, surface, ingredient).
+Emphasise: foodborne pathogens and the strength of evidence (Listeria monocytogenes, Salmonella, STEC E. coli, Bacillus cereus group and similar); spoilage organisms relevant to the product and how dominant they are; hygiene and faecal indicators; resistance genes of priority; practical follow-up that the evidence supports (e.g. confirmatory culture or PCR, re-sampling), without overstating risk from low read counts.

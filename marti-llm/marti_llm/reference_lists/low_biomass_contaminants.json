@@ -1,0 +1,103 @@
+{
+ "id": "low_biomass_contaminants",
+ "title": "Common contaminants of low-biomass samples (illustrative starter list)",
+ "description": "Genera repeatedly found as contaminants of DNA extraction kits and laboratory reagents (e.g. Salter et al. 2014), plus human DNA from handling. Several are also genuine environmental and leaf-surface bacteria, so a hit is not proof of contamination: compare with negative controls and field blanks processed alongside the sample. Taxonomy IDs were written from knowledge of NCBI Taxonomy and could not all be checked against it when the list was made; screening ignores an ID whose name in your taxonomy belongs to a different genus, and reports it under list_validation_warnings.",
+ "entries": [
+  {
+   "taxid": 48736,
+   "name": "Ralstonia",
+   "category": "reagent contaminant",
+   "notes": "Classic kit and water-system contaminant."
+  },
+  {
+   "taxid": 374,
+   "name": "Bradyrhizobium",
+   "category": "reagent contaminant",
+   "notes": "Common kit contaminant; also a soil bacterium."
+  },
+  {
+   "taxid": 407,
+   "name": "Methylobacterium",
+   "category": "reagent contaminant",
+   "notes": "Common kit contaminant; also a genuine leaf-surface bacterium."
+  },
+  {
+   "taxid": 13687,
+   "name": "Sphingomonas",
+   "category": "reagent contaminant",
+   "notes": "Common kit contaminant; also a genuine air and leaf-surface bacterium."
+  },
+  {
+   "taxid": 32008,
+   "name": "Burkholderia",
+   "category": "reagent contaminant",
+   "notes": "Reported in reagents and ultrapure water."
+  },
+  {
+   "taxid": 68287,
+   "name": "Mesorhizobium",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant; soil bacterium."
+  },
+  {
+   "taxid": 1033,
+   "name": "Afipia",
+   "category": "reagent contaminant",
+   "notes": "Reported kit and water contaminant."
+  },
+  {
+   "taxid": 80865,
+   "name": "Delftia",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant."
+  },
+  {
+   "taxid": 963,
+   "name": "Herbaspirillum",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant."
+  },
+  {
+   "taxid": 34072,
+   "name": "Variovorax",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant."
+  },
+  {
+   "taxid": 41275,
+   "name": "Brevundimonas",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant."
+  },
+  {
+   "taxid": 40323,
+   "name": "Stenotrophomonas",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant; also environmental."
+  },
+  {
+   "taxid": 222,
+   "name": "Achromobacter",
+   "category": "reagent contaminant",
+   "notes": "Reported kit contaminant."
+  },
+  {
+   "taxid": 1912216,
+   "name": "Cutibacterium",
+   "category": "handling",
+   "notes": "Skin bacterium (formerly Propionibacterium); handling contamination."
+  },
+  {
+   "taxid": 1279,
+   "name": "Staphylococcus",
+   "category": "handling",
+   "notes": "Skin bacteria; handling contamination."
+  },
+  {
+   "taxid": 9606,
+   "name": "Homo sapiens",
+   "category": "handling",
+   "notes": "Human DNA from handling, or from people near the sampler."
+  }
+ ]
+}

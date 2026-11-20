@@ -1,0 +1,236 @@
+{
+ "id": "amr_priority_genes",
+ "title": "AMR genes of clinical/public-health priority (illustrative starter list)",
+ "description": "Matches CARD gene families (case-insensitive substring of the gene's geneFamily) or gene-name regular expressions. Includes a 'likely intrinsic / mutation model' category for genes to downweight. Curate for your context; variant-level interpretation (e.g. which SHV/TEM variants are ESBLs) needs the gene name and expert review.",
+ "kind": "amr",
+ "entries": [
+  {
+   "family": "KPC beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "KPC carbapenemase; usually plasmid-borne in Enterobacterales."
+  },
+  {
+   "family": "NDM beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "NDM carbapenemase; usually plasmid-borne in Enterobacterales."
+  },
+  {
+   "family": "VIM beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "VIM carbapenemase; usually plasmid-borne in Enterobacterales."
+  },
+  {
+   "family": "IMP beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "IMP carbapenemase; usually plasmid-borne in Enterobacterales."
+  },
+  {
+   "family": "OXA-48-like beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "OXA-48-like carbapenemase; usually plasmid-borne in Enterobacterales."
+  },
+  {
+   "family": "OXA-23-like beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "Acquired carbapenem-hydrolysing oxacillinase, mainly Acinetobacter."
+  },
+  {
+   "family": "OXA-24-like beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "Acquired carbapenem-hydrolysing oxacillinase, mainly Acinetobacter."
+  },
+  {
+   "family": "OXA-58-like beta-lactamase",
+   "category": "carbapenemase",
+   "priority": "critical",
+   "notes": "Acquired carbapenem-hydrolysing oxacillinase, mainly Acinetobacter."
+  },
+  {
+   "family": "MCR phosphoethanolamine transferase",
+   "category": "colistin resistance (mcr)",
+   "priority": "critical",
+   "notes": "Mobile colistin resistance; last-resort antibiotic."
+  },
+  {
+   "name_regex": "^mcr-",
+   "category": "colistin resistance (mcr)",
+   "priority": "critical",
+   "notes": "Mobile colistin resistance."
+  },
+  {
+   "family": "CTX-M beta-lactamase",
+   "category": "ESBL",
+   "priority": "high",
+   "notes": "CTX-M extended-spectrum beta-lactamase; usually plasmid-borne."
+  },
+  {
+   "family": "SHV beta-lactamase",
+   "category": "ESBL (variant-dependent)",
+   "priority": "medium",
+   "notes": "Only some SHV variants are ESBLs; SHV-1-like enzymes are chromosomal in Klebsiella pneumoniae."
+  },
+  {
+   "family": "TEM beta-lactamase",
+   "category": "ESBL (variant-dependent)",
+   "priority": "medium",
+   "notes": "Most TEM variants (TEM-1) are narrow-spectrum; some are ESBLs."
+  },
+  {
+   "family": "CMY beta-lactamase",
+   "category": "plasmid AmpC (variant-dependent)",
+   "priority": "medium",
+   "notes": "Often plasmid-borne AmpC; CMY is chromosomal in Citrobacter freundii."
+  },
+  {
+   "family": "DHA beta-lactamase",
+   "category": "plasmid AmpC (variant-dependent)",
+   "priority": "medium",
+   "notes": "Often plasmid-borne AmpC; CMY is chromosomal in Citrobacter freundii."
+  },
+  {
+   "name_regex": "^van[AB]$",
+   "category": "glycopeptide resistance (vanA/vanB)",
+   "priority": "high",
+   "notes": "Vancomycin resistance in enterococci/staphylococci."
+  },
+  {
+   "family": "methicillin resistant PBP2",
+   "category": "methicillin resistance (mecA/mecC)",
+   "priority": "high",
+   "notes": "MRSA/MR-CoNS marker. Also found in coagulase-negative staphylococci and Macrococcus - check the host."
+  },
+  {
+   "family": "16S rRNA methyltransferase",
+   "category": "pan-aminoglycoside resistance",
+   "priority": "high",
+   "notes": "16S rRNA methyltransferases (armA, rmt) confer high-level resistance to all aminoglycosides."
+  },
+  {
+   "family": "Cfr 23S ribosomal RNA methyltransferase",
+   "category": "linezolid resistance",
+   "priority": "high",
+   "notes": "cfr confers resistance to linezolid and others."
+  },
+  {
+   "name_regex": "^(optrA|poxtA)",
+   "category": "linezolid resistance",
+   "priority": "high",
+   "notes": "optrA/poxtA: transferable oxazolidinone resistance."
+  },
+  {
+   "name_regex": "^tet\\(X",
+   "category": "tigecycline resistance",
+   "priority": "high",
+   "notes": "tet(X) family enzymes inactivate tigecycline."
+  },
+  {
+   "family": "quinolone resistance protein",
+   "category": "quinolone resistance (plasmid)",
+   "priority": "medium",
+   "notes": "Plasmid-mediated quinolone resistance (qnr)."
+  },
+  {
+   "family": "Erm 23S ribosomal RNA methyltransferase",
+   "category": "macrolide resistance",
+   "priority": "low",
+   "notes": "Common acquired macrolide resistance."
+  },
+  {
+   "family": "antibiotic efflux pump",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "MATE) transporter",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "General Bacterial Porin",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "pmr phosphoethanolamine transferase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "rifamycin-resistant beta-subunit of RNA polymerase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "antibiotic-resistant isoleucyl-tRNA synthetase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "undecaprenyl pyrophosphate related proteins",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "elfamycin resistant EF-Tu",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "fluoroquinolone resistant gyrA",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "fluoroquinolone resistant parC",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "ACT beta-lactamase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "MIR beta-lactamase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "OXA-51-like beta-lactamase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "OKP beta-lactamase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  },
+  {
+   "family": "LEN beta-lactamase",
+   "category": "likely intrinsic / mutation model",
+   "priority": "interpret with caution",
+   "notes": "Often intrinsic, housekeeping, or a mutation-based CARD model - presence of the gene does not by itself indicate acquired resistance."
+  }
+ ]
+}

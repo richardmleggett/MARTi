@@ -1,0 +1,115 @@
+{
+ "id": "airborne_allergens",
+ "title": "Allergenic fungal spores and pollen (illustrative starter list)",
+ "description": "Fungi whose spores, and plants whose pollen, are recognised sources of airborne allergens. Pollen is usually only resolved to genus or family by sequence. Read counts reflect DNA, not spore or pollen counts. Taxonomy IDs were written from knowledge of NCBI Taxonomy and could not all be checked against it when the list was made; screening ignores an ID whose name in your taxonomy belongs to a different genus, and reports it under list_validation_warnings.",
+ "entries": [
+  {
+   "taxid": 5598,
+   "name": "Alternaria",
+   "category": "fungal spores",
+   "notes": "Major outdoor spore allergen, peaks in late summer; associated with asthma."
+  },
+  {
+   "taxid": 5498,
+   "name": "Cladosporium",
+   "category": "fungal spores",
+   "notes": "Usually the most abundant airborne spore outdoors."
+  },
+  {
+   "taxid": 5052,
+   "name": "Aspergillus",
+   "category": "fungal spores",
+   "notes": "Allergenic; A. fumigatus is also an opportunistic pathogen (see human pathogens)."
+  },
+  {
+   "taxid": 5073,
+   "name": "Penicillium",
+   "category": "fungal spores",
+   "notes": "Allergenic; more often indoors."
+  },
+  {
+   "taxid": 5506,
+   "name": "Fusarium",
+   "category": "fungal spores",
+   "notes": "Some species allergenic; several are plant pathogens."
+  },
+  {
+   "taxid": 5314,
+   "name": "Ganoderma",
+   "category": "fungal spores",
+   "notes": "Bracket fungus; basidiospores are allergenic in some regions."
+  },
+  {
+   "taxid": 4479,
+   "name": "Poaceae",
+   "category": "grass pollen",
+   "notes": "Grass pollen: the most common pollen allergy in the UK and Europe."
+  },
+  {
+   "taxid": 3504,
+   "name": "Betula",
+   "category": "tree pollen",
+   "notes": "Birch: major tree pollen allergen in spring."
+  },
+  {
+   "taxid": 3516,
+   "name": "Alnus",
+   "category": "tree pollen",
+   "notes": "Alder: early spring; cross-reacts with birch."
+  },
+  {
+   "taxid": 13450,
+   "name": "Corylus",
+   "category": "tree pollen",
+   "notes": "Hazel: late winter to early spring; cross-reacts with birch."
+  },
+  {
+   "taxid": 3511,
+   "name": "Quercus",
+   "category": "tree pollen",
+   "notes": "Oak: spring."
+  },
+  {
+   "taxid": 38871,
+   "name": "Fraxinus",
+   "category": "tree pollen",
+   "notes": "Ash: spring."
+  },
+  {
+   "taxid": 4402,
+   "name": "Platanus",
+   "category": "tree pollen",
+   "notes": "Plane: common urban street tree."
+  },
+  {
+   "taxid": 4145,
+   "name": "Olea",
+   "category": "tree pollen",
+   "notes": "Olive: major allergen in Mediterranean regions."
+  },
+  {
+   "taxid": 3367,
+   "name": "Cupressaceae",
+   "category": "tree pollen",
+   "notes": "Cypress family: allergenic in southern Europe."
+  },
+  {
+   "taxid": 4211,
+   "name": "Ambrosia",
+   "category": "weed pollen",
+   "notes": "Ragweed: potent allergen; invasive in parts of Europe."
+  },
+  {
+   "taxid": 4219,
+   "name": "Artemisia",
+   "category": "weed pollen",
+   "notes": "Mugwort: late summer."
+  },
+  {
+   "taxid": 26867,
+   "name": "Plantago",
+   "category": "weed pollen",
+   "notes": "Plantain: summer."
+  }
+ ]
+}

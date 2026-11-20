@@ -1,0 +1,2 @@
+Audience: a clinical or public-health microbiologist reviewing a sample from a person (e.g. stool, swab, fluid).
+Emphasise: organisms of clinical relevance and the strength of evidence for each (read counts, species-level resolution, identity); priority resistance genes and which organisms they are attributed to, noting plasmid evidence; dominance by a single organism or unusually low diversity; that taxonomic detection does not establish infection, viability, serotype or virulence, and that findings need confirmation by accredited methods before clinical action.

@@ -10,6 +10,9 @@ const { sampleHasTaxon, suggestTaxa } = require('./services/taxonFilter');
 const { normalizeHeatmapTaxaPresets } = require('./services/heatmapTaxaPresets');
 const { normalizeProjectSampleGroups } = require('./services/projectSampleGroups');
 const { calculateOrdination, calculateDendrogram, calculateDistanceMatrix } = require('./services/ordination');
+const { LlmSettings, defaultSettingsPath } = require('./services/llmSettings');
+const { NarrativeJobs } = require('./services/narrativeJobs');
+const { ChatJobs, buildContext: buildChatContext, chatPage } = require('./services/chatJobs');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -26,7 +29,10 @@ const aliases = {
   help: 'help',
   h: 'help',
   version: 'version',
-  v: 'version'
+  v: 'version',
+  'llm-python': 'llm-python',
+  'llm-tools': 'llm-tools',
+  'restricted-chat': 'restricted-chat'
 };
 
 // Fix incorrectly parsed single-dash long flags like -marti
@@ -40,7 +46,14 @@ process.argv.slice(2).forEach((arg, i, args) => {
   }
 });
 
-const restrictedMode = argv.r || false;
+// Restricted mode only when asked for exactly. (minimist reads a single-dash word such as -marti or -port as
+// separate one-letter flags, -m -a -r -t -i, so argv.r alone would switch restricted mode on by accident.)
+const restrictedMode = process.argv.slice(2).some(arg => arg === '-r' || arg === '--restricted');
+if (restrictedMode) {
+  console.log('Restricted mode is ON: renaming samples, AI settings and generating narratives are disabled.');
+}
+// AI chat answers questions without changing anything, so restricted mode can allow it if asked to.
+const restrictedChatRequested = process.argv.slice(2).some(arg => arg === '--restricted-chat');
 
 const martiGuiVersion = "1.0.7";
 
@@ -59,6 +72,10 @@ Options:
 --key <path>           Path to the SSL key file (required if HTTPS is true).
 --cert <path>          Path to the SSL certificate file (required if HTTPS is true).
 --options <path>       Path to a custom marti_engine_options.txt file (overrides default locations).
+--llm-python <path>    Python used for narrative analysis (default: python3; or LLMPython in the options file).
+--llm-tools <path>     Folder containing the marti_llm package, if it is not installed (or LLMToolsDir).
+-r, --restricted       Restricted mode: hides and refuses actions that change data or settings.
+--restricted-chat      In restricted mode, still offer the AI chat (off by default; or LLMChatInRestrictedMode:true).
 --help, -h             Show this help message.
 
 Examples:
@@ -77,6 +94,11 @@ serverOptions["Port"] = "";
 serverOptions["https"] = "false";
 serverOptions["Key"] = "";
 serverOptions["Certificate"] = "";
+serverOptions["LLMPython"] = "python3";
+serverOptions["LLMToolsDir"] = "";
+serverOptions["LLMSettingsFile"] = defaultSettingsPath();
+serverOptions["LLMTimeoutMinutes"] = "10";
+serverOptions["LLMChatInRestrictedMode"] = "false";
 var numAnalyses = 0;
 
 var engineOptionsPath = "";
@@ -196,6 +218,31 @@ serverOptions["Port"] = argv.port || argv.p || serverOptions["Port"];
 serverOptions["https"] = argv.https || serverOptions["https"];
 serverOptions["Key"] = argv.key || serverOptions["Key"];
 serverOptions["Certificate"] = argv.cert || serverOptions["Certificate"];
+serverOptions["LLMPython"] = String(argv['llm-python'] || serverOptions["LLMPython"]).trim();
+serverOptions["LLMToolsDir"] = String(argv['llm-tools'] || serverOptions["LLMToolsDir"]).trim();
+serverOptions["LLMSettingsFile"] = String(serverOptions["LLMSettingsFile"]).trim();
+
+// Narrative analysis (AI). Settings and the API key live only on this server; restricted mode refuses both
+// changing them and generating narratives (see the narrative-* and llm-settings-* socket handlers).
+const llmSettings = new LlmSettings({ file: serverOptions["LLMSettingsFile"] });
+const narrativeJobs = new NarrativeJobs({
+  python: serverOptions["LLMPython"],
+  toolsDir: serverOptions["LLMToolsDir"],
+  timeoutMs: (parseFloat(serverOptions["LLMTimeoutMinutes"]) || 10) * 60 * 1000,
+  maxConcurrent: 2
+});
+for (const problem of [narrativeJobs.toolsProblem()]) {
+  if (problem) console.warn('WARNING: ' + problem + ' AI narratives and chat will not work until this is fixed.');
+}
+const chatAllowed = !restrictedMode || restrictedChatRequested ||
+  String(serverOptions["LLMChatInRestrictedMode"]).trim().toLowerCase() === 'true';
+if (restrictedMode) console.log(`AI chat is ${chatAllowed ? 'ON' : 'OFF'} in restricted mode.`);
+const chatJobs = new ChatJobs({
+  python: serverOptions["LLMPython"],
+  toolsDir: serverOptions["LLMToolsDir"],
+  timeoutMs: (parseFloat(serverOptions["LLMTimeoutMinutes"]) || 10) * 60 * 1000,
+  maxConcurrent: 3
+});
 
 
   if (!serverOptions["Port"]) {
@@ -491,6 +538,128 @@ function updateAlertsData(data) {
     };
   };
 
+}
+
+
+// ---------------------------------------------------------------- narrative analysis
+function narrativeKey(runId, sampleId) {
+  return runId + '/' + sampleId;
+}
+
+function clientsViewingSample(runId, sampleId) {
+  return Object.entries(clientData)
+    .filter(([uuid, entry]) => entry.selectedDashboardSample &&
+      entry.selectedDashboardSample.name == sampleId && entry.selectedDashboardSample.runId == runId)
+    .map(([uuid]) => uuid);
+}
+
+function notifyNarrativeViewers(runId, sampleId, event, payload) {
+  for (const uuid of clientsViewingSample(runId, sampleId)) {
+    io.to(uuid).emit(event, Object.assign({ id: sampleId, runId: runId }, payload || {}));
+  }
+}
+
+function storeNarrative(runId, sampleId, content) {
+  if (!narrativeDict[runId]) narrativeDict[runId] = {};
+  narrativeDict[runId][sampleId] = content && content.narrative ? content.narrative : null;
+  notifyNarrativeViewers(runId, sampleId, 'narrative-update-available');
+}
+
+observer.on('narrative-file-added', data => {
+  storeNarrative(data.runId, data.id, data.content);
+});
+
+observer.on('narrative-file-removed', data => {
+  if (narrativeDict[data.runId]) delete narrativeDict[data.runId][data.id];
+  notifyNarrativeViewers(data.runId, data.id, 'narrative-update-available');
+});
+
+narrativeJobs.on('progress', (key, progress) => {
+  const [runId, sampleId] = key.split(/\/(.*)/s);
+  notifyNarrativeViewers(runId, sampleId, 'narrative-progress', progress);
+});
+
+narrativeJobs.on('finished', (key, result) => {
+  const [runId, sampleId] = key.split(/\/(.*)/s);
+  if (result.ok) {
+    // Read the new file now rather than waiting for the (polling) file watcher.
+    const meta = sampleMetaDict[runId] && sampleMetaDict[runId][sampleId];
+    const file = meta && meta.sample && meta.sample.jsonDir ? path.join(meta.sample.jsonDir, 'narrative.json') : null;
+    try {
+      storeNarrative(runId, sampleId, JSON.parse(fsExtra.readFileSync(file, 'utf8')));
+    } catch (err) {
+      notifyNarrativeViewers(runId, sampleId, 'narrative-update-available');
+    }
+    console.log(`[${new Date().toLocaleString()}] Narrative analysis written for ${key}`);
+  } else {
+    notifyNarrativeViewers(runId, sampleId, 'narrative-error', { message: result.message });
+    console.log(`[${new Date().toLocaleString()}] Narrative analysis failed for ${key}: ${result.message}`);
+  }
+});
+
+chatJobs.on('progress', (clientId, requestId, progress) => {
+  io.to(clientId).emit('chat-progress', { requestId: requestId, message: progress.message });
+});
+
+chatJobs.on('finished', (clientId, requestId, result) => {
+  if (result.ok) {
+    io.to(clientId).emit('chat-answer', {
+      requestId: requestId, answer: result.answer, model: result.model, actions: result.actions || []
+    });
+  } else {
+    io.to(clientId).emit('chat-error', { requestId: requestId, message: result.message, cancelled: Boolean(result.cancelled) });
+  }
+});
+
+// The samples the Samples page lists for a client: all of them, or its project's (as 'meta-request' does).
+function samplesListedFor(clientId) {
+  const entry = clientData[clientId];
+  const project = entry && entry.project ? entry.project : defaultProject;
+  const config = projectsEnabled ? projectsDatabase[project] : null;
+  if (projectsEnabled && !config) return [];
+  const out = [];
+  for (const [runId, samples] of Object.entries(sampleMetaDict)) {
+    for (const [name, meta] of Object.entries(samples)) {
+      if (config && !config.runs.includes(runId) && !config.samples.includes(name) &&
+          !(meta && meta.sample && config.directories.includes(meta.sample.dir))) continue;
+      out.push({ runId: runId, name: name });
+    }
+  }
+  return out;
+}
+
+// The samples a client has open on a page, with their folders: the chat only ever sees these.
+function chatSamplesOf(clientId, page) {
+  const entry = clientData[clientId];
+  if (!entry) return [];
+  const chosen = page === 'dashboard'
+    ? (selectedDashboardSampleOf(clientId) ? [entry.selectedDashboardSample] : [])
+    : page === 'samples' ? samplesListedFor(clientId)
+    : (Array.isArray(entry.selectedCompareSamples) ? entry.selectedCompareSamples : []);
+  const out = [];
+  for (const s of chosen) {
+    const meta = s && sampleMetaDict[s.runId] && sampleMetaDict[s.runId][s.name];
+    if (meta && meta.sample && meta.sample.jsonDir) out.push({ dir: meta.sample.jsonDir, runId: s.runId, name: s.name });
+  }
+  return out;
+}
+
+function chatStatus() {
+  const configured = llmSettings.isConfigured();
+  const settings = configured ? llmSettings.publicView() : {};
+  return {
+    enabled: chatAllowed,
+    configured: chatAllowed && configured,
+    canConfigure: !restrictedMode,
+    model: chatAllowed && configured ? settings.model : null
+  };
+}
+
+function selectedDashboardSampleOf(clientId) {
+  const entry = clientData[clientId];
+  if (!entry || !entry.selectedDashboardSample || !entry.selectedDashboardSample.name ||
+      !entry.selectedDashboardSample.runId) return null;
+  return entry.selectedDashboardSample;
 }
 
 
@@ -854,6 +1023,7 @@ function commonAvailableTreeLcas(samples) {
 }
 var sampleAmrDict = {};
 var alertsDict = {};
+var narrativeDict = {};
 
 var clientData = {};
 
@@ -1375,6 +1545,136 @@ io.on('connect', function(socket){
     console.log(`[${new Date().toLocaleString()}][${id}] Dashboard meta data sent`);
     });
 
+  // ---------------------------------------------------------------- narrative analysis
+  socket.on('dashboard-narrative-request', request => {
+    const id = request && request.clientId;
+    const selected = selectedDashboardSampleOf(id);
+    if (!selected) return;
+    const runId = selected.runId, sampleId = selected.name;
+    const meta = sampleMetaDict[runId] && sampleMetaDict[runId][sampleId];
+    const key = narrativeKey(runId, sampleId);
+    io.to(id).emit('dashboard-narrative-response', {
+      id: sampleId,
+      runId: runId,
+      narrative: (narrativeDict[runId] && narrativeDict[runId][sampleId]) || null,
+      generating: narrativeJobs.isBusy(key),
+      progress: narrativeJobs.lastProgress(key),
+      canGenerate: !restrictedMode,
+      configured: !restrictedMode && llmSettings.isConfigured(),
+      current: meta && meta.sample ? {
+        readsAnalysed: meta.sample.readsAnalysed,
+        martiStatus: meta.sample.martiStatus
+      } : null
+    });
+  });
+
+  socket.on('narrative-generate-request', request => {
+    const id = request && request.clientId;
+    const selected = selectedDashboardSampleOf(id);
+    if (!selected) return;
+    const runId = selected.runId, sampleId = selected.name;
+    const fail = message => io.to(id).emit('narrative-error', { id: sampleId, runId: runId, message: message });
+    if (restrictedMode) {
+      fail('Narrative analysis cannot be generated in restricted mode.');
+      return;
+    }
+    if (!llmSettings.isConfigured()) {
+      fail('No AI model is set up yet. Open Options (the gear icon) to choose one.');
+      return;
+    }
+    const meta = sampleMetaDict[runId] && sampleMetaDict[runId][sampleId];
+    if (!meta || !meta.sample || !meta.sample.jsonDir) {
+      fail('This sample\'s folder could not be found.');
+      return;
+    }
+    const outcome = narrativeJobs.start(narrativeKey(runId, sampleId), meta.sample.jsonDir, llmSettings.get());
+    if (!outcome.started) fail(outcome.reason);
+    console.log(`[${new Date().toLocaleString()}][${id}] Narrative analysis requested for ${runId}/${sampleId}`);
+  });
+
+  socket.on('chat-status-request', request => {
+    const id = request && request.clientId;
+    if (!id) return;
+    const page = chatPage(request.page);
+    const entry = clientData[id];
+    io.to(id).emit('chat-status-response', Object.assign(chatStatus(), {
+      busy: chatJobs.isBusy(id),
+      page: page,
+      scope: projectsEnabled ? ((entry && entry.project) || defaultProject || '') : '',
+      samples: chatStatus().enabled ? chatSamplesOf(id, page).map(s => ({ runId: s.runId, name: s.name })) : []
+    }));
+  });
+
+  socket.on('chat-ask', request => {
+    const id = request && request.clientId;
+    if (!id) return;
+    const requestId = typeof request.requestId === 'string' ? request.requestId.slice(0, 64) : '';
+    const fail = message => io.to(id).emit('chat-error', { requestId: requestId, message: message });
+    if (!chatAllowed) {
+      fail('The AI chat is not available in restricted mode.');
+      return;
+    }
+    if (!llmSettings.isConfigured()) {
+      fail(restrictedMode ? 'No AI model has been set up on this server.'
+        : 'No AI model is set up yet. Open Options (the gear icon) to choose one.');
+      return;
+    }
+    const page = chatPage(request.page);
+    const selectedDirs = page === 'samples' ? chatSamplesOf(id, 'compare').map(s => s.dir) : [];
+    const built = buildChatContext(request, chatSamplesOf(id, page), selectedDirs, samplesListedFor(id));
+    if (!built.ok) {
+      fail(built.message);
+      return;
+    }
+    const outcome = chatJobs.ask(id, requestId, built.context, llmSettings.get());
+    if (!outcome.started) fail(outcome.reason);
+    else console.log(`[${new Date().toLocaleString()}][${id}] AI chat question on the ${page} page (${built.context.samples.length} samples)`);
+  });
+
+  socket.on('chat-cancel', request => {
+    const id = request && request.clientId;
+    if (id) chatJobs.cancel(id);
+  });
+
+  socket.on('llm-settings-request', request => {
+    const id = request && request.clientId;
+    if (!id) return;
+    io.to(id).emit('llm-settings-response', restrictedMode ? { available: false }
+      : Object.assign({ available: true }, llmSettings.publicView()));
+  });
+
+  socket.on('llm-settings-save', request => {
+    const id = request && request.clientId;
+    if (!id) return;
+    if (restrictedMode) {
+      io.to(id).emit('llm-settings-response', { available: false, error: 'Settings cannot be changed in restricted mode.' });
+      return;
+    }
+    try {
+      const view = llmSettings.save(request.settings);
+      io.to(id).emit('llm-settings-response', Object.assign({ available: true, saved: true }, view));
+      io.sockets.emit('chat-status-changed');
+      console.log(`[${new Date().toLocaleString()}][${id}] AI model settings updated (${view.provider}, ${view.model})`);
+    } catch (err) {
+      io.to(id).emit('llm-settings-response', Object.assign({ available: true, error: err.message }, llmSettings.publicView()));
+    }
+  });
+
+  socket.on('llm-settings-test', async request => {
+    const id = request && request.clientId;
+    if (!id) return;
+    if (restrictedMode) {
+      io.to(id).emit('llm-settings-test-response', { ok: false, message: 'Not available in restricted mode.' });
+      return;
+    }
+    if (!llmSettings.isConfigured()) {
+      io.to(id).emit('llm-settings-test-response', { ok: false, message: 'Save a provider, model and key (or URL) first.' });
+      return;
+    }
+    const result = await narrativeJobs.check(llmSettings.get());
+    io.to(id).emit('llm-settings-test-response', result);
+  });
+
   socket.on('dashboard-alerts-request', request => {
     var id = request.clientId;
 
@@ -1596,6 +1896,7 @@ socket.on('compare-tree-request', request => {
           const rooms = Object.keys(socket.rooms);
           var property = rooms[1];
           console.log(`[${new Date().toLocaleString()}] Client disconnecting: ${property}`);
+          if (property) chatJobs.cancel(property);
 
         });
 
