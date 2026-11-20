@@ -189,7 +189,7 @@ function refreshSampleMapMarkers() {
   });
   for (const sampleMetaData of sampleMetaDataArray) {
     if (visibleSamples.has(sampleTaxonFilterKey(sampleMetaData.pathRun, sampleMetaData.pathName)) &&
-        sampleMetaData.metadatafile && sampleMetaData.metadatafile.location) {
+        sampleMetadataCoordinates(sampleMetaData.metadatafile)) {
       addSampleMarkerToMap(sampleMetaData);
     }
   }
@@ -713,26 +713,6 @@ function initialiseExportCard(){
 
 
 
-function validateAndExtractLocation(location) {
-    // Define the regex pattern for the location string
-    const pattern = /^\s*(-?\d{1,3}\.\d+),\s*(-?\d{1,3}\.\d+)\s*$/;
-
-    const match = location.match(pattern);
-    if (!match) {
-        return { isValid: false, latitude: null, longitude: null };
-    }
-
-    // Extract latitude and longitude from the regex groups
-    const latitude = parseFloat(match[1]);
-    const longitude = parseFloat(match[2]);
-
-    // Validate the ranges of latitude and longitude
-    if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
-        return { isValid: true, latitude: latitude, longitude: longitude };
-    }
-    return { isValid: false, latitude: null, longitude: null };
-}
-
 var existingMarkers = [];
 
 function addSampleMarkerToMap(data){
@@ -744,11 +724,11 @@ function addSampleMarkerToMap(data){
   var findMarker = existingMarkers.findIndex(e => e.pathName == data.pathName && e.pathRun == data.pathRun);
 
   if (findMarker == -1) {
-    var location = data.metadatafile.location;
+    const result = sampleMetadataCoordinates(data.metadatafile);
 
-    const result = validateAndExtractLocation(location);
-
-    if (result.isValid){
+    if (result){
+      var location = result.text;
+      var siteName = sampleMetadataSiteName(data.metadatafile);
 
       $('#sampleMapCard').show();
 
@@ -764,9 +744,9 @@ function addSampleMarkerToMap(data){
       popupContent += "<tr><td><strong>Run Name:</strong></td>";
       popupContent += "<td>" + data.runId + "</td></tr>";
       popupContent += "<tr><td><strong>Location:</strong></td>";
-      popupContent += "<td>" + data.metadatafile.locationName + "</td></tr>";
+      popupContent += "<td>" + (siteName ? escapeSampleLocationHtml(siteName) : "-") + "</td></tr>";
       popupContent += "<tr><td><strong>Coordinates:</strong></td>";
-      popupContent += '<td><a href="https://www.google.com/maps?q=' + location + '" target="_blank">' + location + "</td></tr>";
+      popupContent += '<td><a href="https://www.google.com/maps?q=' + encodeURIComponent(result.latitude + ',' + result.longitude) + '" target="_blank">' + escapeSampleLocationHtml(location) + "</a></td></tr>";
       popupContent += "<tr><td><strong>Compare:</strong></td>";
       popupContent += '<td class="select-checkbox">' + "</td></tr>";
       popupContent += "</tbody></table>";
@@ -814,7 +794,7 @@ existingMarkers = [];
       if (sampleData.metadatafile.hasOwnProperty("keywords")){
         keywords = sampleData.metadatafile.keywords;
       }
-      if (sampleData.metadatafile.hasOwnProperty("location")){
+      if (sampleMetadataCoordinates(sampleData.metadatafile)){
         addSampleMarkerToMap(sampleData);
       }
 
@@ -1228,9 +1208,8 @@ var taxIdArray = [];
       var sampleName = sampleData.id;
       var sampleUuid = sampleData.uuid;
       var siteName = "";
-      if (sampleData.metadatafile.hasOwnProperty("locationName")) {
-        siteName = sampleData.metadatafile.locationName;
-      } else {
+      siteName = sampleMetadataSiteName(sampleData.metadatafile);
+      if (!siteName) {
         missingFields.push("site name");
       }
       var keywords = "";
@@ -1240,10 +1219,10 @@ var taxIdArray = [];
       }
       var latitude = 0.0;
       var longitude = 0.0;
-      if (sampleData.metadatafile.hasOwnProperty("location")) {
-        const [lat, lon] = sampleData.metadatafile.location.split(',');
-        latitude = parseFloat(lat);
-        longitude = parseFloat(lon);
+      var coordinates = sampleMetadataCoordinates(sampleData.metadatafile);
+      if (coordinates) {
+        latitude = coordinates.latitude;
+        longitude = coordinates.longitude;
       } else {
         missingFields.push("location");
       }

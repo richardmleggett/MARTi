@@ -9,6 +9,10 @@ MARTi consists of two main components:
 * The **MARTi Engine** - a back-end which performs the analysis and can be a single desktop/laptop or a high performance compute (HPC) cluster.
 * The **MARTi GUI** - a lightweight web-based front-end which allows users to view analysis results.
 
+MARTi also includes optional AI features: the GUI can write a narrative summary of a sample and answer questions about
+samples in a chat panel, and an MCP server lets AI assistants such as the Claude app work with MARTi results (see
+:ref:`ai` and :ref:`mcp`).
+
 There are a number of possible ways to install MARTi, but in the following sections, we highlight the two most common:
 
 #. a local analysis configuration where both the MARTi Engine and the MARTi GUI are installed on a single laptop/desktop.
@@ -57,3 +61,6 @@ The diagram above illustrates the processes that take place inside the MARTi Eng
 * By default, MARTi classifies reads with a combination of BLAST and its own Lowest Common Ancestor algorithm to assign reads to taxa. You can also use DIAMOND instead of BLAST for protein searches. Centrifuge and Kraken2 can also be used as an alternative for lower powered systems.
 * BLAST files are gzip compressed after analysis to reduce storage requirements.
 * For AMR classification, MARTi uses BLAST and the CARD database.
+* After each chunk, MARTi updates its results files: the taxonomic tree at several minimum abundance cutoffs, taxa
+  accumulation and diversity, and AMR results. The GUI reads these files, so results appear while a run is in
+  progress. See :ref:`downstream`.

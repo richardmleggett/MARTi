@@ -1068,6 +1068,11 @@ app.get('/sample/:sample', function (req, res) {
 
 
 app.post('/new',(req, res) => {
+  if (restrictedMode) {
+    console.log("Refused a new analysis request: the GUI is in restricted mode.");
+    res.status(403).send('New analyses cannot be started in restricted mode.');
+    return;
+  }
   if(numAnalyses < serverOptions["MaxSimultaneousAnalyses"] ) {
     // check output dir exists, create if not
     // const outputDir = req.body["outputDir"] + "/" + req.body["martiName"];
@@ -1325,6 +1330,10 @@ io.on('connect', function(socket){
 
 
   socket.on('update-sample-name-request', request => {
+    if (restrictedMode) {
+      console.log("Refused a sample rename request: the GUI is in restricted mode.");
+      return;
+    }
     var newId = request.newId;
     var originalId = request.originalId;
     var sampleId = request.pathName;

@@ -1,3 +1,4 @@
+Keyword	Example	Meaning
 Metadata	n/a	Defines the start of a metadata block
 Location	52.62170,1.21900	GPS coordinates of location where sample was collected.
 Date	31/10/23	Date of sample collection

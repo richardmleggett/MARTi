@@ -61,7 +61,9 @@ https://benlangmead.github.io/aws-indexes/centrifuge
 Note: These prebuilt databases are quite old (2016–2018) and do not reflect the latest available reference sequences. We recommend building your own up-to-date Centrifuge database where possible.
 
 Users can build their own Centrifuge database using the `centrifuge-download` and `centrifuge-build` commands. Here is an example for constructing a basic metagenomic database for Centrifuge:
+
 ::
+
  # download NCBI taxonomy
  centrifuge-download -o taxonomy taxonomy
 

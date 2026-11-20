@@ -1,3 +1,4 @@
+Keyword	Example	Meaning
 CentrifugeProcess	n/a	Defines the start of a Centrifuge process
 Name	cent_nt	Name of process
 Database	/path/to/db	Path to Centrifuge database

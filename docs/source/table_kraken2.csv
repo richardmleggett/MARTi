@@ -1,3 +1,4 @@
+Keyword	Example	Meaning
 Kraken2Process	n/a	Defines the start of a Kraken2 process
 Name	k2_refseq	Name of process
 Database	/path/to/db/	Path to directory containing Kraken2 database
