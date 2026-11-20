@@ -40,7 +40,8 @@ MAX_TURNS = 12                 # model calls per question
 MAX_TOOL_RESULT = 24000        # characters of one tool result passed back to the model
 MAX_HISTORY_MESSAGES = 20
 MAX_HISTORY_CHARS = 40000
-MAX_ANSWER_TOKENS = 2000
+MAX_ANSWER_TOKENS = 4000
+TRUNCATED = "__truncated__"   # marks a tool call cut off by the output token limit
 HIDDEN_PARAMS = {"project", "reference_project"}     # the chat sees only the samples on screen, not projects
 
 
@@ -152,6 +153,8 @@ On this page the user finds and selects samples (the selection is what the Compa
 - "Select ..." means: find the samples, then call select_samples with their keys (mode "replace", or "add" or
   "remove" when the user says so, e.g. "also select" or "deselect"). The table updates when you answer. Only call
   select_samples when the user asks to select, add or remove; "list", "show" or "which" questions just answer.
+- For "all samples except ..." (or whenever the samples to leave out are fewer), call select_samples with
+  all_except listing only the samples to leave out, rather than listing every sample to select.
 - When listing samples, link each one: [name](marti:sample/<key>). Summarise rather than list when there are more
   than about 20.
 - Always say how you read the request: the dates used (seasons are meteorological: spring March-May, summer
@@ -294,6 +297,9 @@ class _Conversation:
             self.messages.append({"role": "assistant", "content": content})
             text = "".join(b.get("text", "") for b in content if b.get("type") == "text")
             calls = [(b["id"], b["name"], b.get("input") or {}) for b in content if b.get("type") == "tool_use"]
+            if body.get("stop_reason") == "max_tokens":
+                # a tool call cut off at the output limit arrives with missing or partial arguments
+                calls = [(cid, name, {TRUNCATED: True}) for cid, name, _ in calls]
             u = body.get("usage") or {}
             return text, calls, {"input_tokens": u.get("input_tokens"), "output_tokens": u.get("output_tokens")}
         payload = {"model": cfg.model, "messages": self.messages, "tools": self.tools}
@@ -309,12 +315,15 @@ class _Conversation:
             keep["tool_calls"] = msg["tool_calls"]
         self.messages.append(keep)
         calls = []
+        truncated = (body.get("choices") or [{}])[0].get("finish_reason") == "length"
         for tc in msg.get("tool_calls") or []:
             fn = tc.get("function") or {}
             try:
                 args = json.loads(fn.get("arguments") or "{}")
             except json.JSONDecodeError:
                 args = {"__invalid__": fn.get("arguments")}
+            if truncated:
+                args = {TRUNCATED: True}
             calls.append((tc.get("id") or fn.get("name", ""), fn.get("name", ""), args if isinstance(args, dict) else {}))
         u = body.get("usage") or {}
         return msg.get("content") or "", calls, {"input_tokens": u.get("prompt_tokens"),
@@ -401,30 +410,52 @@ def _open_tool(page: str, page_links: list[dict], dashboard_links: list[dict], l
 
 def _select_tool(store: ScopedStore, refs: dict[str, dict], actions: list[dict]):
     """select_samples for the Samples page: records the selection for the GUI to apply with the answer."""
-    def select_samples(samples: list[str], mode: str = "replace") -> dict:
-        """Select samples in the Samples page table (the selection the Compare page uses). samples: sample keys,
-        e.g. from find_samples. mode: "replace" (default) makes these the whole selection; "add" adds them;
-        "remove" deselects them. Call only when the user asks to select, add or remove samples."""
+    def select_samples(samples: list[str] | None = None, mode: str = "replace",
+                       all_except: list[str] | None = None) -> dict:
+        """Select samples in the Samples page table (the selection the Compare page uses). Give either samples
+        (sample keys, e.g. from find_samples) or all_except (keys to leave out: every sample on this page except
+        these, e.g. all samples except the controls; use [] for every sample). Prefer all_except when it is the
+        shorter list. mode: "replace" (default) makes these the whole selection; "add" adds them; "remove"
+        deselects them. Call only when the user asks to select, add or remove samples."""
         if mode not in ("replace", "add", "remove"):
             return {"error": 'mode must be "replace", "add" or "remove".'}
-        if not isinstance(samples, list):
-            return {"error": "samples must be a list of sample keys."}
-        keys, unknown = [], []
-        for ref in samples:
-            try:
-                s = store.get(str(ref))
-            except (KeyError, ValueError):
-                unknown.append(ref)
-                continue
-            if s.key not in keys:
-                keys.append(s.key)
+        if (samples is None) == (all_except is None):
+            return {"error": "Give either samples (the keys to select) or all_except (the keys to leave out), "
+                             "not both."}
+        refs_given = samples if samples is not None else all_except
+        if not isinstance(refs_given, list):
+            return {"error": "samples and all_except must be lists of sample keys."}
+
+        def resolve(refs_list):
+            keys, unknown = [], []
+            for ref in refs_list:
+                try:
+                    s = store.get(str(ref))
+                except (KeyError, ValueError):
+                    unknown.append(ref)
+                    continue
+                if s.key not in keys:
+                    keys.append(s.key)
+            return keys, unknown
+
+        keys, unknown = resolve(refs_given)
         if unknown:
             return {"error": f"Not samples on this page: {unknown[:10]}. Use keys from find_samples or list_samples."}
+        left_out = 0
+        if all_except is not None:
+            excluded = set(keys)
+            keys = [s.key for s in store.samples() if s.key not in excluded]
+            left_out = len(excluded)
+        if not keys:
+            return {"error": "That leaves no samples to select."}
         actions.append({"type": "select", "mode": mode,
                         "samples": [refs.get(k) or {"runId": k.split("/")[0], "name": k.split("/")[-1]}
                                     for k in keys]})
-        return {"ok": True, "mode": mode, "n_samples": len(keys),
-                "note": "The table will show this selection when you answer. Tell the user what was selected and why."}
+        out = {"ok": True, "mode": mode, "n_samples": len(keys),
+               "note": "The table will show this selection when you answer. Tell the user what was selected and why."}
+        if all_except is not None:
+            out["n_left_out"] = left_out
+        return out
     return (select_samples, "Select samples", tool_schema(select_samples))
 
 
@@ -433,6 +464,12 @@ def run_tool(registry: dict, name: str, args: dict) -> str:
     if entry is None:
         return json.dumps({"error": f"Unknown tool '{name}'. Available: {', '.join(sorted(registry))}."})
     fn = entry[0]
+    if TRUNCATED in args:
+        return json.dumps({"error": f"This {name} call was cut off at the output length limit, so its arguments "
+                                    "were lost and it did nothing. Make a shorter call"
+                                    + (": to select all samples but a few, use all_except with the few to leave "
+                                       "out; otherwise select in batches of up to 40 with mode \"add\"."
+                                       if name == "select_samples" else ".")})
     if "__invalid__" in args:
         return json.dumps({"error": "The arguments were not valid JSON; call the tool again."})
     params = inspect.signature(fn).parameters

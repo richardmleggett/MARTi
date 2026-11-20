@@ -61,14 +61,16 @@ class Mock(BaseHTTPRequestHandler):
             content = [{"type": "text", "text": step.get("text", "")}] if step.get("text") else []
             content += [{"type": "tool_use", "id": f"tu_{n}_{i}", "name": nm, "input": a}
                         for i, (nm, a) in enumerate(step.get("tools", []))]
-            self._send({"content": content, "usage": {"input_tokens": 100, "output_tokens": 20}})
+            self._send({"content": content, "stop_reason": "max_tokens" if step.get("truncated") else "end_turn",
+                        "usage": {"input_tokens": 100, "output_tokens": 20}})
         else:
             msg = {"role": "assistant", "content": step.get("text")}
             if step.get("tools"):
                 msg["tool_calls"] = [{"id": f"call_{n}_{i}", "type": "function",
                                       "function": {"name": nm, "arguments": a if isinstance(a, str) else json.dumps(a)}}
                                      for i, (nm, a) in enumerate(step["tools"])]
-            self._send({"choices": [{"message": msg}], "usage": {"prompt_tokens": 100, "completion_tokens": 20}})
+            self._send({"choices": [{"message": msg, "finish_reason": "length" if step.get("truncated") else "stop"}],
+                        "usage": {"prompt_tokens": 100, "completion_tokens": 20}})
 
 
 srv = HTTPServer(("127.0.0.1", 0), Mock)
@@ -295,6 +297,35 @@ check("the selection comes back with the answer, with the GUI's ids",
           {"runId": BAMBI[0], "name": BAMBI[0]}, {"runId": BAMBI[1], "name": BAMBI[1]},
           {"runId": MARC[0], "name": MARC[0]}]}]
       and f"(marti:sample/{BAMBI[0]}/{BAMBI[0]})" in r["answer"], r)
+
+# "all samples except ...": the model lists only the samples to leave out
+ctx_x = dict(ctx_s, messages=[{"role": "user", "content": "Select all samples except the controls"}])
+SCRIPT[:] = [{"tools": [("select_samples", {}),
+                        ("select_samples", {"samples": [key[BAMBI[0]]], "all_except": [key[BAMBI[1]]]}),
+                        ("select_samples", {"all_except": [key[BAMBI[0]], key[MARC[0]]]})]},
+             {"text": "I selected every sample except two."}]
+SEEN.clear()
+r = C.answer(ctx_x, cfg)
+res = [json.loads(x) for x in tool_results(SEEN[1][2])]
+everything = [s.key for s in C.ScopedStore(list(dirs.values())).samples()]
+expected = [k for k in everything if k not in (key[BAMBI[0]], key[MARC[0]])]
+check("select_samples needs samples or all_except, not neither or both",
+      "either samples" in res[0]["error"] and "either samples" in res[1]["error"], res)
+check("all_except selects every sample on the page except those given",
+      res[2]["ok"] and res[2]["n_samples"] == len(everything) - 2 and res[2]["n_left_out"] == 2
+      and [f"{x['runId']}/{x['name']}" for x in r["actions"][0]["samples"]] == expected, r["actions"])
+
+# a tool call cut off at the output limit is reported to the model, not run with missing arguments
+for prov, url in (("openai-compatible", BASE + "/v1"), ("anthropic", BASE)):
+    SCRIPT[:] = [{"truncated": True, "tools": [("select_samples", {"samples": [key[BAMBI[0]]]})]},
+                 {"text": "That call was too long; I will use all_except."}]
+    SEEN.clear()
+    r = C.answer(ctx_x, LLMConfig(prov, "mock-model", "k", url))
+    res = tool_results(SEEN[1][2])
+    check(f"{prov}: a truncated select_samples call does nothing and the model is told to use all_except",
+          r["actions"] == [] and "cut off at the output length limit" in res[0] and "all_except" in res[0], res)
+check("answers may be up to 4000 tokens", SEEN[0][2]["max_tokens"] == 4000)
+
 r = C.answer(ctx(question="hi"), cfg)
 check("other pages return no actions", r["actions"] == [])
 shutil.rmtree(tmp)
