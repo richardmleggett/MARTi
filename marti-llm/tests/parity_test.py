@@ -25,7 +25,7 @@ from marti_llm import diversity as D  # noqa: E402
 from marti_llm import groups as GR  # noqa: E402
 from marti_llm.data import MartiStore  # noqa: E402
 
-marti = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi").resolve()
+marti = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent  # marti-llm lives in MARTi
 for tool in ("javac", "java", "node"):
     if not shutil.which(tool):
         sys.exit(f"{tool} not found - install a JDK (17+) and Node.js to run parity checks")

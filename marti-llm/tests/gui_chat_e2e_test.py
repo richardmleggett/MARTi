@@ -23,7 +23,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-MARTI = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi").resolve()
+MARTI = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent  # marti-llm lives in MARTi
 SHOTS = Path(sys.argv[2]) if len(sys.argv) > 2 else None
 GUI = MARTI / "gui" / "UI"
 tmp = Path(tempfile.mkdtemp())
@@ -160,7 +160,7 @@ def start_gui(port, *extra):
     env = {**os.environ, "HOME": str(home)}
     env.pop("MARTI_LLM_API_KEY", None)
     log = open(tmp / f"gui_{port}.log", "w")
-    p = subprocess.Popen(["node", "index.js", "--marti", str(data), "-p", str(port), "--llm-tools", str(ROOT),
+    p = subprocess.Popen(["node", "index.js", "--marti", str(data), "-p", str(port),
                           "--llm-python", sys.executable, *extra], cwd=GUI, env=env, stdout=log,
                          stderr=subprocess.STDOUT)
     for _ in range(100):

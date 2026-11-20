@@ -45,7 +45,7 @@ Alternatively, you can store all these paths in a ``marti_engine_options.txt`` f
 * ``--cert <path>``          Path to the SSL certificate file (required if HTTPS is enabled).
 * ``--options <path>``       Path to a custom ``marti_engine_options.txt`` file (overrides default locations).
 * ``--llm-python <path>``    Python used for narrative analysis (default: ``python3``). See :ref:`narrative-analysis`.
-* ``--llm-tools <path>``     Folder containing the ``marti_llm`` package, if it is not installed in that Python.
+* ``--llm-tools <path>``     Folder containing the ``marti_llm`` package (default: MARTi's own ``marti-llm`` folder).
 * ``-r, --restricted``       Restricted mode: hides and refuses actions that change data or settings.
 * ``--restricted-chat``      In restricted mode, still offer the AI chat (off by default).
 * ``--help, -h``             Display this help message.
@@ -181,19 +181,20 @@ How it works:
 
 Setting up a model: open *Options* (the cog icon) and fill in *AI narrative analysis*. Choose Anthropic, OpenAI, or a
 local or other OpenAI-compatible server (for example LM Studio at ``http://localhost:1234/v1`` or Ollama at
-``http://localhost:11434/v1``), the model name, and an API key if the provider needs one. *Test connection* checks the
-details without generating anything. The settings are stored on the computer running the GUI, in
+``http://localhost:11434/v1``), the model name, and an API key if the provider needs one. *Test connection* saves the
+settings and checks them without generating anything. The settings are stored on the computer running the GUI, in
 ``~/.marti/llm_settings.json`` (readable only by that account); the API key is never sent back to a browser. A key in
 the ``MARTI_LLM_API_KEY`` environment variable takes precedence. With a cloud provider, each narrative sends a summary
 of the sample's results to that provider; a local server keeps everything on your own machines. The engine itself
 never contacts a model, so it can run without internet access.
 
 Requirements: Python 3.10 or later with the ``marti_llm`` package, ``numpy`` and ``httpx`` (the ``mcp`` package is
-only needed for marti-llm's MCP server, not for narratives). If ``marti_llm`` is not installed, point the GUI at its folder with ``--llm-tools`` or ``LLMToolsDir``.
+only needed for marti-llm's MCP server, not for narratives). The GUI uses the ``marti-llm`` folder that comes with
+MARTi (``MARTi/marti-llm``) automatically; ``--llm-tools`` or ``LLMToolsDir`` are only needed to use a copy elsewhere.
 The following ``marti_engine_options.txt`` entries are read by the GUI:
 
 * ``LLMPython`` – the Python to run (default ``python3``)
-* ``LLMToolsDir`` – folder containing the ``marti_llm`` package
+* ``LLMToolsDir`` – folder containing the ``marti_llm`` package (default: MARTi's own ``marti-llm`` folder)
 * ``LLMSettingsFile`` – where the settings are stored (default ``~/.marti/llm_settings.json``)
 * ``LLMTimeoutMinutes`` – how long one narrative or chat answer may take before it is stopped (default 10)
 * ``LLMChatInRestrictedMode`` – ``true`` to offer the AI chat in restricted mode (default ``false``)

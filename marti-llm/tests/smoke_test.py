@@ -16,7 +16,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-src = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi/gui/output").resolve()
+src = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[2] / "gui" / "output"
 tmp = Path(tempfile.mkdtemp()) / "output"
 shutil.copytree(src, tmp)
 

@@ -17,6 +17,7 @@ var MARTI_CHAT_LINKS = {
     { id: 'taxa-heatmap', view: 'Plots', card: 'heatmapTaxaCard', description: 'Heatmap of taxon abundance across samples' },
     { id: 'taxa-tree', view: 'Plots', card: 'compareTaxaTreeCard', reveal: '#compareTaxaTreeCard > .card-header', description: 'Taxonomic tree with each sample\'s abundance' },
     { id: 'taxa-donut', view: 'Plots', card: 'compareDonutCard', description: 'Donut charts of composition per sample' },
+    { id: 'taxon-trends', view: 'Plots', card: 'compareTaxonTrendsCard', description: 'Taxon trends: percentages of chosen taxa (by default bacteria, archaea, fungi, plants, animals, viruses) across the samples, e.g. over time' },
     { id: 'accumulation-curves', view: 'Diversity', card: 'compareRarefactionCard', description: 'Taxa accumulation (rarefaction) curves per sample' },
     { id: 'diversity-plot', view: 'Diversity', card: 'compareDiversityPlotCard', description: 'Alpha diversity plot by sample or group' },
     { id: 'diversity-table', view: 'Diversity', card: 'compareDiversityCard', description: 'Table of diversity metrics per sample' },

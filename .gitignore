@@ -12,3 +12,5 @@ gui/UI/package-lock.json
 docs/.DS_Store
 docs/.DS_Store
 docs/source/.DS_Store
+__pycache__/
+.pytest_cache/

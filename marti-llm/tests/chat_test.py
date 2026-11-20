@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 from marti_llm import chat as C  # noqa: E402
 from marti_llm.providers import LLMConfig, ProviderError  # noqa: E402
 
-OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi/gui/output").resolve()
+OUT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / "gui" / "output"
 BAMBI = ["BAMBI_P8_1D_19092017", "BAMBI_P103M_400ng_RAD4_20122017", "BAMBI_P106I_LSQK108_02022018",
          "BAMBI_P116I_SQK108_02022018"]
 MARC = ["MARC_Yare_101117_F2_no_control", "MARC_Yare_171117_F1_no_control"]

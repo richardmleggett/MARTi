@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 from marti_llm import narrate as N  # noqa: E402
 from marti_llm.providers import LLMConfig, ProviderError  # noqa: E402
 
-src = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi/gui/output").resolve()
+src = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / "gui" / "output"
 tmp = Path(tempfile.mkdtemp())
 shutil.copytree(src / "BAMBI_P8_1D_19092017", tmp / "BAMBI_P8_1D_19092017")
 SAMPLE = tmp / "BAMBI_P8_1D_19092017" / "marti" / "BAMBI_P8_1D_19092017"

@@ -22,7 +22,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-MARTI = Path(sys.argv[1] if len(sys.argv) > 1 else "../MARTi").resolve()
+MARTI = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent  # marti-llm lives in MARTi
 SHOTS = Path(sys.argv[2]) if len(sys.argv) > 2 else None
 GUI = MARTI / "gui" / "UI"
 tmp = Path(tempfile.mkdtemp())
@@ -97,7 +97,7 @@ def start_gui(port, *extra):
     env = {**os.environ, "HOME": str(home)}
     env.pop("MARTI_LLM_API_KEY", None)
     log = open(tmp / f"gui_{port}.log", "w")
-    p = subprocess.Popen(["node", "index.js", "--marti", str(data), "-p", str(port), "--llm-tools", str(ROOT),
+    p = subprocess.Popen(["node", "index.js", "--marti", str(data), "-p", str(port),
                           "--llm-python", sys.executable, *extra], cwd=GUI, env=env, stdout=log,
                          stderr=subprocess.STDOUT)
     for _ in range(100):
@@ -158,11 +158,21 @@ try:
         page.wait_for_function("document.querySelector('#llmSettingsStatus').innerText === 'Saved.'")
         check("settings saved; key field cleared and only its last four characters shown",
               page.input_value("#llmApiKey") == "" and "…wxyz" in page.inner_text("#llmApiKeyHelp"))
+        # Test connection saves what is in the form first
+        page.fill("#llmBaseUrl", "ftp://nowhere")
+        page.click("#llmTestButton")
+        page.wait_for_function("document.querySelector('#llmSettingsStatus').innerText.includes('http')")
+        check("Test connection with an invalid form: the save error is shown and the button works again",
+              page.is_enabled("#llmTestButton") and
+              json.loads((home / ".marti" / "llm_settings.json").read_text())["baseUrl"] == LLM_URL)
+        page.fill("#llmBaseUrl", LLM_URL)
+        page.fill("#llmModel", "mock-model")
         page.click("#llmTestButton")
         page.wait_for_function("document.querySelector('#llmSettingsStatus').innerText.includes('Connected')",
                                timeout=30000)
-        check("connection test reports the model as available",
-              "mock-model' is available" in page.inner_text("#llmSettingsStatus"))
+        check("Test connection saves the form, then reports the model as available",
+              "mock-model' is available" in page.inner_text("#llmSettingsStatus")
+              and json.loads((home / ".marti" / "llm_settings.json").read_text())["model"] == "mock-model")
         shot(page, "2_options_settings", clip={"x": 250, "y": 0, "width": 900, "height": 1000})
         settings_file = home / ".marti" / "llm_settings.json"
         check("settings file is readable only by its owner", (settings_file.stat().st_mode & 0o777) == 0o600)

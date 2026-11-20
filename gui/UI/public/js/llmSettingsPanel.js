@@ -9,6 +9,7 @@ var LLM_MODEL_PLACEHOLDERS = {
 };
 
 var llmSettingsView = null;
+var llmTestAfterSave = false; // Test connection saves the form first, then tests what was saved
 
 function llmSetStatus (text, kind) {
   $('#llmSettingsStatus').text(text || '')
@@ -55,7 +56,7 @@ $(function () {
 
   $('#llmSettingsForm').on('submit', function (event) {
     event.preventDefault();
-    llmSetStatus('Saving…');
+    llmSetStatus(llmTestAfterSave ? 'Saving, then testing the connection…' : 'Saving…');
     socket.emit('llm-settings-save', {
       clientId: uuid,
       settings: {
@@ -70,9 +71,9 @@ $(function () {
   });
 
   $('#llmTestButton').on('click', function () {
-    llmSetStatus('Testing the connection…');
     $('#llmTestButton').prop('disabled', true);
-    socket.emit('llm-settings-test', { clientId: uuid });
+    llmTestAfterSave = true;
+    $('#llmSettingsForm').trigger('submit');
   });
 });
 
@@ -87,11 +88,21 @@ socket.on('llm-settings-response', function (data) {
     llmSettingsView = data;
     llmUpdateProviderFields();
     llmSetStatus(data.error, 'error');
+    if (llmTestAfterSave) {
+      llmTestAfterSave = false;
+      $('#llmTestButton').prop('disabled', false);
+    }
     return;
   }
   llmShowSettings(data);
-  if (data.saved) {
+  if (data.saved && llmTestAfterSave) {
+    llmTestAfterSave = false;
+    llmSetStatus('Saved. Testing the connection…');
+    socket.emit('llm-settings-test', { clientId: uuid });
+  } else if (data.saved) {
     llmSetStatus('Saved.', 'ok');
+  }
+  if (data.saved) {
     // Let an open dashboard enable its Generate button
     if ($('#narrativeCard').length) socket.emit('dashboard-narrative-request', { clientId: uuid });
   }

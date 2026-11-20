@@ -73,7 +73,8 @@ Options:
 --cert <path>          Path to the SSL certificate file (required if HTTPS is true).
 --options <path>       Path to a custom marti_engine_options.txt file (overrides default locations).
 --llm-python <path>    Python used for narrative analysis (default: python3; or LLMPython in the options file).
---llm-tools <path>     Folder containing the marti_llm package, if it is not installed (or LLMToolsDir).
+--llm-tools <path>     Folder containing the marti_llm package (default: the marti-llm folder of this MARTi
+                       installation; or LLMToolsDir).
 -r, --restricted       Restricted mode: hides and refuses actions that change data or settings.
 --restricted-chat      In restricted mode, still offer the AI chat (off by default; or LLMChatInRestrictedMode:true).
 --help, -h             Show this help message.
@@ -220,6 +221,11 @@ serverOptions["Key"] = argv.key || serverOptions["Key"];
 serverOptions["Certificate"] = argv.cert || serverOptions["Certificate"];
 serverOptions["LLMPython"] = String(argv['llm-python'] || serverOptions["LLMPython"]).trim();
 serverOptions["LLMToolsDir"] = String(argv['llm-tools'] || serverOptions["LLMToolsDir"]).trim();
+// By default, use the marti-llm folder that ships with MARTi (MARTi/marti-llm, beside MARTi/gui)
+const bundledLlmTools = path.resolve(__dirname, '..', '..', 'marti-llm');
+if (!serverOptions["LLMToolsDir"] && fsExtra.existsSync(path.join(bundledLlmTools, 'marti_llm'))) {
+  serverOptions["LLMToolsDir"] = bundledLlmTools;
+}
 serverOptions["LLMSettingsFile"] = String(serverOptions["LLMSettingsFile"]).trim();
 
 // Narrative analysis (AI). Settings and the API key live only on this server; restricted mode refuses both
