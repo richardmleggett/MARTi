@@ -1,0 +1,145 @@
+{
+ "id": "plant_pathogens",
+ "title": "Airborne plant pathogens (illustrative starter list)",
+ "description": "Fungal, oomycete and bacterial plant pathogens dispersed through the air, chosen for crops and trees in temperate regions. Detection shows DNA in the air, not infection; many have non-pathogenic relatives that are hard to separate by sequence. Taxonomy IDs were written from knowledge of NCBI Taxonomy and could not all be checked against it when the list was made; screening ignores an ID whose name in your taxonomy belongs to a different genus, and reports it under list_validation_warnings.",
+ "entries": [
+  {
+   "taxid": 27350,
+   "name": "Puccinia striiformis",
+   "category": "cereal rust",
+   "notes": "Yellow (stripe) rust of wheat and barley; long-distance spore dispersal."
+  },
+  {
+   "taxid": 5297,
+   "name": "Puccinia graminis",
+   "category": "cereal rust",
+   "notes": "Stem (black) rust of wheat."
+  },
+  {
+   "taxid": 208348,
+   "name": "Puccinia triticina",
+   "category": "cereal rust",
+   "notes": "Brown (leaf) rust of wheat."
+  },
+  {
+   "taxid": 34373,
+   "name": "Blumeria graminis",
+   "category": "powdery mildew",
+   "notes": "Powdery mildew of cereals and grasses."
+  },
+  {
+   "taxid": 1047171,
+   "name": "Zymoseptoria tritici",
+   "category": "cereal leaf blotch",
+   "notes": "Septoria tritici blotch of wheat."
+  },
+  {
+   "taxid": 13684,
+   "name": "Parastagonospora nodorum",
+   "category": "cereal leaf blotch",
+   "notes": "Septoria nodorum blotch of wheat."
+  },
+  {
+   "taxid": 45151,
+   "name": "Pyrenophora tritici-repentis",
+   "category": "cereal leaf spot",
+   "notes": "Tan spot of wheat."
+  },
+  {
+   "taxid": 318829,
+   "name": "Pyricularia oryzae",
+   "category": "blast",
+   "notes": "Rice blast and wheat blast; a quarantine concern for wheat outside its current range."
+  },
+  {
+   "taxid": 5518,
+   "name": "Fusarium graminearum",
+   "category": "head blight",
+   "notes": "Fusarium head blight of cereals; mycotoxin producer."
+  },
+  {
+   "taxid": 5516,
+   "name": "Fusarium culmorum",
+   "category": "head blight",
+   "notes": "Fusarium head blight and foot rot; mycotoxin producer."
+  },
+  {
+   "taxid": 5111,
+   "name": "Claviceps purpurea",
+   "category": "ergot",
+   "notes": "Ergot of cereals and grasses; toxic alkaloids."
+  },
+  {
+   "taxid": 112498,
+   "name": "Ramularia collo-cygni",
+   "category": "cereal leaf spot",
+   "notes": "Ramularia leaf spot of barley."
+  },
+  {
+   "taxid": 5022,
+   "name": "Leptosphaeria maculans",
+   "category": "oilseed disease",
+   "notes": "Phoma stem canker of oilseed rape."
+  },
+  {
+   "taxid": 5180,
+   "name": "Sclerotinia sclerotiorum",
+   "category": "broad host range",
+   "notes": "Sclerotinia stem rot; very broad host range."
+  },
+  {
+   "taxid": 40559,
+   "name": "Botrytis cinerea",
+   "category": "broad host range",
+   "notes": "Grey mould of fruit, vegetables and flowers."
+  },
+  {
+   "taxid": 5025,
+   "name": "Venturia inaequalis",
+   "category": "fruit disease",
+   "notes": "Apple scab."
+  },
+  {
+   "taxid": 122368,
+   "name": "Cercospora beticola",
+   "category": "leaf spot",
+   "notes": "Cercospora leaf spot of sugar beet."
+  },
+  {
+   "taxid": 5270,
+   "name": "Ustilago maydis",
+   "category": "smut",
+   "notes": "Corn smut of maize."
+  },
+  {
+   "taxid": 746836,
+   "name": "Hymenoscyphus fraxineus",
+   "category": "tree disease",
+   "notes": "Ash dieback."
+  },
+  {
+   "taxid": 4787,
+   "name": "Phytophthora infestans",
+   "category": "oomycete blight",
+   "notes": "Late blight of potato and tomato."
+  },
+  {
+   "taxid": 143451,
+   "name": "Plasmopara viticola",
+   "category": "oomycete mildew",
+   "notes": "Downy mildew of grapevine."
+  },
+  {
+   "taxid": 4779,
+   "name": "Bremia lactucae",
+   "category": "oomycete mildew",
+   "notes": "Downy mildew of lettuce."
+  },
+  {
+   "taxid": 317,
+   "name": "Pseudomonas syringae",
+   "category": "bacterial plant pathogen",
+   "notes": "Many pathovars; also common on leaves without causing disease."
+  }
+ ]
+}

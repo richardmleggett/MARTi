@@ -158,6 +158,7 @@ class Observer extends EventEmitter {
       let filesToWatch;
       let idFilesToWatch;
       let alertsFilesToWatch;
+      let narrativeFilesToWatch;
 
       const hasTopLevelMarti = fsExtra.existsSync(folder + 'marti');
       const hasSampleJsonHere = fsExtra.existsSync(path.join(folder, 'sample.json'));
@@ -197,6 +198,9 @@ class Observer extends EventEmitter {
         alertsFilesToWatch = folder + '*/marti/**/alerts.json';
       }
 
+      // narrative.json sits next to alerts.json in each sample folder
+      narrativeFilesToWatch = [].concat(alertsFilesToWatch).map(p => p.replace(/alerts\.json$/, 'narrative.json'));
+
       console.log(`[${new Date().toLocaleString()}] Monitoring MARTi run directories in: ${folder}`);
 
       // ----- Main watcher -------------------------------------------------------------
@@ -232,6 +236,7 @@ class Observer extends EventEmitter {
             fileContent.sample.dir      = dir;
             fileContent.sample.pathName = sampleName;
             fileContent.sample.pathRun  = runId;
+            fileContent.sample.jsonDir  = path.dirname(filePath);
 
             this.emit('meta-file-added', { id: sampleName, runId, content: fileContent });
             await emitAssociatedFiles.call(this, filePath, false);
@@ -278,6 +283,7 @@ class Observer extends EventEmitter {
             fileContent.sample.dir      = dir;
             fileContent.sample.pathName = sampleName;
             fileContent.sample.pathRun  = runId;
+            fileContent.sample.jsonDir  = path.dirname(filePath);
 
             this.emit('meta-file-updated', { id: sampleName, runId, content: fileContent });
             await emitAssociatedFiles.call(this, filePath, true);
@@ -377,6 +383,30 @@ class Observer extends EventEmitter {
       alertsWatcher.on('change', async filePath => {
         if (!shouldProcessAlert(filePath)) return;
         await this.processJsonFile(filePath, 'changed', 'alerts-file-added');
+      });
+
+      // ----- narrative.json watcher (narrative analysis written by marti_llm.narrate) ----
+      const narrativeWatcher = chokidar.watch(narrativeFilesToWatch, {
+        persistent       : true,
+        usePolling       : true,
+        atomic           : true,
+        awaitWriteFinish : { stabilityThreshold: 1000, pollInterval: 5000 }
+      });
+
+      narrativeWatcher.on('add', async filePath => {
+        if (!shouldProcessAlert(filePath)) return;
+        await this.processJsonFile(filePath, 'added', 'narrative-file-added');
+      });
+
+      narrativeWatcher.on('change', async filePath => {
+        if (!shouldProcessAlert(filePath)) return;
+        await this.processJsonFile(filePath, 'changed', 'narrative-file-added');
+      });
+
+      narrativeWatcher.on('unlink', async filePath => {
+        if (fsExtra.existsSync(filePath)) return;
+        const { sampleName, runName } = await getRunSampleInfo(filePath);
+        this.emit('narrative-file-removed', { id: sampleName, runId: runName });
       });
     } catch (err) {
       console.error(`[WATCH ERROR]`, err.message);

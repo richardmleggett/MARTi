@@ -222,3 +222,18 @@ thead > tr > th.widerColumn{
 #dashboardTaxonomyOptionsBar[hidden] {
   display: none !important;
 }
+
+
+/* Narrative analysis card */
+#narrativeCard .card-header h6 { color: #3a3b45; }
+.narrativeAiBadge { font-weight: 600; font-size: 0.7rem; vertical-align: middle; border: 1px solid #d1d3e2; }
+#narrativeProgress { display: flex; align-items: center; }
+.narrativeSummary { font-size: 1.05rem; line-height: 1.5; color: #3a3b45; }
+#narrativeToggle, #narrativeToggle:focus { color: #375a7f; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+#narrativeToggle:hover { color: #23394f; }
+#narrativeToggle .fas { font-size: 0.75em; margin-left: 0.35rem; text-decoration: none; }
+#narrativeSections { margin-bottom: 0.75rem; }
+#narrativeSections h6 { font-weight: 700; color: #3a3b45; margin: 0.9rem 0 0.25rem; font-size: 0.95rem; }
+#narrativeSections p { margin-bottom: 0.25rem; line-height: 1.5; color: #3a3b45; }
+#narrativeChecks.narrativeChecksOk { color: #1e7b34; }
+#narrativeChecks ul { margin: 0.25rem 0 0; padding-left: 1.25rem; }

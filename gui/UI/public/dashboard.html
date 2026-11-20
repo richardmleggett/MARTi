@@ -313,6 +313,31 @@
 </div>
 
 
+<div id="narrativeCard" class="card shadow mb-4" aria-labelledby="narrativeCardTitle">
+  <div class="card-header d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold" id="narrativeCardTitle">Narrative analysis
+      <span class="badge badge-light narrativeAiBadge ml-1" title="Written by an AI model from this sample's results">AI-generated</span></h6>
+    <button type="button" class="btn btn-sm btn-outline-primary" id="narrativeGenerateButton" style="display: none;">Generate narrative analysis</button>
+  </div>
+  <div class="card-body">
+    <p id="narrativeEmpty" class="mb-0 text-gray-700">Loading&hellip;</p>
+    <div id="narrativeProgress" class="text-gray-700" role="status" aria-live="polite" style="display: none;">
+      <div class="spinner-border spinner-border-sm text-primary mr-2" aria-hidden="true"></div>
+      <span id="narrativeProgressText">Starting</span>
+    </div>
+    <div id="narrativeError" class="alert alert-warning small mb-3" role="alert" style="display: none;"></div>
+    <div id="narrativeContent" style="display: none;">
+      <p id="narrativeSummary" class="narrativeSummary mb-2"></p>
+      <button type="button" class="btn btn-link btn-sm p-0 mb-2" id="narrativeToggle" aria-expanded="false" aria-controls="narrativeSections">Show full analysis</button>
+      <div id="narrativeSections" style="display: none;"></div>
+      <div id="narrativeStale" class="alert alert-info small mb-2" style="display: none;"></div>
+      <div id="narrativeChecks" class="small mb-2"></div>
+      <p id="narrativeFooter" class="small text-gray-600 mb-0"></p>
+    </div>
+  </div>
+</div>
+
+
 <div class="nav nav-pills martiViewNav" role="tablist" aria-label="Dashboard views">
   <button type="button" class="nav-link active" id="dashboardTaxonomyTab" role="tab" aria-controls="dashboardTaxonomyView" aria-selected="true">Taxonomy</button>
   <button type="button" class="nav-link" id="dashboardDiversityTab" role="tab" aria-controls="dashboardDiversityView" aria-selected="false">Diversity</button>

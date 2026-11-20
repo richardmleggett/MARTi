@@ -167,6 +167,8 @@ socket.emit('dashboard-alerts-request', {
   clientId: uuid
 });
 
+initialiseDashboardNarrative();
+
 d3.selectAll("input[name='includeAncestorNodes']").on("change", function() {
   globUpdate(globDonutData);
   });

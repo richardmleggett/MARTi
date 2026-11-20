@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "marti": {
+      "command": "python3",
+      "args": ["/path/to/marti-llm/server.py"],
+      "env": {
+        "MARTI_DIRS": "/path/to/marti_output;/path/to/other_marti_output"
+      }
+    }
+  }
+}

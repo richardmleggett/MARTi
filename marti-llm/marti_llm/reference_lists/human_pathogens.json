@@ -1,0 +1,287 @@
+{
+ "id": "human_pathogens",
+ "title": "Human pathogens (bacterial, fungal, protozoan; illustrative starter list)",
+ "description": "Organisms with recognised human pathogenic potential. Many are also commensals or environmental organisms; pathogenicity is often strain-level (virulence genes, serotype), which taxonomic classification alone cannot establish. Hazard group per UK ACDP Approved List as understood at time of writing; verify against the current list before relying on it.",
+ "entries": [
+  {
+   "taxid": 1639,
+   "name": "Listeria monocytogenes",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Key foodborne pathogen; persistent in food manufacturing environments (drains, wet areas)."
+  },
+  {
+   "taxid": 28901,
+   "name": "Salmonella enterica",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Serovars Typhi/Paratyphi are HG3; serovar cannot be determined from taxonomy alone."
+  },
+  {
+   "taxid": 562,
+   "name": "Escherichia coli",
+   "category": "foodborne/commensal",
+   "hazard_group": 2,
+   "notes": "Mostly commensal; STEC/VTEC (e.g. O157) are HG3. Needs virulence-gene evidence (stx, eae)."
+  },
+  {
+   "taxid": 620,
+   "name": "Shigella",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Genus. S. dysenteriae type 1 is HG3. Very hard to separate from E. coli by sequence classification."
+  },
+  {
+   "taxid": 1280,
+   "name": "Staphylococcus aureus",
+   "category": "foodborne/opportunist",
+   "hazard_group": 2,
+   "notes": "Enterotoxin producer; also skin/nasal commensal - common from human handling."
+  },
+  {
+   "taxid": 1396,
+   "name": "Bacillus cereus",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "B. cereus group members (incl. B. anthracis, B. thuringiensis) are hard to separate."
+  },
+  {
+   "taxid": 1392,
+   "name": "Bacillus anthracis",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": "Usually a misassignment within the B. cereus group; confirm with specific markers before raising concern."
+  },
+  {
+   "taxid": 1491,
+   "name": "Clostridium botulinum",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Polyphyletic species; botulinum toxin genes are the relevant evidence."
+  },
+  {
+   "taxid": 1502,
+   "name": "Clostridium perfringens",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 1496,
+   "name": "Clostridioides difficile",
+   "category": "healthcare",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 197,
+   "name": "Campylobacter jejuni",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 195,
+   "name": "Campylobacter coli",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 630,
+   "name": "Yersinia enterocolitica",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Psychrotrophic; grows at refrigeration temperatures."
+  },
+  {
+   "taxid": 632,
+   "name": "Yersinia pestis",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": "Near-identical to Y. pseudotuberculosis; treat assignments with great caution."
+  },
+  {
+   "taxid": 666,
+   "name": "Vibrio cholerae",
+   "category": "foodborne/waterborne",
+   "hazard_group": 2,
+   "notes": "Toxigenic O1/O139 status requires ctx genes."
+  },
+  {
+   "taxid": 670,
+   "name": "Vibrio parahaemolyticus",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Seafood-associated."
+  },
+  {
+   "taxid": 672,
+   "name": "Vibrio vulnificus",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Seafood-associated."
+  },
+  {
+   "taxid": 28141,
+   "name": "Cronobacter sakazakii",
+   "category": "foodborne",
+   "hazard_group": 2,
+   "notes": "Powdered infant formula risk."
+  },
+  {
+   "taxid": 573,
+   "name": "Klebsiella pneumoniae",
+   "category": "opportunist/AMR",
+   "hazard_group": 2,
+   "notes": "Important AMR carrier."
+  },
+  {
+   "taxid": 287,
+   "name": "Pseudomonas aeruginosa",
+   "category": "opportunist",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 470,
+   "name": "Acinetobacter baumannii",
+   "category": "opportunist/AMR",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 1352,
+   "name": "Enterococcus faecium",
+   "category": "opportunist/AMR",
+   "hazard_group": 2,
+   "notes": "Also a faecal indicator."
+  },
+  {
+   "taxid": 1351,
+   "name": "Enterococcus faecalis",
+   "category": "opportunist",
+   "hazard_group": 2,
+   "notes": "Also a faecal indicator."
+  },
+  {
+   "taxid": 1314,
+   "name": "Streptococcus pyogenes",
+   "category": "clinical",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 1313,
+   "name": "Streptococcus pneumoniae",
+   "category": "clinical",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 446,
+   "name": "Legionella pneumophila",
+   "category": "waterborne",
+   "hazard_group": 2,
+   "notes": "Relevant to water systems, cooling towers."
+  },
+  {
+   "taxid": 1773,
+   "name": "Mycobacterium tuberculosis",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": ""
+  },
+  {
+   "taxid": 234,
+   "name": "Brucella",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": "Genus."
+  },
+  {
+   "taxid": 777,
+   "name": "Coxiella burnetii",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": ""
+  },
+  {
+   "taxid": 263,
+   "name": "Francisella tularensis",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": ""
+  },
+  {
+   "taxid": 28450,
+   "name": "Burkholderia pseudomallei",
+   "category": "high consequence",
+   "hazard_group": 3,
+   "notes": ""
+  },
+  {
+   "taxid": 210,
+   "name": "Helicobacter pylori",
+   "category": "clinical",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 644,
+   "name": "Aeromonas hydrophila",
+   "category": "opportunist/waterborne",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 40324,
+   "name": "Stenotrophomonas maltophilia",
+   "category": "opportunist",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 5476,
+   "name": "Candida albicans",
+   "category": "fungal opportunist",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 498019,
+   "name": "Candidozyma auris",
+   "category": "fungal opportunist/AMR",
+   "hazard_group": 2,
+   "notes": "Formerly Candida auris; name in your taxonomy may differ."
+  },
+  {
+   "taxid": 746128,
+   "name": "Aspergillus fumigatus",
+   "category": "fungal opportunist",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 5811,
+   "name": "Toxoplasma gondii",
+   "category": "protozoan",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 5807,
+   "name": "Cryptosporidium parvum",
+   "category": "protozoan/waterborne",
+   "hazard_group": 2,
+   "notes": ""
+  },
+  {
+   "taxid": 5741,
+   "name": "Giardia intestinalis",
+   "category": "protozoan/waterborne",
+   "hazard_group": 2,
+   "notes": ""
+  }
+ ]
+}

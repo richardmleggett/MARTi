@@ -65,6 +65,8 @@
 
 <!-- Dashboard page -->
 <script src="/js/dashboard.js" type="text/javascript"></script>
+<script src="/js/dashboardNarrative.js" type="text/javascript"></script>
+<script src="/js/llmSettingsPanel.js" type="text/javascript"></script>
 <script src="/js/dashboardDiversity.js" type="text/javascript"></script>
 <link href="/css/dashboard.css" rel="stylesheet">
 <!-- Compare page -->
@@ -81,6 +83,8 @@
 <script src="/js/compareUpSet.js" type="text/javascript"></script>
 <script src="/js/compareDiversity.js" type="text/javascript"></script>
 <script src="/js/compare.js" type="text/javascript"></script>
+<script src="/js/chatPanel.js" type="text/javascript"></script>
+<link href="/css/chatPanel.css" rel="stylesheet">
 
 <!-- D3 plot scripts -->
 <script src="/js/dashboardReadsDonut.js" type="text/javascript"></script>
@@ -388,6 +392,57 @@
 
           </div>
 
+        </div>
+
+        <div id="llmSettingsSection" style="display: none;">
+          <hr>
+          <h6 class="font-weight-bold mb-1" id="llmSettingsTitle">AI narrative analysis</h6>
+          <p class="small text-gray-700 mb-3">Used by "Generate narrative analysis" on the dashboard. These settings,
+            including the API key, are stored on the computer running the MARTi GUI, not in this browser. Each
+            narrative sends a summary of the sample's results to the provider you choose; a local server keeps
+            everything on your own machines.</p>
+          <form id="llmSettingsForm" autocomplete="off" aria-labelledby="llmSettingsTitle">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="llmProvider">Provider</label>
+              <div class="col-sm-9">
+                <select class="form-control" id="llmProvider">
+                  <option value="">Choose&hellip;</option>
+                  <option value="anthropic">Anthropic (Claude)</option>
+                  <option value="openai">OpenAI</option>
+                  <option value="openai-compatible">Local or other OpenAI-compatible server (LM Studio, Ollama&hellip;)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row" id="llmBaseUrlRow" style="display: none;">
+              <label class="col-sm-3 col-form-label" for="llmBaseUrl">Server URL</label>
+              <div class="col-sm-9">
+                <input type="url" class="form-control" id="llmBaseUrl" placeholder="http://localhost:1234/v1" spellcheck="false">
+                <small class="form-text text-gray-600">LM Studio: http://localhost:1234/v1 &middot; Ollama: http://localhost:11434/v1</small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="llmModel">Model</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="llmModel" spellcheck="false" placeholder="Model name, as the provider lists it">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="llmApiKey">API key</label>
+              <div class="col-sm-9">
+                <input type="password" class="form-control" id="llmApiKey" spellcheck="false" autocomplete="new-password">
+                <small class="form-text text-gray-600" id="llmApiKeyHelp"></small>
+                <div class="form-check mt-1" id="llmClearKeyRow" style="display: none;">
+                  <input class="form-check-input" type="checkbox" id="llmClearKey">
+                  <label class="form-check-label small" for="llmClearKey">Remove the saved key</label>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <button type="submit" class="btn btn-primary btn-sm mr-2" id="llmSaveButton">Save</button>
+              <button type="button" class="btn btn-outline-primary btn-sm mr-3" id="llmTestButton">Test connection</button>
+              <span class="small" id="llmSettingsStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
         </div>
 
       </div>

@@ -44,6 +44,10 @@ Alternatively, you can store all these paths in a ``marti_engine_options.txt`` f
 * ``--key <path>``           Path to the SSL key file (required if HTTPS is enabled).
 * ``--cert <path>``          Path to the SSL certificate file (required if HTTPS is enabled).
 * ``--options <path>``       Path to a custom ``marti_engine_options.txt`` file (overrides default locations).
+* ``--llm-python <path>``    Python used for narrative analysis (default: ``python3``). See :ref:`narrative-analysis`.
+* ``--llm-tools <path>``     Folder containing the ``marti_llm`` package, if it is not installed in that Python.
+* ``-r, --restricted``       Restricted mode: hides and refuses actions that change data or settings.
+* ``--restricted-chat``      In restricted mode, still offer the AI chat (off by default).
 * ``--help, -h``             Display this help message.
 
 **Examples:**
@@ -152,6 +156,96 @@ The Dashboard and Compare pages have additional page-specific options bars fixed
 
 Many of the plots also have plot-specific options that can be accessed via the three vertical dots menu icon in the top right-hand corner of the plot’s card.
 
+.. _narrative-analysis:
+
+Narrative analysis (AI)
+-----------------------
+
+The Dashboard has a *Narrative analysis* card: a short written summary of the sample's results (organisms of note,
+antimicrobial resistance, data quality), written by an AI model. Narratives are only ever generated when someone
+clicks *Generate narrative analysis*; nothing is sent to a model automatically.
+
+How it works:
+
+* The GUI runs ``python -m marti_llm.narrate``, which computes a fixed set of analyses from the sample's MARTi output
+  (top taxa, screens against curated organism lists, priority resistance genes, diversity, sequencing saturation),
+  sends those results to the model in one request, and checks every organism, resistance gene and number in the answer
+  against them. Anything that does not match is shown on the card under *Automatic checks*.
+* The narrative is saved as ``narrative.json`` in the sample's folder, next to ``sample.json``, so it moves with the
+  sample's data. The GUI needs write access to that folder. Every user viewing the sample sees the same narrative.
+* The sample's keywords (the ``Keywords`` line of the config file's ``Metadata`` block) choose what the narrative
+  emphasises: for example *food*, *factory* or *drain* select the food manufacturing profile; *stool*, *patient* or
+  *blood* the clinical profile; *air*, *bioaerosol* or *pollen* the outdoor air profile (not with *indoor*); *river*,
+  *soil* or *wastewater* the environmental profile.
+* If more reads have been analysed since the narrative was written, the card says so.
+
+Setting up a model: open *Options* (the cog icon) and fill in *AI narrative analysis*. Choose Anthropic, OpenAI, or a
+local or other OpenAI-compatible server (for example LM Studio at ``http://localhost:1234/v1`` or Ollama at
+``http://localhost:11434/v1``), the model name, and an API key if the provider needs one. *Test connection* checks the
+details without generating anything. The settings are stored on the computer running the GUI, in
+``~/.marti/llm_settings.json`` (readable only by that account); the API key is never sent back to a browser. A key in
+the ``MARTI_LLM_API_KEY`` environment variable takes precedence. With a cloud provider, each narrative sends a summary
+of the sample's results to that provider; a local server keeps everything on your own machines. The engine itself
+never contacts a model, so it can run without internet access.
+
+Requirements: Python 3.10 or later with the ``marti_llm`` package, ``numpy`` and ``httpx`` (the ``mcp`` package is
+only needed for marti-llm's MCP server, not for narratives). If ``marti_llm`` is not installed, point the GUI at its folder with ``--llm-tools`` or ``LLMToolsDir``.
+The following ``marti_engine_options.txt`` entries are read by the GUI:
+
+* ``LLMPython`` – the Python to run (default ``python3``)
+* ``LLMToolsDir`` – folder containing the ``marti_llm`` package
+* ``LLMSettingsFile`` – where the settings are stored (default ``~/.marti/llm_settings.json``)
+* ``LLMTimeoutMinutes`` – how long one narrative or chat answer may take before it is stopped (default 10)
+* ``LLMChatInRestrictedMode`` – ``true`` to offer the AI chat in restricted mode (default ``false``)
+
+Narratives can also be written by Claude in the Claude app (or another MCP client) through marti-llm's MCP server,
+using that app's own access rather than an API key: ask it to write the narrative analysis for a sample. It saves
+``narrative.json`` with the same checks, and the card shows it within a few seconds.
+
+In restricted mode (``-r``), existing narratives are shown, but there is no *Generate* button and no AI settings in
+*Options*, and the server refuses requests to generate narratives or change the settings.
+
+
+AI chat
+-------
+
+The Samples page, the Compare page and the Dashboard have an *Ask AI* button (bottom right) that opens a floating chat panel. Ask a
+question about the samples on the page, for example "Do the groups differ in diversity?" or "Which organisms of
+concern are present, and in which samples?". The model answers using the same analyses as marti-llm's MCP server
+(diversity, group comparisons, pathogen and resistance-gene screens, co-occurrence and so on), run on the GUI server,
+and it can only see the samples open on the page. On the Compare page it is told the groups you have assigned, and the
+rank and minimum abundance you are viewing.
+
+Answers contain links to the plots and tables they are based on: clicking one opens the right tab, scrolls to the
+card and highlights it, while the panel stays open. A link to a sample opens its Dashboard. The model can only link to
+a fixed list of places in the GUI; anything else is shown as plain text.
+
+The chat uses the model chosen in *Options* (see above), and needs one that can call tools: Anthropic and OpenAI
+models can, and so can many local models served by LM Studio or Ollama, though local models may be slow because each
+answer can take several analysis steps. With a cloud provider, the question and the analysis results it needs are
+sent to that provider.
+
+Conversations are kept only in your browser (local storage), one per page and set of samples: reopening the same
+comparison or sample brings the conversation back, and other users of the same GUI do not see it. The GUI server does
+not store them. Use the download button to keep a conversation as a Markdown file, and the bin to clear it.
+
+On the Samples page, *Ask AI* finds and selects samples. Ask for example "Select the samples collected in summer
+2025", "Also select samples within 5 miles of Norwich", "Which samples contain Streptomyces?" or "List the samples
+with E. coli". A search tool does the matching on the GUI server; the model only turns the request into a search
+and says how it read it (for example, summer 2025 as 1 June to 31 August 2025). "Select" ticks the matching rows in
+the table, replacing the selection unless you say "also" or "deselect"; the answer has *Undo* and *Compare* buttons.
+"List" or "which" questions answer with links to each sample and leave the selection alone. Organism searches use the
+lowest non-zero minimum abundance each sample has, so a single read counts, unless you ask for a threshold (for
+example "at least 1% of classified reads"). Distances use the coordinates in each sample's ``metadata.json``
+(``location``, as for the sample map, e.g. ``52.63, 1.29``); for samples without coordinates the model may estimate
+a position from the place name, and then says which samples were placed by estimate.
+
+On any page you can also ask Ask AI to open a view, for example "Open the treemap for Brancaster1_24-Jul" or
+"Show me the PCoA". It opens that sample's Dashboard if needed and scrolls to the plot. Sample names can be given in
+full, as run/name, or by a part that matches only one sample; if a name matches several, the model asks which.
+
+In restricted mode the chat is off unless the GUI is started with ``--restricted-chat`` (or
+``LLMChatInRestrictedMode:true``). Even then, users cannot change the AI settings.
 
 Taxonomic ranks
 ---------------

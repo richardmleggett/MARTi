@@ -1,0 +1,169 @@
+{
+ "id": "food_spoilage",
+ "title": "Food spoilage organisms (illustrative starter list)",
+ "description": "Organisms commonly associated with spoilage of chilled, fermented, acidic or heat-processed foods. Relevance depends heavily on product type, storage temperature, pH and water activity.",
+ "entries": [
+  {
+   "taxid": 286,
+   "name": "Pseudomonas",
+   "category": "chilled meat/fish/dairy",
+   "notes": "Genus; psychrotrophic proteolytic/lipolytic spoilers, biofilm formers."
+  },
+  {
+   "taxid": 294,
+   "name": "Pseudomonas fluorescens",
+   "category": "chilled dairy/meat",
+   "notes": "Heat-stable proteases/lipases survive UHT."
+  },
+  {
+   "taxid": 296,
+   "name": "Pseudomonas fragi",
+   "category": "chilled meat",
+   "notes": ""
+  },
+  {
+   "taxid": 22,
+   "name": "Shewanella",
+   "category": "chilled fish",
+   "notes": "Genus; H2S producers."
+  },
+  {
+   "taxid": 24,
+   "name": "Shewanella putrefaciens",
+   "category": "chilled fish",
+   "notes": ""
+  },
+  {
+   "taxid": 659,
+   "name": "Photobacterium phosphoreum",
+   "category": "chilled/MAP fish",
+   "notes": ""
+  },
+  {
+   "taxid": 2756,
+   "name": "Brochothrix thermosphacta",
+   "category": "chilled/MAP meat",
+   "notes": ""
+  },
+  {
+   "taxid": 2747,
+   "name": "Carnobacterium",
+   "category": "chilled/MAP meat & fish",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 1243,
+   "name": "Leuconostoc",
+   "category": "MAP meat, vegetables, sugar",
+   "notes": "Genus; slime/dextran producers."
+  },
+  {
+   "taxid": 1357,
+   "name": "Lactococcus",
+   "category": "dairy, MAP products",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 46255,
+   "name": "Weissella",
+   "category": "MAP meat, vegetables",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 1590,
+   "name": "Lactiplantibacillus plantarum",
+   "category": "fermented/acidic products",
+   "notes": ""
+  },
+  {
+   "taxid": 497,
+   "name": "Psychrobacter",
+   "category": "chilled meat/fish",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 469,
+   "name": "Acinetobacter",
+   "category": "chilled meat/fish",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 569,
+   "name": "Hafnia alvei",
+   "category": "chilled meat/dairy",
+   "notes": ""
+  },
+  {
+   "taxid": 614,
+   "name": "Serratia liquefaciens",
+   "category": "chilled meat",
+   "notes": ""
+  },
+  {
+   "taxid": 1450,
+   "name": "Alicyclobacillus acidoterrestris",
+   "category": "fruit juices",
+   "notes": "Thermo-acidophilic spore former; guaiacol taint."
+  },
+  {
+   "taxid": 1422,
+   "name": "Geobacillus stearothermophilus",
+   "category": "canned/heat-processed",
+   "notes": "Flat-sour spoilage; spores survive processing."
+  },
+  {
+   "taxid": 1509,
+   "name": "Clostridium sporogenes",
+   "category": "canned/heat-processed",
+   "notes": "Putrefactive anaerobe; process-validation surrogate for C. botulinum."
+  },
+  {
+   "taxid": 434,
+   "name": "Acetobacter",
+   "category": "beverages, fruit products",
+   "notes": "Genus; acetic acid bacteria."
+  },
+  {
+   "taxid": 441,
+   "name": "Gluconobacter",
+   "category": "beverages, fruit products",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 4954,
+   "name": "Zygosaccharomyces bailii",
+   "category": "acidic/preserved products",
+   "notes": "Preservative-resistant yeast."
+  },
+  {
+   "taxid": 4932,
+   "name": "Saccharomyces cerevisiae",
+   "category": "beverages, sugary products",
+   "notes": "Spoiler in some products, process organism in others."
+  },
+  {
+   "taxid": 4959,
+   "name": "Debaryomyces hansenii",
+   "category": "salted/cured products, dairy",
+   "notes": ""
+  },
+  {
+   "taxid": 5533,
+   "name": "Rhodotorula",
+   "category": "dairy, chilled products",
+   "notes": "Genus; pink yeast."
+  },
+  {
+   "taxid": 5073,
+   "name": "Penicillium",
+   "category": "bakery, dairy, fruit",
+   "notes": "Genus; some species mycotoxigenic."
+  },
+  {
+   "taxid": 5061,
+   "name": "Aspergillus niger",
+   "category": "fruit, bakery, dried foods",
+   "notes": ""
+  }
+ ]
+}

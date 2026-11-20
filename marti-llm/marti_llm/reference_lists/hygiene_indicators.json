@@ -1,0 +1,37 @@
+{
+ "id": "hygiene_indicators",
+ "title": "Hygiene and faecal indicator taxa",
+ "description": "Taxa used as indicators of hygiene failures or faecal contamination. Indicator value comes from abundance relative to baseline for that site.",
+ "entries": [
+  {
+   "taxid": 543,
+   "name": "Enterobacteriaceae",
+   "category": "hygiene indicator",
+   "notes": "Family; standard process-hygiene indicator."
+  },
+  {
+   "taxid": 562,
+   "name": "Escherichia coli",
+   "category": "faecal indicator",
+   "notes": ""
+  },
+  {
+   "taxid": 1350,
+   "name": "Enterococcus",
+   "category": "faecal indicator",
+   "notes": "Genus."
+  },
+  {
+   "taxid": 1637,
+   "name": "Listeria",
+   "category": "environmental indicator",
+   "notes": "Genus; Listeria spp. used as indicator for L. monocytogenes harbourage."
+  },
+  {
+   "taxid": 1491,
+   "name": "Clostridium botulinum",
+   "category": "process indicator",
+   "notes": ""
+  }
+ ]
+}
