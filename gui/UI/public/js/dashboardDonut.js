@@ -227,15 +227,15 @@ function donutUpdate(data) {
             .append("g");
 
         dashboardTaxaDonutLegendEnter.append("rect")
-            .attr("width", 20)
-            .attr("height", 20)
+            .attr("width", 18)
+            .attr("height", 14)
+            .attr("y", 3)
             .style("fill", "black");
 
         dashboardTaxaDonutLegendEnter.append("text")
-            .attr("x", 24)
-            .attr("y", 9)
-            .style("font-size", "1.1em")
-            .attr("dy", ".356em");
+            .attr("x", 23)
+            .attr("y", 15)
+            .style("font-size", "14px");
 
         dashboardTaxaDonutLegend.select("g rect")
           .style("fill", function(d, i) {
@@ -247,7 +247,7 @@ function donutUpdate(data) {
           .text(function(d) { return d.label; });
 
         dashboardTaxaDonutLegend
-          .attr("width",function(d) { var getWidth = this.firstChild.getBBox().width + 10; if (getWidth != 10) { return getWidth;} else {return "200"} });
+          .attr("width",function() { return compactLegendWidth(this); });
 
         dashboardTaxaDonutLegend.exit().remove();
 
@@ -284,7 +284,7 @@ function donutUpdate(data) {
                     return taxonKey(d) == selectedKey;
                 });
             dashboardTaxaDonutLegend.filter(function(d) { return taxonKey(d) == selectedKey; })
-                .attr("width", function() { return this.firstChild.getBBox().width + 10; });
+                .attr("width", function() { return compactLegendWidth(this); });
         }
 
         function clearTaxonHighlight() {

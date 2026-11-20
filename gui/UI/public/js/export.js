@@ -134,7 +134,7 @@ function dashboardAmrDonutExport(donutE,legendE){
 
   for (const [i, child] of legendContent.entries()){
     var clonedNode = legendContent[i].cloneNode(true);
-    legendY = item*25;
+    legendY = item*22;
     var x =0;
     $(clonedNode).attr("transform","translate("+x+","+legendY+")");
     $('#clonedAmrDonutLegend')[0].appendChild(clonedNode);
@@ -198,7 +198,7 @@ function dashboardTaxaDonutExport(){
 
   for (const [i, child] of legendContent.entries()){
     var clonedNode = legendContent[i].cloneNode(true);
-    legendY = item*25;
+    legendY = item*22;
     var x =0;
     $(clonedNode).attr("transform","translate("+x+","+legendY+")");
     $('#clonedTaxaDonutLegend')[0].appendChild(clonedNode);
@@ -354,8 +354,8 @@ function compareTaxaDonutExport(){
 
 
         var numberLines = 1;
-        var lineHeight = 30;
-        var legendSpacing = 10;
+        var lineHeight = 24;
+        var legendSpacing = 8;
         var currentLineLength = 0;
         var maxLineLength = $("#clonedDonutComparePlot")[0].getBBox().width;
 
@@ -421,6 +421,8 @@ function compareTaxaStackedBarExport(){
       var chartContent = chartSvg.childNodes[0];
 
       var chartSvgViewBox = $(chartSvg).attr('viewBox');
+      var chartWidth = chartSvg.viewBox.baseVal.width || 960;
+      var exportWidth = chartWidth + 80;
 
       var legendArray = $(".stackedBarLegend");
 
@@ -431,7 +433,7 @@ function compareTaxaStackedBarExport(){
       var mergedSvg = document.createElementNS(svgNS, 'svg');
       $(mergedSvg).attr('id', 'mergedStackedBarPlot');
       $(mergedSvg).attr('height', '500');
-      $(mergedSvg).attr('width', '920');
+      $(mergedSvg).attr('width', exportWidth);
 
       merged.appendChild(mergedSvg);
 
@@ -445,10 +447,10 @@ function compareTaxaStackedBarExport(){
           .attr('id', 'clonedStackedBarLegend');
 
         var numberLines = 1;
-        var lineHeight = 30;
-        var legendSpacing = 10;
+        var lineHeight = 24;
+        var legendSpacing = 8;
         var currentLineLength = 0;
-        var maxLineLength = 840;
+        var maxLineLength = chartWidth;
 
         clonedStackedBarLegend.append("g")
           .attr('id', 'clonedStackedBarLegend_line_'+numberLines);
@@ -460,7 +462,7 @@ function compareTaxaStackedBarExport(){
         var clonedNode = legendContent[i].cloneNode(true);
         var clonedNodeWidth = legendContent[i].getBBox().width;
         var previousLineLength = currentLineLength;
-        if ((currentLineLength + clonedNodeWidth) > 840) {
+        if ((currentLineLength + clonedNodeWidth) > maxLineLength) {
           previousLineLength = 0;
           currentLineLength = clonedNodeWidth + legendSpacing;
           numberLines += 1;
@@ -530,8 +532,8 @@ function dashboardAccumulationExport(){
           .attr("transform","translate(60,0)");
 
         var numberLines = 1;
-        var lineHeight = 30;
-        var legendSpacing = 15;
+        var lineHeight = 24;
+        var legendSpacing = 8;
         var currentLineLength = 0;
         var maxLineLength = 840;
 

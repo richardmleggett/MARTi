@@ -1,12 +1,10 @@
-var sampleTaxonFilterId = "";
-var sampleTaxonFilterQuery = "";
-var sampleTaxonFilterMatches = null;
+var sampleSearchTokens = [];
+var sampleTaxonFilterMatches = new Map();
 var sampleTaxonFilterRequestSerial = 0;
 var sampleTaxonSuggestionRequestSerial = 0;
-var sampleTaxonFilterTimer;
 var sampleTaxonSuggestionTimer;
 var sampleTaxonFilterRegistered = false;
-var sampleTaxonSuggestions = [];
+var sampleSearchSuggestions = [];
 var sampleTaxonSuggestionActive = -1;
 
 function sampleTaxonFilterKey(runId, name) {
@@ -19,59 +17,163 @@ function sampleTaxonFilterSamples() {
   });
 }
 
+function sampleSearchTaxonQuery(draft) {
+  var prefixed = /^taxon\s*:\s*(.*)$/i.exec(draft);
+  if (prefixed) return prefixed[1].trim();
+  return /[a-z]/i.test(draft) && !draft.includes(':') ? draft : '';
+}
+
+function sampleSearchStructuredDraft(draft) {
+  return /^(taxon|sample|run|pipeline|barcode|status)\s*:/i.test(draft);
+}
+
+function sampleSearchSuggestionQuery(draft) {
+  var prefixed = /^(taxon|sample|run|pipeline|barcode|status)\s*:\s*(.*)$/i.exec(draft);
+  return prefixed ? { type: prefixed[1].toLowerCase(), value: prefixed[2].trim() }
+    : { type: 'all', value: draft };
+}
+
+function sampleSearchLocalSuggestions(draft) {
+  var query = sampleSearchSuggestionQuery(draft);
+  if (!['all', 'run', 'pipeline'].includes(query.type) ||
+      (query.type === 'all' && query.value.length < 2) || !samplePageDataTable) return [];
+  var lower = query.value.toLowerCase();
+  var seen = new Set();
+  var suggestions = [];
+  samplePageDataTable.rows().data().toArray().forEach(function(row) {
+    if (query.type !== 'pipeline') {
+      var runName = String(row[2] == null ? '' : row[2]);
+      if (runName && runName.toLowerCase().includes(lower) && !seen.has('run:' + runName)) {
+        seen.add('run:' + runName);
+        suggestions.push({ type: 'run', value: runName, label: runName, detail: 'Run' });
+      }
+    }
+    if (query.type === 'pipeline') {
+      var pipelineName = String(row[7] == null ? '' : row[7]);
+      if (pipelineName && pipelineName.toLowerCase().includes(lower) && !seen.has('pipeline:' + pipelineName)) {
+        seen.add('pipeline:' + pipelineName);
+        suggestions.push({ type: 'pipeline', value: pipelineName,
+          label: pipelineName, detail: 'Pipeline' });
+      }
+    }
+  });
+  suggestions.sort(function(a, b) {
+    var aStarts = a.label.toLowerCase().startsWith(lower);
+    var bStarts = b.label.toLowerCase().startsWith(lower);
+    return Number(bStarts) - Number(aStarts) || a.label.localeCompare(b.label);
+  });
+  return suggestions.slice(0, 12);
+}
+
+function sampleSearchBarcodeMatches(query, barcode) {
+  var requestedCode = /^(?:bc)?0*(\d+)$/i.exec(query.trim());
+  if (requestedCode) {
+    var sampleCode = /^(?:bc)?0*(\d+)$/i.exec(String(barcode == null ? '' : barcode).trim());
+    return !!sampleCode && Number(sampleCode[1]) === Number(requestedCode[1]);
+  }
+  return formatBarcodeLabel(barcode).toLowerCase().includes(query.trim().toLowerCase());
+}
+
 function hideSampleTaxonSuggestions() {
   $('#sampleTaxonSuggestions').prop('hidden', true).empty();
-  $('#sampleTaxonIdFilter').attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+  $('#sampleSearchInput').attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
   sampleTaxonSuggestionActive = -1;
 }
 
-function chooseSampleTaxonSuggestion(taxon) {
-  sampleTaxonFilterId = String(taxon.id);
-  sampleTaxonFilterQuery = taxon.name;
+function renderSampleSearchTokens() {
+  var container = $('#sampleSearchTokens').empty();
+  sampleSearchTokens.forEach(function(token, index) {
+    var chip = $('<span class="sampleSearchToken"></span>').appendTo(container);
+    $('<span></span>').text(token.label).appendTo(chip);
+    $('<button type="button" aria-label="Remove filter"></button>')
+      .attr('aria-label', 'Remove ' + token.label + ' filter')
+      .html('&times;')
+      .on('click', function() {
+        var removed = sampleSearchTokens.splice(index, 1)[0];
+        renderSampleSearchTokens();
+        if (removed.type === 'taxon') requestSampleTaxonFilters();
+        else drawSampleSearch();
+        $('#sampleSearchInput').trigger('focus');
+      }).appendTo(chip);
+  });
+  $('#sampleSearchClear').prop('hidden', !sampleSearchTokens.length && !$('#sampleSearchInput').val());
+}
+
+function addSampleSearchToken(token) {
+  if (!sampleSearchTokens.some(function(existing) {
+    return existing.type === token.type && existing.value.toLowerCase() === token.value.toLowerCase() &&
+      existing.exact === token.exact;
+  })) sampleSearchTokens.push(token);
   ++sampleTaxonSuggestionRequestSerial;
   clearTimeout(sampleTaxonSuggestionTimer);
-  $('#sampleTaxonIdFilter').val(taxon.name + ' (' + taxon.id + ')');
+  $('#sampleSearchInput').val('');
   hideSampleTaxonSuggestions();
-  requestSampleTaxonFilter();
+  renderSampleSearchTokens();
+  if (token.type === 'taxon') requestSampleTaxonFilters();
+  else drawSampleSearch();
+  $('#sampleSearchInput').trigger('focus');
+}
+
+function chooseSampleTaxonSuggestion(taxon) {
+  addSampleSearchToken({ type: 'taxon', value: String(taxon.id),
+    label: 'Taxon: ' + taxon.name + ' (' + taxon.id + ')' });
+}
+
+function chooseSampleSearchSuggestion(suggestion) {
+  if (suggestion.type === 'taxon') chooseSampleTaxonSuggestion(suggestion);
+  else addSampleSearchToken({ type: suggestion.type, value: suggestion.value,
+    exact: true,
+    label: (suggestion.type === 'run' ? 'Run: ' : 'Pipeline: ') + suggestion.label });
 }
 
 function renderSampleTaxonSuggestions() {
   var list = $('#sampleTaxonSuggestions').empty();
   sampleTaxonSuggestionActive = -1;
-  sampleTaxonSuggestions.forEach(function(taxon, index) {
+  sampleSearchSuggestions.forEach(function(suggestion, index) {
     var option = $('<button type="button" class="list-group-item list-group-item-action"></button>')
       .attr('id', 'sampleTaxonOption' + index)
       .attr('role', 'option')
       .attr('aria-selected', 'false')
       .on('mousedown', function(event) { event.preventDefault(); })
-      .on('click', function() { chooseSampleTaxonSuggestion(taxon); });
-    $('<span></span>').text(taxon.name).appendTo(option);
+      .on('click', function() { chooseSampleSearchSuggestion(suggestion); });
+    $('<span></span>').text(suggestion.label || suggestion.name).appendTo(option);
     $('<small class="d-block text-muted"></small>')
-      .text((taxon.rank ? taxon.rank + ' · ' : '') + 'NCBI ID ' + taxon.id)
+      .text(suggestion.type === 'taxon'
+        ? (suggestion.rank ? suggestion.rank + ' · ' : '') + 'NCBI ID ' + suggestion.id
+        : suggestion.detail)
       .appendTo(option);
     option.appendTo(list);
   });
-  var open = sampleTaxonSuggestions.length > 0;
+  var open = sampleSearchSuggestions.length > 0;
   list.prop('hidden', !open);
-  $('#sampleTaxonIdFilter').attr('aria-expanded', String(open));
+  $('#sampleSearchInput').attr('aria-expanded', String(open));
 }
 
 function requestSampleTaxonSuggestions() {
-  var query = sampleTaxonFilterQuery;
+  var draft = $('#sampleSearchInput').val().trim();
+  var localSuggestions = sampleSearchLocalSuggestions(draft);
+  sampleSearchSuggestions = localSuggestions;
+  renderSampleTaxonSuggestions();
+  var query = sampleSearchTaxonQuery(draft);
   var serial = ++sampleTaxonSuggestionRequestSerial;
-  if (sampleTaxonFilterId || query.length < 2) return;
+  if (query.length < 2 && !(/^taxon\s*:/i.test(draft) && /^\d+$/.test(query))) return;
   socket.emit('sample-taxon-suggestions-request', {
     clientId: uuid,
     query: query,
     samples: sampleTaxonFilterSamples()
   }, function(response) {
     if (serial !== sampleTaxonSuggestionRequestSerial || currentPage !== 'Samples' ||
-        sampleTaxonFilterId || query !== sampleTaxonFilterQuery) return;
-    sampleTaxonSuggestions = response && Array.isArray(response.suggestions) ? response.suggestions : [];
+        draft !== $('#sampleSearchInput').val().trim()) return;
+    var taxa = response && Array.isArray(response.suggestions) ? response.suggestions : [];
+    sampleSearchSuggestions = localSuggestions.concat(taxa.map(function(taxon) {
+      return Object.assign({ type: 'taxon', label: taxon.name }, taxon);
+    }));
     renderSampleTaxonSuggestions();
-    $('#sampleTaxonFilterStatus').text(sampleTaxonSuggestions.length
-      ? 'Choose a taxon to include it and its descendants.'
-      : 'No matching taxa with assigned reads in the loaded samples.');
+    if (/^taxon\s*:/i.test(draft)) {
+      $('#sampleTaxonFilterStatus').text(taxa.length
+        ? 'Choose a taxon to include it and its descendants.'
+        : 'No matching taxa with assigned reads in the loaded samples.');
+    }
   });
 }
 
@@ -94,36 +196,49 @@ function refreshSampleMapMarkers() {
   $('#sampleMapCard').toggle(existingMarkers.length > 0);
 }
 
-function requestSampleTaxonFilter() {
+function drawSampleSearch() {
+  if (!samplePageDataTable) return;
+  var draft = $('#sampleSearchInput').val().trim();
+  samplePageDataTable.search(sampleSearchStructuredDraft(draft) ? '' : draft).draw(false);
+  $('#samplePageDataTable thead>tr').children(':first-child').removeClass('checkSelected');
+  $('#sampleSearchClear').prop('hidden', !sampleSearchTokens.length && !draft);
+  refreshSampleMapMarkers();
+  var taxonCount = sampleSearchTokens.filter(function(token) { return token.type === 'taxon'; }).length;
+  if (sampleSearchTokens.length && sampleTaxonFilterMatches.size === taxonCount) {
+    var count = samplePageDataTable.rows({ search: 'applied' }).count();
+    $('#sampleTaxonFilterStatus').text(count === 1 ? '1 matching sample.' : count + ' matching samples.');
+  }
+}
+
+function requestSampleTaxonFilters() {
   var serial = ++sampleTaxonFilterRequestSerial;
   var status = $('#sampleTaxonFilterStatus');
-  if (!sampleTaxonFilterId) {
-    sampleTaxonFilterMatches = null;
+  var ids = sampleSearchTokens.filter(function(token) { return token.type === 'taxon'; })
+    .map(function(token) { return token.value; });
+  sampleTaxonFilterMatches = new Map();
+  if (!ids.length) {
     status.text('');
-    samplePageDataTable.draw(false);
-    refreshSampleMapMarkers();
+    drawSampleSearch();
     return;
   }
-  sampleTaxonFilterMatches = new Set();
-  samplePageDataTable.draw(false);
-  refreshSampleMapMarkers();
-  if (!/^\d+$/.test(sampleTaxonFilterId)) {
-    status.text('Enter a numeric NCBI taxon ID.');
-    return;
-  }
-  status.text('Finding samples with reads assigned to this taxon or its descendants…');
-  socket.emit('sample-taxon-filter-request', {
-    clientId: uuid,
-    taxonId: sampleTaxonFilterId, samples: sampleTaxonFilterSamples()
-  }, function(response) {
-    if (serial !== sampleTaxonFilterRequestSerial || currentPage !== 'Samples') return;
-    var matches = response && Array.isArray(response.matches) ? response.matches : [];
-    sampleTaxonFilterMatches = new Set(matches.map(function(sample) {
-      return sampleTaxonFilterKey(sample.runId, sample.name);
-    }));
-    samplePageDataTable.draw(false);
-    refreshSampleMapMarkers();
-    status.text(matches.length === 1 ? '1 matching sample.' : matches.length + ' matching samples.');
+  drawSampleSearch();
+  status.text('Finding samples with reads assigned to the selected taxa or their descendants…');
+  var samples = sampleTaxonFilterSamples();
+  ids.forEach(function(id) {
+    socket.emit('sample-taxon-filter-request', {
+      clientId: uuid, taxonId: id, samples: samples
+    }, function(response) {
+      if (serial !== sampleTaxonFilterRequestSerial || currentPage !== 'Samples') return;
+      var matches = response && Array.isArray(response.matches) ? response.matches : [];
+      sampleTaxonFilterMatches.set(id, new Set(matches.map(function(sample) {
+        return sampleTaxonFilterKey(sample.runId, sample.name);
+      })));
+      if (sampleTaxonFilterMatches.size === ids.length) {
+        drawSampleSearch();
+        var count = samplePageDataTable.rows({ search: 'applied' }).count();
+        status.text(count === 1 ? '1 matching sample.' : count + ' matching samples.');
+      }
+    });
   });
 }
 
@@ -131,22 +246,38 @@ function initialiseSamplePage() {
 exportRequestPending = false;
 mapUpdated = false;
 $('#sampleMapCard').hide();
-sampleTaxonFilterId = '';
-sampleTaxonFilterQuery = '';
-sampleTaxonFilterMatches = null;
+sampleSearchTokens = [];
+sampleTaxonFilterMatches = new Map();
 ++sampleTaxonFilterRequestSerial;
 ++sampleTaxonSuggestionRequestSerial;
-clearTimeout(sampleTaxonFilterTimer);
 clearTimeout(sampleTaxonSuggestionTimer);
-sampleTaxonSuggestions = [];
+sampleSearchSuggestions = [];
 hideSampleTaxonSuggestions();
+renderSampleSearchTokens();
 
 if (!sampleTaxonFilterRegistered) {
   $.fn.dataTable.ext.search.push(function(settings, searchData, dataIndex) {
-    if (settings.nTable.id !== 'samplePageDataTable' || !sampleTaxonFilterId) return true;
+    if (settings.nTable.id !== 'samplePageDataTable') return true;
     var row = settings.aoData[dataIndex]._aData;
-    return sampleTaxonFilterMatches !== null &&
-      sampleTaxonFilterMatches.has(sampleTaxonFilterKey(row[11], row[12]));
+    var text = searchData.join(' ').toLowerCase();
+    return sampleSearchTokens.every(function(token) {
+      var value = token.value.toLowerCase();
+      if (token.type === 'text') return text.includes(value);
+      if (token.type === 'taxon') {
+        var matches = sampleTaxonFilterMatches.get(token.value);
+        return !!matches && matches.has(sampleTaxonFilterKey(row[11], row[12]));
+      }
+      if (token.type === 'sample') return String(row[1]).toLowerCase().includes(value) ||
+        String(row[12]).toLowerCase().includes(value);
+      if (token.type === 'run' && token.exact) return String(row[2]).toLowerCase() === value;
+      if (token.type === 'run') return String(row[2]).toLowerCase().includes(value) ||
+        String(row[11]).toLowerCase().includes(value);
+      if (token.type === 'pipeline' && token.exact) return String(row[7]).toLowerCase() === value;
+      if (token.type === 'pipeline') return String(row[7]).toLowerCase().includes(value);
+      if (token.type === 'barcode') return sampleSearchBarcodeMatches(token.value, row[3]);
+      if (token.type === 'status') return String(row[8]).toLowerCase().includes(value);
+      return true;
+    });
   });
   sampleTaxonFilterRegistered = true;
 }
@@ -225,6 +356,7 @@ if (!$.fn.DataTable.isDataTable('#samplePageDataTable')) {
   });
 
 }
+samplePageDataTable.search('').draw(false);
 
 
 
@@ -259,42 +391,47 @@ $('.compareSamplesInput').on('click', function() {
 
 sampleListCurrent = [];
 
-$("#sampleTaxonIdFilter").off('.sampleTaxonFilter').on('input.sampleTaxonFilter', function() {
-  sampleTaxonFilterQuery = this.value.trim();
-  sampleTaxonFilterId = /^\d+$/.test(sampleTaxonFilterQuery) ? sampleTaxonFilterQuery : '';
-  ++sampleTaxonFilterRequestSerial;
+$('#sampleSearchField').on('click.sampleSearch', function(event) {
+  if (!$(event.target).closest('button, input').length) $('#sampleSearchInput').trigger('focus');
+});
+
+$('#sampleSearchInput').on('input.sampleSearch', function() {
   ++sampleTaxonSuggestionRequestSerial;
-  clearTimeout(sampleTaxonFilterTimer);
   clearTimeout(sampleTaxonSuggestionTimer);
-  sampleTaxonSuggestions = [];
+  sampleSearchSuggestions = [];
   hideSampleTaxonSuggestions();
-  if (sampleTaxonFilterId) {
-    sampleTaxonFilterTimer = setTimeout(requestSampleTaxonFilter, 200);
-  } else {
-    sampleTaxonFilterMatches = null;
-    samplePageDataTable.draw(false);
-    refreshSampleMapMarkers();
-    $('#sampleTaxonFilterStatus').text(sampleTaxonFilterQuery
-      ? sampleTaxonFilterQuery.length < 2 ? 'Type at least two characters of a taxon name.' : 'Searching taxon names…'
-      : '');
-    if (sampleTaxonFilterQuery.length >= 2) {
-      sampleTaxonSuggestionTimer = setTimeout(requestSampleTaxonSuggestions, 200);
-    }
+  $('#sampleTaxonFilterStatus').text('');
+  drawSampleSearch();
+  var query = sampleSearchSuggestionQuery(this.value.trim());
+  if ((query.type === 'all' && query.value.length >= 2) ||
+      (['run', 'pipeline'].includes(query.type)) ||
+      (query.type === 'taxon' && (query.value.length >= 2 || /^\d+$/.test(query.value)))) {
+    sampleTaxonSuggestionTimer = setTimeout(requestSampleTaxonSuggestions, 200);
+  } else if (!sampleSearchTokens.length) {
+    $('#sampleTaxonFilterStatus').text('');
   }
 });
 
-$('#sampleTaxonIdFilter').on('keydown.sampleTaxonFilter', function(event) {
+$('#sampleSearchInput').on('keydown.sampleSearch', function(event) {
   if (event.key === 'Escape') {
     hideSampleTaxonSuggestions();
     return;
   }
-  if (!sampleTaxonSuggestions.length || $('#sampleTaxonSuggestions').prop('hidden')) return;
-  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+  if (event.key === 'Backspace' && !this.value && sampleSearchTokens.length) {
+    event.preventDefault();
+    var removed = sampleSearchTokens.pop();
+    renderSampleSearchTokens();
+    if (removed.type === 'taxon') requestSampleTaxonFilters();
+    else drawSampleSearch();
+    return;
+  }
+  var suggestionsOpen = sampleSearchSuggestions.length && !$('#sampleTaxonSuggestions').prop('hidden');
+  if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestionsOpen) {
     event.preventDefault();
     var step = event.key === 'ArrowDown' ? 1 : -1;
     sampleTaxonSuggestionActive = sampleTaxonSuggestionActive < 0
-      ? (step > 0 ? 0 : sampleTaxonSuggestions.length - 1)
-      : (sampleTaxonSuggestionActive + step + sampleTaxonSuggestions.length) % sampleTaxonSuggestions.length;
+      ? (step > 0 ? 0 : sampleSearchSuggestions.length - 1)
+      : (sampleTaxonSuggestionActive + step + sampleSearchSuggestions.length) % sampleSearchSuggestions.length;
     var list = document.getElementById('sampleTaxonSuggestions');
     var option = document.getElementById('sampleTaxonOption' + sampleTaxonSuggestionActive);
     $('#sampleTaxonSuggestions [role="option"]').removeClass('active').attr('aria-selected', 'false');
@@ -309,31 +446,51 @@ $('#sampleTaxonIdFilter').on('keydown.sampleTaxonFilter', function(event) {
     }
   } else if (event.key === 'Enter') {
     event.preventDefault();
-    chooseSampleTaxonSuggestion(sampleTaxonSuggestions[sampleTaxonSuggestionActive < 0 ? 0 : sampleTaxonSuggestionActive]);
+    if (suggestionsOpen && sampleTaxonSuggestionActive >= 0) {
+      chooseSampleSearchSuggestion(sampleSearchSuggestions[sampleTaxonSuggestionActive]);
+      return;
+    }
+    var draft = this.value.trim();
+    if (!draft) return;
+    var parsed = /^(taxon|sample|run|pipeline|barcode|status)\s*:\s*(.*)$/i.exec(draft);
+    if (parsed) {
+      var type = parsed[1].toLowerCase();
+      var value = parsed[2].trim();
+      if (type === 'taxon' && !/^\d+$/.test(value)) {
+        $('#sampleTaxonFilterStatus').text('Choose a taxon from the suggestions or enter a numeric NCBI ID.');
+        return;
+      }
+      if (!value) return;
+      addSampleSearchToken({ type: type, value: value,
+        label: type.charAt(0).toUpperCase() + type.slice(1) + ': ' + value });
+    } else {
+      addSampleSearchToken({ type: 'text', value: draft, label: draft });
+    }
   }
 });
 
-$('#sampleTaxonIdFilter').on('focus.sampleTaxonFilter', function() {
-  if (sampleTaxonFilterId || sampleTaxonFilterQuery.length < 2) return;
-  if (sampleTaxonSuggestions.length) renderSampleTaxonSuggestions();
+$('#sampleSearchInput').on('focus.sampleSearch', function() {
+  var query = sampleSearchSuggestionQuery(this.value.trim());
+  if ((query.type === 'all' && query.value.length < 2) ||
+      (query.type === 'taxon' && query.value.length < 2 && !/^\d+$/.test(query.value)) ||
+      !['all', 'run', 'pipeline', 'taxon'].includes(query.type)) return;
+  if (sampleSearchSuggestions.length) renderSampleTaxonSuggestions();
   else requestSampleTaxonSuggestions();
 });
 
 $(document).off('click.sampleTaxonSuggestions').on('click.sampleTaxonSuggestions', function(event) {
-  if (!$(event.target).closest('.sampleTaxonFilter').length) hideSampleTaxonSuggestions();
+  if (!$(event.target).closest('.sampleSearchFieldWrap').length) hideSampleTaxonSuggestions();
 });
 
-$("#sampleTableSearchBox").keyup(function() {
-samplePageDataTable.search(this.value).draw();
-
-var selectAllToggle = $('#samplePageDataTable thead>tr').children(':first-child');
-
-  if(selectAllToggle.hasClass('checkSelected')){
-    selectAllToggle.removeClass('checkSelected');
-  };
-
-  refreshSampleMapMarkers();
-
+$('#sampleSearchClear').on('click.sampleSearch', function() {
+  sampleSearchTokens = [];
+  $('#sampleSearchInput').val('');
+  ++sampleTaxonSuggestionRequestSerial;
+  clearTimeout(sampleTaxonSuggestionTimer);
+  hideSampleTaxonSuggestions();
+  renderSampleSearchTokens();
+  requestSampleTaxonFilters();
+  $('#sampleSearchInput').trigger('focus');
 });
 
 $("#sampleDataSampleName").on('input', function(){
@@ -673,8 +830,9 @@ existingMarkers = [];
  };
 
 samplePageDataTable.draw(false);
-if (sampleTaxonFilterId) requestSampleTaxonFilter();
-else if (sampleTaxonFilterQuery.length >= 2) requestSampleTaxonSuggestions();
+if (sampleSearchTokens.some(function(token) { return token.type === 'taxon'; })) requestSampleTaxonFilters();
+else drawSampleSearch();
+if ($('#sampleSearchInput').val().trim()) requestSampleTaxonSuggestions();
 
 
   $('#samplePageDataTable tbody>tr[role="row"]>td:nth-child(2)').on('click', function() {
@@ -840,8 +998,8 @@ socket.on('meta-update-available', request => {
 socket.on('sample-taxon-filter-data-updated', function() {
   if (currentPage !== 'Samples') return;
   refreshExportCutoffOptions();
-  if (sampleTaxonFilterId) requestSampleTaxonFilter();
-  else if (sampleTaxonFilterQuery.length >= 2) requestSampleTaxonSuggestions();
+  if (sampleSearchTokens.some(function(token) { return token.type === 'taxon'; })) requestSampleTaxonFilters();
+  if ($('#sampleSearchInput').val().trim()) requestSampleTaxonSuggestions();
 });
 
 // socket.on('metadata-file-update-available', request => {

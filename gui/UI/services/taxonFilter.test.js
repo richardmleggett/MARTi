@@ -39,3 +39,13 @@ test('name suggestions keep distinct taxon IDs and require assigned descendants'
   assert.equal(suggestTaxa([first], 'coli')[0].rank, 'species');
   assert.deepEqual(suggestTaxa([first], 'e'), []);
 });
+
+test('numeric suggestions match taxon IDs and put an exact ID first', () => {
+  const tree = { ncbiID: 1, name: 'root', summedValue: 12, children: [
+    { ncbiID: 2, name: 'Bacteria', summedValue: 8 },
+    { ncbiID: 562, name: 'Escherichia coli', summedValue: 3 },
+    { ncbiID: 20, name: 'Other taxon', summedValue: 1 },
+    { ncbiID: 200, name: 'Empty taxon', summedValue: 0 }
+  ] };
+  assert.deepEqual(suggestTaxa([tree], '2').map(taxon => taxon.id), ['2', '20', '562']);
+});

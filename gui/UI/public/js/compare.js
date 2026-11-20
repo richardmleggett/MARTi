@@ -156,6 +156,12 @@ function initialiseComparePage() {
 
   initialiseHeatmapTaxa();
   initialiseCompareViews();
+  initialiseCompareTaxonTrends();
+  TaxonIdPicker.initialise({ searchId: 'compareHmTaxaTaxonSearch',
+    listId: 'compareHmTaxaTaxonSuggestions', statusId: 'compareHmTaxaTaxonSearchStatus', idsId: 'compareHmTaxaIds' });
+  TaxonIdPicker.initialise({ searchId: 'compareTaxonTrendsTaxonSearch',
+    listId: 'compareTaxonTrendsTaxonSuggestions', statusId: 'compareTaxonTrendsTaxonSearchStatus',
+    idsId: 'compareTaxonTrendsIds' });
   initialiseCompareOrdination();
   initialiseCompareDendrogram();
   initialiseCompareDistanceMatrix();
@@ -466,6 +472,13 @@ function initialiseComparePlotPanels() {
       } else if (returnFocus) {
         button.trigger('focus');
       }
+      if (prefix === 'compareStackedBar' && Array.isArray(stackedBarCompareData) &&
+          stackedBarCompareData.length && taxaTotalCounts &&
+          taxaTotalCounts.stackedBar && taxaTotalCounts.stackedBar.length) {
+        window.requestAnimationFrame(function() {
+          plotStackedBar(stackedBarCompareData, taxaTotalCounts.stackedBar);
+        });
+      }
       if (prefix === 'compareAmrHm' && typeof orderedAmrHmData !== 'undefined' && orderedAmrHmData) {
         window.requestAnimationFrame(function() {
           plotAmrHm(orderedAmrHmData, compareAmrHmGenes);
@@ -672,7 +685,7 @@ function updateComparePlots(compareSampleData,treeplot) {
 compareTaxaData = {"n/a":{name: "Other", ncbiRank: "n/a"},"-5":{name: "Higher taxa", ncbiRank: "n/a", values: {}}};
 
     if(isEmpty(compareSampleData)) {
-
+      renderCompareTaxonTrends([]);
     } else {
 
       formattedData = {"donut":[],"stackedBar":[],"hmTaxa":[]};
@@ -1016,6 +1029,7 @@ plotStackedBar(stackedBarCompareData,taxaTotalCounts["stackedBar"]);
 plotCompareDonut(donutCompareData,taxaTotalCounts["donut"]);
 
 renderCompareHeatmapTaxa(compareSampleData);
+renderCompareTaxonTrends(compareSampleData);
 updateCompareDiversityTable(compareSampleData);
 
 

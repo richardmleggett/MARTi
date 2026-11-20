@@ -183,15 +183,15 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
 
 
   donutCompareLegendEnter.append("rect")
-      .attr("width", 20)
-      .attr("height", 20)
+      .attr("width", 16)
+      .attr("height", 12)
+      .attr("y", 4)
       .style("fill", "black");
 
   donutCompareLegendEnter.append("text")
-      .attr("x", 24)
-      .attr("y", 9)
-      .style("font-size", "1em")
-      .attr("dy", ".356em");
+      .attr("x", 21)
+      .attr("y", 14)
+      .style("font-size", "13px");
 
 
   donutCompareLegend.select("g rect")
@@ -202,7 +202,7 @@ radiusCompare.domain([0, d3.max(data, function(d) { return d.totalReadCount; })]
     .text(function(d) { return d.name; });
 
   donutCompareLegend
-    .attr("width",function(d) { return this.firstChild.getBBox().width; });
+    .attr("width",function() { return compactLegendWidth(this); });
 
 
 

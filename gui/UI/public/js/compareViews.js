@@ -245,6 +245,7 @@ function loadCompareProjectGroups(groups) {
   if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
   if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
   if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
+  if (typeof renderCompareTaxonTrends === 'function') renderCompareTaxonTrends();
   if ((sampleOrdertype === 'Group asc' || sampleOrdertype === 'Group desc') &&
       typeof refreshCompareSampleOrder === 'function') refreshCompareSampleOrder();
 }
@@ -263,6 +264,7 @@ function saveCompareSampleGroups() {
   if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
   if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
   if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
+  if (typeof renderCompareTaxonTrends === 'function') renderCompareTaxonTrends();
 }
 
 function compareSampleMetadataGroup(sample, field) {
@@ -339,6 +341,7 @@ function setCompareView(view) {
   if (typeof compareCooccurrenceHideTooltip === 'function') compareCooccurrenceHideTooltip();
   if (typeof compareUpSetHideTooltip === 'function') compareUpSetHideTooltip();
   if (typeof compareDistanceMatrixHideTooltip === 'function') compareDistanceMatrixHideTooltip();
+  if (typeof compareTaxonTrendsHideTooltip === 'function') compareTaxonTrendsHideTooltip();
   ['Plots', 'Diversity', 'Ordination', 'TaxonRelationships', 'Amr'].forEach(function (name) {
     var selected = name === view;
     $('#compare' + name + 'View').prop('hidden', !selected);
@@ -428,6 +431,7 @@ function initialiseCompareViews() {
     if (typeof renderCompareDiversityPlot === 'function') renderCompareDiversityPlot();
     if (typeof refreshCompareAccumulationGroups === 'function') refreshCompareAccumulationGroups();
     if (typeof renderCompareUpSet === 'function') renderCompareUpSet();
+    if (typeof renderCompareTaxonTrends === 'function') renderCompareTaxonTrends();
   });
   $(window).off('storage.compareOrder').on('storage.compareOrder', function(event) {
     if (event.originalEvent.key !== compareSampleOrderStorageKey()) return;

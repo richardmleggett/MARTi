@@ -215,7 +215,7 @@ function plotRarefactionCompare(data) {
   enter.append('text').attr('x', 21).attr('y', 14).style('font-size', '13px');
   legends.select('rect').style('fill', sampleColour);
   legends.select('text').text(function (sample) { return sample.displayName; });
-  legends.attr('width', function (sample) { return 25 + sample.displayName.length * 8; });
+  legends.attr('width', function () { return compactLegendWidth(this); });
   legends.exit().remove();
   rarefactionCompareSVG.selectAll('.mouse-over-effects').remove();
   $('#accumulationHoverTooltip').remove();

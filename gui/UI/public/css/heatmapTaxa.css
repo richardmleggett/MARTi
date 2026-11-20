@@ -65,6 +65,7 @@
 
 #compareHeatmapTaxaPlot {
   min-height: 240px;
+  overflow-x: auto;
 }
 
 #compareHmTaxaEmptyState {

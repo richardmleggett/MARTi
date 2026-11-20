@@ -45,10 +45,14 @@
 
 #stackedBarPlot {
     margin: 10px 20px 10px 20px;
+    overflow-x: auto;
   }
 
 #stackedBarPlot svg {
   overflow: visible;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 #stackedBarPlot .bar {
@@ -60,7 +64,8 @@
 }
 
 #stackedBarLegend svg.stackedBarLegend {
-  margin: 10px 0px 5px 10px;
+  margin: 2px 6px 2px 0;
+  vertical-align: middle;
 
 }
 
@@ -70,7 +75,7 @@
 }
 
 #stackedBarLegend {
-  margin: 10px 15px 10px 15px;
+  margin: 8px 15px;
 }
 
 

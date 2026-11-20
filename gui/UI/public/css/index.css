@@ -180,7 +180,7 @@ color:#1cc88a;
 
 
 #dashboardAmrDonutLegend svg.amrDonutLegend, #dashboardAmrHitsDonutLegend svg.amrHitsDonutLegend, #dashboardTaxaDonutLegend svg.taxaDonutLegend {
-  margin: 5px 0px 5px 10px;
+  margin: 2px 0 2px 6px;
 }
 
 #dashboardAmrDonutLegend, #dashboardAmrHitsDonutLegend, #dashboardTaxaDonutLegend {
@@ -210,7 +210,7 @@ color:#1cc88a;
 }
 
 #dashboardReadsDonutLegend svg.readsDonutLegend {
-  margin: 5px 0px 5px 10px;
+  margin: 3px 0 3px 6px;
 }
 
 #dashboardReadsDonutPlot {

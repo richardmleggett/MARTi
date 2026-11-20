@@ -362,15 +362,15 @@ function plotAmrHitsDonut(data) {
           .append("g");
 
       dashboardAmrHitsDonutLegendEnter.append("rect")
-          .attr("width", 20)
-          .attr("height", 20)
+          .attr("width", 18)
+          .attr("height", 14)
+          .attr("y", 3)
           .style("fill", "black");
 
       dashboardAmrHitsDonutLegendEnter.append("text")
-          .attr("x", 24)
-          .attr("y", 9)
-          .style("font-size", "1.1em")
-          .attr("dy", ".356em");
+          .attr("x", 23)
+          .attr("y", 15)
+          .style("font-size", "14px");
 
       dashboardAmrHitsDonutLegend.select("g rect")
         .style("fill", function(d, i) {
@@ -382,7 +382,7 @@ function plotAmrHitsDonut(data) {
         .text(function(d) { return d; });
 
       dashboardAmrHitsDonutLegend
-        .attr("width",function(d) { return this.firstChild.getBBox().width + 10; });
+        .attr("width",function() { return compactLegendWidth(this); });
 
       dashboardAmrHitsDonutLegend.exit().remove();
 

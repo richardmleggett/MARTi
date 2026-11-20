@@ -483,6 +483,12 @@
                             <textarea class="form-control form-control-sm" id="compareHmTaxaIds" rows="3" placeholder="562, 1639, 28901"></textarea>
                             <small class="form-text text-muted">Comma, space, or newline separated. Listed order is kept; absent taxa show zero. The rank selector above does not change these rows.</small>
                           </div>
+                          <div class="form-group compareTaxonIdPicker">
+                            <label for="compareHmTaxaTaxonSearch">Add taxon by name</label>
+                            <input class="form-control form-control-sm" id="compareHmTaxaTaxonSearch" type="text" autocomplete="off" placeholder="Search selected samples" role="combobox" aria-autocomplete="list" aria-controls="compareHmTaxaTaxonSuggestions" aria-expanded="false">
+                            <div id="compareHmTaxaTaxonSuggestions" class="list-group compareTaxonIdSuggestions" role="listbox" hidden></div>
+                            <small id="compareHmTaxaTaxonSearchStatus" class="form-text text-muted" role="status" aria-live="polite"></small>
+                          </div>
                           <div class="form-group">
                             <label for="compareHmTaxaDenominator">Percent denominator taxon ID</label>
                             <input class="form-control form-control-sm" id="compareHmTaxaDenominator" type="text" inputmode="numeric" value="1">
@@ -588,6 +594,50 @@
           </div>
 
 
+
+<div class="row" id="compareTaxonTrendsRow">
+  <div class="col-12 mb-4">
+    <div class="card shadow" id="compareTaxonTrendsCard">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Taxon trends</h6>
+        <div class="d-flex align-items-center comparePlotHeaderActions">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2" id="compareTaxonTrendsSettingsButton" aria-controls="compareTaxonTrendsSettings" aria-expanded="false">Settings</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" id="compareTaxonTrendsExportButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="compareTaxonTrendsExportButton">
+              <a class="dropdown-item" id="exportCompareTaxonTrendsSVG" href="#">Export as SVG</a>
+              <a class="dropdown-item" id="exportCompareTaxonTrendsPNG" href="#">Export as PNG</a>
+              <a class="dropdown-item" id="exportCompareTaxonTrendsCSV" href="#">Export data as CSV</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body-custom">
+        <div class="comparePlotLayout">
+          <aside id="compareTaxonTrendsSettings" class="comparePlotSettings" aria-labelledby="compareTaxonTrendsSettingsTitle" hidden>
+            <div class="comparePlotSettingsHeader"><h6 id="compareTaxonTrendsSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Taxon trends settings</h6><button type="button" class="close" id="compareTaxonTrendsSettingsClose" aria-label="Close settings"><span aria-hidden="true">&times;</span></button></div>
+            <h6 class="compareSettingsSection">Taxa</h6>
+            <div class="form-group"><label for="compareTaxonTrendsSelection">Taxa to show</label><select id="compareTaxonTrendsSelection" class="form-control form-control-sm"><option value="broad_taxonomic_groups" selected>Broad taxonomic groups</option><option value="custom">Custom taxon IDs</option></select><small id="compareTaxonTrendsPresetStatus" class="form-text text-danger" role="status"></small></div>
+            <div class="form-group"><label for="compareTaxonTrendsIds">NCBI taxon IDs</label><textarea id="compareTaxonTrendsIds" class="form-control form-control-sm" rows="3" placeholder="562, 1639, 28901">2, 2157, 4751, 33090, 33208, 10239</textarea><small class="form-text text-muted">One panel per ID, in the order entered. Descendant counts are included.</small></div>
+            <div class="form-group compareTaxonIdPicker"><label for="compareTaxonTrendsTaxonSearch">Add taxon by name</label><input id="compareTaxonTrendsTaxonSearch" class="form-control form-control-sm" type="text" autocomplete="off" placeholder="Search selected samples" role="combobox" aria-autocomplete="list" aria-controls="compareTaxonTrendsTaxonSuggestions" aria-expanded="false"><div id="compareTaxonTrendsTaxonSuggestions" class="list-group compareTaxonIdSuggestions" role="listbox" hidden></div><small id="compareTaxonTrendsTaxonSearchStatus" class="form-text text-muted" role="status" aria-live="polite"></small></div>
+            <div class="form-group"><label for="compareTaxonTrendsDenominator">Percent denominator taxon ID</label><input id="compareTaxonTrendsDenominator" class="form-control form-control-sm" inputmode="numeric" value="1"><small class="form-text text-muted">1 = analysed reads, including unclassified; 2 = Bacteria; 4751 = Fungi.</small></div>
+            <div class="form-group"><label for="compareTaxonTrendsMinimumPercent">Minimum abundance (% of sample root)</label><input id="compareTaxonTrendsMinimumPercent" class="form-control form-control-sm" type="number" min="0" max="100" step="0.001" value="0"><small class="form-text text-muted">Values below this cutoff appear as zero.</small></div>
+            <h6 class="compareSettingsSection">Display</h6>
+            <div class="form-group"><label for="compareTaxonTrendsXAxis">X axis</label><select id="compareTaxonTrendsXAxis" class="form-control form-control-sm"><option value="samples">Samples in Compare order</option><option value="date">Sampling date</option></select></div>
+            <div class="form-group"><label for="compareTaxonTrendsSeries">Line series by</label><select id="compareTaxonTrendsSeries" class="form-control form-control-sm"><option value="all">All samples</option><option value="group">Assigned group</option><option value="location">Location metadata</option></select></div>
+            <div class="form-group"><label for="compareTaxonTrendsLineStyle">Line style</label><select id="compareTaxonTrendsLineStyle" class="form-control form-control-sm"><option value="linear">Straight</option><option value="step-after">Step</option><option value="monotone">Smooth</option></select></div>
+            <div class="form-check"><label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareTaxonTrendsShowPercent" checked> Show percentages (otherwise counts)</label></div>
+            <div class="form-check"><label class="form-check-label"><input type="checkbox" class="form-check-input" id="compareTaxonTrendsSharedScale"> Use the same y scale for all taxa</label></div>
+          </aside>
+          <div class="comparePlotContent">
+            <div id="compareTaxonTrendsStatus" class="small text-muted px-3 pt-3" role="status" aria-live="polite"></div>
+            <div id="compareTaxonTrendsPlot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Content Row -->
 <div class="row" id="compareTaxaTreeRow">

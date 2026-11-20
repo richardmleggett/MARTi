@@ -66,6 +66,11 @@
 .comparePlotSettings .form-check { margin-bottom: 0.5rem; }
 .comparePlotContent { flex: 1 1 auto; min-width: 0; }
 .comparePlotHeaderActions { cursor: auto; }
+.compareTaxonIdSuggestions { max-height: min(15rem, 35vh); overflow-y: auto; margin-top: 0.25rem; }
+.compareTaxonIdSuggestions[hidden] { display: none; }
+.compareTaxonIdSuggestions .list-group-item { padding: 0.3rem 0.6rem; font-size: 0.8125rem; line-height: 1.2; text-align: left; white-space: normal; }
+.compareTaxonIdSuggestions .list-group-item small { font-size: 0.72rem; line-height: 1.15; }
+.compareTaxonIdSuggestions .active small { color: inherit !important; }
 #compareUpSetPlot { overflow-x: auto; padding: 0.5rem 1rem 1rem; text-align: center; }
 #compareUpSetPlot svg { display: block; margin: 0 auto; max-width: none; }
 
@@ -317,10 +322,6 @@
 
   #compareTaxonCorrelationCard .card-header, #compareTaxonDiscoveryCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
   #compareCooccurrenceCard .card-header { flex-wrap: wrap; gap: 0.5rem; }
-}
-
-#stackedBarPlot>svg {
-  max-height: 500px;
 }
 
 #compareRarefactionPlot>svg {

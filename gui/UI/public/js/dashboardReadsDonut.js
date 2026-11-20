@@ -131,28 +131,27 @@ function plotReadsDonut(data) {
 
           var dashboardReadsDonutLegendEnter = dashboardReadsDonutLegend.enter().append("svg")
               .attr("class", "readsDonutLegend d-block")
-              .attr("height", 40)
+              .attr("height", 38)
               .append("g");
 
           dashboardReadsDonutLegendEnter.append("rect")
-              .attr("width", 20)
-              .attr("height", 20)
+              .attr("width", 18)
+              .attr("height", 14)
+              .attr("y", 3)
               .style("fill", "black");
 
           dashboardReadsDonutLegendEnter.append("text")
-              .attr("x", 24)
-              .attr("y", 9)
-              .style("font-size", "1em")
+              .attr("x", 23)
+              .attr("y", 15)
+              .style("font-size", "14px")
               .style("fill", "#858796")
-              .attr("dy", ".356em")
               .attr("class","readClass");
 
           dashboardReadsDonutLegendEnter.append("text")
-              .attr("x", 24)
-              .attr("y", 9)
-              .style("font-size", "1em")
+              .attr("x", 23)
+              .attr("y", 31)
+              .style("font-size", "14px")
               .style("fill", "black")
-              .attr("dy", "1.456em")
               .attr("class","readInfo");
 
           dashboardReadsDonutLegend.select("g rect")
@@ -167,7 +166,7 @@ function plotReadsDonut(data) {
             .text(function(d) { return thousandsSeparators(d.value) + " reads (" + Math.round(((d.value / dataSum) * 10000)) / 100 + "%)"; });
 
           dashboardReadsDonutLegend
-            .attr("width",function(d) { return this.firstChild.getBBox().width + 10; });
+            .attr("width",function() { return compactLegendWidth(this); });
 
           dashboardReadsDonutLegend.exit().remove();
 

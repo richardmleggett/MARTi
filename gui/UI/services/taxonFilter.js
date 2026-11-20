@@ -33,17 +33,24 @@ function taxaInTree(tree) {
 
 function suggestTaxa(trees, query, limit = 20) {
   const term = String(query || '').trim().toLocaleLowerCase();
-  if (term.length < 2) return [];
+  const numeric = /^\d+$/.test(term);
+  if (term.length < 2 && !numeric) return [];
   const matches = new Map();
   for (const tree of trees) {
     for (const taxon of taxaInTree(tree)) {
       const name = taxon.name.toLocaleLowerCase();
-      if (name.includes(term) && !matches.has(taxon.id)) matches.set(taxon.id, taxon);
+      if ((name.includes(term) || (numeric && taxon.id.includes(term))) && !matches.has(taxon.id)) {
+        matches.set(taxon.id, taxon);
+      }
     }
   }
   return Array.from(matches.values()).sort((a, b) => {
-    const score = name => name === term ? 0 : name.startsWith(term) ? 1 : 2;
-    return score(a.name.toLocaleLowerCase()) - score(b.name.toLocaleLowerCase()) ||
+    const score = taxon => numeric && taxon.id === term ? 0
+      : numeric && taxon.id.startsWith(term) ? 1
+      : numeric && taxon.id.includes(term) ? 2
+      : taxon.name.toLocaleLowerCase() === term ? 3
+      : taxon.name.toLocaleLowerCase().startsWith(term) ? 4 : 5;
+    return score(a) - score(b) ||
       a.name.localeCompare(b.name) || a.id.localeCompare(b.id, undefined, { numeric: true });
   }).slice(0, limit);
 }

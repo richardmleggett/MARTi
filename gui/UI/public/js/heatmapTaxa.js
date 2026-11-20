@@ -488,9 +488,9 @@ heatmapTaxaSvg.select("g.y.axis")
 var yAxisWidth = heatmapTaxaSvg.select("g.y.axis")[0][0].getBBox().width;
 
 
-widthHeatmapTaxa = sampleCount * hmTaxaMaxRectWidth;
+widthHeatmapTaxa = Math.max(sampleCount * 8,
+  Math.min(sampleCount * hmTaxaMaxRectWidth, Math.max(0, maxWidth - yAxisWidth)));
 if (widthHeatmapTaxa > maxWidth - yAxisWidth) {
-  widthHeatmapTaxa = maxWidth - yAxisWidth;
   heatmapTaxaSvg.attr("transform","translate(" + (marginHeatmapTaxa.left + yAxisWidth) + "," + marginHeatmapTaxa.top + ")");
 } else {
   heatmapTaxaSvg.attr("transform","translate(" + (heatmapTaxaWidth/2 - (widthHeatmapTaxa + yAxisWidth)/2 + yAxisWidth) + "," + marginHeatmapTaxa.top + ")");
@@ -630,7 +630,7 @@ if (continuousCustomRange) {
 
 
   var xScaleHmTaxa = d3.scale.ordinal()
-    .rangeRoundBands([ 0, widthHeatmapTaxa ]);
+    .rangeBands([ 0, widthHeatmapTaxa ]);
 
   var xAxisHmTaxa = d3.svg.axis()
       .scale(xScaleHmTaxa)
@@ -638,28 +638,13 @@ if (continuousCustomRange) {
 
   xScaleHmTaxa.domain(data.map(function(d) {return d.index; }));
 
-if (data.length <= 10){
-  heatmapTaxaSvg.select("g.x.axis")
+var heatmapTaxaAxis = heatmapTaxaSvg.select("g.x.axis")
     .attr("transform", "translate(0," + heightHeatmapTaxa + ")")
-    .call(xAxisHmTaxa)
-    .selectAll("text")
-      .text(function(d) { var finalText = stackedBarTextShrink(d,data); return finalText })
-      .attr("dx", "0.5em")
-      .attr("transform", "rotate(45)")
-      .style("text-anchor", "start");
-} else {
-  heatmapTaxaSvg.select("g.x.axis")
-    .attr("transform", "translate(0," + heightHeatmapTaxa + ")")
-    .call(xAxisHmTaxa)
-    .selectAll("text")
-      .text(function(d) { var finalText = stackedBarTextShrink(d,data); return finalText })
-      .attr("dy", "-0.25em")
-      .attr("dx", "0.5em")
-      .attr("transform", "rotate(90)")
-      .style("text-anchor", "start");
-}
+    .call(xAxisHmTaxa);
+formatCompareSampleAxis(heatmapTaxaAxis, data, xScaleHmTaxa, true);
 
-      var xAxisHeight = heatmapTaxaSvg.select("g.x.axis")[0][0].getBBox().height;
+      var xAxisBounds = heatmapTaxaAxis.node().getBBox();
+      var xAxisHeight = xAxisBounds.height;
 
 
 
@@ -807,6 +792,11 @@ var legendPlotMaxVal = hmTaxaDomain[hmTaxaDomain.length - 1] * legendFactor;
       }
 
       d3.select("#compareHeatmapTaxaPlot>svg")
+        .attr("width", Math.max(heatmapTaxaWidth,
+          widthHeatmapTaxa + marginHeatmapTaxa.left + yAxisWidth + marginHeatmapTaxa.right,
+          (widthHeatmapTaxa > maxWidth - yAxisWidth ? marginHeatmapTaxa.left + yAxisWidth :
+            heatmapTaxaWidth/2 - (widthHeatmapTaxa + yAxisWidth)/2 + yAxisWidth) +
+            xAxisBounds.x + xAxisBounds.width + marginHeatmapTaxa.right))
         .attr("height", heightHeatmapTaxa + xAxisHeight + hmTaxaLegendHeight + marginHeatmapTaxa.top + marginHeatmapTaxa.bottom);
 
           var taxaHover = compareHeatmapCellHover(heatmapTaxaSvg, xScaleHmTaxa,

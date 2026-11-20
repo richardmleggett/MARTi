@@ -1,0 +1,53 @@
+/* Keep every plot settings panel alongside its plot as the plot height changes. */
+.comparePlotLayout,
+.diversityPlotLayout,
+.compareOrdinationLayout,
+.dashboardPlotLayout,
+#heatmapTaxaCard .compareHmTaxaLayout {
+  align-items: stretch;
+}
+
+.comparePlotSettings,
+.diversityPlotSettings,
+.compareOrdinationSettings,
+.dashboardPlotSettings,
+.compareHmTaxaSettings {
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.plotSettingsOverflowing {
+  overflow-y: scroll;
+  background-image: linear-gradient(#9aa8bd, #9aa8bd), linear-gradient(#f1f3f8, #f1f3f8);
+  background-size: 6px var(--plot-settings-thumb-height), 10px 100%;
+  background-position: right 2px top var(--plot-settings-thumb-top), right top;
+  background-repeat: no-repeat;
+}
+
+.comparePlotSettings::-webkit-scrollbar,
+.diversityPlotSettings::-webkit-scrollbar,
+.compareOrdinationSettings::-webkit-scrollbar,
+.dashboardPlotSettings::-webkit-scrollbar,
+.compareHmTaxaSettings::-webkit-scrollbar {
+  width: 10px;
+}
+
+.comparePlotSettings::-webkit-scrollbar-track,
+.diversityPlotSettings::-webkit-scrollbar-track,
+.compareOrdinationSettings::-webkit-scrollbar-track,
+.dashboardPlotSettings::-webkit-scrollbar-track,
+.compareHmTaxaSettings::-webkit-scrollbar-track {
+  background: #f1f3f8;
+}
+
+.comparePlotSettings::-webkit-scrollbar-thumb,
+.diversityPlotSettings::-webkit-scrollbar-thumb,
+.compareOrdinationSettings::-webkit-scrollbar-thumb,
+.dashboardPlotSettings::-webkit-scrollbar-thumb,
+.compareHmTaxaSettings::-webkit-scrollbar-thumb {
+  background: #9aa8bd;
+  border: 2px solid #f1f3f8;
+  border-radius: 6px;
+}
+

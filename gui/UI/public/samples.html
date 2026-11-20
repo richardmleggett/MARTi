@@ -152,21 +152,24 @@
 
 
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" id="sampleSelectorCard">
               <div class="card-header d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Sample selector</h6>
-                <div class="col-xs-2 searchContainer">
-                  <i class="fa fa-search fa-sm searchIcon"></i>
-                <input class="form-control form-control-sm searchBox" type="text" placeholder="Search sample details..." aria-label="Search sample details" id="sampleTableSearchBox">
-                </div>
-                <div class="col-xs-2 ml-2 sampleTaxonFilter">
-                  <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="Taxon name or NCBI ID" aria-label="Filter samples by taxon name or NCBI ID, including descendants" role="combobox" aria-autocomplete="list" aria-controls="sampleTaxonSuggestions" aria-expanded="false" id="sampleTaxonIdFilter">
-                  <div id="sampleTaxonSuggestions" class="list-group sampleTaxonSuggestions" role="listbox" hidden></div>
-                </div>
               </div>
               <div class="card-body">
-
-                <div id="sampleTaxonFilterStatus" class="small text-muted mb-2" role="status" aria-live="polite"></div>
+                <div class="sampleSearchPanel mb-2">
+                  <div class="sampleSearchFieldWrap">
+                    <div class="sampleSearchField" id="sampleSearchField">
+                      <i class="fa fa-search text-muted" aria-hidden="true"></i>
+                      <div id="sampleSearchTokens" class="sampleSearchTokens"></div>
+                      <input id="sampleSearchInput" type="text" autocomplete="off" placeholder="Sample details, taxon, run, pipeline, barcode…" aria-label="Search samples or add a filter" aria-describedby="sampleSearchHint" role="combobox" aria-autocomplete="list" aria-controls="sampleTaxonSuggestions" aria-expanded="false">
+                      <button id="sampleSearchClear" class="sampleSearchClear" type="button" aria-label="Clear all sample filters" title="Clear all filters" hidden>&times;</button>
+                    </div>
+                    <div id="sampleTaxonSuggestions" class="list-group sampleTaxonSuggestions" role="listbox" hidden></div>
+                  </div>
+                  <div id="sampleSearchHint" class="sampleSearchHint text-muted">Press Enter to add a token; tokens combine. Try <code>taxon:2</code>, <code>run:MARC</code>, <code>pipeline:kraken2</code> or <code>barcode:1</code>.</div>
+                  <div id="sampleTaxonFilterStatus" class="small text-muted mt-1" role="status" aria-live="polite"></div>
+                </div>
 
                 <div id="" class="row justify-content-between px-3 pb-3">
                       <a class=""><i class="fas fa-info-circle"></i> Shift click on column headers for multi-column ordering.</a>

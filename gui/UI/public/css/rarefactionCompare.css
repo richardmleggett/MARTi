@@ -72,13 +72,14 @@
 .accumulationHoverSwatch { width: 9px; height: 9px; margin-top: 0.3em; border-radius: 50%; }
 
 #compareRarefactionPlotLegend svg.rarefactionCompareLegend {
-  margin: 10px 0px 5px 10px;
+  margin: 2px 6px 2px 0;
+  vertical-align: middle;
   overflow: visible;
 }
 
 
 #compareRarefactionPlotLegend {
-  margin: 10px 15px 10px 15px;
+  margin: 8px 15px;
 }
 
 #clonedAccumulationLegend {

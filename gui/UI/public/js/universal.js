@@ -31,6 +31,57 @@ function thousandsSeparators(num) {
   return num_parts.join(".");
 };
 
+// Size inline SVG legends to their rendered labels, including when a plot tab is hidden.
+function compactLegendWidth(svg) {
+  var group = svg.firstChild;
+  var box = group.getBBox();
+  if (box.width) return Math.ceil(box.x + box.width) + 6;
+
+  var context = document.createElement('canvas').getContext('2d');
+  var swatch = group.querySelector('rect');
+  var width = swatch ? Number(swatch.getAttribute('width')) : 0;
+  Array.prototype.forEach.call(group.querySelectorAll('text'), function (label) {
+    var style = window.getComputedStyle(label);
+    context.font = style.fontSize + ' ' + style.fontFamily;
+    width = Math.max(width, Number(label.getAttribute('x')) + context.measureText(label.textContent).width);
+  });
+  return Math.ceil(width) + 6;
+}
+
+// Keep sample axis labels readable as the available space per sample changes.
+function formatCompareSampleAxis(axis, data, scale, heatmap) {
+  var positions = scale.range();
+  var pitch = positions.length > 1 ? Math.abs(positions[1] - positions[0]) : scale.rangeBand();
+  var fontSize = pitch >= 140 ? 14 : pitch >= 80 ? 13 : pitch >= 40 ? 12 :
+    pitch >= 18 ? 11 : pitch >= 12 ? 10 : pitch >= 9 ? 9 : 8;
+  var context = document.createElement('canvas').getContext('2d');
+  context.font = fontSize + 'px Arial, sans-serif';
+  var names = data.map(function (sample) {
+    return String(compareSampleDisplayNameById(sample.runId, sample.sample));
+  });
+  var angle = pitch >= Math.max.apply(null, names.map(function (name) {
+    return context.measureText(name).width + 12;
+  })) ? 0 : pitch >= 32 ? 45 : 90;
+
+  axis.selectAll('.tick').each(function (index) {
+    var tick = d3.select(this);
+    tick.style('display', null);
+    var label = tick.select('text');
+    label.text(names[index])
+      .style('font-family', 'Arial, Helvetica, sans-serif')
+      .style('font-size', fontSize + 'px')
+      .style('text-anchor', angle === 0 ? 'middle' : 'start')
+      .attr('x', 0)
+      .attr('y', 9)
+      .attr('dx', angle === 0 ? '0em' : '0.5em')
+      .attr('dy', angle === 0 ? '1em' : angle === 45 ? '.71em' : '-0.25em')
+      .attr('transform', angle ?
+        'translate(' + (angle === 45 ? 8 : Math.round(fontSize * 0.3) +
+          (heatmap ? Math.max(0, 10 - fontSize) : 0)) + ',4) rotate(' + angle + ')' : null);
+    label.append('title').text(names[index]);
+  });
+}
+
 function formatBarcodeLabel(barcode) {
   if (barcode === null || barcode === undefined || barcode === '') return '—';
   var number = Number(barcode);
@@ -262,6 +313,19 @@ function tooltipPosY(y){
     top = winTop + 4;
   }
   return top;
+}
+
+function tooltipPositionAroundCursor(event, width, height) {
+  var gap = 12, edge = 8;
+  var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  var x = event.clientX, y = event.clientY;
+  var left = x + gap + width + edge <= viewportWidth ? x + gap : x - width - gap;
+  var top = y + gap + height + edge <= viewportHeight ? y + gap : y - height - gap;
+  return {
+    left: Math.max(edge, Math.min(left, viewportWidth - width - edge)),
+    top: Math.max(edge, Math.min(top, viewportHeight - height - edge))
+  };
 }
 
 

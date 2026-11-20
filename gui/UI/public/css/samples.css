@@ -4,9 +4,85 @@
   white-space: nowrap;
 }
 
-.sampleTaxonFilter {
+#sampleSelectorCard > .card-body {
+  padding-top: 0.75rem;
+}
+
+#sampleTaxonFilterStatus:empty {
+  display: none;
+}
+
+.sampleSearchHint {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.sampleSearchFieldWrap {
   position: relative;
-  width: min(22rem, 100%);
+}
+
+.sampleSearchField {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #d1d3e2;
+  border-radius: 0.35rem;
+  background: #fff;
+  cursor: text;
+}
+
+.sampleSearchField:focus-within {
+  border-color: #bac8f3;
+  box-shadow: 0 0 0 0.15rem rgba(78, 115, 223, 0.15);
+}
+
+#sampleSearchInput {
+  flex: 1 1 12rem;
+  min-width: 8rem;
+  border: 0;
+  outline: 0;
+  padding: 0.15rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.sampleSearchTokens {
+  display: contents;
+}
+
+.sampleSearchToken {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 100%;
+  padding: 0.12rem 0.3rem 0.12rem 0.5rem;
+  border-radius: 0.35rem;
+  background: #e9eefc;
+  color: #314777;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.sampleSearchToken span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sampleSearchToken button,
+.sampleSearchClear {
+  border: 0;
+  background: none;
+  color: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sampleSearchClear {
+  color: #858796;
+  font-size: 1.2rem;
 }
 
 .sampleTaxonSuggestions {

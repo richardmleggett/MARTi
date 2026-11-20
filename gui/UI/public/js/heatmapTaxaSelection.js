@@ -45,7 +45,9 @@
         proportion: denominator > 0 ? count / denominator : 0
       };
     });
-    return { cells: cells, denominator: denominator, missingDenominator: denominator <= 0 };
+    return { cells: cells, denominator: denominator,
+      denominatorName: denominatorNode && denominatorNode.name ? denominatorNode.name : '',
+      missingDenominator: denominator <= 0 };
   }
 
   function resolveColourThresholds(values, observedLow, observedHigh, percentMode) {

@@ -64,6 +64,7 @@ test('uses descendant sums and the chosen percent denominator', () => {
   assert.equal(result.cells['2'].value, 1000);
   assert.equal(result.cells['562'].value, 10);
   assert.equal(result.cells['562'].proportion, 0.01);
+  assert.equal(result.denominatorName, 'Bacteria');
   assert.equal(result.cells['999'].value, 0);
   assert.equal(result.missingDenominator, false);
 

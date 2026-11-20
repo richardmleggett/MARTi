@@ -43,7 +43,9 @@ function initialiseCompareTaxonDiscovery() {
 }
 
 function compareTaxonDiscoveryHideTooltip() {
-  if (typeof toolTipDiv !== 'undefined') toolTipDiv.interrupt().style('opacity', 0).style('max-height', null).style('overflow-y', null);
+  if (typeof toolTipDiv !== 'undefined') toolTipDiv.interrupt().style('opacity', 0)
+    .style('max-height', null).style('overflow-y', null).style('max-width', null)
+    .style('white-space', null).style('width', null);
 }
 
 function compareTaxonDiscoveryShowTooltip(points, pair, event) {
@@ -72,9 +74,12 @@ function compareTaxonDiscoveryShowTooltip(points, pair, event) {
   });
   if (points.length > 3) content.append('small').text('And ' + (points.length - 3) + ' more nearby samples.');
   toolTipDiv.style('z-index', 1100).style('opacity', .95)
-    .style('max-height', 'min(480px, calc(100vh - 32px))').style('overflow-y', 'auto')
-    .style('left', tooltipPos(event.pageX + 12) + 'px')
-    .style('top', tooltipPosY(event.pageY + 12) + 'px');
+    .style('width', 'max-content').style('max-width', 'calc(100vw - 16px)').style('white-space', 'normal')
+    .style('max-height', 'min(480px, calc(100vh - 32px))').style('overflow-y', 'auto');
+  var tooltip = toolTipDiv.node();
+  var position = tooltipPositionAroundCursor(event, tooltip.offsetWidth, tooltip.offsetHeight);
+  toolTipDiv.style('left', position.left + window.pageXOffset + 'px')
+    .style('top', position.top + window.pageYOffset + 'px');
 }
 
 function drawCompareTaxonDiscoveryResult() {
@@ -291,7 +296,7 @@ function renderCompareTaxonDiscoveryScatter(result, pair, holder) {
     circle.addEventListener('mouseleave', compareTaxonDiscoveryHideTooltip);
     circle.addEventListener('focus', function() {
       var bounds = circle.getBoundingClientRect();
-      show({ pageX: bounds.right + window.pageXOffset, pageY: bounds.top + window.pageYOffset });
+      show({ clientX: bounds.right, clientY: bounds.top });
     });
     circle.addEventListener('blur', compareTaxonDiscoveryHideTooltip);
   });

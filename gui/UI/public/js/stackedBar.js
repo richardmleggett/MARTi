@@ -1,17 +1,15 @@
 var stackedSvg,
     layer1,
     layer2,
-    stackedBarHighlightLayer;
+    stackedBarHighlightLayer,
+    stackedBarResizeObserver;
 
 function initialiseCompareStackedBar() {
 
     stackedSvg = d3.select("#stackedBarPlot").append("svg")
         .attr("viewBox", function() {
-            width = widthStacked + 180;
-            height = heightStacked + 80;
-            x = 0;
-            y = 0;
-            return x + " " + y + " " + width + " " + height;
+            return "0 0 " + (widthStacked + marginStacked.left + marginStacked.right) +
+                " " + (heightStacked + 80);
         })
         .append("g")
         .attr("transform", "translate(" + marginStacked.left + "," + marginStacked.top + ")");
@@ -61,9 +59,52 @@ function initialiseCompareStackedBar() {
     longestSampleName = 0;
     compareStackedBarYAxis = "percent";
 
+    if (stackedBarResizeObserver) stackedBarResizeObserver.disconnect();
+    if (typeof ResizeObserver === 'function') {
+        stackedBarResizeObserver = new ResizeObserver(function() {
+            var plotWidth = Math.round($('#stackedBarPlot').width() || 0);
+            if (plotWidth <= marginStacked.left + marginStacked.right + 100 ||
+                Math.abs(plotWidth - widthStacked - marginStacked.left - marginStacked.right) < 2 ||
+                currentPage !== 'Compare' || !stackedBarCompareData || !stackedBarCompareData.length ||
+                !taxaTotalCounts || !taxaTotalCounts.stackedBar || !taxaTotalCounts.stackedBar.length) return;
+            plotStackedBar(stackedBarCompareData, taxaTotalCounts.stackedBar);
+        });
+        stackedBarResizeObserver.observe(document.getElementById('stackedBarPlot'));
+    }
+
+    var resizeTimer;
+    $(window).off('resize.compareStackedBar').on('resize.compareStackedBar', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (currentPage === 'Compare' && stackedBarCompareData && stackedBarCompareData.length &&
+                taxaTotalCounts && taxaTotalCounts.stackedBar && taxaTotalCounts.stackedBar.length &&
+                $('#stackedBarPlot').is(':visible')) {
+                plotStackedBar(stackedBarCompareData, taxaTotalCounts.stackedBar);
+            }
+        }, 120);
+    });
+
 };
+function stackedBarTextShrink(d, data) {
 
+    var maxChars = 28,
+        halfMaxChars = maxChars / 2;
 
+    var text = compareSampleDisplayNameById(data[d].runId, data[d].sample),
+        numChars = text.length,
+        middleString = "...",
+        finalText;
+
+    if (numChars > maxChars) {
+        var firstString = text.slice(0, halfMaxChars);
+        var endString = text.slice(-halfMaxChars);
+        finalText = firstString + middleString + endString;
+    } else {
+        finalText = text;
+    };
+    return finalText;
+
+};
 var longestSampleName;
 var percentClicked;
 var compareStackedBarYAxis;
@@ -80,7 +121,7 @@ var marginStacked = {
 
 
 var xScale = d3.scale.ordinal()
-    .rangeRoundBands([0, widthStacked], .3);
+    .rangeBands([0, widthStacked], .15, .075);
 
 var yScale = d3.scale.linear()
     .rangeRound([heightStacked, 0]);
@@ -88,7 +129,7 @@ var yScale = d3.scale.linear()
 var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
-    .innerTickSize([0]);
+    .innerTickSize(6);
 
 var yAxis = d3.svg.axis()
     .scale(yScale)
@@ -270,6 +311,11 @@ var stackedBarNcbiIDs = [];
 
 
 function plotStackedBar(data, taxaTotalCounts) {
+    var plotWidth = Math.round($('#stackedBarPlot').width() || 0);
+    if (plotWidth > marginStacked.left + marginStacked.right + 100) {
+        widthStacked = Math.max(plotWidth - marginStacked.left - marginStacked.right, data.length * 8);
+        xScale.rangeBands([0, widthStacked], .15, .075);
+    }
     stackedBarHighlightLayer.selectAll("*").remove();
     d3.select("#compareStackedBarYAxisTitle")
         .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
@@ -311,45 +357,10 @@ function plotStackedBar(data, taxaTotalCounts) {
     }));
 
 
-    if (data.length <= 2) {
-        stackedSvg.select("g.x.axis")
-            .attr("transform", "translate(0," + heightStacked + ")")
-            .call(xAxis)
-            .selectAll("text")
-            .text(function(d) {
-                return compareSampleDisplayNameById(data[d].runId, data[d].sample);
-            })
-            .attr("dy", "1em")
-            .attr("dx", "0em")
-            .style("text-anchor", "middle");
-
-    } else if (data.length <= 10) {
-        stackedSvg.select("g.x.axis")
-            .attr("transform", "translate(0," + heightStacked + ")")
-            .call(xAxis)
-            .selectAll("text")
-            .text(function(d) {
-                var finalText = stackedBarTextShrink(d, data);
-                return finalText
-            })
-            .attr("dy", "1em")
-            .attr("dx", "1em")
-            .attr("transform", "rotate(45)")
-            .style("text-anchor", "start");
-    } else {
-        stackedSvg.select("g.x.axis")
-            .attr("transform", "translate(0," + heightStacked + ")")
-            .call(xAxis)
-            .selectAll("text")
-            .text(function(d) {
-                var finalText = stackedBarTextShrink(d, data);
-                return finalText
-            })
-            .attr("dy", "0.25em")
-            .attr("dx", "1em")
-            .attr("transform", "rotate(90)")
-            .style("text-anchor", "start");
-    };
+    var stackedAxis = stackedSvg.select("g.x.axis")
+        .attr("transform", "translate(0," + heightStacked + ")")
+        .call(xAxis);
+    formatCompareSampleAxis(stackedAxis, data, xScale);
 
 
     stackedSvg.select("g.y.axis")
@@ -373,8 +384,8 @@ function plotStackedBar(data, taxaTotalCounts) {
         .data(function(d) {
             return d;
         })
-        .enter().append("rect")
-        .attr("width", xScale.rangeBand());
+        .enter().append("rect");
+    sample.selectAll("rect").attr("width", xScale.rangeBand());
 
 
     if (compareStackedBarYAxis == "percent") {
@@ -394,15 +405,15 @@ function plotStackedBar(data, taxaTotalCounts) {
         .append("g");
 
     stackedBarLegendEnter.append("rect")
-        .attr("width", 20)
-        .attr("height", 20)
+        .attr("width", 16)
+        .attr("height", 12)
+        .attr("y", 4)
         .style("fill", "black");
 
     stackedBarLegendEnter.append("text")
-        .attr("x", 24)
-        .attr("y", 9)
-        .style("font-size", "1em")
-        .attr("dy", ".356em");
+        .attr("x", 21)
+        .attr("y", 14)
+        .style("font-size", "13px");
 
     stackedBarLegend.select("g rect")
         .style("fill", function(d) {
@@ -417,7 +428,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     stackedBarLegend
         .attr("width", function(d) {
-            return this.firstChild.getBBox().width;
+            return compactLegendWidth(this);
         });
 
     stackedBarLegend.exit().remove();
@@ -505,39 +516,16 @@ function plotStackedBar(data, taxaTotalCounts) {
 
 
 
-    var addedAxisHeight = stackedSvg.select("g.x.axis")[0][0].getBBox().height;
+    var xAxisBounds = stackedAxis.node().getBBox();
+    var addedAxisHeight = xAxisBounds.height;
 
+    var svgWidth = Math.max(widthStacked + marginStacked.left + marginStacked.right,
+        marginStacked.left + xAxisBounds.x + xAxisBounds.width + marginStacked.right);
+    var svgHeight = heightStacked + addedAxisHeight + 85;
     d3.select("#stackedBarPlot>svg")
-        .attr("viewBox", function() {
-            width = widthStacked + 180;
-            height = heightStacked + addedAxisHeight + 85;
-            x = 0;
-            y = 0;
-            return x + " " + y + " " + width + " " + height;
-        })
-        .style("max-height", 500 + addedAxisHeight)
-
-};
-
-
-function stackedBarTextShrink(d, data) {
-
-
-    var maxChars = 28,
-        halfMaxChars = maxChars / 2;
-
-    var text = compareSampleDisplayNameById(data[d].runId, data[d].sample),
-        numChars = text.length,
-        middleString = "...",
-        finalText;
-
-    if (numChars > maxChars) {
-        var firstString = text.slice(0, halfMaxChars);
-        var endString = text.slice(-halfMaxChars);
-        finalText = firstString + middleString + endString;
-    } else {
-        finalText = text;
-    };
-    return finalText;
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+        .attr("viewBox", "0 0 " + svgWidth + " " + svgHeight)
+        .style("min-width", svgWidth + "px")
 
 };

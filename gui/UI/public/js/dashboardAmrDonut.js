@@ -465,15 +465,15 @@ for (var taxa of plotData) {
               .append("g");
 
           dashboardAmrDonutLegendEnter.append("rect")
-              .attr("width", 20)
-              .attr("height", 20)
+              .attr("width", 18)
+              .attr("height", 14)
+              .attr("y", 3)
               .style("fill", "black");
 
           dashboardAmrDonutLegendEnter.append("text")
-              .attr("x", 24)
-              .attr("y", 9)
-              .style("font-size", "1.1em")
-              .attr("dy", ".356em");
+              .attr("x", 23)
+              .attr("y", 15)
+              .style("font-size", "14px");
 
           dashboardAmrDonutLegend.select("g rect")
             .style("fill", function(d, i) {
@@ -485,7 +485,7 @@ for (var taxa of plotData) {
             .text(function(d) { return d.label; });
 
           dashboardAmrDonutLegend
-            .attr("width",function(d) { return this.firstChild.getBBox().width + 10; });
+            .attr("width",function() { return compactLegendWidth(this); });
 
           dashboardAmrDonutLegend.exit().remove();
 
