@@ -245,11 +245,17 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
 });
 
 
+  function compareStackedBarExportType() {
+    if (compareStackedBarStyle !== "area") return "stacked_bar";
+    return compareStackedBarYAxis === "read" ? "streamgraph" : "stacked_area";
+  }
+
   d3.select('#exportTaxaStackedBarSVG').on('click', function(){
     compareTaxaStackedBarExport();
     var date = getDate() + "_" + getTime();
     var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
-    var outputFilename = "compare_taxa_stacked_bar_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var outputFilename = "compare_taxa_" + compareStackedBarExportType() +
+      "_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     save_as_svg_with_style('mergedStackedBarPlot','/css/stackedBar.css',outputFilename,false,'merged-div');
   });
 
@@ -257,7 +263,8 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
     compareTaxaStackedBarExport();
     var date = getDate() + "_" + getTime();
     var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
-    var outputFilename = "compare_taxa_stacked_bar_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var outputFilename = "compare_taxa_" + compareStackedBarExportType() +
+      "_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     save_as_raster_with_style('mergedStackedBarPlot','/css/stackedBar.css',outputFilename,2,'png',false,'merged-div');
   });
 
@@ -265,7 +272,8 @@ d3.select('#exportCompareDonutJPG').on('click', function(){
     compareTaxaStackedBarExport();
     var date = getDate() + "_" + getTime();
     var levelSelected = taxonomicRankSelectedText.toLowerCase().replace(" ", "_")
-    var outputFilename = "compare_taxa_stacked_bar_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
+    var outputFilename = "compare_taxa_" + compareStackedBarExportType() +
+      "_lca_" + lcaAbundanceCompare + "_" + levelSelected + "_" + date;
     save_as_raster_with_style('mergedStackedBarPlot','/css/stackedBar.css',outputFilename,2,'jpg',false,'merged-div');
   });
 

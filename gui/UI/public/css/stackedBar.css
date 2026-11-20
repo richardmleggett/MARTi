@@ -59,6 +59,13 @@
   fill: steelblue;
 }
 
+#stackedBarPlot .stackedBarArea,
+#clonedStackedBarPlot .stackedBarArea {
+  stroke: #fff;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+}
+
 #stackedBarPlot .x.axis path {
   /*display: none;*/
 }
