@@ -55,7 +55,7 @@ if (restrictedMode) {
 // AI chat answers questions without changing anything, so restricted mode can allow it if asked to.
 const restrictedChatRequested = process.argv.slice(2).some(arg => arg === '--restricted-chat');
 
-const martiGuiVersion = "1.0.8";
+const martiGuiVersion = "1.1.0";
 
 if (argv.h || argv.help) {
   console.log(`

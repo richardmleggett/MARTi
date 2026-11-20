@@ -247,7 +247,33 @@ function renderCompareUpSet() {
   if (!columns.length) {
     holder.textContent = 'No taxa meet the presence thresholds.'; return;
   }
-  var xStart = 310, columnWidth = 31, barBottom = 232, matrixTop = 270, rowHeight = 34;
+  var measureContext = document.createElement('canvas').getContext('2d');
+  if (measureContext) measureContext.font = '12px Arial, Helvetica, sans-serif';
+  function measureLabel(text) {
+    return measureContext ? measureContext.measureText(text).width : Array.from(text).length * 7;
+  }
+  function fullSetLabel(set) {
+    return set.label + (result.mode === 'groups' ? ' (n=' + set.sampleCount + ')' : '');
+  }
+  function fitSetLabel(text, maxWidth) {
+    if (measureLabel(text) <= maxWidth) return text;
+    var chars = Array.from(text);
+    for (var keep = chars.length - 1; keep > 0; keep--) {
+      var start = Math.ceil(keep / 2), end = Math.floor(keep / 2);
+      var shortened = chars.slice(0, start).join('') + '…' + chars.slice(chars.length - end).join('');
+      if (measureLabel(shortened) <= maxWidth) return shortened;
+    }
+    return '…';
+  }
+  var countRight = 145 + Math.max.apply(null, result.sets.map(function(set) {
+    return measureLabel(String(set.taxa.size));
+  })) + 12;
+  var longestLabel = Math.max.apply(null, result.sets.map(function(set) {
+    return measureLabel(fullSetLabel(set));
+  }));
+  var xStart = Math.max(310, Math.min(470, Math.ceil(countRight + longestLabel + 26)));
+  var labelMaxWidth = xStart - 18 - countRight - 8;
+  var columnWidth = 31, barBottom = 232, matrixTop = 270, rowHeight = 34;
   var width = Math.max(760, xStart + columns.length * columnWidth + 30);
   var legendGroups = stackByBroadGroup ? compareUpSetBroadGroups.filter(function(group) {
     return Array.from(result.taxa).some(function(id) { return (result.taxonGroups.get(id) || 'Other') === group; });
@@ -305,8 +331,7 @@ function renderCompareUpSet() {
     });
     compareOrdinationSvgElement('text', { x: 145, y: y + 4, fill: '#5a5c69', 'font-size': 12 }, setGroup,
       String(set.taxa.size));
-    var fullLabel = set.label + (result.mode === 'groups' ? ' (n=' + set.sampleCount + ')' : '');
-    var label = fullLabel.length > 24 ? fullLabel.slice(0, 23) + '…' : fullLabel;
+    var label = fitSetLabel(fullSetLabel(set), labelMaxWidth);
     compareOrdinationSvgElement('text', { x: xStart - 18, y: y + 4, 'text-anchor': 'end',
       fill: '#3a3b45', 'font-size': 12 }, setGroup, label);
     function showSet(event) {

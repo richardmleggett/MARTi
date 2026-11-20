@@ -377,7 +377,7 @@
               <!-- stackedBar card -->
               <div class="card shadow" id="stackedBarCard">
                 <div class="card-header d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Stacked bar</h6>
+                  <h6 class="m-0 font-weight-bold text-primary" id="compareStackedBarTitle">Stacked bar</h6>
 
                   <!-- <div id="fullScreenOpenIcon" class="fullScreenIcon" onclick="openFullscreen(stackedBarFullScreen);">
                     <i class="fas fa-expand fa-sm fa-fw text-gray-600"></i>
@@ -399,7 +399,7 @@
 
                 <div class="card-body-custom"><div class="comparePlotLayout"><aside id="compareStackedBarSettings" class="comparePlotSettings" aria-labelledby="compareStackedBarSettingsTitle" hidden>
         <div class="comparePlotSettingsHeader">
-          <h6 id="compareStackedBarSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Stacked bar settings</h6>
+          <h6 id="compareStackedBarSettingsTitle" class="m-0 font-weight-bold text-primary" tabindex="-1">Taxa composition settings</h6>
           <button type="button" class="close" id="compareStackedBarSettingsClose" aria-label="Close stacked bar settings"><span aria-hidden="true">&times;</span></button>
         </div>
         <form id="compareStackedBarSettingsForm">
@@ -413,6 +413,7 @@
 
           <h6 class="compareSettingsSection">Display</h6>
           <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareStackedBarRead" checked> Show percentages (otherwise counts)</label></div>
+          <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" id="compareStackedBarArea"> Show as area chart (centred for counts)</label></div>
         </form>
       </aside><div class="comparePlotContent text-center">
 

@@ -56,8 +56,14 @@ function initialiseCompareStackedBar() {
         plotStackedBar(stackedBarCompareData, taxaTotalCounts["stackedBar"]);
     });
 
+    d3.select("#compareStackedBarArea").on("change", function() {
+        compareStackedBarStyle = this.checked ? "area" : "bar";
+        plotStackedBar(stackedBarCompareData, taxaTotalCounts["stackedBar"]);
+    });
+
     longestSampleName = 0;
     compareStackedBarYAxis = "percent";
+    compareStackedBarStyle = "bar";
 
     if (stackedBarResizeObserver) stackedBarResizeObserver.disconnect();
     if (typeof ResizeObserver === 'function') {
@@ -108,6 +114,7 @@ function stackedBarTextShrink(d, data) {
 var longestSampleName;
 var percentClicked;
 var compareStackedBarYAxis;
+var compareStackedBarStyle;
 var stackedBarColor;
 
 var marginStacked = {
@@ -140,60 +147,61 @@ var stack = d3.layout
     .stack();
 
 
-function transitionPercent() {
+function transitionPercent(stacked) {
 
     yAxis.tickFormat(function(d) { return d * 100; });
     d3.select("#compareStackedBarYAxisTitle")
     .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s (%)");
     // yAxis.tickFormat(d3.format("%"));
-    stack.offset("zero");
-    // var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
-    var stacked = stack(makeData(stackedBarInputData, stackedBarNcbiIDs));
-    transitionRects(stacked);
+    renderStackedLayers(stacked);
 }
 
-function transitionCount() {
+function transitionCount(stacked) {
 
     yAxis.tickFormat(d3.format(".2s"));
     d3.select("#compareStackedBarYAxisTitle")
     .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
-    stack.offset("zero");
-    // var stacked = stack(makeData(stackedTaxa, stackedBarInputData));
-    var stacked = stack(makeData(stackedBarInputData, stackedBarNcbiIDs));
-    transitionRects(stacked);
+    renderStackedLayers(stacked);
 
 }
 
-function transitionRects(stacked) {
-
-
-
+function renderStackedLayers(stacked) {
     yScale.domain([0, d3.max(stacked[stacked.length - 1], function(d) {
         return d.y0 + d.y;
-    })]);
+    }) || 0]);
 
-
-
-    var sample = stackedSvg.selectAll(".taxa")
-        .data(stacked);
-
-    sample.selectAll("rect")
-        .data(function(d) {
-            return d;
-        })
-
-    stackedSvg.selectAll("g.taxa rect")
-        .transition("stackedBarRectTrans")
-        .duration(350)
-        .attr("x", function(d) {
-            return xScale(d.x);
-        })
-        .attr("y", function(d) {
-            return yScale(d.y0 + d.y);
-        })
-        .attr("height", function(d) {
-            return yScale(d.y0) - yScale(d.y0 + d.y);
+    var sample = layer1.selectAll("g.taxa");
+    if (compareStackedBarStyle === "area") {
+        sample.selectAll("rect").remove();
+        var area = d3.svg.area()
+            .x(function(d) {
+                return d.xEdge === undefined ? xScale(d.x) + xScale.rangeBand() / 2 : d.xEdge;
+            })
+            .y0(function(d) { return yScale(d.y0); })
+            .y1(function(d) { return yScale(d.y0 + d.y); });
+        sample.each(function(layer) {
+            var first = layer[0], last = layer[layer.length - 1];
+            var points = [Object.assign({}, first, { xEdge: xScale(first.x) })]
+                .concat(layer, [Object.assign({}, last, {
+                    xEdge: xScale(last.x) + xScale.rangeBand()
+                })]);
+            var path = d3.select(this).selectAll("path.stackedBarArea").data([points]);
+            path.enter().append("path").attr("class", "stackedBarArea");
+            path.attr("d", area);
         });
+    } else {
+        sample.selectAll("path.stackedBarArea").remove();
+        var rectangles = sample.selectAll("rect")
+            .data(function(d) { return d; });
+        rectangles.enter().append("rect");
+        rectangles.exit().remove();
+        rectangles.attr("width", xScale.rangeBand())
+            .transition("stackedBarRectTrans")
+            .duration(350)
+            .attr("x", function(d) { return xScale(d.x); })
+            .attr("y", function(d) { return yScale(d.y0 + d.y); })
+            .attr("height", function(d) { return yScale(d.y0) - yScale(d.y0 + d.y); });
+    }
 
     stackedSvg.selectAll(".y.axis").transition("sbYAxis").call(yAxis);
 }
@@ -305,20 +313,32 @@ function makeData(data, ids) {
     return dataArray;
 }
 
-var stackedBarInputData;
 // var stackedTaxa;
 var stackedBarNcbiIDs = [];
 
 
 function plotStackedBar(data, taxaTotalCounts) {
+    if (!data || !data.length || !taxaTotalCounts || !taxaTotalCounts.length) {
+        if (layer1) layer1.selectAll("*").remove();
+        if (layer2) layer2.selectAll(".axis").selectAll("*").remove();
+        d3.select("#stackedBarLegend").selectAll("*").remove();
+        if (stackedBarHighlightLayer) stackedBarHighlightLayer.selectAll("*").remove();
+        return;
+    }
     var plotWidth = Math.round($('#stackedBarPlot').width() || 0);
     if (plotWidth > marginStacked.left + marginStacked.right + 100) {
         widthStacked = Math.max(plotWidth - marginStacked.left - marginStacked.right, data.length * 8);
         xScale.rangeBands([0, widthStacked], .15, .075);
     }
     stackedBarHighlightLayer.selectAll("*").remove();
+    var streamgraph = compareStackedBarStyle === "area" && compareStackedBarYAxis === "read";
+    d3.select("#compareStackedBarTitle").text(compareStackedBarStyle === "area"
+        ? (streamgraph ? "Streamgraph (counts)" : "Proportional area")
+        : "Stacked bar");
     d3.select("#compareStackedBarYAxisTitle")
+        .style("display", streamgraph ? "none" : null)
         .text("Classified " + plotLevelSelectedCompareTooltipPrefix.toUpperCase().toLowerCase() + "s");
+    stackedSvg.select("g.y.axis").style("display", streamgraph ? "none" : null);
 
     stackedBarColor = d3.scale.ordinal()
         .range(colourPalettes[selectedPalette]);
@@ -343,12 +363,11 @@ function plotStackedBar(data, taxaTotalCounts) {
         stackedBarNcbiIDs.push(taxa.ncbiID);
     }
 
-    stackedBarInputData = data;
-
     for (var [i, sample] of data.entries()) {
         sample.index = i;
     };
 
+    stack.offset(streamgraph ? "silhouette" : "zero");
     var stacked = stack(makeData(data, stackedBarNcbiIDs));
     // var stacked = stack(makeData(stackedTaxa, data));
 
@@ -380,18 +399,10 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     sample.exit().remove();
 
-    sample.selectAll("rect")
-        .data(function(d) {
-            return d;
-        })
-        .enter().append("rect");
-    sample.selectAll("rect").attr("width", xScale.rangeBand());
-
-
     if (compareStackedBarYAxis == "percent") {
-        transitionPercent();
+        transitionPercent(stacked);
     } else {
-        transitionCount();
+        transitionCount(stacked);
     };
 
 
@@ -434,23 +445,28 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarLegend.exit().remove();
 
 
-    var allRectangles = stackedSvg.selectAll("g.taxa rect");
+    var allMarks = stackedSvg.selectAll(compareStackedBarStyle === "area"
+        ? "g.taxa path.stackedBarArea" : "g.taxa rect");
     var legendGroups = stackedBarLegend.select("g");
 
+    function markTaxonId(d) {
+        return Array.isArray(d) ? d[0].ncbiID : d.ncbiID;
+    }
+
     function highlightTaxon(ncbiID) {
-        allRectangles.interrupt().style("stroke", null).style("stroke-width", null);
-        allRectangles.filter(function(d) { return d.ncbiID == ncbiID; })
+        allMarks.interrupt().style("stroke", null).style("stroke-width", null);
+        allMarks.filter(function(d) { return markTaxonId(d) == ncbiID; })
             .style("opacity", 1)
             .style("stroke", "#1f1f1f")
             .style("stroke-width", "1.5px");
-        allRectangles.filter(function(d) { return d.ncbiID != ncbiID; })
+        allMarks.filter(function(d) { return markTaxonId(d) != ncbiID; })
             .transition().duration(opacityTransitionTime).style("opacity", 0.3);
 
         var svg = stackedSvg.node().ownerSVGElement;
         var pixelsPerUnit = svg.viewBox.baseVal.height
             ? svg.getBoundingClientRect().height / svg.viewBox.baseVal.height : 1;
         var thinSegments = [];
-        allRectangles.filter(function(d) { return d.ncbiID == ncbiID; })
+        allMarks.filter(function(d) { return compareStackedBarStyle !== "area" && d.ncbiID == ncbiID; })
             .each(function(d) {
                 var segmentHeight = Math.abs(yScale(d.y0) - yScale(d.y0 + d.y)) * pixelsPerUnit;
                 if (d.y > 0 && segmentHeight < 3) thinSegments.push(d);
@@ -483,7 +499,7 @@ function plotStackedBar(data, taxaTotalCounts) {
 
     function clearHighlight() {
         stackedBarHighlightLayer.selectAll("*").remove();
-        allRectangles.interrupt().style("stroke", null).style("stroke-width", null)
+        allMarks.interrupt().style("stroke", null).style("stroke-width", null)
             .transition().duration(opacityTransitionTime).style("opacity", 1);
         legendGroups.interrupt().transition().duration(opacityTransitionTime).style("opacity", 1);
         stackedBarLegend.select("g text").style("font-weight", "normal");
@@ -492,15 +508,25 @@ function plotStackedBar(data, taxaTotalCounts) {
     stackedBarLegend.on("mouseover", function(d) { highlightTaxon(d.ncbiID); })
         .on("mouseout", clearHighlight);
 
-    allRectangles.on("mouseover", function(d) {
-            highlightTaxon(d.ncbiID);
-            showTooltip(d);
+    allMarks.on("mouseover", function(d) {
+            highlightTaxon(markTaxonId(d));
+            showTooltip(compareStackedBarStyle === "area" ? nearestAreaPoint(d) : d);
         })
-        .on("mousemove", showTooltip)
+        .on("mousemove", function(d) {
+            showTooltip(compareStackedBarStyle === "area" ? nearestAreaPoint(d) : d);
+        })
         .on("mouseout", function() {
             clearHighlight();
             toolTipDiv.interrupt().style("opacity", 0);
         });
+
+    function nearestAreaPoint(layer) {
+        var mouseX = d3.mouse(stackedSvg.node())[0];
+        return layer.reduce(function(closest, point) {
+            return Math.abs(xScale(point.x) + xScale.rangeBand() / 2 - mouseX) <
+                Math.abs(xScale(closest.x) + xScale.rangeBand() / 2 - mouseX) ? point : closest;
+        });
+    }
 
     function showTooltip(d) {
         toolTipDiv.interrupt().style("opacity", .95)

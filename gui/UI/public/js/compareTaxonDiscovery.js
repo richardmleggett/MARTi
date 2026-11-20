@@ -278,6 +278,19 @@ function renderCompareTaxonDiscoveryScatter(result, pair, holder) {
   function axisLabel(taxon) { return (taxon.name.length > 45 ? taxon.name.slice(0, 44) + '…' : taxon.name) + ' (%)'; }
   compareOrdinationSvgElement('text', { x: left + plotWidth / 2, y: top + plotHeight + 47, 'text-anchor': 'middle', 'font-size': 12 }, svg, axisLabel(pair.a));
   compareOrdinationSvgElement('text', { transform: 'translate(18 ' + (top + plotHeight / 2) + ') rotate(-90)', 'text-anchor': 'middle', 'font-size': 12 }, svg, axisLabel(pair.b));
+  var pointElements = [], legendElements = [];
+  function highlightGroup(group, hoveredCircle) {
+    pointElements.forEach(function(item) {
+      var matching = group && item.group === group;
+      item.circle.style.opacity = !group || matching ? '1' : '0.25';
+      item.circle.style.stroke = matching && (!hoveredCircle || item.circle === hoveredCircle) ? '#1f1f1f' : '';
+      item.circle.style.strokeWidth = matching && (!hoveredCircle || item.circle === hoveredCircle) ? '2px' : '';
+    });
+    legendElements.forEach(function(item) {
+      item.element.style.opacity = !group || item.group === group ? '1' : '0.3';
+      item.label.style.fontWeight = group && item.group === group ? 'bold' : 'normal';
+    });
+  }
   points.forEach(function(point) {
     var i = point.index;
     var text = point.name + ' · ' + point.sample.runId + ' · ' + point.group + '\n' +
@@ -290,19 +303,30 @@ function renderCompareTaxonDiscoveryScatter(result, pair, holder) {
       return other !== point && Math.hypot(x(pair.a.values[other.index] * 100) - x(pair.a.values[i] * 100),
         y(pair.b.values[other.index] * 100) - y(pair.b.values[i] * 100)) <= 6;
     }));
+    pointElements.push({ group: point.group, circle: circle });
     var show = function(event) { compareTaxonDiscoveryShowTooltip(nearby, pair, event); };
-    circle.addEventListener('mouseenter', show);
+    circle.addEventListener('mouseenter', function(event) { highlightGroup(point.group, circle); show(event); });
     circle.addEventListener('mousemove', show);
-    circle.addEventListener('mouseleave', compareTaxonDiscoveryHideTooltip);
+    circle.addEventListener('mouseleave', function() { highlightGroup(null); compareTaxonDiscoveryHideTooltip(); });
     circle.addEventListener('focus', function() {
+      highlightGroup(point.group, circle);
       var bounds = circle.getBoundingClientRect();
       show({ clientX: bounds.right, clientY: bounds.top });
     });
-    circle.addEventListener('blur', compareTaxonDiscoveryHideTooltip);
+    circle.addEventListener('blur', function() { highlightGroup(null); compareTaxonDiscoveryHideTooltip(); });
   });
   legend.forEach(function(item) {
-    compareOrdinationSvgElement('circle', { cx: item.x, cy: item.y - 4, r: 4, fill: colours.get(item.name) }, svg);
-    compareOrdinationSvgElement('text', { x: item.x + 10, y: item.y, 'font-size': 11 }, svg, item.name);
+    var element = compareOrdinationSvgElement('g', { class: 'correlationScatterLegendItem', tabindex: 0,
+      role: 'img', 'aria-label': item.name + ': highlight matching samples' }, svg);
+    compareOrdinationSvgElement('rect', { x: item.x - 6, y: item.y - 15,
+      width: Math.min(width - item.x - 14, item.name.length * 7 + 28), height: 20, fill: 'transparent' }, element);
+    compareOrdinationSvgElement('circle', { cx: item.x, cy: item.y - 4, r: 4, fill: colours.get(item.name) }, element);
+    var label = compareOrdinationSvgElement('text', { x: item.x + 10, y: item.y, 'font-size': 11 }, element, item.name);
+    legendElements.push({ group: item.name, element: element, label: label });
+    element.addEventListener('mouseenter', function() { compareTaxonDiscoveryHideTooltip(); highlightGroup(item.name); });
+    element.addEventListener('mouseleave', function() { highlightGroup(null); });
+    element.addEventListener('focus', function() { compareTaxonDiscoveryHideTooltip(); highlightGroup(item.name); });
+    element.addEventListener('blur', function() { highlightGroup(null); });
   });
 }
 
