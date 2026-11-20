@@ -1,7 +1,10 @@
 .. _example:
 
-Example and tutorial
-====================
+Example analyses
+================
+
+These examples run the MARTi Engine on a small example dataset. For a guided tour of the GUI using MARTi's bundled
+example results, see :ref:`tutorial`.
 
 Engine-initiated local analysis
 -------------------------------

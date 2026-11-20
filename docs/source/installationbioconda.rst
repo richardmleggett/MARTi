@@ -5,6 +5,12 @@ Installation with bioconda
 
 This page describes how to install MARTi with ``mamba``, a CLI tool to manage conda environments.
 
+.. note::
+
+   The bioconda package is currently MARTi 0.9.33, which is older than the version described in this documentation.
+   An updated package will be released soon. Until then, install MARTi from GitHub (see :ref:`installationbyhand`) if
+   you need the newer GUI features, such as the Compare page tabs, diversity measures and the :ref:`AI features <ai>`.
+
 Install Mamba
 -------------
 

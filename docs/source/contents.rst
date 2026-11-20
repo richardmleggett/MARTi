@@ -3,6 +3,8 @@
    :caption: Start here
 
    intro
+   quickstart
+   tutorial
 
 .. toctree::
    :maxdepth: 4
@@ -16,17 +18,33 @@
 
 .. toctree::
    :maxdepth: 4
-   :caption: Using MARTi
+   :caption: Running analyses
 
    running
    cmdline
-   gui
    configfiles
+   metadata
    continuing
    advanced
-   downstream
    example
-   history
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Viewing results
+
+   gui
+   guisamples
+   guidashboard
+   guicompare
+   diversity
+   downstream
+
+.. toctree::
+   :maxdepth: 4
+   :caption: AI features
+
+   ai
+   mcp
 
 .. toctree::
    :maxdepth: 4
@@ -35,3 +53,9 @@
    engineproblems
    guiproblems
    faqs
+
+.. toctree::
+   :maxdepth: 4
+   :caption: About
+
+   history

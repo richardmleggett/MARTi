@@ -1,3 +1,4 @@
+Keyword	Example	Meaning
 LCAMaxHits	100	Maximum number of BLAST hits to consider in LCA assignment. Default 100.
 LCAScorePercent	90	Only consider hits within this percentage of the top hit for a given read. Default 90.
 LCAMinIdentity	70	Only consider hits with this minimum identity. Default 70.

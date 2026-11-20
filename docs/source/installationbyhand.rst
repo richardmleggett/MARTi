@@ -28,8 +28,8 @@ In order to run the MARTi Engine (back-end), you also need to install the follow
 
 If you want to use Centrifuge or Kraken2 to classify reads, these will also need to be installed and available on the path. As with BLAST, you can use any database built for these tools (either by downloading one directly, or building your own following the tools' instructions):
 
-* **Centrifuge** - prebuilt binaries are available `here <https://ccb.jhu.edu/software/centrifuge/>`_, or it can be built from source from `GitHub <https://github.com/DaehwanKimLab/centrifuge>`_.
-* **Kraken2** - download `here <https://ccb.jhu.edu/software/kraken2/>`_ or on `GitHub <https://github.com/DerrickWood/kraken2>`_.
+* **Centrifuge** - prebuilt binaries are available `here <https://ccb.jhu.edu/software/centrifuge/>`__, or it can be built from source from `GitHub <https://github.com/DaehwanKimLab/centrifuge>`__.
+* **Kraken2** - download `here <https://ccb.jhu.edu/software/kraken2/>`__ or on `GitHub <https://github.com/DerrickWood/kraken2>`__.
 
 In order to run the MARTi GUI, you also need to install the following on the computer where it will be running:
 
@@ -91,12 +91,22 @@ To view the GUI, open a browser and navigate to GUI's port. For example, if usin
 
 ``localhost:3000``
 
+Optional: AI features
+---------------------
+
+The GUI's optional AI features (narrative analysis and the Ask AI chat) and MARTi's MCP server need Python 3.10 or
+later with a few packages. Install them with:
+
+``pip install -r /path/to/MARTi/marti-llm/requirements.txt``
+
+Then choose a model in the GUI's *Options*. See :ref:`aisetup`.
+
 marti_engine_options.txt
 ------------------------
 
 Both the engine and the GUI can make use of the optional ``marti_engine_options.txt`` file which can be placed in your home directory. This file contains the default locations of taxonomy directories and database definitions which are used in two ways:
 
-    * By the Engine when using the ``-writeconfig`` option. The processes defined in the options file will then be written to the example config Gile.
+    * By the Engine when using the ``-writeconfig`` option. The processes defined in the options file will then be written to the example config file.
     * By the GUI when the user is creating a new analysis. The options will be used to populate the New analysis webpage, but can be changed.
 
 An example marti_engine_options file is provided in the bin directory and can be copied to your home directory:
@@ -105,7 +115,7 @@ An example marti_engine_options file is provided in the bin directory and can be
 
 This file contains the locations of some important directories and you will need to update these for your system installation:
 
-   * TaxonomyDirectory - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
+   * TaxonomyDir - the location of NCBI taxonomy data (i.e. the directory containing nodes.dmp and names.dmp).
    * MinKNOWRunDirectory - path to the directory containing sequencing runs to be analysed by MARTi. The data for each run directory within the MinKNOWRunDirectory should be in fastq format inside a directory called ``fastq_pass``, ``pass``, or ``fastq``. For example, if your MinKNOWRunDirectory is set to the following: ``/Users/peeln/Documents/data`` and you want to analyse a run called ``Flongle_run_11102022`` then the full path to the pass read data for that sample could look something like this: ``/Users/peeln/Documents/data/Flongle_run_11102022/20221011_1041_X2_AMT909_e26da2dd/fastq_pass`` or simply: ``/Users/peeln/Documents/data/Flongle_run_11102022/pass``
    * MARTiSampleDirectory - the location of a directory that contains, or will contain, MARTi output data. The MARTi GUI will monitor this directory for results to display.
 
@@ -115,6 +125,8 @@ The following parameters are specific to the GUI:
 
    * ``Port:`` Specify the port number to be used. Ignore this if unsure. The default port number is 3000.
    * ``https:`` False by default. If true the path to ``Key:`` and ``Certificate:`` is required as well.
+
+The full list of GUI settings is in :ref:`guioptionsfile`.
 
 Possible macOS differences
 --------------------------

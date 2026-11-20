@@ -1,6 +1,37 @@
 Change history
 ==============
 
+Version 1.0.0 (22 Oct 2026)
+---------------------------
+
+MARTi Engine:
+
+* Diversity measures (Shannon, Pielou, Simpson, inverse Simpson, Simpson evenness and Chao1) calculated after every
+  chunk and written to the accumulation files. See :ref:`diversity`.
+* Taxa accumulation curves now count the taxa present at the end of the run, so they no longer dip when the LCA cutoff
+  moves reads to a higher taxon.
+* Trees and accumulation data also written at a 0.005% minimum abundance cutoff.
+* New ``LCAMinSupportDenominator`` option, to apply the minimum abundance cutoff as a percentage of all filtered reads
+  or of assigned reads.
+* When BLAST hits have equal scores and E-values, the hit with the higher identity is now preferred.
+* Corrected a thread synchronisation issue in classification.
+
+MARTi GUI (versions 1.0.0 to 1.0.8, October-November 2026):
+
+* Dashboard and Compare pages reorganised into tabs, with new Diversity, Sample relationships (PCoA, UPGMA clustering
+  and distance heatmap), Taxon relationships (correlations, co-occurrence network and UpSet plot) and AMR views.
+* Compare page groups, browser-only sample names, and project ``sampleGroups`` and ``heatmapTaxaPresets``.
+* New Taxa heatmap options (custom taxa, presets, traffic-light colours, bubbles) and Taxon trends plot.
+* Samples page search with ``taxon:`` and other filter tokens, and a new Export data card.
+* Settings and Export buttons on most plots.
+* Optional AI features: narrative analysis on the Dashboard and the Ask AI chat panel. See :ref:`ai`.
+* The sample map reads coordinates from ``sampleLocation`` (as written by the Engine) as well as ``location``.
+* Restricted mode is enforced by the server: requests to rename samples or start analyses are refused.
+
+marti-llm (new):
+
+* MCP server for using MARTi's results with AI assistants. See :ref:`mcp`.
+
 Version 0.9.33 (11 June 2026)
 -----------------------------
 

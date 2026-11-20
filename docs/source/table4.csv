@@ -1,3 +1,4 @@
+Keyword	Example	Meaning
 BlastProcess	n/a	Defines the start of a BLAST process
 Name	nt	Name of process
 Program	megablast	Blast algorithm to use e.g megablast, blastn

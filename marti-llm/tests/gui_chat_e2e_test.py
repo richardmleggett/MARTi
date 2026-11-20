@@ -30,12 +30,12 @@ tmp = Path(tempfile.mkdtemp())
 data = tmp / "output"
 shutil.copytree(MARTI / "gui" / "output", data)
 # collection metadata in the engine's format, for the Samples page searches
-# (coordinates as the GUI's sample map reads them: "location" with "locationName")
+# (coordinates in "location" or, as the Engine writes them, "sampleLocation")
 for name, md in {"BAMBI_P8_1D_19092017": {"location": "52.6309, 1.2974", "locationName": "Norwich",
                                           "sampleDate": "16/07/25"},
                  "BAMBI_P103M_400ng_RAD4_20122017": {"sampleLocation": "Brancaster", "sampleDate": "20/08/25"},
                  "MARC_Yare_101117_F2_no_control": {"sampleLocation": "Hickling Broad", "sampleDate": "01/07/25"},
-                 "MARC_Yare_171117_F1_no_control": {"location": "52.75, 1.60", "locationName": "Ludham",
+                 "MARC_Yare_171117_F1_no_control": {"sampleLocation": "52.75,1.60", "locationName": "Ludham",
                                                     "sampleDate": "01/12/24"}}.items():
     (data / name / "marti" / name / "metadata.json").write_text(json.dumps({"id": name, "runId": name, **md}))
 SUMMER = sorted(["BAMBI_P8_1D_19092017", "BAMBI_P103M_400ng_RAD4_20122017", "MARC_Yare_101117_F2_no_control"])
@@ -407,6 +407,10 @@ try:
         check("map link opens the sample map at the top of the window",
               page.is_visible("#sampleMap") and page.evaluate(
                   "Math.abs(document.getElementById('sampleMapCard').getBoundingClientRect().top - martiChatTopOffset()) <= 2"))
+        check("the map shows samples with coordinates in location or sampleLocation",
+              sorted(page.evaluate("existingMarkers.map(m => m.pathName)")) ==
+              ["BAMBI_P8_1D_19092017", "MARC_Yare_171117_F1_no_control"],
+              page.evaluate("existingMarkers.map(m => m.pathName)"))
         answers(page).nth(0).locator(".martiChatCompare").click()
         page.wait_for_function("document.querySelectorAll('#compareSampleNameList tr').length === 5", timeout=30000)
         check("Compare opens the Compare page with the selected samples", page.locator("#compareSampleNameList tr").count() == 5)
@@ -453,17 +457,31 @@ def restricted(*flags):
             page.evaluate("""() => socket.emit('chat-ask', {clientId: uuid, requestId: 'forged', page: 'compare',
                               messages: [{role: 'user', content: 'What is in these samples?'}]})""")
             page.wait_for_timeout(8000)
+            # forged writes: the server must refuse them, not just the hidden buttons
+            ids = data / P8 / "ids.json"
+            ids_before = ids.read_text() if ids.exists() else None
+            page.evaluate(f"""() => socket.emit('update-sample-name-request', {{newId: 'Renamed',
+                              originalId: '{P8}', pathName: '{P8}', pathRun: '{P8}'}})""")
+            status = page.evaluate(f"""async () => (await fetch('/new', {{method: 'POST',
+                              headers: {{'Content-Type': 'application/x-www-form-urlencoded'}},
+                              body: 'outputDir=' + encodeURIComponent('{tmp}') + '&martiName=forged_run'}})).status""")
+            page.wait_for_timeout(1500)
+            renamed = (ids.read_text() if ids.exists() else None) != ids_before
             browser.close()
-            return visible, " ".join(got), len(LLM) - n
+            writes = {"renamed": renamed, "new_status": status, "new_dir": (tmp / "forged_run").exists()}
+            return visible, " ".join(got), len(LLM) - n, writes
     finally:
         rgui.terminate()
 
 
-visible, got, calls = restricted()
+visible, got, calls, writes = restricted()
 check("restricted mode: no chat button", not visible)
 check("restricted mode: a forged question is refused by the server, no model call",
       "not available in restricted mode" in got and calls == 0)
-visible, got, calls = restricted("--restricted-chat")
+check("restricted mode: a forged rename leaves ids.json unchanged", not writes["renamed"], writes)
+check("restricted mode: a forged new analysis is refused (403) and creates nothing",
+      writes["new_status"] == 403 and not writes["new_dir"], writes)
+visible, got, calls, _ = restricted("--restricted-chat")
 check("restricted mode with --restricted-chat: chat offered and answered", visible and calls >= 1
       and "chat-answer" in got)
 llm.shutdown()

@@ -57,6 +57,7 @@
 <!-- Sample page -->
 <link href="/css/samples.css" rel="stylesheet">
 <script src="/js/sampleAssignmentExport.js" type="text/javascript"></script>
+<script src="/js/sampleLocation.js" type="text/javascript"></script>
 <script src="/js/samples.js" type="text/javascript"></script>
 
 <!-- New analysis page -->
@@ -396,11 +397,11 @@
 
         <div id="llmSettingsSection" style="display: none;">
           <hr>
-          <h6 class="font-weight-bold mb-1" id="llmSettingsTitle">AI narrative analysis</h6>
-          <p class="small text-gray-700 mb-3">Used by "Generate narrative analysis" on the dashboard. These settings,
-            including the API key, are stored on the computer running the MARTi GUI, not in this browser. Each
-            narrative sends a summary of the sample's results to the provider you choose; a local server keeps
-            everything on your own machines.</p>
+          <h6 class="font-weight-bold mb-1" id="llmSettingsTitle">AI model</h6>
+          <p class="small text-gray-700 mb-3">Used by the dashboard's narrative analysis and by Ask AI. These settings,
+            including the API key, are stored on the computer running the MARTi GUI, not in this browser. Narratives
+            and questions send analysis results to the provider you choose; a local server keeps everything on your
+            own machines.</p>
           <form id="llmSettingsForm" autocomplete="off" aria-labelledby="llmSettingsTitle">
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="llmProvider">Provider</label>

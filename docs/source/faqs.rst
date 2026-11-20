@@ -3,8 +3,13 @@
 FAQs
 ====
 
-Why does the taxa accumulation curves go down as well as up?
-------------------------------------------------------------
+Why do the taxa accumulation curves go down as well as up?
+----------------------------------------------------------
+
+By default, the GUI now draws accumulation curves from the *Final taxa set*: at each point it counts how many of the
+taxa present at the end of the run had been seen so far, so the curves never go down. This needs results from MARTi
+Engine v1.0.0 or later. The explanation below applies to the *Per-chunk taxa count* option, and to results from older
+versions of the Engine.
 
 In rare circumstances, the number of taxa in an accumulation curve can appear to dip if the LCA cutoff is set higher than 0%. This is because each point along the x-axis represents the addition of a chunk of reads. If a chunk contains enough of a taxa to just meet the LCA threshold, but the next chunk contains no reads for that taxa, the percentage of reads represented by the taxa can drop below the LCA cutoff and the reads are then pushed up to the next taxonomic level.
 
@@ -43,6 +48,32 @@ For query-time exclusion, this is determined by the capabilities of the underlyi
 What is the LCA minimum abundance cutoff?
 -----------------------------------------
 
-LCA stands for Lowest Common Ancestor and is the process used with BLAST results to assign reads to taxa. The cutoff sets the minimum abundance level that a taxa needs to have to be shown. If a taxa has fewer reads than this minimum abundance, its read counts will be moved up the taxonomic tree until the threshold is met. So a threshold of 0.1% means that a taxa must possess at least 0.1% of classified reads in order for it to be shown. It is a useful tool for simplifying a taxonomic tree. 
+LCA stands for Lowest Common Ancestor and is the process used with BLAST results to assign reads to taxa. The cutoff sets the minimum abundance level that a taxa needs to have to be shown. If a taxa has fewer reads than this minimum abundance, its read counts will be moved up the taxonomic tree until the threshold is met. So a threshold of 0.1% means that a taxa must possess at least 0.1% of reads in order for it to be shown. It is a useful tool for simplifying a taxonomic tree.
 
-What causes the 
+The percentage is of either all reads that passed the quality filters or only the classified reads, as set by
+``LCAMinSupportDenominator`` in the config file (see :ref:`configfiles`). The Engine writes results at cutoffs of 0,
+0.005, 0.05, 0.1, 1 and 2%, and the GUI's options bar chooses between them.
+
+Which cutoff should I use?
+--------------------------
+
+Use 0% or 0.005% when you are looking for organisms present at low levels, for example when screening for pathogens:
+at higher cutoffs their reads may have been moved to a higher taxon. Use 0.1% or higher for overviews of a sample's
+main components, where a long tail of rare taxa (some of which may be misassignments) would clutter the plots.
+Diversity measures and taxon counts depend on the cutoff, so compare samples at the same cutoff.
+
+Why are some plots or tabs empty for my sample?
+-----------------------------------------------
+
+Some results need particular analyses or Engine versions: the AMR tabs need a BLAST process against the CARD database,
+the putative host taxa need reads to be classified with BLAST, and the diversity curves need MARTi Engine v1.0.0 or
+later. Plots on the Compare page's *Sample relationships* and *Taxon relationships* tabs need several samples.
+
+Does MARTi send my data to an AI provider?
+------------------------------------------
+
+Only if someone using the GUI chooses to: the :ref:`AI features <ai>` are off until a model is set up in *Options*, and
+nothing is sent to a model until someone clicks *Generate narrative analysis* or asks *Ask AI* a question. With a local
+model server, nothing leaves your own computers. If you connect MARTi's :ref:`MCP server <mcp>` to an assistant such
+as the Claude app, the results the assistant asks for are sent to that assistant's provider. The MARTi Engine never
+contacts a model.

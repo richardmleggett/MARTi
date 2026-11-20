@@ -39,7 +39,8 @@ function compareOrdinationGroup(sample) {
   if (mode === 'run') return String(sample.runId);
   if (mode === 'manual') return compareSampleGroupValue(sample.runId, sample.name) || 'Ungrouped';
   var metadata = compareOrdinationMetadata(sample);
-  return metadata && metadata.metadatafile && metadata.metadatafile.locationName || 'No site';
+  // Same site as 'Set groups from metadata': locationName, else location, else sampleLocation.
+  return metadata && compareSampleMetadataGroup(metadata, 'location') || 'No site';
 }
 
 function compareOrdinationHasAssignedGroups(samples, groupValue) {

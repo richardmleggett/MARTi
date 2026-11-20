@@ -1135,7 +1135,7 @@ _ISO_DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 def sample_coordinates(md: dict | None) -> tuple[float, float] | None:
     """Latitude, longitude written in the metadata location (e.g. "52.63, 1.29", as the GUI's sample map reads it)."""
     md = md or {}
-    for field in ("sampleLocation", "location", "locationName"):
+    for field in ("location", "sampleLocation", "locationName"):
         value = md.get(field)
         m = _COORDS.search(value) if isinstance(value, str) else None
         if m:
